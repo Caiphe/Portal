@@ -1,0 +1,81 @@
+button {
+    height: 34px;
+    line-height: 1;
+    background-color: $primary;
+    background-position: center center;
+    background-size: 16px;
+    background-repeat: no-repeat;
+    border: 2px solid $primary;
+    border-radius: 16px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    &.dark {
+        background-color: #000;
+        border: 2px solid #000;
+        color: #FFF;
+    }
+
+    &.outline {
+        background-color: #FFF;
+        border: 2px solid #000;
+    }
+
+    &.icon-only {
+        padding: 0;
+        width: 34px;
+        border-radius: 50%;
+
+        &::before {
+            background-size: 20px;
+            position: absolute;
+        }
+
+        &::after {
+            display: none;
+        }
+    }
+
+    &.front::before {
+        margin-right: 5px;
+        background-position: center center;
+        background-size: 16px;
+        background-repeat: no-repeat;
+        content: "";
+        height: 16px;
+        width: 16px;
+    }
+
+    &.end::after {
+        margin-left: 5px;
+        background-position: center center;
+        background-size: 16px;
+        background-repeat: no-repeat;
+        content: "";
+        height: 16px;
+        width: 16px;
+    }
+
+    @each $icon, $glyph in $icons {
+        &.front.#{$icon}::before,
+        &.end.#{$icon}::after {
+            background-image: get-icon("#{$icon}", #000000);
+        }
+
+        &.dark.front.#{$icon}::before,
+        &.dark.end.#{$icon}::after {
+            background-image: get-icon("#{$icon}", #FFFFFF);
+        }
+
+        &.icon-only.#{$icon} {
+            background-image: get-icon("#{$icon}", #000000);
+        }
+
+        &.dark.icon-only.#{$icon} {
+            background-image: get-icon("#{$icon}", #FFFFFF);
+        }
+    }
+}
