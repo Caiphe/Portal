@@ -1,0 +1,97 @@
+@font-face {
+    font-family: 'mtn-regular';
+    font-style: normal;
+    font-weight: 400;
+    font-display: auto;
+    src: local('Awesome Font'),
+        url('/fonts/MTNBrighterSans-Regular.woff2') format('woff2'),
+        url('/fonts/MTNBrighterSans-Regular.woff') format('woff'),
+        url('/fonts/MTNBrighterSans-Regular.ttf') format('truetype'),
+        url('/fonts/MTNBrighterSans-Regular.eot') format('embedded-opentype');
+}
+
+@font-face {
+    font-family: 'mtn-bold';
+    font-style: bold;
+    font-weight: 700;
+    font-display: auto;
+    src: local('Awesome Font'),
+        url('/fonts/MTNBrighterSans-Bold.woff2') format('woff2'),
+        url('/fonts/MTNBrighterSans-Bold.woff') format('woff'),
+        url('/fonts/MTNBrighterSans-Bold.ttf') format('truetype'),
+        url('/fonts/MTNBrighterSans-Bold.eot') format('embedded-opentype');
+}
+
+@font-face {
+    font-family: 'mtn-medium';
+    font-style: medium;
+    font-weight: 500;
+    font-display: auto;
+    src: local('Awesome Font'),
+        url('/fonts/MTNBrighterSans-Medium.woff2') format('woff2'),
+        url('/fonts/MTNBrighterSans-Medium.woff') format('woff'),
+        url('/fonts/MTNBrighterSans-Medium.ttf') format('truetype'),
+        url('/fonts/MTNBrighterSans-Medium.eot') format('embedded-opentype');
+}
+
+@font-face {
+    font-family: 'mtn-italic';
+    font-style: italic;
+    font-weight: 400;
+    font-display: auto;
+    src: local('Awesome Font'),
+        url('/fonts/MTNBrighterSans-RegularItalic.woff2') format('woff2'),
+        url('/fonts/MTNBrighterSans-RegularItalic.woff') format('woff'),
+        url('/fonts/MTNBrighterSans-RegularItalic.ttf') format('truetype'),
+        url('/fonts/MTNBrighterSans-RegularItalic.eot') format('embedded-opentype');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 400;
+    font-display: auto;
+    src: local('Awesome Font'),
+        url('/fonts/Montserrat-Regular.woff2') format('woff2'),
+        url('/fonts/Montserrat-Regular.woff') format('woff'),
+        url('/fonts/Montserrat-Regular.ttf') format('truetype'),
+        url('/fonts/Montserrat-Regular.eot') format('embedded-opentype');
+}
+
+@font-face {
+    font-family: 'Montserrat-Light';
+    font-style: normal;
+    font-weight: 300;
+    font-display: auto;
+    src: local('Awesome Font'),
+        url('/fonts/Montserrat-Light.woff2') format('woff2'),
+        url('/fonts/Montserrat-Light.woff') format('woff'),
+        url('/fonts/Montserrat-Light.ttf') format('truetype'),
+        url('/fonts/Montserrat-Light.eot') format('embedded-opentype');
+}
+
+body {
+    font-size: 14px;
+    line-height: 21px;
+    font-family: "mtn-regular", sans-serif;
+    color: $grey500;
+}
+
+h1 {
+    color: #000;
+    font-size: 20px;
+    line-height: 25px;
+    font-family: "mtn-bold";
+}
+
+h2 {
+    color: #000;
+    font-size: 20px;
+    line-height: 25px;
+    font-family: "mtn-regular";
+}
+
+a {
+    text-decoration: none;
+    color: $blue;
+}

@@ -1,81 +1,122 @@
 button {
     height: 34px;
     line-height: 1;
-    background-color: $primary;
+    background-color: $yellow;
     background-position: center center;
     background-size: 16px;
     background-repeat: no-repeat;
-    border: 2px solid $primary;
-    border-radius: 16px;
+    border: 2px solid $yellow;
+    border-radius: 22px;
     padding: 0 20px;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
 
+    &.blue {
+        background-color: $blue;
+        border: 1px solid $blue;
+
+        &:hover {
+            background-color: mix(#FFFFFF, $blue, 20%);
+            border-color: mix(#FFFFFF, $blue, 20%);
+        }
+    }
+
     &.dark {
         background-color: #000;
         border: 2px solid #000;
+
+        &:hover {
+            background-color: mix(#FFFFFF, #000, 20%);
+            border-color: mix(#FFFFFF, #000, 20%);
+        }
+    }
+
+    &.medium {
+        background-color: $grey800;
+        border: 2px solid $grey800;
+
+        &:hover {
+            background-color: mix(#FFFFFF, $grey800, 20%);
+            border-color: mix(#FFFFFF, $grey800, 20%);
+        }
+    }
+
+    &.blue:not(.outline),
+    &.dark:not(.outline),
+    &.medium:not(.outline) {
         color: #FFF;
     }
 
-    &.outline {
-        background-color: #FFF;
-        border: 2px solid #000;
-    }
-
-    &.icon-only {
+    &.fab {
         padding: 0;
         width: 34px;
         border-radius: 50%;
+    }
 
-        &::before {
-            background-size: 20px;
-            position: absolute;
-        }
-
-        &::after {
-            display: none;
-        }
+    &.front::before,
+    &.end::after {
+        background-position: center center;
+        background-size: 16px;
+        background-repeat: no-repeat;
+        content: "";
+        height: 16px;
+        width: 16px;
     }
 
     &.front::before {
         margin-right: 5px;
-        background-position: center center;
-        background-size: 16px;
-        background-repeat: no-repeat;
-        content: "";
-        height: 16px;
-        width: 16px;
     }
 
     &.end::after {
         margin-left: 5px;
-        background-position: center center;
-        background-size: 16px;
-        background-repeat: no-repeat;
-        content: "";
-        height: 16px;
-        width: 16px;
     }
 
-    @each $icon, $glyph in $icons {
+    @each $icon,
+    $glyph in $icons {
+
         &.front.#{$icon}::before,
         &.end.#{$icon}::after {
             background-image: get-icon("#{$icon}", #000000);
         }
 
-        &.dark.front.#{$icon}::before,
-        &.dark.end.#{$icon}::after {
+        &.dark.front.#{$icon}:not(.outline)::before,
+        &.dark.end.#{$icon}:not(.outline)::after,
+        &.medium.front.#{$icon}:not(.outline)::before,
+        &.medium.end.#{$icon}:not(.outline)::after,
+        &.blue.front.#{$icon}:not(.outline)::before,
+        &.blue.end.#{$icon}:not(.outline)::after {
             background-image: get-icon("#{$icon}", #FFFFFF);
         }
 
-        &.icon-only.#{$icon} {
+        &.fab.#{$icon} {
             background-image: get-icon("#{$icon}", #000000);
         }
 
-        &.dark.icon-only.#{$icon} {
+        &.dark.fab.#{$icon}:not(.outline),
+        &.medium.fab.#{$icon}:not(.outline),
+        &.blue.fab.#{$icon}:not(.outline) {
             background-image: get-icon("#{$icon}", #FFFFFF);
         }
+
+        &.blue.front.#{$icon}.outline:hover::before,
+        &.blue.end.#{$icon}.outline:hover::after,
+        &.blue.fab.#{$icon}.outline:hover {
+            background-image: get-icon("#{$icon}", #FFFFFF);
+        }
+    }
+
+    &.outline {
+        background-color: #FFF;
+
+        &.blue:hover {
+            color: #FFF;
+        }
+    }
+
+    &:hover {
+        background-color: mix(#FFFFFF, $yellow, 20%);
+        border-color: mix(#FFFFFF, $yellow, 20%);
     }
 }

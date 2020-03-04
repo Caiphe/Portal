@@ -1,8 +1,28 @@
-$primary: #FC0;
+// Colours
+$yellow: #FC0;
+$yellow900: mix(#FFFFFF, $yellow, 20%);
+$yellow800: mix(#FFFFFF, $yellow, 40%);
+$yellow700: mix(#FFFFFF, $yellow, 60%);
+$yellow600: mix(#FFFFFF, $yellow, 80%);
+
+$blue: #0f6987;
+$blue900: mix(#FFFFFF, $blue, 20%);
+$blue800: mix(#FFFFFF, $blue, 40%);
+$blue700: mix(#FFFFFF, $blue, 60%);
+$blue600: mix(#FFFFFF, $blue, 80%);
+
+$grey900: mix(#FFFFFF, #000000, 20%);
+$grey800: mix(#FFFFFF, #000000, 40%);
+$grey700: mix(#FFFFFF, #000000, 60%);
+$grey600: mix(#FFFFFF, #000000, 80%);
+$grey500: mix(#FFFFFF, #000000, 90%);
+$grey400: mix(#FFFFFF, #000000, 95%);
+$grey300: mix(#FFFFFF, #000000, 98%);
 
 // Icons
 $icons: (
     'plus': '<svg xmlns="http://www.w3.org/2000/svg" fill="#000000" height="24" viewBox="0 0 24 24" width="24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>',
     'arrow-left': '<svg xmlns="http://www.w3.org/2000/svg" fill="#000000" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>',
     'arrow-right': '<svg xmlns="http://www.w3.org/2000/svg" fill="#000000" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>',
+    'arrow-down': '<svg xmlns="http://www.w3.org/2000/svg" fill="#000000" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/><path d="M0 0h24v24H0V0z" fill="none"/></svg>',
 );
