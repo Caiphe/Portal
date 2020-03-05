@@ -85,26 +85,33 @@ input[type="number"] {
 }
 
 .switch {
-    background-color: $grey700;
     border-radius: 12px;
     position: relative;
     display: inline-block;
     cursor: pointer;
-
-    &.yellow {
-        background-color: $yellow;
-    }
 
     .ball {
         position: absolute;
         left: 2px;
         top: 2px;
         border-radius: 50%;
-        background-color: $grey900;
         transition: transform 0.128s ease-out;
     }
 
-    &.ball-white .ball {
+    .track {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: $grey700;
+        border-radius: 12px;
+        transition: background-color 0.128s ease-out;
+    }
+
+    &.dark .ball {
+        background-color: $grey800;
+    }
+
+    &.light .ball {
         background-color: #FFF;
     }
 
@@ -132,11 +139,15 @@ input[type="number"] {
         display: none;
     }
 
-    &.big input:checked+.ball {
+    input:checked+.track {
+        background-color: $yellow;
+    }
+
+    &.big input:checked+.track+.ball {
         transform: translate(16px, 0);
     }
 
-    &.small input:checked+.ball {
+    &.small input:checked+.track+.ball {
         transform: translate(12px, 0);
     }
 }

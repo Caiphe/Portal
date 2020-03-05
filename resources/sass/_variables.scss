@@ -11,13 +11,18 @@ $blue800: mix(#FFFFFF, $blue, 40%);
 $blue700: mix(#FFFFFF, $blue, 60%);
 $blue600: mix(#FFFFFF, $blue, 80%);
 
-$grey900: mix(#FFFFFF, #000000, 20%);
-$grey800: mix(#FFFFFF, #000000, 40%);
-$grey700: mix(#FFFFFF, #000000, 60%);
-$grey600: mix(#FFFFFF, #000000, 80%);
-$grey500: mix(#FFFFFF, #000000, 90%);
-$grey400: mix(#FFFFFF, #000000, 95%);
-$grey300: mix(#FFFFFF, #000000, 98%);
+$grey900: mix(#FFFFFF, #000000, 10%);
+$grey800: mix(#FFFFFF, #000000, 20%);
+$grey700: mix(#FFFFFF, #000000, 40%);
+$grey600: mix(#FFFFFF, #000000, 60%);
+$grey500: mix(#FFFFFF, #000000, 80%);
+$grey400: mix(#FFFFFF, #000000, 90%);
+$grey300: mix(#FFFFFF, #000000, 95%);
+$grey200: mix(#FFFFFF, #000000, 98%);
+
+// Spacing
+$gutter: 40px;
+$gutterSmall: 20px;
 
 // Icons
 $icons: (

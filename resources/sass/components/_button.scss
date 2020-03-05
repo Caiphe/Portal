@@ -1,3 +1,15 @@
+/*
+    The button css component is styled to affect all buttons on the page with just a <button> element.
+    The idea is that it will have sane defaults that can be overwritten with styles applied to it.
+    The classes describe what you want to do, 
+    for example if you want a button that is blue, has an arrow-right icon after the text, you would right:
+    <button class="blue arrow-right after">button text</button>
+    or if you want a button that is outlined, has a arrow left button before the text, you would right:
+    <button class="outline arrow-left before">button text</button>
+    or a fab button with a plus icon:
+    <button class="fab plus"></button>
+*/
+
 button {
     height: 34px;
     line-height: 1;
@@ -55,8 +67,8 @@ button {
         border-radius: 50%;
     }
 
-    &.front::before,
-    &.end::after {
+    &.before::before,
+    &.after::after {
         background-position: center center;
         background-size: 16px;
         background-repeat: no-repeat;
@@ -65,28 +77,28 @@ button {
         width: 16px;
     }
 
-    &.front::before {
+    &.before::before {
         margin-right: 5px;
     }
 
-    &.end::after {
+    &.after::after {
         margin-left: 5px;
     }
 
     @each $icon,
     $glyph in $icons {
 
-        &.front.#{$icon}::before,
-        &.end.#{$icon}::after {
+        &.before.#{$icon}::before,
+        &.after.#{$icon}::after {
             background-image: get-icon("#{$icon}", #000000);
         }
 
-        &.dark.front.#{$icon}:not(.outline)::before,
-        &.dark.end.#{$icon}:not(.outline)::after,
-        &.medium.front.#{$icon}:not(.outline)::before,
-        &.medium.end.#{$icon}:not(.outline)::after,
-        &.blue.front.#{$icon}:not(.outline)::before,
-        &.blue.end.#{$icon}:not(.outline)::after {
+        &.dark.before.#{$icon}:not(.outline)::before,
+        &.dark.after.#{$icon}:not(.outline)::after,
+        &.medium.before.#{$icon}:not(.outline)::before,
+        &.medium.after.#{$icon}:not(.outline)::after,
+        &.blue.before.#{$icon}:not(.outline)::before,
+        &.blue.after.#{$icon}:not(.outline)::after {
             background-image: get-icon("#{$icon}", #FFFFFF);
         }
 
@@ -100,8 +112,8 @@ button {
             background-image: get-icon("#{$icon}", #FFFFFF);
         }
 
-        &.blue.front.#{$icon}.outline:hover::before,
-        &.blue.end.#{$icon}.outline:hover::after,
+        &.blue.before.#{$icon}.outline:hover::before,
+        &.blue.after.#{$icon}.outline:hover::after,
         &.blue.fab.#{$icon}.outline:hover {
             background-image: get-icon("#{$icon}", #FFFFFF);
         }

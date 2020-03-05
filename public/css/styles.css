@@ -436,23 +436,27 @@ textarea {
   src: local("Awesome Font"), url("/fonts/Montserrat-Light.woff2") format("woff2"), url("/fonts/Montserrat-Light.woff") format("woff"), url("/fonts/Montserrat-Light.ttf") format("truetype"), url("/fonts/Montserrat-Light.eot") format("embedded-opentype");
 }
 
-body {
-  font-size: 14px;
+html {
+  font-size: 10px;
   line-height: 21px;
   font-family: "mtn-regular", sans-serif;
-  color: #e6e6e6;
+  color: #1a1a1a;
+}
+
+body {
+  font-size: 1.4rem;
 }
 
 h1 {
   color: #000;
-  font-size: 20px;
+  font-size: 2.5rem;
   line-height: 25px;
   font-family: "mtn-bold";
 }
 
 h2 {
   color: #000;
-  font-size: 20px;
+  font-size: 2rem;
   line-height: 25px;
   font-family: "mtn-regular";
 }
@@ -461,6 +465,18 @@ a {
   text-decoration: none;
   color: #0f6987;
 }
+
+/*
+    The button css component is styled to affect all buttons on the page with just a <button> element.
+    The idea is that it will have sane defaults that can be overwritten with styles applied to it.
+    The classes describe what you want to do, 
+    for example if you want a button that is blue, has an arrow-right icon after the text, you would right:
+    <button class="blue arrow-right after">button text</button>
+    or if you want a button that is outlined, has a arrow left button before the text, you would right:
+    <button class="outline arrow-left before">button text</button>
+    or a fab button with a plus icon:
+    <button class="fab plus"></button>
+*/
 
 button {
   height: 34px;
@@ -499,13 +515,13 @@ button.dark:hover {
 }
 
 button.medium {
-  background-color: #666666;
-  border: 2px solid #666666;
+  background-color: #333333;
+  border: 2px solid #333333;
 }
 
 button.medium:hover {
-  background-color: #858585;
-  border-color: #858585;
+  background-color: #5c5c5c;
+  border-color: #5c5c5c;
 }
 
 button.blue:not(.outline),
@@ -520,8 +536,8 @@ button.fab {
   border-radius: 50%;
 }
 
-button.front::before,
-button.end::after {
+button.before::before,
+button.after::after {
   background-position: center center;
   background-size: 16px;
   background-repeat: no-repeat;
@@ -530,25 +546,25 @@ button.end::after {
   width: 16px;
 }
 
-button.front::before {
+button.before::before {
   margin-right: 5px;
 }
 
-button.end::after {
+button.after::after {
   margin-left: 5px;
 }
 
-button.front.plus::before,
-button.end.plus::after {
+button.before.plus::before,
+button.after.plus::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
-button.dark.front.plus:not(.outline)::before,
-button.dark.end.plus:not(.outline)::after,
-button.medium.front.plus:not(.outline)::before,
-button.medium.end.plus:not(.outline)::after,
-button.blue.front.plus:not(.outline)::before,
-button.blue.end.plus:not(.outline)::after {
+button.dark.before.plus:not(.outline)::before,
+button.dark.after.plus:not(.outline)::after,
+button.medium.before.plus:not(.outline)::before,
+button.medium.after.plus:not(.outline)::after,
+button.blue.before.plus:not(.outline)::before,
+button.blue.after.plus:not(.outline)::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
@@ -562,23 +578,23 @@ button.blue.fab.plus:not(.outline) {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
-button.blue.front.plus.outline:hover::before,
-button.blue.end.plus.outline:hover::after,
+button.blue.before.plus.outline:hover::before,
+button.blue.after.plus.outline:hover::after,
 button.blue.fab.plus.outline:hover {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
-button.front.arrow-left::before,
-button.end.arrow-left::after {
+button.before.arrow-left::before,
+button.after.arrow-left::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>');
 }
 
-button.dark.front.arrow-left:not(.outline)::before,
-button.dark.end.arrow-left:not(.outline)::after,
-button.medium.front.arrow-left:not(.outline)::before,
-button.medium.end.arrow-left:not(.outline)::after,
-button.blue.front.arrow-left:not(.outline)::before,
-button.blue.end.arrow-left:not(.outline)::after {
+button.dark.before.arrow-left:not(.outline)::before,
+button.dark.after.arrow-left:not(.outline)::after,
+button.medium.before.arrow-left:not(.outline)::before,
+button.medium.after.arrow-left:not(.outline)::after,
+button.blue.before.arrow-left:not(.outline)::before,
+button.blue.after.arrow-left:not(.outline)::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>');
 }
 
@@ -592,23 +608,23 @@ button.blue.fab.arrow-left:not(.outline) {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>');
 }
 
-button.blue.front.arrow-left.outline:hover::before,
-button.blue.end.arrow-left.outline:hover::after,
+button.blue.before.arrow-left.outline:hover::before,
+button.blue.after.arrow-left.outline:hover::after,
 button.blue.fab.arrow-left.outline:hover {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>');
 }
 
-button.front.arrow-right::before,
-button.end.arrow-right::after {
+button.before.arrow-right::before,
+button.after.arrow-right::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>');
 }
 
-button.dark.front.arrow-right:not(.outline)::before,
-button.dark.end.arrow-right:not(.outline)::after,
-button.medium.front.arrow-right:not(.outline)::before,
-button.medium.end.arrow-right:not(.outline)::after,
-button.blue.front.arrow-right:not(.outline)::before,
-button.blue.end.arrow-right:not(.outline)::after {
+button.dark.before.arrow-right:not(.outline)::before,
+button.dark.after.arrow-right:not(.outline)::after,
+button.medium.before.arrow-right:not(.outline)::before,
+button.medium.after.arrow-right:not(.outline)::after,
+button.blue.before.arrow-right:not(.outline)::before,
+button.blue.after.arrow-right:not(.outline)::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>');
 }
 
@@ -622,23 +638,23 @@ button.blue.fab.arrow-right:not(.outline) {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>');
 }
 
-button.blue.front.arrow-right.outline:hover::before,
-button.blue.end.arrow-right.outline:hover::after,
+button.blue.before.arrow-right.outline:hover::before,
+button.blue.after.arrow-right.outline:hover::after,
 button.blue.fab.arrow-right.outline:hover {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>');
 }
 
-button.front.arrow-down::before,
-button.end.arrow-down::after {
+button.before.arrow-down::before,
+button.after.arrow-down::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/><path d="M0 0h24v24H0V0z" fill="none"/></svg>');
 }
 
-button.dark.front.arrow-down:not(.outline)::before,
-button.dark.end.arrow-down:not(.outline)::after,
-button.medium.front.arrow-down:not(.outline)::before,
-button.medium.end.arrow-down:not(.outline)::after,
-button.blue.front.arrow-down:not(.outline)::before,
-button.blue.end.arrow-down:not(.outline)::after {
+button.dark.before.arrow-down:not(.outline)::before,
+button.dark.after.arrow-down:not(.outline)::after,
+button.medium.before.arrow-down:not(.outline)::before,
+button.medium.after.arrow-down:not(.outline)::after,
+button.blue.before.arrow-down:not(.outline)::before,
+button.blue.after.arrow-down:not(.outline)::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/><path d="M0 0h24v24H0V0z" fill="none"/></svg>');
 }
 
@@ -652,8 +668,8 @@ button.blue.fab.arrow-down:not(.outline) {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/><path d="M0 0h24v24H0V0z" fill="none"/></svg>');
 }
 
-button.blue.front.arrow-down.outline:hover::before,
-button.blue.end.arrow-down.outline:hover::after,
+button.blue.before.arrow-down.outline:hover::before,
+button.blue.after.arrow-down.outline:hover::after,
 button.blue.fab.arrow-down.outline:hover {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/><path d="M0 0h24v24H0V0z" fill="none"/></svg>');
 }
@@ -674,7 +690,7 @@ button:hover {
 input,
 textarea {
   border-radius: 5px;
-  border: 1px solid #f2f2f2;
+  border: 1px solid #e6e6e6;
   padding: 0 10px;
   -moz-appearance: none;
   -webkit-appearance: none;
@@ -710,7 +726,7 @@ textarea {
 select {
   height: 40px;
   padding: 0 22px 0 10px;
-  border: 1px solid #f2f2f2;
+  border: 1px solid #e6e6e6;
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/><path d="M0 0h24v24H0V0z" fill="none"/></svg>');
   background-repeat: no-repeat;
   background-size: 16px;
@@ -746,7 +762,7 @@ input[type=email].alt,
 input[type=number].alt {
   height: 32px;
   border: none;
-  border-bottom: 1px solid #f2f2f2;
+  border-bottom: 1px solid #e6e6e6;
   padding: 0;
 }
 
@@ -766,15 +782,10 @@ input[type=number].alt {
 }
 
 .switch {
-  background-color: #999999;
   border-radius: 12px;
   position: relative;
   display: inline-block;
   cursor: pointer;
-}
-
-.switch.yellow {
-  background-color: #FC0;
 }
 
 .switch .ball {
@@ -782,11 +793,23 @@ input[type=number].alt {
   left: 2px;
   top: 2px;
   border-radius: 50%;
-  background-color: #333333;
   transition: transform 0.128s ease-out;
 }
 
-.switch.ball-white .ball {
+.switch .track {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #666666;
+  border-radius: 12px;
+  transition: background-color 0.128s ease-out;
+}
+
+.switch.dark .ball {
+  background-color: #333333;
+}
+
+.switch.light .ball {
   background-color: #FFF;
 }
 
@@ -814,11 +837,55 @@ input[type=number].alt {
   display: none;
 }
 
-.switch.big input:checked + .ball {
+.switch input:checked + .track {
+  background-color: #FC0;
+}
+
+.switch.big input:checked + .track + .ball {
   transform: translate(16px, 0);
 }
 
-.switch.small input:checked + .ball {
+.switch.small input:checked + .track + .ball {
   transform: translate(12px, 0);
+}
+
+#footer {
+  background-color: #1a1a1a;
+  color: #FFF;
+  font-size: 1rem;
+}
+
+#footer .footer-inner {
+  padding: 4% 8%;
+  position: relative;
+}
+
+#footer p {
+  margin-right: 120px;
+}
+
+#footer .link-to {
+  color: #FFF;
+  margin-right: 14px;
+}
+
+#footer .logo,
+#footer .social {
+  position: absolute;
+  margin-right: 8%;
+  right: 0;
+  top: 0;
+}
+
+#footer .logo {
+  margin-top: 4%;
+}
+
+#footer .social {
+  margin-top: calc(4% + 80px);
+}
+
+#footer .social a {
+  margin-left: 10px;
 }
 
