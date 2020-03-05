@@ -1,4 +1,4 @@
-<footer id="footer">
+<footer id="footer" class="curve">
     <div class="footer-inner">
         <p>
             &copy; 2020 MTN. All rights reserved.<br>

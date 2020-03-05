@@ -386,6 +386,7 @@ button,
 select,
 textarea {
   box-sizing: border-box;
+  position: relative;
 }
 
 @font-face {
@@ -853,6 +854,7 @@ input[type=number].alt {
   background-color: #1a1a1a;
   color: #FFF;
   font-size: 1rem;
+  position: relative;
 }
 
 #footer .footer-inner {
@@ -887,5 +889,33 @@ input[type=number].alt {
 
 #footer .social a {
   margin-left: 10px;
+}
+
+.curve {
+  overflow: hidden;
+  padding-top: 32px;
+}
+
+.curve::before {
+  content: "";
+  position: absolute;
+  width: calc(100% + 20px);
+  height: 72px;
+  background-color: #FFF;
+  border-radius: 0 0 50% 50%;
+  left: -10px;
+  top: -40px;
+}
+
+.curve.yellow::before {
+  background-color: #FC0;
+}
+
+.curve.dark::before {
+  background-color: #1a1a1a;
+}
+
+.curve.medium::before {
+  background-color: #f2f2f2;
 }
 
