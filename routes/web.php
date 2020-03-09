@@ -1,5 +1,7 @@
 <?php
 
+use App\Services\ApigeeService;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,4 +15,8 @@
 
 Route::get('/', function () {
     return view('master');
+});
+
+Route::get('/test', function(){
+    return ApigeeService::askFor("apiproducts?expand=true");
 });
