@@ -379,6 +379,16 @@ template {
   display: none;
 }
 
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
 a p,
 div,
 input,
@@ -944,6 +954,7 @@ input[type=number].see-through {
 }
 
 #main {
+  flex: 1 0 auto;
   margin: 40px 8%;
 }
 
@@ -952,6 +963,7 @@ input[type=number].see-through {
   color: #FFF;
   font-size: 1rem;
   position: relative;
+  flex-shrink: 0;
 }
 
 #footer .footer-inner {

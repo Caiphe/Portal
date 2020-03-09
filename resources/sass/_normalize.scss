@@ -1,5 +1,14 @@
 @import "vendor/normalize";
 
+html,body{
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
 a
 p,
 div,

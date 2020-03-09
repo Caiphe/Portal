@@ -18,6 +18,10 @@
         <button class="blue arrow-right after">button text</button>
         <button class="outline plus before">hello world</button>
         <button class="fab outline plus"></button>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate recusandae ratione, deserunt blanditiis praesentium explicabo nobis molestias dignissimos perferendis ipsa voluptatem deleniti repellat nesciunt facilis sed, eligendi minima fugit voluptatum?</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate recusandae ratione, deserunt blanditiis praesentium explicabo nobis molestias dignissimos perferendis ipsa voluptatem deleniti repellat nesciunt facilis sed, eligendi minima fugit voluptatum?</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate recusandae ratione, deserunt blanditiis praesentium explicabo nobis molestias dignissimos perferendis ipsa voluptatem deleniti repellat nesciunt facilis sed, eligendi minima fugit voluptatum?</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate recusandae ratione, deserunt blanditiis praesentium explicabo nobis molestias dignissimos perferendis ipsa voluptatem deleniti repellat nesciunt facilis sed, eligendi minima fugit voluptatum?</p>
     </main>
     <x-footer/>
     @yield("content")
