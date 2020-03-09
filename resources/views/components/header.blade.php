@@ -1,6 +1,6 @@
 <header id="header">
     <div class="header-inner">
-        <a href="https://www.mtn.com"><img src="/images/mtn-logo.svg" alt="MTN logo"></a>
+        <a href="/"><img src="/images/mtn-logo.svg" alt="MTN logo"></a>
         <div class="site-name">Developer Portal</div>
         <ul class="main-menu" role="navigation" aria-label="Main">
             <li><a href="/">Products</a></li>
