@@ -12,10 +12,16 @@
     <link rel="preload" href="/fonts/Montserrat-Regular.woff2" as="font" type="font/woff2">
     <link rel="preload" href="/fonts/Montserrat-Light.woff2" as="font" type="font/woff2">
 </head>
-<body style="margin: 40px;">
-    <h1>Y'ello there!</h1>
+<body>
+    <x-header/>
+    <main id="main">
+        <button class="blue arrow-right after">button text</button>
+        <button class="outline plus before">hello world</button>
+        <button class="fab outline plus"></button>
+    </main>
     <x-footer/>
     @yield("content")
+    <script src="/js/scripts.js"></script>
     @stack("scripts")
 </body>
 </html>

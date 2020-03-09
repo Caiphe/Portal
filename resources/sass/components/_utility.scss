@@ -13,15 +13,19 @@
         top: -40px;
     }
 
-    &.yellow::before{
+    &.yellow::before {
         background-color: $yellow;
     }
 
-    &.dark::before{
+    &.dark::before {
         background-color: $grey900;
     }
 
-    &.medium::before{
+    &.medium::before {
         background-color: $grey300;
     }
+}
+
+.shadow {
+    box-shadow: 0 3px 6px rgba(0,0,0,0.12), 0 3px 6px rgba(0,0,0,0.16);
 }

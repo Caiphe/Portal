@@ -67,6 +67,11 @@ button {
         border-radius: 50%;
     }
 
+    &.image {
+        background-size: cover;
+        background-position: center center;
+    }
+
     &.before::before,
     &.after::after {
         background-position: center center;
@@ -85,8 +90,7 @@ button {
         margin-left: 5px;
     }
 
-    @each $icon,
-    $glyph in $icons {
+    @each $icon, $svg in $icons {
 
         &.before.#{$icon}::before,
         &.after.#{$icon}::after {

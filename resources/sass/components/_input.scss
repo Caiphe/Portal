@@ -54,6 +54,7 @@ select {
 
 input[type="text"],
 input[type="email"],
+input[type="search"],
 input[type="number"] {
     height: 40px;
 
@@ -66,6 +67,11 @@ input[type="number"] {
         border: none;
         border-bottom: 1px solid $grey400;
         padding: 0;
+    }
+
+    &.see-through{
+        background-color: rgba(255,255,255,0.4);
+        border:none;
     }
 }
 

@@ -464,7 +464,84 @@ h2 {
 
 a {
   text-decoration: none;
+  color: initial;
+}
+
+#main a {
   color: #0f6987;
+}
+
+#header {
+  height: 80px;
+  background-color: #FC0;
+}
+
+#header .header-inner {
+  height: 80px;
+  padding: 0 8%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+#header .site-name {
+  margin-left: 20px;
+  font-size: 1.8rem;
+  flex-grow: 1;
+}
+
+#header .main-menu {
+  list-style: none;
+}
+
+#header .main-menu li {
+  display: inline-block;
+  font-size: 1.6rem;
+  padding: 0 10px;
+}
+
+#header input {
+  margin: 0 20px 0 10px;
+}
+
+#profile {
+  margin-left: 20px;
+  z-index: 4;
+}
+
+#profile-menu {
+  position: absolute;
+  background-color: #FFF;
+  padding: 20px;
+  top: 54px;
+  right: 8%;
+  list-style: none;
+  margin: 0 -32px 0 0;
+  width: 64px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease-in, transform 0.18s ease-in;
+}
+
+.show-profile-menu #profile-menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(0, 10px);
+  z-index: 2;
+}
+
+#profile-menu-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
+
+.show-profile-menu #profile-menu-background {
+  pointer-events: auto;
+  z-index: 2;
 }
 
 /*
@@ -535,6 +612,11 @@ button.fab {
   padding: 0;
   width: 34px;
   border-radius: 50%;
+}
+
+button.image {
+  background-size: cover;
+  background-position: center center;
 }
 
 button.before::before,
@@ -748,23 +830,34 @@ select.dark {
 
 input[type=text],
 input[type=email],
+input[type=search],
 input[type=number] {
   height: 40px;
 }
 
 input[type=text].thin,
 input[type=email].thin,
+input[type=search].thin,
 input[type=number].thin {
   height: 32px;
 }
 
 input[type=text].alt,
 input[type=email].alt,
+input[type=search].alt,
 input[type=number].alt {
   height: 32px;
   border: none;
   border-bottom: 1px solid #e6e6e6;
   padding: 0;
+}
+
+input[type=text].see-through,
+input[type=email].see-through,
+input[type=search].see-through,
+input[type=number].see-through {
+  background-color: rgba(255, 255, 255, 0.4);
+  border: none;
 }
 
 :not(.switch) > input[type=checkbox] {
@@ -850,6 +943,10 @@ input[type=number].alt {
   transform: translate(12px, 0);
 }
 
+#main {
+  margin: 40px 8%;
+}
+
 #footer {
   background-color: #1a1a1a;
   color: #FFF;
@@ -917,5 +1014,9 @@ input[type=number].alt {
 
 .curve.medium::before {
   background-color: #f2f2f2;
+}
+
+.shadow {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12), 0 3px 6px rgba(0, 0, 0, 0.16);
 }
 
