@@ -15,16 +15,9 @@
 <body>
     <x-header/>
     <main id="main">
-        <button class="blue arrow-right after">button text</button>
-        <button class="outline plus before">hello world</button>
-        <button class="fab outline plus"></button>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate recusandae ratione, deserunt blanditiis praesentium explicabo nobis molestias dignissimos perferendis ipsa voluptatem deleniti repellat nesciunt facilis sed, eligendi minima fugit voluptatum?</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate recusandae ratione, deserunt blanditiis praesentium explicabo nobis molestias dignissimos perferendis ipsa voluptatem deleniti repellat nesciunt facilis sed, eligendi minima fugit voluptatum?</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate recusandae ratione, deserunt blanditiis praesentium explicabo nobis molestias dignissimos perferendis ipsa voluptatem deleniti repellat nesciunt facilis sed, eligendi minima fugit voluptatum?</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate recusandae ratione, deserunt blanditiis praesentium explicabo nobis molestias dignissimos perferendis ipsa voluptatem deleniti repellat nesciunt facilis sed, eligendi minima fugit voluptatum?</p>
+        @yield("content")
     </main>
     <x-footer/>
-    @yield("content")
     <script src="/js/scripts.js"></script>
     @stack("scripts")
 </body>
