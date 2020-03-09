@@ -16,7 +16,3 @@ use App\Services\ApigeeService;
 Route::get('/', function () {
     return view('master');
 });
-
-Route::get('/test', function(){
-    return ApigeeService::askFor("apiproducts?expand=true");
-});
