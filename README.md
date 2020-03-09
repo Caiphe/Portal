@@ -8,25 +8,28 @@ Below is a living //TODO of what needs to be done to get parity with the current
 
 ## Base setup
 - Migrations and Models.
-    - Users.
+    - ~~Users~~.
     - Products.
     - Faqs.
     - Documentation (general, not product.)
-- Master view layout.
+- ~~Master view layouts.~~
 
 ## Components
 - Card.
-- Button (css.)
-- Header.
-- Footer.
-- Input (css.)
+- ~~Button. (css.)~~
+- ~~Header.~~
+- ~~Footer.~~
+- ~~Input (css.)~~
 - Accordian.
 - Dialog / Alert.
 - Zebra (white / grey sections.)
 - Product model view.
 
+## Helpers
+- ~~SVG - pulls in an svg into a blade component~~
+
 ## Layout
-- Full width.
+- ~~Full width.~~
 - Left nav.
 
 ## Home page
