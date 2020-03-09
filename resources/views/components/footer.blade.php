@@ -1,7 +1,7 @@
 <footer id="footer" class="curve">
     <div class="footer-inner">
         <p>
-            &copy; 2020 MTN. All rights reserved.<br>
+            &copy; {{date("Y")}} MTN. All rights reserved.<br>
             MTN (PTY) LTD is an authorised Financial Service Provider underwritten by Guardrisk Insurance Company. FSP license number: 44774
         </p>
         <a href="privacy-policy" class="link-to">Privacy policy</a>

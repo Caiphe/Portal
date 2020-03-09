@@ -15,15 +15,20 @@ Below is a living //TODO of what needs to be done to get parity with the current
 - ~~Master view layouts.~~
 
 ## Components
-- Card.
+- Card product (Waseem).
+- Card link (Waseem).
 - ~~Button. (css.)~~
 - ~~Header.~~
 - ~~Footer.~~
 - ~~Input (css.)~~
-- Accordian.
-- Dialog / Alert.
-- Zebra (white / grey sections.)
-- Product model view.
+- Heading with icon (css) (Takalani).
+- Carousel (WesDawg).
+- Tag (css) (Tebello).
+- Multiselect with tag (WesDawg).
+- Accordian (Xoliswa).
+- Dialog / Alert (Neil).
+- Key features (Xoliswa).
+- Product model view (Neil).
 
 ## Helpers
 - ~~SVG - pulls in an svg into a blade component~~
