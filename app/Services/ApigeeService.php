@@ -5,7 +5,9 @@ namespace App\Services;
 use Illuminate\Support\Facades\Http;
 
 /**
- * 
+ * This is a helper service to connect to Apigee.
+ * It has the base connections through GET, POST, PUT and Delete but has
+ * some helper functions on top of it for convenience.
  */
 class ApigeeService
 {
