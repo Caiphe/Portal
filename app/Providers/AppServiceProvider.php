@@ -34,5 +34,13 @@ class AppServiceProvider extends ServiceProvider
             $colour = trim($options[1], " '\"");
             return preg_replace('/<svg/', '<svg fill="' . $colour . '"', $icon);
         });
+
+        Blade::directive('allowonce', function ($expression) {
+            $isDisplayed = '__allowonce_'.trim($expression, " '\"");
+            return "<?php if(!isset(\$__env->{$isDisplayed})): \$__env->{$isDisplayed} = true; ?>";
+        });
+        Blade::directive('endallowonce', function ($expression) {
+            return '<?php endif; ?>';
+        });
     }
 }
