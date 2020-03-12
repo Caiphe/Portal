@@ -42,5 +42,13 @@ class AppServiceProvider extends ServiceProvider
         Blade::directive('endallowonce', function ($expression) {
             return '<?php endif; ?>';
         });
+
+        Blade::directive('pushscript', function ($expression) {
+            $isDisplayed = '__pushscript_'.trim($expression, " '\"");
+            return "<?php if(!isset(\$__env->{$isDisplayed})): \$__env->{$isDisplayed} = true; \$__env->startPush('scripts'); ?>";
+        });
+        Blade::directive('endpushscript', function ($expression) {
+            return '<?php $__env->stopPush(); endif; ?>';
+        });
     }
 }
