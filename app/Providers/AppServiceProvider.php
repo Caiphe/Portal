@@ -25,14 +25,14 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Blade::directive('svg', function ($expression) {
-            $options = explode(', ', $expression);
+            $options = explode(',', $expression);
             $icon = trim($options[0], " '\"");
-            $icon = file_get_contents(public_path("images/icons/{$icon}.svg"));
-            
-            if (!isset($options[1])) return $icon;
-
             $colour = trim($options[1], " '\"");
-            return preg_replace('/<svg/', '<svg fill="' . $colour . '"', $icon);
+            return <<<SVG
+            <?php
+                echo preg_replace('/<svg/', '<svg fill="$colour"', file_get_contents(public_path("images/icons/$icon.svg")));
+            ?>
+            SVG;
         });
 
         Blade::directive('allowonce', function ($expression) {
