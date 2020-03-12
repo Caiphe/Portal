@@ -25,13 +25,18 @@
 </style>
 @endallowonce
 
-<select name="{{$name}}" id="{{$id ?? $name}}" {{ $attributes->merge(['class' => 'multiselect ' . ' ' . ($scheme ?? 'dark')]) }} onchange="multiselectChanged(this);" autocomplete="off">
+<select name="{{$name}}-select" id="{{$id ?? $name}}-select" {{ $attributes->merge(['class' => 'multiselect ' . ' ' . ($scheme ?? 'dark')]) }} onchange="multiselectChanged(this);" autocomplete="off">
     <option value="" disabled selected>-- Select --</option>
     @foreach($options as $value => $label)
     <option value="{{$value}}">{{$label}}</option>
     @endforeach
 </select>
-<div id="{{$id ?? $name}}-tags" class="multiselect-tags"></div>
+<select name="{{$name}}" id="{{$id ?? $name}}" multiple autocomplete="off">
+    @foreach($options as $value => $label)
+    <option value="{{$value}}">{{$label}}</option>
+    @endforeach
+</select>
+<div id="{{$id ?? $name}}-tags" class="multiselect-tags" onclick="removeTag(event)"></div>
 
 @pushscript('multiselect')
 <script src="/js/components/multiselect.js" defer></script>
