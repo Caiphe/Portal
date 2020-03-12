@@ -33,6 +33,6 @@
 </select>
 <div id="{{$id ?? $name}}-tags" class="multiselect-tags"></div>
 
-@push('scripts')
+@pushscript('multiselect')
 <script src="/js/components/multiselect.js" defer></script>
-@endpush
+@endpushscript
