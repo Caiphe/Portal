@@ -17,8 +17,8 @@
 <body>
     <x-header/>
     <main id="main">
-        <x-multiselect id="test" name="test" scheme="light" :options="['first' => 'one', 'second' => 'two']"/>
-        <x-multiselect id="test1" name="test1" scheme="light" :options="['first' => 'one', 'second' => 'two']"/>
+        <x-multiselect id="test" name="test" scheme="light" label="please choose it" :options="['first' => 'one', 'second' => 'two']" :selected="['first']"/>
+        <x-multiselect id="test1" name="test1" scheme="light" label="please choose it" :options="['first' => 'one', 'second' => 'two']" :selected="['second']"/>
         <x-multiselect id="test2" name="test2" scheme="light" :options="['first' => 'one', 'second' => 'two']"/>
         @yield("content")
     </main>
