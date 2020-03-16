@@ -7,11 +7,15 @@
 
 <a {{ $attributes }}>
 	<div class="card card--link">
-		@svg($icon, '#000000')
+		@isset($icon)
+			@svg($icon, '#000000')
+		@endisset
 		<div class="card__content">
+			@isset($title)
 			<h3 class="card__header">
 				{{ $title }}
 			</h3>
+			@endisset
 			<p class="card__body">
 				{{ $slot }}
 			</p>
