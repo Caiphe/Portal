@@ -1,0 +1,22 @@
+@import "../variables";
+
+.key-feature {
+    .key-feature__body{
+        text-align: center;
+
+        .key-feature__icon{
+            background-color: $yellow;
+            padding: 22px;
+            width: 30%;
+            margin: auto;
+        }
+        .key-feature__header {
+            font-size: 18px;
+            color: $grey900;
+        }
+        .key-feature__content {
+            font-size: 14px;
+            color: $grey900;
+        }
+    }
+}
