@@ -1,0 +1,20 @@
+.key-feature {
+    .key-feature__body{
+        text-align: center;
+
+        .key-feature__icon{
+            background-color: #FFCC00;
+            padding: 22px;
+            width: 30%;
+            margin: auto;
+        }
+        .key-feature__header {
+            font-size: 18px;
+            color: #000000;
+        }
+        .key-feature__content {
+            font-size: 14px;
+            color: #000000;
+        }
+    }
+}
