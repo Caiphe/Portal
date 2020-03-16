@@ -3,16 +3,16 @@
 <link href="/css/components/card.css" rel="stylesheet"/>
 @endallowonce
 
-@props(['title', 'icon', 'linkUrl'])
+@props(['title', 'icon'])
 
-<a href="{{ $linkUrl }}" {{ $attributes }}>
-	<div class="mtn-card mtn-card--link">
+<a {{ $attributes }}>
+	<div class="card card--link">
 		@svg($icon, '#000000')
-		<div class="mtn-card__content">
-			<h3 class="mtn-card__header">
+		<div class="card__content">
+			<h3 class="card__header">
 				{{ $title }}
 			</h3>
-			<p class="mtn-card__body">
+			<p class="card__body">
 				{{ $slot }}
 			</p>
 			<button class="fab chevron-right"></button>
