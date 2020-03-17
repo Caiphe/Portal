@@ -1,0 +1,64 @@
+@keyframes slideIn {
+    0% {
+        left: 100%;
+        transform: translate(0, 0);
+    }
+
+    100% {
+        transform: translate(-100%, 0);
+    }
+}
+
+@keyframes slideOut {
+    0% {
+        transform: translate(-100%, 0);
+    }
+
+    100% {
+        transform: translate(-200%, 0);
+    }
+}
+
+.carousel {
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.512s;
+
+    &.ready {
+        opacity: 1;
+    }
+
+    .carousel-item {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 100%;
+        animation-duration: 0.512s;
+        animation-name: slideOut;
+
+        &.active {
+            animation-duration: 0.512s;
+            animation-name: slideIn;
+            animation-fill-mode: forwards;
+        }
+    }
+
+    .carousel-pager {
+        position: absolute;
+        bottom: 2rem;
+        display: flex;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .carousel-pager-item {
+        background-color: #FFF;
+        border: none;
+        border-radius: 100px;
+        margin: 0 2px;
+        height: 6px;
+        width: 22px;
+    }
+}

@@ -124,6 +124,17 @@ function toggleProfileMenu() {
 
 /***/ }),
 
+/***/ "./resources/sass/components/carousel.scss":
+/*!*************************************************!*\
+  !*** ./resources/sass/components/carousel.scss ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ "./resources/sass/components/key-feature.scss":
 /*!****************************************************!*\
   !*** ./resources/sass/components/key-feature.scss ***!
@@ -147,13 +158,14 @@ function toggleProfileMenu() {
 /***/ }),
 
 /***/ 0:
-/*!**************************************************************************************************************************************************************************************************!*\
-  !*** multi ./resources/js/scripts.js ./resources/sass/components/card.scss ./resources/sass/components/card-link.scss ./resources/sass/components/key-feature.scss ./resources/sass/styles.scss ***!
-  \**************************************************************************************************************************************************************************************************/
+/*!********************************************************************************************************************************************************************************************************************************************!*\
+  !*** multi ./resources/js/scripts.js ./resources/sass/components/carousel.scss ./resources/sass/components/card.scss ./resources/sass/components/card-link.scss ./resources/sass/components/key-feature.scss ./resources/sass/styles.scss ***!
+  \********************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! /Users/wesleymartin/www/developer-portal.test/resources/js/scripts.js */"./resources/js/scripts.js");
+__webpack_require__(/*! /Users/wesleymartin/www/developer-portal.test/resources/sass/components/carousel.scss */"./resources/sass/components/carousel.scss");
 __webpack_require__(/*! /Users/wesleymartin/www/developer-portal.test/resources/sass/components/card.scss */"./resources/sass/components/card.scss");
 __webpack_require__(/*! /Users/wesleymartin/www/developer-portal.test/resources/sass/components/card-link.scss */"./resources/sass/components/card-link.scss");
 __webpack_require__(/*! /Users/wesleymartin/www/developer-portal.test/resources/sass/components/key-feature.scss */"./resources/sass/components/key-feature.scss");

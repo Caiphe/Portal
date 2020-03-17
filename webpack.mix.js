@@ -13,6 +13,7 @@ const mix = require("laravel-mix");
 
 mix.js("resources/js/scripts.js", "public/js")
     .scripts("resources/js/components/carousel.js", "public/js/components/carousel.js")
+    .sass("resources/sass/components/carousel.scss", "public/css/components")
     .sass("resources/sass/components/card.scss", "public/css/components")
     .sass("resources/sass/components/card-link.scss", "public/css/components")
     .sass("resources/sass/components/key-feature.scss", "public/css/components")
