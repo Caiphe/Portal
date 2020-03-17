@@ -12,7 +12,7 @@ h1, h2, h3, h4, h5, h6 {
             position: relative;
             width: 30px;
             height: 30px;
-            background-image: get-icon("#{$icon}", #FC0);
+            background-image: get-icon("#{$icon}", $yellow);
             position: absolute;
             left: 0;
         }
