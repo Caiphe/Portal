@@ -153,11 +153,11 @@ function toggleProfileMenu() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/admin/Code/mtn/mtn-developer-portal/resources/js/scripts.js */"./resources/js/scripts.js");
-__webpack_require__(/*! /Users/admin/Code/mtn/mtn-developer-portal/resources/sass/components/card.scss */"./resources/sass/components/card.scss");
-__webpack_require__(/*! /Users/admin/Code/mtn/mtn-developer-portal/resources/sass/components/card-link.scss */"./resources/sass/components/card-link.scss");
-__webpack_require__(/*! /Users/admin/Code/mtn/mtn-developer-portal/resources/sass/components/key-feature.scss */"./resources/sass/components/key-feature.scss");
-module.exports = __webpack_require__(/*! /Users/admin/Code/mtn/mtn-developer-portal/resources/sass/styles.scss */"./resources/sass/styles.scss");
+__webpack_require__(/*! /Users/wesleymartin/www/developer-portal.test/resources/js/scripts.js */"./resources/js/scripts.js");
+__webpack_require__(/*! /Users/wesleymartin/www/developer-portal.test/resources/sass/components/card.scss */"./resources/sass/components/card.scss");
+__webpack_require__(/*! /Users/wesleymartin/www/developer-portal.test/resources/sass/components/card-link.scss */"./resources/sass/components/card-link.scss");
+__webpack_require__(/*! /Users/wesleymartin/www/developer-portal.test/resources/sass/components/key-feature.scss */"./resources/sass/components/key-feature.scss");
+module.exports = __webpack_require__(/*! /Users/wesleymartin/www/developer-portal.test/resources/sass/styles.scss */"./resources/sass/styles.scss");
 
 
 /***/ })

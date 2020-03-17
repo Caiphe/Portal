@@ -18,6 +18,11 @@
     <x-header/>
     <main id="main">
         @yield("content")
+        <x-carousel>
+            <x-carousel-item>This is an item 1</x-carousel-item>
+            <x-carousel-item>This is an item 2</x-carousel-item>
+            <x-carousel-item>This is an item 3</x-carousel-item>
+        </x-carousel>
     </main>
     <x-footer/>
     <script src="/js/scripts.js"></script>

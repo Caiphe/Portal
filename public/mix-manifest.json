@@ -1,5 +1,8 @@
 {
-    "/js/scripts.js": "/js/scripts.js?id=67783ac45f7e3830ccb8",
-    "/css/components/key-feature.css": "/css/components/key-feature.css?id=edb14bec00e90d9ceb71",
-    "/css/styles.css": "/css/styles.css?id=23b7a407888c00044305"
+    "/js/scripts.js": "/js/scripts.js?id=f764a601d52610f50696",
+    "/css/components/card.css": "/css/components/card.css?id=a4b2d99646affa3b9d34",
+    "/css/components/card-link.css": "/css/components/card-link.css?id=be94b84cceaead029cd1",
+    "/css/components/key-feature.css": "/css/components/key-feature.css?id=1dcdaa70cf5de89bd053",
+    "/css/styles.css": "/css/styles.css?id=d0c48f2894a52b38817a",
+    "/js/components/carousel.js": "/js/components/carousel.js?id=5e3b7d0940d80a2548dc"
 }
