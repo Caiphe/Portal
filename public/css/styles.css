@@ -612,6 +612,11 @@ button.medium:hover {
   border-color: #5c5c5c;
 }
 
+button.inline {
+  display: inline-block;
+  margin-right: 5px;
+}
+
 button.blue:not(.outline),
 button.dark:not(.outline),
 button.medium:not(.outline) {
