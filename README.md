@@ -16,7 +16,7 @@ Below is a living //TODO of what needs to be done to get parity with the current
 
 ## Components
 - Card product (Waseem).
-- Card link (Waseem).
+- ~~Card link (Waseem).~~
 - ~~Button. (css.)~~
 - ~~Header.~~
 - ~~Footer.~~
@@ -27,7 +27,7 @@ Below is a living //TODO of what needs to be done to get parity with the current
 - Multiselect with tag (WesDawg).
 - Accordian (Xoliswa).
 - Dialog / Alert (Neil).
-- Key features (Xoliswa).
+- ~~Key features (Xoliswa).~~
 - Product model view (Neil).
 
 ## Helpers
