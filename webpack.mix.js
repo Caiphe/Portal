@@ -13,8 +13,10 @@ const mix = require("laravel-mix");
 
 mix.js("resources/js/scripts.js", "public/js")
     .version()
+    .scripts("resources/js/components/sidebar-accordion.js", "public/js/components/sidebar-accordion.js")
     .sass("resources/sass/components/card.scss", "public/css/components")
     .sass("resources/sass/components/card-link.scss", "public/css/components")
     .sass("resources/sass/components/key-feature.scss", "public/css/components")
+    .sass("resources/sass/components/sidebar-accordion.scss", "public/css/components")
     .sass("resources/sass/styles.scss", "public/css")
     .version();

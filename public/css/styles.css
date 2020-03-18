@@ -1062,3 +1062,194 @@ input[type=number].see-through {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12), 0 3px 6px rgba(0, 0, 0, 0.16);
 }
 
+h1.with-icon,
+h2.with-icon,
+h3.with-icon,
+h4.with-icon,
+h5.with-icon,
+h6.with-icon {
+  padding-left: 30px;
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 16px;
+  position: absolute;
+}
+
+h1.plus::before,
+h2.plus::before,
+h3.plus::before,
+h4.plus::before,
+h5.plus::before,
+h6.plus::before {
+  content: "";
+  position: relative;
+  width: 30px;
+  height: 30px;
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FC0" height="24" viewBox="0 0 24 24" width="24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+  position: absolute;
+  left: 0;
+}
+
+h1.arrow-left::before,
+h2.arrow-left::before,
+h3.arrow-left::before,
+h4.arrow-left::before,
+h5.arrow-left::before,
+h6.arrow-left::before {
+  content: "";
+  position: relative;
+  width: 30px;
+  height: 30px;
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FC0" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>');
+  position: absolute;
+  left: 0;
+}
+
+h1.arrow-right::before,
+h2.arrow-right::before,
+h3.arrow-right::before,
+h4.arrow-right::before,
+h5.arrow-right::before,
+h6.arrow-right::before {
+  content: "";
+  position: relative;
+  width: 30px;
+  height: 30px;
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FC0" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>');
+  position: absolute;
+  left: 0;
+}
+
+h1.arrow-down::before,
+h2.arrow-down::before,
+h3.arrow-down::before,
+h4.arrow-down::before,
+h5.arrow-down::before,
+h6.arrow-down::before {
+  content: "";
+  position: relative;
+  width: 30px;
+  height: 30px;
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FC0" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/><path d="M0 0h24v24H0V0z" fill="none"/></svg>');
+  position: absolute;
+  left: 0;
+}
+
+h1.chevron-right::before,
+h2.chevron-right::before,
+h3.chevron-right::before,
+h4.chevron-right::before,
+h5.chevron-right::before,
+h6.chevron-right::before {
+  content: "";
+  position: relative;
+  width: 30px;
+  height: 30px;
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FC0" height="24" viewBox="0 0 24 24" width="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+  position: absolute;
+  left: 0;
+}
+
+.tag {
+  padding: 1px 9px 2px;
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+  color: #ffffff;
+  background-color: #999999;
+  border-radius: 3px;
+}
+
+.tag.hoverable {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.tag.hoverable.yellow:hover {
+  background-color: #ffd633;
+}
+
+.tag.hoverable.blue:hover {
+  background-color: #3f879f;
+}
+
+.tag.hoverable.grey:hover {
+  background-color: #1a1a1a;
+}
+
+.tag.hoverable.success:hover {
+  background-color: #6ba06c;
+}
+
+.tag.hoverable.warning:hover {
+  background-color: #f9a938;
+}
+
+.tag.hoverable.error:hover {
+  background-color: #c76e6d;
+}
+
+.tag.outline {
+  border: 1px solid black;
+  background-color: transparent !important;
+  color: black;
+}
+
+.tag.outline.hoverable {
+  background-color: transparent;
+}
+
+.tag.outline.yellow {
+  border: 1px solid #FC0;
+  color: #FC0;
+}
+
+.tag.outline.blue {
+  border: 1px solid #0f6987;
+  color: #0f6987;
+}
+
+.tag.outline.grey {
+  border: 1px solid #1a1a1a;
+  color: #1a1a1a;
+}
+
+.tag.outline.success {
+  border: 1px solid #468847;
+  color: #468847;
+}
+
+.tag.outline.warning {
+  border: 1px solid #f89406;
+  color: #f89406;
+}
+
+.tag.outline.error {
+  border: 1px solid #b94a48;
+  color: #b94a48;
+}
+
+.tag.success {
+  background-color: #468847;
+}
+
+.tag.warning {
+  background-color: #f89406;
+}
+
+.tag.error {
+  background-color: #b94a48;
+}
+
+.tag.yellow {
+  background-color: #FC0;
+}
+
+.tag.blue {
+  background-color: #0f6987;
+}
+
+.tag.grey {
+  background-color: #1a1a1a;
+}
+
