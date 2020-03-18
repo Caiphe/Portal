@@ -1150,3 +1150,106 @@ h6.chevron-right::before {
   left: 0;
 }
 
+.tag {
+  padding: 1px 9px 2px;
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+  color: #ffffff;
+  background-color: #999999;
+  border-radius: 3px;
+}
+
+.tag.hoverable {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.tag.hoverable.yellow:hover {
+  background-color: #ffd633;
+}
+
+.tag.hoverable.blue:hover {
+  background-color: #3f879f;
+}
+
+.tag.hoverable.grey:hover {
+  background-color: #1a1a1a;
+}
+
+.tag.hoverable.success:hover {
+  background-color: #6ba06c;
+}
+
+.tag.hoverable.warning:hover {
+  background-color: #f9a938;
+}
+
+.tag.hoverable.error:hover {
+  background-color: #c76e6d;
+}
+
+.tag.outline {
+  border: 1px solid black;
+  background-color: transparent !important;
+  color: black;
+}
+
+.tag.outline.hoverable {
+  background-color: transparent;
+}
+
+.tag.outline.yellow {
+  border: 1px solid #FC0;
+  color: #FC0;
+}
+
+.tag.outline.blue {
+  border: 1px solid #0f6987;
+  color: #0f6987;
+}
+
+.tag.outline.grey {
+  border: 1px solid #1a1a1a;
+  color: #1a1a1a;
+}
+
+.tag.outline.success {
+  border: 1px solid #468847;
+  color: #468847;
+}
+
+.tag.outline.warning {
+  border: 1px solid #f89406;
+  color: #f89406;
+}
+
+.tag.outline.error {
+  border: 1px solid #b94a48;
+  color: #b94a48;
+}
+
+.tag.success {
+  background-color: #468847;
+}
+
+.tag.warning {
+  background-color: #f89406;
+}
+
+.tag.error {
+  background-color: #b94a48;
+}
+
+.tag.yellow {
+  background-color: #FC0;
+}
+
+.tag.blue {
+  background-color: #0f6987;
+}
+
+.tag.grey {
+  background-color: #1a1a1a;
+}
+

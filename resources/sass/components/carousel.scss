@@ -42,9 +42,7 @@
         animation-timing-function: ease-out;
 
         &.active {
-            animation-duration: 0.340s;
             animation-name: slideIn;
-            animation-timing-function: ease-out;
             animation-fill-mode: forwards;
         }
     }
