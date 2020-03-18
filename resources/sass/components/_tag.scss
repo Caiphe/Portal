@@ -11,15 +11,38 @@
     -moz-border-radius: 3px;
     border-radius: 3px;
     
-    .hoverable {
+    &.hoverable {
         text-decoration: none;
         cursor: pointer;
+
+        &.yellow {
+            background-color: $yellow900;
+        }
+        &.blue {
+            background-color: $blue900;
+        }
+        &.grey {
+            background-color: $grey900;
+        }
+        &.success {
+            background-color: $success900;
+        }
+        &.warning {
+            background-color: $warning900;
+        }
+        &.error {
+            background-color: $error900;
+        }
     }
 
     &.outline {
         border: 1px solid rgb(0, 0, 0);
         background-color: transparent;
         color: rgb(0, 0, 0);
+
+        &.hoverable {
+            background-color: transparent;
+        }
 
         &.yellow {
             border: 1px solid $yellow;

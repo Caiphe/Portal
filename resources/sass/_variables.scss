@@ -21,8 +21,13 @@ $grey300: mix(#FFFFFF, #000000, 95%);
 $grey200: mix(#FFFFFF, #000000, 98%);
 
 $success: #468847;
+$success900: mix(#FFFFFF, $success, 20%);
+
 $warning: #f89406;
+$warning900: mix(#FFFFFF, $warning, 20%);
+
 $error: #b94a48;
+$error900: mix(#FFFFFF, $error, 20%);
 
 // Spacing
 $gutter: 40px;
