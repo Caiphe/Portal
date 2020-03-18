@@ -1,6 +1,43 @@
 .card--product {
-    .buttons {
-        position: absolute;
-        right: 20px;
+    .card__content {
+        .tags {
+            display: flex;
+            .tag {
+                display: inline-block;
+                margin-left: 5px;
+            }
+        }
+        .country-selector {
+            display: flex;
+            .countries {
+                width: 30px;
+                height: 30px;
+                overflow: hidden;
+                img {
+                    height: 30px;
+                }
+            }
+            .view-more {
+                margin-left: 5px;
+                display: inline-block;
+                color: #000000;
+                align-items: center;
+            }
+            &:hover {
+                > .countries {
+					transition: width 2s;
+                    width: 100%;
+                }
+                > .view-more {
+                    display: none;
+                }
+            }
+        }
+        .buttons {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            right: 20px;
+        }
     }
 }

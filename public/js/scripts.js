@@ -113,6 +113,17 @@ function toggleProfileMenu() {
 
 /***/ }),
 
+/***/ "./resources/sass/components/card-product.scss":
+/*!*****************************************************!*\
+  !*** ./resources/sass/components/card-product.scss ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
 /***/ "./resources/sass/components/card.scss":
 /*!*********************************************!*\
   !*** ./resources/sass/components/card.scss ***!
@@ -147,15 +158,16 @@ function toggleProfileMenu() {
 /***/ }),
 
 /***/ 0:
-/*!**************************************************************************************************************************************************************************************************!*\
-  !*** multi ./resources/js/scripts.js ./resources/sass/components/card.scss ./resources/sass/components/card-link.scss ./resources/sass/components/key-feature.scss ./resources/sass/styles.scss ***!
-  \**************************************************************************************************************************************************************************************************/
+/*!************************************************************************************************************************************************************************************************************************************************!*\
+  !*** multi ./resources/js/scripts.js ./resources/sass/components/card.scss ./resources/sass/components/card-link.scss ./resources/sass/components/card-product.scss ./resources/sass/components/key-feature.scss ./resources/sass/styles.scss ***!
+  \************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! /Users/admin/Code/mtn/mtn-developer-portal/resources/js/scripts.js */"./resources/js/scripts.js");
 __webpack_require__(/*! /Users/admin/Code/mtn/mtn-developer-portal/resources/sass/components/card.scss */"./resources/sass/components/card.scss");
 __webpack_require__(/*! /Users/admin/Code/mtn/mtn-developer-portal/resources/sass/components/card-link.scss */"./resources/sass/components/card-link.scss");
+__webpack_require__(/*! /Users/admin/Code/mtn/mtn-developer-portal/resources/sass/components/card-product.scss */"./resources/sass/components/card-product.scss");
 __webpack_require__(/*! /Users/admin/Code/mtn/mtn-developer-portal/resources/sass/components/key-feature.scss */"./resources/sass/components/key-feature.scss");
 module.exports = __webpack_require__(/*! /Users/admin/Code/mtn/mtn-developer-portal/resources/sass/styles.scss */"./resources/sass/styles.scss");
 
