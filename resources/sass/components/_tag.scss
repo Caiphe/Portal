@@ -15,29 +15,29 @@
         text-decoration: none;
         cursor: pointer;
 
-        &.yellow {
+        &.yellow:hover {
             background-color: $yellow900;
         }
-        &.blue {
+        &.blue:hover {
             background-color: $blue900;
         }
-        &.grey {
+        &.grey:hover {
             background-color: $grey900;
         }
-        &.success {
+        &.success:hover {
             background-color: $success900;
         }
-        &.warning {
+        &.warning:hover {
             background-color: $warning900;
         }
-        &.error {
+        &.error:hover {
             background-color: $error900;
         }
     }
 
     &.outline {
         border: 1px solid rgb(0, 0, 0);
-        background-color: transparent;
+        background-color: transparent !important;
         color: rgb(0, 0, 0);
 
         &.hoverable {
