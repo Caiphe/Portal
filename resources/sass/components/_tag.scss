@@ -10,10 +10,12 @@
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    &:hover {
+    
+    .hoverable {
         text-decoration: none;
         cursor: pointer;
     }
+
     &.outline {
         border: 1px solid rgb(0, 0, 0);
         background-color: transparent;
@@ -56,19 +58,10 @@
     &.yellow {
         background-color: $yellow;
     }
-    &.yellow:hover {
-        background-color: $yellow900;
-    }
     &.blue {
         background-color: $blue;
     }
-    &.blue:hover {
-        background-color: $blue900;
-    }
     &.grey {
-        background-color: $grey900;
-    }
-    &.grey:hover {
         background-color: $grey900;
     }
 }
