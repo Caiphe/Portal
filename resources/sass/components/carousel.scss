@@ -25,7 +25,7 @@
     position: relative;
     overflow: hidden;
     opacity: 0;
-    transition: opacity 0.256s;
+    transition: opacity 0.340s;
 
     &.ready {
         opacity: 1;
@@ -37,12 +37,12 @@
         height: 100%;
         top: 0;
         left: 100%;
-        animation-duration: 0.256s;
+        animation-duration: 0.340s;
         animation-name: slideOut;
         animation-timing-function: ease-out;
 
         &.active {
-            animation-duration: 0.256s;
+            animation-duration: 0.340s;
             animation-name: slideIn;
             animation-timing-function: ease-out;
             animation-fill-mode: forwards;

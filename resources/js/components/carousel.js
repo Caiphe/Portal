@@ -1,14 +1,13 @@
 (function() {
     var carousels = document.querySelectorAll(".carousel");
     var transitionTimer = void 0;
-    var transitionCarouselSpeed = 2000;
 
     for (var i = carousels.length - 1; i >= 0; i--) {
         setupCarousel(carousels[i]);
         carousels[i].addEventListener('mouseenter', stopTransition);
         carousels[i].addEventListener('mouseleave', startTransition);
-        window.setTimeout(makeCarouselReady.bind(null, carousels[i]), 300);
-        window.setTimeout(transitionCarousel.bind(null, carousels[i]), transitionCarouselSpeed)
+        window.setTimeout(transitionCarousel.bind(null, carousels[i]), +carousels[i].dataset.wait)
+        window.setTimeout(makeCarouselReady.bind(null, carousels[i]), 400);
     }    
 
     function makeCarouselReady(carousel) {
@@ -21,6 +20,10 @@
         carouselItems[0].classList.add('active');
 
         carousel.appendChild(buildPager(carouselItems));
+
+        for (var i = carouselItems.length - 1; i >= 0; i--) {
+            carouselItems[i].style.animationDuration = carousel.dataset.duration;
+        }
     }
 
     function buildPager(carouselItems) {
@@ -76,7 +79,7 @@
             pagerActive.nextElementSibling.classList.add('active');
         }
 
-        transitionTimer = window.setTimeout(transitionCarousel.bind(null, carousel), transitionCarouselSpeed);
+        transitionTimer = window.setTimeout(transitionCarousel.bind(null, carousel), +carousel.dataset.wait);
     }
 
     function stopTransition(ev) {
@@ -85,6 +88,6 @@
     }
 
     function startTransition(ev) {
-        transitionTimer = window.setTimeout(transitionCarousel.bind(null, this), transitionCarouselSpeed);
+        transitionTimer = window.setTimeout(transitionCarousel.bind(null, this), +this.dataset.wait);
     }
 }());

@@ -44,7 +44,7 @@
   position: relative;
   overflow: hidden;
   opacity: 0;
-  transition: opacity 0.256s;
+  transition: opacity 0.34s;
 }
 
 .carousel.ready {
@@ -57,8 +57,8 @@
   height: 100%;
   top: 0;
   left: 100%;
-  -webkit-animation-duration: 0.256s;
-          animation-duration: 0.256s;
+  -webkit-animation-duration: 0.34s;
+          animation-duration: 0.34s;
   -webkit-animation-name: slideOut;
           animation-name: slideOut;
   -webkit-animation-timing-function: ease-out;
@@ -66,8 +66,8 @@
 }
 
 .carousel .carousel-item.active {
-  -webkit-animation-duration: 0.256s;
-          animation-duration: 0.256s;
+  -webkit-animation-duration: 0.34s;
+          animation-duration: 0.34s;
   -webkit-animation-name: slideIn;
           animation-name: slideIn;
   -webkit-animation-timing-function: ease-out;

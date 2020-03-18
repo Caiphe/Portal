@@ -26,10 +26,10 @@
     <x-header/>
     <main id="main">
         @yield("content")
-        <x-carousel class="main-carousel">
-            <x-carousel-item style="background-color: red;">This is an item 1</x-carousel-item>
-            <x-carousel-item style="background-color: green;">This is an item 2</x-carousel-item>
-            <x-carousel-item style="background-color: purple;">This is an item 3</x-carousel-item>
+        <x-carousel class="main-carousel" wait="4000" duration="1">
+            <x-carousel-item style="background: linear-gradient(90deg, rgba(255,204,0,1) 0%, rgba(0,102,0,1) 100%);">This is an item 1</x-carousel-item>
+            <x-carousel-item style="background: linear-gradient(90deg, rgba(0,20,102,1) 0%, rgba(0,102,0,1) 100%);">This is an item 2</x-carousel-item>
+            <x-carousel-item style="background: linear-gradient(90deg, rgba(102,0,0,1) 0%, rgba(0,102,0,1) 100%);">This is an item 3</x-carousel-item>
         </x-carousel>
     </main>
     <x-footer/>
