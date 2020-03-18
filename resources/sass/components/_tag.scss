@@ -19,56 +19,56 @@
         background-color: transparent;
         color: rgb(0, 0, 0);
 
-        &.tag__yellow {
+        &.yellow {
             border: 1px solid $yellow;
             color: $yellow;
         }
-        &.tag__blue {
+        &.blue {
             border: 1px solid $blue;
             color: $blue;
         }
-        &.tag__grey {
+        &.grey {
             border: 1px solid $grey900;
             color: $grey900;
         }
-        &.tag__success {
+        &.success {
             border: 1px solid $success;
             color: $success;
         }
-        &.tag__warning {
+        &.warning {
             border: 1px solid $warning;
             color: $warning;
         }
-        &.tag__error {
+        &.error {
             border: 1px solid $error;
             color: $error;
         }
     }
-    &.tag__success {
+    &.success {
         background-color: $success;
     }
-    &.tag__warning {
+    &.warning {
         background-color: $warning;
     }
-    &.tag__error {
+    &.error {
         background-color: $error;
     }
-    &.tag__yellow {
+    &.yellow {
         background-color: $yellow;
     }
-    &.tag_yellow:hover {
+    &.yellow:hover {
         background-color: $yellow900;
     }
-    &.tag__blue {
+    &.blue {
         background-color: $blue;
     }
-    &.tag_blue:hover {
+    &.blue:hover {
         background-color: $blue900;
     }
-    &.tag__grey {
+    &.grey {
         background-color: $grey900;
     }
-    &.tag_grey:hover {
+    &.grey:hover {
         background-color: $grey900;
     }
 }
