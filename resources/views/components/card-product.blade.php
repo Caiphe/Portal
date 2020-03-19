@@ -10,11 +10,9 @@
 	<div class="card card--product">
 		<div class="card__content">
 			@isset($tags)
-			<div class="tags">
-			@foreach ($tags as $tag)
-					<div class="tag outline yellow">{{$tag}}</div>
-			@endforeach
-			</div>	
+				@foreach ($tags as $tag)
+					<span class="tag outline yellow">{{$tag}}</span>
+				@endforeach
 			@endisset
 			@isset($title)
 			<h3 class="card__header">
@@ -28,7 +26,7 @@
 			<div class="country-selector">
 				<div class="countries">
 					@foreach ($countries as $country)
-						<img src="/images/{{Str::slug($country,"-")}}.svg" alt="{{$country}} flag">
+						<img src="/images/countries/{{Str::slug($country,"-")}}.svg" alt="{{$country}} flag">
 					@endforeach
 				</div>
 				<div class="view-more">+ {{count($countries )-1}} more</div>
