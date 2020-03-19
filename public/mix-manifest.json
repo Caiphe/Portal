@@ -1,9 +1,11 @@
 {
-    "/js/scripts.js": "/js/scripts.js?id=390a244128c3564aae00",
+    "/js/scripts.js": "/js/scripts.js?id=ddf2527e611478a37d6f",
+    "/css/components/carousel.css": "/css/components/carousel.css?id=526011b89c6cbab29788",
     "/css/components/multiselect.css": "/css/components/multiselect.css?id=dfc4598bfed9afacfa34",
     "/css/components/card.css": "/css/components/card.css?id=6aaac33dbc9e49b48b2d",
     "/css/components/card-link.css": "/css/components/card-link.css?id=e447fdedf4608ddb6c2a",
     "/css/components/key-feature.css": "/css/components/key-feature.css?id=7cad1e8d72a3313ad5fa",
     "/css/styles.css": "/css/styles.css?id=268905b85909bb7957d5",
+    "/js/components/carousel.js": "/js/components/carousel.js?id=f8d1fee067d5197f9ccb",
     "/js/components/multiselect.js": "/js/components/multiselect.js?id=39cf03457417178b9ad4"
 }
