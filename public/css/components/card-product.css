@@ -1,5 +1,6 @@
 .card--product .card__content .country-selector {
   display: flex;
+  align-items: center;
 }
 
 .card--product .card__content .country-selector .countries {
@@ -16,7 +17,6 @@
   margin-left: 5px;
   display: inline-block;
   color: #000000;
-  align-items: center;
 }
 
 .card--product .card__content .country-selector:hover > .countries {
