@@ -11,8 +11,9 @@
 
     Wait: The time spent on a carousel item.
     Duration: The time it takes to move to another carousel item.
+    Auto Scroll: Whether the carousel should scroll by itself.
 --}}
-@props(['wait', 'duration'])
+@props(['wait', 'duration', 'autoScroll'])
 
 @allowonce
 <link rel="stylesheet" href="/css/components/carousel.css">
@@ -22,6 +23,7 @@
     {{$attributes->merge(['class' => 'carousel'])}}
     data-wait="{{$wait ?? '5000'}}"
     data-duration="{{$duration ?? '0.34'}}"
+    data-auto-scroll="{{$autoScroll ?? 'true'}}"
 >
     {{$slot}}
 </div>

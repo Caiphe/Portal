@@ -15,7 +15,11 @@
     <link rel="preload" href="/fonts/Montserrat-Light.woff2" as="font" type="font/woff2">
 
     <style>
-        #feature{
+        #main {
+            display: flex;
+        }
+        #feature, #feature2{
+            margin-right: 10px;
             width: 300px;
             height: 500px;
             background-color: grey;
@@ -25,7 +29,25 @@
 <body>
     <x-header/>
     <main id="main">
-        <x-carousel id="feature" wait="5000" duration="0.34">
+        <x-carousel id="feature" wait="3000" duration="0.34">
+            <x-carousel-item>
+                <h2>One</h2>
+                <p>This is some content.</p>
+            </x-carousel-item>
+            <x-carousel-item>
+                <h2>Two</h2>
+                <p>This is some content.</p>
+            </x-carousel-item>
+            <x-carousel-item>
+                <h2>Three</h
+                    2><p>This is some content.</p>
+            </x-carousel-item>
+            <x-carousel-item>
+                <h2>Four</h2
+                    ><p>This is some content.</p>
+            </x-carousel-item>
+        </x-carousel>
+        <x-carousel id="feature2" auto-scroll="false">
             <x-carousel-item>
                 <h2>One</h2>
                 <p>This is some content.</p>

@@ -1,6 +1,6 @@
 (function() {
     var carousels = document.querySelectorAll(".carousel");
-    var transitionTimer = void 0;
+    var transitionTimer = {};
 
     for (var i = carousels.length - 1; i >= 0; i--) {
         if(+carousels[i].dataset.wait < (+carousels[i].dataset.duration * 1000)){
@@ -8,20 +8,25 @@
             continue;
         }
         
-        setupCarousel(carousels[i]);
+        setupCarousel(carousels[i], i);
+
+        if(carousels[i].dataset.autoScroll === 'false') continue;
+
         carousels[i].addEventListener('mouseenter', transitionStop);
         carousels[i].addEventListener('mouseleave', transitionStart);
+
         window.setTimeout(transitionCarousel.bind(null, carousels[i]), +carousels[i].dataset.wait)
-        window.setTimeout(makeCarouselReady.bind(null, carousels[i]), (+carousels[i].dataset.duration * 1000));
     }    
 
     function makeCarouselReady(carousel) {
         carousel.classList.add('ready');
     }
 
-    function setupCarousel(carousel) {
+    function setupCarousel(carousel, index) {
         var carouselItems = carousel.querySelectorAll('.carousel-item');
         var duration = carousel.dataset.duration + "s";
+
+        carousel.dataset.name = 'carousel-' + index;
 
         carouselItems[0].classList.add('active');
 
@@ -30,6 +35,10 @@
         for (var i = carouselItems.length - 1; i >= 0; i--) {
             carouselItems[i].style.animationDuration = duration;
         }
+
+        transitionTimer['carousel-' + index] = null;
+
+        window.setTimeout(makeCarouselReady.bind(null, carousel), (+carousel.dataset.duration * 1000));
     }
 
     function buildPager(carouselItems) {
@@ -85,15 +94,17 @@
             pagerActive.nextElementSibling.classList.add('active');
         }
 
-        transitionTimer = window.setTimeout(transitionCarousel.bind(null, carousel), +carousel.dataset.wait);
+        if(carousel.dataset.autoScroll === 'false') return;
+
+        transitionTimer[carousel.dataset.name] = window.setTimeout(transitionCarousel.bind(null, carousel), +carousel.dataset.wait);
     }
 
-    function transitionStop(ev) {
-        window.clearTimeout(transitionTimer);
-        transitionTimer = null;
+    function transitionStop() {
+        window.clearTimeout(transitionTimer[this.dataset.name]);
+        transitionTimer[this.dataset.name] = null;
     }
 
-    function transitionStart(ev) {
-        transitionTimer = window.setTimeout(transitionCarousel.bind(null, this), +this.dataset.wait);
+    function transitionStart() {
+        transitionTimer[this.dataset.name] = window.setTimeout(transitionCarousel.bind(null, this), +this.dataset.wait);
     }
 }());
