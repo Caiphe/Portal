@@ -7,6 +7,7 @@
             alert('The carousel should not have a wait period less than the duration.');
             continue;
         }
+        
         setupCarousel(carousels[i]);
         carousels[i].addEventListener('mouseenter', transitionStop);
         carousels[i].addEventListener('mouseleave', transitionStart);

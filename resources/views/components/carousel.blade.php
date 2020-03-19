@@ -1,6 +1,7 @@
 {{--
     The carousel component tries to not have any hard opinions but is just a shell for styling,
     instead adds functionality to all the children inside it.
+    This means that you would need to add your own classes with heights and widths wo the parent to get it to show.
     This component relies on there being at least one <x-carousel-item> component.
     eg: 
     <x-carousel wait="5000" duration="0.34">
