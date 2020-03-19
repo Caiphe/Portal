@@ -1,3 +1,12 @@
+{{-- 
+    This component allows for adding link cards.
+    Eg:
+    <x-card-link target="_blank" icon="twitter" title="My Apps" linkUrl="http://www.google.com">This is the description</x-card-link>
+    icon -  is the icon name for the icon on the card e.g. twitter
+	title - the card title
+	The card description is passed through the $slot and link attributes can be added to the card to be applied to the a tag
+--}}
+
 @allowonce('card_link')
 <link href="/css/components/card-link.css" rel="stylesheet"/>
 <link href="/css/components/card.css" rel="stylesheet"/>
