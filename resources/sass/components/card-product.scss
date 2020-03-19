@@ -1,12 +1,5 @@
 .card--product {
     .card__content {
-        .tags {
-            display: flex;
-            .tag {
-                display: inline-block;
-                margin-left: 5px;
-            }
-        }
         .country-selector {
             display: flex;
             .countries {
@@ -25,7 +18,7 @@
             }
             &:hover {
                 > .countries {
-					transition: width 2s;
+                    transition: width 2s;
                     width: 100%;
                 }
                 > .view-more {
@@ -33,11 +26,11 @@
                 }
             }
         }
-        .buttons {
-            display: flex;
-            align-items: center;
-            position: absolute;
-            right: 20px;
-        }
+    }
+    .buttons {
+        display: flex;
+        align-items: center;
+        position: absolute;
+        right: 20px;
     }
 }

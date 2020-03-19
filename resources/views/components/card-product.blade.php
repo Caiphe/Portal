@@ -6,8 +6,8 @@
 
 @props(['title','countries','tags'])
 
-<a {{ $attributes }}>
-	<div class="card card--product">
+<div class="card card--product">
+	<a {{ $attributes }}>
 		<div class="card__content">
 			@isset($tags)
 				@foreach ($tags as $tag)
@@ -32,10 +32,9 @@
 				<div class="view-more">+ {{count($countries )-1}} more</div>
 			</div>	
 			@endisset	
-			<div class="buttons">
-				<button class="inline">View</button>
-				<button class="inline fab plus dark"></button>
-			</div>	
 		</div>
+	</a>
+	<div class="buttons">
+		<button class="inline fab plus dark"></button>
 	</div>
-</a>
+</div>

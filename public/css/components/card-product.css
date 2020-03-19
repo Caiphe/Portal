@@ -1,12 +1,3 @@
-.card--product .card__content .tags {
-  display: flex;
-}
-
-.card--product .card__content .tags .tag {
-  display: inline-block;
-  margin-left: 5px;
-}
-
 .card--product .card__content .country-selector {
   display: flex;
 }
@@ -37,7 +28,7 @@
   display: none;
 }
 
-.card--product .card__content .buttons {
+.card--product .buttons {
   display: flex;
   align-items: center;
   position: absolute;
