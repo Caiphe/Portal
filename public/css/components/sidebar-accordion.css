@@ -1,12 +1,15 @@
-@charset "UTF-8";
-
 li,
 * {
   list-style: none;
 }
 
-#sidebar-accordion a {
-  color: #999999;
+#sidebar-accordion .accordion-menu {
+  margin: 0;
+}
+
+#sidebar-accordion .accordion-menu .accordion-item a {
+  color: #666666;
+  font-size: 12px;
 }
 
 .accordion-item [data-toggle=accordion-item] {
@@ -17,14 +20,20 @@ li,
 .accordion-item .icon-arrow {
   position: absolute;
   display: block;
-  font-size: 0.7em;
   top: 0;
   left: -2%;
 }
 
+.accordion-item .icon-arrow svg {
+  fill: #666666;
+  height: 20px;
+  width: 20px;
+}
+
 .accordion-item .icon-arrow.open {
-  transform: rotate(-180deg);
+  transform: rotate(-270deg);
   transition: transform 0.3s;
+  left: -2.5%;
 }
 
 .accordion-item .icon-arrow.close {
@@ -32,11 +41,8 @@ li,
   transition: transform 0.3s;
 }
 
-.accordion-item .icon-arrow:before {
-  content: "\25BC";
-}
-
 .accordion-item .accordion-sub-items {
+  margin: 10px 0;
   max-height: 0;
   overflow: hidden;
   padding: 0;
@@ -47,8 +53,31 @@ li,
 }
 
 .accordion-item .accordion-sub-items li a {
+  color: #333333 !important;
+  position: relative;
   display: block;
   padding-left: 20px;
+}
+
+.accordion-item .accordion-sub-items li a .arrow-forward {
+  display: none;
+}
+
+.accordion-item .accordion-sub-items li a.active {
+  color: #0f6987 !important;
+}
+
+.accordion-item .accordion-sub-items li a.active .arrow-forward {
+  position: absolute;
+  display: block;
+  top: 2%;
+  left: 0;
+}
+
+.accordion-item .accordion-sub-items li a.active .arrow-forward svg {
+  fill: #0f6987;
+  height: 20px;
+  width: 13px;
 }
 
 .accordion-item .show,
@@ -59,18 +88,17 @@ li,
 .accordion-item .show {
   display: block;
   max-height: 9999px;
-  padding-top: 15px;
   transform: scaleY(1);
   -webkit-animation: 0.3s ease-in-out;
           animation: 0.3s ease-in-out;
-  transition: max-height 0.5s ease-in-out;
+  transition: max-height 0.3s ease-in-out;
 }
 
 .accordion-item .hide {
   max-height: 0;
   transform: scaleY(0);
-  -webkit-animation: 0.4s ease-out;
-          animation: 0.4s ease-out;
+  -webkit-animation: 0.3s ease-out;
+          animation: 0.3s ease-out;
   transition: max-height 0.3s ease-out;
 }
 
