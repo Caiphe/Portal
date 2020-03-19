@@ -15,16 +15,18 @@ Below is a living //TODO of what needs to be done to get parity with the current
 - ~~Master view layouts.~~
 
 ## Components
-- Card product (Waseem).
+- ~~Card product (Waseem).~~
 - ~~Card link (Waseem).~~
 - ~~Button. (css.)~~
-- ~~Header.~~
+- Header.
+    - ~~Header layout~~
+    - Header dropdown
 - ~~Footer.~~
 - ~~Input (css.)~~
-- Heading with icon (css) (Takalani).
-- Carousel (WesDawg).
-- Tag (css) (Tebello).
-- Multiselect with tag (WesDawg).
+- ~~Heading with icon (css) (Takalani).~~
+- ~~Carousel (WesDawg).~~
+- ~~Tag (css) (Tebello).~~
+- ~~Multiselect with tag (WesDawg).~~
 - Accordian (Xoliswa).
 - Dialog / Alert (Neil).
 - ~~Key features (Xoliswa).~~
