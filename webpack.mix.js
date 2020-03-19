@@ -18,6 +18,7 @@ mix.js("resources/js/scripts.js", "public/js")
     .sass("resources/sass/components/multiselect.scss", "public/css/components")
     .sass("resources/sass/components/card.scss", "public/css/components")
     .sass("resources/sass/components/card-link.scss", "public/css/components")
+    .sass("resources/sass/components/card-product.scss", "public/css/components")
     .sass("resources/sass/components/key-feature.scss", "public/css/components")
     .sass("resources/sass/styles.scss", "public/css")
     .version();

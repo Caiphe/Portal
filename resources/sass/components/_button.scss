@@ -55,6 +55,10 @@ button {
         }
     }
 
+	&.inline {
+		display: inline-block;
+		margin-right: 5px;
+	}
     &.blue:not(.outline),
     &.dark:not(.outline),
     &.medium:not(.outline) {
