@@ -16,7 +16,7 @@
         $selectOptions .= "<option value=\"$key\">$value</option>";
         $selectMultipleOptions .= "<option value=\"$key\" " . (in_array($key, $selected) ? 'selected' : '') . ">$value</option>";
         if(in_array($key, $selected)){
-            $tags = '<span class="tag removeable" data-index="' . $i . '" data-id="' . $id . '">' . $value . '</span>';
+            $tags = '<span class="tag grey hoverable removeable" data-index="' . $i . '" data-id="' . $id . '">' . $value . '</span>';
         }
         ++$i;
     }
@@ -25,7 +25,7 @@
 <select name="{{$name}}-select" id="{{$id}}-select" {{ $attributes->merge(['class' => 'multiselect-select ' . ' ' . ($scheme ?? 'dark')]) }} onchange="multiselectChanged(this);" autocomplete="off">
     {!!$selectOptions!!}
 </select>
-<select name="{{$name}}" id="{{$id}}" class="multiselect" multiple autocomplete="off">
+<select name="{{$name}}[]" id="{{$id}}" class="multiselect" multiple autocomplete="off">
     {!!$selectMultipleOptions!!}
 </select>
 <div id="{{$id}}-tags" class="multiselect-tags" onclick="removeTag(event)">{!!$tags!!}</div>

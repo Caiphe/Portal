@@ -21,7 +21,7 @@ function multiselectChanged(el) {
 
 function createTag(value, index, id) {
     var tag = document.createElement('span');
-    tag.className = 'tag removeable';
+    tag.className = 'tag grey hoverable removeable';
     tag.textContent = value;
     tag.dataset.index = index;
     tag.dataset.id = id;

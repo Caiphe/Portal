@@ -1,3 +1,9 @@
+@php
+    if(isset($_POST['test'])){
+        echo "<pre>".print_r($_POST,1)."</pre>";
+    }
+@endphp
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,9 +23,13 @@
 <body>
     <x-header/>
     <main id="main">
+        <form action="" method="post">
+            @csrf
         <x-multiselect id="test" name="test" scheme="light" label="please choose it" :options="['first' => 'one', 'second' => 'two']" :selected="['first']"/>
         <x-multiselect id="test1" name="test1" scheme="light" label="please choose it" :options="['first' => 'one', 'second' => 'two']" :selected="['second']"/>
         <x-multiselect id="test2" name="test2" scheme="light" :options="['first' => 'one', 'second' => 'two']"/>
+            <button>test it</button>
+        </form>
         @yield("content")
     </main>
     <x-footer/>
