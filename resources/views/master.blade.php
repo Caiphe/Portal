@@ -1,9 +1,3 @@
-@php
-    if(isset($_POST['test'])){
-        echo "<pre>".print_r($_POST,1)."</pre>";
-    }
-@endphp
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
