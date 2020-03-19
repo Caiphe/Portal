@@ -1,4 +1,16 @@
-@props(['id', 'name', 'scheme', 'options', 'selected', 'label'])
+{{-- 
+    This component allows for adding multiselects that show removeable tags.
+    Eg:
+    <x-multiselect id="test" name="test" label="please choose it" :options="['first' => 'one', 'second' => 'two']" :selected="['first']"/>
+    
+    id: The id that gets passed in. This needs to be a prop because I reuse it in a couple places
+    name: The name of the select. I use this as a fallback if no id is added
+    label: What should be the first first option that tells the user what to do, defaults to -- Select --
+    options: An associative array that makes up the options. The key is the value and the value is the option label. I know that sounds weird :)
+    selected: An array that will mark an option as selected. This is a single array of values.
+--}}
+
+@props(['id', 'name', 'options', 'selected', 'label'])
 
 @allowonce('multiselect')
 <link rel="stylesheet" href="/css/components/multiselect.css">
@@ -22,7 +34,7 @@
     }
 @endphp
 
-<select name="{{$name}}-select" id="{{$id}}-select" {{ $attributes->merge(['class' => 'multiselect-select ' . ' ' . ($scheme ?? 'dark')]) }} onchange="multiselectChanged(this);" autocomplete="off">
+<select name="{{$name}}-select" id="{{$id}}-select" {{ $attributes->merge(['class' => 'multiselect-select']) }} onchange="multiselectChanged(this);" autocomplete="off">
     {!!$selectOptions!!}
 </select>
 <select name="{{$name}}[]" id="{{$id}}" class="multiselect" multiple autocomplete="off">
