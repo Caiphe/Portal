@@ -2,12 +2,22 @@
 
 namespace App;
 
+use App\Casts\Slug;
 use App\FaqFeedback;
 use Illuminate\Database\Eloquent\Model;
 
 class Faq extends Model
 {
     protected $guarded = [];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'slug' => Slug::class,
+    ];
 
     public function feedback()
     {
