@@ -17,6 +17,27 @@
 <body>
     <x-header/>
     <main id="main">
+        @php
+            $list = [ 
+                'Adverstising' => [
+                    ['label' => 'APN', 'link' => '#anchor-id'],
+                    ['label' => 'Devices','link' => 'https://www.google.com/'],
+                    ['label' => 'KYC','link' => 'https://www.google.com/']],
+                'Customer' => [
+                    ['label' => 'APN', 'link' => 'https://www.google.com/'],
+                    ['label' => 'Devices','link' => 'https://www.google.com/'],
+                    ['label' => 'KYC','link' => 'https://www.google.com/']],
+                'Messaging' => [
+                    ['label' => 'APN', 'link' => 'https://www.google.com/'],
+                    ['label' => 'Devices','link' => 'https://www.google.com/'],
+                    ['label' => 'KYC','link' => 'https://www.google.com/']],
+                'Tickets' => [
+                    ['label' => 'APN', 'link' => 'https://www.google.com/'],
+                    ['label' => 'Devices','link' => 'https://www.google.com/'],
+                    ['label' => 'KYC','link' => 'https://www.google.com/']],
+            ];
+        @endphp
+        <x-sidebar-accordion id="test" :list="$list"/>
         @yield("content")
     </main>
     <x-footer/>

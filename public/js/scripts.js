@@ -197,15 +197,15 @@ function toggleProfileMenu() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/admin/Code/mtn/mtn-developer-portal/resources/js/scripts.js */"./resources/js/scripts.js");
-__webpack_require__(/*! /Users/admin/Code/mtn/mtn-developer-portal/resources/sass/components/carousel.scss */"./resources/sass/components/carousel.scss");
-__webpack_require__(/*! /Users/admin/Code/mtn/mtn-developer-portal/resources/sass/components/multiselect.scss */"./resources/sass/components/multiselect.scss");
-__webpack_require__(/*! /Users/admin/Code/mtn/mtn-developer-portal/resources/sass/components/card.scss */"./resources/sass/components/card.scss");
-__webpack_require__(/*! /Users/admin/Code/mtn/mtn-developer-portal/resources/sass/components/card-link.scss */"./resources/sass/components/card-link.scss");
-__webpack_require__(/*! /Users/admin/Code/mtn/mtn-developer-portal/resources/sass/components/card-product.scss */"./resources/sass/components/card-product.scss");
-__webpack_require__(/*! /Users/admin/Code/mtn/mtn-developer-portal/resources/sass/components/key-feature.scss */"./resources/sass/components/key-feature.scss");
-__webpack_require__(/*! /Users/admin/Code/mtn/mtn-developer-portal/resources/sass/components/sidebar-accordion.scss */"./resources/sass/components/sidebar-accordion.scss");
-module.exports = __webpack_require__(/*! /Users/admin/Code/mtn/mtn-developer-portal/resources/sass/styles.scss */"./resources/sass/styles.scss");
+__webpack_require__(/*! /Users/wesleymartin/www/developer-portal.test/resources/js/scripts.js */"./resources/js/scripts.js");
+__webpack_require__(/*! /Users/wesleymartin/www/developer-portal.test/resources/sass/components/carousel.scss */"./resources/sass/components/carousel.scss");
+__webpack_require__(/*! /Users/wesleymartin/www/developer-portal.test/resources/sass/components/multiselect.scss */"./resources/sass/components/multiselect.scss");
+__webpack_require__(/*! /Users/wesleymartin/www/developer-portal.test/resources/sass/components/card.scss */"./resources/sass/components/card.scss");
+__webpack_require__(/*! /Users/wesleymartin/www/developer-portal.test/resources/sass/components/card-link.scss */"./resources/sass/components/card-link.scss");
+__webpack_require__(/*! /Users/wesleymartin/www/developer-portal.test/resources/sass/components/card-product.scss */"./resources/sass/components/card-product.scss");
+__webpack_require__(/*! /Users/wesleymartin/www/developer-portal.test/resources/sass/components/key-feature.scss */"./resources/sass/components/key-feature.scss");
+__webpack_require__(/*! /Users/wesleymartin/www/developer-portal.test/resources/sass/components/sidebar-accordion.scss */"./resources/sass/components/sidebar-accordion.scss");
+module.exports = __webpack_require__(/*! /Users/wesleymartin/www/developer-portal.test/resources/sass/styles.scss */"./resources/sass/styles.scss");
 
 
 /***/ })
