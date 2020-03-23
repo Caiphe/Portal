@@ -13,6 +13,7 @@ const mix = require("laravel-mix");
 
 mix.js("resources/js/scripts.js", "public/js")
     .scripts("resources/js/components/carousel.js", "public/js/components/carousel.js")
+    .scripts("resources/js/components/sidebar-accordion.js", "public/js/components/sidebar-accordion.js")
     .sass("resources/sass/components/carousel.scss", "public/css/components")
     .scripts("resources/js/components/multiselect.js", "public/js/components/multiselect.js")
     .sass("resources/sass/components/multiselect.scss", "public/css/components")
@@ -20,5 +21,6 @@ mix.js("resources/js/scripts.js", "public/js")
     .sass("resources/sass/components/card-link.scss", "public/css/components")
     .sass("resources/sass/components/card-product.scss", "public/css/components")
     .sass("resources/sass/components/key-feature.scss", "public/css/components")
+    .sass("resources/sass/components/sidebar-accordion.scss", "public/css/components")
     .sass("resources/sass/styles.scss", "public/css")
     .version();
