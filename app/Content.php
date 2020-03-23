@@ -3,13 +3,12 @@
 namespace App;
 
 use App\Casts\Slug;
-use App\Category;
-use App\FaqFeedback;
+use App\Product;
 use App\Tag;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Faq extends Model
+class Content extends Model
 {
     /**
      * The attributes that aren't mass assignable.
@@ -27,24 +26,19 @@ class Faq extends Model
         'slug' => Slug::class,
     ];
 
-    public function setQuestionAttribute($value)
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = [
+        'published_at',
+    ];
+
+    public function setTitleAttribute($value)
     {
-        $this->attributes['question'] = $value;
+        $this->attributes['title'] = $value;
         $this->attributes['slug'] = Str::slug($value);
-    }
-
-    public function feedback()
-    {
-        return $this->hasMany(FaqFeedback::class);
-    }
-
-    public function isHelpful($type, $feedback = '')
-    {
-        $this->feedback()->create([
-            'faq_id' => $this->id,
-            'type' => $type,
-            'feedback' => $feedback
-        ]);
     }
 
     /**
@@ -58,5 +52,10 @@ class Faq extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsToMany(Product::class);
     }
 }
