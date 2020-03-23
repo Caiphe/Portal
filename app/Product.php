@@ -19,4 +19,22 @@ class Product extends Model
         $this->attributes['name'] = $value;
         $this->attributes['slug'] = Str::slug($value);
     }
+
+    public function scopeHasSwagger($query)
+    {
+        return $query->whereNotNull('swagger');
+    }
+
+    public function scopeIsPublic($query)
+    {
+        return $query->whereAccess("public");
+    }
+
+    public function scopeGetEnvironment($query, $environment)
+    {
+        return $query
+            ->isPublic()
+            ->hasSwagger()
+            ->whereRaw("find_in_set('$environment',environments)");
+    }
 }
