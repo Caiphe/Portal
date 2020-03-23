@@ -27,6 +27,18 @@ class CreateProductsTable extends Migration
             $table->string('swagger')->nullable();
             $table->timestamps();
         });
+        
+        Schema::create('content_product', function (Blueprint $table) {
+            $table->primary(['content_id', 'product_id']);
+
+            $table->foreignId('content_id')
+                ->constrained()
+                ->onDelete('cascade');
+
+            $table->foreignId('product_id')
+                ->constrained()
+                ->onDelete('cascade');
+        });
     }
 
     /**
@@ -36,6 +48,10 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
+        Schema::table('content_product', function (Blueprint $table) {
+            $table->dropForeign(['content_id', 'product_id']);
+        });
+
         Schema::dropIfExists('products');
     }
 }

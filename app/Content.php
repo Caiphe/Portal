@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Casts\Slug;
+use App\Product;
 use App\Tag;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -51,5 +52,10 @@ class Content extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsToMany(Product::class);
     }
 }

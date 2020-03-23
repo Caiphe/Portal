@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Content;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -36,5 +37,10 @@ class Product extends Model
             ->isPublic()
             ->hasSwagger()
             ->whereRaw("find_in_set('$environment',environments)");
+    }
+
+    public function content()
+    {
+        return $this->belongsToMany(Content::class);
     }
 }
