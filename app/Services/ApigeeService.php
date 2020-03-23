@@ -13,7 +13,7 @@ class ApigeeService
 {
     public static function get(string $url)
     {
-        return self::HttpWithBasicAuth()->get(env('APIGEE_BASE') . $url);
+        return self::HttpWithBasicAuth()->get(env('APIGEE_BASE') . $url)->json();
     }
 
     public static function post(string $url, array $data)
@@ -41,6 +41,15 @@ class ApigeeService
     {
         $user = auth()->user();
         return self::put("developers/{$user->email}/apps/{$data['appName']}", $data);
+    }
+
+    public static function getAppAttributes(array $attributes)
+    {
+        $a = [];
+        foreach ($attributes as $attribute) {
+            $a[$attribute['name']] = $attribute['value'];
+        }
+        return $a;
     }
 
     protected static function HttpWithBasicAuth()
