@@ -1,11 +1,7 @@
 @import "../variables";
 
-li, *{
-    list-style: none;
-}
-
 #sidebar-accordion {
-    .accordion-menu{
+    .accordion-menu {
         margin: 0;
 
         .accordion-item a {
@@ -13,65 +9,54 @@ li, *{
             font-size: 12px;
         }
     }
-}
 
-.accordion-item {
-	[data-toggle="accordion-item"] {
-		position: relative;
-		display: block;
-	}
-	.icon-arrow {
-		position: absolute;
-		display: block;
-		top: 0;
-        left: -2%;
-        
-        svg{
+    .accordion-item {
+        [data-toggle="accordion-item"] {
+            position: relative;
+            display: block;
+        }
+
+
+        svg {
+            position: absolute;
+            display: block;
+            top: 0;
+            left: -2%;
             fill: $grey700;
             height: 20px;
             width: 20px;
+            transition: transform 0.3s;
+            transform: rotate(0deg);
         }
 
-		&.open {
-			transform : rotate(-270deg);
-            transition : transform 0.3s;
-            left: -2.5%;
-		}
-		&.close {
-			transform : rotate(0deg);
-			transition : transform 0.3s;
-		}
-	}
+        .accordion-sub-items {
+            margin: 10px 0;
+            max-height: 0;
+            overflow: hidden;
+            padding: 0;
+            transition: all 0.5s;
 
-	.accordion-sub-items {
-        margin: 10px 0;
-		max-height: 0;
-        overflow: hidden;
-        padding: 0;
+            li {
+                padding: 0;
 
-		li {
-			padding: 0;
-
-			a {
-                color: $grey800 !important;
-                position: relative;
-                display: block;
-                padding-left: 20px;
-
-                .arrow-forward{
-                    display: none;
-                }
-
-                &.active{
-                    color: $blue !important;
+                a {
+                    color: $grey800;
+                    position: relative;
+                    display: block;
+                    padding-left: 20px;
 
                     .arrow-forward {
-                        position: absolute;
-                        display: block;
-                        top: 2%;
-                        left: 0;
-                        
-                        svg{
+                        display: none;
+                    }
+
+                    &.active {
+                        color: $blue;
+
+                        svg {
+                            position: absolute;
+                            display: block;
+                            top: 2%;
+                            left: 0;
                             fill: $blue;
                             height: 20px;
                             width: 13px;
@@ -79,25 +64,22 @@ li, *{
                     }
                 }
             }
-		}
-	}
+        }
 
-	.show, .hide {
-		transform-origin : 50%, 0%;
-	}
+        &.show {
+            &>a svg {
+                transform: rotate(90deg);
+            }
 
-	.show {
-		display: block;
-        max-height: 9999px;
-		transform : scaleY(1);
-		animation :  0.3s ease-in-out;
-		transition : max-height 0.3s ease-in-out;
-	}
+            .accordion-sub-items {
+                display: block;
+                max-height: 300px;
+            }
+        }
+    }
 
-	.hide {
-		max-height: 0;
-		transform : scaleY(0);
-		animation : .3s ease-out;
-		transition : max-height 0.3s ease-out;
+    ul,
+    li {
+        list-style: none;
     }
 }
