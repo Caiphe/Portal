@@ -1,7 +1,5 @@
 <?php
 
-use App\Product;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,8 +13,4 @@ use App\Product;
 
 Route::get('/', function () {
     return view('master');
-});
-
-Route::get('prod', function(){
-    return Product::getEnvironment('prod')->get();
 });
