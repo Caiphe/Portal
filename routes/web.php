@@ -15,4 +15,6 @@ Route::get('/', function () {
     return view('layouts.sidebar');
 });
 
+Route::get('my-apps', 'AppController@index');
+
 Auth::routes();
