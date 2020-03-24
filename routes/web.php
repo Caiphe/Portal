@@ -14,7 +14,7 @@ use App\Services\OpenApiService;
 */
 
 Route::get('/', function () {
-    return view('layouts.master');
+    return view('layouts.sidebar');
 });
 
 Route::get('products/{product:slug}', 'ProductController@show')->name('product.show');

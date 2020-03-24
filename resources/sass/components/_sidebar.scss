@@ -1,0 +1,14 @@
+.wrapper {
+    display: flex;
+    height: 100vh;
+
+    #sidebar {
+        flex: 1;
+        padding: 4% 0 4% 8%;
+        max-width: 300px;
+        background-color: $grey200;
+        height: 100%;
+    }
+}
+
+
