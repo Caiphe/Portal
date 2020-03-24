@@ -36,7 +36,7 @@
 			<div class="country-selector">
 				<div class="countries">
 					@foreach ($countries as $country)
-						<img src="/images/locations/{{$country}}.svg" alt="{{$country}} flag">
+						<img src="/images/locations/{{$country}}.svg" title="{{$country}} flag" alt="{{$country}} flag">
 					@endforeach
 				</div>
 				@if (count($countries ) > 1)
