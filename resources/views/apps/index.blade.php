@@ -11,8 +11,8 @@
         </x-heading>
 
         <div class="row">
-            @forelse($apps as $app)
-                <li></li>
+            @forelse($apps['app'] as $app)
+                <li>{{ $app['name'] }}</li>
             @empty
                 <div class="col-12">
                     @svg('app', '#ffffff')
