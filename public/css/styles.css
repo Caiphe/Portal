@@ -1022,7 +1022,7 @@ input[type=number].see-through {
 
 #main {
   flex: 1 0 auto;
-  margin: 40px 8%;
+  margin: 40px 2%;
 }
 
 #footer {
@@ -1065,6 +1065,19 @@ input[type=number].see-through {
 
 #footer .social a {
   margin-left: 10px;
+}
+
+.wrapper {
+  display: flex;
+  height: 100vh;
+}
+
+.wrapper #sidebar {
+  flex: 1;
+  padding: 4% 0 4% 8%;
+  max-width: 300px;
+  background-color: #fafafa;
+  height: 100%;
 }
 
 .curve {

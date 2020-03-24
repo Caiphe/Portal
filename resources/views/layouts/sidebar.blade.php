@@ -16,8 +16,10 @@
 </head>
 <body>
     <x-header/>
-    <div>
-        <x-sidebar />
+    <div class="wrapper">
+        <nav id="sidebar">
+            @yield('sidebar')
+        </nav>
         <main id="main">
             @yield("content")
         </main>
