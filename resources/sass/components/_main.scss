@@ -1,8 +1,14 @@
 #main {
+    width: 100%;
     padding: $gutter;
     position: relative;
 }
 
 body > #main {
     flex: 1 0 auto;
+<<<<<<< HEAD
 }
+=======
+    padding: $gutter 8%;
+}
+>>>>>>> 2f6751950402cdc65a4923b18739b240ce36dd46
