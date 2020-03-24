@@ -5,6 +5,15 @@
     position: relative;
     flex-shrink: 0;
 
+    svg {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 100%;
+        background-color: transparent;
+        width: 100%;
+    }
+
     .footer-inner {
         padding: 4% 8%;
         position: relative;

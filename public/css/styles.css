@@ -1033,6 +1033,15 @@ input[type=number].see-through {
   flex-shrink: 0;
 }
 
+#footer svg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  background-color: transparent;
+  width: 100%;
+}
+
 #footer .footer-inner {
   padding: 4% 8%;
   position: relative;
