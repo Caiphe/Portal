@@ -15,4 +15,6 @@ Route::get('/', function () {
     return view('layouts.sidebar');
 });
 
+Route::resource('products', 'ProductController');
+
 Auth::routes();

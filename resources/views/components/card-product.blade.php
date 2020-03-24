@@ -13,10 +13,10 @@
 <link href="/css/components/card.css" rel="stylesheet"/>
 @endallowonce
 
-@props(['title','countries','tags'])
+@props(['title','countries','tags', 'href'])
 
-<div class="card card--product">
-	<a {{ $attributes }}>
+<div {{ $attributes->merge(['class' => 'card card--product']) }} >
+	<a href="{{$href}}">
 		<div class="card__content">
 			@isset($tags)
 				@foreach ($tags as $tag)
