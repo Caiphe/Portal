@@ -16,9 +16,12 @@
 </head>
 <body>
     <x-header/>
-    <main id="main">
-        @yield("content")
-    </main>
+    <div>
+        <x-sidebar />
+        <main id="main">
+            @yield("content")
+        </main>
+    </div>
     <x-footer/>
     <script src="/js/scripts.js"></script>
     @stack("scripts")
