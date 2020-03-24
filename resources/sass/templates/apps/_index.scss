@@ -1,27 +1,16 @@
-.container {
+#app-index {
     height: 100%;
     width: 100%;
 
-    //#main {
-    //    width: 100%;
-    //}
-    //
-    //#heading {
-    //    position: relative;
-    //}
-    //
-    //.app {
-    //    padding: 20px;
-    //}
-
     .row {
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         text-align: center;
         border: 2px solid #F2F2F2;
         border-radius: 10px;
-        margin: 40px;
+        margin-top: 20px;
         padding: 40px;
 
         button {
