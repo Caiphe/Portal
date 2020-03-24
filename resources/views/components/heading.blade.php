@@ -30,9 +30,10 @@
         @endforeach
     </h1>
 
+
     @if(isset($fab))
     <button id="heading-fab" class="fab {{$fab}}"></button>
     @endif
-
+    
     <div class="right-side">{{$slot}}</div>
 </div>
