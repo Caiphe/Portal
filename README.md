@@ -12,12 +12,14 @@ Below is a living //TODO of what needs to be done to get parity with the current
     - ~~Products.~~
     - ~~Faqs.~~
     - ~~Documentation (general, not product.)~~
-- ~~Master view layouts.~~
 
 ## Components
 - Header.
     - ~~Header layout.~~
-    - Header dropdown.
+    - Header menus.
+        - Product menu.
+        - Profile menu.
+    - User personalisation.
 - General accordion (eg. for FAQ.)
 - Search.
 - Dialog / Alert (Neil).
@@ -41,7 +43,7 @@ Below is a living //TODO of what needs to be done to get parity with the current
     - ~~Scripts (pushscripts)~~
 
 ## Layout
-- ~~Full width.~~
+- ~~Full width (Master view.)~~
 - Left nav.
 
 ## Home page
@@ -165,3 +167,9 @@ Below is a living //TODO of what needs to be done to get parity with the current
 ## Note on Routes
 - Initial version can be page reload. With future versions it would be great to load in the views that are needed.
 - With any ajax actions (eg. deleting an FAQ) I would like to use [Sanctum](https://laravel.com/docs/7.x/sanctum) for security.
+
+## Next Phase
+
+## Opco Dashboard
+
+## Admin portal to create and edit content
