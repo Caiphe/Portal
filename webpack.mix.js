@@ -23,5 +23,6 @@ mix.scripts('resources/js/scripts.js', 'public/js/scripts.js')
     .sass("resources/sass/components/key-feature.scss", "public/css/components")
     .sass("resources/sass/components/sidebar-accordion.scss", "public/css/components")
     .sass("resources/sass/components/heading.scss", "public/css/components")
+    .sass("resources/sass/templates/apps/_index.scss", "public/css/templates/apps")
     .sass("resources/sass/styles.scss", "public/css")
     .version();
