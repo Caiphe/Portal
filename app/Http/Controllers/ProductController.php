@@ -46,7 +46,9 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return $product->with('content')->get();
+        return view('products.show', [
+            "product" => $product->load('content')
+        ]);
     }
 
     /**
