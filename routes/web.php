@@ -1,5 +1,7 @@
 <?php
 
+use App\Services\OpenApiService;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,5 +16,7 @@
 Route::get('/', function () {
     return view('layouts.master');
 });
+
+Route::get('products/{product:slug}', 'ProductController@show')->name('product.show');
 
 Auth::routes();
