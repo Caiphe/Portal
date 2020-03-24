@@ -17,9 +17,6 @@
 <body>
     <x-header/>
     <main id="main">
-        <x-heading heading="This is a heading" tags="thing, otherthing, hello">
-            <button>hello world</button>
-        </x-heading>
         @yield("content")
     </main>
     <x-footer/>
