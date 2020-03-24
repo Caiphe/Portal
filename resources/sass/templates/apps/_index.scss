@@ -3,13 +3,14 @@
 
     .row {
         display: flex;
-        height: 70%;
+        //height: 70%;
         align-items: center;
         justify-content: center;
         text-align: center;
         border: 2px solid #F2F2F2;
         border-radius: 10px;
         margin: 40px;
+        padding: 40px;
 
         button {
             margin: auto;
