@@ -1,8 +1,17 @@
 @import "../variables";
 
 #main {
-    padding: 90px $gutterSmall;
-    & > #heading {
+    padding: 90px $gutter $gutter;
+
+    body>& {
+        padding: 90px 8vw $gutter;
+        #heading {
+            padding: $gutterSmall 8vw;
+        }
+    }
+
+    &>#heading {
+        padding: $gutterSmall $gutter;
         position: absolute;
         top: 0;
         left: 0;
