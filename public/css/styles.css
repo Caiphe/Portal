@@ -1033,7 +1033,7 @@ input[type=number].see-through {
   flex-shrink: 0;
 }
 
-#footer svg {
+#footer .footer-curve {
   position: absolute;
   left: 0;
   right: 0;
