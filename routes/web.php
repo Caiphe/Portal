@@ -15,4 +15,8 @@ Route::get('/', function () {
     return view('layouts.sidebar');
 });
 
+Route::get('/introduction', function () {
+    return view('layouts.getting-started.index');
+});
+
 Auth::routes();

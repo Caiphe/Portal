@@ -1,0 +1,18 @@
+@import "../../variables";
+
+#product-usage{
+    .card{
+        display: inline-block;
+        width: 30%;
+        margin: 10px;
+
+        svg{
+            fill: $grey700;
+        }
+
+        .card__body{
+            font-size: 12px;
+        }
+    }
+}
+
