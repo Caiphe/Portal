@@ -393,6 +393,8 @@ body {
 
 a p,
 div,
+main,
+footer,
 input,
 button,
 select,
@@ -1021,12 +1023,14 @@ input[type=number].see-through {
 }
 
 #main {
+  width: 100%;
   padding: 40px;
   position: relative;
 }
 
 body > #main {
   flex: 1 0 auto;
+  padding: 40px 8%;
 }
 
 #footer {
