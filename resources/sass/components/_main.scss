@@ -1,8 +1,10 @@
 #main {
+    width: 100%;
     padding: $gutter;
     position: relative;
 }
 
 body > #main {
     flex: 1 0 auto;
+    padding: $gutter 8%;
 }
