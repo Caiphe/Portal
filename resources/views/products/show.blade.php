@@ -1,5 +1,11 @@
-@extends('layouts.master')
+@extends('layouts.sidebar')
+
+@section('sidebar')
+    This is the sidebar
+@endsection
 
 @section('content')
-    <h1>Product</h1>
+    <x-heading :heading="$product->display_name" tags="hello, wolrd"/>
+
+    <div>this is some content</div>
 @endsection

@@ -1,5 +1,9 @@
 @import "../variables";
 
+#main {
+    margin: 0;
+}
+
 #heading {
     position: relative;
     padding: $gutterSmall $gutter;
