@@ -5,6 +5,7 @@
     countries - is an array of country names, which is converted to slug friendly text for the country svg files e.g. ['South Africa','Cameroon','Ivory Coast']
 	tags -  is an array the product tags e.g. ['MTN API','MTN APP']
 	title - the card title
+	href - the link for the card to go to
 	The card description is passed through the $slot and link attributes can be added to the card to be applied to the a tag
 --}}
 
@@ -13,10 +14,10 @@
 <link href="/css/components/card.css" rel="stylesheet"/>
 @endallowonce
 
-@props(['title','countries','tags'])
+@props(['title','countries','tags', 'href'])
 
-<div class="card card--product">
-	<a {{ $attributes }}>
+<div {{ $attributes->merge(['class' => 'card card--product']) }} >
+	<a href="{{$href}}">
 		<div class="card__content">
 			@isset($tags)
 				@foreach ($tags as $tag)
@@ -35,10 +36,12 @@
 			<div class="country-selector">
 				<div class="countries">
 					@foreach ($countries as $country)
-						<img src="/images/countries/{{Str::slug($country,"-")}}.svg" alt="{{$country}} flag">
+						<img src="/images/locations/{{$country}}.svg" title="{{$country}} flag" alt="{{$country}} flag">
 					@endforeach
 				</div>
-				<div class="view-more">+ {{count($countries )-1}} more</div>
+				@if (count($countries ) > 1)
+					<div class="view-more">+ {{count($countries )-1}} more</div>
+				@endif	
 			</div>	
 			@endisset	
 		</div>
