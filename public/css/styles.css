@@ -1021,6 +1021,11 @@ input[type=number].see-through {
 }
 
 #main {
+  padding: 40px;
+  position: relative;
+}
+
+body > #main {
   flex: 1 0 auto;
 }
 
@@ -1078,13 +1083,15 @@ input[type=number].see-through {
 
 .wrapper {
   display: flex;
-  height: 100vh;
+  padding: 0 8% 0 0;
+  flex: 1 0 auto;
 }
 
 .wrapper #sidebar {
   flex: 1;
   padding: 4% 0 4% 8%;
   max-width: 300px;
+  min-width: 300px;
   background-color: #fafafa;
   height: 100%;
 }

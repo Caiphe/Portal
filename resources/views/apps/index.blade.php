@@ -3,16 +3,25 @@
 @endpush
 
 @extends('layouts.sidebar')
+
+@section('sidebar')
+    Sidebar content
+@endsection
+
 @section('content')
 
+    <x-heading heading="Apps" tags="DASHBOARD">
+        <button class="outline dark">Create new</button>
+    </x-heading>
+
     <div class="container">
-        <x-heading heading="Apps" tags="DASHBOARD">
-            <button class="outline dark">Create new</button>
-        </x-heading>
+
 
         <div class="row">
-            @forelse($apps['app'] as $app)
-                <li>{{ $app['name'] }}</li>
+            @forelse($apps['app'] ?? '' as $app)
+                <div class="app">
+                    {{ $app['name'] }}
+                </div>
             @empty
                 <div class="col-12">
                     @svg('app', '#ffffff')

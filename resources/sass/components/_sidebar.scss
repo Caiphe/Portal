@@ -1,11 +1,13 @@
 .wrapper {
     display: flex;
-    height: 100vh;
+    padding: 0 8% 0 0;
+    flex: 1 0 auto;
 
     #sidebar {
         flex: 1;
         padding: 4% 0 4% 8%;
         max-width: 300px;
+        min-width: 300px;
         background-color: $grey200;
         height: 100%;
     }
