@@ -1041,7 +1041,6 @@ input[type=number].see-through {
   background-color: transparent;
   width: 100%;
   margin-bottom: -1px;
-  fill: #1a1a1a;
 }
 
 #footer .footer-inner {
