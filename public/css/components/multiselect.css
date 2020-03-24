@@ -1,1 +1,12 @@
-.multiselect{display:none}.multiselect-tags{margin-top:4px}.multiselect-tags .tag{margin-right:4px}
+.multiselect {
+  display: none;
+}
+
+.multiselect-tags {
+  margin-top: 4px;
+}
+
+.multiselect-tags .tag {
+  margin-right: 4px;
+}
+
