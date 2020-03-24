@@ -1,4 +1,5 @@
-<footer id="footer" class="curve">
+<footer id="footer">
+    @svg('curve', '#1a1a1a')
     <div class="footer-inner">
         <p>
             &copy; {{date("Y")}} MTN. All rights reserved.<br>
