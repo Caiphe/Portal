@@ -11,13 +11,17 @@
         </x-heading>
 
         <div class="row">
-            <div class="col-12">
-                @svg('app', '#ffffff')
-                <h1>Looks like you don’t have any apps yet.</h1>
-                <p>Fortunately, it’s very easy to create one.</p>
+            @forelse($apps as $app)
+                <li></li>
+            @empty
+                <div class="col-12">
+                    @svg('app', '#ffffff')
+                    <h1>Looks like you don’t have any apps yet.</h1>
+                    <p>Fortunately, it’s very easy to create one.</p>
 
-                <button class="outline dark">Create app</button>
-            </div>
+                    <button class="outline dark">Create app</button>
+                </div>
+            @endforelse
         </div>
 
     </div>

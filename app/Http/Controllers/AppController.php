@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\ApigeeService;
 use Illuminate\Http\Request;
 
 class AppController extends Controller
 {
     public function index()
     {
-        return view('apps.index');
+        $apps = ApigeeService::get('developers/wes@plusnarrative.com/apps/?expand=true');
+
+        return view('apps.index', [
+            'apps' => $apps
+        ]);
     }
 
     public function create()
