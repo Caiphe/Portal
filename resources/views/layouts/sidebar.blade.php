@@ -21,6 +21,7 @@
             @yield('sidebar')
         </nav>
         <main id="main">
+            <x-heading heading="Ticket" fab="dark plus"/>
             @yield("content")
         </main>
     </div>
