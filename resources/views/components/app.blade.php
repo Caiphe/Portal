@@ -1,4 +1,8 @@
-@props(['name'])
+@allowonce('card_link')
+<link href="/css/components/app.css" rel="stylesheet"/>
+@endallowonce
+
+{{--@props(['icon'])--}}
 
 <div class="my-app" {{ $attributes }}>
     <div class="column">
