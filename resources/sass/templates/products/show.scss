@@ -23,3 +23,22 @@
     display: inline-block;
     margin-right: 6px;
 }
+
+#product-sections {
+    margin-top: $gutter;
+    
+    &.overview #product-docs,
+    &.overview #product-specification {
+        display: none;
+    }
+
+    &.docs #product-overview,
+    &.docs #product-specification {
+        display: none;
+    }
+
+    &.specification #product-overview,
+    &.specification #product-docs {
+        display: none;
+    }
+}

@@ -29,17 +29,23 @@
         </div>
     </x-heading>
 
-    <button class="light small product-section-button">OVERVIEW</button>
-    <button class="outline light small product-section-button">DOCS</button>
-    <button class="outline light small product-section-button">SPECIFICATION</button>
+    <button class="light small product-section-button" onclick="switchSection('overview');">OVERVIEW</button>
+    <button class="outline light small product-section-button" onclick="switchSection('docs');">DOCS</button>
+    <button class="outline light small product-section-button" onclick="switchSection('specification');">SPECIFICATION</button>
 
-    <div id="product-overview" class="product-section">
-        <p>product-overview</p>
-    </div>
-    <div id="product-docs" class="product-section">
-        <p>product-docs</p>
-    </div>
-    <div id="product-specification" class="product-section">
-        <p>product-specification</p>
+    <div id="product-sections" class="overview">
+        <div id="product-overview" class="product-section">
+            {!!$product->content[0]['body']!!}
+        </div>
+        <div id="product-docs" class="product-section">
+            {!!$product->content[1]['body']!!}
+        </div>
+        <div id="product-specification" class="product-section">
+            <p>product-specification</p>
+        </div>
     </div>
 @endsection
+
+@push('scripts')
+<script src="/js/templates/products/show.js" defer></script>
+@endpush
