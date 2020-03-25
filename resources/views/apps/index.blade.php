@@ -20,7 +20,7 @@
                 <div style="display: flex; align-items: center;">
                     @svg('chevron-down', '#000000')
 
-                    <h1 style="margin-left: 10px">Approved Apps</h1>
+                    <h3 style="margin-left: 10px">Approved Apps</h3>
                 </div>
 
                 <div class="my-apps">
@@ -59,7 +59,7 @@
                                     </p>
                                 </div>
                                 <div class="column">
-                                    Lorem ipsum dolor sit amet, consetetur.
+
                                 </div>
                                 <div class="column">
                                     <a href="">https://www.appdomain.co.za</a>
@@ -83,7 +83,7 @@
                                     <p>Callback URL: https://www.plusnarrative.com</p>
                                     <p>Description: Test application</p>
 
-                                    <p>Apps</p>
+                                    <p>Products</p>
 
                                     <div class="services">
                                         <div class="app">
@@ -115,7 +115,7 @@
                 <div style="display: flex; align-items: center;">
                     @svg('chevron-down', '#000000')
 
-                    <h1 style="margin-left: 10px">Revoked Apps</h1>
+                    <h3 style="margin-left: 10px">Revoked Apps</h3>
                 </div>
 
                 <div class="my-apps">

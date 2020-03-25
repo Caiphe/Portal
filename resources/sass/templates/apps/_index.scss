@@ -35,7 +35,7 @@
         margin-top: 20px;
 
         > div {
-            padding: 10px 20px 20px;
+            padding: 10px 20px 10px;
         }
     }
 
@@ -67,8 +67,9 @@
             width: 5%;
         }
 
-        .column:last-of-type {
+        .column:nth-of-type(6) {
             width: 5%;
+            text-align: right;
         }
 
         .head {
@@ -81,13 +82,13 @@
         .body {
             display: flex;
             flex-wrap: wrap;
+            padding-top: 10px;
         }
 
         .my-app {
             display: flex;
             align-items: center;
             flex-wrap: wrap;
-            padding: 10px 0;
             width: 100%;
 
             .column:first-of-type {
