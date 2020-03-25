@@ -834,6 +834,36 @@ button.blue.fab.chevron-right.outline:hover {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
+button.before.chevron-down::before,
+button.after.chevron-down::after {
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>');
+}
+
+button.dark.before.chevron-down:not(.outline)::before,
+button.dark.after.chevron-down:not(.outline)::after,
+button.medium.before.chevron-down:not(.outline)::before,
+button.medium.after.chevron-down:not(.outline)::after,
+button.blue.before.chevron-down:not(.outline)::before,
+button.blue.after.chevron-down:not(.outline)::after {
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>');
+}
+
+button.fab.chevron-down {
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>');
+}
+
+button.dark.fab.chevron-down:not(.outline),
+button.medium.fab.chevron-down:not(.outline),
+button.blue.fab.chevron-down:not(.outline) {
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>');
+}
+
+button.blue.before.chevron-down.outline:hover::before,
+button.blue.after.chevron-down.outline:hover::after,
+button.blue.fab.chevron-down.outline:hover {
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>');
+}
+
 button.before.arrow-forward::before,
 button.after.arrow-forward::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
@@ -1244,6 +1274,21 @@ h6.chevron-right::before {
   width: 30px;
   height: 30px;
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FC0" height="24" viewBox="0 0 24 24" width="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+  position: absolute;
+  left: 0;
+}
+
+h1.chevron-down::before,
+h2.chevron-down::before,
+h3.chevron-down::before,
+h4.chevron-down::before,
+h5.chevron-down::before,
+h6.chevron-down::before {
+  content: "";
+  position: relative;
+  width: 30px;
+  height: 30px;
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FC0" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>');
   position: absolute;
   left: 0;
 }

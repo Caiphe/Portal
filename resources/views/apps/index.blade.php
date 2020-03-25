@@ -37,7 +37,7 @@
         </div>
 
         <div class="row">
-            <div style="padding-left: 20px; padding-right: 20px; padding-top: 10px; padding-bottom: 10px;">
+            <div style="padding-left: 20px; padding-right: 20px; padding-top: 10px; padding-bottom: 20px;">
                 <div style="display: flex; align-items: center;">
                     @svg('chevron-down', '#000000')
 
@@ -47,22 +47,26 @@
                 <table class="table">
                     <thead style="border-bottom: 1px solid #000000;">
                         <tr>
-                            <th style="text-align: left;">App name</th>
-                            <th style="text-align: left;">Reason</th>
-                            <th style="text-align: left;">Callback URL</th>
-                            <th style="text-align: left;">Date created</th>
-                            <th style="text-align: left;">Status</th>
-                            <th style="text-align: left;">&nbsp;</th>
+                            <th style="text-align: left; border-bottom: 2px solid #dee2e6;">App name</th>
+                            <th style="text-align: left; border-bottom: 2px solid #dee2e6;">Reason</th>
+                            <th style="text-align: left; border-bottom: 2px solid #dee2e6;">Callback URL</th>
+                            <th style="text-align: left; border-bottom: 2px solid #dee2e6;">Date created</th>
+                            <th style="text-align: left; border-bottom: 2px solid #dee2e6;">Status</th>
+                            <th style="text-align: left; border-bottom: 2px solid #dee2e6;">&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <th>App name v2.0.1</th>
-                            <th>Lorem ipsum dolor sit amet, consetetur.</th>
-                            <th>https://www.appdomain.co.za</th>
-                            <th>20 Feb 2019</th>
-                            <th>Mark</th>
-                            <th>Otto</th>
+                            <th style="text-align: left; padding-top: 10px;">App name v2.0.1</th>
+                            <th style="text-align: left; padding-top: 10px; font-size: 12px;">Lorem ipsum dolor sit amet, consetetur.</th>
+                            <th style="text-align: left; padding-top: 10px; font-size: 12px;">https://www.appdomain.co.za</th>
+                            <th style="text-align: left; padding-top: 10px; font-size: 12px;">20 Feb 2019</th>
+                            <th style="text-align: left; padding-top: 10px; font-size: 12px;">
+                                <svg height="100" width="100">
+                                    <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+                                </svg>
+                            </th>
+                            <th style="text-align: left; padding-top: 10px; font-size: 12px;">Otto</th>
                         </tr>
                     </tbody>
                 </table>
