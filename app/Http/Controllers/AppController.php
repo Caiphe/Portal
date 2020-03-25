@@ -11,8 +11,20 @@ class AppController extends Controller
     {
         $apps = ApigeeService::get('developers/wes@plusnarrative.com/apps/?expand=true');
 
+        $approved_apps = [];
+        $revoked_apps = [];
+
+        foreach ($apps['app'] as $app) {
+            if($app['status'] === 'approved') {
+                $approved_apps[] = $app;
+            } else {
+                $revoked_apps[] = $app;
+            }
+        }
+
         return view('apps.index', [
-            'apps' => $apps
+            'approved_apps' => $approved_apps,
+            'revoked_apps' => $revoked_apps
         ]);
     }
 

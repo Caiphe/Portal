@@ -1,3 +1,5 @@
+@import '../../variables';
+
 // NO APPS
 //#app-index {
 //    height: 100%;
@@ -35,6 +37,42 @@
 
     table {
         width: 100%;
+        color: $grey600;
+
+        thead {
+            border-bottom: 1px solid #000000;
+
+            th {
+                text-align: left;
+                border-bottom: 2px solid #dee2e6;
+            }
+        }
+
+        tbody {
+
+            th:first-of-type {
+                font-size: 14px;
+            }
+
+            th {
+                color: $grey900;
+                text-align: left;
+                padding-top: 10px;
+                font-size: 12px;
+            }
+
+            span {
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+
+            span:after {
+                content: '\2807';
+                font-size: 25px;
+            }
+        }
     }
 }
 
