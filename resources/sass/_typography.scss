@@ -83,16 +83,23 @@ body {
 
 h1 {
     color: #000;
-    font-size: 2.5rem;
+    font-size: 3rem;
     line-height: 25px;
     font-family: "mtn-bold";
 }
 
 h2 {
     color: #000;
-    font-size: 2rem;
+    font-size: 2.2rem;
     line-height: 25px;
-    font-family: "mtn-regular";
+    font-family: "mtn-bold";
+}
+
+h3 {
+    color: #000;
+    font-size: 1.8rem;
+    line-height: 22px;
+    font-family: "mtn-bold";
 }
 
 a {
@@ -102,4 +109,24 @@ a {
     #main & {
         color: $blue;
     }
+}
+
+.t-small {
+    font-size: 1rem;
+}
+
+.t-large {
+    font-size: 4rem;
+}
+
+.t-xlarge {
+    font-size: 6rem;
+}
+
+.t-pl {
+    font-size: 1.6rem;
+}
+
+.t-pxl {
+    font-size: 1.8rem;
 }
