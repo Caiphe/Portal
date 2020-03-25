@@ -58,8 +58,10 @@
                                         {{ $app['name'] }}
                                     </p>
                                 </div>
-                                <div class="column">
-
+                                <div class="column regions">
+                                    @svg('za', '#000000', 'images/locations')
+                                    @svg('af', '#000000', 'images/locations')
+                                    @svg('bf', '#000000', 'images/locations')
                                 </div>
                                 <div class="column">
                                     <a href="">https://www.appdomain.co.za</a>
@@ -74,6 +76,11 @@
                                 </div>
                                 <div class="column">
                                     <span class="actions"></span>
+{{--                                    <nav class="menu">--}}
+{{--                                        <a>Analytics</a>--}}
+{{--                                        <a>Edit</a>--}}
+{{--                                        <a>Delete</a>--}}
+{{--                                    </nav>--}}
                                 </div>
                                 <div class="detail">
                                     <p>Consumer key: M5dGYCRA4FEtfccmBH6IGFp8RRddMivK</p>
@@ -85,20 +92,20 @@
 
                                     <p>Products</p>
 
-                                    <div class="services">
-                                        <div class="app">
+                                    <div class="products">
+                                        <div class="product">
                                             <svg height="25" width="25">
                                                 <circle cx="12.5" cy="12.5" r="10" stroke="#BB1E4F" stroke-width="3" fill="#BB1E4F" />
                                             </svg>
-                                            Subscription v1
+                                            <span>Subscription v1</span>
                                             @svg('arrow-forward', '#000000')
                                         </div>
 
-                                        <div class="app">
+                                        <div class="product">
                                             <svg height="25" width="25">
                                                 <circle cx="12.5" cy="12.5" r="10" stroke="#BB1E4F" stroke-width="3" fill="#BB1E4F" />
                                             </svg>
-                                            Subscription v1
+                                            <span>SMS</span>
                                             @svg('arrow-forward', '#000000')
                                         </div>
                                     </div>
@@ -148,7 +155,10 @@
                         @foreach($revoked_apps as $app)
                             <div class="my-app">
                                 <div class="column">
-                                    <p class="name">{{ $app['name'] }}</p>
+                                    <p class="name">
+                                        @svg('app-avatar', '#fff')
+                                        {{ $app['name'] }}
+                                    </p>
                                 </div>
                                 <div class="column">
                                     Lorem ipsum dolor sit amet, consetetur.
@@ -166,6 +176,39 @@
                                 </div>
                                 <div class="column">
                                     <span class="actions"></span>
+{{--                                    <nav class="menu">--}}
+{{--                                        <a>Analytics</a>--}}
+{{--                                        <a>Edit</a>--}}
+{{--                                        <a>Delete</a>--}}
+{{--                                    </nav>--}}
+                                </div>
+                                <div class="detail">
+                                    <p>Consumer key: M5dGYCRA4FEtfccmBH6IGFp8RRddMivK</p>
+                                    <p>Consumer secret: 6DxjvPOWlpzTbGe7</p>
+                                    <p>Key issued: 02/03/2020 - 21:26</p>
+                                    <p>Expires: Never</p>
+                                    <p>Callback URL: https://www.plusnarrative.com</p>
+                                    <p>Description: Test application</p>
+
+                                    <p>Products</p>
+
+                                    <div class="products">
+                                        <div class="product">
+                                            <svg height="25" width="25">
+                                                <circle cx="12.5" cy="12.5" r="10" stroke="#BB1E4F" stroke-width="3" fill="#BB1E4F" />
+                                            </svg>
+                                            <span>Subscription v1</span>
+                                            @svg('arrow-forward', '#000000')
+                                        </div>
+
+                                        <div class="product">
+                                            <svg height="25" width="25">
+                                                <circle cx="12.5" cy="12.5" r="10" stroke="#BB1E4F" stroke-width="3" fill="#BB1E4F" />
+                                            </svg>
+                                            <span>SMS</span>
+                                            @svg('arrow-forward', '#000000')
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         @endforeach
@@ -183,9 +226,9 @@
 <script>
     var buttons = document.querySelectorAll('.name');
 
-    buttons.forEach(function(button) {
-        button.addEventListener('click', handleButtonClick);
-    });
+    for (var i = 0; i < buttons.length; i ++) {
+        buttons[i].addEventListener('click', handleButtonClick);
+    }
 
     function handleButtonClick(event) {
         var button = event.currentTarget;
@@ -196,6 +239,18 @@
         } else {
             detail.style.display = 'block';
         }
+    }
+
+    var actions = document.querySelectorAll('.actions');
+
+    for (var i = 0; i < actions.length; i ++) {
+        actions[i].addEventListener('click', handleMenuClick);
+    }
+
+    function handleMenuClick() {
+        var menu = document.querySelector('.menu');
+
+        menu.style.display = 'block';
     }
 </script>
 @endpush

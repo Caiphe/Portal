@@ -99,14 +99,14 @@
                 font-size: 12px;
             }
 
-            span {
+            .actions {
 
                 &:hover {
                     cursor: pointer;
                 }
             }
 
-            span:after {
+            .actions:after {
                 content: '\2807';
                 font-size: 25px;
             }
@@ -117,6 +117,24 @@
 
                 svg {
                     margin-right: 20px;
+                }
+            }
+
+            .regions {
+
+                svg {
+                    margin-right: 5px;
+                    width: 25px;
+                }
+            }
+
+            .menu {
+                background-color: $grey900;
+                border-radius: 10px;
+                padding: 10px;
+
+                a {
+                    color: #ffffff;
                 }
             }
 
@@ -132,11 +150,11 @@
                     margin: 0;
                 }
 
-                .services {
+                .products {
                     display: flex;
                     flex-wrap: wrap;
 
-                    .app {
+                    .product {
                         background-color: $grey300;
                         border-radius: 24px;
                         display: flex;
