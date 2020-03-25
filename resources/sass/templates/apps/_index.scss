@@ -33,31 +33,68 @@
         border: 2px solid #F2F2F2;
         border-radius: 10px;
         margin-top: 20px;
+
+        > div {
+            padding: 10px 20px 20px;
+        }
     }
 
-    table {
-        width: 100%;
-        color: $grey600;
+    .my-apps {
 
-        thead {
-            border-bottom: 1px solid #000000;
-
-            th {
-                text-align: left;
-                border-bottom: 2px solid #dee2e6;
+        .column {
+            div {
+                flex-grow: 1;
             }
         }
 
-        tbody {
+        .column:nth-of-type(1) {
+            width: 30%;
+        }
 
-            th:first-of-type {
+        .column:nth-of-type(2) {
+            width: 20%;
+        }
+
+        .column:nth-of-type(3) {
+            width: 25%;
+        }
+
+        .column:nth-of-type(4) {
+            width: 15%;
+        }
+
+        .column:nth-of-type(5) {
+            width: 5%;
+        }
+
+        .column:last-of-type {
+            width: 5%;
+        }
+
+        .head {
+            border-bottom: 2px solid $grey300;
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0;
+        }
+
+        .body {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .my-app {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 10px 0;
+            width: 100%;
+
+            .column:first-of-type {
                 font-size: 14px;
             }
 
-            th {
-                color: $grey900;
-                text-align: left;
-                padding-top: 10px;
+            .column {
                 font-size: 12px;
             }
 
@@ -71,6 +108,33 @@
             span:after {
                 content: '\2807';
                 font-size: 25px;
+            }
+
+            .detail {
+                display: none;
+                background-color: $grey200;
+                border-radius: 24px;
+                width: 100%;
+                padding: 20px;
+
+                p {
+                    font-size: 12px;
+                }
+
+                .app {
+                    background-color: $grey300;
+                    border-radius: 24px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    font-size: 12px;
+                    padding: 8px;
+                    max-width: 200px;
+
+                    svg:last-of-type {
+                        width: 7%;
+                    }
+                }
             }
         }
     }

@@ -16,107 +16,173 @@
 
     <div class="container" id="app-index">
         <div class="row">
-            <div style="padding-left: 20px; padding-right: 20px; padding-top: 10px; padding-bottom: 20px;">
+            <div>
                 <div style="display: flex; align-items: center;">
                     @svg('chevron-down', '#000000')
 
                     <h1 style="margin-left: 10px">Approved Apps</h1>
                 </div>
 
+                <div class="my-apps">
+                    <div class="head">
+                        <div class="column">
+                            <p>App name</p>
+                        </div>
 
+                        <div class="column">
+                            <p>Regions</p>
+                        </div>
 
-                <table class="table">
-                    <thead class="app">
-                        <tr>
-                            <th>App name</th>
-                            <th>Regions</th>
-                            <th>Callback URL</th>
-                            <th>Date created</th>
-                            <th>Status</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                        <div class="column">
+                            <p>Callback URL</p>
+                        </div>
+
+                        <div class="column">
+                            <p>Date created</p>
+                        </div>
+
+                        <div class="column">
+                            <p>Status</p>
+                        </div>
+
+                        <div class="column">
+                            <p>&nbsp;</p>
+                        </div>
+                    </div>
+                    <div class="body">
                         @foreach($approved_apps as $app)
-                            <tr>
-                                <th>
-                                    {{ $app['name'] }}
-                                </th>
-                                <th>
-
-                                </th>
-                                <th>
+                            <div class="my-app">
+                                <div class="column">
+                                    <p class="name">{{ $app['name'] }}</p>
+                                </div>
+                                <div class="column">
+                                    Lorem ipsum dolor sit amet, consetetur.
+                                </div>
+                                <div class="column">
                                     <a href="">https://www.appdomain.co.za</a>
-                                </th>
-                                <th>{{ \Carbon\Carbon::parse()->format('d M') }}</th>
-                                <th>
+                                </div>
+                                <div class="column">
+                                    {{ \Carbon\Carbon::parse()->format('d M') }}
+                                </div>
+                                <div class="column">
                                     <svg height="25" width="25">
                                         <circle cx="12.5" cy="12.5" r="10" stroke="#BB1E4F" stroke-width="3" fill="#BB1E4F" />
                                     </svg>
-                                </th>
-                                <th>
+                                </div>
+                                <div class="column">
                                     <span class="actions"></span>
-                                </th>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-{{--                @forelse($approved_apps as $app)--}}
-{{--                    <x-app :title="$app['name']"></x-app>--}}
-{{--                @empty--}}
-{{--                    <div class="col-12">--}}
-{{--                        @svg('app', '#ffffff')--}}
-{{--                        <h1>Looks like you don’t have any apps yet.</h1>--}}
-{{--                        <p>Fortunately, it’s very easy to create one.</p>--}}
+                                </div>
+                                <div class="detail">
+                                    <p>Consumer key: M5dGYCRA4FEtfccmBH6IGFp8RRddMivK</p>
+                                    <p>Consumer secret: 6DxjvPOWlpzTbGe7</p>
+                                    <p>Key issued: 02/03/2020 - 21:26</p>
+                                    <p>Expires: Never</p>
+                                    <p>Callback URL: https://www.plusnarrative.com</p>
+                                    <p>Description: Test application</p>
 
-{{--                        <button class="outline dark">Create app</button>--}}
-{{--                    </div>--}}
-{{--                @endforelse--}}
+                                    <p>Apps</p>
+
+                                    <div class="app">
+                                        <svg height="25" width="25">
+                                            <circle cx="12.5" cy="12.5" r="10" stroke="#BB1E4F" stroke-width="3" fill="#BB1E4F" />
+                                        </svg>
+                                        Subscription v1
+                                        @svg('arrow-forward', '#000000')
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="row">
-            <div style="padding-left: 20px; padding-right: 20px; padding-top: 10px; padding-bottom: 20px;">
+        <div class="row" id="app">
+            <div>
                 <div style="display: flex; align-items: center;">
                     @svg('chevron-down', '#000000')
 
                     <h1 style="margin-left: 10px">Revoked Apps</h1>
                 </div>
 
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>App name</th>
-                            <th>Reason</th>
-                            <th>Callback URL</th>
-                            <th>Date created</th>
-                            <th>Status</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <div class="my-apps">
+                    <div class="head">
+                        <div class="column">
+                            <p>App name</p>
+                        </div>
+
+                        <div class="column">
+                            <p>Reason</p>
+                        </div>
+
+                        <div class="column">
+                            <p>Callback URL</p>
+                        </div>
+
+                        <div class="column">
+                            <p>Date created</p>
+                        </div>
+
+                        <div class="column">
+                            <p>Status</p>
+                        </div>
+
+                        <div class="column">
+                            <p>&nbsp;</p>
+                        </div>
+                    </div>
+                    <div class="body">
                         @foreach($revoked_apps as $app)
-                            <tr>
-                                <th>{{ $app['name'] }}</th>
-                                <th>Lorem ipsum dolor sit amet, consetetur.</th>
-                                <th>
+                            <div class="my-app">
+                                <div class="column">
+                                    <p class="name">{{ $app['name'] }}</p>
+                                </div>
+                                <div class="column">
+                                    Lorem ipsum dolor sit amet, consetetur.
+                                </div>
+                                <div class="column">
                                     <a href="">https://www.appdomain.co.za</a>
-                                </th>
-                                <th>{{ \Carbon\Carbon::parse()->format('d M') }}</th>
-                                <th>
+                                </div>
+                                <div class="column">
+                                    {{ \Carbon\Carbon::parse()->format('d M') }}
+                                </div>
+                                <div class="column">
                                     <svg height="25" width="25">
                                         <circle cx="12.5" cy="12.5" r="10" stroke="#BB1E4F" stroke-width="3" fill="#BB1E4F" />
                                     </svg>
-                                </th>
-                                <th>
+                                </div>
+                                <div class="column">
                                     <span class="actions"></span>
-                                </th>
-                            </tr>
+                                </div>
+                            </div>
                         @endforeach
-                    </tbody>
-                </table>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 
 @endsection
+
+
+@push('scripts')
+<script>
+    var buttons = document.querySelectorAll('.name');
+
+    buttons.forEach(function(button) {
+        button.addEventListener('click', handleButtonClick);
+    });
+
+    function handleButtonClick(event) {
+        var button = event.currentTarget;
+        var detail = document.querySelector('.detail');
+
+        if (detail.style.display === 'block') {
+            detail.style.display = 'none';
+        } else {
+            detail.style.display = 'block';
+        }
+    }
+</script>
+@endpush
