@@ -25,6 +25,39 @@
 }
 
 #product-sections {
+    &.overview #button-docs,
+    &.overview #button-specification {
+        background-color: #FFF;
+        color: $grey600;
+        &:hover {
+            background-color: mix(#FFFFFF, $grey600, 20%);
+            border-color: mix(#FFFFFF, $grey600, 20%);
+            color: #FFF;
+        }
+    }
+
+    &.docs #button-overview,
+    &.docs #button-specification {
+        background-color: #FFF;
+        color: $grey600;
+        &:hover {
+            background-color: mix(#FFFFFF, $grey600, 20%);
+            border-color: mix(#FFFFFF, $grey600, 20%);
+            color: #FFF;
+        }
+    }
+
+    &.specification #button-overview,
+    &.specification #button-docs {
+        background-color: #FFF;
+        color: $grey600;
+        &:hover {
+            background-color: mix(#FFFFFF, $grey600, 20%);
+            border-color: mix(#FFFFFF, $grey600, 20%);
+            color: #FFF;
+        }
+    }
+
     &.overview #product-docs,
     &.overview #product-specification {
         display: none;

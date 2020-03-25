@@ -47,8 +47,10 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        $openApiClass = new OpenApiService($product->swagger);
         return view('products.show', [
-            "product" => $product->load(['content', 'keyFeatures'])
+            "product" => $product->load(['content', 'keyFeatures']),
+            "specification" => $openApiClass->buildOpenApiJson()
         ]);
     }
 

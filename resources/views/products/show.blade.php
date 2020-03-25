@@ -28,11 +28,12 @@
         </div>
     </x-heading>
 
-    <button class="light small product-section-button" onclick="switchSection('overview');">OVERVIEW</button>
-    <button class="outline light small product-section-button" onclick="switchSection('docs');">DOCS</button>
-    <button class="outline light small product-section-button" onclick="switchSection('specification');">SPECIFICATION</button>
-
     <div id="product-sections" class="overview">
+
+        <button id="button-overview" class="light small product-section-button" onclick="switchSection('overview');">OVERVIEW</button>
+        <button id="button-docs" class="light small product-section-button" onclick="switchSection('docs');">DOCS</button>
+        <button id="button-specification" class="light small product-section-button" onclick="switchSection('specification');">SPECIFICATION</button>
+            
         <div id="product-overview" class="product-section">
             {!!$product->content[0]['body']!!}
             <div class="key-features">
@@ -50,6 +51,11 @@
             <h2>Download</h2>
             <a href="{{ route('product.download.postman', [$product->slug]) }}" class="button">Download Postman collection</a>
             <a href="{{ route('product.download.swagger', [$product->slug]) }}" class="button">Download Swagger</a>
+            
+            <h2>Available endpoints</h2>
+            @foreach($specification['item'] as $spec)
+            <div><span class="tag">{{$spec['request']['method']}}</span>{{implode('/', $spec['request']['url']['path'])}}</div>
+            @endforeach
         </div>
     </div>
 @endsection
