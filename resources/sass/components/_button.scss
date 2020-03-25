@@ -25,6 +25,11 @@ button {
     align-items: center;
     cursor: pointer;
 
+    &.small {
+        height: 24px;
+        font-size: 1.2rem;
+    }
+
     &.blue {
         background-color: $blue;
         border: 1px solid $blue;
@@ -55,12 +60,34 @@ button {
         }
     }
 
+    &.light {
+        background-color: $grey600;
+        border: 2px solid $grey600;
+
+        &:hover {
+            background-color: mix(#FFFFFF, $grey600, 20%);
+            border-color: mix(#FFFFFF, $grey600, 20%);
+        }
+    }
+
+    &.lightest {
+        background-color: $grey500;
+        border: 2px solid $grey500;
+
+        &:hover {
+            background-color: mix(#FFFFFF, $grey500, 20%);
+            border-color: mix(#FFFFFF, $grey500, 20%);
+        }
+    }
+
 	&.inline {
 		display: inline-block;
 		margin-right: 5px;
 	}
     &.blue:not(.outline),
     &.dark:not(.outline),
+    &.light:not(.outline),
+    &.lightest:not(.outline),
     &.medium:not(.outline) {
         color: #FFF;
     }
@@ -131,6 +158,16 @@ button {
         background-color: #FFF;
 
         &.blue:hover {
+            color: #FFF;
+        }
+
+        &.light,
+        &.lightest {
+            color: $grey600;
+        }
+
+        &.light:hover,
+        &.lightest:hover {
             color: #FFF;
         }
     }
