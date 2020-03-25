@@ -29,7 +29,17 @@
         </div>
     </x-heading>
 
-    <button class="medium">OVERVIEW</button>
-    <button class="medium">DOCS</button>
-    <button class="medium">SPECIFICATION</button>
+    <button class="light small product-section-button">OVERVIEW</button>
+    <button class="outline light small product-section-button">DOCS</button>
+    <button class="outline light small product-section-button">SPECIFICATION</button>
+
+    <div id="product-overview" class="product-section">
+        <p>product-overview</p>
+    </div>
+    <div id="product-docs" class="product-section">
+        <p>product-docs</p>
+    </div>
+    <div id="product-specification" class="product-section">
+        <p>product-specification</p>
+    </div>
 @endsection
