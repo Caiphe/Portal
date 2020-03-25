@@ -5,16 +5,15 @@
 @endpush
 
 @section('sidebar')
-    @php
-        $list = [ 
+    <x-sidebar-accordion id="product-page-sidebar" :list="
+        [ 
             'Customer' => [
                 ['label' => 'APN', 'link' => 'https://www.google.com/'],
                 ['label' => 'Devices','link' => 'https://www.google.com/'],
                 ['label' => 'KYC','link' => 'https://www.google.com/']
             ],
-        ];
-    @endphp
-    <x-sidebar-accordion id="product-page-sidebar" :list="$list"/>
+        ]
+    "/>
 @endsection
 
 @section('content')
@@ -36,6 +35,13 @@
     <div id="product-sections" class="overview">
         <div id="product-overview" class="product-section">
             {!!$product->content[0]['body']!!}
+            <div class="key-features">
+                @foreach($product->keyFeatures as $keyFeature)
+                <x-key-feature :title="$keyFeature['title']">
+                    {{$keyFeature['description']}}
+                </x-key-feature>
+                @endforeach
+            </div>
         </div>
         <div id="product-docs" class="product-section">
             {!!$product->content[1]['body']!!}

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Product;
+use App\KeyFeature;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class KeyFeatureController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,23 +41,21 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Product  $product
+     * @param  \App\KeyFeature  $keyFeature
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show(KeyFeature $keyFeature)
     {
-        return view('products.show', [
-            "product" => $product->load(['content', 'keyFeatures'])
-        ]);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Product  $product
+     * @param  \App\KeyFeature  $keyFeature
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $product)
+    public function edit(KeyFeature $keyFeature)
     {
         //
     }
@@ -66,10 +64,10 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Product  $product
+     * @param  \App\KeyFeature  $keyFeature
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, KeyFeature $keyFeature)
     {
         //
     }
@@ -77,10 +75,10 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Product  $product
+     * @param  \App\KeyFeature  $keyFeature
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy(KeyFeature $keyFeature)
     {
         //
     }

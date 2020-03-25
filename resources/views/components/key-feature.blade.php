@@ -1,18 +1,18 @@
-@props(['icon', 'title'])
+@props(['title'])
 
 @allowonce('key_feature')
 <link href="/css/components/key-feature.css" rel="stylesheet"/>
 @endallowonce
 
 <div class="key-feature">
-    <div class="key-feature__body">
-        <div class="key-feature__icon">
-            @svg($icon, '#000000')
+    <div class="body">
+        <div class="icon">
+            @svg('key', '#000000')
         </div>
-        <h3 class="key-feature__header">
+        <h3 class="header">
             {{ $title }}
         </h3>
-        <p class="key-feature__content">
+        <p class="content">
             {{ $slot }}
         </p>
     </div>

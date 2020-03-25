@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Content;
+use App\KeyFeature;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -42,5 +43,10 @@ class Product extends Model
     public function content()
     {
         return $this->belongsToMany(Content::class);
+    }
+
+    public function keyFeatures()
+    {
+        return $this->belongsToMany(KeyFeature::class);
     }
 }
