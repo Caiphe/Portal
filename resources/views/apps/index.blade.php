@@ -114,14 +114,13 @@
         buttons[i].addEventListener('click', handleButtonClick);
     }
 
-    function handleButtonClick(event) {
-        var button = event.currentTarget;
-        var detail = document.querySelector('.detail');
+    function handleButtonClick() {
+        var parent = this.parentNode.parentNode;
 
-        if (detail.style.display === 'block') {
-            detail.style.display = 'none';
+        if (parent.lastElementChild.style.display === 'block') {
+            parent.lastElementChild.style.display = 'none';
         } else {
-            detail.style.display = 'block';
+            parent.lastElementChild.style.display = 'block';
         }
     }
 
