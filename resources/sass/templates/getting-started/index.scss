@@ -1,6 +1,18 @@
 @import "../../variables";
 
+.getting-started{
+    h2{
+        display: flex;
+        
+        svg{
+            padding-left: 10px;
+        }
+    }
+}
+
 #product-usage{
+    padding-top: 15px;
+
     .card{
         display: inline-block;
         width: 30%;
