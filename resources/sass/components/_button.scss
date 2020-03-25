@@ -10,7 +10,8 @@
     <button class="fab plus"></button>
 */
 
-button {
+button,
+.button {
     height: 34px;
     line-height: 1;
     background-color: $yellow;
@@ -20,10 +21,11 @@ button {
     border: 2px solid $yellow;
     border-radius: 22px;
     padding: 0 20px;
-    display: flex;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    color: $grey900;
 
     &.small {
         height: 24px;

@@ -18,5 +18,7 @@ Route::get('/', function () {
 });
 
 Route::get('products/{product:slug}', 'ProductController@show')->name('product.show');
+Route::get('products/{product:slug}/download/postman', 'ProductController@downloadPostman')->name('product.download.postman');
+Route::get('products/{product:slug}/download/swagger', 'ProductController@downloadSwagger')->name('product.download.swagger');
 
 Auth::routes();

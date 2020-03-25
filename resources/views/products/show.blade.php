@@ -47,7 +47,9 @@
             {!!$product->content[1]['body']!!}
         </div>
         <div id="product-specification" class="product-section">
-            <p>product-specification</p>
+            <h2>Download</h2>
+            <a href="{{ route('product.download.postman', [$product->slug]) }}" class="button">Download Postman collection</a>
+            <a href="{{ route('product.download.swagger', [$product->slug]) }}" class="button">Download Swagger</a>
         </div>
     </div>
 @endsection

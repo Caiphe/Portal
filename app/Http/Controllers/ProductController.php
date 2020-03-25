@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\Services\OpenApiService;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -83,5 +84,20 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         //
+    }
+
+    public function downloadPostman(Product $product)
+    {
+        $openApiClass = new OpenApiService($product->swagger);
+        $openApi = $openApiClass->buildOpenApiJson();
+
+        return response()->streamDownload(function () use ($product, $openApi) {
+            echo json_encode($openApi, JSON_PRETTY_PRINT);
+        }, $product->slug . '.json');
+    }
+
+    public function downloadSwagger(Product $product)
+    {
+        return response()->download(public_path() . '/openapi/' . $product->swagger);
     }
 }

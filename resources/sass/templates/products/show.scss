@@ -21,12 +21,10 @@
 
 .product-section-button {
     display: inline-block;
-    margin-right: 6px;
+    margin: $gutter 6px $gutter 0;
 }
 
 #product-sections {
-    margin-top: $gutter;
-    
     &.overview #product-docs,
     &.overview #product-specification {
         display: none;
