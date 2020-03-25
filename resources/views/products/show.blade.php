@@ -28,7 +28,7 @@
         </div>
     </x-heading>
 
-    <div id="product-sections" class="overview">
+    <div id="product-sections" class="specification">
 
         <button id="button-overview" class="light small product-section-button" onclick="switchSection('overview');">OVERVIEW</button>
         <button id="button-docs" class="light small product-section-button" onclick="switchSection('docs');">DOCS</button>
@@ -54,7 +54,7 @@
             
             <h2>Available endpoints</h2>
             @foreach($specification['item'] as $spec)
-            <div><span class="tag">{{$spec['request']['method']}}</span>{{implode('/', $spec['request']['url']['path'])}}</div>
+            <div class="endpoint"><div class="tag-wrapper"><span class="tag {{strtolower($spec['request']['method'])}}">{{strtoupper($spec['request']['method'])}}</span></div>{{implode('/', $spec['request']['url']['path'])}}</div>
             @endforeach
         </div>
     </div>
