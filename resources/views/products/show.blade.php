@@ -5,7 +5,16 @@
 @endpush
 
 @section('sidebar')
-    This is the sidebar
+    @php
+        $list = [ 
+            'Customer' => [
+                ['label' => 'APN', 'link' => 'https://www.google.com/'],
+                ['label' => 'Devices','link' => 'https://www.google.com/'],
+                ['label' => 'KYC','link' => 'https://www.google.com/']
+            ],
+        ];
+    @endphp
+    <x-sidebar-accordion id="product-page-sidebar" :list="$list"/>
 @endsection
 
 @section('content')
