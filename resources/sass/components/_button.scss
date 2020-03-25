@@ -55,6 +55,16 @@ button {
         }
     }
 
+    &.light {
+        background-color: $grey400;
+        border: 2px solid $grey400;
+
+        &:hover {
+            background-color: mix(#FFFFFF, $grey400, 20%);
+            border-color: mix(#FFFFFF, $grey400, 20%);
+        }
+    }
+
 	&.inline {
 		display: inline-block;
 		margin-right: 5px;
