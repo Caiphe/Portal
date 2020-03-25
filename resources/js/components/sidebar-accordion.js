@@ -1,4 +1,4 @@
-(function() {
+window.onload = function() {
     var accordion = document.querySelectorAll('.accordion-item');
     var menu = document.querySelector('.accordion-menu');
     var i = 0;
@@ -7,8 +7,10 @@
         var button = accordion[i].querySelector('a[data-toggle="accordion-item"]');
         var submenu = accordion[i].querySelector('.accordion-sub-items');
 
-        //accordion open and close items
-        button.addEventListener("click", toggleShow);
+        if (accordion.length > 1) {
+            //accordion open and close items
+            button.addEventListener("click", toggleShow);
+        }
 
         //add active class to sub-item onclick
         submenu.addEventListener("click", makeActive);
@@ -25,4 +27,4 @@
 
         event.target.classList.add('active');
     }
-}());
+}
