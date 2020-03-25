@@ -14,8 +14,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-		$products_collection = Product::all()->sortBy('category')->groupBy('category'); 
-		return view('products.index',['products_collection' => $products_collection]);
+		$productsCollection = Product::all()->sortBy('category')->groupBy('category'); 
+		return view('products.index',['productsCollection' => $productsCollection, 'productCategories' => array_keys($productsCollection->toArray())]);
     }
 
     /**
