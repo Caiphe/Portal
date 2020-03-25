@@ -15,6 +15,6 @@ Route::get('/', function () {
     return view('layouts.sidebar');
 });
 
-Route::view('/getting-started', 'layouts.getting-started.index');
+Route::view('/getting-started', 'templates.getting-started.index');
 
 Auth::routes();
