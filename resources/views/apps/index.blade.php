@@ -53,7 +53,10 @@
                         @foreach($approved_apps as $app)
                             <div class="my-app">
                                 <div class="column">
-                                    <p class="name">{{ $app['name'] }}</p>
+                                    <p class="name">
+                                        @svg('app-avatar', '#fff')
+                                        {{ $app['name'] }}
+                                    </p>
                                 </div>
                                 <div class="column">
                                     Lorem ipsum dolor sit amet, consetetur.
@@ -82,12 +85,22 @@
 
                                     <p>Apps</p>
 
-                                    <div class="app">
-                                        <svg height="25" width="25">
-                                            <circle cx="12.5" cy="12.5" r="10" stroke="#BB1E4F" stroke-width="3" fill="#BB1E4F" />
-                                        </svg>
-                                        Subscription v1
-                                        @svg('arrow-forward', '#000000')
+                                    <div class="services">
+                                        <div class="app">
+                                            <svg height="25" width="25">
+                                                <circle cx="12.5" cy="12.5" r="10" stroke="#BB1E4F" stroke-width="3" fill="#BB1E4F" />
+                                            </svg>
+                                            Subscription v1
+                                            @svg('arrow-forward', '#000000')
+                                        </div>
+
+                                        <div class="app">
+                                            <svg height="25" width="25">
+                                                <circle cx="12.5" cy="12.5" r="10" stroke="#BB1E4F" stroke-width="3" fill="#BB1E4F" />
+                                            </svg>
+                                            Subscription v1
+                                            @svg('arrow-forward', '#000000')
+                                        </div>
                                     </div>
                                 </div>
                             </div>
