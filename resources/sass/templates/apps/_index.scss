@@ -39,6 +39,16 @@
         }
     }
 
+    .approved-apps {
+        display: flex;
+        align-items: center;
+    }
+
+    .revoked-apps {
+        display: flex;
+        align-items: center;
+    }
+
     .my-apps {
 
         .column {
