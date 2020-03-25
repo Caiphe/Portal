@@ -20,6 +20,10 @@ mix.scripts("resources/js/scripts.js", "public/js/scripts.js")
         "resources/js/components/sidebar-accordion.js",
         "public/js/components/sidebar-accordion.js"
     )
+    .scripts(
+        "resources/js/templates/products/index.js",
+        "public/js/templates/products/index.js"
+    )
     .sass("resources/sass/components/carousel.scss", "public/css/components")
     .scripts(
         "resources/js/components/multiselect.js",

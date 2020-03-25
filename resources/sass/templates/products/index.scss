@@ -1,9 +1,24 @@
 .row {
     margin-top: 20px;
     padding: 20px;
-    .product-block {
-        display: inline-block;
-        width: 33%;
-		margin-top: 20px;
+    @media screen and (min-width: 1024px) {
+        .product-block {
+            display: inline-block;
+            width: 33%;
+            margin-top: 20px;
+        }
     }
+}
+.filter-checkbox {
+    display: flex;
+    align-items: center;
+    .filter-label {
+        margin-left: 5px;
+    }
+    margin-bottom: 5px;
+}
+
+#clearFilter {
+    margin-top: 30px;
+    display: none;
 }
