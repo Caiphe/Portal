@@ -21,7 +21,10 @@
             @yield('sidebar')
         </nav>
         <main id="main">
-            <button class="light small">hello</button>
+            <button class="light small">hello</button><br>
+            <button class="outline light small">hello</button><br>
+            <button class="lightest small">hello</button><br>
+            <button class="outline lightest small">hello</button>
             @yield("content")
         </main>
     </div>
