@@ -55,12 +55,12 @@
                     </div>
 
                     <div class="column">
-                        &nbsp;@nbsp;
+                        &nbsp;&nbsp;
                     </div>
                 </div>
                 <div class="body">
                     @foreach($approved_apps as $app)
-                        <x-app name="$app['name']"></x-app>
+                        <x-app :name="$app['attributes'][1]['value']"></x-app>
                     @endforeach
                 </div>
             </div>

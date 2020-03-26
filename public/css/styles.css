@@ -861,7 +861,6 @@ button.blue.fab.chevron-right.outline:hover {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
-<<<<<<< HEAD
 button.before.chevron-down::before,
 button.after.chevron-down::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>');
@@ -892,8 +891,6 @@ button.blue.fab.chevron-down.outline:hover {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>');
 }
 
-=======
->>>>>>> b044a05d735b8b18e88a93e81c124c2ed03f8137
 button.before.arrow-forward::before,
 button.after.arrow-forward::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
@@ -1318,7 +1315,6 @@ h6.chevron-right::before {
   left: 0;
 }
 
-<<<<<<< HEAD
 h1.chevron-down::before,
 h2.chevron-down::before,
 h3.chevron-down::before,
@@ -1334,8 +1330,6 @@ h6.chevron-down::before {
   left: 0;
 }
 
-=======
->>>>>>> b044a05d735b8b18e88a93e81c124c2ed03f8137
 h1.arrow-forward::before,
 h2.arrow-forward::before,
 h3.arrow-forward::before,

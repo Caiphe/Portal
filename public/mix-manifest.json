@@ -1,8 +1,5 @@
 {
-<<<<<<< HEAD
     "/css/components/app.css": "/css/components/app.css?id=9490d55044b90d31e88a",
-=======
->>>>>>> b044a05d735b8b18e88a93e81c124c2ed03f8137
     "/css/components/carousel.css": "/css/components/carousel.css?id=910d5c9a6b32ce5b7bfa",
     "/css/components/multiselect.css": "/css/components/multiselect.css?id=cf9276f189ecbaeeb8a2",
     "/css/components/card.css": "/css/components/card.css?id=c91778283571008f8208",
@@ -11,13 +8,9 @@
     "/css/components/key-feature.css": "/css/components/key-feature.css?id=1dcdaa70cf5de89bd053",
     "/css/components/sidebar-accordion.css": "/css/components/sidebar-accordion.css?id=1250fd5aaaf6e57296e3",
     "/css/components/heading.css": "/css/components/heading.css?id=a5af20fc4c45aa0c8731",
-<<<<<<< HEAD
     "/css/templates/apps/_index.css": "/css/templates/apps/_index.css?id=6b403317e6f902c57761",
-    "/css/styles.css": "/css/styles.css?id=45bba8905aa65a0f4d20",
-=======
     "/css/templates/getting-started/index.css": "/css/templates/getting-started/index.css?id=bfbfa43e390d32409c06",
-    "/css/styles.css": "/css/styles.css?id=9c948b1c1e42671381e1",
->>>>>>> b044a05d735b8b18e88a93e81c124c2ed03f8137
+    "/css/styles.css": "/css/styles.css?id=45bba8905aa65a0f4d20",
     "/js/scripts.js": "/js/scripts.js?id=1073cc28ad56d5a8c1c5",
     "/js/components/carousel.js": "/js/components/carousel.js?id=f8d1fee067d5197f9ccb",
     "/js/components/sidebar-accordion.js": "/js/components/sidebar-accordion.js?id=709883c29c1c818cfd4f",
