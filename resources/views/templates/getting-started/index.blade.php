@@ -5,18 +5,18 @@
 @endpush
 
 @section('sidebar')
-    <x-sidebar-accordion id="sidebar-accordion"  
+    <x-sidebar-accordion id="sidebar-accordion" :active="'/' . request()->path()"
     :list="
     [ 'GETTING STARTED' => 
         [
-            [ 'label' => 'Introduction', 'link' => '#'],
-            [ 'label' => 'My apps', 'link' => '#'],
-            [ 'label' => 'Browse products','link' => '#'],
-            [ 'label' => 'Create an application','link' => '#'],
+            [ 'label' => 'Introduction', 'link' => '/getting-started'],
+            [ 'label' => 'My apps', 'link' => '/my-apps'],
+            [ 'label' => 'Browse products','link' => '/browse-products'],
+            [ 'label' => 'Create an application','link' => '/create-aplication'],
             [ 'label' => 'Request approval','link' => '/request-approval'],
-            [ 'label' => 'Responses and error codes','link' => '#'],
-            [ 'label' => 'FAQ','link' => '#'],
-            [ 'label' => 'Developer tips','link' => '#']
+            [ 'label' => 'Responses and error codes','link' => '/responses'],
+            [ 'label' => 'FAQ','link' => '/faq'],
+            [ 'label' => 'Developer tips','link' => '/developer-tips']
         ]
     ]" />   
 @endsection
