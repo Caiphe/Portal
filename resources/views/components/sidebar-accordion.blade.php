@@ -27,6 +27,7 @@
 
 @php
     $isSingle = count($list) === 1;
+    $active = $active ?? '';
 @endphp
 
 <div id="sidebar-accordion" {{ $attributes->merge(['class' => 'accordion-items']) }}>
