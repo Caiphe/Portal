@@ -60,7 +60,7 @@
                 </div>
                 <div class="body">
                     @foreach($approved_apps as $app)
-                        <x-app :name="$app['name']" :description="{{ $app['attributes'][0]['value'] }}"></x-app>
+                        <x-app name="$app['name']"></x-app>
                     @endforeach
                 </div>
             </div>

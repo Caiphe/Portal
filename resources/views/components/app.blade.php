@@ -2,7 +2,7 @@
 <link href="/css/components/app.css" rel="stylesheet"/>
 @endallowonce
 
-@props(['description'])
+{{--@props(['description'])--}}
 
 <div class="my-app" {{ $attributes }}>
     <div class="column">
@@ -62,7 +62,7 @@
             <strong>Description:</strong>
         </p>
 
-        <p style="margin-bottom: 10px;">{{ $description }}</p>
+        <p style="margin-bottom: 10px;"></p>
 
         <p style="margin-bottom: 10px;"><strong>Products</strong></p>
 
