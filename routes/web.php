@@ -15,10 +15,7 @@ Route::get('/', function () {
     return view('layouts.sidebar');
 });
 
-<<<<<<< HEAD
 Route::get('my-apps', 'AppController@index');
-=======
 Route::view('/getting-started', 'templates.getting-started.index');
->>>>>>> b044a05d735b8b18e88a93e81c124c2ed03f8137
 
 Auth::routes();
