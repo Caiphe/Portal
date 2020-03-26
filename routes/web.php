@@ -21,4 +21,6 @@ Route::get('products/{product:slug}', 'ProductController@show')->name('product.s
 Route::get('products/{product:slug}/download/postman', 'ProductController@downloadPostman')->name('product.download.postman');
 Route::get('products/{product:slug}/download/swagger', 'ProductController@downloadSwagger')->name('product.download.swagger');
 
+Route::view('/getting-started', 'templates.getting-started.index');
+
 Auth::routes();
