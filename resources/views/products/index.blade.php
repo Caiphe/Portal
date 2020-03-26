@@ -18,6 +18,10 @@ $filters = array('Group'=> array('MTN'),'Categories'=> $productCategories);
 		</div>
 	@endforeach	
 @endforeach
+<div class="country-filter">
+	<h3>Country</h3>
+	<x-multiselect id="filter-country" name="filter-country" label="Select country" :options="$countries" onclick="filterProducts('Country');"/>
+</div>
 
 <button id="clearFilter" class="dark outline" onclick="clearFilter()">Clear filters</button>
 @endsection

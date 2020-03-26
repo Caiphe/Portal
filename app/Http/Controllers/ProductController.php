@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\Country;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -14,8 +15,13 @@ class ProductController extends Controller
      */
     public function index()
     {
-		$productsCollection = Product::all()->sortBy('category')->groupBy('category'); 
-		return view('products.index',['productsCollection' => $productsCollection, 'productCategories' => array_keys($productsCollection->toArray())]);
+		$productsCollection = Product::all()->sortBy('category')->groupBy('category');
+		$countries = Country::all();
+		$country_array = array();
+		foreach ($countries as $country) {
+			$country_array[$country->code] = $country->name;
+		}
+		return view('products.index',['productsCollection' => $productsCollection, 'productCategories' => array_keys($productsCollection->toArray()), 'countries' => $country_array]);
     }
 
     /**

@@ -3,6 +3,9 @@ function filterProducts(filterGroup) {
         "input[name=Categories]:checked"
     );
     var groupChecked = document.querySelectorAll("input[name=Group]:checked");
+    var countrySelect = getSelected(
+        document.getElementById("filter-country-select")
+    );
     if (filterGroup === "Group") {
         var products = document.querySelectorAll(".card--product");
         for (var i = products.length - 1; i >= 0; i--) {
@@ -26,11 +29,21 @@ function filterProducts(filterGroup) {
             )
                 categories[i].style.display = "block";
         }
-	}
-	if(groupChecked.length !== 0 || categoriesChecked.length !== 0)
-		document.getElementById("clearFilter").style.display = "block";
-	else if (groupChecked.length === 0 && categoriesChecked.length === 0)
-        document.getElementById("clearFilter").style.display = "none";	
+    } else {
+        console.log(countrySelect);
+    }
+    if (
+        groupChecked.length !== 0 ||
+        categoriesChecked.length !== 0 ||
+        countrySelect.length !== 0
+    )
+        document.getElementById("clearFilter").style.display = "block";
+    else if (
+        groupChecked.length === 0 &&
+        categoriesChecked.length === 0 &&
+        countrySelect.length === 0
+    )
+        document.getElementById("clearFilter").style.display = "none";
 }
 
 //check if a value is in a checkbox checked array
@@ -44,32 +57,42 @@ function in_checked_array(haystack, needle) {
     }
 }
 
-function clearFilter(){
-	var categoriesChecked = document.querySelectorAll(
+function clearFilter() {
+    var categoriesChecked = document.querySelectorAll(
         "input[name=Categories]:checked"
     );
-	if (categoriesChecked.length > 0) {
+    if (categoriesChecked.length > 0) {
         uncheckArray(categoriesChecked);
         var categories = document.querySelectorAll(".product-category");
         for (var i = categories.length - 1; i >= 0; i--) {
             categories[i].style.display = "block";
         }
-	}
+    }
 
-	var groupChecked = document.querySelectorAll("input[name=Group]:checked");
-	if(groupChecked.length > 0){
-		uncheckArray(groupChecked);
-		var products = document.querySelectorAll(".card--product");
+    var groupChecked = document.querySelectorAll("input[name=Group]:checked");
+    if (groupChecked.length > 0) {
+        uncheckArray(groupChecked);
+        var products = document.querySelectorAll(".card--product");
         for (var i = products.length - 1; i >= 0; i--) {
             products[i].style.display = "inline-block";
-        }	
-	}
+        }
+    }
 
-	document.getElementById("clearFilter").style.display = "none";	
+    document.getElementById("clearFilter").style.display = "none";
 }
 
-function uncheckArray(checkArray){
-	for (var i = checkArray.length - 1; i >= 0; i--) {
+function uncheckArray(checkArray) {
+    for (var i = checkArray.length - 1; i >= 0; i--) {
         checkArray[i].checked = false;
     }
+}
+
+function getSelected(multiSelect) {
+    var selected = [];
+    for (var option of multiSelect.options) {
+        if (option.selected) {
+            selected.push(option.value);
+        }
+    }
+    return selected;
 }
