@@ -84,15 +84,23 @@
         max-width: 150px;
     }
 
-    .endpoint {
-        margin-bottom: 14px;
-        display: flex;
-        font-family: "Montserrat-Light";
+    .specification-detail {
+        padding: $gutterSmall;
+        border: 1px solid $grey300;
+        border-radius: 8px;
+        margin-bottom: 10px;
     }
 
-    .tag-wrapper {
-        width: 67px;
-        text-align: right;
+    .endpoint {
+        display: flex;
+        font-family: "Montserrat-Light";
+
+        svg {
+            margin-right: 16px;
+        }
+    }
+
+    .tag {
         margin-right: 14px;
     }
 
@@ -111,5 +119,10 @@
 
     .delete {
         background-color: $red;
+    }
+
+    h4 {
+        font-family: "mtn-bold";
+        margin: 12px 0;
     }
 }

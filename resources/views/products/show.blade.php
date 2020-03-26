@@ -55,11 +55,13 @@
             
             <h2 class="mt-4">Available endpoints</h2>
             @foreach($specification['item'] as $spec)
-            <div class="endpoint">
-                <div class="tag-wrapper">
-                    <span class="tag {{strtolower($spec['request']['method'])}}">{{strtoupper($spec['request']['method'])}}</span>
+            <div class="specification-detail">
+                <div class="endpoint">
+                    @svg('chevron-right') <span class="tag {{strtolower($spec['request']['method'])}}">{{strtoupper($spec['request']['method'])}}</span> {{implode('/', $spec['request']['url']['path'])}}
                 </div>
-                {{implode('/', $spec['request']['url']['path'])}}
+                <h4>Description</h4>
+                <p class="description my-0">{{$spec['description']}}</p>
+                <h4 class="mt-2">Header parameters</h4>
             </div>
             @endforeach
         </div>
