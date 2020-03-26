@@ -56,7 +56,7 @@
             <h2 class="mt-4">Available endpoints</h2>
             @foreach($specification['item'] as $spec)
             <div class="specification-detail">
-                <div class="endpoint">
+                <div class="endpoint" onclick="toggleParent(this)">
                     @svg('chevron-right') <span class="tag {{strtolower($spec['request']['method'])}}">{{strtoupper($spec['request']['method'])}}</span> {{implode('/', $spec['request']['url']['path'])}}
                 </div>
 
@@ -66,11 +66,23 @@
                 <p class="description my-0">{{$spec['description']}}</p>
 
                 <h4>Header parameters</h4>
-                @foreach($spec['request']['header'] as $option)
-                <x-products.parameter :title="$option['name']" :type="$option['type']" :required="$option['required'] ?? 0">{{$option['description']}}</x-products.parameter>
+                @foreach($spec['request']['header'] as $parameter)
+                <x-products.parameter :title="$parameter['name']" :type="$parameter['type']" :required="$parameter['required'] ?? 0">{{$parameter['description']}}</x-products.parameter>
                 @endforeach
-
+                
+                @if(isset($spec['request']['url']['query']))
                 <h4>Query parameters</h4>
+                @foreach($spec['request']['url']['query'] as $parameter)
+                <x-products.parameter :title="$parameter['key']" :type="$parameter['type']" :required="$parameter['required'] ?? 0">{{$parameter['description']}}</x-products.parameter>
+                @endforeach
+                @endif
+                
+                @if(isset($spec['request']['body']))
+                <h4>FormData parameters</h4>
+                @foreach($spec['request']['body']['formdata'] as $parameter)
+                <x-products.parameter :title="$parameter['key']" :type="$parameter['type']" :required="$parameter['required'] ?? 0">{{$parameter['description']}}</x-products.parameter>
+                @endforeach
+                @endif
             </div>
             @endforeach
         </div>

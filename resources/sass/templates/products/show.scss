@@ -93,14 +93,26 @@
         border: 1px solid $grey300;
         border-radius: 8px;
         margin-bottom: 10px;
+        height: 66px;
+        overflow: hidden;
+
+        &.open {
+            height: auto;
+
+            .endpoint svg {
+                transform: rotate(90deg);
+            }
+        }
     }
 
     .endpoint {
         display: flex;
         font-family: "Montserrat-Light";
+        cursor: pointer;
 
         svg {
             margin-right: 16px;
+            transition: transform 0.356s;
         }
 
         .tag {
@@ -137,12 +149,31 @@
 
     .parameter {
         width: calc(50% - 20px);
+        height: 40px;
+        overflow: hidden;
         font-size: 10px;
-
         font-family: "Montserrat-Light";
+        padding-left: 22px;
+
+        &.open {
+            height: auto;
+
+            svg {
+                transform: rotate(90deg);
+            }
+        }
 
         h5 {
             font-family: "Montserrat";
+            margin-bottom: 5px;
+            cursor: pointer;
+
+            svg {
+                width: 20px;
+                position: absolute;
+                left: 0;
+                transition: transform 0.356s;
+            }
 
             .tag {
                 font-family: "Montserrat-Light";
