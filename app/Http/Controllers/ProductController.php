@@ -49,12 +49,19 @@ class ProductController extends Controller
     {
         $openApiClass = new OpenApiService($product->swagger);
         $prod = $product->load(['content', 'keyFeatures']);
-        $productList = Product::hasSwagger()->isPublic()->get()->groupBy('category');
+        $productList = Product::isPublic()->get()->groupBy('category');
         $content = [];
         $sidebarAccordion = [];
+        $startingPoint = "product-specification";
 
         foreach ($prod->content as $c) {
             $content[$c->type] = $c;
+        }
+
+        if(isset($content['product_overview'])){
+            $startingPoint = 'product-overview';
+        } else if(isset($content['product_docs'])){
+            $startingPoint = 'product-docs';
         }
 
         foreach ($productList as $category => $products) {
@@ -71,6 +78,7 @@ class ProductController extends Controller
             "product" => $prod,
             "sidebarAccordion" => $sidebarAccordion,
             "content" => $content,
+            "startingPoint" => $startingPoint,
             "specification" => $openApiClass->buildOpenApiJson()
         ]);
     }

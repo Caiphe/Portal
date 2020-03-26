@@ -25,8 +25,8 @@
 }
 
 #product-sections {
-    &.overview #button-docs,
-    &.overview #button-specification {
+    &.product-overview #button-docs,
+    &.product-overview #button-specification {
         background-color: #FFF;
         color: $grey600;
         &:hover {
@@ -36,8 +36,8 @@
         }
     }
 
-    &.docs #button-overview,
-    &.docs #button-specification {
+    &.product-docs #button-overview,
+    &.product-docs #button-specification {
         background-color: #FFF;
         color: $grey600;
         &:hover {
@@ -47,8 +47,8 @@
         }
     }
 
-    &.specification #button-overview,
-    &.specification #button-docs {
+    &.product-specification #button-overview,
+    &.product-specification #button-docs {
         background-color: #FFF;
         color: $grey600;
         &:hover {
@@ -58,18 +58,18 @@
         }
     }
 
-    &.overview #product-docs,
-    &.overview #product-specification {
+    &.product-overview #product-docs,
+    &.product-overview #product-specification {
         display: none;
     }
 
-    &.docs #product-overview,
-    &.docs #product-specification {
+    &.product-docs #product-overview,
+    &.product-docs #product-specification {
         display: none;
     }
 
-    &.specification #product-overview,
-    &.specification #product-docs {
+    &.product-specification #product-overview,
+    &.product-specification #product-docs {
         display: none;
     }
 

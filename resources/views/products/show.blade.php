@@ -5,9 +5,7 @@
 @endpush
 
 @section('sidebar')
-    {{url()->current()}}
-
-    <x-sidebar-accordion id="product-page-sidebar" :list="$sidebarAccordion"/>
+    <x-sidebar-accordion id="product-page-sidebar" :active="'/' . request()->path()" :list="$sidebarAccordion"/>
 @endsection
 
 @section('content')
@@ -22,30 +20,29 @@
         </div>
     </x-heading>
 
-    <div id="product-sections" class="specification">
-        
-        @if(isset($content['overview']))
-        <button id="button-overview" class="light small product-section-button" onclick="switchSection('overview');">OVERVIEW</button>
+    <div id="product-sections" class="{{$startingPoint}}">
+        @if(isset($content['product_overview']))
+        <button id="button-overview" class="light small product-section-button" onclick="switchSection('product-overview');">OVERVIEW</button>
         @endif
-        @if(isset($content['product']))
-        <button id="button-docs" class="light small product-section-button" onclick="switchSection('docs');">DOCS</button>
+        @if(isset($content['product_docs']))
+        <button id="button-docs" class="light small product-section-button" onclick="switchSection('product-docs');">DOCS</button>
         @endif
-        <button id="button-specification" class="light small product-section-button" onclick="switchSection('specification');">SPECIFICATION</button>
+        <button id="button-specification" class="light small product-section-button" onclick="switchSection('product-specification');">SPECIFICATION</button>
             
-        @if(isset($content['overview']))
+        @if(isset($content['product_overview']))
         <div id="product-overview" class="product-section">
             {!!$product->content[0]['body']!!}
             <div class="key-features">
                 @foreach($product->keyFeatures as $keyFeature)
                 <x-key-feature :title="$keyFeature['title']">
-                    {{$keyFeature['description']}}
+                    {{$keyFeature['description'] ?? ''}}
                 </x-key-feature>
                 @endforeach
             </div>
         </div>
         @endif
 
-        @if(isset($content['product']))
+        @if(isset($content['product_docs']))
         <div id="product-docs" class="product-section">
             {!!$product->content[1]['body']!!}
         </div>

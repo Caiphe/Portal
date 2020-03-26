@@ -29,7 +29,7 @@ class Product extends Model
 
     public function scopeIsPublic($query)
     {
-        return $query->whereAccess("public");
+        return $query->hasSwagger()->whereAccess("public");
     }
 
     public function scopeGetEnvironment($query, $environment)

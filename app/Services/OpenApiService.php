@@ -72,7 +72,7 @@ class OpenApiService
 
                 $items[] = [
                     "name" => $requestName,
-                    "description" => $request['description'],
+                    "description" => $request['description'] ?? '',
                     "request" => [
                         "auth" => $this->auth,
                         "method" => ucwords($method),
