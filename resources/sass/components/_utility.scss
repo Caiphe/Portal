@@ -27,5 +27,33 @@
 }
 
 .shadow {
-    box-shadow: 0 3px 6px rgba(0,0,0,0.12), 0 3px 6px rgba(0,0,0,0.16);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12), 0 3px 6px rgba(0, 0, 0, 0.16);
+}
+
+@for $i from 0 through 5 {
+    .mt-#{$i} {
+        margin-top: #{$i}rem;
+    }
+
+    .mb-#{$i} {
+        margin-bottom: #{$i}rem;
+    }
+
+    .mr-#{$i} {
+        margin-right: #{$i}rem;
+    }
+
+    .ml-#{$i} {
+        margin-left: #{$i}rem;
+    }
+
+    .mx-#{$i} {
+        margin-left: #{$i}rem;
+        margin-right: #{$i}rem;
+    }
+
+    .my-#{$i} {
+        margin-top: #{$i}rem;
+        margin-bottom: #{$i}rem;
+    }
 }

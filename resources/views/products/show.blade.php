@@ -5,15 +5,7 @@
 @endpush
 
 @section('sidebar')
-    <x-sidebar-accordion id="product-page-sidebar" :list="
-        [ 
-            'Customer' => [
-                ['label' => 'APN', 'link' => 'https://www.google.com/'],
-                ['label' => 'Devices','link' => 'https://www.google.com/'],
-                ['label' => 'KYC','link' => 'https://www.google.com/']
-            ],
-        ]
-    "/>
+    <x-sidebar-accordion id="product-page-sidebar" :list="$sidebarAccordion"/>
 @endsection
 
 @section('content')
@@ -29,11 +21,16 @@
     </x-heading>
 
     <div id="product-sections" class="specification">
-
+        
+        @if(isset($content['overview']))
         <button id="button-overview" class="light small product-section-button" onclick="switchSection('overview');">OVERVIEW</button>
+        @endif
+        @if(isset($content['product']))
         <button id="button-docs" class="light small product-section-button" onclick="switchSection('docs');">DOCS</button>
+        @endif
         <button id="button-specification" class="light small product-section-button" onclick="switchSection('specification');">SPECIFICATION</button>
             
+        @if(isset($content['overview']))
         <div id="product-overview" class="product-section">
             {!!$product->content[0]['body']!!}
             <div class="key-features">
@@ -44,17 +41,27 @@
                 @endforeach
             </div>
         </div>
+        @endif
+
+        @if(isset($content['product']))
         <div id="product-docs" class="product-section">
             {!!$product->content[1]['body']!!}
         </div>
+        @endif
+
         <div id="product-specification" class="product-section">
-            <h2>Download</h2>
+            <h2 class="mt-0">Download</h2>
             <a href="{{ route('product.download.postman', [$product->slug]) }}" class="button">Download Postman collection</a>
             <a href="{{ route('product.download.swagger', [$product->slug]) }}" class="button">Download Swagger</a>
             
-            <h2>Available endpoints</h2>
+            <h2 class="mt-4">Available endpoints</h2>
             @foreach($specification['item'] as $spec)
-            <div class="endpoint"><div class="tag-wrapper"><span class="tag {{strtolower($spec['request']['method'])}}">{{strtoupper($spec['request']['method'])}}</span></div>{{implode('/', $spec['request']['url']['path'])}}</div>
+            <div class="endpoint">
+                <div class="tag-wrapper">
+                    <span class="tag {{strtolower($spec['request']['method'])}}">{{strtoupper($spec['request']['method'])}}</span>
+                </div>
+                {{implode('/', $spec['request']['url']['path'])}}
+            </div>
             @endforeach
         </div>
     </div>

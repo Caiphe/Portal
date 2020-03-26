@@ -48,8 +48,29 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         $openApiClass = new OpenApiService($product->swagger);
+        $prod = $product->load(['content', 'keyFeatures']);
+        $productList = Product::hasSwagger()->isPublic()->get()->groupBy('category');
+        $content = [];
+        $sidebarAccordion = [];
+
+        foreach ($prod->content as $c) {
+            $content[$c->type] = $c;
+        }
+
+        foreach ($productList as $category => $products) {
+            if(!isset($sidebarAccordion[$category])){
+                $sidebarAccordion[$category] = [];
+            }
+
+            foreach ($products as $key => $product) {
+                $sidebarAccordion[$category][] = ["label" => $product['display_name'], "link" => $product['slug']];
+            }
+        }
+
         return view('products.show', [
-            "product" => $product->load(['content', 'keyFeatures']),
+            "product" => $prod,
+            "sidebarAccordion" => $sidebarAccordion,
+            "content" => $content,
             "specification" => $openApiClass->buildOpenApiJson()
         ]);
     }
