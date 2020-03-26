@@ -59,9 +59,18 @@
                 <div class="endpoint">
                     @svg('chevron-right') <span class="tag {{strtolower($spec['request']['method'])}}">{{strtoupper($spec['request']['method'])}}</span> {{implode('/', $spec['request']['url']['path'])}}
                 </div>
+
+                @if(!empty($spec['description']))
                 <h4>Description</h4>
+                @endif
                 <p class="description my-0">{{$spec['description']}}</p>
-                <h4 class="mt-2">Header parameters</h4>
+
+                <h4>Header parameters</h4>
+                @foreach($spec['request']['header'] as $option)
+                <x-products.parameter :title="$option['name']" :type="$option['type']" :required="$option['required'] ?? 0">{{$option['description']}}</x-products.parameter>
+                @endforeach
+
+                <h4>Query parameters</h4>
             </div>
             @endforeach
         </div>

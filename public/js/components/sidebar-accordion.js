@@ -1,1 +1,30 @@
-window.onload=function(){for(var e=document.querySelectorAll(".accordion-item"),t=document.querySelector(".accordion-menu"),c=0;c<e.length;c++){var o=e[c].querySelector('a[data-toggle="accordion-item"]'),i=e[c].querySelector(".accordion-sub-items");e.length>1&&o.addEventListener("click",n),i.addEventListener("click",a)}function n(){this.parentNode.classList.toggle("show")}function a(e){t.querySelectorAll(".accordion-sub-items li a.active").forEach(function(e){e.classList.remove("active")}),e.target.classList.add("active")}};
+window.onload = function() {
+    var accordion = document.querySelectorAll('.accordion-item');
+    var menu = document.querySelector('.accordion-menu');
+    var i = 0;
+
+    for (; i < accordion.length; i++) {
+        var button = accordion[i].querySelector('a[data-toggle="accordion-item"]');
+        var submenu = accordion[i].querySelector('.accordion-sub-items');
+
+        if (accordion.length > 1) {
+            //accordion open and close items
+            button.addEventListener("click", toggleShow);
+        }
+
+        //add active class to sub-item onclick
+        submenu.addEventListener("click", makeActive);
+    }
+
+    function toggleShow() {
+        this.parentNode.classList.toggle('show');
+    }
+
+    function makeActive(event) {
+        menu.querySelectorAll('.accordion-sub-items li a.active').forEach(function(item) {
+            item.classList.remove('active');
+        });
+
+        event.target.classList.add('active');
+    }
+}
