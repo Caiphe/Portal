@@ -124,14 +124,14 @@
     }
 
     function handleHeadingClick() {
-        if (this.nextElementSibling.style.display === 'block') {
-            this.nextElementSibling.style.display = 'none';
-            console.log(this.querySelector('svg'));
-        } else {
+        if (this.nextElementSibling.style.display === 'none' || this.nextElementSibling.style.display === '') {
             this.nextElementSibling.style.display = 'block';
+            this.querySelector('svg').classList.remove('active');
+        } else {
+            this.nextElementSibling.style.display = 'none';
+            this.querySelector('svg').classList.add('active');
         }
     }
-
 
     var buttons = document.querySelectorAll('.name');
 
