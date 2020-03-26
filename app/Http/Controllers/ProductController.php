@@ -63,7 +63,7 @@ class ProductController extends Controller
             }
 
             foreach ($products as $key => $product) {
-                $sidebarAccordion[$category][] = ["label" => $product['display_name'], "link" => $product['slug']];
+                $sidebarAccordion[$category][] = ["label" => $product['display_name'], "link" => '/products/' . $product['slug']];
             }
         }
 

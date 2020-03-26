@@ -5,6 +5,8 @@
 @endpush
 
 @section('sidebar')
+    {{url()->current()}}
+
     <x-sidebar-accordion id="product-page-sidebar" :list="$sidebarAccordion"/>
 @endsection
 
