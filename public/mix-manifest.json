@@ -1,4 +1,5 @@
 {
+    "/css/components/app.css": "/css/components/app.css?id=9b0bba7c5b2953ba0226",
     "/css/components/carousel.css": "/css/components/carousel.css?id=910d5c9a6b32ce5b7bfa",
     "/css/components/multiselect.css": "/css/components/multiselect.css?id=cf9276f189ecbaeeb8a2",
     "/css/components/card.css": "/css/components/card.css?id=c91778283571008f8208",
@@ -12,6 +13,5 @@
     "/js/scripts.js": "/js/scripts.js?id=1073cc28ad56d5a8c1c5",
     "/js/components/carousel.js": "/js/components/carousel.js?id=f8d1fee067d5197f9ccb",
     "/js/components/sidebar-accordion.js": "/js/components/sidebar-accordion.js?id=709883c29c1c818cfd4f",
-    "/js/components/multiselect.js": "/js/components/multiselect.js?id=39cf03457417178b9ad4",
-    "/css/components/app.css": "/css/components/app.css?id=ff9db39588c1c6425310"
+    "/js/components/multiselect.js": "/js/components/multiselect.js?id=39cf03457417178b9ad4"
 }

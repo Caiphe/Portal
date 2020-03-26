@@ -13,8 +13,7 @@
     </div>
     <div class="column regions">
         @svg('za', '#000000', 'images/locations')
-        @svg('af', '#000000', 'images/locations')
-        @svg('bf', '#000000', 'images/locations')
+        + 2 more
     </div>
     <div class="column">
         <a href="">https://www.appdomain.co.za</a>
@@ -36,14 +35,35 @@
         {{--                                    </nav>--}}
     </div>
     <div class="detail">
-        <p>Consumer key: M5dGYCRA4FEtfccmBH6IGFp8RRddMivK</p>
-        <p>Consumer secret: 6DxjvPOWlpzTbGe7</p>
-        <p>Key issued: 02/03/2020 - 21:26</p>
-        <p>Expires: Never</p>
-        <p>Callback URL: https://www.plusnarrative.com</p>
-        <p>Description: Test application</p>
+        <div style="display: flex;">
+            <div style="flex: 1;">
+                <p><strong>Consumer key:</strong> </p>
+                <p><strong>Consumer secret:</strong> </p>
+                <p><strong>Callback URL:</strong> </p>
+            </div>
+            <div style="flex: 1 auto;">
+                <p>M5dGYCRA4FEtfccmBH6IGFp8RRddMivK</p>
+                <p>6DxjvPOWlpzTbGe7</p>
+                <p>https://www.plusnarrative.com</p>
+            </div>
+            <div style="padding-right: 30px;">
+                <p><strong>Regions:</strong></p>
+                <p><strong>Key issued:</strong></p>
+                <p><strong>Expires:</strong></p>
+            </div>
+            <div style="flex: 1;">
+                <div style="display: flex;">
+                    @svg('za', '#000000', 'images/locations')
+                </div>
+                <p>02/03/2020 - 21:26</p>
+                <p>Never</p>
+            </div>
+        </div>
 
-        <p>Products</p>
+        <p><strong>Description:</strong></p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis ipsa magnam perspiciatis quaerat rem! Asperiores corporis delectus error esse et, excepturi in nemo nulla odit officia officiis quo ullam, unde!</p>
+
+        <p><strong>Products</strong></p>
 
         <div class="products">
             <div class="product">

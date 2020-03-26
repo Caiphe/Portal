@@ -36,10 +36,12 @@
     }
 
     .regions {
+        display: flex;
+        align-items: center;
 
         svg {
             margin-right: 5px;
-            width: 25px;
+            width: 20px;
         }
     }
 
@@ -65,10 +67,15 @@
             margin: 0;
         }
 
-        p:last-of-type {
-            margin-top: 12px;
-            margin-bottom: 10px;
+        svg {
+            margin-right: 5px;
+            width: 20px;
         }
+
+        //p:last-of-type {
+        //    margin-top: 12px;
+        //    margin-bottom: 10px;
+        //}
 
         .products {
             display: flex;
