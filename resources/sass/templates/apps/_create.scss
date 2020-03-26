@@ -1,3 +1,23 @@
-#app-create {
+@import '../../variables';
 
+#app-create {
+    height: 100%;
+    width: 100%;
+
+    .row {
+        display: flex;
+        flex-direction: column;
+        border: 2px solid #F2F2F2;
+        border-radius: 10px;
+        margin-top: 20px;
+
+        > div {
+            padding: 10px 20px 10px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+    }
 }

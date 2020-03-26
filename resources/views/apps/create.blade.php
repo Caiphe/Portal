@@ -24,11 +24,24 @@
 
 @section('content')
 
-    <x-heading heading="Apps" tags="DASHBOARD"></x-heading>
+    <x-heading heading="Apps" tags="CREATE NEW"></x-heading>
 
     <div class="container" id="app-create">
         <div class="row">
+            <form action="">
+                <div>
+                    <label for="name">Name your app *</label>
+                    <input type="text" name="name" id="name">
+                </div>
 
+                <label for="name">Callback url *</label>
+                <input type="text" name="name" id="name">
+
+                <label for="description">Description *</label>
+                <textarea name="description" id="description"></textarea>
+
+                <button class="dark">Select regions</button>
+            </form>
         </div>
     </div>
 
