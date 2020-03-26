@@ -16,5 +16,6 @@ Route::get('/', function () {
 });
 
 Route::view('/getting-started', 'templates.getting-started.index');
+Route::view('/request-approval', 'templates.getting-started.show');
 
 Auth::routes();
