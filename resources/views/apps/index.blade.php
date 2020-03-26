@@ -55,16 +55,12 @@
                     </div>
 
                     <div class="column">
-                        <p>Status</p>
-                    </div>
-
-                    <div class="column">
-                        &nbsp;
+                        &nbsp;@nbsp;
                     </div>
                 </div>
                 <div class="body">
                     @foreach($approved_apps as $app)
-                        <x-app :name="$app['name']"></x-app>
+                        <x-app :name="$app['name']" :description="{{ $app['attributes'][0]['value'] }}"></x-app>
                     @endforeach
                 </div>
             </div>
@@ -93,10 +89,6 @@
 
                     <div class="column">
                         <p>Date created</p>
-                    </div>
-
-                    <div class="column">
-                        <p>Status</p>
                     </div>
 
                     <div class="column">

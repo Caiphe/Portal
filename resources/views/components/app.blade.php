@@ -2,7 +2,7 @@
 <link href="/css/components/app.css" rel="stylesheet"/>
 @endallowonce
 
-{{--@props(['icon'])--}}
+@props(['description'])
 
 <div class="my-app" {{ $attributes }}>
     <div class="column">
@@ -16,15 +16,10 @@
         + 2 more
     </div>
     <div class="column">
-        <a href="">https://www.appdomain.co.za</a>
+        https://www.appdomain.co.za
     </div>
     <div class="column">
         {{ \Carbon\Carbon::parse()->format('d M') }}
-    </div>
-    <div class="column">
-        <svg height="25" width="25">
-            <circle cx="12.5" cy="12.5" r="10" stroke="#BB1E4F" stroke-width="3" fill="#BB1E4F" />
-        </svg>
     </div>
     <div class="column">
         <button class="actions"></button>
@@ -67,7 +62,7 @@
             <strong>Description:</strong>
         </p>
 
-        <p style="margin-bottom: 10px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis ipsa magnam perspiciatis quaerat rem! Asperiores corporis delectus error esse et, excepturi in nemo nulla odit officia officiis quo ullam, unde!</p>
+        <p style="margin-bottom: 10px;">{{ $description }}</p>
 
         <p style="margin-bottom: 10px;"><strong>Products</strong></p>
 
