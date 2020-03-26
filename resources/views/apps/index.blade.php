@@ -163,5 +163,15 @@
 
         menu.style.display = 'block';
     }
+
+    var keys = document.querySelectorAll('.copy');
+
+    for (var i = 0; i < keys.length; i ++) {
+        keys[i].addEventListener('click', handleCopyClick);
+    }
+
+    function handleCopyClick() {
+
+    }
 </script>
 @endpush
