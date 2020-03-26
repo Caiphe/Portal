@@ -58,6 +58,7 @@
             color: #ffffff !important;
             cursor: pointer;
             display: block;
+            font-size: 12px;
         }
     }
 
@@ -124,10 +125,10 @@
 
             .product {
                 background-color: $grey300;
-                border-radius: 10px;
+                border-radius: 5px;
                 display: flex;
                 justify-content: space-between;
-                align-items: center;
+                align-items: stretch;
                 font-size: 12px;
                 padding: 8px;
                 max-width: 250px;
@@ -135,16 +136,22 @@
                 margin-bottom: 10px;
                 height: 100%;
 
-                svg:not(:last-of-type) {
+                .status {
+                    height: auto;
+                    width: 10px;
+                    background: #FD6506;
+                    border-radius: 7px;
+                    opacity: 1;
                     margin-right: 10px;
                 }
 
-                span {
+                .name {
                     margin-right: 40px;
+                    max-width: 120px;
                 }
 
-                svg:last-of-type {
-                    //width: 7%;
+                svg {
+                    width: 15px;
                 }
             }
         }

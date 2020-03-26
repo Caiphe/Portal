@@ -124,14 +124,11 @@
     }
 
     function handleHeadingClick() {
-        var parent = this;
-
-        console.log(parent.nextSibling);
-
-        if (parent.lastElementChild.style.display === 'block') {
-            parent.lastElementChild.style.display = 'none';
+        if (this.nextElementSibling.style.display === 'block') {
+            this.nextElementSibling.style.display = 'none';
+            console.log(this.querySelector('svg'));
         } else {
-            parent.lastElementChild.style.display = 'block';
+            this.nextElementSibling.style.display = 'block';
         }
     }
 
@@ -145,10 +142,10 @@
     function handleButtonClick() {
         var parent = this.parentNode.parentNode;
 
-        if (parent.lastElementChild.style.display === 'block') {
-            parent.lastElementChild.style.display = 'none';
+        if (parent.querySelector('.detail').style.display === 'block') {
+            parent.querySelector('.detail').style.display = 'none';
         } else {
-            parent.lastElementChild.style.display = 'block';
+            parent.querySelector('.detail').style.display = 'block';
         }
     }
 
@@ -158,10 +155,12 @@
         actions[i].addEventListener('click', handleMenuClick);
     }
 
-    function handleMenuClick() {
+    function handleMenuClick(event) {
         var parent = this.parentNode.parentNode;
 
-        if (parent.lastElementChild.style.display === 'block') {
+        var isClickInside = parent.contains(event.target);
+
+        if (isClickInside && parent.lastElementChild.style.display === 'block') {
             parent.lastElementChild.style.display = 'none';
         } else {
             parent.lastElementChild.style.display = 'block';

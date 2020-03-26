@@ -73,26 +73,20 @@
 
         <div class="products">
             <div class="product">
-                <svg height="25" width="25">
-                    <circle cx="12.5" cy="12.5" r="10" stroke="#BB1E4F" stroke-width="3" fill="#BB1E4F" />
-                </svg>
-                <span>Subscription v1</span>
+                <span class="status"></span>
+                <span class="name">Subscription v1</span>
                 @svg('arrow-forward', '#000000')
             </div>
 
             <div class="product">
-                <svg height="25" width="25">
-                    <circle cx="12.5" cy="12.5" r="10" stroke="#BB1E4F" stroke-width="3" fill="#BB1E4F" />
-                </svg>
-                <span>SMS</span>
+                <span class="status"></span>
+                <span class="name">SMS</span>
                 @svg('arrow-forward', '#000000')
             </div>
 
             <div class="product">
-                <svg height="25" width="25">
-                    <circle cx="12.5" cy="12.5" r="10" stroke="#BB1E4F" stroke-width="3" fill="#BB1E4F" />
-                </svg>
-                <span>Product name which is really super dooper extra long</span>
+                <span class="status"></span>
+                <span class="name">Product name which is really super dooper extra long</span>
                 @svg('arrow-forward', '#000000')
             </div>
         </div>
