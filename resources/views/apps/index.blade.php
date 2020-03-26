@@ -59,7 +59,7 @@
                     </div>
 
                     <div class="column">
-                        <p>&nbsp;</p>
+                        &nbsp;
                     </div>
                 </div>
                 <div class="body">
@@ -100,7 +100,7 @@
                     </div>
 
                     <div class="column">
-                        <p>&nbsp;</p>
+                        &nbsp;
                     </div>
                 </div>
                 <div class="body">
@@ -159,9 +159,13 @@
     }
 
     function handleMenuClick() {
-        var menu = document.querySelector('.menu');
+        var parent = this.parentNode.parentNode;
 
-        menu.style.display = 'block';
+        if (parent.lastElementChild.style.display === 'block') {
+            parent.lastElementChild.style.display = 'none';
+        } else {
+            parent.lastElementChild.style.display = 'block';
+        }
     }
 
     var keys = document.querySelectorAll('.copy');

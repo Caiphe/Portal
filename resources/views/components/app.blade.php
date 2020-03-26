@@ -27,12 +27,7 @@
         </svg>
     </div>
     <div class="column">
-        <span class="actions"></span>
-        {{--                                    <nav class="menu">--}}
-        {{--                                        <a>Analytics</a>--}}
-        {{--                                        <a>Edit</a>--}}
-        {{--                                        <a>Delete</a>--}}
-        {{--                                    </nav>--}}
+        <button class="actions"></button>
     </div>
     <div class="detail">
         <div>
@@ -68,7 +63,10 @@
             </div>
         </div>
 
-        <p style=""><strong>Description:</strong></p>
+        <p>
+            <strong>Description:</strong>
+        </p>
+
         <p style="margin-bottom: 10px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis ipsa magnam perspiciatis quaerat rem! Asperiores corporis delectus error esse et, excepturi in nemo nulla odit officia officiis quo ullam, unde!</p>
 
         <p style="margin-bottom: 10px;"><strong>Products</strong></p>
@@ -99,5 +97,10 @@
             </div>
         </div>
     </div>
+    <nav class="menu">
+        <a href="">Analytics</a>
+        <a href="">Edit</a>
+        <a href="">Delete</a>
+    </nav>
 </div>
 

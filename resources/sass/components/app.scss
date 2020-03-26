@@ -15,15 +15,13 @@
     }
 
     .actions {
+        background-color: transparent;
+        border: transparent;
 
-        &:hover {
-            cursor: pointer;
+        &:after {
+            content: '\2807';
+            font-size: 25px;
         }
-    }
-
-    .actions:after {
-        content: '\2807';
-        font-size: 25px;
     }
 
     .name {
@@ -49,9 +47,17 @@
         background-color: $grey900;
         border-radius: 10px;
         padding: 10px;
+        display: none;
+        position: absolute;
+        text-align: left;
+        right: -5px;
+        top: 40px;
+        z-index: 1;
 
         a {
-            color: #ffffff;
+            color: #ffffff !important;
+            cursor: pointer;
+            display: block;
         }
     }
 
