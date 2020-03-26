@@ -1,18 +1,28 @@
+document
+    .getElementById("filter-country")
+    .addEventListener("change", filterCountries);
+function filterCountries(ev){
+	console.log('hello');
+	this.selectedOptions.forEach(element => {
+	console.log(element.value);	
+	});
+}
 function filterProducts(filterGroup) {
     var categoriesChecked = document.querySelectorAll(
         "input[name=Categories]:checked"
     );
     var groupChecked = document.querySelectorAll("input[name=Group]:checked");
     var countrySelect = getSelected(
-        document.getElementById("filter-country-select")
+        document.getElementById("filter-country")
     );
     if (filterGroup === "Group") {
         var products = document.querySelectorAll(".card--product");
         for (var i = products.length - 1; i >= 0; i--) {
-            products[i].style.display = "none";
+			products[i].style.display = "none";
+			console.log(products[i].dataset.locations);
             if (
                 groupChecked.length === 0 ||
-                in_checked_array(groupChecked, products[i].dataset.group)
+                inCheckedArray(groupChecked, products[i].dataset.group)
             )
                 products[i].style.display = "inline-block";
         }
@@ -22,16 +32,14 @@ function filterProducts(filterGroup) {
             categories[i].style.display = "none";
             if (
                 categoriesChecked.length === 0 ||
-                in_checked_array(
+                inCheckedArray(
                     categoriesChecked,
                     categories[i].dataset.category
                 )
             )
                 categories[i].style.display = "block";
         }
-    } else {
-        console.log(countrySelect);
-    }
+    } 
     if (
         groupChecked.length !== 0 ||
         categoriesChecked.length !== 0 ||
@@ -47,10 +55,11 @@ function filterProducts(filterGroup) {
 }
 
 //check if a value is in a checkbox checked array
-function in_checked_array(haystack, needle) {
+function inCheckedArray(haystack, needle) {
     if (haystack.length > 0) {
         for (var i = haystack.length - 1; i >= 0; i--) {
-            if (haystack[i].value === needle) return true;
+            if (haystack[i].value.toLowerCase() === needle.toLowerCase())
+                return true;
         }
     } else {
         return false;
@@ -90,7 +99,7 @@ function uncheckArray(checkArray) {
 function getSelected(multiSelect) {
     var selected = [];
     for (var option of multiSelect.options) {
-        if (option.selected) {
+		if (option.selected) {
             selected.push(option.value);
         }
     }
