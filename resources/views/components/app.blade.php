@@ -32,8 +32,14 @@
                 <p><strong>Callback URL:</strong> </p>
             </div>
             <div>
-                <p class="key">M5dGYCRA4FEtfccmBH6IGFp8RRddMivK</p>
-                <p class="key">6DxjvPOWlpzTbGe7</p>
+                <p class="key">
+                    M5dGYCRA4FEtfccmBH6IGFp8RRddMivK
+                </p>
+                <input type="hidden" id="consumer-key" value="M5dGYCRA4FEtfccmBH6IGFp8RRddMivK">
+                <p class="key">
+                    6DxjvPOWlpzTbGe7
+                </p>
+                <input type="hidden" class="consumer-secret" value="6DxjvPOWlpzTbGe7">
                 <p>https://www.plusnarrative.com</p>
             </div>
             <div class="copy-column">

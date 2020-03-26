@@ -162,11 +162,15 @@
     var keys = document.querySelectorAll('.copy');
 
     for (var i = 0; i < keys.length; i ++) {
-        keys[i].addEventListener('click', handleCopyClick);
+        keys[i].addEventListener('click', copyText);
     }
 
-    function handleCopyClick() {
-
+    function copyText(id) {
+        var el = document.getElementById(id);
+        el.select();
+        /* Copy the text inside the text field */
+        document.execCommand("copy");
+        el.blur();
     }
 </script>
 @endpush
