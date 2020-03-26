@@ -24,6 +24,8 @@
 
 @section('content')
 
+    <x-heading heading="Apps" tags="DASHBOARD"></x-heading>
+
 @endsection
 
 @push('scripts')
