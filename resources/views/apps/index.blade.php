@@ -106,7 +106,6 @@
 
 @endsection
 
-
 @push('scripts')
 <script>
     var headings = document.querySelectorAll('.heading-app');

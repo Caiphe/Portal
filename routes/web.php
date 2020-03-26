@@ -15,7 +15,9 @@ Route::get('/', function () {
     return view('layouts.sidebar');
 });
 
-Route::get('my-apps', 'AppController@index');
+Route::get('apps', 'AppController@index');
+Route::get('apps/create', 'AppController@create');
+
 Route::view('/getting-started', 'templates.getting-started.index');
 
 Auth::routes();
