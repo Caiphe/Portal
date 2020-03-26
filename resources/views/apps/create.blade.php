@@ -26,6 +26,12 @@
 
     <x-heading heading="Apps" tags="DASHBOARD"></x-heading>
 
+    <div class="container" id="app-create">
+        <div class="row">
+
+        </div>
+    </div>
+
 @endsection
 
 @push('scripts')
