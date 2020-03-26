@@ -5,7 +5,21 @@
 @extends('layouts.sidebar')
 
 @section('sidebar')
-    Sidebar content
+    <x-sidebar-accordion id="sidebar-accordion"
+                         :list="
+    [ 'Manage' =>
+        [
+            [ 'label' => 'Profile', 'link' => '#'],
+            [ 'label' => 'Approved apps', 'link' => '#'],
+            [ 'label' => 'Revoked apps','link' => '#'],
+        ],
+        'Discover' =>
+        [
+            [ 'label' => 'Browse all products', 'link' => '#'],
+            [ 'label' => 'Working with our products','link' => '#'],
+        ]
+    ]
+    " />
 @endsection
 
 @section('content')
@@ -16,89 +30,84 @@
 
     <div class="container" id="app-index">
         <div class="row">
-            <div>
-                <div class="approved-apps">
-                    @svg('chevron-down', '#000000')
+            <div class="heading-app">
+                @svg('chevron-down', '#000000')
 
-                    <h3 style="margin-left: 10px">Approved Apps</h3>
+                <h3>Approved Apps</h3>
+            </div>
+
+            <div class="my-apps">
+                <div class="head">
+                    <div class="column">
+                        <p>App name</p>
+                    </div>
+
+                    <div class="column">
+                        <p>Regions</p>
+                    </div>
+
+                    <div class="column">
+                        <p>Callback URL</p>
+                    </div>
+
+                    <div class="column">
+                        <p>Date created</p>
+                    </div>
+
+                    <div class="column">
+                        <p>Status</p>
+                    </div>
+
+                    <div class="column">
+                        <p>&nbsp;</p>
+                    </div>
                 </div>
-
-                <div class="my-apps">
-                    <div class="head">
-                        <div class="column">
-                            <p>App name</p>
-                        </div>
-
-                        <div class="column">
-                            <p>Regions</p>
-                        </div>
-
-                        <div class="column">
-                            <p>Callback URL</p>
-                        </div>
-
-                        <div class="column">
-                            <p>Date created</p>
-                        </div>
-
-                        <div class="column">
-                            <p>Status</p>
-                        </div>
-
-                        <div class="column">
-                            <p>&nbsp;</p>
-                        </div>
-                    </div>
-                    <div class="body">
-                        @foreach($approved_apps as $app)
-                            <x-app :name="$app['name']"></x-app>
-                        @endforeach
-                    </div>
+                <div class="body">
+                    @foreach($approved_apps as $app)
+                        <x-app :name="$app['name']"></x-app>
+                    @endforeach
                 </div>
             </div>
         </div>
 
         <div class="row" id="app">
-            <div>
-                <div class="revoked-apps">
-                    @svg('chevron-down', '#000000')
+            <div class="heading-app">
+                @svg('chevron-down', '#000000')
 
-                    <h3 style="margin-left: 10px">Revoked Apps</h3>
-                </div>
+                <h3>Revoked Apps</h3>
+            </div>
 
-                <div class="my-apps">
-                    <div class="head">
-                        <div class="column">
-                            <p>App name</p>
-                        </div>
-
-                        <div class="column">
-                            <p>Reason</p>
-                        </div>
-
-                        <div class="column">
-                            <p>Callback URL</p>
-                        </div>
-
-                        <div class="column">
-                            <p>Date created</p>
-                        </div>
-
-                        <div class="column">
-                            <p>Status</p>
-                        </div>
-
-                        <div class="column">
-                            <p>&nbsp;</p>
-                        </div>
+            <div class="my-apps">
+                <div class="head">
+                    <div class="column">
+                        <p>App name</p>
                     </div>
-                    <div class="body">
-                        @foreach($revoked_apps as $app)
-                            <x-app :name="$app['name']"></x-app>
-                        @endforeach
+
+                    <div class="column">
+                        <p>Reason</p>
+                    </div>
+
+                    <div class="column">
+                        <p>Callback URL</p>
+                    </div>
+
+                    <div class="column">
+                        <p>Date created</p>
+                    </div>
+
+                    <div class="column">
+                        <p>Status</p>
+                    </div>
+
+                    <div class="column">
+                        <p>&nbsp;</p>
                     </div>
                 </div>
-
+                <div class="body">
+                    @foreach($revoked_apps as $app)
+                        <x-app :name="$app['name']"></x-app>
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>
@@ -108,6 +117,25 @@
 
 @push('scripts')
 <script>
+    var headings = document.querySelectorAll('.heading-app');
+
+    for (var i = 0; i < headings.length; i++) {
+        headings[i].addEventListener('click', handleHeadingClick)
+    }
+
+    function handleHeadingClick() {
+        var parent = this;
+
+        console.log(parent.nextSibling);
+
+        if (parent.lastElementChild.style.display === 'block') {
+            parent.lastElementChild.style.display = 'none';
+        } else {
+            parent.lastElementChild.style.display = 'block';
+        }
+    }
+
+
     var buttons = document.querySelectorAll('.name');
 
     for (var i = 0; i < buttons.length; i ++) {

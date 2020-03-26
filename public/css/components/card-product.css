@@ -4,13 +4,13 @@
 }
 
 .card--product .card__content .country-selector .countries {
-  width: 30px;
-  height: 30px;
+  width: 15px;
+  height: 15px;
   overflow: hidden;
 }
 
 .card--product .card__content .country-selector .countries img {
-  height: 30px;
+  height: 15px;
 }
 
 .card--product .card__content .country-selector .view-more {

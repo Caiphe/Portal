@@ -39,14 +39,13 @@
         }
     }
 
-    .approved-apps {
+    .heading-app {
         display: flex;
         align-items: center;
-    }
 
-    .revoked-apps {
-        display: flex;
-        align-items: center;
+        h3 {
+            margin-left: 10px
+        }
     }
 
     .my-apps {
