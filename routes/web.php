@@ -15,7 +15,6 @@ Route::get('/', function () {
     return view('layouts.sidebar');
 });
 
-Route::view('/getting-started', 'templates.getting-started.index');
-Route::view('/request-approval', 'templates.getting-started.show');
+Route::resource('getting-started', 'GettingStartedController');
 
 Auth::routes();
