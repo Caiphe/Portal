@@ -1,11 +1,16 @@
 document
-    .getElementById("filter-country")
+    .getElementById("filter-country-select")
     .addEventListener("change", filterCountries);
-function filterCountries(ev){
-	console.log('hello');
-	this.selectedOptions.forEach(element => {
-	console.log(element.value);	
-	});
+function filterCountries(){
+	var countrySelect = getSelected(document.getElementById("filter-country"));
+	var products = document.querySelectorAll(".card--product");
+    for (var i = products.length - 1; i >= 0; i--) {
+		products[i].style.display = "none";
+		if (products[i].dataset.locations !== null)
+            locations = products[i].dataset.locations.split(",");
+        if (countrySelect.length === 0 || arrayCompare(locations, countrySelect))
+            products[i].style.display = "inline-block";
+    }
 }
 function filterProducts(filterGroup) {
     var categoriesChecked = document.querySelectorAll(
@@ -19,8 +24,7 @@ function filterProducts(filterGroup) {
         var products = document.querySelectorAll(".card--product");
         for (var i = products.length - 1; i >= 0; i--) {
 			products[i].style.display = "none";
-			console.log(products[i].dataset.locations);
-            if (
+			if (
                 groupChecked.length === 0 ||
                 inCheckedArray(groupChecked, products[i].dataset.group)
             )
@@ -104,4 +108,14 @@ function getSelected(multiSelect) {
         }
     }
     return selected;
+}
+
+function arrayCompare(a, b) {
+    var matches = [];
+    for (var i = 0; i < a.length; i++) {
+        for (var e = 0; e < b.length; e++) {
+            if (a[i] === b[e]) matches.push(a[i]);
+        }
+    }
+    return (matches.length > 0);
 }

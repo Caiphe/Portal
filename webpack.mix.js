@@ -46,5 +46,6 @@ mix.scripts("resources/js/scripts.js", "public/js/scripts.js")
         "resources/sass/templates/products/index.scss",
         "public/css/templates/products"
     )
+    .sass("resources/sass/templates/getting-started/index.scss", "public/css/templates/getting-started")
     .sass("resources/sass/styles.scss", "public/css")
     .version();
