@@ -115,7 +115,7 @@
 {{--                        </div>--}}
 {{--                    </div>--}}
 
-{{--                    <div class="buttons">--}}
+{{--                    <div class="form-actions">--}}
 {{--                        <button class="dark outline">Back</button>--}}
 {{--                        <button class="dark">--}}
 {{--                            Add products--}}
@@ -144,7 +144,7 @@
                         @endforeach
                     </div>
 
-                    <div class="buttons">
+                    <div class="form-actions">
                         <button class="dark outline">Back</button>
                         <button class="dark">
                             Create app
