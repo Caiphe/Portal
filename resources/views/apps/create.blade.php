@@ -44,24 +44,24 @@
 
             <form action="">
 
-                <div>
+                <div class="active">
                     @svg('app-avatar', '#ffffff')
                     <div class="group">
                         <label for="name">Name your app *</label>
-                        <input type="text" name="name" id="name" placeholder="Enter name">
+                        <input type="text" name="name" id="name" placeholder="Enter name" required>
                     </div>
 
                     <div class="group">
                         <label for="name">Callback url *</label>
-                        <input type="text" name="name" id="name" placeholder="Enter callback url">
+                        <input type="text" name="name" id="name" placeholder="Enter callback url" required>
                     </div>
 
                     <div class="group">
                         <label for="description">Description *</label>
-                        <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>
+                        <textarea name="description" id="description" rows="5" placeholder="Enter description" required></textarea>
                     </div>
 
-                    <button class="dark" type="submit">
+                    <button class="dark next">
                         Select regions
                         @svg('arrow-forward', '#ffffff')
                     </button>
@@ -118,7 +118,7 @@
 
                     <div class="form-actions">
                         <button class="dark outline">Back</button>
-                        <button class="dark">
+                        <button class="dark next">
                             Add products
                             @svg('arrow-forward', '#ffffff')
                         </button>
@@ -147,11 +147,14 @@
 
                     <div class="form-actions">
                         <button class="dark outline">Back</button>
-                        <button class="dark">
+                        <button class="dark" type="submit">
                             Create app
                         </button>
                     </div>
                 </div>
+
+                @csrf
+
             </form>
         </div>
 
@@ -162,9 +165,34 @@
 
 @push('scripts')
 <script>
+    document.addEventListener('DOMContentLoaded', init);
+
+    var nav = document.querySelector('#app-create nav');
     var form = document.querySelector('form');
+    var buttons = document.querySelectorAll('.next');
+
+    function init() {
+        handleButtonClick();
+    }
 
 
+    function handleButtonClick() {
+        for (var i = 0; i < buttons.length; i++) {
 
+            buttons[i].addEventListener('click', function (event) {
+                event.preventDefault();
+
+                if(form.firstElementChild.classList.contains('active')) {
+
+                    nav.querySelector('a').nextElementSibling.classList.add('active');
+
+                    form.firstElementChild.classList.remove('active');
+                    form.firstElementChild.style.display = 'none';
+                    form.firstElementChild.nextElementSibling.classList.add('active');
+                }
+
+            });
+        }
+    }
 </script>
 @endpush

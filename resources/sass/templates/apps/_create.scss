@@ -75,6 +75,10 @@
                 + div {
                     display: none;
                 }
+
+                &.active {
+                    display: flex;
+                }
             }
 
 
