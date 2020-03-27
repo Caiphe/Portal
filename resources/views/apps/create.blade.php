@@ -65,6 +65,8 @@
                 </button>
             </form>
         </div>
+
+        <button type="reset">Cancel</button>
     </div>
 
 @endsection
