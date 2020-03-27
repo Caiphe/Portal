@@ -31,10 +31,11 @@
                 <p><strong>Consumer secret:</strong> </p>
                 <p><strong>Callback URL:</strong> </p>
             </div>
-            <div>
+            <div class="consumer">
                 <p class="key">
                     {{ end($app['credentials'])['consumerKey']  }}
                 </p>
+                <input type="hidden" id="consumer-key" value="{{ end($app['credentials'])['consumerKey']  }}">
                 <p class="key">
                     {{ end($app['credentials'])['consumerSecret'] }}
                 </p>

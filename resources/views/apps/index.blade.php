@@ -181,24 +181,23 @@
         keys[i].addEventListener('click', copyText);
     }
 
-    function copyText(id) {
-        var el = document.getElementById(id);
+    function copyText() {
+        var parent = this.parentNode.parentNode.parentNode.parentNode;
+        var el = parent.querySelector('.detail');
+        // var el = document.getElementById('#consumer-key').value;
         el.select();
-        /* Copy the text inside the text field */
+
         document.execCommand("copy");
         el.blur();
     }
 
-    // var menus = document.getElementsByClassName('menu');
+    // var menus = document.querySelectorAll('.menu');
     //
-    // function closeMenu(menu) {
-    //     console.log(menu)
-    //     menu.classList.remove('show');
-    //     // document.querySelectorAll('.my-app').classList.toggle('show');
+    // function closeMenu() {
+    //     console.log('close')
     // }
     //
     // window.onclick = function(event) {
-    //     event.preventDefault()
     //     for (var i =0 ; i < menus.length; i++) {
     //         menus.item(i).onclick = closeMenu();
     //     }
