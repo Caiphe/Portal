@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Country;
+use App\Product;
 use App\Services\ApigeeService;
 use Illuminate\Http\Request;
 
@@ -30,7 +32,23 @@ class AppController extends Controller
 
     public function create()
     {
-        return view('apps.create');
+        $products = Product::all()
+            ->sortBy('category')
+            ->groupBy('category');
+
+        $countries = Country::all();
+
+        $country_array = [];
+        foreach ($countries as $country) {
+            $country_array[$country->code] = $country->name;
+        }
+
+        return view('apps.create', [
+                'products' => $products,
+                'productCategories' => array_keys($products->toArray()),
+                'countries' => $country_array
+            ]
+        );
     }
 
     public function store(Request $request)

@@ -82,6 +82,10 @@
                 width: 12%;
             }
 
+            p {
+                font-size: 16px;
+            }
+
             textarea {
                 resize: none;
             }
@@ -97,6 +101,49 @@
                 flex-direction: column;
                 margin-bottom: 3rem;
                 width: 50%;
+            }
+
+            .countries {
+                display: flex;
+                flex-flow: row wrap;
+                margin-top: 20px;
+                margin-bottom: 40px;
+
+                .country {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    border: 2px solid $grey400;
+                    border-radius: 5px;
+                    padding: 20px;
+                    margin-right: 10px;
+                    margin-bottom: 20px;
+                    width: 15%;
+
+                    svg {
+                        margin-bottom: 15px;
+                        width: 60%;
+                    }
+
+                    span {
+                        justify-content: center;
+                    }
+                }
+            }
+
+            .products {
+                display: flex;
+                flex-flow: row wrap;
+
+                .category {
+                    margin-bottom: 40px;
+                    width: 100%;
+
+                    .card {
+                        margin-bottom: 30px;
+                        width: 30%;
+                    }
+                }
             }
 
             .buttons {

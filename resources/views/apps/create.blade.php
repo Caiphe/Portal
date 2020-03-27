@@ -66,18 +66,91 @@
 {{--                    </button>--}}
 {{--                </div>--}}
 
+{{--                <div>--}}
+{{--                    <p>Select the regions you would like to associate with your app *</p>--}}
+
+{{--                    <div class="countries">--}}
+{{--                        <div class="country">--}}
+{{--                            @svg('za', '#ffffff', 'images/locations')--}}
+{{--                            <span>--}}
+{{--                            Country--}}
+{{--                        </span>--}}
+{{--                        </div>--}}
+
+{{--                        <div class="country">--}}
+{{--                            @svg('za', '#ffffff', 'images/locations')--}}
+{{--                            <span>--}}
+{{--                            Country--}}
+{{--                        </span>--}}
+{{--                        </div>--}}
+
+{{--                        <div class="country">--}}
+{{--                            @svg('za', '#ffffff', 'images/locations')--}}
+{{--                            <span>--}}
+{{--                            Country--}}
+{{--                        </span>--}}
+{{--                        </div>--}}
+
+{{--                        <div class="country">--}}
+{{--                            @svg('za', '#ffffff', 'images/locations')--}}
+{{--                            <span>--}}
+{{--                            Country--}}
+{{--                        </span>--}}
+{{--                        </div>--}}
+
+
+{{--                        <div class="country">--}}
+{{--                            @svg('za', '#ffffff', 'images/locations')--}}
+{{--                            <span>--}}
+{{--                            Country--}}
+{{--                        </span>--}}
+{{--                        </div>--}}
+
+
+{{--                        <div class="country">--}}
+{{--                            @svg('za', '#ffffff', 'images/locations')--}}
+{{--                            <span>--}}
+{{--                            Country--}}
+{{--                        </span>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+
+{{--                    <div class="buttons">--}}
+{{--                        <button class="dark outline">Back</button>--}}
+{{--                        <button class="dark">--}}
+{{--                            Add products--}}
+{{--                            @svg('arrow-forward', '#ffffff')--}}
+{{--                        </button>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+
                 <div>
-                    <p style="font-size: 16px;">Select the regions you would like to associate with your app *</p>
+                    <p>Select the products you would like to add to your app.</p>
+
+                    <div class="products">
+                        @foreach ($products as $category=>$products)
+                            <div class="category" data-category="{{ $category }}">
+                                <h3>{{ $category }}</h3>
+                                @foreach ($products as $product)
+                                    @php
+				                    $tags = array($product->group, $product->category);
+                                    @endphp
+                                    <x-card-product :title="$product->display_name" class="product-block" :href="$product->slug" :tags="$tags"
+                                                    :data-title="$product->display_name"
+                                                    :data-group="$product->group"
+                                                    :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}</x-card-product>
+                                @endforeach
+                            </div>
+                        @endforeach
+                    </div>
 
                     <div class="buttons">
                         <button class="dark outline">Back</button>
                         <button class="dark">
-                            Add products
-                            @svg('arrow-forward', '#ffffff')
+                            Create app
                         </button>
                     </div>
                 </div>
-
             </form>
         </div>
 
