@@ -178,6 +178,10 @@
                     background-color: $warning;
                 }
 
+                .status-revoked {
+                    background-color: $error;
+                }
+
                 .name {
                     margin-right: 40px;
                     max-width: 120px;
