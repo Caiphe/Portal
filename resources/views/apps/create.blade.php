@@ -42,7 +42,7 @@
 
         <div class="row">
 
-            <form action="">
+            <form id="create-app" action="">
 
                 <div class="active">
                     @svg('app-avatar', '#ffffff')
@@ -211,6 +211,8 @@
                     form.firstElementChild.nextElementSibling.classList.remove('active');
                     form.firstElementChild.classList.add('active');
                     form.firstElementChild.style.display = 'flex';
+
+
                 } else if(form.firstElementChild.nextElementSibling.nextElementSibling.classList.contains('active')) {
                     form.firstElementChild.nextElementSibling.nextElementSibling.classList.remove('active');
                     form.firstElementChild.nextElementSibling.classList.add('active');
@@ -225,6 +227,8 @@
             form.firstElementChild.classList.add('active');
             form.firstElementChild.style.display = 'flex';
         }
+
+        form.reset();
     });
 </script>
 @endpush
