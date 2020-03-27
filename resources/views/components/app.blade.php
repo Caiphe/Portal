@@ -2,13 +2,15 @@
 <link href="/css/components/app.css" rel="stylesheet"/>
 @endallowonce
 
-@props(['name'])
+@props(['app', 'attr'])
 
-<div class="my-app" {{ $attributes }}>
+{{--{{ dd($app) }}--}}
+
+<div class="my-app">
     <div class="column">
         <p class="name">
             @svg('app-avatar', '#fff')
-            {{ $name }}
+            {{ $attr['DisplayName'] }}
         </p>
     </div>
     <div class="column regions">
@@ -33,10 +35,10 @@
             </div>
             <div>
                 <p class="key">
-                    M5dGYCRA4FEtfccmBH6IGFp8RRddMivK
+                    {{ end($app['credentials'])['consumerKey']  }}
                 </p>
                 <p class="key">
-                    6DxjvPOWlpzTbGe7
+                    {{ end($app['credentials'])['consumerSecret'] }}
                 </p>
                 <p>https://www.plusnarrative.com</p>
             </div>
@@ -66,34 +68,38 @@
             <strong>Description:</strong>
         </p>
 
-        <p style="margin-bottom: 10px;"></p>
+        <p class="description">
+            {{ $attr['Description'] }}
+        </p>
 
-        <p style="margin-bottom: 10px;"><strong>Products</strong></p>
+        <p class="description"><strong>Products</strong></p>
 
         <div class="products">
-            <div class="product">
-                <span class="status"></span>
-                <span class="name">Subscription v1</span>
-                @svg('arrow-forward', '#000000')
-            </div>
+            @foreach(end($app['credentials'])['apiProducts'] as $product)
+                <div class="product">
+                    <span class="status-{{ $product['status'] }}"></span>
+                    <span class="name">{{ $product['apiproduct'] }}</span>
+                    @svg('arrow-forward', '#000000')
+                </div>
+            @endforeach
 
-            <div class="product">
-                <span class="status"></span>
-                <span class="name">SMS</span>
-                @svg('arrow-forward', '#000000')
-            </div>
+{{--            <div class="product">--}}
+{{--                <span class="status"></span>--}}
+{{--                <span class="name">SMS</span>--}}
+{{--                @svg('arrow-forward', '#000000')--}}
+{{--            </div>--}}
 
-            <div class="product">
-                <span class="status"></span>
-                <span class="name">Product name which is really super dooper extra long</span>
-                @svg('arrow-forward', '#000000')
-            </div>
+{{--            <div class="product">--}}
+{{--                <span class="status"></span>--}}
+{{--                <span class="name">Product name which is really super dooper extra long</span>--}}
+{{--                @svg('arrow-forward', '#000000')--}}
+{{--            </div>--}}
         </div>
     </div>
     <nav class="menu">
-        <a href="">Analytics</a>
         <a href="">Edit</a>
         <a href="">Delete</a>
     </nav>
+    <div class="modal"></div>
 </div>
 

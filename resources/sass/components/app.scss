@@ -69,7 +69,23 @@
             opacity: 1;
             pointer-events: auto;
             transform: translate(0, 10px);
+            z-index: 3;
         }
+    }
+
+    .menu.show + .modal {
+        display: block;
+    }
+
+    .modal {
+        position: fixed;
+        background-color: transparent;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 2;
+        display: none;
     }
 
     .detail {
@@ -146,18 +162,29 @@
                 margin-bottom: 10px;
                 height: 100%;
 
-                .status {
+                span[class^="status-"], span[class*=" status-"] {
                     height: auto;
                     width: 10px;
-                    background: #FD6506;
                     border-radius: 7px;
                     opacity: 1;
                     margin-right: 10px;
                 }
 
+                .status-approved {
+                    background-color: $success;
+                }
+
+                .status-pending {
+                    background-color: $warning;
+                }
+
                 .name {
                     margin-right: 40px;
                     max-width: 120px;
+                }
+
+                .description {
+                    margin-bottom: 10px;
                 }
 
                 svg {

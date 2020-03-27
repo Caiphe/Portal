@@ -73,7 +73,9 @@
                 </div>
                 <div class="body">
                     @forelse($approved_apps as $app)
-                        <x-app :name="$app['attributes'][1]['value']"></x-app>
+                        @if(!empty($app['attributes']))
+                            <x-app :app="$app" :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"></x-app>
+                        @endif
                     @empty
                         <p>No approved apps.</p>
                     @endforelse
@@ -112,7 +114,9 @@
                 </div>
                 <div class="body">
                     @forelse($revoked_apps as $app)
-                        <x-app :name="$app['name']"></x-app>
+                        @if(!empty($app['attributes']))
+                            <x-app :app="$app" :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"></x-app>
+                        @endif
                     @empty
                         <p>No revoked apps.</p>
                     @endforelse
@@ -167,11 +171,8 @@
     function handleMenuClick() {
         var parent = this.parentNode.parentNode;
 
-        if (parent.lastElementChild.classList.contains('show')) {
-            parent.lastElementChild.classList.remove('show');
-        } else {
-            parent.lastElementChild.classList.add('show');
-        }
+        parent.querySelector('.menu').classList.toggle('show');
+        parent.querySelector('.modal').classList.toggle('show');
     }
 
     var keys = document.querySelectorAll('.copy');
@@ -187,5 +188,19 @@
         document.execCommand("copy");
         el.blur();
     }
+
+    // var menus = document.getElementsByClassName('menu');
+    //
+    // function closeMenu(menu) {
+    //     menu.classList.remove('show');
+    //     // document.querySelectorAll('.my-app').classList.toggle('show');
+    // }
+    //
+    // document.onclick = function(event) {
+    //     for (var i =0 ; i < menus.length; i++) {
+    //         // Here we have the same onclick
+    //         menus.item(i).onclick = closeMenu(menus.item(i));
+    //     }
+    // };
 </script>
 @endpush
