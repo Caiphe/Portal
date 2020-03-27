@@ -211,9 +211,13 @@
                     form.firstElementChild.nextElementSibling.classList.remove('active');
                     form.firstElementChild.classList.add('active');
                     form.firstElementChild.style.display = 'flex';
+
+                    nav.firstElementChild.nextElementSibling.classList.remove('active');
                 } else if(form.firstElementChild.nextElementSibling.nextElementSibling.classList.contains('active')) {
                     form.firstElementChild.nextElementSibling.nextElementSibling.classList.remove('active');
                     form.firstElementChild.nextElementSibling.classList.add('active');
+
+                    nav.firstElementChild.nextElementSibling.nextElementSibling.classList.remove('active');
                 }
             });
         }
