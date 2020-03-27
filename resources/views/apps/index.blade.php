@@ -28,6 +28,19 @@
         <button class="outline dark">Create new</button>
     </x-heading>
 
+    @if(empty($approved_apps) && empty($revoked_apps))
+        <div class="container" id="app-empty">
+            <div class="row">
+                <div class="col-12">
+                    @svg('app', '#ffffff')
+                    <h1>Looks like you don’t have any apps yet.</h1>
+                    <p>Fortunately, it’s very easy to create one.</p>
+
+                    <button class="outline dark">Create app</button>
+                </div>
+            </div>
+        </div>
+    @else
     <div class="container" id="app-index">
         <div class="row">
             <div class="heading-app">
@@ -103,6 +116,7 @@
             </div>
         </div>
     </div>
+    @endif
 
 @endsection
 
