@@ -211,8 +211,6 @@
                     form.firstElementChild.nextElementSibling.classList.remove('active');
                     form.firstElementChild.classList.add('active');
                     form.firstElementChild.style.display = 'flex';
-
-
                 } else if(form.firstElementChild.nextElementSibling.nextElementSibling.classList.contains('active')) {
                     form.firstElementChild.nextElementSibling.nextElementSibling.classList.remove('active');
                     form.firstElementChild.nextElementSibling.classList.add('active');
@@ -227,6 +225,14 @@
             form.firstElementChild.classList.add('active');
             form.firstElementChild.style.display = 'flex';
         }
+
+        var els = document.querySelectorAll('#app-create nav a.active');
+
+        for (var i = 0; i < els.length; i++) {
+            els[i].classList.remove('active');
+        }
+
+        nav.querySelector('a').classList.add('active');
 
         form.reset();
     });
