@@ -197,7 +197,6 @@
                     form.firstElementChild.nextElementSibling.classList.remove('active');
                     form.firstElementChild.nextElementSibling.nextElementSibling.classList.add('active');
                 }
-
             });
         }
     }
@@ -216,5 +215,14 @@
             });
         }
     }
+
+    document.querySelector('[type="reset"]').addEventListener('click', function () {
+        if(form.querySelector('.active') !== form.firstElementChild) {
+
+            form.querySelector('.active').classList.remove('active');
+            form.firstElementChild.classList.add('active');
+            form.firstElementChild.style.display = 'flex';
+        }
+    });
 </script>
 @endpush
