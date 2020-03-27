@@ -38,12 +38,12 @@ class AppController extends Controller
         //
     }
 
-    public function show()
+    public function show(Request $request)
     {
         return view('apps.show');
     }
 
-    public function edit()
+    public function edit(Request $request)
     {
         $app = '';
 
