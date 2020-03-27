@@ -15,12 +15,11 @@
     <link rel="preload" href="/fonts/Montserrat-Light.woff2" as="font" type="font/woff2">
 </head>
 <body>
-    <x-header/>
-    <main id="main">
+    <main class="container-fluid" style="padding: 0" id="main">
         @yield("content")
     </main>
-    <x-footer/>
-    <script src="/js/scripts.js"></script>
+    <!-- <script src="/js/register.js"></script>
+    @stack("register") -->
     @stack("scripts")
 </body>
 </html>

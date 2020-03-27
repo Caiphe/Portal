@@ -12,6 +12,7 @@ const mix = require('laravel-mix');
  */
 
 mix.scripts('resources/js/scripts.js', 'public/js/scripts.js')
+    .scripts("resources/js/register.js", "public/js/register.js")
     .scripts("resources/js/components/carousel.js", "public/js/components/carousel.js")
     .scripts("resources/js/components/sidebar-accordion.js", "public/js/components/sidebar-accordion.js")
     .scripts("resources/js/components/multiselect.js", "public/js/components/multiselect.js")

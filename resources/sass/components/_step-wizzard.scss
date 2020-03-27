@@ -1,0 +1,66 @@
+// @import "node_modules/bootstrap/scss/bootstrap";
+  
+  /* Hide all steps by default: */
+  .step__wizzard_item {
+    display: none;
+  }
+  
+  .step_wizzard__footer {
+      display: block;
+      position: absolute;
+      bottom: 15%;
+  }
+
+  .step__wizzard__content {
+      padding: 80px;
+      margin: 50px;
+      display: table;
+      vertical-align: middle;
+  }
+
+  .step__wizzard_progress_bar {
+    height: 5px;
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+  }
+  .step__wizzard_bar_container {
+      width: 100%;
+      background: rgba(128, 128, 128, 0.31);
+  }
+  #stepWizzardProgress {
+        background: $yellow;
+  }
+
+  .step__wizzard_content {
+    padding: 10px;
+  }
+  .step__wizzard_header {
+      margin: 20px auto 50px;
+      display: flex;
+      vertical-align: middle;
+  }
+
+  
+
+  /* Make circles that indicate the steps of the form: */
+//   .step {
+//     height: 15px;
+//     width: 15px;
+//     margin: 0 2px;
+//     background-color: #bbbbbb;
+//     border: none;
+//     border-radius: 50%;
+//     display: inline-block;
+//     opacity: 0.5;
+//   }
+  
+  /* Mark the active step: */
+//   .step.active {
+//     opacity: 1;
+//   }
+  
+  /* Mark the steps that are finished and valid: */
+//   .step.finish {
+//     background-color: #4CAF50;
+//   }
