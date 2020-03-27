@@ -44,17 +44,17 @@
             @svg('app-avatar', '#ffffff')
             <form id="create" action="">
 
-                <div class="form-group">
+                <div class="group">
                     <label for="name">Name your app *</label>
                     <input type="text" name="name" id="name" placeholder="Enter name">
                 </div>
 
-                <div class="form-group">
+                <div class="group">
                     <label for="name">Callback url *</label>
                     <input type="text" name="name" id="name" placeholder="Enter callback url">
                 </div>
 
-                <div class="form-group">
+                <div class="group">
                     <label for="description">Description *</label>
                     <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>
                 </div>
