@@ -59,7 +59,9 @@
                 <div>
                     @svg('za', '#000000', 'images/locations')
                 </div>
-                <p>02/03/2020 - 21:26</p>
+                <p>
+                    {{ \Carbon\Carbon::parse(end($app['credentials'])['issuedAt'])->format('d/m/y - H:i') }}
+                </p>
                 <p>Never</p>
             </div>
         </div>
@@ -82,18 +84,6 @@
                     @svg('arrow-forward', '#000000')
                 </div>
             @endforeach
-
-{{--            <div class="product">--}}
-{{--                <span class="status"></span>--}}
-{{--                <span class="name">SMS</span>--}}
-{{--                @svg('arrow-forward', '#000000')--}}
-{{--            </div>--}}
-
-{{--            <div class="product">--}}
-{{--                <span class="status"></span>--}}
-{{--                <span class="name">Product name which is really super dooper extra long</span>--}}
-{{--                @svg('arrow-forward', '#000000')--}}
-{{--            </div>--}}
         </div>
     </div>
     <nav class="menu">
