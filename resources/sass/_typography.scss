@@ -70,6 +70,18 @@
         url('/fonts/Montserrat-Light.eot') format('embedded-opentype');
 }
 
+@font-face {
+    font-family: 'Montserrat-Bold';
+    font-style: normal;
+    font-weight: 700;
+    font-display: auto;
+    src: local('Awesome Font'),
+        url('/fonts/Montserrat-Bold.woff2') format('woff2'),
+        url('/fonts/Montserrat-Bold.woff') format('woff'),
+        url('/fonts/Montserrat-Bold.ttf') format('truetype'),
+        url('/fonts/Montserrat-Bold.eot') format('embedded-opentype');
+}
+
 html {
     font-size: 10px;
     line-height: 21px;

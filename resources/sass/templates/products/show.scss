@@ -248,6 +248,8 @@
         }
 
         .response-details {
+            display: none;
+
             &.show-modal .detail-example {
                 display: none;
             }
@@ -257,23 +259,55 @@
             }
 
             button {
-                margin: $gutterSmall 5px $gutterSmall 0;
+                margin: $gutterSmall 5px 10px 0;
+            }
+        }
+
+        &.open {
+            &>.response-details {
+                display: block;
+            }
+
+            &>h6 svg+svg {
+                display: none;
             }
         }
 
         .detail-modal {
             font-size: 1rem;
-            h6, .tag{
+
+            h6,
+            .tag {
                 font-size: 1rem;
             }
 
             h6 {
-                margin-top: $gutterSmall;
+                margin-top: 10px;
                 margin-bottom: 0;
+                position: relative;
             }
 
-            h6.first {
-                margin-top: 0;
+            svg {
+                top: -2px;
+            }
+
+            .has-children {
+                font-size: 1.4rem;
+                font-family: "Montserrat-Bold";
+                cursor: pointer;
+            }
+
+            .schema {
+                display: none;
+
+                &.open>h6 svg+svg {
+                    display: none;
+                }
+            }
+
+            &>.schema,
+            .schema.open>.schema {
+                display: block;
             }
         }
 
