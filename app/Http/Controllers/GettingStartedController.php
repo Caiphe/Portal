@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Content;
 
 class GettingStartedController extends Controller
 {
@@ -13,7 +14,23 @@ class GettingStartedController extends Controller
      */
     public function index()
     {
-        return view('templates.getting-started.index');
+        $list =  [ 'GETTING STARTED' => 
+            [
+                [ 'label' => 'Introduction', 'link' => '/getting-started'],
+                [ 'label' => 'My apps', 'link' => '/my-apps'],
+                [ 'label' => 'Browse products','link' => '/browse-products'],
+                [ 'label' => 'Create an application','link' => '/create-aplication'],
+                [ 'label' => 'Request approval','link' => '/request-approval'],
+                [ 'label' => 'Responses and error codes','link' => '/responses'],
+                [ 'label' => 'FAQ','link' => '/faq'],
+                [ 'label' => 'Developer tips','link' => '/developer-tips']
+            ]
+        ];
+
+        return view('templates.getting-started.index', [
+            "content"=> Content::where('type', 'general_docs')->get(),
+            "list"=> $list
+        ]);
     }
 
     /**
@@ -43,7 +60,7 @@ class GettingStartedController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Content $content)
     {
         return view('templates.getting-started.show');
     }

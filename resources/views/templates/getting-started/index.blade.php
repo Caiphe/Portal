@@ -6,22 +6,11 @@
 
 @section('sidebar')
     <x-sidebar-accordion id="sidebar-accordion" :active="'/' . request()->path()"
-    :list="
-    [ 'GETTING STARTED' => 
-        [
-            [ 'label' => 'Introduction', 'link' => '/getting-started'],
-            [ 'label' => 'My apps', 'link' => '/my-apps'],
-            [ 'label' => 'Browse products','link' => '/browse-products'],
-            [ 'label' => 'Create an application','link' => '/create-aplication'],
-            [ 'label' => 'Request approval','link' => '/request-approval'],
-            [ 'label' => 'Responses and error codes','link' => '/responses'],
-            [ 'label' => 'FAQ','link' => '/faq'],
-            [ 'label' => 'Developer tips','link' => '/developer-tips']
-        ]
-    ]" />   
+    :list="$list" />   
 @endsection
 
 @section("content")
+    {{ $content }}
     <x-heading heading="Working with our products" tags="INTRODUCTION">
     </x-heading>
     <div class="getting-started">
@@ -38,6 +27,10 @@
             <x-card-link icon="code-json" title="Responses and error codes" href="/responses">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo.</x-card-link>
             <x-card-link icon="help-network" title="FAQ" href="/faq">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo.</x-card-link>
             <x-card-link icon="lightbulb" title="Developer tips" href="/developer-tips">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo.</x-card-link>
+            
+            @foreach($content as $block)
+                <x-card-link icon="apps-box" :title="$block['title']" href="/my-apps">{{ $block['body'] }}</x-card-link>
+            @endforeach
         </div>
     </div>
 @endsection
