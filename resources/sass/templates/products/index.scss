@@ -1,31 +1,47 @@
+@import "../../variables";
+
+h2,
+h3 {
+    font-family: "mtn-regular", sans-serif;
+}
+
+.search-hr {
+    color: $grey300;
+}
 .row {
     margin-top: 20px;
     padding: 20px;
     @media screen and (min-width: 1024px) {
         .product-block {
             display: inline-block;
-            width: 33%;
-            margin-top: 20px;
+            width: 30%;
+			margin: 10px;
+			.card__header, .card__body{
+				min-height: 40px;
+			}
         }
     }
 }
-.filter-checkbox {
-    display: flex;
-    align-items: center;
-    .filter-label {
-        margin-left: 5px;
+.filter-sidebar {
+    .filter-checkbox {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        .filter-label {
+            margin-left: 5px;
+            color: $grey700;
+        }
     }
-    margin-bottom: 5px;
-}
 
-.country-filter {
-	margin-top: 15px;
-	width:100%;
-	.multiselect-select{
-		width:150px;
-	}
-}
-#clearFilter {
-    margin-top: 30px;
-    display: none;
+    .country-filter {
+        margin-top: 15px;
+        width: 100%;
+        .multiselect-select {
+            width: 150px;
+        }
+    }
+    #clearFilter {
+        margin-top: 30px;
+        display: none;
+    }
 }

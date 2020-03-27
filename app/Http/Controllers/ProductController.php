@@ -21,7 +21,7 @@ class ProductController extends Controller
 		foreach ($countries as $country) {
 			$country_array[$country->code] = $country->name;
 		}
-		return view('products.index',['productsCollection' => $productsCollection, 'productCategories' => array_keys($productsCollection->toArray()), 'countries' => $country_array]);
+		return view('templates.products.index',['productsCollection' => $productsCollection, 'productCategories' => array_keys($productsCollection->toArray()), 'countries' => $country_array]);
     }
 
     /**

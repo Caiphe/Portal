@@ -8,26 +8,30 @@
 @php
 $filters = array('Group'=> array('MTN'),'Categories'=> $productCategories);
 @endphp
-<h2>Filter by</h2>
+<div class="filter-sidebar">
+	<h2>Filter by</h2>
 
-@foreach ($filters as $filterTitle => $filterGroup)
-	<h3>{{$filterTitle}}</h3>
-	@foreach ($filterGroup as $filterItem)
-		<div class="filter-checkbox">
-			<input type="checkbox" name="{{$filterTitle}}" value="{{$filterItem}}" id="{{$filterTitle}}" onclick="filterProducts('{{$filterTitle}}');"/><label class="filter-label" for="{{$filterTitle}}">{{$filterItem}}</label>
-		</div>
-	@endforeach	
-@endforeach
-<div class="country-filter">
-	<h3>Country</h3>
-	<x-multiselect id="filter-country" name="filter-country" label="Select country" :options="$countries" />
+	@foreach ($filters as $filterTitle => $filterGroup)
+		<h3>{{$filterTitle}}</h3>
+		@foreach ($filterGroup as $filterItem)
+			<div class="filter-checkbox">
+				<input type="checkbox" name="{{$filterTitle}}" value="{{$filterItem}}" id="{{$filterTitle}}" onclick="filterProducts('{{$filterTitle}}');"/><label class="filter-label" for="{{$filterTitle}}">{{$filterItem}}</label>
+			</div>
+		@endforeach	
+	@endforeach
+	<div class="country-filter">
+		<h3>Country</h3>
+		<x-multiselect id="filter-country" name="filter-country" label="Select country" :options="$countries" />
+	</div>
+
+	<button id="clearFilter" class="dark outline" onclick="clearFilter()">Clear filters</button>
 </div>
-
-<button id="clearFilter" class="dark outline" onclick="clearFilter()">Clear filters</button>
 @endsection
 
 @section('content')
 	<x-heading heading="Products"></x-heading>
+	<input type="search" name="filter-text" id="filter-text" class="filter-text" placeholder="Search"/>
+	<hr class="search-hr"/>
 	<div class="container">
 	@foreach ($productsCollection as $category=>$products)
 	<div class="row product-category" data-category="{{ $category }}">
