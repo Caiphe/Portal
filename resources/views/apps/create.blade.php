@@ -207,10 +207,13 @@
             backButtons[i].addEventListener('click', function (event) {
                 event.preventDefault();
 
-                console.log(form.querySelector('.active').previousElementSibling);
-
-                if(form.querySelector('.active')) {
-                    form.querySelector('.active').classList.remove('active')
+                if(form.firstElementChild.nextElementSibling.classList.contains('active')) {
+                    form.firstElementChild.nextElementSibling.classList.remove('active');
+                    form.firstElementChild.classList.add('active');
+                    form.firstElementChild.style.display = 'flex';
+                } else if(form.firstElementChild.nextElementSibling.nextElementSibling.classList.contains('active')) {
+                    form.firstElementChild.nextElementSibling.nextElementSibling.classList.remove('active');
+                    form.firstElementChild.nextElementSibling.classList.add('active');
                 }
             });
         }
@@ -218,7 +221,6 @@
 
     document.querySelector('[type="reset"]').addEventListener('click', function () {
         if(form.querySelector('.active') !== form.firstElementChild) {
-
             form.querySelector('.active').classList.remove('active');
             form.firstElementChild.classList.add('active');
             form.firstElementChild.style.display = 'flex';
