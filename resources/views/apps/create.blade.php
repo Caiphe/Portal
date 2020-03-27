@@ -29,7 +29,7 @@
     <div class="container" id="app-create">
 
         <nav>
-            <a href="#">
+            <a href="#" class="active">
                 <span>1</span> App details
             </a>
             <a href="#">
@@ -42,7 +42,7 @@
 
         <div class="row">
             @svg('app-avatar', '#ffffff')
-            <form id="create" action="">
+            <form class="active" action="">
 
                 <div class="group">
                     <label for="name">Name your app *</label>
