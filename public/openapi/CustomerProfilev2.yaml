@@ -537,8 +537,7 @@ definitions:
 
   timePeriodEnum:
     type: string
-    description: "a time period for which data is available. Usually data is available for multiple time periods, like 1 month, 3 month, and 6 month. 
-    Each time period will be represented as a separate array"
+    description: "a time period for which data is available. Usually data is available for multiple time periods, like 1 month, 3 month, and 6 month. Each time period will be represented as a separate array"
     enum:
       - "month"
       - "days"

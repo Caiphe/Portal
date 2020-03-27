@@ -1,6 +1,6 @@
 @foreach($schemas as $name => $schema)
 @php
-    $hasChildren = !isset($schema['type']);
+    $hasChildren = !isset($schema['type']) || gettype($schema['type']) === 'array';
     $h6Class = $hasChildren ? 'has-children' : 'no-children';
     if($loop->first){
         $h6Class .= " first";
@@ -17,10 +17,10 @@
         @endif
     </h6>
 
-    @if(isset($schema['description']))
+    @if(!$hasChildren && isset($schema['description']))
     {{$schema['description']}}
     @endif
-
+    
     @if($hasChildren)
     <x-products.modal :schemas="$schema" />
     @endif

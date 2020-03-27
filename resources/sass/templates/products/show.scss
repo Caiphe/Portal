@@ -203,6 +203,7 @@
                 position: absolute;
                 left: 0;
                 transition: transform 0.356s;
+                margin-top: -2px;
             }
 
             .tag {
@@ -214,11 +215,14 @@
 
     .specification-options {
         flex: 1;
+        flex-shrink: 1;
         margin-top: 50px;
+        margin-right: $gutter;
     }
 
     .specification-responses {
         flex: 1;
+        flex-shrink: 1;
         background-color: $grey400;
         border-radius: 8px;
         padding: 10px;
@@ -250,12 +254,26 @@
         .response-details {
             display: none;
 
-            &.show-modal .detail-example {
-                display: none;
+            &.show-modal {
+                .detail-example {
+                    display: none;
+                }
+
+                .example {
+                    background-color: transparent;
+                    color: $grey700;
+                }
             }
 
-            &.show-example .detail-modal {
-                display: none;
+            &.show-example {
+                .detail-modal {
+                    display: none;
+                }
+
+                .modal {
+                    background-color: transparent;
+                    color: $grey700;
+                }
             }
 
             button {
@@ -283,12 +301,13 @@
 
             h6 {
                 margin-top: 10px;
+                padding-top: 10px;
                 margin-bottom: 0;
                 position: relative;
-            }
 
-            svg {
-                top: -2px;
+                &.has-children{
+                    border-top: 2px solid $grey500;
+                }
             }
 
             .has-children {
@@ -299,10 +318,20 @@
 
             .schema {
                 display: none;
+                padding-left: 10px;
 
                 &.open>h6 svg+svg {
                     display: none;
                 }
+            }
+
+            &>.schema {
+                padding-left: 0;
+            }
+
+            &>.schema:first-child h6 {
+                border: none;
+                padding-top: 0;
             }
 
             &>.schema,

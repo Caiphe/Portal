@@ -1,434 +1,146 @@
-swagger: "2.0"
-
+swagger: '2.0'
 info:
-  version: "v1.8"
-  title: MTN Customer Profile API
-  description: An API to retrieve the profile of an MTN customer. Please refer to the reference guides https://developers.mtn.com/API-Reference-Guides and Response and Error Codes documents https://developers.mtn.com/ResponseCodes 
-
+    version: v1.8
+    title: 'MTN Customer Profile API'
+    description: 'An API to retrieve the profile of an MTN customer. Please refer to the reference guides https://developers.mtn.com/API-Reference-Guides and Response and Error Codes documents https://developers.mtn.com/ResponseCodes'
 schemes:
-  - https
-
-host: "staging.api.mtn.com"
-basePath: "/v1"
-
+    - https
+host: staging.api.mtn.com
+basePath: /v1
 consumes:
-- "application/json"
+    - application/json
 produces:
-- "application/json"
-
+    - application/json
 securityDefinitions:
-  ApiKeyAuth:
-    type: "apiKey"
-    name: "X-API-Key"
-    in: "header" 
-paths: 
-    /customers/{customerId}:
-      get:
-        description: "Retrieves the customer profile of a MTN customer. The customer profile includes 4 main objects: Location (Country and Operator), Billing Plan and related details, Subscriptions for VAS and Digital Services, and Loans details"
-        summary: "View customer profile"
-        tags:
-          - "customers"
-        parameters: 
-        - in: "path"
-          name: "customerId"
-          description: "ID of the customer. It could be MSISDN, email address, or any other customer identifier. if id is msisdn, format must be E.123"
-          required: true
-          type: "string"
-        - in: "query"
-          name: scope
-          type: string
-          description: the set of data to be retrieved. There are 2 options - `basic` will retrieve only the structure of the customer profile including the links to each resource, will `full` will retrieve all the data for each resource, which will be en expensive call. If not specified, the default will be `basic`"
-          enum: 
-          - basic
-          - full
-        responses:
-          200:
-            description: "Customer Profile object. For a successfull request, it will contain all the customers details. If the customer does not have any requested data, then it will be null. E.g. if the customer does not any location set, then Country and Operator will be null."
-            schema:
-              $ref: "#/definitions/Customer"
-          
-          207:
-            description: "If there was an error retrieving some part of the request, then the successfull request will be shown, and the remaining failed objects will be be excluded. E.g. if there was an error retrieving Balance information, then the balance object will be empty"
-            examples:
-              Partially Sucessfull Response, showing valid Locations data, but plan object is null:
-                  "location": {
-                    "data": {
-                      "country": "ZA",
-                      "operator": "MTN",
-                      },
-                      "_links": {
-                        "self": {
-                          "href": "http://location-mtndariel-stagi-mtnapitest.e4ff.pro-eu-west-1.openshiftapps.com/customers/27832000046/location",
-                          }
-                        }
-                      }
-                  "plan": {
-                      "data": null,
-                      "_links": {
-                        "self": {
-                           "href": "http://plan-mtndariel-staging-mtnapitest.e4ff.pro-eu-west-1.openshiftapps.com/customers/27832000046/plan",
-                          }
-                        }
-                      }
-
-          400:
-            description: "Bad Request"
-            schema:
-              $ref: "#/definitions/ErrorDefault"
-          401:
-            description: "Unauthorized"
-            schema:
-              $ref: "#/definitions/ErrorDefault"
-          403:
-            description: "Forbidden"
-            schema:
-              $ref: "#/definitions/ErrorDefault"
-          404:
-            description: "Customer not found"
-            examples:
-              The data object/envelope will be null:
-                {  
-                  "data": null,
-                }
-          405:
-            description: "Method Not allowed"
-            schema:
-              $ref: "#/definitions/Error"
-          500:
-            description: "Internal Server Error"
-            schema:
-              $ref: "#/definitions/Error"        
-     
+    ApiKeyAuth:
+        type: apiKey
+        name: X-API-Key
+        in: header
+paths:
+    '/customers/{customerId}':
+        get:
+            description: 'Retrieves the customer profile of a MTN customer. The customer profile includes 4 main objects: Location (Country and Operator), Billing Plan and related details, Subscriptions for VAS and Digital Services, and Loans details'
+            summary: 'View customer profile'
+            tags: [customers]
+            parameters: [{in: path, name: customerId, description: 'ID of the customer. It could be MSISDN, email address, or any other customer identifier. if id is msisdn, format must be E.123', required: true, type: string}, {in: query, name: scope, type: string, description: 'the set of data to be retrieved. There are 2 options - `basic` will retrieve only the structure of the customer profile including the links to each resource, will `full` will retrieve all the data for each resource, which will be en expensive call. If not specified, the default will be `basic`"', enum: [basic, full]}]
+            responses: {'200': {description: 'Customer Profile object. For a successfull request, it will contain all the customers details. If the customer does not have any requested data, then it will be null. E.g. if the customer does not any location set, then Country and Operator will be null.', schema: {$ref: '#/definitions/Customer'}}, '207': {description: 'If there was an error retrieving some part of the request, then the successfull request will be shown, and the remaining failed objects will be be excluded. E.g. if there was an error retrieving Balance information, then the balance object will be empty', examples: {'Partially Sucessfull Response, showing valid Locations data, but plan object is null': {location: {data: {country: ZA, operator: MTN}, _links: {self: {href: 'http://location-mtndariel-stagi-mtnapitest.e4ff.pro-eu-west-1.openshiftapps.com/customers/27832000046/location'}}}, plan: {data: null, _links: {self: {href: 'http://plan-mtndariel-staging-mtnapitest.e4ff.pro-eu-west-1.openshiftapps.com/customers/27832000046/plan'}}}}}}, '400': {description: 'Bad Request', schema: {$ref: '#/definitions/ErrorDefault'}}, '401': {description: Unauthorized, schema: {$ref: '#/definitions/ErrorDefault'}}, '403': {description: Forbidden, schema: {$ref: '#/definitions/ErrorDefault'}}, '404': {description: 'Customer not found', examples: {'The data object/envelope will be null': {data: null}}}, '405': {description: 'Method Not allowed', schema: {$ref: '#/definitions/Error'}}, '500': {description: 'Internal Server Error', schema: {$ref: '#/definitions/Error'}}}
 definitions:
-  Customer:
-    type: "object"
-    required: 
-      - "customerId"
-      - "_links"
-    properties:
-      customerId:
-        type: "string"
-      locations:
-        type: "object"
-        description: "The location of customer. Location includes Country and Network Operator"
-        $ref: "#/definitions/CustomerLocations"
-      plans:
-        type: "object"
-        description: "the customers billing plan"
-        $ref: "#/definitions/CustomerPlans"
-      loans:
-        type: "object"
-        description: "the customers loan and eligibility details"
-        $ref: "#/definitions/CustomerLoans"
-      _links:
-        type: "string"
-        description: "link to retrieve the customer profile"
-        $ref: "#/definitions/CustomerLinks"
-        
-  CreditProfile:
-    properties:
-      creditProfileDate:
-        type: string
-        format: date-time
-      creditRiskRating:
-        type: integer
-      creditScore:
-        type: integer
-        
-  CustomerLinks:
-    type: "object"
-    required: 
-    - "self"
-    properties: 
-      self:
-        type: "object"
-        required: 
-        - "href"
-        description: ""
-        properties:
-          href:
-            type: "string"
-            description: ""
-  CustomerLocations:
-    type: "object"
-    required: 
-    - "_link"
-    properties:
-      data:
-        type: "object"
-        $ref: "#/definitions/Locations"
-      _link:
-        type: "string"
-        description: "The link to retrieve the location of customer"
-        $ref: "#/definitions/CustomerLinks"
-        example: "https://api.mtn.com/v1/customers/27832000000/locations"
-  
-  Locations:
-    type: "object"
-    required:
-    - "country"
-    - "operator"
-    properties:
-      country:
-        type: "string"
-        description: "The country that the customer MSISDN was provisioned in."
-        example: "South Africa"
-      operator:
-        type: "string"
-        description: "The network operator that the customer MSISDN was provisioned for."
-        example: "MTN"
-         
-
-  CustomerPlans:
-    type: "object"
-    required: 
-    - "_link"
-    properties:
-      data:
-        type: "object"
-        $ref: "#/definitions/Plans"
-      _link:
-        type: "string"
-        description: "The link to retrieve the plan for a customer."
-        $ref: "#/definitions/CustomerLinks"
-        example: "https://api.mtn.com/v1/customers/27832000000/plan"
-        
-  Plans:
-    type: "object"
-    required: 
-    - "type"
-    - "status"
-    - "startDate"
-    - "endDate"
-    - "balance"
-    description: "The plan details for the customer."
-    properties:
-      type:
-        type: "string"
-        description: "The billing type of the plan."
-        enum:
-        - "Prepaid"
-        - "Postpaid"
-        - "Hybrid"
-      status:
-        type: "string"
-        description: "The current status of the plan."
-        enum:
-        - "Active"
-        - "Suspended"
-        - "Inactive"
-        - "RICA Barred"
-        - "Blacklisted"
-      startDate:
-        type: "string"
-        description: "The date the customer was created/provisioned"
-        format: date-time
-      endDate:
-        type: "string"
-        description: "The date the plan will be deactivated."
-        format: date-time
-      balance:
-        type: "array"
-        description: "The account balance details of a customer"
-        items:
-          $ref: "#/definitions/CustomerBalances"
-
-  CustomerBalances:
-    type: "object"
-    properties:
-      data:
-        type: "object"
+    Customer:
+        type: object
         required:
-        - "balanceType"
-        - "amount"
-        - "currency"
-        - "expiryDate"
+            - customerId
+            - _links
         properties:
-          balanceType:
-            type: "string"
-            description: "Identifies the type of balance. A customer plan may have multiple types of balances for different usage, for example, voice, SMS, and game services."
-            example: "VOICE"
-          amount:
-            type: "string"
-            description: "Amount of balance."
-            example: "26861"
-          currency:
-            type: "string"
-            description: "ISO 4217 three-letter ISO code for the currency."
-            example: "ZAR"
-          expiryDate:
-            type: "string"
-            format: date-time
-            description: "Expiry Date of the account."
-            example: "2019-12-31T12:00:00"
-  
-  CustomerLoans:
-    type: "object"
-    required: 
-    - "_link"
-    properties:
-      data:
-        type: "object"
-        $ref: "#/definitions/Loans"
-      _link:
-        type: "string"
-        description: "The link to retrieve the customers MoMo details."
-        $ref: "#/definitions/CustomerLinks"
-        example: "https://api.mtn.com/v1/customers/27832000000/loans"
-        
-  Loans:
-    type: object
-    required: 
-    - "customerId"
-    description: "The loans details of a customer, if it exisits"
-    properties:
-      _link:
-        type: array
-        xml:
-          name: link
-          attribute: false
-          wrapped: false
-        items:
-          $ref: '#/definitions/CustomerLinks'
-      status:
-        type: string
-        enum:
-          - FAILED
-          - COMPLETED
-          - INITED
-      transactionId:
-        type: string
-
-  Band:
-    type: object
-    properties:
-      bandGroup:
-        type: integer
-        format: int32
-      bandName:
-        type: string
-    title: Band
-  Eligibility:
-    type: object
-    properties:
-      _links:
-        type: array
-        xml:
-          name: link
-          attribute: false
-          wrapped: false
-        items:
-          $ref: '#/definitions/Link'
-      bands:
-        type: array
-        items:
-          $ref: '#/definitions/Band'
-      status:
-        type: string
-        enum:
-          - ELIGIBLE
-          - NE_LOAN
-          - NE_TCL_REACHED
-    title: Eligibility
-  Link:
-    type: object
-    properties:
-      deprecation:
-        type: string
-        xml:
-          name: deprecation
-          attribute: true
-          wrapped: false
-      href:
-        type: string
-        xml:
-          name: href
-          attribute: true
-          wrapped: false
-      hreflang:
-        type: string
-        xml:
-          name: hreflang
-          attribute: true
-          wrapped: false
-      media:
-        type: string
-        xml:
-          name: media
-          attribute: true
-          wrapped: false
-      rel:
-        type: string
-        xml:
-          name: rel
-          attribute: true
-          wrapped: false
-      templated:
-        type: boolean
-      title:
-        type: string
-        xml:
-          name: title
-          attribute: true
-          wrapped: false
-      type:
-        type: string
-        xml:
-          name: type
-          attribute: true
-          wrapped: false
-    title: Link
-
-  Error:
-    properties:
-      timestamp:
-        type: "string"
-        format: "date-time"
-        description: "Error response code"
-      status:
-        type: "string"
-        description: "Text explaining the reason for the error"
-      error:
-        type: "string"
-      message:
-        type: "string"
-        description: "More error details and corrective measures"
-      path:
-        type: "string"
-        description: ""
-    
-  ErrorDefault:
-    properties:
-      error:
-        type: "string"
-      error_description:
-        type: "string"
-        
-  AccountRef:
-  
-    properties:
-      data:
+            customerId: {type: string}
+            locations: {type: object, description: 'The location of customer. Location includes Country and Network Operator', $ref: '#/definitions/CustomerLocations'}
+            plans: {type: object, description: 'the customers billing plan', $ref: '#/definitions/CustomerPlans'}
+            loans: {type: object, description: 'the customers loan and eligibility details', $ref: '#/definitions/CustomerLoans'}
+            _links: {type: string, description: 'link to retrieve the customer profile', $ref: '#/definitions/CustomerLinks'}
+    CreditProfile:
+        properties:
+            creditProfileDate: {type: string, format: date-time}
+            creditRiskRating: {type: integer}
+            creditScore: {type: integer}
+    CustomerLinks:
+        type: object
+        required:
+            - self
+        properties:
+            self: {type: object, required: [href], description: "", properties: {href: {type: string, description: ""}}}
+    CustomerLocations:
+        type: object
+        required:
+            - _link
+        properties:
+            data: {type: object, $ref: '#/definitions/Locations'}
+            _link: {type: string, description: 'The link to retrieve the location of customer', $ref: '#/definitions/CustomerLinks', example: 'https://api.mtn.com/v1/customers/27832000000/locations'}
+    Locations:
+        type: object
+        required:
+            - country
+            - operator
+        properties:
+            country: {type: string, description: 'The country that the customer MSISDN was provisioned in.', example: 'South Africa'}
+            operator: {type: string, description: 'The network operator that the customer MSISDN was provisioned for.', example: MTN}
+    CustomerPlans:
+        type: object
+        required:
+            - _link
+        properties:
+            data: {type: object, $ref: '#/definitions/Plans'}
+            _link: {type: string, description: 'The link to retrieve the plan for a customer.', $ref: '#/definitions/CustomerLinks', example: 'https://api.mtn.com/v1/customers/27832000000/plan'}
+    Plans:
+        type: object
+        required:
+            - type
+            - status
+            - startDate
+            - endDate
+            - balance
+        description: 'The plan details for the customer.'
+        properties:
+            type: {type: string, description: 'The billing type of the plan.', enum: [Prepaid, Postpaid, Hybrid]}
+            status: {type: string, description: 'The current status of the plan.', enum: [Active, Suspended, Inactive, 'RICA Barred', Blacklisted]}
+            startDate: {type: string, description: 'The date the customer was created/provisioned', format: date-time}
+            endDate: {type: string, description: 'The date the plan will be deactivated.', format: date-time}
+            balance: {type: array, description: 'The account balance details of a customer', items: {$ref: '#/definitions/CustomerBalances'}}
+    CustomerBalances:
         type: object
         properties:
-          accountName:
-            type: string
-            example: MoMo
-          accountId:
-            type: string
-          description:
-            type: string
-            description: Detailed description of account
-          status:
-            type: string
-            enum: [active, inactive]
-      _links:
+            data: {type: object, required: [balanceType, amount, currency, expiryDate], properties: {balanceType: {type: string, description: 'Identifies the type of balance. A customer plan may have multiple types of balances for different usage, for example, voice, SMS, and game services.', example: VOICE}, amount: {type: string, description: 'Amount of balance.', example: '26861'}, currency: {type: string, description: 'ISO 4217 three-letter ISO code for the currency.', example: ZAR}, expiryDate: {type: string, format: date-time, description: 'Expiry Date of the account.', example: '2019-12-31T12:00:00'}}}
+    CustomerLoans:
+        type: object
+        required:
+            - _link
+        properties:
+            data: {type: object, $ref: '#/definitions/Loans'}
+            _link: {type: string, description: 'The link to retrieve the customers MoMo details.', $ref: '#/definitions/CustomerLinks', example: 'https://api.mtn.com/v1/customers/27832000000/loans'}
+    Loans:
+        type: object
+        required:
+            - customerId
+        description: 'The loans details of a customer, if it exisits'
+        properties:
+            _link: {type: array, xml: {name: link, attribute: false, wrapped: false}, items: {$ref: '#/definitions/CustomerLinks'}}
+            status: {type: string, enum: [FAILED, COMPLETED, INITED]}
+            transactionId: {type: string}
+    Band:
         type: object
         properties:
-          self:
-            type: object
-            properties:
-              href:
-                type: string
-              type:
-                type: string
-                example: POST
+            bandGroup: {type: integer, format: int32}
+            bandName: {type: string}
+        title: Band
+    Eligibility:
+        type: object
+        properties:
+            _links: {type: array, xml: {name: link, attribute: false, wrapped: false}, items: {$ref: '#/definitions/Link'}}
+            bands: {type: array, items: {$ref: '#/definitions/Band'}}
+            status: {type: string, enum: [ELIGIBLE, NE_LOAN, NE_TCL_REACHED]}
+        title: Eligibility
+    Link:
+        type: object
+        properties:
+            deprecation: {type: string, xml: {name: deprecation, attribute: true, wrapped: false}}
+            href: {type: string, xml: {name: href, attribute: true, wrapped: false}}
+            hreflang: {type: string, xml: {name: hreflang, attribute: true, wrapped: false}}
+            media: {type: string, xml: {name: media, attribute: true, wrapped: false}}
+            rel: {type: string, xml: {name: rel, attribute: true, wrapped: false}}
+            templated: {type: boolean}
+            title: {type: string, xml: {name: title, attribute: true, wrapped: false}}
+            type: {type: string, xml: {name: type, attribute: true, wrapped: false}}
+        title: Link
+    Error:
+        properties:
+            timestamp: {type: string, format: date-time, description: 'Error response code'}
+            status: {type: string, description: 'Text explaining the reason for the error'}
+            error: {type: string}
+            message: {type: string, description: 'More error details and corrective measures'}
+            path: {type: string, description: ""}
+    ErrorDefault:
+        properties:
+            error: {type: string}
+            error_description: {type: string}
+    AccountRef:
+        properties:
+            data: {type: object, properties: {accountName: {type: string, example: MoMo}, accountId: {type: string}, description: {type: string, description: 'Detailed description of account'}, status: {type: string, enum: [active, inactive]}}}
+            _links: {type: object, properties: {self: {type: object, properties: {href: {type: string}, type: {type: string, example: POST}}}}}
