@@ -1,1 +1,41 @@
-function multiselectChanged(e){var t=e.value,a=document.getElementById(e.id.replace(/select$/,"tags")),n=document.getElementById(e.id.replace(/-select$/,""));if(n.options[e.selectedIndex].selected)e.selectedIndex=0;else{for(var d=n.options.length-1;d>=0;d--)if(n.options[d].value===t){n.options[d].selected=!0,t=n.options[d].textContent;break}a.appendChild(createTag(t,e.selectedIndex,n.id)),e.selectedIndex=0}}function createTag(e,t,a){var n=document.createElement("span");return n.className="tag grey hoverable removeable",n.textContent=e,n.dataset.index=t,n.dataset.id=a,n}function removeTag(e){e.target.parentNode.removeChild(e.target),document.getElementById(e.target.dataset.id).options[e.target.dataset.index].selected=!1}
+var event = new Event('multiselect');
+
+function multiselectChanged(el) {
+    var value = el.value;
+    var tagEl = document.getElementById(el.id.replace(/select$/, 'tags'));
+    var multiselectEl = document.getElementById(el.id.replace(/-select$/, ''));
+
+    if (multiselectEl.options[el.selectedIndex].selected) {
+        el.selectedIndex = 0;
+        return;
+    };
+
+    for (var i = multiselectEl.options.length - 1; i >= 0; i--) {
+        if (multiselectEl.options[i].value !== value) continue;
+        multiselectEl.options[i].selected = true;
+        value = multiselectEl.options[i].textContent;
+        break;
+    }
+
+    tagEl.appendChild(createTag(value, el.selectedIndex, multiselectEl.id));
+    el.selectedIndex = 0;
+
+    multiselectEl.dispatchEvent(event);
+}
+
+function createTag(value, index, id) {
+    var tag = document.createElement('span');
+    tag.className = 'tag grey hoverable removeable';
+    tag.textContent = value;
+    tag.dataset.index = index;
+    tag.dataset.id = id;
+
+    return tag;
+}
+
+function removeTag(ev) {
+    var multiselectEl = document.getElementById(ev.target.dataset.id);
+    ev.target.parentNode.removeChild(ev.target);
+    multiselectEl.options[ev.target.dataset.index].selected = false;
+    multiselectEl.dispatchEvent(event);
+}
