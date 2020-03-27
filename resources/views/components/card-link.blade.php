@@ -1,7 +1,7 @@
 {{-- 
     This component allows for adding link cards.
     Eg:
-    <x-card-link target="_blank" icon="twitter" title="My Apps" linkUrl="http://www.google.com">This is the description</x-card-link>
+    <x-card-link target="_blank" icon="twitter" title="My Apps" href="http://www.google.com">This is the description</x-card-link>
     icon -  is the icon name for the icon on the card e.g. twitter
 	title - the card title
 	The card description is passed through the $slot and link attributes can be added to the card to be applied to the a tag
@@ -13,6 +13,10 @@
 @endallowonce
 
 @props(['title', 'icon'])
+
+@php 
+    $card_text = strlen($slot) > 165 ? substr($slot,0,165) : $slot;
+@endphp
 
 <a {{ $attributes }}>
 	<div class="card card--link">
@@ -26,7 +30,7 @@
 			</h3>
 			@endisset
 			<p class="card__body">
-				{{ $slot }}
+				{{ $card_text }}
 			</p>
 			<button class="fab chevron-right"></button>
 		</div>
