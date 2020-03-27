@@ -60,29 +60,9 @@
                     @svg('chevron-right') <span class="tag {{strtolower($spec['request']['method'])}}">{{strtoupper($spec['request']['method'])}}</span> {{implode('/', $spec['request']['url']['path'])}}
                 </div>
 
-                @if(!empty($spec['description']))
-                <h4>Description</h4>
-                @endif
-                <p class="description my-0">{{$spec['description']}}</p>
+                <x-products.options :description="$spec['description']" :request="$spec['request']"/>
 
-                <h4>Header parameters</h4>
-                @foreach($spec['request']['header'] as $parameter)
-                <x-products.parameter :title="$parameter['name']" :type="$parameter['type']" :required="$parameter['required'] ?? 0">{{$parameter['description']}}</x-products.parameter>
-                @endforeach
-                
-                @if(isset($spec['request']['url']['query']))
-                <h4>Query parameters</h4>
-                @foreach($spec['request']['url']['query'] as $parameter)
-                <x-products.parameter :title="$parameter['key']" :type="$parameter['type']" :required="$parameter['required'] ?? 0">{{$parameter['description']}}</x-products.parameter>
-                @endforeach
-                @endif
-                
-                @if(isset($spec['request']['body']))
-                <h4>FormData parameters</h4>
-                @foreach($spec['request']['body']['formdata'] as $parameter)
-                <x-products.parameter :title="$parameter['key']" :type="$parameter['type']" :required="$parameter['required'] ?? 0">{{$parameter['description']}}</x-products.parameter>
-                @endforeach
-                @endif
+                <x-products.breakdown :responses="$spec['response']"/>
             </div>
             @endforeach
         </div>

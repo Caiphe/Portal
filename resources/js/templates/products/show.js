@@ -14,3 +14,7 @@ function switchSection(section) {
 function toggleParent(that) {
     that.parentNode.classList.toggle('open');
 }
+
+function toggleParameters(that) {
+    that.classList.toggle('open');
+}

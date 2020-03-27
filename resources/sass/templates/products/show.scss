@@ -95,6 +95,7 @@
         margin-bottom: 10px;
         height: 66px;
         overflow: hidden;
+        display: flex;
 
         &.open {
             height: auto;
@@ -109,6 +110,8 @@
         display: flex;
         font-family: "Montserrat-Light";
         cursor: pointer;
+        position: absolute;
+        z-index: 2;
 
         svg {
             margin-right: 16px;
@@ -141,10 +144,38 @@
     h4 {
         font-family: "mtn-bold";
         margin: 20px 0 10px;
+        position: relative;
     }
 
-    .description {
-        width: calc(50% - 20px);
+    h4:first-child {
+        margin: 0 0 10px;
+    }
+
+    .collapseable {
+        cursor: pointer;
+        padding-left: 28px;
+
+        svg {
+            position: absolute;
+            left: 0;
+            top: -2px;
+            transition: transform 0.356s;
+            width: 22px;
+        }
+
+        &+.parameters {
+            display: none;
+        }
+
+        &.open {
+            &+.parameters {
+                display: block;
+            }
+
+            svg {
+                transform: rotate(90deg);
+            }
+        }
     }
 
     .parameter {
@@ -178,6 +209,59 @@
             .tag {
                 font-family: "Montserrat-Light";
                 font-size: 10px;
+            }
+        }
+    }
+
+    .specification-options {
+        flex: 1;
+        margin-top: 50px;
+    }
+
+    .specification-responses {
+        flex: 1;
+        background-color: $grey500;
+        border-radius: 8px;
+        padding: 10px;
+        margin-top: 50px;
+    }
+
+    .specification-response {
+        h6 {
+            background-color: $yellow;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 0 0 5px;
+            font-size: 10px;
+            font-family: "Montserrat";
+            cursor: pointer;
+        }
+
+        &.last h6 {
+            margin: 0;
+        }
+
+        svg {
+            position: absolute;
+            right: 10px;
+            width: 18px;
+            top: 8px;
+        }
+
+        .response-details{
+            button {
+                margin: $gutterSmall 5px $gutterSmall 0;
+            }
+        }
+
+        .detail-example{
+            font-size: 10px;
+            background-color: $grey700;
+            border-radius: 8px;
+            padding: $gutterSmall;
+
+            pre {
+                margin: 0;
             }
         }
     }
