@@ -254,7 +254,7 @@
         .response-details {
             display: none;
 
-            &.show-modal {
+            &.show-model {
                 .detail-example {
                     display: none;
                 }
@@ -266,11 +266,11 @@
             }
 
             &.show-example {
-                .detail-modal {
+                .detail-model {
                     display: none;
                 }
 
-                .modal {
+                .model {
                     background-color: transparent;
                     color: $grey700;
                 }
@@ -291,7 +291,7 @@
             }
         }
 
-        .detail-modal {
+        .detail-model {
             font-size: 1rem;
 
             h6,

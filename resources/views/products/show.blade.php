@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-    <x-heading :heading="$product->display_name" fab="dark plus">
+    <x-heading :heading="$product->display_name">
         <div class="available-in">
             <h4>AVAILABLE IN</h4>
             <div class="flags">

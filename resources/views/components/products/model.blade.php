@@ -22,7 +22,7 @@
     @endif
     
     @if($hasChildren)
-    <x-products.modal :schemas="$schema" />
+    <x-products.model :schemas="$schema" />
     @endif
 </div>
 @endforeach
