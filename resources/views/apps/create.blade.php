@@ -27,20 +27,42 @@
     <x-heading heading="Apps" tags="CREATE NEW"></x-heading>
 
     <div class="container" id="app-create">
+
+        <nav>
+            <a href="#">
+                <span>1</span> App details
+            </a>
+            <a href="#">
+                <span>2</span> Select regions
+            </a>
+            <a href="#">
+                <span>3</span> Add products
+            </a>
+        </nav>
+
         <div class="row">
-            <form action="">
-                <div>
+            @svg('app-avatar', '#ffffff')
+            <form id="create" action="">
+
+                <div class="form-group">
                     <label for="name">Name your app *</label>
-                    <input type="text" name="name" id="name">
+                    <input type="text" name="name" id="name" placeholder="Enter name">
                 </div>
 
-                <label for="name">Callback url *</label>
-                <input type="text" name="name" id="name">
+                <div class="form-group">
+                    <label for="name">Callback url *</label>
+                    <input type="text" name="name" id="name" placeholder="Enter callback url">
+                </div>
 
-                <label for="description">Description *</label>
-                <textarea name="description" id="description"></textarea>
+                <div class="form-group">
+                    <label for="description">Description *</label>
+                    <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>
+                </div>
 
-                <button class="dark">Select regions</button>
+                <button class="dark" type="submit">
+                    Select regions
+                    @svg('arrow-forward', '#ffffff')
+                </button>
             </form>
         </div>
     </div>
