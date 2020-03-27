@@ -71,49 +71,14 @@
                     <p>Select the regions you would like to associate with your app *</p>
 
                     <div class="countries">
+                        @foreach($countries as $country)
                         <div class="country">
                             @svg('za', '#ffffff', 'images/locations')
                             <span>
-                            Country
-                        </span>
+                                Country
+                            </span>
                         </div>
-
-                        <div class="country">
-                            @svg('za', '#ffffff', 'images/locations')
-                            <span>
-                            Country
-                        </span>
-                        </div>
-
-                        <div class="country">
-                            @svg('za', '#ffffff', 'images/locations')
-                            <span>
-                            Country
-                        </span>
-                        </div>
-
-                        <div class="country">
-                            @svg('za', '#ffffff', 'images/locations')
-                            <span>
-                            Country
-                        </span>
-                        </div>
-
-
-                        <div class="country">
-                            @svg('za', '#ffffff', 'images/locations')
-                            <span>
-                            Country
-                        </span>
-                        </div>
-
-
-                        <div class="country">
-                            @svg('za', '#ffffff', 'images/locations')
-                            <span>
-                            Country
-                        </span>
-                        </div>
+                        @endforeach
                     </div>
 
                     <div class="form-actions">
