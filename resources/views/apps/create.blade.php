@@ -72,12 +72,11 @@
 
                     <div class="countries">
                         @foreach($countries as $country)
-                        <div class="country">
-                            @svg('za', '#ffffff', 'images/locations')
-                            <span>
-                                Country
-                            </span>
-                        </div>
+                            <label class="country" for="country-{{ $loop->index + 1 }}">
+                                @svg('za', '#ffffff', 'images/locations')
+                                <input type="checkbox" class="country-{{ $loop->index + 1 }}" value="">
+                                {{ $country }}
+                            </label>
                         @endforeach
                     </div>
 
@@ -205,5 +204,14 @@
 
         form.reset();
     });
+
+    var countries = document.querySelectorAll('input[type="checkbox"]');
+    for (var i = 0; i < countries.length; i++) {
+        countries[i].addEventListener('click', selectCountry);
+    }
+
+    function selectCountry() {
+        console.log('click');
+    }
 </script>
 @endpush
