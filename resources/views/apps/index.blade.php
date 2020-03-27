@@ -164,15 +164,13 @@
         actions[i].addEventListener('click', handleMenuClick);
     }
 
-    function handleMenuClick(event) {
+    function handleMenuClick() {
         var parent = this.parentNode.parentNode;
 
-        var isClickInside = parent.contains(event.target);
-
-        if (isClickInside && parent.lastElementChild.style.display === 'block') {
-            parent.lastElementChild.style.display = 'none';
+        if (parent.lastElementChild.classList.contains('show')) {
+            parent.lastElementChild.classList.remove('show');
         } else {
-            parent.lastElementChild.style.display = 'block';
+            parent.lastElementChild.classList.add('show');
         }
     }
 
