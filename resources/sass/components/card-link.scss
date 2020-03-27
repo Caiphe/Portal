@@ -1,7 +1,20 @@
 .card--link {
+    display: inline-table;
+
     .fab {
         position: absolute;
         bottom: -50px;
         right: 0;
+    }
+
+    .card__header {
+        min-height: 70px;
+        margin: 5px 0;
+        display: flex;
+        align-items: center;
+    }
+    
+    .card__body{
+        min-height: 105px;
     }
 }
