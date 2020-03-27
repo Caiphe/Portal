@@ -57,21 +57,27 @@
             flex-direction: column;
             align-items: center;
 
-            > svg {
-                display: flex;
-                margin-left: auto;
-                margin-right: auto;
-                margin-bottom: 3rem;
-                height: 100%;
-                width: 10%;
-            }
-
             > div {
                 width: 100%;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+
+                > svg {
+                    display: flex;
+                    margin-left: auto;
+                    margin-right: auto;
+                    margin-bottom: 3rem;
+                    height: 100%;
+                    width: 10%;
+                }
+
+                + div {
+                    display: none;
+                }
             }
+
+
 
             label {
                 margin-bottom: 1.5rem;

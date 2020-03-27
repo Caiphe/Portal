@@ -43,86 +43,87 @@
         <div class="row">
 
             <form action="">
-{{--                @svg('app-avatar', '#ffffff')--}}
-{{--                <div>--}}
-{{--                    <div class="group">--}}
-{{--                        <label for="name">Name your app *</label>--}}
-{{--                        <input type="text" name="name" id="name" placeholder="Enter name">--}}
-{{--                    </div>--}}
 
-{{--                    <div class="group">--}}
-{{--                        <label for="name">Callback url *</label>--}}
-{{--                        <input type="text" name="name" id="name" placeholder="Enter callback url">--}}
-{{--                    </div>--}}
+                <div>
+                    @svg('app-avatar', '#ffffff')
+                    <div class="group">
+                        <label for="name">Name your app *</label>
+                        <input type="text" name="name" id="name" placeholder="Enter name">
+                    </div>
 
-{{--                    <div class="group">--}}
-{{--                        <label for="description">Description *</label>--}}
-{{--                        <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>--}}
-{{--                    </div>--}}
+                    <div class="group">
+                        <label for="name">Callback url *</label>
+                        <input type="text" name="name" id="name" placeholder="Enter callback url">
+                    </div>
 
-{{--                    <button class="dark" type="submit">--}}
-{{--                        Select regions--}}
-{{--                        @svg('arrow-forward', '#ffffff')--}}
-{{--                    </button>--}}
-{{--                </div>--}}
+                    <div class="group">
+                        <label for="description">Description *</label>
+                        <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>
+                    </div>
 
-{{--                <div>--}}
-{{--                    <p>Select the regions you would like to associate with your app *</p>--}}
+                    <button class="dark" type="submit">
+                        Select regions
+                        @svg('arrow-forward', '#ffffff')
+                    </button>
+                </div>
 
-{{--                    <div class="countries">--}}
-{{--                        <div class="country">--}}
-{{--                            @svg('za', '#ffffff', 'images/locations')--}}
-{{--                            <span>--}}
-{{--                            Country--}}
-{{--                        </span>--}}
-{{--                        </div>--}}
+                <div>
+                    <p>Select the regions you would like to associate with your app *</p>
 
-{{--                        <div class="country">--}}
-{{--                            @svg('za', '#ffffff', 'images/locations')--}}
-{{--                            <span>--}}
-{{--                            Country--}}
-{{--                        </span>--}}
-{{--                        </div>--}}
+                    <div class="countries">
+                        <div class="country">
+                            @svg('za', '#ffffff', 'images/locations')
+                            <span>
+                            Country
+                        </span>
+                        </div>
 
-{{--                        <div class="country">--}}
-{{--                            @svg('za', '#ffffff', 'images/locations')--}}
-{{--                            <span>--}}
-{{--                            Country--}}
-{{--                        </span>--}}
-{{--                        </div>--}}
+                        <div class="country">
+                            @svg('za', '#ffffff', 'images/locations')
+                            <span>
+                            Country
+                        </span>
+                        </div>
 
-{{--                        <div class="country">--}}
-{{--                            @svg('za', '#ffffff', 'images/locations')--}}
-{{--                            <span>--}}
-{{--                            Country--}}
-{{--                        </span>--}}
-{{--                        </div>--}}
+                        <div class="country">
+                            @svg('za', '#ffffff', 'images/locations')
+                            <span>
+                            Country
+                        </span>
+                        </div>
 
-
-{{--                        <div class="country">--}}
-{{--                            @svg('za', '#ffffff', 'images/locations')--}}
-{{--                            <span>--}}
-{{--                            Country--}}
-{{--                        </span>--}}
-{{--                        </div>--}}
+                        <div class="country">
+                            @svg('za', '#ffffff', 'images/locations')
+                            <span>
+                            Country
+                        </span>
+                        </div>
 
 
-{{--                        <div class="country">--}}
-{{--                            @svg('za', '#ffffff', 'images/locations')--}}
-{{--                            <span>--}}
-{{--                            Country--}}
-{{--                        </span>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
+                        <div class="country">
+                            @svg('za', '#ffffff', 'images/locations')
+                            <span>
+                            Country
+                        </span>
+                        </div>
 
-{{--                    <div class="form-actions">--}}
-{{--                        <button class="dark outline">Back</button>--}}
-{{--                        <button class="dark">--}}
-{{--                            Add products--}}
-{{--                            @svg('arrow-forward', '#ffffff')--}}
-{{--                        </button>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
+
+                        <div class="country">
+                            @svg('za', '#ffffff', 'images/locations')
+                            <span>
+                            Country
+                        </span>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="dark outline">Back</button>
+                        <button class="dark">
+                            Add products
+                            @svg('arrow-forward', '#ffffff')
+                        </button>
+                    </div>
+                </div>
 
                 <div>
                     <p>Select the products you would like to add to your app.</p>
@@ -161,6 +162,9 @@
 
 @push('scripts')
 <script>
-    var state = document.querySelector('form .active');
+    var form = document.querySelector('form');
+
+
+
 </script>
 @endpush
