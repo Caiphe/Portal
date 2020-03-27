@@ -72,7 +72,7 @@
             {{ $attr['Description'] }}
         </p>
 
-        <p class="description"><strong>Products</strong></p>
+        <p class="products-title"><strong>Products</strong></p>
 
         <div class="products">
             @foreach(end($app['credentials'])['apiProducts'] as $product)
