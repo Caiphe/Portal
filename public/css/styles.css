@@ -1005,6 +1005,7 @@ select.dark {
 input[type=text],
 input[type=email],
 input[type=search],
+input[type=url],
 input[type=number] {
   height: 40px;
 }
@@ -1012,6 +1013,7 @@ input[type=number] {
 input[type=text].thin,
 input[type=email].thin,
 input[type=search].thin,
+input[type=url].thin,
 input[type=number].thin {
   height: 32px;
 }
@@ -1019,6 +1021,7 @@ input[type=number].thin {
 input[type=text].alt,
 input[type=email].alt,
 input[type=search].alt,
+input[type=url].alt,
 input[type=number].alt {
   height: 32px;
   border: none;
@@ -1029,6 +1032,7 @@ input[type=number].alt {
 input[type=text].see-through,
 input[type=email].see-through,
 input[type=search].see-through,
+input[type=url].see-through,
 input[type=number].see-through {
   background-color: rgba(255, 255, 255, 0.4);
   border: none;
