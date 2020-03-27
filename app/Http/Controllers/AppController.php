@@ -40,12 +40,16 @@ class AppController extends Controller
 
     public function show()
     {
-        //
+        return view('apps.show');
     }
 
     public function edit()
     {
-        return view('apps.edit');
+        $app = '';
+
+        return view('apps.edit', [
+            'app' => $app
+        ]);
     }
 
     public function update(Request $request)

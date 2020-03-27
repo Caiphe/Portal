@@ -86,7 +86,7 @@
     </div>
     <nav class="menu">
         <a href="{{ url('apps/edit') }}">Edit</a>
-        <a href="">Delete</a>
+        <button class="app-delete">Delete</button>
     </nav>
     <div class="modal"></div>
 </div>
