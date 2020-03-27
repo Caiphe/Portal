@@ -4,8 +4,6 @@
 
 @props(['app', 'attr'])
 
-{{--{{ dd($app) }}--}}
-
 <div class="my-app">
     <div class="column">
         <p class="name">
@@ -87,7 +85,7 @@
         </div>
     </div>
     <nav class="menu">
-        <a href="">Edit</a>
+        <a href="{{ url('apps/edit') }}">Edit</a>
         <a href="">Delete</a>
     </nav>
     <div class="modal"></div>

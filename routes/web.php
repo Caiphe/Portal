@@ -17,6 +17,7 @@ Route::get('/', function () {
 
 Route::get('apps', 'AppController@index');
 Route::get('apps/create', 'AppController@create');
+Route::get('apps/edit', 'AppController@edit');
 
 Route::view('/getting-started', 'templates.getting-started.index');
 

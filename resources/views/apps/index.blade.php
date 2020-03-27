@@ -192,14 +192,15 @@
     // var menus = document.getElementsByClassName('menu');
     //
     // function closeMenu(menu) {
+    //     console.log(menu)
     //     menu.classList.remove('show');
     //     // document.querySelectorAll('.my-app').classList.toggle('show');
     // }
     //
-    // document.onclick = function(event) {
+    // window.onclick = function(event) {
+    //     event.preventDefault()
     //     for (var i =0 ; i < menus.length; i++) {
-    //         // Here we have the same onclick
-    //         menus.item(i).onclick = closeMenu(menus.item(i));
+    //         menus.item(i).onclick = closeMenu();
     //     }
     // };
 </script>

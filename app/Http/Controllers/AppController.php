@@ -45,7 +45,7 @@ class AppController extends Controller
 
     public function edit()
     {
-        //
+        return view('apps.edit');
     }
 
     public function update(Request $request)
