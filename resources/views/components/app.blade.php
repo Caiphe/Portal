@@ -16,7 +16,7 @@
         + 2 more
     </div>
     <div class="column">
-        https://www.appdomain.co.za
+        {{ $app['callbackUrl'] }}
     </div>
     <div class="column">
         {{ \Carbon\Carbon::parse()->format('d M') }}
@@ -38,7 +38,7 @@
                 <p class="key">
                     {{ end($app['credentials'])['consumerSecret'] }}
                 </p>
-                <p>https://www.plusnarrative.com</p>
+                <p>{{ $app['callbackUrl'] }}</p>
             </div>
             <div class="copy-column">
                 <button class="copy">
