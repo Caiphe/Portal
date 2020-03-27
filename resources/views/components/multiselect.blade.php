@@ -1,5 +1,7 @@
 {{-- 
     This component allows for adding multiselects that show removeable tags.
+    If you would like to add an event listener for the change please use the 'multiselect' event, like the below:
+    el.addEventListener('mulstiselct', function);
     Eg:
     <x-multiselect id="test" name="test" label="please choose it" :options="['first' => 'one', 'second' => 'two']" :selected="['first']"/>
     
