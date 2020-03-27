@@ -68,13 +68,15 @@
                     </div>
 
                     <div class="column">
-                        &nbsp;&nbsp;
+                        &nbsp;
                     </div>
                 </div>
                 <div class="body">
-                    @foreach($approved_apps as $app)
+                    @forelse($approved_apps as $app)
                         <x-app :name="$app['attributes'][1]['value']"></x-app>
-                    @endforeach
+                    @empty
+                        <p>No approved apps.</p>
+                    @endforelse
                 </div>
             </div>
         </div>
@@ -105,13 +107,15 @@
                     </div>
 
                     <div class="column">
-                        &nbsp;
+
                     </div>
                 </div>
                 <div class="body">
-                    @foreach($revoked_apps as $app)
+                    @forelse($revoked_apps as $app)
                         <x-app :name="$app['name']"></x-app>
-                    @endforeach
+                    @empty
+                        <p>No revoked apps.</p>
+                    @endforelse
                 </div>
             </div>
         </div>
