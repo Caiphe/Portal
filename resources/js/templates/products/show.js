@@ -18,3 +18,7 @@ function toggleParent(that) {
 function toggleParameters(that) {
     that.classList.toggle('open');
 }
+
+function toggleResponseDetail(that, responseDetail) {
+    that.parentNode.className = 'response-details show-' + responseDetail;
+}

@@ -179,7 +179,6 @@
     }
 
     .parameter {
-        width: calc(50% - 20px);
         height: 40px;
         overflow: hidden;
         font-size: 10px;
@@ -220,14 +219,14 @@
 
     .specification-responses {
         flex: 1;
-        background-color: $grey500;
+        background-color: $grey400;
         border-radius: 8px;
         padding: 10px;
         margin-top: 50px;
     }
 
     .specification-response {
-        h6 {
+        &>h6 {
             background-color: $yellow;
             padding: 10px;
             border-radius: 5px;
@@ -237,7 +236,7 @@
             cursor: pointer;
         }
 
-        &.last h6 {
+        &.last>h6 {
             margin: 0;
         }
 
@@ -248,13 +247,37 @@
             top: 8px;
         }
 
-        .response-details{
+        .response-details {
+            &.show-modal .detail-example {
+                display: none;
+            }
+
+            &.show-example .detail-modal {
+                display: none;
+            }
+
             button {
                 margin: $gutterSmall 5px $gutterSmall 0;
             }
         }
 
-        .detail-example{
+        .detail-modal {
+            font-size: 1rem;
+            h6, .tag{
+                font-size: 1rem;
+            }
+
+            h6 {
+                margin-top: $gutterSmall;
+                margin-bottom: 0;
+            }
+
+            h6.first {
+                margin-top: 0;
+            }
+        }
+
+        .detail-example {
             font-size: 10px;
             background-color: $grey700;
             border-radius: 8px;
