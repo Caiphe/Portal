@@ -117,7 +117,7 @@
                     </div>
 
                     <div class="form-actions">
-                        <button class="dark outline">Back</button>
+                        <button class="dark outline back">Back</button>
                         <button class="dark next">
                             Add products
                             @svg('arrow-forward', '#ffffff')
@@ -146,7 +146,7 @@
                     </div>
 
                     <div class="form-actions">
-                        <button class="dark outline">Back</button>
+                        <button class="dark outline back">Back</button>
                         <button class="dark" type="submit">
                             Create app
                         </button>
@@ -170,11 +170,12 @@
     var nav = document.querySelector('#app-create nav');
     var form = document.querySelector('form');
     var buttons = document.querySelectorAll('.next');
+    var backButtons = document.querySelectorAll('.back');
 
     function init() {
         handleButtonClick();
+        handleBackButtonClick();
     }
-
 
     function handleButtonClick() {
         for (var i = 0; i < buttons.length; i++) {
@@ -189,8 +190,29 @@
                     form.firstElementChild.classList.remove('active');
                     form.firstElementChild.style.display = 'none';
                     form.firstElementChild.nextElementSibling.classList.add('active');
+
+                } else if (form.firstElementChild.nextElementSibling.classList.contains('active')) {
+                    nav.querySelector('a').nextElementSibling.nextElementSibling.classList.add('active');
+
+                    form.firstElementChild.nextElementSibling.classList.remove('active');
+                    form.firstElementChild.nextElementSibling.nextElementSibling.classList.add('active');
                 }
 
+            });
+        }
+    }
+
+    function handleBackButtonClick() {
+        for (var i = 0; i < backButtons.length; i++) {
+
+            backButtons[i].addEventListener('click', function (event) {
+                event.preventDefault();
+
+                console.log(form.querySelector('.active').previousElementSibling);
+
+                if(form.querySelector('.active')) {
+                    form.querySelector('.active').classList.remove('active')
+                }
             });
         }
     }
