@@ -66,6 +66,10 @@
                 width: 12%;
             }
 
+            textarea {
+                resize: none;
+            }
+
             button {
                 display: flex;
                 justify-content: space-between;
