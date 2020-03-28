@@ -8,8 +8,10 @@
             <li><a href="/">FAQ</a></li>
         </ul>
         <input type="search" name="search" id="search" class="thin see-through" placeholder="Search">
+        @if(\Auth::check())
         <button class="dark">Build app</button>
-        <button id="profile" class="fab image" style="background-image: url(/images/profile.jpg)"></button>
+        <button id="user-profile-image" class="fab image" style="background-image: url({{\Auth::user()->profile_picture}})"></button>
+        @endif
     </div>
 </header>
 <div id="profile-menu-background"></div>

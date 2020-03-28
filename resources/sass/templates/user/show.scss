@@ -1,0 +1,64 @@
+@import "../../variables";
+@import "../../functions";
+
+#profile {
+    border: 1px solid $grey300;
+    border-radius: 8px;
+    text-align: center;
+    padding: $gutter;
+}
+
+#profile-picture-label {
+    position: relative;
+    cursor: pointer;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    display: block;
+    width: 226px;
+    height: 226px;
+    margin: 0 auto;
+    border-radius: 50%;
+
+    &::after {
+        content: '';
+        background-image: get-icon("edit", #FFFFFF);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-color: $grey900;
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        margin: 0 0 -18px -20px;
+        bottom: 0;
+        left: 50%;
+        border-radius: 50%;
+    }
+
+
+    input {
+        display: none;
+    }
+}
+
+#profile-form {
+    width: 478px;
+    position: relative;
+    margin: 0 auto;
+
+    h2 {
+        font-size: 1.8rem;
+        text-align: left;
+        margin: $gutter 0 $gutterSmall;
+    }
+
+    input {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    button {
+        margin: 0 auto;
+    }
+}

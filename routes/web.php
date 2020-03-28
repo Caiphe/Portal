@@ -1,5 +1,7 @@
 <?php
 
+Auth::loginUsingId(1);
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,8 +15,12 @@
 
 Route::get('/', function () {
     return view('layouts.sidebar');
-});
+})->name('home');
 
 Route::view('/getting-started', 'templates.getting-started.index');
+
+Route::get('profile', 'UserController@show')->name('user.profile');
+Route::put('profile/{user}/update', 'UserController@update')->name('user.profile.update');
+Route::put('profile/update/picture', 'UserController@updateProfilePicture')->name('user.profile.update.picture');
 
 Auth::routes();

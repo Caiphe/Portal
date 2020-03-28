@@ -31,9 +31,10 @@
     }
 }
 
-#profile {
+#user-profile-image {
     margin-left: $gutterSmall;
     z-index: 4;
+    border-radius: 50%;
 }
 
 #profile-menu {
