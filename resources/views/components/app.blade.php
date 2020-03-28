@@ -86,7 +86,11 @@
     </div>
     <nav class="menu">
         <a href="{{ url('apps/edit') }}">Edit</a>
-        <a class="app-delete">Delete</a>
+        <form class="delete" action="{{ url('apps') }}" method="POST">
+            @method('DELETE')
+            @csrf
+            <button class="app-delete" type="submit">Delete</button>
+        </form>
     </nav>
     <div class="modal"></div>
 </div>

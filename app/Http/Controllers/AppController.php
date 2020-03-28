@@ -106,8 +106,8 @@ class AppController extends Controller
         //
     }
 
-    public function destroy()
+    public function destroy(Request $request)
     {
-        //
+        dd($request->all());
     }
 }
