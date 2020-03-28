@@ -34,11 +34,6 @@ function changeProfilePicture(file) {
 function uploadProfilePicture(file) {
     var xhr = new XMLHttpRequest();
 
-    if (!xhr) {
-        console.log("Giving up :( Cannot create an XMLHTTP instance");
-        return false;
-    }
-
     xhr.onreadystatechange = function() {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
@@ -51,14 +46,15 @@ function uploadProfilePicture(file) {
         }
     };
 
-    var formData = new FormData();
-    formData.append('profile', file);
-
-    xhr.open("PUT", "/profile/update/picture");
+    xhr.open("POST", "/profile/update/picture");
     xhr.setRequestHeader(
         "X-CSRF-TOKEN",
         document.getElementsByName("csrf-token")[0].content
     );
+
+    var formData = new FormData();
+    formData.append('test', 'test');
+    formData.append('profile', file);
 
     xhr.send(formData);
 }

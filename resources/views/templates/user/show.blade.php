@@ -53,6 +53,14 @@ Update profile
             <input type="password" name="password" placeholder="Password" autocomplete="off">
             <input type="password" name="password_confirmation" placeholder="Confirm password" autocomplete="off">
             <h2>Your selected countries</h2>
+            <div class="locations">
+                @foreach($locations as $location)
+                <label for="{{$location}}">
+                    @svg($location, '#000000', 'images/locations')
+                    <input type="checkbox" name="{{$location}}" id="{{$location}}">
+                </label>
+                @endforeach
+            </div>
             <button class="dark">Save</button>
         </form>
     </div>

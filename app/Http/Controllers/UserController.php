@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Product;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -50,8 +51,15 @@ class UserController extends Controller
             return redirect()->home();
         }
 
+        $productLocations = Product::isPublic()
+                        ->WhereNotNull('locations')
+                        ->select('locations')
+                        ->get()
+                        ->implode('locations', ',');
+
         return view('templates.user.show', [
-            'user'=>\Auth::user()
+            'user'=>\Auth::user(),
+            'locations' => array_unique(explode(',', $productLocations))
         ]);
     }
 
@@ -80,7 +88,7 @@ class UserController extends Controller
             'second_name' => 'required',
         ];
 
-        if($request->email !== $user->email){
+        if ($request->email !== $user->email) {
             $validateOn = array_merge($validateOn, ['email' => 'email|required|unique:users,email']);
         }
 
@@ -106,10 +114,8 @@ class UserController extends Controller
 
     public function updateProfilePicture(Request $request)
     {
-
-        // $image = $request->file('profile');
-        // $imageName = base64_encode('jsklaf88sfjdsfjl' . $request->user()->id) . '.png';
-        // $path = \Storage::putFileAs('profile', $request->file('profile'), $imageName);
+        $imageName = base64_encode('jsklaf88sfjdsfjl' . $request->user()->id) . '.png';
+        $path = \Storage::putFileAs('public/profile', $request->file('profile'), $imageName);
 
         // $image = Image::make($request->file('profile'))
         //     ->fit(452, 452, function ($constraint) {
@@ -120,7 +126,7 @@ class UserController extends Controller
         // Storage::putFileAs('profile', (string)$image->encode('png', 95), $image_name);
 
         return response()->json([
-            'img' => $request->hasFile('profile')
+            'path' => $path
         ]);
     }
 }

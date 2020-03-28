@@ -6,6 +6,23 @@
     border-radius: 8px;
     text-align: center;
     padding: $gutter;
+
+    .locations {
+        width: 120px;
+        text-align: left;
+        label {
+            cursor: pointer;
+        }
+        
+        svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        input {
+            display: none;
+        }
+    }
 }
 
 #profile-picture-label {
