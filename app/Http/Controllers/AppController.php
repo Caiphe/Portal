@@ -40,7 +40,9 @@ class AppController extends Controller
 
         $productLocations = Product::isPublic()
             ->WhereNotNull('locations') ->select('locations')
-            ->get()->implode('locations', ',');
+            ->get()
+            ->implode('locations', ',');
+
         $productLocations = array_unique(explode(',', $productLocations));
 
         $filteredCountries = Country::whereIn('code', $productLocations)->get();
