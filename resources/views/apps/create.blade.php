@@ -130,8 +130,6 @@
                     </div>
                 </div>
 
-                <input type="hidden" name="products" id="products" value="">
-
                 @csrf
 
             </form>
@@ -295,11 +293,13 @@
 
     function addProduct(product) {
         var products = document.querySelector('#products');
-        var selected = product.dataset.title;
+        var selectedProduct = document.createElement('input');
 
-        products.setAttribute('value', selected);
-        console.log(product);
-        console.log(selected);
+        selectedProduct.setAttribute('type', 'hidden');
+        selectedProduct.setAttribute("name", "selected_product[]");
+        selectedProduct.setAttribute("value", product.dataset.title);
+
+        form.append(p);
     }
 </script>
 @endpush
