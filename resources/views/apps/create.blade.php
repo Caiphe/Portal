@@ -250,8 +250,9 @@
             console.log('Add product');
             var button = event.currentTarget;
 
-            button.classList.remove('plus');
-            button.classList.add('done');
+            button.classList.toggle('plus');
+            button.classList.toggle('done');
+            button.classList.toggle('animate');
         });
     }
 
