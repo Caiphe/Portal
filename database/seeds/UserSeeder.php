@@ -18,6 +18,7 @@ class UserSeeder extends Seeder
             'first_name' => 'Wesley',
             'last_name' => 'Martin',
             'email' => 'wes@plusnarrative.com',
+            'locations' => 'za,ug',
             'password' => bcrypt('devport')
         ]);
 
@@ -25,6 +26,7 @@ class UserSeeder extends Seeder
             'first_name' => 'developer',
             'last_name' => 'User',
             'email' => 'developer@user.com',
+            'locations' => 'za,ug',
             'password' => bcrypt('devport')
         ]);
 
@@ -32,6 +34,7 @@ class UserSeeder extends Seeder
             'first_name' => 'Opco Admin',
             'last_name' => 'User',
             'email' => 'opco-admin@user.com',
+            'locations' => 'opco-za,ug',
             'password' => bcrypt('devport')
         ]);
 
@@ -39,6 +42,7 @@ class UserSeeder extends Seeder
             'first_name' => 'Opco',
             'last_name' => 'User',
             'email' => 'opco@user.com',
+            'locations' => 'za,ug',
             'password' => bcrypt('devport')
         ]);
 

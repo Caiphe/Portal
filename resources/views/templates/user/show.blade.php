@@ -56,12 +56,12 @@ Update profile
             <div class="locations">
                 @foreach($locations as $location)
                 <label for="{{$location}}">
+                    <input type="checkbox" name="locations[]" value="{{$location}}" id="{{$location}}" autocomplete="off" @if(in_array($location, $userLocations)) checked @endif>
                     @svg($location, '#000000', 'images/locations')
-                    <input type="checkbox" name="{{$location}}" id="{{$location}}">
                 </label>
                 @endforeach
             </div>
-            <button class="dark">Save</button>
+            <button class="dark mt-2">Save</button>
         </form>
     </div>
 @endsection

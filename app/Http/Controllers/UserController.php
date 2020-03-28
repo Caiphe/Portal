@@ -51,14 +51,18 @@ class UserController extends Controller
             return redirect()->home();
         }
 
+        $user = \Auth::user();
+        $user->load('countries');
+
         $productLocations = Product::isPublic()
-                        ->WhereNotNull('locations')
-                        ->select('locations')
-                        ->get()
-                        ->implode('locations', ',');
+            ->WhereNotNull('locations')
+            ->select('locations')
+            ->get()
+            ->implode('locations', ',');
 
         return view('templates.user.show', [
-            'user'=>\Auth::user(),
+            'user'=>$user,
+            'userLocations' => $user->countries->pluck('code')->toArray(),
             'locations' => array_unique(explode(',', $productLocations))
         ]);
     }
@@ -96,7 +100,13 @@ class UserController extends Controller
             $validateOn = array_merge($validateOn, ['password' => 'confirmed']);
         }
 
-        $user->update($request->validate($validateOn));
+        $validatedData = $request->validate($validateOn);
+
+        if ($request->has('locations')) {
+            $validatedData = array_merge($validatedData, ['locations' => implode(',', $request->locations)]);
+        }
+
+        $user->update($validatedData);
 
         return redirect()->back();
     }
