@@ -249,25 +249,25 @@
      *  Clear checkboxes on page load, otherwise some checkboxes persist checked state.
      */
     function clearCheckBoxes() {
-        for (var i = 0; i < checkedBoxes.length; ++i) {
-            checkedBoxes[i].checked = false;
+        for (var n = 0; n < checkedBoxes.length; ++n) {
+            checkedBoxes[n].checked = false;
         }
     }
 
     var addProductButtons = document.querySelectorAll('[data-title] button');
-    for (var i = 0; i < addProductButtons.length; ++i) {
+    for (var o = 0; o < addProductButtons.length; ++o) {
 
-        addProductButtons[i].addEventListener('click', function (event) {
+        addProductButtons[o].addEventListener('click', function (event) {
             var button = event.currentTarget;
 
             button.classList.toggle('plus');
             button.classList.toggle('done');
 
-            // if(document.querySelectorAll('[data-title] button')) {
-            //     var selectedProduct = this.parentNode.parentNode;
-            //
-            //     selectedProduct.classList.toggle('selected');
-            // }
+            if(document.querySelectorAll('[data-title] button')) {
+                var selectedProduct = this.parentNode.parentNode;
+
+                selectedProduct.classList.toggle('selected');
+            }
         });
     }
 </script>
