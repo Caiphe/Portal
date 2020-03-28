@@ -10,7 +10,8 @@
     <button class="fab plus"></button>
 */
 
-button, .button {
+button,
+.button {
     height: 34px;
     line-height: 1;
     background-color: $yellow;
@@ -20,10 +21,11 @@ button, .button {
     border: 2px solid $yellow;
     border-radius: 22px;
     padding: 0 20px;
-    display: flex;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    color: $grey900;
 
     &.small {
         height: 24px;
@@ -61,12 +63,12 @@ button, .button {
     }
 
     &.light {
-        background-color: $grey600;
-        border: 2px solid $grey600;
+        background-color: $grey700;
+        border: 2px solid $grey700;
 
         &:hover {
-            background-color: mix(#FFFFFF, $grey600, 20%);
-            border-color: mix(#FFFFFF, $grey600, 20%);
+            background-color: mix(#FFFFFF, $grey700, 20%);
+            border-color: mix(#FFFFFF, $grey700, 20%);
         }
     }
 
@@ -80,7 +82,7 @@ button, .button {
         }
     }
 
-	&.inline {
+	&.flex {
 		display: flex;
 	}
     &.blue:not(.outline),
@@ -154,19 +156,22 @@ button, .button {
     }
 
     &.outline {
-        background-color: #FFF;
-
+		background-color: transparent;
+		
 		&.dark:hover {
             color: #FFF;
 		}
-		
+
         &.blue:hover {
             color: #FFF;
         }
 
-        &.light,
+        &.light{
+            color: $grey700;
+        }
+
         &.lightest {
-            color: $grey600;
+            color: $grey500;
         }
 
         &.light:hover,

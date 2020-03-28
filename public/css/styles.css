@@ -617,10 +617,11 @@ button,
   border: 2px solid #FC0;
   border-radius: 22px;
   padding: 0 20px;
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  color: #1a1a1a;
 }
 
 button.small,
@@ -667,14 +668,14 @@ button.medium:hover,
 
 button.light,
 .button.light {
-  background-color: #999999;
-  border: 2px solid #999999;
+  background-color: #666666;
+  border: 2px solid #666666;
 }
 
 button.light:hover,
 .button.light:hover {
-  background-color: #adadad;
-  border-color: #adadad;
+  background-color: #858585;
+  border-color: #858585;
 }
 
 button.lightest,
@@ -689,8 +690,8 @@ button.lightest:hover,
   border-color: #d6d6d6;
 }
 
-button.inline,
-.button.inline {
+button.flex,
+.button.flex {
   display: flex;
 }
 
@@ -1014,7 +1015,7 @@ button.blue.fab.arrow-forward.outline:hover,
 
 button.outline,
 .button.outline {
-  background-color: #FFF;
+  background-color: transparent;
 }
 
 button.outline.dark:hover,
@@ -1028,10 +1029,13 @@ button.outline.blue:hover,
 }
 
 button.outline.light,
+.button.outline.light {
+  color: #666666;
+}
+
 button.outline.lightest,
-.button.outline.light,
 .button.outline.lightest {
-  color: #999999;
+  color: #cccccc;
 }
 
 button.outline.light:hover,

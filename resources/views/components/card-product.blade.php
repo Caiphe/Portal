@@ -48,9 +48,9 @@
         </div>
     </a>
     <div class="buttons">
-        <a class="inline button" href="{{$href}}">View</a>
+        <a class="flex button" href="{{$href}}">View</a>
         @isset($addButtonId)
-        <a href="{{$addUrl}}" id="$addButtonId" class="inline button fab plus dark"></a>
+        <a href="{{$addUrl}}" id="$addButtonId" class="flex button fab plus dark"></a>
         @endisset
     </div>
 </div>
