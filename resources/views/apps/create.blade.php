@@ -71,9 +71,9 @@
                     <p>Select the countries you would like to associate with your app *</p>
 
                     <div class="countries">
-                        @foreach($countries as $country)
+                        @foreach($countries as $key => $country)
                             <label class="country" for="country-{{ $loop->index + 1 }}">
-                                @svg('za', '#ffffff', 'images/locations')
+                                @svg('$key', '#ffffff', 'images/locations')
                                 <input type="checkbox" id="country-{{ $loop->index + 1 }}" name="country-checkbox">
                                 {{ $country }}
                             </label>
