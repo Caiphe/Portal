@@ -85,7 +85,10 @@ class ProductController extends Controller
             foreach ($products as $key => $product) {
                 $sidebarAccordion[$category][] = ["label" => $product['display_name'], "link" => '/products/' . $product['slug']];
             }
+            
+            asort($sidebarAccordion[$category]);
         }
+
 
         return view('templates.products.show', [
             "product" => $prod,
