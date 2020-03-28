@@ -39,7 +39,8 @@ class AppController extends Controller
             ->groupBy('category');
 
         $productLocations = Product::isPublic()
-            ->WhereNotNull('locations') ->select('locations')
+            ->WhereNotNull('locations')
+            ->select('locations')
             ->get()
             ->implode('locations', ',');
 
