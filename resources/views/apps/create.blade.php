@@ -72,7 +72,7 @@
 
                     <div class="countries">
                         @foreach($countries as $key => $country)
-                            <label class="country" for="country-{{ $loop->index + 1 }}">
+                            <label class="country" for="country-{{ $loop->index + 1 }}" data-id="{{ $key }}">
                                 @svg('$key', '#000000', 'images/locations')
                                 <input type="checkbox" id="country-{{ $loop->index + 1 }}" name="country-checkbox">
                                 {{ $country }}
@@ -96,7 +96,7 @@
 
                     <div class="filtered-countries">
                         @foreach($countries as $key => $country)
-                            <img src="/images/locations/{{$key}}.svg" title="{{$country}} flag" alt="{{$country}} flag">
+                            <img src="/images/locations/{{$key}}.svg" title="{{$country}} flag" alt="{{$country}} flag" data-code="{{ $key }}">
                         @endforeach
                     </div>
 
