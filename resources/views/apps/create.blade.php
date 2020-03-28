@@ -247,20 +247,17 @@
     for (var i = 0; i < addProductButtons.length; ++i) {
 
         addProductButtons[i].addEventListener('click', function (event) {
-            console.log('Add product');
             var button = event.currentTarget;
 
             button.classList.toggle('plus');
             button.classList.toggle('done');
-            button.classList.toggle('animate');
+
+            if(document.querySelectorAll('[data-title] button')) {
+                var selectedProduct = this.parentNode.parentNode;
+
+                selectedProduct.classList.toggle('selected');
+            }
         });
     }
-
-    function handleProductAdd() {
-        console.log('Add product');
-    }
-
-    console.log(addProductButtons);
-
 </script>
 @endpush

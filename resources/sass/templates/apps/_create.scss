@@ -173,6 +173,10 @@
                         margin-bottom: 30px;
                         margin-right: 20px;
                         width: 30%;
+
+                        &.selected {
+                            border-color: $grey900;
+                        }
                     }
                 }
             }
