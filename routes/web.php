@@ -1,5 +1,7 @@
 <?php
 
+use App\Services\OpenApiService;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,6 +23,10 @@ Route::post('apps', 'AppController@store');
 Route::get('apps/{id}/edit', 'AppController@edit');
 Route::put('apps/{id}', 'AppController@update');
 Route::delete('apps', 'AppController@destroy');
+
+Route::get('products/{product:slug}', 'ProductController@show')->name('product.show');
+Route::get('products/{product:slug}/download/postman', 'ProductController@downloadPostman')->name('product.download.postman');
+Route::get('products/{product:slug}/download/swagger', 'ProductController@downloadSwagger')->name('product.download.swagger');
 
 Route::view('/getting-started', 'templates.getting-started.index');
 

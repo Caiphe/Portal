@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Content;
+use App\KeyFeature;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -28,7 +29,7 @@ class Product extends Model
 
     public function scopeIsPublic($query)
     {
-        return $query->whereAccess("public");
+        return $query->hasSwagger()->whereAccess("public");
     }
 
     public function scopeGetEnvironment($query, $environment)
@@ -42,5 +43,10 @@ class Product extends Model
     public function content()
     {
         return $this->belongsToMany(Content::class);
+    }
+
+    public function keyFeatures()
+    {
+        return $this->belongsToMany(KeyFeature::class);
     }
 }
