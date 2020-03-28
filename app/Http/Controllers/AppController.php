@@ -48,7 +48,7 @@ class AppController extends Controller
 
         $filteredCountries = Country::whereIn('code', $productLocations)->get();
 
-        $countries = $filteredCountries->map(function ($query) {
+        $countries = $filteredCountries->each(function ($query) {
             return $query;
         })->pluck('name', 'code');
 
