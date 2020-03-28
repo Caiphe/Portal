@@ -189,9 +189,7 @@
 
         var deleteApp = confirm('Are you sure you want to delete this app?');
 
-        if(deleteApp) {
-            console.log('Delete');
-        } else {
+        if(!deleteApp) {
             document.querySelector(".menu.show").classList.remove('show');
         }
     }
