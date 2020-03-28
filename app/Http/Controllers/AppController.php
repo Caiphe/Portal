@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Country;
+use App\Http\Requests\CreateAppRequest;
 use App\Http\Requests\DeleteAppRequest;
 use App\Product;
 use App\Services\ApigeeService;
@@ -79,8 +80,33 @@ class AppController extends Controller
         );
     }
 
-    public function store(Request $request)
+    public function store(CreateAppRequest $request)
     {
+        $validated = $request->validated();
+//        {
+//            "name" : "my_app_internal_name",
+//             "apiProducts": [ "api_product_1", "api_product_2" ],
+//             "keyExpiresIn" : 2592000000,
+//             "attributes" : [
+//              {
+//                  "name" : "DisplayName",
+//               "value" : "My Awesome App"
+//              },
+//              {
+//                  "name" : "Notes",
+//               "value" : "notes_for_developer_app"
+//              },
+//              {
+//                  "name" : "custom_attribute_name",
+//               "value" : "custom_attribute_value"
+//              }
+//             ],
+//             "scopes" : [ "scope_a" ],
+//             "callbackUrl" : "https://url-for-3-legged-oauth/"
+//        }
+
+
+
         ApigeeService::createApp($request->all());
 
         return response([
