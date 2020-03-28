@@ -72,7 +72,7 @@
 
                     <div class="countries">
                         @foreach($countries as $key => $country)
-                            <label class="country" for="country-{{ $loop->index + 1 }}" data-id="{{ $key }}">
+                            <label class="country" for="country-{{ $loop->index + 1 }}" data-code="{{ $key }}">
                                 @svg('$key', '#000000', 'images/locations')
                                 <input type="checkbox" id="country-{{ $loop->index + 1 }}" name="country-checkbox">
                                 {{ $country }}
@@ -231,9 +231,13 @@
         // var countryCheckBoxes = document.querySelectorAll('input[type=checkbox]:checked');
 
         var select = event.currentTarget;
+        var code = select.dataset.code;
+        console.log(code);
 
         select.classList.toggle('selected');
         var checkbox = select.querySelector('input[type=checkbox]').classList.toggle('selected');
+
+
 
         // for (var m = 0; m < countryCheckBoxes.length; m++) {
         //     array.push(countryCheckBoxes[m]);
