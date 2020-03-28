@@ -1,0 +1,227 @@
+swagger: "2.0"
+
+info:
+  version: "v1.0"
+  title: MTN Customer Plans API
+  description: An API to retrieve the Plan details of an MTN customer. Please refer to the reference guides https://developers.mtn.com/API-Reference-Guides and Response and Error Codes documents https://developers.mtn.com/ResponseCodes 
+
+schemes:
+  - https
+
+host: "api.mtn.com"
+basePath: "/v1"
+
+consumes:
+- "application/json"
+produces:
+- "application/json"
+
+securityDefinitions:
+  ApiKeyAuth:
+    type: "apiKey"
+    name: "X-API-Key"
+    in: "header"  
+
+paths: 
+    /customers/{customerId}/plans:
+      get:
+        description: "Retrieves the Billing Plan and related details of an MTN customer."
+        summary: "View customer plans"
+        tags:
+          - "customers"
+        parameters: 
+        - name: "customerId"
+          in: "path"
+          description: "ID of the customer. It could be MSISDN, email address, or any other customer identifier. if id is msisdn, format must be E.123"
+          required: true
+          type: "string"
+        responses:
+          200:
+            description: "Customer Plans object. For a successfull request, the response will contain all the customers details. If the customer does not have any requested data, then those fields will be null. E.g. if the customer does not have a startDate set, then it will be null. If the customer does not have any Balance set, then the Balance array will be null."
+            schema:
+              $ref: "#/definitions/CustomerPlans"
+          
+          207:
+            description: "If there was an error retrieving some part of the request, then the successfull request will be shown, and the remaining failed objects will be be excluded. E.g. if there was an error retrieving Balance information, then the balance object will be empty"
+            examples:
+              Partially Successfuls Response, showing valid plan data, but balance object is null:
+                {
+                  "data": {
+                    "type": "Postpaid",
+                    "status": "Active",
+                    "startDate": "2019-04-12T14:31:21.810Z",
+                    "endDate": "2021-04-12T14:31:21.810Z",
+                    "language": "1",
+                    "balance": null,
+                  }
+                }
+
+          400:
+            description: "Bad Request"
+            schema:
+              $ref: "#/definitions/ErrorDefault"
+          401:
+            description: "Unauthorized"
+            schema:
+              $ref: "#/definitions/ErrorDefault"
+          403:
+            description: "Forbidden"
+            schema:
+              $ref: "#/definitions/ErrorDefault"
+          404:
+            description: "Customer not found"
+            examples:
+              The data object/envelope will be null:
+                {  
+                  "data": null,
+                }
+          405:
+            description: "Method Not allowed"
+            schema:
+              $ref: "#/definitions/Error"
+          500:
+            description: "Internal Server Error"
+            schema:
+              $ref: "#/definitions/Error"       
+     
+definitions:
+  Customer:
+    type: "object"
+    required: 
+      - "customerId"
+      - "_links"
+    properties:
+      customerId:
+        type: "string"
+      plans:
+        type: "object"
+        description: "the customers billing plan"
+        $ref: "#/definitions/CustomerPlans"
+        
+    
+  CustomerLinks:
+    type: "object"
+    required: 
+    - "self"
+    properties: 
+      self:
+        type: "object"
+        required: 
+        - "href"
+        description: ""
+        properties: 
+          href:
+            type: "string"
+            description: ""
+  
+    
+  CustomerPlans:
+    type: "object"
+    required: 
+    - "_link"
+    properties:
+      data:
+        type: "object"
+        $ref: "#/definitions/Plans"
+      _link:
+        type: "string"
+        description: "The link to retrieve the plans for a customer."
+        $ref: "#/definitions/CustomerLinks"
+        example: "https://api.mtn.com/v1/customers/27832000000/plan"
+        
+  Plans:
+    type: "object"
+    required: 
+    - "type"
+    - "status"
+    - "startDate"
+    - "endDate"
+    - "language"
+    - "balance"
+    description: "The plan details for the customer."
+    properties:
+      type:
+        type: "string"
+        description: "The billing type of the plan."
+        enum:
+        - "Prepaid"
+        - "Postpaid"
+        - "Hybrid"
+      status:
+        type: "string"
+        description: "The current status of the plan."
+        enum:
+        - "Active"
+        - "Suspended"
+        - "Inactive"
+        - "RICA Barred"
+        - "Blacklisted"
+      startDate:
+        type: "string"
+        description: "The date the customer was created/provisioned"
+        format: date-time
+      endDate:
+        type: "string"
+        description: "The date the plan will be deactivated."
+        format: date-time
+      language:
+        type: "string"
+        description: "The customers language."
+      balance:
+        type: "array"
+        description: "The account balance details of a customer"
+        items:
+          $ref: "#/definitions/CustomerBalance"
+
+  CustomerBalance:
+    type: "object"
+    required:
+    - "balanceType"
+    - "amount"
+    - "currency"
+    - "expiryDate"
+    description: "The plan balance details for the customer."
+    properties:
+      balanceType:
+        type: "string"
+        description: "Identifies the type of balance. A customer plan may have multiple types of balances for different usage, for example, voice, SMS, and game services."
+        example: "VOICE"
+      amount:
+        type: "integer"
+        description: "Current balance on the customers account."
+        example: "26861"
+      currency:
+        type: "string"
+        description: "ISO 4217 three-letter ISO code for the currency."
+        example: "ZAR"
+      expiryDate:
+        type: "string"
+        format: date-time
+        description: "Expiry date of the balance/bundle."
+        example: "2019-12-31T12:00:00"
+
+  Error:
+    properties:
+      timestamp:
+        type: "string"
+        format: "date-time"
+        description: "Error response code"
+      status:
+        type: "string"
+        description: "Text explaining the reason for the error"
+      error:
+        type: "string"
+      message:
+        type: "string"
+        description: "More error details and corrective measures"
+      path:
+        type: "string"
+        description: ""
+    
+  ErrorDefault:
+    properties:
+      error:
+        type: "string"
+      error_description:
+        type: "string"
+          

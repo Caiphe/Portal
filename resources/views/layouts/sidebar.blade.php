@@ -22,8 +22,8 @@
             @yield('sidebar')
         </nav>
         <main id="main">
-            @yield("content")
-        </main>
+			@yield("content")
+		</main>
     </div>
     <x-footer/>
     <script src="/js/scripts.js"></script>
