@@ -22,12 +22,7 @@
         </nav>
         <main id="main">
 			@yield("content")
-			@php
-			$countries = ['za','cm','ci'];
-    $tags = ['MTN API','MTN APP'];
-			@endphp
-			<x-card-product :countries="$countries" :tags="$tags" target="_blank" title="API Name" href="http://www.google.com" addButtonId="button-id" addUrl="http://www.fb.com">This is the description</x-card-product>
-        </main>
+		</main>
     </div>
     <x-footer/>
     <script src="/js/scripts.js"></script>
