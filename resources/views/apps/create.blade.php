@@ -130,6 +130,8 @@
                     </div>
                 </div>
 
+                <input type="hidden" name="products" id="products" value="">
+
                 @csrf
 
             </form>
@@ -227,17 +229,20 @@
     }
 
     function selectCountry(event) {
-        // var array = [];
-        // var countryCheckBoxes = document.querySelectorAll('input[type=checkbox]:checked');
-
         var select = event.currentTarget;
         var code = select.dataset.code;
-        console.log(code);
 
         select.classList.toggle('selected');
-        var checkbox = select.querySelector('input[type=checkbox]').classList.toggle('selected');
+        select.querySelector('input[type=checkbox]').classList.toggle('selected');
 
+        console.log(code);
 
+/*        var filteredCountries = document.querySelectorAll('.filtered-countries img');
+
+        console.log(filteredCountries);*/
+
+        // var array = [];
+        // var countryCheckBoxes = document.querySelectorAll('input[type=checkbox]:checked');
 
         // for (var m = 0; m < countryCheckBoxes.length; m++) {
         //     array.push(countryCheckBoxes[m]);
@@ -282,8 +287,19 @@
                 var selectedProduct = this.parentNode.parentNode;
 
                 selectedProduct.classList.toggle('selected');
+
+                addProduct(selectedProduct);
             }
         });
+    }
+
+    function addProduct(product) {
+        var products = document.querySelector('#products');
+        var selected = product.dataset.title;
+
+        products.setAttribute('value', selected);
+        console.log(product);
+        console.log(selected);
     }
 </script>
 @endpush
