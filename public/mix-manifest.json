@@ -15,5 +15,6 @@
     "/js/components/sidebar-accordion.js": "/js/components/sidebar-accordion.js?id=709883c29c1c818cfd4f",
     "/js/components/multiselect.js": "/js/components/multiselect.js?id=90d9eb9e4956c24f1451",
     "/js/templates/products/index.js": "/js/templates/products/index.js?id=200d54cf2841ec9033e4",
-    "/js/templates/products/show.js": "/js/templates/products/show.js?id=6b7d80178a2833e52bde"
+    "/js/templates/products/show.js": "/js/templates/products/show.js?id=6b7d80178a2833e52bde",
+    "/css/components/card-product.css": "/css/components/card-product.css?id=0008ef74d9ad05f1af61"
 }
