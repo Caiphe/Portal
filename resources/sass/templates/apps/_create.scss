@@ -163,7 +163,19 @@
                     font-size: 10px;
                     text-transform: uppercase;
                     font-weight: bold;
+                }
+
+                .filtered-countries {
+                    display: flex;
+                    width: 100%;
                     margin-bottom: 40px;
+                    justify-content: center;
+
+                    img {
+                        display: inline-block;
+                        width: 20px;
+                        margin-right: 5px;
+                    }
                 }
 
                 .products {

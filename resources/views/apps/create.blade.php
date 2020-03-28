@@ -94,6 +94,12 @@
 
                     <p>Showing products for</p>
 
+                    <div class="filtered-countries">
+                        @foreach($countries as $key => $country)
+                            <img src="/images/locations/{{$key}}.svg" title="{{$country}} flag" alt="{{$country}} flag">
+                        @endforeach
+                    </div>
+
                     <div class="products">
                         @foreach ($products as $category=>$products)
                             <div class="category" data-category="{{ $category }}">
