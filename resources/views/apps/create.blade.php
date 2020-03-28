@@ -108,10 +108,15 @@
                                     @php
 				                    $tags = array($product->group, $product->category);
                                     @endphp
-                                    <x-card-product :title="$product->display_name" class="product-block" :href="$product->slug" :tags="$tags"
+                                    <x-card-product :title="$product->display_name"
+                                                    class="product-block"
+                                                    :href="$product->slug"
+                                                    :tags="$tags"
+                                                    :addButtonId="$product"
                                                     :data-title="$product->display_name"
                                                     :data-group="$product->group"
-                                                    :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}</x-card-product>
+                                                    :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}
+                                    </x-card-product>
                                 @endforeach
                             </div>
                         @endforeach
@@ -260,7 +265,7 @@
         }
     }
 
-    var addProductButtons = document.querySelectorAll('[data-title] button');
+    var addProductButtons = document.querySelectorAll('[data-title] a');
     for (var o = 0; o < addProductButtons.length; ++o) {
 
         addProductButtons[o].addEventListener('click', function (event) {
