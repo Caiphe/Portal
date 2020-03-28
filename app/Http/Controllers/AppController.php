@@ -38,17 +38,12 @@ class AppController extends Controller
             ->sortBy('category')
             ->groupBy('category');
 
-        $countries = $products->flatMap(function ($query) {
-            return $query->pluck('locations');
-        })->reject(function ($location) {
-            return empty($location);
-        })->unique()->values()->all();
+        $productLocations = Product::isPublic()
+            ->WhereNotNull('locations') ->select('locations')
+            ->get()->implode('locations', ',');
+        $productLocations = array_unique(explode(',', $productLocations));
 
-        $validCountries = collect($countries)->mapWithKeys(function ($query) {
-            return explode(',', $query);
-        })->unique();
-
-        $filteredCountries = Country::whereIn('code', $validCountries)->get();
+        $filteredCountries = Country::whereIn('code', $productLocations)->get();
 
         $countries = $filteredCountries->map(function ($query) {
             return $query;
@@ -57,7 +52,7 @@ class AppController extends Controller
         return view('apps.create', [
                 'products' => $products,
                 'productCategories' => array_keys($products->toArray()),
-                'countries' => $countries
+                'countries' => $countries ?? ''
             ]
         );
     }
