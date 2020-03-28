@@ -246,11 +246,12 @@
     var addProductButtons = document.querySelectorAll('[data-title] button');
     for (var i = 0; i < addProductButtons.length; ++i) {
 
-        var button = addProductButtons[i];
+        addProductButtons[i].addEventListener('click', function (event) {
+            console.log('Add product');
+            var button = event.currentTarget;
 
-        addProductButtons[i].addEventListener('click', function (button) {
-            console.log(button);
-            button.innerText = 'Add';
+            button.classList.remove('plus');
+            button.classList.add('done');
         });
     }
 
