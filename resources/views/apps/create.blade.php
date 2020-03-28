@@ -242,5 +242,23 @@
             checkedBoxes[i].checked = false;
         }
     }
+
+    var addProductButtons = document.querySelectorAll('[data-title] button');
+    for (var i = 0; i < addProductButtons.length; ++i) {
+
+        var button = addProductButtons[i];
+
+        addProductButtons[i].addEventListener('click', function (button) {
+            console.log(button);
+            button.innerText = 'Add';
+        });
+    }
+
+    function handleProductAdd() {
+        console.log('Add product');
+    }
+
+    console.log(addProductButtons);
+
 </script>
 @endpush
