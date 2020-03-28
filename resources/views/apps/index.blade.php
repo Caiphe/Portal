@@ -136,14 +136,11 @@
         headings[i].addEventListener('click', handleHeadingClick)
     }
 
-    function handleHeadingClick() {
-        if (this.nextElementSibling.style.display === 'none' || this.nextElementSibling.style.display === '') {
-            this.nextElementSibling.style.display = 'block';
-            this.querySelector('svg').classList.remove('active');
-        } else {
-            this.nextElementSibling.style.display = 'none';
-            this.querySelector('svg').classList.add('active');
-        }
+    function handleHeadingClick(event) {
+        var heading = event.currentTarget;
+
+        heading.nextElementSibling.classList.toggle('collapse');
+        heading.querySelector('svg').classList.toggle('active');
     }
 
     var buttons = document.querySelectorAll('.name');
