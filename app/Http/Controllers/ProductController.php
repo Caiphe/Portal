@@ -17,7 +17,9 @@ class ProductController extends Controller
     public function index()
     {
 		$productsCollection = Product::all()->sortBy('category')->groupBy('category');
-		$countries = Country::all();
+		$productLocations = Product::isPublic()->WhereNotNull('locations')->select('locations')->get()->implode('locations', ',');
+		$locations = array_unique(explode(',', $productLocations));
+		$countries = Country::whereIn('code', $locations)->get();
 		$country_array = array();
 		foreach ($countries as $country) {
 			$country_array[$country->code] = $country->name;
@@ -60,7 +62,7 @@ class ProductController extends Controller
     {
         $openApiClass = new OpenApiService($product->swagger);
         $prod = $product->load(['content', 'keyFeatures']);
-        $productList = Product::isPublic()->get()->groupBy('category');
+        $productList = Product::isPublic()->get()->sortBy('category')->groupBy('category');
         $content = [];
         $sidebarAccordion = [];
         $startingPoint = "product-specification";
