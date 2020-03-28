@@ -1,0 +1,211 @@
+info:
+  title: MTN Customer Devices API
+  version: '1.0'
+  contact:
+    name: MTN API Support
+    email: developer-support@mtn.com
+  description: "MTN Customer Devices API allows clients to view the physical devices that a customer has used. This typically includes phone make, IMSI and IMEI details.               The API will return an array for each type of device"
+swagger: '2.0'
+schemes:
+  - https
+host: api.mtn.com
+basePath: /v1/customers
+produces:
+  - application/json
+consumes:
+  - application/json
+securityDefinitions:
+  API Key:
+    name: x-api-key
+    type: apiKey
+    in: header
+  OAuth2:
+    type: oauth2
+    tokenUrl: 'https://api.mtn.com/oauth/client_credential/accesstoken'
+    flow: application
+paths:
+  '/customers/{customerId}/devices':
+    parameters:
+      - type: string
+        name: customerId
+        in: path
+        description: "ID of the customer. It could be MSISDN, email address, or any other customer identifier. if customerId is MSISDN, then the format must be E.123"
+        required: true
+      - name: "startDate"
+        in: "query"
+        description: "An optional parameter, together with endDate, allows developers to specify a time range by which to query customer data on. 
+        If you want to request data for 2 months, then start date will need to be set to 2 months prior to today, and endDate to todays date. 
+        If this is not set, the date range will be defaulted to 6 months"
+        type: string
+        format: date
+        example: "20190329"
+      - name: "endDate"
+        in: query
+        description: "An optional parameter, together with endDate, allows developers to specify a time range by which to query customer data on. 
+        If you want to request data for 2 months, then start date will need to be set to 2 months prior to today, and endDate to todays date. 
+        If this is not set, the date range will be defaulted to 6 months"
+        type: string
+        format: date
+        example: "20190929"
+      - name: "transactionId"
+        in: header
+        description: "Client generated Id to include for tracing requests, so that the API can easily trace the HTTP request all the way from a client to MTN's backend processes (via our proxies). 
+        Each time a request is made to an MTN API the client should include a unique request reference in the HTTP Header.  
+        The value must be between 5 and 20 characters, and consist of ASCII letters, digits, or the characters +, /, =, and -. Invalid or blank IDs will be ignored and replaced with generated ones.
+        MTN may use this to detect duplicate transactions from the client, but this functionality is not always guaranteed, so clients must make their own efforts to prevent duplicate transactions. 
+        MTN will also log the transactionId in order to assist with debugging and to correlate transactions processed by the API to requests from the client."
+        type: string
+    get:
+      summary: Retrieve customer devices data
+      tags:
+        - customer
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Customer Devices Object
+            $ref: "#/definitions/devices"
+        400:
+          description: "Bad Request. 
+                        A Bad Request response is returned when the path info doesn't have the right format, or a parameter or request body value doesn't have the right format, or a required parameter is missing, or values have the right format but are invalid in some way.
+                        The client SHOULD NOT repeat the request without modifications."
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "Customer not found"
+          schema:
+            $ref: "#/definitions/Error"
+        405:
+          description: "Method Not allowed"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"
+
+definitions:
+  devices:
+    type: object
+    properties:
+      data:
+        type: object
+        properties:
+          devices:
+            type: array
+            items:
+              properties:
+                deviceId:
+                  type: string
+                  description: "an identifier for each device. This will be a unique key per device, the format will be a string "
+                  example: "Should"
+                deviceMake:
+                  type: string
+                  description: "Make of current device"
+                  example: "Apple iPhone X"
+                IMSI:
+                  type: string
+                  description: "Last known IMSI. Relates to the SIM used by the MSISDN"
+                  example: "310150123456789"
+                IMEI:
+                  type: string
+                  description: "Last known IMEI. Unique identifier of Mobile Device used by the MSISDN"
+                  example: "990000862471854"
+                timePeriods:
+                  type: object
+                  properties: 
+                    unit:
+                      $ref: "#/definitions/timePeriodEnum" 
+                    value:
+                      type: string
+                      description: the value of the timePeriods 'unit' field. E.g. if unit is 'month', then this will represent how many months
+                      example: "1"
+                numberOfIMSIs:
+                  type: string
+                  description: "The number of unique IMSIs that was used by the MSISDN in the last measured period"
+                  example: "4"
+                numberOfIMEIs:
+                  type: string
+                  description: "The number of unique IMEI’s that was used by the MSISDN in the last measured period"
+                  example: "1"
+                primaryUCID:
+                  type: string
+                  description: "Primary Unique Customer Id"
+                primaryUSID:
+                  type: string
+                  description: "Primary Unique Service Id"
+                secondaryUCID:
+                  type: string
+                  description: "Secondary Unique Customer Id"
+                secondaryUSID:
+                  type: string
+                  description: "Secondary Unique Service Id"
+      _links:
+          $ref: "#/definitions/CustomerLinks"
+
+  Error:
+      type: "object"
+      title: "Error"
+      required:
+      - "status"
+      - "message"
+      properties:
+        timestamp:
+          type: "string"
+          format: "date-time"
+          description: "Timestamp when the error occurred, using date-time format"
+          example: "2019-08-23T07:29:25.593+0000”"
+        status:
+          type: "string"
+          description: "HTTP Status code"
+          example: "404"
+        error:
+          type: "string"
+          description: "HTTP Status description"
+          example: "Not Found"
+        message:
+          type: "string"
+          description: "More error details and corrective measures"
+          example: "No message available"
+        path:
+          type: "string"
+          description: "that URL from which the error originated"
+          example: "/customers/2783200000/subscriptions/AG8cfc7353e-23b0-578f-a041-b8bf5ef76418:23-08-201907:27:38AMGMT/status”"
+
+  CustomerLinks:
+    type: "object"
+    required: 
+    - "self"
+    properties: 
+      self:
+        type: "object"
+        required: 
+        - "href"
+        description: ""
+        properties: 
+          href:
+            type: "string"
+            description: "HATEOS links referring to this object"
+            example: "https://api.mtn.com/v1/customers/27832000000/devices"
+          type:
+            type: string
+            description: "HTTP methods supported by the HATEOS links above"
+            example: "GET, POST"
+
+
+  timePeriodEnum:
+    type: string
+    description: "a time period for which data is available. Usually data is available for multiple time periods, like 1 month, 3 month, and 6 month. 
+    Each time period will be represented as a separate array"
+    enum:
+      - "month"
+      - "days"
+

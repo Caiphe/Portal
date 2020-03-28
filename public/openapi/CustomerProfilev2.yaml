@@ -1,0 +1,1009 @@
+swagger: "2.0"
+
+info:
+  version: "v1.10"
+  title: MTN Customer Profiles API
+  description: An API to retrieve the profile of an MTN customer. Please refer to the reference guides https://developers.mtn.com/API-Reference-Guides and Response and Error Codes documents https://developers.mtn.com/ResponseCodes 
+
+schemes:
+  - https
+
+host: "api.mtn.com"
+basePath: "/v1/customers"
+
+consumes:
+- "application/json"
+produces:
+- "application/json"
+
+
+paths: 
+    /customers/{customerId}:
+      get:
+        description: "Retrieves the customer profile of a MTN customer. The customer profile includes 4 main objects: Location (Country and Operator), Billing Plan and related details, Subscriptions for VAS and Digital Services, Loans details, and Transactions Summaries"
+        summary: "View customer profile"
+        tags:
+          - "customers"
+        parameters: 
+        - in: "path"
+          name: "customerId"
+          description: "ID of the customer. It could be MSISDN, email address, or any other customer identifier. if id is msisdn, format must be E.123"
+          required: true
+          type: "string"
+        - in: "query"
+          name: propset
+          type: string
+          description: the set of data to be retrieved. There are 2 options - `basic` will retrieve only the structure of the customer profile including the links to each resource, will `full` will retrieve all the data for each resource, which will be en expensive call. If not specified, the default will be `basic`"
+          example: propset=full
+          enum: 
+          - basic
+          - full
+        responses:
+          200:
+            description: "Customer Profile object. For a successful request, it will contain all the customers details. If the customer does not have any requested data, then it will be null. E.g. if the customer does not any location set, then Country and Operator will be null."
+            schema:
+              $ref: "#/definitions/Customer"
+          
+          207:
+            description: "If there was an error retrieving some part of the request, then the successful request will be shown, and the remaining failed objects will be be excluded. E.g. if there was an error retrieving Balance information, then the balance object will be empty"
+            examples:
+              Multi-Status Response, showing valid Locations data, but plan object is null: >
+                  "location": {
+                    "data": {
+                      "country": "ZA",
+                      "operator": "MTN"
+                    },
+                    "_links": {
+                      "self": {
+                        "href": "http://api.mtn.com/customers/27832000046/locations"
+                      }
+                    }
+                  }
+                  "plan": {
+                    "data": null,
+                     "_links": {
+                      "self": {
+                          "href": "http://api.mtn.com/customers/27832000046/plans"
+                        }
+                      }
+                  }
+
+          400:
+            description: "Bad Request"
+            schema:
+              $ref: "#/definitions/ErrorDefault"
+          401:
+            description: "Unauthorized"
+            schema:
+              $ref: "#/definitions/ErrorDefault"
+          403:
+            description: "Forbidden"
+            schema:
+              $ref: "#/definitions/ErrorDefault"
+          404:
+            description: "Customer not found"
+            examples:
+              The data object/envelope will be null: >
+                {  
+                  "data": null
+                }
+          405:
+            description: "Method Not allowed"
+            schema:
+              $ref: "#/definitions/Error"
+          500:
+            description: "Internal Server Error"
+            schema:
+              $ref: "#/definitions/Error"        
+     
+definitions:
+  Customer:
+    type: "object"
+    required: 
+      - "customerId"
+      - "_links"
+    properties:
+      customerId:
+        type: "string"
+      locations:
+        type: "object"
+        description: "The location of customer. Location includes Country and Network Operator"
+        $ref: "#/definitions/CustomerLocations"
+      plans:
+        type: "object"
+        description: "the customers billing plan"
+        $ref: "#/definitions/CustomerPlans"
+      loans:
+        type: "object"
+        description: "the customers loan and eligibility details"
+        $ref: "#/definitions/CustomerLoans"
+      account:
+        type: array
+        items:
+          $ref: "#/definitions/AccountRef"
+      kyc:
+        type: array
+        items:
+          $ref: "#/definitions/KYC"
+      devices:
+        type: array
+        items:
+          $ref: "#/definitions/Devices"
+      transactions-summaries:
+        $ref: "#/definitions/transactions-summaries"
+      _links:
+        type: "string"
+        description: "link to retrieve the customer profile"
+        $ref: "#/definitions/CustomerLinks"
+        
+  CustomerLinks:
+    type: "object"
+    required: 
+    - "self"
+    properties: 
+      self:
+        type: "object"
+        required: 
+        - "href"
+        description: ""
+        properties: 
+          href:
+            type: "string"
+            description: ""
+  
+
+  CustomerLocations:
+    type: "object"
+    required: 
+    - "_link"
+    properties:
+      data:
+        type: "object"
+        $ref: "#/definitions/Locations"
+      _link:
+        type: "string"
+        description: "The link to retrieve the location of customer"
+        $ref: "#/definitions/CustomerLinks"
+        example: "https://api.mtn.com/v1/customers/27832000000/locations"
+  
+  Locations:
+    type: "object"
+    required:
+    - "country"
+    - "operator"
+    properties:
+      country:
+        type: "string"
+        description: "The country that the customer MSISDN was provisioned in."
+        example: "South Africa"
+      operator:
+        type: "string"
+        description: "The network operator that the customer MSISDN was provisioned for."
+        example: "MTN"
+         
+
+  CustomerPlans:
+    type: "object"
+    required: 
+    - "_link"
+    properties:
+      data:
+        type: "object"
+        $ref: "#/definitions/Plans"
+      _link:
+        type: "string"
+        description: "The link to retrieve the plan for a customer."
+        $ref: "#/definitions/CustomerLinks"
+        example: "https://api.mtn.com/v1/customers/27832000000/plan"
+        
+  Plans:
+    type: "object"
+    required: 
+    - "type"
+    - "status"
+    - "startDate"
+    - "endDate"
+    - "balance"
+    description: "The plan details for the customer."
+    properties:
+      type:
+        type: "string"
+        description: "The billing type of the plan."
+        enum:
+        - "Prepaid"
+        - "Postpaid"
+        - "Hybrid"
+      status:
+        type: "string"
+        description: "The current status of the plan."
+        enum:
+        - "Active"
+        - "Suspended"
+        - "Inactive"
+        - "RICA Barred"
+        - "Blacklisted"
+      startDate:
+        type: "string"
+        description: "The date the customer was created/provisioned"
+        format: date-time
+      endDate:
+        type: "string"
+        description: "The date the plan will be deactivated."
+        format: date-time
+      balance:
+        type: "array"
+        description: "The account balance details of a customer"
+        items:
+          $ref: "#/definitions/CustomerBalances"
+
+  CustomerBalances:
+    type: "object"
+    properties:
+      data:
+        type: "object"
+        required:
+        - "balanceType"
+        - "amount"
+        - "currency"
+        - "expiryDate"
+        properties:
+          balanceType:
+            type: "string"
+            description: "Identifies the type of balance. A customer plan may have multiple types of balances for different usage, for example, voice, SMS, and game services."
+            example: "VOICE"
+          amount:
+            type: "string"
+            description: "Amount of balance."
+            example: "26861"
+          currency:
+            type: "string"
+            description: "ISO 4217 three-letter ISO code for the currency."
+            example: "ZAR"
+          expiryDate:
+            type: "string"
+            format: date-time
+            description: "Expiry Date of the account."
+            example: "2019-12-31T12:00:00"
+  
+  CustomerLoans:
+    type: "object"
+    required: 
+    - "_link"
+    properties:
+      data:
+        type: "object"
+        $ref: "#/definitions/Loans"
+      _link:
+        type: "string"
+        description: "The link to retrieve the customers MoMo details."
+        $ref: "#/definitions/CustomerLinks"
+        example: "https://api.mtn.com/v1/customers/27832000000/loans"
+        
+  Loans:
+    type: object
+    required: 
+    - "customerId"
+    description: "The loans details of a customer, if it exists"
+    properties:
+      _link:
+        type: array
+        xml:
+          name: link
+          attribute: false
+          wrapped: false
+        items:
+          $ref: '#/definitions/CustomerLinks'
+      status:
+        type: string
+        enum:
+          - FAILED
+          - COMPLETED
+          - INITED
+      transactionId:
+        type: string
+
+  Band:
+    type: object
+    properties:
+      bandGroup:
+        type: integer
+        format: int32
+      bandName:
+        type: string
+    title: Band
+  Eligibility:
+    type: object
+    properties:
+      _links:
+        type: array
+        xml:
+          name: link
+          attribute: false
+          wrapped: false
+        items:
+          $ref: '#/definitions/Link'
+      bands:
+        type: array
+        items:
+          $ref: '#/definitions/Band'
+      status:
+        type: string
+        enum:
+          - ELIGIBLE
+          - NE_LOAN
+          - NE_TCL_REACHED
+    title: Eligibility
+  Link:
+    type: object
+    properties:
+      deprecation:
+        type: string
+        xml:
+          name: deprecation
+          attribute: true
+          wrapped: false
+      href:
+        type: string
+        xml:
+          name: href
+          attribute: true
+          wrapped: false
+      hreflang:
+        type: string
+        xml:
+          name: hreflang
+          attribute: true
+          wrapped: false
+      media:
+        type: string
+        xml:
+          name: media
+          attribute: true
+          wrapped: false
+      rel:
+        type: string
+        xml:
+          name: rel
+          attribute: true
+          wrapped: false
+      templated:
+        type: boolean
+      title:
+        type: string
+        xml:
+          name: title
+          attribute: true
+          wrapped: false
+      type:
+        type: string
+        xml:
+          name: type
+          attribute: true
+          wrapped: false
+    title: Link
+
+  Error:
+    properties:
+      timestamp:
+        type: "string"
+        format: "date-time"
+        description: "Error response code"
+      status:
+        type: "string"
+        description: "Text explaining the reason for the error"
+      error:
+        type: "string"
+      message:
+        type: "string"
+        description: "More error details and corrective measures"
+      path:
+        type: "string"
+        description: ""
+    
+  ErrorDefault:
+    properties:
+      error:
+        type: "string"
+      error_description:
+        type: "string"
+        
+  AccountRef:
+    properties:
+      data:
+        type: object
+        properties:
+          accountName:
+            type: string
+            example: MoMo
+          accountId:
+            type: string
+          description:
+            type: string
+            description: Detailed description of account
+          status:
+            type: string
+            enum: [active, inactive]
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+              type:
+                type: string
+                example: POST
+
+  KYC:
+    properties:
+      data:
+        type: object
+        properties:
+          idType:
+            type: string
+            description: "Legal ID Type"
+            example: "South African ID"
+          idNumber:
+            type: string
+            description: "Legal ID Number/Reference"
+            example: "8002143987083"
+          dateOfBirth:
+            type: string
+            format: date
+            description: "Date of Birth"
+            pattern: "YYYY-MM-DD"
+            example: "1980-02-14"
+          gender:
+             $ref: "#/definitions/GenderEnum"
+          firstName:
+            type: string
+            description: "Name"
+            example: "First n Middle"
+          lastName:
+            type: string
+            description: "Surname"
+            example: "Surname"
+      _link:
+        type: "string"
+        description: "The link to retrieve the customers KYC details."
+        $ref: "#/definitions/CustomerLinks"
+
+  GenderEnum:
+    type: "string"
+    title: "Gender Enum"
+    example: "Male"
+    enum:
+    - "Male"
+    - "Female"
+
+  Devices:
+    type: object
+    properties:
+      data:
+        type: object
+        properties:
+          devices:
+            type: array
+            items:
+              properties:
+                deviceId:
+                  type: string
+                  description: "an identifier for each device. This will be a unique key per device, the format will be a string "
+                  example: "Should"
+                deviceMake:
+                  type: string
+                  description: "Make of current device"
+                  example: "Apple iPhone X"
+                IMSI:
+                  type: string
+                  description: "Last known IMSI. Relates to the SIM used by the MSISDN"
+                  example: "310150123456789"
+                IMEI:
+                  type: string
+                  description: "Last known IMEI. Unique identifier of Mobile Device used by the MSISDN"
+                  example: "990000862471854"
+                timePeriods:
+                  type: object
+                  properties: 
+                    unit:
+                      $ref: "#/definitions/timePeriodEnum" 
+                    value:
+                      type: string
+                      description: the value of the timePeriods 'unit' field. E.g. if unit is 'month', then this will represent how many months
+                      example: "1"
+                numberOfIMSIs:
+                  type: string
+                  description: "The number of unique IMSIs that was used by the MSISDN in the last measured period"
+                  example: "4"
+                numberOfIMEIs:
+                  type: string
+                  description: "The number of unique IMEI’s that was used by the MSISDN in the last measured period"
+                  example: "1"
+                primaryUCID:
+                  type: string
+                  description: "Primary Unique Customer Id"
+                primaryUSID:
+                  type: string
+                  description: "Primary Unique Service Id"
+                secondaryUCID:
+                  type: string
+                  description: "Secondary Unique Customer Id"
+                secondaryUSID:
+                  type: string
+                  description: "Secondary Unique Service Id"
+      _links:
+          $ref: "#/definitions/CustomerLinks"
+
+  timePeriodEnum:
+    type: string
+    description: "a time period for which data is available. Usually data is available for multiple time periods, like 1 month, 3 month, and 6 month. Each time period will be represented as a separate array"
+    enum:
+      - "month"
+      - "days"
+
+  transactions-summaries:
+    properties:
+      requestId:
+        type: string
+        description: "The requestId that was used by the client"
+      dateRange:
+        type: string
+        description: "The date range used by the client, to request customer data for a specific time period"
+      data:
+        type: object
+        properties:
+          marketingFlag:
+            type: boolean
+            description: "Flag set for this partner, or should this should be an object, of flags per partner"
+          lendingFlag:
+            type: boolean
+            description: "This should be an object, of flags per partner"
+          momo:
+            type: object
+            properties:  
+              withdrawals:
+                $ref: "#/definitions/withdrawals"
+              deposits:
+                $ref: "#/definitions/deposits"
+              billPayments:
+                $ref: "#/definitions/billPayments"
+              send:
+                $ref: "#/definitions/send"
+              received:
+                $ref: "#/definitions/received"
+              transfers:
+                $ref: "#/definitions/transfers"
+          gsm:
+            type: object
+            properties:  
+              activity:
+                $ref: "#/definitions/activity"
+          momo-loans:
+            $ref: "#/definitions/momo-loans"
+  
+  withdrawals:
+    type: object
+    properties:
+      lastWithdrawalsDate: 
+        type: string
+        format: date
+        description: "the "
+      maxWithdrawals-6months: 
+        type: string
+        description: "the "
+      quantities:
+        type: object
+        properties:
+          numberOfWithdrawals-1months:
+            type: string
+            description: "the "
+          numberOfWithdrawals-3months:
+            type: string
+            description: "the "
+          numberOfWithdrawals-6months:
+            type: string
+            description: "the "
+      amounts:
+        type: object
+        properties:
+          totalWithdrawalsAmounts-1months:
+            type: string
+            description: "the "
+          totalWithdrawalsAmounts-3months:
+            type: string
+            description: "the "
+          totalWithdrawalsAmounts-6months:
+            type: string
+            description: "the "
+      acceptors:
+        type: object
+        properties:
+          numberOfAcceptors-1months:
+            type: string
+            description: "the "
+          numberOfAcceptors-3months:
+            type: string
+            description: "the "
+          numberOfAcceptors-6months:
+            type: string
+            description: "the "
+
+  deposits:
+    type: object
+    properties:
+      lastDepositsDate: 
+        type: string
+        format: date
+        description: "the "
+        example: "2017"
+      maxDeposits-6months: 
+        type: string
+        description: "the "
+      quantities:
+        type: object
+        properties:
+          numberOfDeposits-1months:
+            type: string
+            description: "the "
+          numberOfDeposits-3months:
+            type: string
+            description: "the "
+          numberOfDeposits-6months:
+            type: string
+            description: "the "
+      amounts:
+        type: object
+        properties:
+          amountOfDeposits-1months:
+            type: string
+            description: "the "
+          amountOfDeposits-3months:
+            type: string
+            description: "the "
+          amountOfDeposits-6months:
+            type: string
+            description: "the "
+      acceptors:
+        type: object
+        properties:
+          numberOfAcceptors-1months:
+            type: string
+            description: "the "
+          numberOfAcceptors-3months:
+            type: string
+            description: "the "
+          numberOfAcceptors-6months:
+            type: string
+            description: "the "
+  
+  billPayments:
+    type: object
+    properties:
+      lastBillPaymentsDate: 
+        type: string
+        format: date
+        description: "the "
+        example: "2017"
+      maxBillPayments-6months: 
+        type: string
+        description: "the "
+      quantities:
+        type: object
+        properties:
+          numberOfBillPayments-1months:
+            type: string
+            description: "the "
+          numberOfBillPayments-3months:
+            type: string
+            description: "the "
+          numberOfBillPayments-6months:
+            type: string
+            description: "the "
+      amounts:
+        type: object
+        properties:
+          amountOfBillPayments-1months:
+            type: string
+            description: "the "
+          amountOfBillPayments-3months:
+            type: string
+            description: "the "
+          amountOfBillPayments-6months:
+            type: string
+            description: "the "
+      acceptors:
+        type: object
+        properties:
+          numberOfAcceptors-1months:
+            type: string
+            description: "the "
+          numberOfAcceptors-3months:
+            type: string
+            description: "the "
+          numberOfAcceptors-6months:
+            type: string
+            description: "the "
+  
+  send:
+    type: object
+    properties:
+      lastSendDate: 
+        type: string
+        format: date
+        description: "the "
+        example: "2017"
+      maxSend-6months: 
+        type: string
+        description: "the "
+      quantities:
+        type: object
+        properties:
+          numberOfSend-1months:
+            type: string
+            description: "the "
+          numberOfSend-3months:
+            type: string
+            description: "the "
+          numberOfSend-6months:
+            type: string
+            description: "the "
+      amounts:
+        type: object
+        properties:
+          amountOfSend-1months:
+            type: string
+            description: "the "
+          amountOfSend-3months:
+            type: string
+            description: "the "
+          amountOfSend-6months:
+            type: string
+            description: "the "
+      acceptors:
+        type: object
+        properties:
+          numberOfAcceptors-1months:
+            type: string
+            description: "the "
+          numberOfAcceptors-3months:
+            type: string
+            description: "the "
+          numberOfAcceptors-6months:
+            type: string
+            description: "the "
+
+  received:
+    type: object
+    properties:
+      lastReceivedDate: 
+        type: string
+        format: date
+        description: "the "
+        example: "2017"
+      time-periods:
+        type: object
+        properties:  
+          1-months:
+            type: object
+            properties:
+              totalReceived: 
+                type: string
+                description: "the "
+              totalAcceptors:
+                type: string
+                description: "the "
+              quantityReceived:
+                type: string
+                description: "the "
+          3-months:
+            type: object
+            properties:
+              totalReceived: 
+                type: string
+                description: "the "
+              totalAcceptors:
+                type: string
+                description: "the "
+              quantityReceived:
+                type: string
+                description: "the "
+          6-months:
+            type: object
+            properties:
+              totalReceived: 
+                type: string
+                description: "the "
+              totalAcceptors:
+                type: string
+                description: "the "
+              quantityReceived:
+                type: string
+                description: "the "
+              maxReceived: 
+                type: string
+                description: "the "
+
+  transfers:
+    type: object
+    properties:
+      lastTransfersDate: 
+        type: string
+        format: date
+        description: "the "
+        example: "2017"
+      time-periods:
+        type: object
+        description: "the "
+        properties:  
+          1-months:
+            type: object
+            description: "the "
+            properties:
+              totalTransfers: 
+                type: string
+                description: "the "
+              totalAcceptors:
+                type: string
+                description: "the "
+              quantityTransfers:
+                type: string
+                description: "the "
+          3-months:
+            type: object
+            properties:
+              totalTransfers:
+                type: string
+                description: "the "
+              totalAcceptors:
+                type: string
+                description: "the "
+              quantityTransfers:
+                type: string
+                description: "the "
+          6-months:
+            type: object
+            properties:
+              totalTransfers: 
+                type: string
+              totalAcceptors:
+                type: string
+                description: "the "
+              quantityTransfers:
+                type: string
+                description: "the "
+              maxTransfers: 
+                type: string
+                description: "the "
+
+  gsm:
+    type: object
+    title: "gsm object"
+    properties:
+      networkRegistrationDate: 
+        type: string
+        format: date
+        description: "the date the customer was initially registered on the network. This is also found in Plans API - startdate "
+      networkPaymentType:
+        type: string
+        example: "Prepaid"
+        description: "the date the customer was initially registered on the network. This is also found in Plans API - type. This should be removed from here "
+              
+
+  activity:
+    type: object
+    description: "Actvity related to GSM calls, data bundles, and airtime"
+    properties: 
+      daysSinceLastActive:
+        type: string
+        description: "Number of days since last activity"
+      topupMethod:
+        type: string
+        description: "Method used to topup airtime (and data?). Should this be a enum, of known types?"
+      time-periods:
+        type: object
+        properties:  
+          1-months:
+            type: object
+            properties:
+              numberOfActiveDays: 
+                type: string
+                description: "the "
+              numberOfTimesBlocked:
+                type: string
+                description: "Number of times blocked (post-  paid), for the last 1 month" 
+              airtimeUtilisation: 
+                type: string
+                description: "the "
+              daysAirtimeBalanceBelow:
+                type: string
+                description: "Days Airtime Below XX, based on UMD, for the last 1 month"
+              topupAmount:
+                type: string
+                description: "Network Topup Amount, for the last 1 month"
+              averageTopupAmount:
+                type: string
+                description: "the "
+              totalOutboundCalls:
+                type: string
+                description: "Number of outbound calls, for the last 1 month "
+              distinctOutboundCalls: 
+                type: string
+                description: "Number of Number of distinct outbound B-Parties , for the last 1 month "
+              totalInboundCalls:
+                type: string
+                description: "Number of inbound calls, for the last 1 month "
+              distinctInboundCalls: 
+                type: string
+                description: "Number of distinct inbound B-Parties , for the last 1 month "
+              dataUsage:
+                type: string
+                description: "Data usage in MB, for the last 1 month "
+              lastDataBundlePurchaseDate:
+                type: string
+                description: "Date of last data bundle purchase (any data bundle), for the last 1 month "
+              daysDataBalanceBelow:
+                type: string
+                description: "Days bundle balance less then 2MB, for the last 1 month"
+              averageDataBundleSize:
+                type: string
+                description: "Average bundle size purchased, for the last 1 month"
+              me2u:
+                type: object
+                properties:   
+                  me2uNumberAirtimeReceived:
+                    type: string
+                    description: "Number of MTN Me2U airtime received, for the last 1 month"
+                  me2uAmountAirtimeReceived:
+                    type: string
+                    description: "Amount of MTN Me2U airtime received, for the last 1 month"
+
+  momo-loans:
+    type: object
+    title: "loans object"
+    properties:
+      time-periods:
+        type: object
+        properties:  
+          1-months:
+            type: object
+            properties:
+              numberOfLoans: 
+                type: string
+                description: "Number of loans, for the last 1 month"
+          3-months:
+            type: object
+            properties:
+              numberOfLoans: 
+                type: string
+                description: "Number of loans, for the last 1 month"
+          6-months:
+            type: object
+            properties:
+              numberOfLoans: 
+                type: string
+                description: "Number of loans, for the last 1 month"
+      totalLoansAmount: 
+        type: string
+        description: "tTotal loan amount"
+      firstLoansDate:
+          type: string
+          format: date
+          description: "First loan date"
+      lastLoansDate:
+          type: string
+          format: date
+          description: "Last loan date"
+      numberOverdue:
+          type: string
+          description: "Number of loans overdue"
+      totalTerm:
+          type: string
+          description: "Total loan term"
+      maxTerm:
+          type: string
+          description: "Maximum loan term"
+      lastOverdueDate:
+          type: string
+          format: date
+          description: "Last time loan was overdue"
