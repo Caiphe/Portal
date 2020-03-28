@@ -104,6 +104,8 @@ class AppController extends Controller
     {
         $app = ApigeeService::get("developers/wes@plusnarrative.com/apps/{$request->name}/?expand=true");
 
+        // dd($app);
+
         return view('apps.edit', [
             'app' => $app
         ]);

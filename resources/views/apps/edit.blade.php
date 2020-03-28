@@ -46,17 +46,19 @@
 
                 <div class="group">
                     <label for="name">Name your app *</label>
-                    <input type="text" name="name" id="name" placeholder="Enter name">
+                    <input type="text" name="name" id="name" placeholder="Enter name" value="{{ $app['name'] }}">
                 </div>
 
                 <div class="group">
                     <label for="name">Callback url *</label>
-                    <input type="text" name="name" id="name" placeholder="Enter callback url">
+                    <input type="text" name="name" id="name" placeholder="Enter callback url" value="{{ $app['callbackUrl'] ?? '' }}">
                 </div>
 
                 <div class="group">
                     <label for="description">Description *</label>
-                    <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>
+                    <textarea name="description" id="description" rows="5" placeholder="Enter description">
+                        {{ $app['attributes'][0]['name'] ?? '' }}
+                    </textarea>
                 </div>
 
                 <button class="dark" type="submit">
