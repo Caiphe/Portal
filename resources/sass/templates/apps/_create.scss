@@ -15,7 +15,6 @@
             display: flex;
             align-items: center;
             margin-right: 40px;
-            color: $blue600;
 
             &.active {
                 color: $blue900;
@@ -23,6 +22,10 @@
                 span {
                     border: 2px solid $blue900;
                 }
+            }
+
+            &:not(.active) {
+                color: $blue600;
             }
 
             span {
@@ -80,8 +83,6 @@
                     display: flex;
                 }
             }
-
-
 
             label {
                 margin-bottom: 1.5rem;
