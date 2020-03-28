@@ -143,11 +143,15 @@
                 }
 
                 input[type=checkbox] {
-                    //display: none;
+                    display: none;
                 }
 
                 .selected {
                     border: 2px solid $grey900;
+                }
+
+                .not-selected {
+                    opacity: 0.5;
                 }
             }
 

@@ -214,12 +214,21 @@
 
     function selectCountry() {
         var array = [];
-        var countryCheckboxes = document.querySelectorAll('input[type=checkbox]:checked');
+        var countryCheckBoxes = document.querySelectorAll('input[type=checkbox]:checked');
 
-        for (var i = 0; i < countryCheckboxes.length; i++) {
-            array.push(countryCheckboxes[i]);
-            countryCheckboxes[i].classList.add('selected');
-            countryCheckboxes[i].parentElement.classList.add('selected');
+        for (var i = 0; i < countryCheckBoxes.length; i++) {
+            array.push(countryCheckBoxes[i]);
+
+            countryCheckBoxes[i].classList.add('selected');
+            countryCheckBoxes[i].parentElement.classList.add('selected');
+
+            var unselectedCheckBoxes = document.querySelectorAll('input[type=checkbox]:not(.selected)');
+
+            for (var u = 0; u < unselectedCheckBoxes.length; u++) {
+
+                unselectedCheckBoxes[u].classList.add('not-selected');
+                unselectedCheckBoxes[u].parentElement.classList.add('not-selected');
+            }
         }
 
         console.log(array);
