@@ -149,7 +149,7 @@
         buttons[j].addEventListener('click', handleButtonClick);
     }
 
-    function handleButtonClick() {
+    function handleButtonClick(event) {
         var parent = this.parentNode.parentNode;
 
         if (parent.querySelector('.detail').style.display === 'block') {
@@ -191,6 +191,8 @@
 
         if(deleteApp) {
             console.log('Delete');
+        } else {
+            document.querySelector(".menu.show").classList.remove('show');
         }
     }
 
