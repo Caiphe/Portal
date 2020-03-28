@@ -105,8 +105,6 @@ class AppController extends Controller
 //             "callbackUrl" : "https://url-for-3-legged-oauth/"
 //        }
 
-
-
         ApigeeService::createApp($request->all());
 
         return response([

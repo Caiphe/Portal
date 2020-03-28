@@ -168,9 +168,9 @@
     }
 
     function handleBackButtonClick() {
-        for (var i = 0; i < backButtons.length; i++) {
+        for (var j = 0; j < backButtons.length; j++) {
 
-            backButtons[i].addEventListener('click', function (event) {
+            backButtons[j].addEventListener('click', function (event) {
                 event.preventDefault();
 
                 if(form.firstElementChild.nextElementSibling.classList.contains('active')) {
@@ -179,6 +179,7 @@
                     form.firstElementChild.style.display = 'flex';
 
                     nav.firstElementChild.nextElementSibling.classList.remove('active');
+
                 } else if(form.firstElementChild.nextElementSibling.nextElementSibling.classList.contains('active')) {
                     form.firstElementChild.nextElementSibling.nextElementSibling.classList.remove('active');
                     form.firstElementChild.nextElementSibling.classList.add('active');
@@ -198,8 +199,8 @@
 
         var els = document.querySelectorAll('#app-create nav a.active');
 
-        for (var i = 0; i < els.length; i++) {
-            els[i].classList.remove('active');
+        for (var k = 0; k < els.length; k++) {
+            els[k].classList.remove('active');
         }
 
         nav.querySelector('a').classList.add('active');
@@ -208,30 +209,38 @@
     });
 
     var countries = document.querySelectorAll('.country');
-    for (var i = 0; i < countries.length; i++) {
-        countries[i].addEventListener('change', selectCountry);
+    for (var l = 0; l < countries.length; l++) {
+        countries[l].addEventListener('change', selectCountry);
     }
 
-    function selectCountry() {
-        var array = [];
-        var countryCheckBoxes = document.querySelectorAll('input[type=checkbox]:checked');
+    function selectCountry(event) {
+        // var array = [];
+        // var countryCheckBoxes = document.querySelectorAll('input[type=checkbox]:checked');
 
-        for (var i = 0; i < countryCheckBoxes.length; i++) {
-            array.push(countryCheckBoxes[i]);
+        var select = event.currentTarget;
 
-            countryCheckBoxes[i].classList.add('selected');
-            countryCheckBoxes[i].parentElement.classList.add('selected');
+        select.classList.toggle('selected');
+        select.querySelector('input[type=checkbox]').classList.toggle('selected');
 
-            var unselectedCheckBoxes = document.querySelectorAll('input[type=checkbox]:not(.selected)');
-
-            for (var u = 0; u < unselectedCheckBoxes.length; u++) {
-
-                unselectedCheckBoxes[u].classList.add('not-selected');
-                unselectedCheckBoxes[u].parentElement.classList.add('not-selected');
-            }
-        }
-
-        console.log(array);
+        // for (var m = 0; m < countryCheckBoxes.length; m++) {
+        //     array.push(countryCheckBoxes[m]);
+        //
+        //     var select = event.currentTarget;
+        //     console.log(select);
+        //
+        //     countryCheckBoxes[m].classList.add('selected');
+        //     countryCheckBoxes[m].parentElement.classList.add('selected');
+        //
+        //     // var unselectedCheckBoxes = document.querySelectorAll('input[type=checkbox]:not(.selected)');
+        //     //
+        //     // for (var u = 0; u < unselectedCheckBoxes.length; u++) {
+        //     //
+        //     //     unselectedCheckBoxes[u].classList.add('not-selected');
+        //     //     unselectedCheckBoxes[u].parentElement.classList.add('not-selected');
+        //     // }
+        // }
+        //
+        // console.log(array);
     }
 
     /**
