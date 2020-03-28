@@ -14,21 +14,24 @@ class GettingStartedController extends Controller
      */
     public function index()
     {
-        $list =  [ 'GETTING STARTED' => 
-            [
+        $contents = Content::where('type', 'general_docs')->get();
+        $contentList = [];
+        
+        foreach($contents as $content){
+            $contentList[] = ['label' => $content['title'], 'link' => '/getting-started/' . $content['slug']];
+        }
+
+        $list =  [
                 [ 'label' => 'Introduction', 'link' => '/getting-started'],
-                [ 'label' => 'My apps', 'link' => '/my-apps'],
-                [ 'label' => 'Browse products','link' => '/browse-products'],
-                [ 'label' => 'Create an application','link' => '/create-aplication'],
-                [ 'label' => 'Request approval','link' => '/request-approval'],
-                [ 'label' => 'Responses and error codes','link' => '/responses'],
+                [ 'label' => 'My apps', 'link' => '/apps'],
+                [ 'label' => 'Browse products','link' => '/products'],
+                [ 'label' => 'Create an application','link' => '/apps/create'],
                 [ 'label' => 'FAQ','link' => '/faq'],
-                [ 'label' => 'Developer tips','link' => '/developer-tips']
-            ]
         ];
+        $list = [ 'GETTING STARTED' => array_merge($list, $contentList)];
 
         return view('templates.getting-started.index', [
-            "content"=> Content::where('type', 'general_docs')->get(),
+            "content"=> $contents,
             "list"=> $list
         ]);
     }
@@ -62,7 +65,29 @@ class GettingStartedController extends Controller
      */
     public function show(Content $content)
     {
-        return view('templates.getting-started.show');
+        $contents = Content::where('type', 'general_docs')->get();
+        $contentList = [];
+        
+        foreach($contents as $conten){
+            $contentList[] = ['label' => $conten['title'], 'link' => '/getting-started/' . $conten['slug']];
+        }
+
+        $list =  [
+                [ 'label' => 'Introduction', 'link' => '/getting-started'],
+                [ 'label' => 'My apps', 'link' => '/apps'],
+                [ 'label' => 'Browse products','link' => '/products'],
+                [ 'label' => 'Create an application','link' => '/apps/create'],
+                [ 'label' => 'FAQ','link' => '/faq'],
+        ];
+        
+        $list = [ 'GETTING STARTED' => array_merge($list, $contentList)];
+
+        return view('templates.getting-started.show', [
+            "content"=> $content,
+            "list"=> $list
+        ]);
+
+        
     }
 
     /**
