@@ -181,12 +181,10 @@
         keys[i].addEventListener('click', copyText);
     }
 
-    function copyText() {
-        var parent = this.parentNode.parentNode.parentNode.parentNode;
-        var el = parent.querySelector('.detail');
-        // var el = document.getElementById('#consumer-key').value;
+    function copyText(id) {
+        var el = document.getElementById(id);
         el.select();
-
+        /* Copy the text inside the text field */
         document.execCommand("copy");
         el.blur();
     }

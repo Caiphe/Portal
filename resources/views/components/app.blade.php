@@ -35,7 +35,6 @@
                 <p class="key">
                     {{ end($app['credentials'])['consumerKey']  }}
                 </p>
-                <input type="hidden" id="consumer-key" value="{{ end($app['credentials'])['consumerKey']  }}">
                 <p class="key">
                     {{ end($app['credentials'])['consumerSecret'] }}
                 </p>
