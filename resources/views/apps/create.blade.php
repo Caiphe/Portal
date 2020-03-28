@@ -218,14 +218,8 @@
 
         for (var i = 0; i < countryCheckboxes.length; i++) {
             array.push(countryCheckboxes[i]);
-
-            if(countryCheckboxes[i].checked === true) {
-                countryCheckboxes[i].classList.toggle('selected');
-                countryCheckboxes[i].parentElement.classList.toggle('selected');
-            } else {
-                countryCheckboxes[i].classList.toggle('selected');
-                countryCheckboxes[i].parentElement.classList.toggle('selected');
-            }
+            // countryCheckboxes[i].classList.add('selected');
+            //countryCheckboxes[i].parentElement.classList.toggle('selected');
         }
 
         console.log(array);
