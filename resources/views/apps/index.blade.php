@@ -25,7 +25,7 @@
 @section('content')
 
     <x-heading heading="Apps" tags="DASHBOARD">
-        <button class="outline dark">Create new</button>
+        <button class="outline dark" id="create">Create new</button>
     </x-heading>
 
     @if(empty($approved_apps) && empty($revoked_apps))

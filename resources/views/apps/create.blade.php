@@ -74,7 +74,7 @@
                         @foreach($countries as $country)
                             <label class="country" for="country-{{ $loop->index + 1 }}">
                                 @svg('za', '#ffffff', 'images/locations')
-                                <input type="checkbox" class="country-{{ $loop->index + 1 }}" value="">
+                                <input type="checkbox" id="country-{{ $loop->index + 1 }}" name="country-checkbox">
                                 {{ $country }}
                             </label>
                         @endforeach
@@ -135,10 +135,12 @@
     var form = document.querySelector('form');
     var buttons = document.querySelectorAll('.next');
     var backButtons = document.querySelectorAll('.back');
+    var checkedBoxes = document.querySelectorAll('input[name=country-checkbox]:checked');
 
     function init() {
         handleButtonClick();
         handleBackButtonClick();
+        clearCheckBoxes();
     }
 
     function handleButtonClick() {
@@ -205,13 +207,26 @@
         form.reset();
     });
 
-    var countries = document.querySelectorAll('input[type="checkbox"]');
+    var countries = document.querySelectorAll('.country');
     for (var i = 0; i < countries.length; i++) {
-        countries[i].addEventListener('click', selectCountry);
+        countries[i].addEventListener('change', selectCountry);
     }
 
     function selectCountry() {
-        console.log('click');
+        // document.getElementById('country-2').checked = true;
+        this.checked = !this.checked;
+
+        console.log(checkedBoxes);
+    }
+
+    /**
+     *  Clear checkboxes on page load, otherwise some checkboxes persist checked state.
+     */
+    function clearCheckBoxes() {
+        var checkList = document.getElementsByTagName("input");
+        for (var i = 0; i < checkList.length; ++i) {
+            checkList[i].checked = false;
+        }
     }
 </script>
 @endpush

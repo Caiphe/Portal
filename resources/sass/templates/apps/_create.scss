@@ -143,7 +143,11 @@
                 }
 
                 input[type=checkbox] {
-                     display: none;
+                    //display: none;
+                }
+
+                input[type=checkbox]:checked + .country {
+                    background-color: green;
                 }
             }
 
