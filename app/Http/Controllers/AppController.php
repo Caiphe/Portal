@@ -38,44 +38,26 @@ class AppController extends Controller
             ->sortBy('category')
             ->groupBy('category');
 
-        $locations = $products->flatMap(function ($query) {
+        $countries = $products->flatMap(function ($query) {
             return $query->pluck('locations');
         })->reject(function ($location) {
             return empty($location);
-        })->unique()->all();
+        })->unique()->values()->all();
 
-        $regions = collect($locations)->map(function ($query) {
+        $validCountries = collect($countries)->mapWithKeys(function ($query) {
             return explode(',', $query);
-        })->values()->all();
+        })->unique();
 
-//        $temp = array_unique(array_column($regions, 'name'));
-//        $unique_arr = array_intersect_key($regions, $temp);
-//
-//        dd($regions);
+        $filteredCountries = Country::whereIn('code', $validCountries)->get();
 
-//        $input = array_map('unserialize', array_unique(array_map('serialize', $regions)));
-
-//        dd($regions);
-
-//        foreach($regions as $category) {
-//            $regions[] = $category['locations'];
-//        }
-
-//        $input = array_map("unserialize",
-//            array_unique(array_map("serialize", $regions)));
-//        dd($input);
-
-        $countries = Country::all();
-
-        $country_array = [];
-        foreach ($countries as $country) {
-            $country_array[$country->code] = $country->name;
-        }
+        $countries = $filteredCountries->map(function ($query) {
+            return $query;
+        })->pluck('name', 'code');
 
         return view('apps.create', [
                 'products' => $products,
                 'productCategories' => array_keys($products->toArray()),
-                'countries' => $country_array
+                'countries' => $countries
             ]
         );
     }
