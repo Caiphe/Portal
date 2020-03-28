@@ -2,6 +2,7 @@
     "/css/components/carousel.css": "/css/components/carousel.css?id=526011b89c6cbab29788",
     "/css/components/multiselect.css": "/css/components/multiselect.css?id=9f19774870e94b5729ad",
     "/css/components/card.css": "/css/components/card.css?id=de0efffb7dc013a80a66",
+<<<<<<< HEAD
     "/css/components/card-link.css": "/css/components/card-link.css?id=8fd02b7a82866b29e72c",
     "/css/components/card-product.css": "/css/components/card-product.css?id=1408b2e4f710262a768d",
     "/css/components/key-feature.css": "/css/components/key-feature.css?id=0afd7f5399f38d227c11",
@@ -10,6 +11,15 @@
     "/css/templates/products/show.css": "/css/templates/products/show.css?id=f54294a7ea4df22637a1",
     "/css/templates/getting-started/index.css": "/css/templates/getting-started/index.css?id=a4573f9b20d543d11605",
     "/css/styles.css": "/css/styles.css?id=427c10d2f404a574d2f8",
+=======
+    "/css/components/card-link.css": "/css/components/card-link.css?id=ad0842e72bc50dca0200",
+    "/css/components/card-product.css": "/css/components/card-product.css?id=1408b2e4f710262a768d",
+    "/css/components/key-feature.css": "/css/components/key-feature.css?id=7cad1e8d72a3313ad5fa",
+    "/css/components/sidebar-accordion.css": "/css/components/sidebar-accordion.css?id=af8deda8d7ef45ab42ee",
+    "/css/components/heading.css": "/css/components/heading.css?id=25435ec8226b14fa6fce",
+    "/css/templates/getting-started/index.css": "/css/templates/getting-started/index.css?id=a4573f9b20d543d11605",
+    "/css/styles.css": "/css/styles.css?id=a9d1027ab54f6e7e1157",
+>>>>>>> develop
     "/js/scripts.js": "/js/scripts.js?id=1073cc28ad56d5a8c1c5",
     "/js/components/carousel.js": "/js/components/carousel.js?id=f8d1fee067d5197f9ccb",
     "/js/components/sidebar-accordion.js": "/js/components/sidebar-accordion.js?id=709883c29c1c818cfd4f",
