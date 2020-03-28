@@ -67,7 +67,7 @@
                     </button>
                 </div>
 
-                <div>
+                <div class="select-countries">
                     <p>Select the countries you would like to associate with your app *</p>
 
                     <div class="countries">
@@ -89,8 +89,10 @@
                     </div>
                 </div>
 
-                <div>
+                <div class="select-products">
                     <p>Select the products you would like to add to your app.</p>
+
+                    <p>Showing products for</p>
 
                     <div class="products">
                         @foreach ($products as $category=>$products)
@@ -111,7 +113,7 @@
 
                     <div class="form-actions">
                         <button class="dark outline back">Back</button>
-                        <button class="dark" type="submit">
+                        <button class="dark">
                             Create app
                         </button>
                     </div>
@@ -220,7 +222,7 @@
         var select = event.currentTarget;
 
         select.classList.toggle('selected');
-        select.querySelector('input[type=checkbox]').classList.toggle('selected');
+        var checkbox = select.querySelector('input[type=checkbox]').classList.toggle('selected');
 
         // for (var m = 0; m < countryCheckBoxes.length; m++) {
         //     array.push(countryCheckBoxes[m]);
@@ -261,11 +263,11 @@
             button.classList.toggle('plus');
             button.classList.toggle('done');
 
-            if(document.querySelectorAll('[data-title] button')) {
-                var selectedProduct = this.parentNode.parentNode;
-
-                selectedProduct.classList.toggle('selected');
-            }
+            // if(document.querySelectorAll('[data-title] button')) {
+            //     var selectedProduct = this.parentNode.parentNode;
+            //
+            //     selectedProduct.classList.toggle('selected');
+            // }
         });
     }
 </script>

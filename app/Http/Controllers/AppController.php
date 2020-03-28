@@ -104,8 +104,9 @@ class AppController extends Controller
 //             "scopes" : [ "scope_a" ],
 //             "callbackUrl" : "https://url-for-3-legged-oauth/"
 //        }
+        dd($request->all());
 
-        ApigeeService::createApp($request->all());
+        // ApigeeService::createApp($request->all());
 
         return response([
             'message' => 'App created successfully'
