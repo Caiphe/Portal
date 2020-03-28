@@ -89,9 +89,9 @@
         <form class="delete" action="{{ url('apps') }}" method="POST">
             @method('DELETE')
             @csrf
+            <input type="hidden" name="app-name" value="{{ $app['name'] }}">
             <button class="app-delete" type="submit">Delete</button>
         </form>
     </nav>
     <div class="modal"></div>
 </div>
-

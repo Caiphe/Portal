@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Country;
+use App\Http\Requests\DeleteAppRequest;
 use App\Product;
 use App\Services\ApigeeService;
 use Illuminate\Http\Request;
@@ -106,8 +107,12 @@ class AppController extends Controller
         //
     }
 
-    public function destroy(Request $request)
+    public function destroy(DeleteAppRequest $request)
     {
-        dd($request->all());
+        $validated = $request->validated();
+
+        ApigeeService::delete("developers/wes@plusnarrative.com/apps/{$validated['name']}");
+
+        return redirect()->back()->with('status', 'App has been deleted');
     }
 }
