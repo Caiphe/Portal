@@ -62,9 +62,9 @@ class AppController extends Controller
         );
     }
 
-    public function store(CreateAppRequest $request)
+    public function store(Request $request)
     {
-        $validated = $request->validated();
+        // $validated = $request->validated();
 //        {
 //            "name" : "my_app_internal_name",
 //             "apiProducts": [ "api_product_1", "api_product_2" ],

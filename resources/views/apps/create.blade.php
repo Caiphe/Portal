@@ -124,7 +124,7 @@
 
                     <div class="form-actions">
                         <button class="dark outline back">Back</button>
-                        <button class="dark">
+                        <button class="dark" type="submit">
                             Create app
                         </button>
                     </div>
