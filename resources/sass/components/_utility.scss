@@ -33,10 +33,10 @@
 .cols {
     &:not(.inline) {
         display: flex;
-        flex-wrap: wrap;
+        flex-flow: row wrap;
 
         .col {
-            flex-grow: 1 auto;
+            flex: 1 auto;
         }
 
         .col-4 {
