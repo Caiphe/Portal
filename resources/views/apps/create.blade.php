@@ -215,8 +215,6 @@
     function selectCountry() {
         // document.getElementById('country-2').checked = true;
 
-        this.checked = !this.checked;
-
         console.log(checkedBoxes);
     }
 
