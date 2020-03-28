@@ -1,9 +1,12 @@
 .card--product {
     .card__content {
+        padding-bottom: 50px;
         .country-selector {
             display: flex;
-			align-items: center;
-			.countries {
+            align-items: center;
+            position: absolute;
+            bottom: 0;
+            .countries {
                 width: 15px;
                 height: 15px;
                 overflow: hidden;
@@ -13,13 +16,15 @@
             }
             .view-more {
                 margin-left: 5px;
-                display: inline-block;
+                display: flex;
                 color: #000000;
             }
             &:hover {
                 > .countries {
-                    transition: width 2s;
                     width: 100%;
+                    height: 50px;
+                    -webkit-transition: width 0.5s, height 0.5s;
+                    transition: width 0.5s, height 0.5s;
                 }
                 > .view-more {
                     display: none;
@@ -31,6 +36,10 @@
         display: flex;
         align-items: center;
         position: absolute;
-		right: 20px;
-	}
+        right: 20px;
+        bottom: -18px;
+        a.button {
+            margin-right: 5px;
+        }
+    }
 }
