@@ -1,0 +1,54 @@
+@import "../../variables";
+
+h2,
+h3 {
+    font-family: "mtn-regular", sans-serif;
+}
+
+.search-hr {
+    color: $grey300;
+}
+.products {
+    display: flex;
+    flex-flow: row wrap;
+
+    .category {
+        display: flex;
+        flex-flow: row wrap;
+        margin-bottom: 10px;
+        width: 100%;
+
+        h3 {
+            width: 100%;
+        }
+
+        .card {
+            margin-bottom: 30px;
+            margin-right: 20px;
+            width: 30%;
+        }
+    }
+}
+.filter-sidebar {
+    .filter-checkbox {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        .filter-label {
+            margin-left: 5px;
+            color: $grey700;
+        }
+    }
+
+    .country-filter {
+        margin-top: 15px;
+        width: 100%;
+        .multiselect-select {
+            width: 150px;
+        }
+    }
+    #clearFilter {
+        margin-top: 30px;
+        display: none;
+    }
+}
