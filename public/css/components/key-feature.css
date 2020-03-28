@@ -1,20 +1,29 @@
-.key-feature .key-feature__body {
+.key-feature .body {
   text-align: center;
 }
 
-.key-feature .key-feature__body .key-feature__icon {
+.key-feature .body .icon {
   background-color: #FC0;
-  padding: 22px;
-  width: 30%;
+  width: 80px;
+  height: 80px;
   margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 60% 60% 60% 60%/15%;
 }
 
-.key-feature .key-feature__body .key-feature__header {
+.key-feature .body .icon svg {
+  width: 40px;
+  height: 40px;
+}
+
+.key-feature .body .header {
   font-size: 18px;
   color: #1a1a1a;
 }
 
-.key-feature .key-feature__body .key-feature__content {
+.key-feature .body .content {
   font-size: 14px;
   color: #1a1a1a;
 }

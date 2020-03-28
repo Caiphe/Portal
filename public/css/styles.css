@@ -452,6 +452,14 @@ textarea {
   src: local("Awesome Font"), url("/fonts/Montserrat-Light.woff2") format("woff2"), url("/fonts/Montserrat-Light.woff") format("woff"), url("/fonts/Montserrat-Light.ttf") format("truetype"), url("/fonts/Montserrat-Light.eot") format("embedded-opentype");
 }
 
+@font-face {
+  font-family: "Montserrat-Bold";
+  font-style: normal;
+  font-weight: 700;
+  font-display: auto;
+  src: local("Awesome Font"), url("/fonts/Montserrat-Bold.woff2") format("woff2"), url("/fonts/Montserrat-Bold.woff") format("woff"), url("/fonts/Montserrat-Bold.ttf") format("truetype"), url("/fonts/Montserrat-Bold.eot") format("embedded-opentype");
+}
+
 html {
   font-size: 10px;
   line-height: 21px;
@@ -489,7 +497,7 @@ a {
   color: initial;
 }
 
-#main a {
+#main a:not(.button) {
   color: #0f6987;
 }
 
@@ -598,7 +606,8 @@ a {
     <button class="fab plus"></button>
 */
 
-button {
+button,
+.button {
   height: 34px;
   line-height: 1;
   background-color: #FC0;
@@ -608,68 +617,81 @@ button {
   border: 2px solid #FC0;
   border-radius: 22px;
   padding: 0 20px;
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  color: #1a1a1a;
 }
 
-button.small {
+button.small,
+.button.small {
   height: 24px;
   font-size: 1.2rem;
 }
 
-button.blue {
+button.blue,
+.button.blue {
   background-color: #0f6987;
   border: 1px solid #0f6987;
 }
 
-button.blue:hover {
+button.blue:hover,
+.button.blue:hover {
   background-color: #3f879f;
   border-color: #3f879f;
 }
 
-button.dark {
+button.dark,
+.button.dark {
   background-color: #000;
   border: 2px solid #000;
 }
 
-button.dark:hover {
+button.dark:hover,
+.button.dark:hover {
   background-color: #333333;
   border-color: #333333;
 }
 
-button.medium {
+button.medium,
+.button.medium {
   background-color: #333333;
   border: 2px solid #333333;
 }
 
-button.medium:hover {
+button.medium:hover,
+.button.medium:hover {
   background-color: #5c5c5c;
   border-color: #5c5c5c;
 }
 
-button.light {
-  background-color: #999999;
-  border: 2px solid #999999;
+button.light,
+.button.light {
+  background-color: #666666;
+  border: 2px solid #666666;
 }
 
-button.light:hover {
-  background-color: #adadad;
-  border-color: #adadad;
+button.light:hover,
+.button.light:hover {
+  background-color: #858585;
+  border-color: #858585;
 }
 
-button.lightest {
+button.lightest,
+.button.lightest {
   background-color: #cccccc;
   border: 2px solid #cccccc;
 }
 
-button.lightest:hover {
+button.lightest:hover,
+.button.lightest:hover {
   background-color: #d6d6d6;
   border-color: #d6d6d6;
 }
 
-button.inline {
+button.inline,
+.button.inline {
   display: inline-block;
   margin-right: 5px;
 }
@@ -678,23 +700,32 @@ button.blue:not(.outline),
 button.dark:not(.outline),
 button.light:not(.outline),
 button.lightest:not(.outline),
-button.medium:not(.outline) {
+button.medium:not(.outline),
+.button.blue:not(.outline),
+.button.dark:not(.outline),
+.button.light:not(.outline),
+.button.lightest:not(.outline),
+.button.medium:not(.outline) {
   color: #FFF;
 }
 
-button.fab {
+button.fab,
+.button.fab {
   padding: 0;
   width: 34px;
   border-radius: 50%;
 }
 
-button.image {
+button.image,
+.button.image {
   background-size: cover;
   background-position: center center;
 }
 
 button.before::before,
-button.after::after {
+button.after::after,
+.button.before::before,
+.button.after::after {
   background-position: center center;
   background-size: 16px;
   background-repeat: no-repeat;
@@ -703,16 +734,20 @@ button.after::after {
   width: 16px;
 }
 
-button.before::before {
+button.before::before,
+.button.before::before {
   margin-right: 5px;
 }
 
-button.after::after {
+button.after::after,
+.button.after::after {
   margin-left: 5px;
 }
 
 button.before.plus::before,
-button.after.plus::after {
+button.after.plus::after,
+.button.before.plus::before,
+.button.after.plus::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
@@ -721,28 +756,43 @@ button.dark.after.plus:not(.outline)::after,
 button.medium.before.plus:not(.outline)::before,
 button.medium.after.plus:not(.outline)::after,
 button.blue.before.plus:not(.outline)::before,
-button.blue.after.plus:not(.outline)::after {
+button.blue.after.plus:not(.outline)::after,
+.button.dark.before.plus:not(.outline)::before,
+.button.dark.after.plus:not(.outline)::after,
+.button.medium.before.plus:not(.outline)::before,
+.button.medium.after.plus:not(.outline)::after,
+.button.blue.before.plus:not(.outline)::before,
+.button.blue.after.plus:not(.outline)::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
-button.fab.plus {
+button.fab.plus,
+.button.fab.plus {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
 button.dark.fab.plus:not(.outline),
 button.medium.fab.plus:not(.outline),
-button.blue.fab.plus:not(.outline) {
+button.blue.fab.plus:not(.outline),
+.button.dark.fab.plus:not(.outline),
+.button.medium.fab.plus:not(.outline),
+.button.blue.fab.plus:not(.outline) {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
 button.blue.before.plus.outline:hover::before,
 button.blue.after.plus.outline:hover::after,
-button.blue.fab.plus.outline:hover {
+button.blue.fab.plus.outline:hover,
+.button.blue.before.plus.outline:hover::before,
+.button.blue.after.plus.outline:hover::after,
+.button.blue.fab.plus.outline:hover {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
 button.before.arrow-left::before,
-button.after.arrow-left::after {
+button.after.arrow-left::after,
+.button.before.arrow-left::before,
+.button.after.arrow-left::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>');
 }
 
@@ -751,28 +801,43 @@ button.dark.after.arrow-left:not(.outline)::after,
 button.medium.before.arrow-left:not(.outline)::before,
 button.medium.after.arrow-left:not(.outline)::after,
 button.blue.before.arrow-left:not(.outline)::before,
-button.blue.after.arrow-left:not(.outline)::after {
+button.blue.after.arrow-left:not(.outline)::after,
+.button.dark.before.arrow-left:not(.outline)::before,
+.button.dark.after.arrow-left:not(.outline)::after,
+.button.medium.before.arrow-left:not(.outline)::before,
+.button.medium.after.arrow-left:not(.outline)::after,
+.button.blue.before.arrow-left:not(.outline)::before,
+.button.blue.after.arrow-left:not(.outline)::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>');
 }
 
-button.fab.arrow-left {
+button.fab.arrow-left,
+.button.fab.arrow-left {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>');
 }
 
 button.dark.fab.arrow-left:not(.outline),
 button.medium.fab.arrow-left:not(.outline),
-button.blue.fab.arrow-left:not(.outline) {
+button.blue.fab.arrow-left:not(.outline),
+.button.dark.fab.arrow-left:not(.outline),
+.button.medium.fab.arrow-left:not(.outline),
+.button.blue.fab.arrow-left:not(.outline) {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>');
 }
 
 button.blue.before.arrow-left.outline:hover::before,
 button.blue.after.arrow-left.outline:hover::after,
-button.blue.fab.arrow-left.outline:hover {
+button.blue.fab.arrow-left.outline:hover,
+.button.blue.before.arrow-left.outline:hover::before,
+.button.blue.after.arrow-left.outline:hover::after,
+.button.blue.fab.arrow-left.outline:hover {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>');
 }
 
 button.before.arrow-right::before,
-button.after.arrow-right::after {
+button.after.arrow-right::after,
+.button.before.arrow-right::before,
+.button.after.arrow-right::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>');
 }
 
@@ -781,28 +846,43 @@ button.dark.after.arrow-right:not(.outline)::after,
 button.medium.before.arrow-right:not(.outline)::before,
 button.medium.after.arrow-right:not(.outline)::after,
 button.blue.before.arrow-right:not(.outline)::before,
-button.blue.after.arrow-right:not(.outline)::after {
+button.blue.after.arrow-right:not(.outline)::after,
+.button.dark.before.arrow-right:not(.outline)::before,
+.button.dark.after.arrow-right:not(.outline)::after,
+.button.medium.before.arrow-right:not(.outline)::before,
+.button.medium.after.arrow-right:not(.outline)::after,
+.button.blue.before.arrow-right:not(.outline)::before,
+.button.blue.after.arrow-right:not(.outline)::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>');
 }
 
-button.fab.arrow-right {
+button.fab.arrow-right,
+.button.fab.arrow-right {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>');
 }
 
 button.dark.fab.arrow-right:not(.outline),
 button.medium.fab.arrow-right:not(.outline),
-button.blue.fab.arrow-right:not(.outline) {
+button.blue.fab.arrow-right:not(.outline),
+.button.dark.fab.arrow-right:not(.outline),
+.button.medium.fab.arrow-right:not(.outline),
+.button.blue.fab.arrow-right:not(.outline) {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>');
 }
 
 button.blue.before.arrow-right.outline:hover::before,
 button.blue.after.arrow-right.outline:hover::after,
-button.blue.fab.arrow-right.outline:hover {
+button.blue.fab.arrow-right.outline:hover,
+.button.blue.before.arrow-right.outline:hover::before,
+.button.blue.after.arrow-right.outline:hover::after,
+.button.blue.fab.arrow-right.outline:hover {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>');
 }
 
 button.before.arrow-down::before,
-button.after.arrow-down::after {
+button.after.arrow-down::after,
+.button.before.arrow-down::before,
+.button.after.arrow-down::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/><path d="M0 0h24v24H0V0z" fill="none"/></svg>');
 }
 
@@ -811,28 +891,43 @@ button.dark.after.arrow-down:not(.outline)::after,
 button.medium.before.arrow-down:not(.outline)::before,
 button.medium.after.arrow-down:not(.outline)::after,
 button.blue.before.arrow-down:not(.outline)::before,
-button.blue.after.arrow-down:not(.outline)::after {
+button.blue.after.arrow-down:not(.outline)::after,
+.button.dark.before.arrow-down:not(.outline)::before,
+.button.dark.after.arrow-down:not(.outline)::after,
+.button.medium.before.arrow-down:not(.outline)::before,
+.button.medium.after.arrow-down:not(.outline)::after,
+.button.blue.before.arrow-down:not(.outline)::before,
+.button.blue.after.arrow-down:not(.outline)::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/><path d="M0 0h24v24H0V0z" fill="none"/></svg>');
 }
 
-button.fab.arrow-down {
+button.fab.arrow-down,
+.button.fab.arrow-down {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/><path d="M0 0h24v24H0V0z" fill="none"/></svg>');
 }
 
 button.dark.fab.arrow-down:not(.outline),
 button.medium.fab.arrow-down:not(.outline),
-button.blue.fab.arrow-down:not(.outline) {
+button.blue.fab.arrow-down:not(.outline),
+.button.dark.fab.arrow-down:not(.outline),
+.button.medium.fab.arrow-down:not(.outline),
+.button.blue.fab.arrow-down:not(.outline) {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/><path d="M0 0h24v24H0V0z" fill="none"/></svg>');
 }
 
 button.blue.before.arrow-down.outline:hover::before,
 button.blue.after.arrow-down.outline:hover::after,
-button.blue.fab.arrow-down.outline:hover {
+button.blue.fab.arrow-down.outline:hover,
+.button.blue.before.arrow-down.outline:hover::before,
+.button.blue.after.arrow-down.outline:hover::after,
+.button.blue.fab.arrow-down.outline:hover {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/><path d="M0 0h24v24H0V0z" fill="none"/></svg>');
 }
 
 button.before.chevron-right::before,
-button.after.chevron-right::after {
+button.after.chevron-right::after,
+.button.before.chevron-right::before,
+.button.after.chevron-right::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
@@ -841,28 +936,43 @@ button.dark.after.chevron-right:not(.outline)::after,
 button.medium.before.chevron-right:not(.outline)::before,
 button.medium.after.chevron-right:not(.outline)::after,
 button.blue.before.chevron-right:not(.outline)::before,
-button.blue.after.chevron-right:not(.outline)::after {
+button.blue.after.chevron-right:not(.outline)::after,
+.button.dark.before.chevron-right:not(.outline)::before,
+.button.dark.after.chevron-right:not(.outline)::after,
+.button.medium.before.chevron-right:not(.outline)::before,
+.button.medium.after.chevron-right:not(.outline)::after,
+.button.blue.before.chevron-right:not(.outline)::before,
+.button.blue.after.chevron-right:not(.outline)::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
-button.fab.chevron-right {
+button.fab.chevron-right,
+.button.fab.chevron-right {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
 button.dark.fab.chevron-right:not(.outline),
 button.medium.fab.chevron-right:not(.outline),
-button.blue.fab.chevron-right:not(.outline) {
+button.blue.fab.chevron-right:not(.outline),
+.button.dark.fab.chevron-right:not(.outline),
+.button.medium.fab.chevron-right:not(.outline),
+.button.blue.fab.chevron-right:not(.outline) {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
 button.blue.before.chevron-right.outline:hover::before,
 button.blue.after.chevron-right.outline:hover::after,
-button.blue.fab.chevron-right.outline:hover {
+button.blue.fab.chevron-right.outline:hover,
+.button.blue.before.chevron-right.outline:hover::before,
+.button.blue.after.chevron-right.outline:hover::after,
+.button.blue.fab.chevron-right.outline:hover {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
 button.before.arrow-forward::before,
-button.after.arrow-forward::after {
+button.after.arrow-forward::after,
+.button.before.arrow-forward::before,
+.button.after.arrow-forward::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
@@ -871,45 +981,68 @@ button.dark.after.arrow-forward:not(.outline)::after,
 button.medium.before.arrow-forward:not(.outline)::before,
 button.medium.after.arrow-forward:not(.outline)::after,
 button.blue.before.arrow-forward:not(.outline)::before,
-button.blue.after.arrow-forward:not(.outline)::after {
+button.blue.after.arrow-forward:not(.outline)::after,
+.button.dark.before.arrow-forward:not(.outline)::before,
+.button.dark.after.arrow-forward:not(.outline)::after,
+.button.medium.before.arrow-forward:not(.outline)::before,
+.button.medium.after.arrow-forward:not(.outline)::after,
+.button.blue.before.arrow-forward:not(.outline)::before,
+.button.blue.after.arrow-forward:not(.outline)::after {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
-button.fab.arrow-forward {
+button.fab.arrow-forward,
+.button.fab.arrow-forward {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
 button.dark.fab.arrow-forward:not(.outline),
 button.medium.fab.arrow-forward:not(.outline),
-button.blue.fab.arrow-forward:not(.outline) {
+button.blue.fab.arrow-forward:not(.outline),
+.button.dark.fab.arrow-forward:not(.outline),
+.button.medium.fab.arrow-forward:not(.outline),
+.button.blue.fab.arrow-forward:not(.outline) {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
 button.blue.before.arrow-forward.outline:hover::before,
 button.blue.after.arrow-forward.outline:hover::after,
-button.blue.fab.arrow-forward.outline:hover {
+button.blue.fab.arrow-forward.outline:hover,
+.button.blue.before.arrow-forward.outline:hover::before,
+.button.blue.after.arrow-forward.outline:hover::after,
+.button.blue.fab.arrow-forward.outline:hover {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
-button.outline {
-  background-color: #FFF;
+button.outline,
+.button.outline {
+  background-color: transparent;
 }
 
-button.outline.blue:hover {
+button.outline.blue:hover,
+.button.outline.blue:hover {
   color: #FFF;
 }
 
 button.outline.light,
-button.outline.lightest {
-  color: #999999;
+.button.outline.light {
+  color: #666666;
+}
+
+button.outline.lightest,
+.button.outline.lightest {
+  color: #cccccc;
 }
 
 button.outline.light:hover,
-button.outline.lightest:hover {
+button.outline.lightest:hover,
+.button.outline.light:hover,
+.button.outline.lightest:hover {
   color: #FFF;
 }
 
-button:hover {
+button:hover,
+.button:hover {
   background-color: #ffd633;
   border-color: #ffd633;
 }

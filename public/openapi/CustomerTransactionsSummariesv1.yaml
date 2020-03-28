@@ -1,0 +1,644 @@
+info:
+  title: MTN Customer Transaction Summaries API
+  version: '1.0'
+  contact:
+    name: MTN API Support
+    email: developer-support@mtn.com
+  description: MTN Customer Transaction Summaries API
+swagger: '2.0'
+schemes:
+  - https
+host: api.mtn.com
+basePath: /v1/customers
+produces:
+  - application/json
+consumes:
+  - application/json
+securityDefinitions:
+  API Key:
+    name: x-api-key
+    type: apiKey
+    in: header
+  OAuth2:
+    type: oauth2
+    tokenUrl: 'https://api.mtn.com/oauth/client_credential/accesstoken'
+    flow: application
+paths:
+  '/customers/{customerId}/transactions-summaries':
+    parameters:
+      - type: string
+        name: customerId
+        in: path
+        description: "ID of the customer. It could be MSISDN, email address, or any other customer identifier. if customerId is MSISDN, then the format must be E.123"
+        required: true
+      - name: "startDate"
+        in: "query"
+        description: "An optional parameter, together with endDate, allows developers to specify a time range by which to query customer data on. 
+        If you want to request data for 2 months, then start date will need to be set to 2 months prior to today, and endDate to todays date. 
+        If this is not set, the date range will be defaulted to 6 months"
+        type: string
+        format: date
+        example: "20190329"
+      - name: "endDate"
+        in: query
+        description: "An optional parameter, together with endDate, allows developers to specify a time range by which to query customer data on. 
+        If you want to request data for 2 months, then start date will need to be set to 2 months prior to today, and endDate to todays date. 
+        If this is not set, the date range will be defaulted to 6 months"
+        type: string
+        format: date
+        example: "20190929"
+      - name: "transactionId"
+        in: header
+        description: "Client generated Id to include for tracing requests, so that the API can easily trace the HTTP request all the way from a client to MTN's backend processes (via our proxies). 
+        Each time a request is made to an MTN API the client should include a unique request reference in the HTTP Header.  
+        The value must be between 5 and 20 characters, and consist of ASCII letters, digits, or the characters +, /, =, and -. Invalid or blank IDs will be ignored and replaced with generated ones.
+        MTN may use this to detect duplicate transactions from the client, but this functionality is not always guaranteed, so clients must make their own efforts to prevent duplicate transactions. 
+        MTN will also log the transactionId in order to assist with debugging and to correlate transactions processed by the API to requests from the client."
+        type: string
+    get:
+      summary: Retrieve summary data of a customers transactions
+      tags:
+        - customer
+      responses:
+        '200':
+          description: OK
+          schema:
+            description: Customer Object
+            $ref: "#/definitions/transactions-summaries"
+
+definitions:
+  transactions-summaries:
+    type: object
+    properties:
+      requestId:
+        type: string
+        description: "The requestId that was used by the client"
+      dateRange:
+        type: string
+        description: "The date range used by the client, to request customer data for a specific time period"
+      data:
+        type: object
+        properties:
+          marketingFlag:
+            type: boolean
+            description: "Flag set for this partner, or should this should be an object, of flags per partner"
+          lendingFlag:
+            type: boolean
+            description: "This should be an object, of flags per partner"
+          momo:
+            type: object
+            properties:  
+              withdrawals:
+                $ref: "#/definitions/withdrawals"
+              deposits:
+                $ref: "#/definitions/deposits"
+              billPayments:
+                $ref: "#/definitions/billPayments"
+              send:
+                $ref: "#/definitions/send"
+              received:
+                $ref: "#/definitions/received"
+              transfers:
+                $ref: "#/definitions/transfers"
+          gsm:
+            type: object
+            properties:  
+              activity:
+                $ref: "#/definitions/activity"
+          momo-loans:
+            $ref: "#/definitions/momo-loans"
+  
+  withdrawals:
+    type: object
+    properties:
+      lastWithdrawalsDate: 
+        type: string
+        format: date
+        description: "the "
+      maxWithdrawals-6months: 
+        type: string
+        description: "the "
+      quantities:
+        type: object
+        properties:
+          numberOfWithdrawals-1months:
+            type: string
+            description: "the "
+          numberOfWithdrawals-3months:
+            type: string
+            description: "the "
+          numberOfWithdrawals-6months:
+            type: string
+            description: "the "
+      amounts:
+        type: object
+        properties:
+          totalWithdrawalsAmounts-1months:
+            type: string
+            description: "the "
+          totalWithdrawalsAmounts-3months:
+            type: string
+            description: "the "
+          totalWithdrawalsAmounts-6months:
+            type: string
+            description: "the "
+      acceptors:
+        type: object
+        properties:
+          numberOfAcceptors-1months:
+            type: string
+            description: "the "
+          numberOfAcceptors-3months:
+            type: string
+            description: "the "
+          numberOfAcceptors-6months:
+            type: string
+            description: "the "
+
+  deposits:
+    type: object
+    properties:
+      lastDepositsDate: 
+        type: string
+        format: date
+        description: "the "
+        example: "2017"
+      maxDeposits-6months: 
+        type: string
+        description: "the "
+      quantities:
+        type: object
+        properties:
+          numberOfDeposits-1months:
+            type: string
+            description: "the "
+          numberOfDeposits-3months:
+            type: string
+            description: "the "
+          numberOfDeposits-6months:
+            type: string
+            description: "the "
+      amounts:
+        type: object
+        properties:
+          amountOfDeposits-1months:
+            type: string
+            description: "the "
+          amountOfDeposits-3months:
+            type: string
+            description: "the "
+          amountOfDeposits-6months:
+            type: string
+            description: "the "
+      acceptors:
+        type: object
+        properties:
+          numberOfAcceptors-1months:
+            type: string
+            description: "the "
+          numberOfAcceptors-3months:
+            type: string
+            description: "the "
+          numberOfAcceptors-6months:
+            type: string
+            description: "the "
+  
+  billPayments:
+    type: object
+    properties:
+      lastBillPaymentsDate: 
+        type: string
+        format: date
+        description: "the "
+        example: "2017"
+      maxBillPayments-6months: 
+        type: string
+        description: "the "
+      quantities:
+        type: object
+        properties:
+          numberOfBillPayments-1months:
+            type: string
+            description: "the "
+          numberOfBillPayments-3months:
+            type: string
+            description: "the "
+          numberOfBillPayments-6months:
+            type: string
+            description: "the "
+      amounts:
+        type: object
+        properties:
+          amountOfBillPayments-1months:
+            type: string
+            description: "the "
+          amountOfBillPayments-3months:
+            type: string
+            description: "the "
+          amountOfBillPayments-6months:
+            type: string
+            description: "the "
+      acceptors:
+        type: object
+        properties:
+          numberOfAcceptors-1months:
+            type: string
+            description: "the "
+          numberOfAcceptors-3months:
+            type: string
+            description: "the "
+          numberOfAcceptors-6months:
+            type: string
+            description: "the "
+  
+  send:
+    type: object
+    properties:
+      lastSendDate: 
+        type: string
+        format: date
+        description: "the "
+        example: "2017"
+      maxSend-6months: 
+        type: string
+        description: "the "
+      quantities:
+        type: object
+        properties:
+          numberOfSend-1months:
+            type: string
+            description: "the "
+          numberOfSend-3months:
+            type: string
+            description: "the "
+          numberOfSend-6months:
+            type: string
+            description: "the "
+      amounts:
+        type: object
+        properties:
+          amountOfSend-1months:
+            type: string
+            description: "the "
+          amountOfSend-3months:
+            type: string
+            description: "the "
+          amountOfSend-6months:
+            type: string
+            description: "the "
+      acceptors:
+        type: object
+        properties:
+          numberOfAcceptors-1months:
+            type: string
+            description: "the "
+          numberOfAcceptors-3months:
+            type: string
+            description: "the "
+          numberOfAcceptors-6months:
+            type: string
+            description: "the "
+
+  received:
+    type: object
+    properties:
+      lastReceivedDate: 
+        type: string
+        format: date
+        description: "the "
+        example: "2017"
+      time-periods:
+        type: object
+        properties:  
+          1-months:
+            type: object
+            properties:
+              totalReceived: 
+                type: string
+                description: "the "
+              totalAcceptors:
+                type: string
+                description: "the "
+              quantityReceived:
+                type: string
+                description: "the "
+          3-months:
+            type: object
+            properties:
+              totalReceived: 
+                type: string
+                description: "the "
+              totalAcceptors:
+                type: string
+                description: "the "
+              quantityReceived:
+                type: string
+                description: "the "
+          6-months:
+            type: object
+            properties:
+              totalReceived: 
+                type: string
+                description: "the "
+              totalAcceptors:
+                type: string
+                description: "the "
+              quantityReceived:
+                type: string
+                description: "the "
+              maxReceived: 
+                type: string
+                description: "the "
+
+  transfers:
+    type: object
+    properties:
+      lastTransfersDate: 
+        type: string
+        format: date
+        description: "the "
+        example: "2017"
+      time-periods:
+        type: object
+        description: "the "
+        properties:  
+          1-months:
+            type: object
+            description: "the "
+            properties:
+              totalTransfers: 
+                type: string
+                description: "the "
+              totalAcceptors:
+                type: string
+                description: "the "
+              quantityTransfers:
+                type: string
+                description: "the "
+          3-months:
+            type: object
+            properties:
+              totalTransfers:
+                type: string
+                description: "the "
+              totalAcceptors:
+                type: string
+                description: "the "
+              quantityTransfers:
+                type: string
+                description: "the "
+          6-months:
+            type: object
+            properties:
+              totalTransfers: 
+                type: string
+              totalAcceptors:
+                type: string
+                description: "the "
+              quantityTransfers:
+                type: string
+                description: "the "
+              maxTransfers: 
+                type: string
+                description: "the "
+
+  gsm:
+    type: object
+    title: "gsm object"
+    properties:
+      networkRegistrationDate: 
+        type: string
+        format: date
+        description: "the date the customer was initially registered on the network. This is also found in Plans API - startdate "
+      networkPaymentType:
+        type: string
+        example: "Prepaid"
+        description: "the date the customer was initially registered on the network. This is also found in Plans API - type. This should be removed from here "
+              
+
+  activity:
+    type: object
+    description: "Actvity related to GSM calls, data bundles, and airtime"
+    properties: 
+      daysSinceLastActive:
+        type: string
+        description: "Number of days since last activity"
+      topupMethod:
+        type: string
+        description: "Method used to topup airtime (and data?). Should this be a enum, of known types?"
+      time-periods:
+        type: object
+        properties:  
+          1-months:
+            type: object
+            properties:
+              numberOfActiveDays: 
+                type: string
+                description: "the "
+              numberOfTimesBlocked:
+                type: string
+                description: "Number of times blocked (post-  paid), for the last 1 month" 
+              airtimeUtilisation: 
+                type: string
+                description: "the "
+              daysAirtimeBalanceBelow:
+                type: string
+                description: "Days Airtime Below XX, based on UMD, for the last 1 month"
+              topupAmount:
+                type: string
+                description: "Network Topup Amount, for the last 1 month"
+              averageTopupAmount:
+                type: string
+                description: "the "
+              totalOutboundCalls:
+                type: string
+                description: "Number of outbound calls, for the last 1 month "
+              distinctOutboundCalls: 
+                type: string
+                description: "Number of Number of distinct outbound B-Parties , for the last 1 month "
+              totalInboundCalls:
+                type: string
+                description: "Number of inbound calls, for the last 1 month "
+              distinctInboundCalls: 
+                type: string
+                description: "Number of distinct inbound B-Parties , for the last 1 month "
+              dataUsage:
+                type: string
+                description: "Data usage in MB, for the last 1 month "
+              lastDataBundlePurchaseDate:
+                type: string
+                description: "Date of last data bundle purchase (any data bundle), for the last 1 month "
+              daysDataBalanceBelow:
+                type: string
+                description: "Days bundle balance less then 2MB, for the last 1 month"
+              averageDataBundleSize:
+                type: string
+                description: "Average bundle size purchased, for the last 1 month"
+              me2u:
+                type: object
+                properties:   
+                  me2uNumberAirtimeReceived:
+                    type: string
+                    description: "Number of MTN Me2U airtime received, for the last 1 month"
+                  me2uAmountAirtimeReceived:
+                    type: string
+                    description: "Amount of MTN Me2U airtime received, for the last 1 month"
+              
+          3-months:
+            type: object
+            properties:
+              numberOfActiveDays:
+                type: string
+                description: "the "
+              numberOfTimesBlocked:
+                type: string
+                description: "Number of times blocked (post-paid), for the last 1 month"
+              airtimeUtilisation:
+                type: string
+                description: "the "
+              daysAirtimeBalanceBelow:
+                type: string
+                description: "Days Airtime Below XX, based on UMD, for the last 1 month"
+              topupAmount:
+                type: string
+                description: "Network Topup Amount, for the last 3 months "
+              averageTopupAmount:
+                type: string
+                description: "the "
+              totalOutboundCalls:
+                type: string
+                description: "Number of outbound calls, for the last 1 month "
+              distinctOutboundCalls: 
+                type: string
+                description: "Number of Number of distinct outbound B-Parties , for the last 1 month "
+              totalInboundCalls:
+                type: string
+                description: "Number of inbound calls, for the last 1 month "
+              distinctInboundCalls: 
+                type: string
+                description: "Number of distinct inbound B-Parties , for the last 1 month "
+              dataUsage:
+                type: string
+                description: "Data usage in MB, for the last 1 month "
+              lastDataBundlePurchaseDate:
+                type: string
+                description: "Date of last data bundle purchase (any data bundle), for the last 1 month "
+              daysDataBalanceBelow:
+                type: string
+                description: "Days bundle balance less then 2MB, for the last 1 month"
+              averageDataBundleSize:
+                type: string
+                description: "Average bundle size purchased, for the last 1 month"
+              me2u:
+                type: object
+                properties:   
+                  me2uNumberAirtimeReceived:
+                    type: string
+                    description: "Number of MTN Me2U airtime received, for the last 1 month"
+                  me2uAmountAirtimeReceived:
+                    type: string
+                    description: "Amount of MTN Me2U airtime received, for the last 1 month"
+          6-months:
+            type: object
+            properties:
+              numberOfActiveDays: 
+                type: string
+                description: "the "
+              numberOfTimesBlocked:
+                type: string
+                description: "Number of times blocked (post-paid), for the last 1 month"
+              airtimeUtilisation: 
+                type: string
+                description: "the "
+              daysAirtimeBalanceBelow:
+                type: string
+                description: "Days Airtime Below XX, based on UMD, for the last 1 month"
+              topupAmount:
+                type: string
+                description: "Network Topup Amount, for the last 6 months "
+              averageTopupAmount:
+                type: string
+                description: "the "
+              totalOutboundCalls:
+                type: string
+                description: "Number of outbound calls, for the last 1 month "
+              distinctOutboundCalls: 
+                type: string
+                description: "Number of Number of distinct outbound B-Parties , for the last 1 month "
+              totalInboundCalls:
+                type: string
+                description: "Number of inbound calls, for the last 1 month "
+              distinctInboundCalls: 
+                type: string
+                description: "Number of distinct inbound B-Parties , for the last 1 month "
+              dataUsage:
+                type: string
+                description: "Data usage in MB, for the last 1 month "
+              lastDataBundlePurchaseDate:
+                type: string
+                description: "Date of last data bundle purchase (any data bundle), for the last 1 month "
+              daysDataBalanceBelow:
+                type: string
+                description: "Days bundle balance less then 2MB, for the last 1 month"
+              averageDataBundleSize:
+                type: string
+                description: "Average bundle size purchased, for the last 1 month"
+              me2u:
+                type: object
+                properties:   
+                  me2uNumberAirtimeReceived:
+                    type: string
+                    description: "Number of MTN Me2U airtime received, for the last 1 month"
+                  me2uAmountAirtimeReceived:
+                    type: string
+                    description: "Amount of MTN Me2U airtime received, for the last 1 month"
+                   
+  momo-loans:
+    type: object
+    title: "loans object"
+    properties:
+      time-periods:
+        type: object
+        properties:  
+          1-months:
+            type: object
+            properties:
+              numberOfLoans: 
+                type: string
+                description: "Number of loans, for the last 1 month"
+          3-months:
+            type: object
+            properties:
+              numberOfLoans: 
+                type: string
+                description: "Number of loans, for the last 1 month"
+          6-months:
+            type: object
+            properties:
+              numberOfLoans: 
+                type: string
+                description: "Number of loans, for the last 1 month"
+      totalLoansAmount: 
+        type: string
+        description: "tTotal loan amount"
+      firstLoansDate:
+          type: string
+          format: date
+          description: "First loan date"
+      lastLoansDate:
+          type: string
+          format: date
+          description: "Last loan date"
+      numberOverdue:
+          type: string
+          description: "Number of loans overdue"
+      totalTerm:
+          type: string
+          description: "Total loan term"
+      maxTerm:
+          type: string
+          description: "Maximum loan term"
+      lastOverdueDate:
+          type: string
+          format: date
+          description: "Last time loan was overdue"

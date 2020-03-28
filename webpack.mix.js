@@ -21,8 +21,16 @@ mix.scripts("resources/js/scripts.js", "public/js/scripts.js")
         "public/js/components/sidebar-accordion.js"
     )
     .scripts(
+        "resources/js/components/multiselect.js",
+        "public/js/components/multiselect.js"
+    )
+    .scripts(
         "resources/js/templates/products/index.js",
         "public/js/templates/products/index.js"
+    )
+    .scripts(
+        "resources/js/templates/products/show.js",
+        "public/js/templates/products/show.js"
     )
     .sass("resources/sass/components/carousel.scss", "public/css/components")
     .scripts(
@@ -46,6 +54,13 @@ mix.scripts("resources/js/scripts.js", "public/js/scripts.js")
         "resources/sass/templates/products/index.scss",
         "public/css/templates/products"
     )
-    .sass("resources/sass/templates/getting-started/index.scss", "public/css/templates/getting-started")
+    .sass(
+        "resources/sass/templates/products/show.scss",
+        "public/css/templates/products"
+    )
+    .sass(
+        "resources/sass/templates/getting-started/index.scss",
+        "public/css/templates/getting-started"
+    )
     .sass("resources/sass/styles.scss", "public/css")
     .version();

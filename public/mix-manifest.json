@@ -4,15 +4,15 @@
     "/css/components/card.css": "/css/components/card.css?id=c91778283571008f8208",
     "/css/components/card-link.css": "/css/components/card-link.css?id=b675982621c40ff3983b",
     "/css/components/card-product.css": "/css/components/card-product.css?id=d40d16a9e4e56ef898b7",
-    "/css/components/key-feature.css": "/css/components/key-feature.css?id=1dcdaa70cf5de89bd053",
+    "/css/components/key-feature.css": "/css/components/key-feature.css?id=7b358dcde3c0c561531f",
     "/css/components/sidebar-accordion.css": "/css/components/sidebar-accordion.css?id=1250fd5aaaf6e57296e3",
     "/css/components/heading.css": "/css/components/heading.css?id=a5af20fc4c45aa0c8731",
-    "/css/templates/products/index.css": "/css/templates/products/index.css?id=d329d00ce886d3953aed",
+    "/css/templates/products/show.css": "/css/templates/products/show.css?id=2a8ad70b794bffd6f6a5",
     "/css/templates/getting-started/index.css": "/css/templates/getting-started/index.css?id=bfbfa43e390d32409c06",
-    "/css/styles.css": "/css/styles.css?id=415050744f55d005b083",
+    "/css/styles.css": "/css/styles.css?id=e4a42fd1c1e1abea966c",
     "/js/scripts.js": "/js/scripts.js?id=1073cc28ad56d5a8c1c5",
     "/js/components/carousel.js": "/js/components/carousel.js?id=f8d1fee067d5197f9ccb",
     "/js/components/sidebar-accordion.js": "/js/components/sidebar-accordion.js?id=709883c29c1c818cfd4f",
-    "/js/templates/products/index.js": "/js/templates/products/index.js?id=200d54cf2841ec9033e4",
-    "/js/components/multiselect.js": "/js/components/multiselect.js?id=90d9eb9e4956c24f1451"
+    "/js/components/multiselect.js": "/js/components/multiselect.js?id=90d9eb9e4956c24f1451",
+    "/js/templates/products/show.js": "/js/templates/products/show.js?id=6b7d80178a2833e52bde"
 }
