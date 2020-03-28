@@ -54,10 +54,6 @@ class AppController extends Controller
             return $query;
         })->pluck('name', 'code');
 
-        $productLocations = Product::isPublic()->WhereNotNull('locations') ->select('locations') ->get() ->implode('locations', ',');
-        array_unique(explode(',', $productLocations));
-        dd($productLocations);
-
         return view('apps.create', [
                 'products' => $products,
                 'productCategories' => array_keys($products->toArray()),
@@ -106,7 +102,7 @@ class AppController extends Controller
 
     public function edit(Request $request)
     {
-        $app = '';
+        $app = ApigeeService::get("developers/wes@plusnarrative.com/apps/{$request->name}/?expand=true");
 
         return view('apps.edit', [
             'app' => $app

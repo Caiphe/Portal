@@ -85,7 +85,7 @@
         </div>
     </div>
     <nav class="menu">
-        <a href="{{ url('apps/edit') }}">Edit</a>
+        <a href="{{ route('app.edit', $app['name']) }}">Edit</a>
         <form class="delete" action="{{ url('apps') }}" method="POST">
             @method('DELETE')
             @csrf
