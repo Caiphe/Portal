@@ -42,7 +42,7 @@
 
         <div class="row">
 
-            <form id="create-app" action="">
+            <form id="create-app" action="{{ urL('apps') }}" method="POST">
 
                 <div class="active">
                     @svg('app-avatar', '#ffffff')

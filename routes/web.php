@@ -17,6 +17,7 @@ Route::get('/', function () {
 
 Route::get('apps', 'AppController@index');
 Route::get('apps/create', 'AppController@create');
+Route::post('apps', 'AppController@store');
 Route::get('apps/{id}/edit', 'AppController@edit');
 Route::put('apps/{id}', 'AppController@update');
 Route::delete('apps/{id}', 'AppController@destroy');

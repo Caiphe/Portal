@@ -80,7 +80,11 @@ class AppController extends Controller
 
     public function store(Request $request)
     {
-        //
+        ApigeeService::createApp($request->all());
+
+        return response([
+            'message' => 'App created successfully'
+        ], 201);
     }
 
     public function show(Request $request)
