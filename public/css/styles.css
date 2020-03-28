@@ -690,10 +690,9 @@ button.lightest:hover,
   border-color: #d6d6d6;
 }
 
-button.inline,
-.button.inline {
-  display: inline-block;
-  margin-right: 5px;
+button.flex,
+.button.flex {
+  display: flex;
 }
 
 button.blue:not(.outline),
@@ -1107,6 +1106,11 @@ button.blue.fab.arrow-forward.outline:hover,
 button.outline,
 .button.outline {
   background-color: transparent;
+}
+
+button.outline.dark:hover,
+.button.outline.dark:hover {
+  color: #FFF;
 }
 
 button.outline.blue:hover,

@@ -82,9 +82,8 @@ button,
         }
     }
 
-	&.inline {
-		display: inline-block;
-		margin-right: 5px;
+	&.flex {
+		display: flex;
 	}
     &.blue:not(.outline),
     &.dark:not(.outline),
@@ -157,7 +156,11 @@ button,
     }
 
     &.outline {
-        background-color: transparent;
+		background-color: transparent;
+		
+		&.dark:hover {
+            color: #FFF;
+		}
 
         &.blue:hover {
             color: #FFF;
