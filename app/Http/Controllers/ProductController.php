@@ -23,7 +23,10 @@ class ProductController extends Controller
 			$country_array[$country->code] = $country->name;
 		}
 		$groups = Product::distinct('group')->pluck('group');
-		return view('templates.products.index',['productsCollection' => $productsCollection, 'productCategories' => array_keys($productsCollection->toArray()), 'countries' => $country_array, 'groups'=> $groups]);
+		return view('templates.products.index',[
+			'productsCollection' => $productsCollection, 
+			'productCategories' => array_keys($productsCollection->toArray()), 'countries' => $country_array, 
+			'groups'=> $groups]);
     }
 
     /**
@@ -82,7 +85,7 @@ class ProductController extends Controller
             }
         }
 
-        return view('products.show', [
+        return view('templates.products.show', [
             "product" => $prod,
             "sidebarAccordion" => $sidebarAccordion,
             "content" => $content,
