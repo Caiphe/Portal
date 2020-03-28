@@ -46,7 +46,7 @@ $filters = array('Group'=> $groups,'Categories'=> $productCategories);
 				$tags = array($product->group,$product->category);
 				$slug = 'products/'.$product->slug;
 				@endphp
-				<x-card-product :title="$product->display_name" :href="$slug" :countries="$countries" :tags="$tags"
+				<x-card-product :title="$product->display_name" :href="'/' . $slug" :countries="$countries" :tags="$tags"
 				:data-title="$product->display_name"
 				:data-group="$product->group"
 				:data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}</x-card-product>
