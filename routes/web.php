@@ -17,12 +17,12 @@ Route::get('/', function () {
     return view('layouts.sidebar');
 });
 
-Route::get('apps', 'AppController@index');
-Route::get('apps/create', 'AppController@create');
-Route::post('apps', 'AppController@store');
-Route::get('apps/{id}/edit', 'AppController@edit');
-Route::put('apps/{id}', 'AppController@update');
-Route::delete('apps', 'AppController@destroy');
+Route::get('apps', 'AppController@index')->name('app.index');
+Route::get('apps/create', 'AppController@create')->name('app.create');
+Route::post('apps', 'AppController@store')->name('app.store');
+Route::get('apps/{id}/edit', 'AppController@edit')->name('app.edit');
+Route::put('apps/{id}', 'AppController@update')->name('app.update');
+Route::delete('apps', 'AppController@destroy')->name('app.destroy');
 
 Route::get('products/{product:slug}', 'ProductController@show')->name('product.show');
 Route::get('products/{product:slug}/download/postman', 'ProductController@downloadPostman')->name('product.download.postman');
