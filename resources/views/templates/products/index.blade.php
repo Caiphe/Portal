@@ -6,7 +6,7 @@
 
 @section('sidebar')
 @php
-$filters = array('Group'=> array('MTN'),'Categories'=> $productCategories);
+$filters = array('Group'=> $groups,'Categories'=> $productCategories);
 @endphp
 <div class="filter-sidebar">
 	<h2>Filter by</h2>
@@ -30,11 +30,11 @@ $filters = array('Group'=> array('MTN'),'Categories'=> $productCategories);
 
 @section('content')
 	<x-heading heading="Products"></x-heading>
-	<input type="search" name="filter-text" id="filter-text" class="filter-text" placeholder="Search"/>
+	<input type="text" name="filter-text" id="filter-text" class="filter-text" placeholder="Search"/>
 	<hr class="search-hr"/>
-	<div class="container">
+	<div class="products">
 	@foreach ($productsCollection as $category=>$products)
-	<div class="row product-category" data-category="{{ $category }}">
+	<div class="category" data-category="{{ $category }}">
 			<h3>{{ $category }}</h3>
 			@foreach ($products as $product)
 				@php //setting variables
@@ -44,8 +44,9 @@ $filters = array('Group'=> array('MTN'),'Categories'=> $productCategories);
 					$countries = array('globe');	
 				endif;
 				$tags = array($product->group,$product->category);
+				$slug = 'products/'.$product->slug;
 				@endphp
-				<x-card-product :title="$product->display_name" class="product-block" :href="$product->slug" :countries="$countries" :tags="$tags"
+				<x-card-product :title="$product->display_name" :href="$slug" :countries="$countries" :tags="$tags"
 				:data-title="$product->display_name"
 				:data-group="$product->group"
 				:data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}</x-card-product>

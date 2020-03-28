@@ -8,17 +8,24 @@ h3 {
 .search-hr {
     color: $grey300;
 }
-.row {
-    margin-top: 20px;
-    padding: 20px;
-    @media screen and (min-width: 1024px) {
-        .product-block {
-            display: inline-block;
+.products {
+    display: flex;
+    flex-flow: row wrap;
+
+    .category {
+        display: flex;
+        flex-flow: row wrap;
+        margin-bottom: 10px;
+        width: 100%;
+
+        h3 {
+            width: 100%;
+        }
+
+        .card {
+            margin-bottom: 30px;
+            margin-right: 20px;
             width: 30%;
-			margin: 10px;
-			.card__header, .card__body{
-				min-height: 40px;
-			}
         }
     }
 }

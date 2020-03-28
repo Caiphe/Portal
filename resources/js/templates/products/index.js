@@ -15,7 +15,7 @@ function filterProducts(filterGroup = "") {
         var categoriesChecked = document.querySelectorAll(
             "input[name=Categories]:checked"
         );
-        var categories = document.querySelectorAll(".product-category");
+        var categories = document.querySelectorAll(".category");
         for (var i = categories.length - 1; i >= 0; i--) {
             categories[i].style.display = "none";
             if (
@@ -35,8 +35,8 @@ function filterProducts(filterGroup = "") {
         var match = new RegExp(filterText, "gi");
         var countrySelect = getSelected(
             document.getElementById("filter-country")
-        );
-        var products = document.querySelectorAll(".card--product");
+		);
+		var products = document.querySelectorAll(".card--product");
         for (var i = products.length - 1; i >= 0; i--) {
             products[i].style.display = "none";
 
@@ -47,9 +47,11 @@ function filterProducts(filterGroup = "") {
             textValid =
                 filterText === "" || products[i].dataset.title.match(match);
 
-            if (products[i].dataset.locations !== undefined)
-                locations = products[i].dataset.locations.split(",");
-            countriesValid =
+			var locations =
+                products[i].dataset.locations !== undefined
+                    ? products[i].dataset.locations.split(",")
+					: ["all"];
+			countriesValid =
                 countrySelect.length === 0 ||
                 locations[0] === "all" ||
                 arrayCompare(locations, countrySelect);
@@ -112,6 +114,7 @@ function clearFilter() {
     }
     var countrySelect = getSelected(document.getElementById("filter-country"));
     if (countrySelect.length > 0) {
+		clearSelected(document.getElementById("filter-country"));
         var multiselectTags = document.getElementById("filter-country-tags");
         while (multiselectTags.firstChild) {
             multiselectTags.removeChild(multiselectTags.firstChild);
@@ -119,7 +122,7 @@ function clearFilter() {
 	}
 	document.getElementById("filter-text").value = "";
 
-    var categories = document.querySelectorAll(".product-category");
+    var categories = document.querySelectorAll(".category");
     for (var i = categories.length - 1; i >= 0; i--) {
         categories[i].style.display = "block";
     }
@@ -145,6 +148,13 @@ function getSelected(multiSelect) {
         }
     }
     return selected;
+}
+
+function clearSelected(multiselect) {
+	var elements = multiselect.options;
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].selected = false;
+	}
 }
 
 function arrayCompare(a, b) {
