@@ -214,6 +214,7 @@
 
     function selectCountry() {
         // document.getElementById('country-2').checked = true;
+
         this.checked = !this.checked;
 
         console.log(checkedBoxes);
@@ -223,9 +224,8 @@
      *  Clear checkboxes on page load, otherwise some checkboxes persist checked state.
      */
     function clearCheckBoxes() {
-        var checkList = document.getElementsByTagName("input");
-        for (var i = 0; i < checkList.length; ++i) {
-            checkList[i].checked = false;
+        for (var i = 0; i < checkedBoxes.length; ++i) {
+            checkedBoxes[i].checked = false;
         }
     }
 </script>
