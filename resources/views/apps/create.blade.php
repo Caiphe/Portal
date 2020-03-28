@@ -73,7 +73,7 @@
                     <div class="countries">
                         @foreach($countries as $key => $country)
                             <label class="country" for="country-{{ $loop->index + 1 }}">
-                                @svg('$key', '#ffffff', 'images/locations')
+                                @svg('$key', '#000000', 'images/locations')
                                 <input type="checkbox" id="country-{{ $loop->index + 1 }}" name="country-checkbox">
                                 {{ $country }}
                             </label>
