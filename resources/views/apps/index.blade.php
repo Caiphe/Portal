@@ -191,16 +191,12 @@
         el.blur();
     }
 
-    // var menus = document.querySelectorAll('.menu');
-    //
-    // function closeMenu() {
-    //     console.log('close')
-    // }
-    //
-    // window.onclick = function(event) {
-    //     for (var i =0 ; i < menus.length; i++) {
-    //         menus.item(i).onclick = closeMenu();
-    //     }
-    // };
+    var modals = document.querySelectorAll('.modal');
+    for (var i = 0; i < modals.length; i ++) {
+        modals[i].addEventListener('click', function() {
+            document.querySelector(".modal.show").classList.remove('show');
+            document.querySelector(".menu.show").classList.remove('show');
+        })
+    }
 </script>
 @endpush
