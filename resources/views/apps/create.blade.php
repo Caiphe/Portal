@@ -33,7 +33,7 @@
                 <span>1</span> App details
             </a>
             <a href="#">
-                <span>2</span> Select regions
+                <span>2</span> Select countries
             </a>
             <a href="#">
                 <span>3</span> Add products
@@ -62,13 +62,13 @@
                     </div>
 
                     <button class="dark next">
-                        Select regions
+                        Select countries
                         @svg('arrow-forward', '#ffffff')
                     </button>
                 </div>
 
                 <div>
-                    <p>Select the regions you would like to associate with your app *</p>
+                    <p>Select the countries you would like to associate with your app *</p>
 
                     <div class="countries">
                         @foreach($countries as $country)
@@ -213,9 +213,22 @@
     }
 
     function selectCountry() {
-        // document.getElementById('country-2').checked = true;
+        var array = [];
+        var countryCheckboxes = document.querySelectorAll('input[type=checkbox]:checked');
 
-        console.log(checkedBoxes);
+        for (var i = 0; i < countryCheckboxes.length; i++) {
+            array.push(countryCheckboxes[i]);
+
+            if(countryCheckboxes[i].checked === true) {
+                countryCheckboxes[i].classList.toggle('selected');
+                countryCheckboxes[i].parentElement.classList.toggle('selected');
+            } else {
+                countryCheckboxes[i].classList.toggle('selected');
+                countryCheckboxes[i].parentElement.classList.toggle('selected');
+            }
+        }
+
+        console.log(array);
     }
 
     /**
