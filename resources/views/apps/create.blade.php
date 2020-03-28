@@ -218,8 +218,8 @@
 
         for (var i = 0; i < countryCheckboxes.length; i++) {
             array.push(countryCheckboxes[i]);
-            // countryCheckboxes[i].classList.add('selected');
-            //countryCheckboxes[i].parentElement.classList.toggle('selected');
+            countryCheckboxes[i].classList.add('selected');
+            countryCheckboxes[i].parentElement.classList.add('selected');
         }
 
         console.log(array);
