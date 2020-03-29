@@ -63,37 +63,30 @@ class AppController extends Controller
 
     public function store(CreateAppRequest $request)
     {
-         $validated = $request->validated();
+        $validated = $request->validated();
 
-         $data = [];
+        Auth::loginUsingId(1);
 
-         $data['name'] = strtolower(str_replace(' ', '-', $validated['name']));
-         $data['callbackUrl'] = $validated['url'] ?? '';
-         $data['attributes'][0]['name'] = 'Description';
-         $data['attributes'][0]['value'] = $validated['description'];
-         $data['attributes'][1]['name'] = 'DisplayName';
-         $data['attributes'][1]['value'] = $validated['name'];
-         $data['apiProducts'] = [];
-         $data['expiresAt'] = -1;
+        $apiProducts = Product::findMany($request->products[0])->pluck('name')->toArray();
 
-         $products = Product::findMany(collect($validated['products'])->flatten());
-         $products = $products->pluck('name');
+        $data = [
+            'name' => strtolower(str_replace(' ', '-', $validated['name'])),
+            'apiProducts' => $apiProducts,
+            'keyExpiresIn' => -1,
+            'attributes' => [
+                [
+                    'name' => 'DisplayName',
+                    'value' => $validated['name']
+                ],
+                [
+                    'name' => 'Description',
+                    'value' => preg_replace('/[<>"]*/', '', strip_tags($validated['description']))
+                ]
+            ],
+            'callbackUrl' => preg_replace('/[<>"]*/', '', strip_tags($validated['url'])) ?? ''
+        ];
 
-//         dd($products);
-
-         $apiProducts = [];
-
-         foreach($products as $product) {
-             $apiProducts[] = str_replace(' ', '-', $product);
-         }
-//
-         $data['apiProducts'] = $apiProducts;
-
-         Auth::loginUsingId(1);
-
-         $create = ApigeeService::createApp($data);
-
-         dd($create);
+        ApigeeService::createApp($data);
 
         return redirect(route('app.index'))->with(
             ['message' => 'App created successfully'], 201
