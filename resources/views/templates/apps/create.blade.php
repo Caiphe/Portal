@@ -274,32 +274,48 @@
 
     function filterProducts(selectedCountry) {
 
-        var categories = document.querySelectorAll('.category');
+        var products = document.querySelectorAll(".card--product");
 
-        console.log(selectedCountry);
+        for (var i = products.length - 1; i >= 0; i--) {
+            products[i].style.display = "none";
 
-        for (var i = categories.length - 1; i >= 0; i--) {
+            var locations =
+                products[i].dataset.locations !== undefined
+                    ? products[i].dataset.locations.split(",")
+                    : ["all"];
 
-            categories[i].style.display = "none";
+            if(selectedCountry.length === 0 || inSelectedArray(selectedCountry, locations)) {
 
-            //console.log(categories[i])
-
-            if (selectedCountry.length === 0 || inSelectedArray(selectedCountry, categories[i])) {
-                categories[i].style.display = "flex";
+                products[i].style.display = "flex";
             }
         }
     }
 
-    function inSelectedArray(selectedCountry, categories) {
-
-        // console.log(categories);
-        // console.log(categories);
-        // var matches = [];
-        // for (var i = 0; i < selectedCountry.length; i++) {
-        //     for (var e = 0; e < categories.length; e++) {
-        //         console.log(categories[i]);
+    function inSelectedArray(selectedCountry, locations) {
         //
-        //         // if (selected[i] === categories[e]) matches.push(selected[i]);
+        for (var j = 0; j < selectedCountry.length; j++) {
+            console.log(selectedCountry[j]);
+
+            for (var k = 0; k < locations.length; k++) {
+                if(selectedCountry[j] === locations[k]) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+        }
+        //
+        //     for (var i = 0; i < categories.length; i++) {
+        //
+        //         // console.log(categories[i].lastElementChild.dataset.locations);
+        //
+        //         if(selectedCountry[j] === categories[i].lastElementChild.dataset.locations) {
+        //
+        //             return true;
+        //         } else {
+        //             return false;
+        //         }
         //     }
         // }
     }
