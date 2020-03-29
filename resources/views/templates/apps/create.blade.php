@@ -292,10 +292,7 @@
     }
 
     function inSelectedArray(selectedCountry, locations) {
-        //
         for (var j = 0; j < selectedCountry.length; j++) {
-            console.log(selectedCountry[j]);
-
             for (var k = 0; k < locations.length; k++) {
                 if(selectedCountry[j] === locations[k]) {
                     return true;
@@ -303,21 +300,7 @@
                     return false;
                 }
             }
-
         }
-        //
-        //     for (var i = 0; i < categories.length; i++) {
-        //
-        //         // console.log(categories[i].lastElementChild.dataset.locations);
-        //
-        //         if(selectedCountry[j] === categories[i].lastElementChild.dataset.locations) {
-        //
-        //             return true;
-        //         } else {
-        //             return false;
-        //         }
-        //     }
-        // }
     }
 
     /**
