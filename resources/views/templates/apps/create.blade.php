@@ -213,9 +213,14 @@
         }
 
         var els = document.querySelectorAll('#app-create nav a.active');
+        var countries = document.querySelectorAll('.countries .selected');
 
         for (var k = 0; k < els.length; k++) {
             els[k].classList.remove('active');
+        }
+
+        for(var x = 0; x < countries.length; x++) {
+            countries[x].classList.remove('selected');
         }
 
         nav.querySelector('a').classList.add('active');
@@ -247,7 +252,7 @@
         }
 
         filterLocations(selected);
-        // filterProducts(selected);
+        filterProducts(selected);
     }
 
     function filterLocations(selected) {
