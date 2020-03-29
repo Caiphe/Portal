@@ -18,5 +18,6 @@
     "/js/components/sidebar-accordion.js": "/js/components/sidebar-accordion.js?id=709883c29c1c818cfd4f",
     "/js/components/multiselect.js": "/js/components/multiselect.js?id=90d9eb9e4956c24f1451",
     "/js/templates/products/index.js": "/js/templates/products/index.js?id=200d54cf2841ec9033e4",
-    "/js/templates/products/show.js": "/js/templates/products/show.js?id=6b7d80178a2833e52bde"
+    "/js/templates/products/show.js": "/js/templates/products/show.js?id=6b7d80178a2833e52bde",
+    "/js/templates/apps/index.js": "/js/templates/apps/index.js?id=8735bf9d2205080cebab"
 }

@@ -72,9 +72,9 @@
 
                     <div class="countries">
                         @foreach($countries as $key => $country)
-                            <label class="country" for="country-{{ $loop->index + 1 }}" data-code="{{ $key }}">
+                            <label class="country" for="country-{{ $loop->index + 1 }}" data-location="{{ $key }}">
                                 @svg('$key', '#000000', 'images/locations')
-                                <input type="checkbox" id="country-{{ $loop->index + 1 }}" name="country-checkbox">
+                                <input type="checkbox" id="country-{{ $loop->index + 1 }}" name="country-checkbox" data-location="{{ $key }}">
                                 {{ $country }}
                             </label>
                         @endforeach
@@ -96,7 +96,7 @@
 
                     <div class="filtered-countries">
                         @foreach($countries as $key => $country)
-                            <img src="/images/locations/{{$key}}.svg" title="{{$country}} flag" alt="{{$country}} flag" data-code="{{ $key }}">
+                            <img src="/images/locations/{{$key}}.svg" title="{{$country}} flag" alt="{{$country}} flag" data-location="{{ $key }}">
                         @endforeach
                     </div>
 
@@ -129,6 +129,8 @@
                         </button>
                     </div>
                 </div>
+
+                <input type="hidden" name="products[]">
 
                 @csrf
 
@@ -228,39 +230,31 @@
 
     function selectCountry(event) {
         var select = event.currentTarget;
-        var code = select.dataset.code;
 
         select.classList.toggle('selected');
         select.querySelector('input[type=checkbox]').classList.toggle('selected');
 
-        console.log(code);
+        var selected = [];
+        var countryCheckBoxes = document.querySelectorAll('input[type=checkbox]:checked');
 
-/*        var filteredCountries = document.querySelectorAll('.filtered-countries img');
+        for (var m = 0; m < countryCheckBoxes.length; m++) {
 
-        console.log(filteredCountries);*/
+            selected.push(countryCheckBoxes[m]);
 
-        // var array = [];
-        // var countryCheckBoxes = document.querySelectorAll('input[type=checkbox]:checked');
+            countryCheckBoxes[m].classList.add('selected');
+            countryCheckBoxes[m].parentElement.classList.add('selected');
 
-        // for (var m = 0; m < countryCheckBoxes.length; m++) {
-        //     array.push(countryCheckBoxes[m]);
-        //
-        //     var select = event.currentTarget;
-        //     console.log(select);
-        //
-        //     countryCheckBoxes[m].classList.add('selected');
-        //     countryCheckBoxes[m].parentElement.classList.add('selected');
-        //
-        //     // var unselectedCheckBoxes = document.querySelectorAll('input[type=checkbox]:not(.selected)');
-        //     //
-        //     // for (var u = 0; u < unselectedCheckBoxes.length; u++) {
-        //     //
-        //     //     unselectedCheckBoxes[u].classList.add('not-selected');
-        //     //     unselectedCheckBoxes[u].parentElement.classList.add('not-selected');
-        //     // }
-        // }
-        //
-        // console.log(array);
+        }
+
+        filterProducts(selected);
+    }
+
+    function filterProducts(selected) {
+
+        var categories = document.querySelectorAll('.category');
+        var products = document.querySelectorAll('.card--product');
+
+        console.log(selected);
     }
 
     /**
@@ -293,13 +287,7 @@
 
     function addProduct(product) {
         var products = document.querySelector('#products');
-        var selectedProduct = document.createElement('input');
 
-        selectedProduct.setAttribute('type', 'hidden');
-        selectedProduct.setAttribute("name", "selected_product[]");
-        selectedProduct.setAttribute("value", product.dataset.title);
-
-        form.append(p);
     }
 </script>
 @endpush
