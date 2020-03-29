@@ -239,22 +239,64 @@
 
         for (var m = 0; m < countryCheckBoxes.length; m++) {
 
-            selected.push(countryCheckBoxes[m]);
+            selected.push(countryCheckBoxes[m].dataset.location);
 
             countryCheckBoxes[m].classList.add('selected');
             countryCheckBoxes[m].parentElement.classList.add('selected');
 
         }
 
-        filterProducts(selected);
+        filterLocations(selected);
+        // filterProducts(selected);
     }
 
-    function filterProducts(selected) {
+    function filterLocations(selected) {
+
+        var locations = document.querySelectorAll('.filtered-countries img');
+
+        for(var i = 0; i < locations.length; i++) {
+
+            locations[i].style.opacity = "0.5";
+
+            for(var j = 0; j < selected.length; j++) {
+
+                if (locations[i].dataset.location === selected[j]) {
+                    locations[i].style.opacity = "1";
+                }
+            }
+        }
+    }
+
+    function filterProducts(selectedCountry) {
 
         var categories = document.querySelectorAll('.category');
-        var products = document.querySelectorAll('.card--product');
 
-        console.log(selected);
+        console.log(selectedCountry);
+
+        for (var i = categories.length - 1; i >= 0; i--) {
+
+            categories[i].style.display = "none";
+
+            //console.log(categories[i])
+
+            if (selectedCountry.length === 0 || inSelectedArray(selectedCountry, categories[i])) {
+                categories[i].style.display = "flex";
+            }
+        }
+    }
+
+    function inSelectedArray(selectedCountry, categories) {
+
+        // console.log(categories);
+        // console.log(categories);
+        // var matches = [];
+        // for (var i = 0; i < selectedCountry.length; i++) {
+        //     for (var e = 0; e < categories.length; e++) {
+        //         console.log(categories[i]);
+        //
+        //         // if (selected[i] === categories[e]) matches.push(selected[i]);
+        //     }
+        // }
     }
 
     /**
