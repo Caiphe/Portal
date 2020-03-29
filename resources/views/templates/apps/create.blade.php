@@ -124,13 +124,12 @@
 
                     <div class="form-actions">
                         <button class="dark outline back">Back</button>
-                        <button class="dark" type="submit">
+                        <button class="dark" id="create">
                             Create app
                         </button>
                     </div>
                 </div>
 
-                <input type="hidden" name="products[]">
 
                 @csrf
 
@@ -345,6 +344,40 @@
     function addProduct(product) {
         var products = document.querySelector('#products');
 
+        console.log(products);
+        console.log(product);
+
+    }
+
+    var submit = document.getElementById('create').addEventListener('click', handleCreate);
+
+    function handleCreate(event) {
+        event.preventDefault();
+
+        var app = {
+            name: document.querySelector('#name').value,
+            url: document.querySelector('#url').value,
+            description: document.querySelector('#description').value,
+            products: []
+        };
+
+        var selectedProducts = document.querySelectorAll('.products .selected');
+
+        var products = [];
+        for(i = 0; i < selectedProducts.length; i++) {
+            products.push(selectedProducts[i].dataset.title);
+        }
+
+        app.products.push(products);
+
+        var url = "{{ route('app.store') }}";
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('POST', url);
+        xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+        xhr.send(JSON.stringify(app));
     }
 </script>
 @endpush
