@@ -15,6 +15,8 @@ class AppController extends Controller
     {
         $apps = ApigeeService::get('developers/wes@plusnarrative.com/apps/?expand=true');
 
+        dd($apps);
+
         $approved_apps = [];
         $revoked_apps = [];
 
@@ -72,14 +74,16 @@ class AppController extends Controller
          $data['attributes'][0]['value'] = $validated['description'];
          $data['attributes'][1]['name'] = 'DisplayName';
          $data['attributes'][1]['value'] = $validated['name'];
-         $data['apiProducts']['apiproduct'] = '';
+         $data['apiProducts']['apiproduct'] = [];
          $data['apiProducts']['status'] = '';
          $data['expiresAt'] = -1;
+//
+//         foreach($validated['apiProducts'] as $product) {
+//             dd($product);
+//         }
+         dd($validated);
 
-         dd($validated['products']);
-
-
-         // ApigeeService::createApp($request->all());
+          $create = ApigeeService::post('developers/wes@plusnarrative.com/apps', $data);
 
         //        {
 //            "name" : "my_app_internal_name",

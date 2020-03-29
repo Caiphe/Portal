@@ -1,4 +1,4 @@
-{{-- 
+{{--
     This component allows for adding product cards.
     Eg:
     <x-card-product :countries="$countries" :tags="$tags" target="_blank" title="API Name" href="http://www.google.com" addButtonId="button-id" addUrl="http://www.google.com">This is the description</x-card-product>
@@ -42,19 +42,19 @@
                 </div>
                 @if (count($countries ) > 1)
                     <div class="view-more">+ {{count($countries )-1}} more</div>
-                @endif  
-            </div>  
-            @endisset   
+                @endif
+            </div>
+            @endisset
         </div>
     </a>
     <div class="buttons">
         <a class="flex button" href="{{$href}}">View</a>
         @isset($addButtonId)
 		<a
-		@isset($addUrl) 
+		@isset($addUrl)
 		href="{{$addUrl}}"
-		@endisset 
-		id="$addButtonId" class="flex button fab plus dark"></a>
+		@endisset
+		id="{{ $addButtonId }}" class="flex button fab plus dark"></a>
         @endisset
     </div>
 </div>

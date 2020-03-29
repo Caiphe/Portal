@@ -112,7 +112,7 @@
                                                     class="product-block"
                                                     :href="$product->slug"
                                                     :tags="$tags"
-                                                    :addButtonId="$product"
+                                                    :addButtonId="$product->id"
                                                     :data-title="$product->display_name"
                                                     :data-group="$product->group"
                                                     :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}
@@ -361,11 +361,11 @@
             products: []
         };
 
-        var selectedProducts = document.querySelectorAll('.products .selected .buttons a:first-of-type');
+        var selectedProducts = document.querySelectorAll('.products .selected');
 
         var products = [];
         for(i = 0; i < selectedProducts.length; i++) {
-            products.push(selectedProducts[i].href);
+            products.push(selectedProducts[i].dataset.title);
         }
 
         app.products.push(products);
