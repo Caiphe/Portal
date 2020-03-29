@@ -4,6 +4,8 @@
 
 @props(['app', 'attr'])
 
+
+{{ dd($app) }}
 <div class="my-app" data-id="{{ $app['appId'] }}">
     <div class="column">
         <p class="name">

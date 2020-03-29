@@ -60,10 +60,28 @@ class AppController extends Controller
         );
     }
 
-    public function store(Request $request)
+    public function store(CreateAppRequest $request)
     {
-        // $validated = $request->validated();
-//        {
+         $validated = $request->validated();
+
+         $data = [];
+
+         $data['name'] = strtolower(str_replace(' ', '-', $validated['name']));
+         $data['callbackUrl'] = $validated['url'] ?? '';
+         $data['attributes'][0]['name'] = 'Description';
+         $data['attributes'][0]['value'] = $validated['description'];
+         $data['attributes'][1]['name'] = 'DisplayName';
+         $data['attributes'][1]['value'] = $validated['name'];
+         $data['apiProducts']['apiproduct'] = '';
+         $data['apiProducts']['status'] = '';
+         $data['expiresAt'] = -1;
+
+         dd($validated['products']);
+
+
+         // ApigeeService::createApp($request->all());
+
+        //        {
 //            "name" : "my_app_internal_name",
 //             "apiProducts": [ "api_product_1", "api_product_2" ],
 //             "keyExpiresIn" : 2592000000,
@@ -84,13 +102,10 @@ class AppController extends Controller
 //             "scopes" : [ "scope_a" ],
 //             "callbackUrl" : "https://url-for-3-legged-oauth/"
 //        }
-        dd($request->all());
 
-        // ApigeeService::createApp($request->all());
-
-        return response([
-            'message' => 'App created successfully'
-        ], 201);
+        return redirect(route('app.index'))->with(
+            ['message' => 'App created successfully'], 201
+        );
     }
 
     public function show(Request $request)

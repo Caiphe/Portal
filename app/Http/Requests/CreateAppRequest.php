@@ -25,11 +25,9 @@ class CreateAppRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'apiProducts' => 'array',
-            'keyExpiresIn' => '',
-            'attributes' => 'array',
-            'scopes' => 'sometimes',
-            'callbackUrl' => 'required'
+            'url' => 'sometimes',
+            'description' => 'sometimes',
+            'products' => 'required:array'
         ];
     }
 }

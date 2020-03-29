@@ -361,11 +361,11 @@
             products: []
         };
 
-        var selectedProducts = document.querySelectorAll('.products .selected');
+        var selectedProducts = document.querySelectorAll('.products .selected .buttons a:first-of-type');
 
         var products = [];
         for(i = 0; i < selectedProducts.length; i++) {
-            products.push(selectedProducts[i].dataset.title);
+            products.push(selectedProducts[i].href);
         }
 
         app.products.push(products);
