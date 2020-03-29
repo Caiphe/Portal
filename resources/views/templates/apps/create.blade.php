@@ -130,7 +130,6 @@
                     </div>
                 </div>
 
-
                 @csrf
 
             </form>
@@ -361,11 +360,11 @@
             products: []
         };
 
-        var selectedProducts = document.querySelectorAll('.products .selected');
+        var selectedProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
 
         var products = [];
         for(i = 0; i < selectedProducts.length; i++) {
-            products.push(selectedProducts[i].dataset.title);
+            products.push(selectedProducts[i].id);
         }
 
         app.products.push(products);
@@ -378,6 +377,8 @@
         xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 
         xhr.send(JSON.stringify(app));
+
+        // location.reload();
     }
 </script>
 @endpush

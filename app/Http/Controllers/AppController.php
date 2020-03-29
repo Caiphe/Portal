@@ -15,8 +15,6 @@ class AppController extends Controller
     {
         $apps = ApigeeService::get('developers/wes@plusnarrative.com/apps/?expand=true');
 
-        dd($apps);
-
         $approved_apps = [];
         $revoked_apps = [];
 
@@ -74,38 +72,23 @@ class AppController extends Controller
          $data['attributes'][0]['value'] = $validated['description'];
          $data['attributes'][1]['name'] = 'DisplayName';
          $data['attributes'][1]['value'] = $validated['name'];
-         $data['apiProducts']['apiproduct'] = [];
-         $data['apiProducts']['status'] = '';
+         $data['apiProducts'] = [];
          $data['expiresAt'] = -1;
+
+         $products = Product::findMany(collect($validated['products'])->flatten());
+         $products = $products->pluck('name');
+
+         $apiProducts = [];
+
+         foreach($products as $product) {
+             $apiProducts[] = str_replace(' ', '-', $product);
+         }
 //
-//         foreach($validated['apiProducts'] as $product) {
-//             dd($product);
-//         }
-         dd($validated);
+         $data['apiProducts'] = $apiProducts;
 
-          $create = ApigeeService::post('developers/wes@plusnarrative.com/apps', $data);
+         $create = ApigeeService::post('developers/wes@plusnarrative.com/apps', $data);
 
-        //        {
-//            "name" : "my_app_internal_name",
-//             "apiProducts": [ "api_product_1", "api_product_2" ],
-//             "keyExpiresIn" : 2592000000,
-//             "attributes" : [
-//              {
-//                  "name" : "DisplayName",
-//               "value" : "My Awesome App"
-//              },
-//              {
-//                  "name" : "Notes",
-//               "value" : "notes_for_developer_app"
-//              },
-//              {
-//                  "name" : "custom_attribute_name",
-//               "value" : "custom_attribute_value"
-//              }
-//             ],
-//             "scopes" : [ "scope_a" ],
-//             "callbackUrl" : "https://url-for-3-legged-oauth/"
-//        }
+         dd($create);
 
         return redirect(route('app.index'))->with(
             ['message' => 'App created successfully'], 201
