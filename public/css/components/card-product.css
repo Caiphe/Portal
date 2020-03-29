@@ -11,7 +11,7 @@
 
 .card--product .card__content .country-selector .countries {
   width: 15px;
-  height: 15px;
+  max-height: 15px;
   overflow: hidden;
 }
 
@@ -27,8 +27,8 @@
 
 .card--product .card__content .country-selector:hover > .countries {
   width: 100%;
-  height: 50px;
-  transition: width 0.5s, height 0.5s;
+  max-height: 50px;
+  transition: max-height 0.5s;
 }
 
 .card--product .card__content .country-selector:hover > .view-more {

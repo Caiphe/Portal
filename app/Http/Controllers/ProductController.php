@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\Country;
 use App\Services\OpenApiService;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,19 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+		$productsCollection = Product::all()->sortBy('category')->groupBy('category');
+		$productLocations = Product::isPublic()->WhereNotNull('locations')->select('locations')->get()->implode('locations', ',');
+		$locations = array_unique(explode(',', $productLocations));
+		$countries = Country::whereIn('code', $locations)->get();
+		$country_array = array();
+		foreach ($countries as $country) {
+			$country_array[$country->code] = $country->name;
+		}
+		$groups = Product::distinct('group')->pluck('group');
+		return view('templates.products.index',[
+			'productsCollection' => $productsCollection, 
+			'productCategories' => array_keys($productsCollection->toArray()), 'countries' => $country_array, 
+			'groups'=> $groups]);
     }
 
     /**
@@ -49,7 +62,7 @@ class ProductController extends Controller
     {
         $openApiClass = new OpenApiService($product->swagger);
         $prod = $product->load(['content', 'keyFeatures']);
-        $productList = Product::isPublic()->get()->groupBy('category');
+        $productList = Product::isPublic()->get()->sortBy('category')->groupBy('category');
         $content = [];
         $sidebarAccordion = [];
         $startingPoint = "product-specification";
@@ -72,9 +85,12 @@ class ProductController extends Controller
             foreach ($products as $key => $product) {
                 $sidebarAccordion[$category][] = ["label" => $product['display_name'], "link" => '/products/' . $product['slug']];
             }
+            
+            asort($sidebarAccordion[$category]);
         }
 
-        return view('products.show', [
+
+        return view('templates.products.show', [
             "product" => $prod,
             "sidebarAccordion" => $sidebarAccordion,
             "content" => $content,

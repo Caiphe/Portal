@@ -26,7 +26,7 @@ class AppController extends Controller
             }
         }
 
-        return view('apps.index', [
+        return view('templates.apps.index', [
             'approved_apps' => $approved_apps,
             'revoked_apps' => $revoked_apps
         ]);
@@ -52,7 +52,7 @@ class AppController extends Controller
             return $query;
         })->pluck('name', 'code');
 
-        return view('apps.create', [
+        return view('templates.apps.create', [
                 'products' => $products,
                 'productCategories' => array_keys($products->toArray()),
                 'countries' => $countries ?? ''
@@ -95,7 +95,7 @@ class AppController extends Controller
 
     public function show(Request $request)
     {
-        return view('apps.show');
+        return view('templates.apps.show');
     }
 
     public function edit(Request $request)
@@ -104,7 +104,7 @@ class AppController extends Controller
 
         // dd($app);
 
-        return view('apps.edit', [
+        return view('templates.apps.edit', [
             'app' => $app
         ]);
     }
