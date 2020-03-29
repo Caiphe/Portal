@@ -8,6 +8,7 @@ use App\Http\Requests\DeleteAppRequest;
 use App\Product;
 use App\Services\ApigeeService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AppController extends Controller
 {
@@ -88,7 +89,9 @@ class AppController extends Controller
 //
          $data['apiProducts'] = $apiProducts;
 
-         $create = ApigeeService::post('developers/wes@plusnarrative.com/apps', $data);
+         Auth::loginUsingId(1);
+
+         $create = ApigeeService::createApp($data);
 
          dd($create);
 
