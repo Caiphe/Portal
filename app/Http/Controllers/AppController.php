@@ -78,6 +78,8 @@ class AppController extends Controller
          $products = Product::findMany(collect($validated['products'])->flatten());
          $products = $products->pluck('name');
 
+//         dd($products);
+
          $apiProducts = [];
 
          foreach($products as $product) {
