@@ -294,7 +294,7 @@
     function inSelectedArray(selectedCountry, locations) {
         for (var j = 0; j < selectedCountry.length; j++) {
             for (var k = 0; k < locations.length; k++) {
-                if(selectedCountry[j] === locations[k]) {
+                if(selectedCountry[j] === locations[k] || locations[k] === 'all') {
                     return true;
                 } else {
                     return false;
