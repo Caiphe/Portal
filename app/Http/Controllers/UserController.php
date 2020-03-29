@@ -6,6 +6,7 @@ use App\Product;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
 {
@@ -124,19 +125,18 @@ class UserController extends Controller
 
     public function updateProfilePicture(Request $request)
     {
-        $imageName = base64_encode('jsklaf88sfjdsfjl' . $request->user()->id) . '.png';
-        $path = \Storage::putFileAs('public/profile', $request->file('profile'), $imageName);
+        $imageName = 'profile/' . base64_encode('jsklaf88sfjdsfjl' . $request->user()->id) . '.png';
 
-        // $image = Image::make($request->file('profile'))
-        //     ->fit(452, 452, function ($constraint) {
-        //         $constraint->aspectRatio();
-        //         $constraint->upsize();
-        //     });
+        $image = Image::make($request->file('profile'))
+            ->fit(452, 452, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
 
-        // Storage::putFileAs('profile', (string)$image->encode('png', 95), $image_name);
+        $path = \Storage::disk('public')->put($imageName, (string)$image->encode('png', 95));
 
         return response()->json([
-            'path' => $path
+            'success' => $path
         ]);
     }
 }
