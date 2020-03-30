@@ -27,12 +27,12 @@
             <x-card-link icon="help-network" title="FAQ" href="/faq">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo.</x-card-link>
             <x-card-link icon="lightbulb" title="Developer tips" href="/developer-tips">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo.</x-card-link>
             
-            @foreach($content as $card_content)
+            @foreach($content as $cardContent)
                 @php
-                    $card_link = '/getting-started/' . $card_content['slug'];
-                    $content_body = strip_tags($card_content['body']);
+                    $cardLink = '/getting-started/' . $cardContent['slug'];
+                    $contentBody = strip_tags($cardContent['body']);
                 @endphp 
-                <x-card-link icon="apps-box" :title="$card_content['title']" :href="$card_link">{{ $content_body }}</x-card-link>
+                <x-card-link icon="apps-box" :title="$cardContent['title']" :href="$cardLink">{{ $contentBody }}</x-card-link>
             @endforeach
         </div>
     </div>
