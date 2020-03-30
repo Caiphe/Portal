@@ -39,7 +39,7 @@
         </x-carousel-item>
     </x-carousel>
 
-    <div class="introduction">
+    <div class="introduction section-padding">
         <h2>Get started using using our products in 4 steps</h2>
         <p>You can browse our products and documentation without registering an account, but when you want to create an App you will need to register an account.</p>
         <div class="steps">
@@ -50,7 +50,7 @@
         </div>
     </div>
 
-    <div class="sign-in grey-bg">
+    <div class="sign-in grey-bg section-padding">
         <div class="content-left">
             <h2>Sign-in</h2>
             <p>Register your account if you want to create an App.</p>
@@ -66,7 +66,7 @@
         <div class="image-right"><img src="/images/register.png"></div>
     </div>
 
-    <div class="browse-products">
+    <div class="browse-products section-padding">
         <div class="image-left"><img src="/images/products.png"></div>
         <div class="content-right">
             <h2>Browse our products</h2>
@@ -81,7 +81,7 @@
         </div>
     </div>
 
-    <div class="register-app grey-bg">
+    <div class="register-app grey-bg section-padding">
         <div class="content-left">
             <h2>Register an app</h2>
             <p>When you have chosen the API you want to use to build your app, you need to register your app. Follow the steps below</p>
@@ -98,7 +98,7 @@
         <div class="image-right"><img src="/images/register-app.png"></div>
     </div>
 
-    <div class="access-keys">
+    <div class="access-keys section-padding">
         <div class="image-left"><img src="/images/access-key.png"></div>
         <div class="content-right">
             <h2>Access the keys</h2>
@@ -117,7 +117,7 @@
         <div class="product-cards">
             @foreach ($productsCollection ?? '' as $category=>$products)
             <div class="category" data-category="{{ $category }}">
-                    <h3>{{ $category }}</h3>
+                <x-carousel wait="5000" duration="0.34">
                     @foreach ($products as $product)
                         @php //setting variables
                         if ($product->locations !== 'all' && $product->locations !== null) :
@@ -128,11 +128,14 @@
                         $tags = array($product->group,$product->category);
                         $slug = 'products/'.$product->slug;
                         @endphp
+                        <x-carousel-item>
                         <x-card-product :title="$product->display_name" :href="'/' . $slug" :countries="$countries" :tags="$tags"
                         :data-title="$product->display_name"
                         :data-group="$product->group"
                         :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}</x-card-product>
-                    @endforeach	
+                    </x-carousel-item>
+                        @endforeach	
+                <x-carousel>
                 </div>
             @endforeach
         </div>

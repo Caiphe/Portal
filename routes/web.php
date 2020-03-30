@@ -13,9 +13,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('layouts.sidebar');
-})->name('home');
+// Route::get('/', function () {
+//     return view('layouts.master');
+// })->name('home');
+Route::get('/', 'HomeController@home')->name('home');
 
 Route::get('/products', 'ProductController@index');
 Route::get('products/{product:slug}', 'ProductController@show')->name('product.show');

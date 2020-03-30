@@ -9,8 +9,8 @@
 }
 
 .carousel{
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 90vh;
 }
 
 .carousel-item{
@@ -63,7 +63,19 @@
     }
 }
 
-.steps, .introduction {
+.section-padding{
+    padding: $gutter;
+}
+
+.introduction{
+    text-align: center;
+}
+
+.access-keys, .register-app, .browse-products, .sign-in{
+    display: flex;
+}
+
+.steps{
     display: flex;
     justify-content: center;
     margin-top: $gutter;
