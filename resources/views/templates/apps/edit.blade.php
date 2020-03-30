@@ -373,8 +373,6 @@
 
             app.products.push(products);
 
-            console.log(app);
-
             var url = "{{ route('app.update', $data) }}";
             var xhr = new XMLHttpRequest();
 

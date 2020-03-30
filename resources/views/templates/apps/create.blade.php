@@ -367,6 +367,12 @@
         xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 
         xhr.send(JSON.stringify(app));
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                window.location.href = "{{ route('app.index') }}"
+            }
+        };
     }
 </script>
 @endpush
