@@ -13,6 +13,10 @@ const mix = require("laravel-mix");
 
 mix.scripts("resources/js/scripts.js", "public/js/scripts.js")
     .scripts(
+        "resources/js/templates/user/show.js",
+        "public/js/templates/user/show.js"
+    )
+    .scripts(
         "resources/js/components/carousel.js",
         "public/js/components/carousel.js"
     )
@@ -33,14 +37,10 @@ mix.scripts("resources/js/scripts.js", "public/js/scripts.js")
         "public/js/templates/products/show.js"
     )
     .scripts(
-        "resources/js/templates/faq/index.js",
-        "public/js/templates/faq/index.js"
-    )
-    .sass("resources/sass/components/carousel.scss", "public/css/components")
-    .scripts(
         "resources/js/components/multiselect.js",
         "public/js/components/multiselect.js"
     )
+    .sass("resources/sass/components/carousel.scss", "public/css/components")
     .sass("resources/sass/components/multiselect.scss", "public/css/components")
     .sass("resources/sass/components/card.scss", "public/css/components")
     .sass("resources/sass/components/card-link.scss", "public/css/components")
@@ -54,6 +54,15 @@ mix.scripts("resources/js/scripts.js", "public/js/scripts.js")
         "public/css/components"
     )
     .sass("resources/sass/components/heading.scss", "public/css/components")
+    .sass("resources/sass/templates/faq/index.scss", "public/css/templates/faq")
+    .sass(
+        "resources/sass/templates/user/show.scss",
+        "public/css/templates/user"
+    )
+    .scripts(
+        "resources/js/templates/faq/index.js",
+        "public/js/templates/faq/index.js"
+    )
     .sass(
         "resources/sass/templates/products/index.scss",
         "public/css/templates/products"
@@ -65,10 +74,6 @@ mix.scripts("resources/js/scripts.js", "public/js/scripts.js")
     .sass(
         "resources/sass/templates/getting-started/index.scss",
         "public/css/templates/getting-started"
-    )
-    .sass(
-        "resources/sass/templates/faq/index.scss",
-        "public/css/templates/faq"
     )
     .sass("resources/sass/styles.scss", "public/css")
     .version();
