@@ -36,6 +36,7 @@ mix.scripts("resources/js/scripts.js", "public/js/scripts.js")
         "resources/js/templates/apps/index.js",
         "public/js/templates/apps/index.js"
     )
+    .sass("resources/sass/components/app.scss", "public/css/components")
     .sass("resources/sass/components/carousel.scss", "public/css/components")
     .scripts(
         "resources/js/components/multiselect.js",

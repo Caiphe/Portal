@@ -4,7 +4,7 @@
 
 @props(['app', 'attr'])
 
-<div class="my-app" data-id="{{ $app['appId'] }}">
+<div class="my-app">
     <div class="column">
         <p class="name">
             @svg('app-avatar', '#fff')
@@ -86,11 +86,9 @@
     </div>
     <nav class="menu">
         <a href="{{ route('app.edit', $app['name']) }}">Edit</a>
-        <form class="delete" action="{{ url('apps') }}" method="POST">
-            @method('DELETE')
+        <form class="delete">
             @csrf
-            <input type="hidden" name="app-name" value="{{ $app['name'] }}">
-            <button class="app-delete" type="submit">Delete</button>
+            <button class="app-delete" data-name="{{ $app['name'] }}">Delete</button>
         </form>
     </nav>
     <div class="modal"></div>

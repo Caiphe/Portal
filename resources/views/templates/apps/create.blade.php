@@ -377,8 +377,6 @@
         xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 
         xhr.send(JSON.stringify(app));
-
-        // location.reload();
     }
 </script>
 @endpush

@@ -88,9 +88,7 @@ class AppController extends Controller
 
         ApigeeService::createApp($data);
 
-        return redirect(route('app.index'))->with(
-            ['message' => 'App created successfully'], 201
-        );
+        return redirect('apps.index')->with('status', 'Application created successfully');
     }
 
     public function show(Request $request)
@@ -117,6 +115,8 @@ class AppController extends Controller
     public function destroy(DeleteAppRequest $request)
     {
         $validated = $request->validated();
+
+        dd($request->all());
 
         ApigeeService::delete("developers/wes@plusnarrative.com/apps/{$validated['name']}");
 
