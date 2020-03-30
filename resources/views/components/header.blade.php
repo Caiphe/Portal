@@ -12,10 +12,9 @@
                     </div>
                     <div class="nav-right">
                         <h3>BROWSE BY CATEGORY</h3>
-                        <a href="/">Advertising</a>
-                        <a href="/">Customer</a>
-                        <a href="/">Advertising</a>
-                        <a href="/">Customer</a>
+                        @foreach($productCategories as $productCategory)
+                        <a href="/products/?category={{$productCategory}}">{{$productCategory}}</a>
+                        @endforeach
                     </div>
                 </div>
             </li>
