@@ -105,13 +105,13 @@ class AppController extends Controller
         $apiProducts = Product::findMany($request->products[0])->pluck('name')->toArray();
 
         $data = [
-            'name' => strtolower(str_replace(' ', '-', $validated['name'])),
+            'name' => $validated['name'],
             'apiProducts' => $apiProducts,
             'keyExpiresIn' => -1,
             'attributes' => [
                 [
                     'name' => 'DisplayName',
-                    'value' => $validated['name']
+                    'value' => $validated['new_name'] ?? $validated['name']
                 ],
                 [
                     'name' => 'Description',
@@ -121,7 +121,7 @@ class AppController extends Controller
             'callbackUrl' => preg_replace('/[<>"]*/', '', strip_tags($validated['url'])) ?? ''
         ];
 
-        ApigeeService::updateApp($data);
+        ApigeeService::updateApp($validated['name'], $data);
 
         return redirect(route('app.index'))->with('status', 'Application updated successfully');
     }

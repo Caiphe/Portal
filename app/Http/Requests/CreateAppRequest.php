@@ -25,6 +25,7 @@ class CreateAppRequest extends FormRequest
     {
         return [
             'name' => 'required',
+            'new_name' => 'sometimes',
             'url' => 'sometimes',
             'description' => 'sometimes',
             'products' => 'required:array'

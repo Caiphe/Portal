@@ -356,7 +356,8 @@
             event.preventDefault();
 
             var app = {
-                name: document.querySelector('#name').value,
+                name: {!! json_encode($data['name']) !!},
+                new_name: document.querySelector('#name').value,
                 url: document.querySelector('#url').value,
                 description: document.querySelector('#description').value,
                 products: [],
