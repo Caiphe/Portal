@@ -51,6 +51,7 @@ class AppController extends Controller
     {
         $validated = $request->validated();
 
+        // TODO: REMOVE LOGIN
         Auth::loginUsingId(1);
 
         $apiProducts = Product::findMany($request->products[0])->pluck('name')->toArray();
@@ -84,10 +85,10 @@ class AppController extends Controller
         $data = ApigeeService::get("developers/wes@plusnarrative.com/apps/{$request->name}/?expand=true");
 
         $selectedProducts = collect(end($data['credentials'])['apiProducts'])->map(function ($query) {
-           return $query['apiproduct'];
+           return ['name' => $query['apiproduct']];
         })->flatten();
 
-        dd($selectedProducts);
+//        dd($selectedProducts);
 
         return view('templates.apps.edit', [
             'products' => $products,

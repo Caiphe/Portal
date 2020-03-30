@@ -27,6 +27,7 @@
     <x-heading heading="Apps" tags="EDIT"></x-heading>
 
 {{--    {{ dd($selectedProducts) }}--}}
+    {{ dd($productCategories) }}
 
     <div class="container" id="app-create">
 
