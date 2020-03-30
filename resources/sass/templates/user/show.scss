@@ -5,7 +5,6 @@
     margin-top: $gutterSmall;
     border: 1px solid $grey300;
     border-radius: 8px;
-    text-align: center;
     padding: $gutter;
 
     .locations {
@@ -15,7 +14,7 @@
         label {
             cursor: pointer;
         }
-        
+
         svg {
             width: 25px;
             height: 25px;
@@ -25,7 +24,7 @@
             display: none;
         }
 
-        input:checked + span {
+        input:checked+span {
             opacity: 0.1;
         }
     }
@@ -85,17 +84,37 @@
         position: relative;
     }
 
-    .show-password {
+    .password-label {
         display: block;
+    }
+
+    .show-password {
+        margin: 0;
         position: absolute;
-        top: 0;
-        right: $gutterSmall;
-        background-image: get-icon("edit", #FFFFFF);
-        width: 32px;
-        height: 32px;
+        top: 5px;
+        right: 1rem;
+        background-image: url('/images/icons/visible.svg');
+        background-size: 20px;
+        background-color: #FFF;
+        background-repeat: no-repeat;
+        background-position: center;
+        border: none;
+        width: 30px;
+        height: 30px;
+        z-index: 1;
+
+        &:hover {
+            background-color: $yellow700;
+        }
+    }
+
+    .password-visible .show-password {
+        background-image: url('/images/icons/hidden.svg');
     }
 
     button {
-        margin: 0 auto;
+        margin: $gutter auto 0;
+        display: block;
+        position: relative;
     }
 }

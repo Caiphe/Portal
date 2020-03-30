@@ -59,3 +59,8 @@ function uploadProfilePicture(file) {
 
     xhr.send(formData);
 }
+
+function togglePasswordVisibility(that) {
+    that.parentNode.classList.toggle('password-visible');
+    that.previousElementSibling.setAttribute('type',that.parentNode.classList.contains('password-visible') ? "text" : "password");
+}

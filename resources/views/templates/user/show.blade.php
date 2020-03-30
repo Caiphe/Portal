@@ -50,13 +50,13 @@ Update profile
             <input type="text" name="second_name" value="{{$user['last_name']}}" placeholder="Second name" autocomplete="last_name">
             <input type="email" name="email" value="{{$user['email']}}" placeholder="Email" autocomplete="email">
             <h2>Password</h2>
-            <label for="password">
+            <label class="password-label" for="password">
                 <input type="password" name="password" id="password" placeholder="Password" autocomplete="off">
-                <span class="show-password"></span>
+                <button type="button" class="fab show-password" onclick="togglePasswordVisibility(this)"></button>
             </label>
-            <label for="passwordConfirmation">
+            <label class="password-label" for="passwordConfirmation">
                 <input type="password" name="password_confirmation" id="passwordConfirmation" placeholder="Confirm password" autocomplete="off">
-                <span class="show-password"></span>
+                <button type="button" class="fab show-password" onclick="togglePasswordVisibility(this)"></button>
             </label>
             <h2>Your selected countries</h2>
             <div class="locations">
