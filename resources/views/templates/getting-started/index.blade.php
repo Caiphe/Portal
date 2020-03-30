@@ -30,8 +30,9 @@
             @foreach($content as $card_content)
                 @php
                     $card_link = '/getting-started/' . $card_content['slug'];
+                    $content_body = strip_tags($card_content['body']);
                 @endphp 
-                <x-card-link icon="apps-box" :title="$card_content['title']" :href="$card_link">{{ $card_content['body'] }}</x-card-link>
+                <x-card-link icon="apps-box" :title="$card_content['title']" :href="$card_link">{{ $content_body }}</x-card-link>
             @endforeach
         </div>
     </div>
