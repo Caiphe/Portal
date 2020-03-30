@@ -136,6 +136,8 @@
 
                 @csrf
 
+                @method('PUT')
+
             </form>
         </div>
 
@@ -357,7 +359,8 @@
                 name: document.querySelector('#name').value,
                 url: document.querySelector('#url').value,
                 description: document.querySelector('#description').value,
-                products: []
+                products: [],
+                _method: 'PUT'
             };
 
             var selectedProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
@@ -372,7 +375,7 @@
             var url = "{{ route('app.update', $data) }}";
             var xhr = new XMLHttpRequest();
 
-            xhr.open('PUT', url);
+            xhr.open('POST', url, true);
             xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 

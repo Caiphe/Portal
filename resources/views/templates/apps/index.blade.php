@@ -196,17 +196,22 @@
 
             var app = event.currentTarget;
 
+            var data = {
+                name: app.dataset.name,
+                _method: 'DELETE'
+            };
+
             var url = '/apps/' + app.dataset.name;
             var xhr = new XMLHttpRequest();
 
-            xhr.open('DELETE', url, true);
+            xhr.open('POST', url, true);
             xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 
             var deleteApp = confirm('Are you sure you want to delete this app?');
 
             if(deleteApp) {
-                xhr.send(JSON.stringify(app.dataset.name));
+                xhr.send(JSON.stringify(data));
             } else {
                 document.querySelector(".menu.show").classList.remove('show');
             }
