@@ -26,6 +26,7 @@ function changeProfilePicture(file) {
 
     reader.onload = function(e) {
         document.getElementById('profile-picture-label').style.backgroundImage = "url(" + e.target.result + ")";
+        document.getElementById('user-profile-image').style.backgroundImage = "url(" + e.target.result + ")";
     }
 
     reader.readAsDataURL(file);

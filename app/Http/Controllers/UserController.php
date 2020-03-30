@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Country;
 use App\Product;
 use App\User;
 use Illuminate\Http\Request;
@@ -103,11 +104,12 @@ class UserController extends Controller
 
         $validatedData = $request->validate($validateOn);
 
-        if ($request->has('locations')) {
-            $validatedData = array_merge($validatedData, ['locations' => implode(',', $request->locations)]);
-        }
-
         $user->update($validatedData);
+
+        if ($request->has('locations')) {
+            $countryIds = Country::whereIn('code', $request->locations)->pluck('id');
+            $user->countries()->sync($countryIds);
+        }
 
         return redirect()->back();
     }
@@ -133,10 +135,10 @@ class UserController extends Controller
                 $constraint->upsize();
             });
 
-        $path = \Storage::disk('public')->put($imageName, (string)$image->encode('png', 95));
+        $success = \Storage::disk('public')->put($imageName, (string)$image->encode('png', 95));
 
         return response()->json([
-            'success' => $path
+            'success' => $success
         ]);
     }
 }

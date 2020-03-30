@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\Services\ApigeeService;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -49,11 +50,27 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+        $validator = Validator::make($data, [
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
+
+        $validator->after(function ($validator) use($data) {
+            $developer = ApigeeService::post('developers', [
+                "email" => $data['email'],
+                "firstName" => $data['first_name'],
+                "lastName" => $data['last_name'],
+                "userName" => $data['first_name'] . $data['last_name'],
+            ])->json();
+
+            if ($developer['code'] === 'developer.service.DeveloperAlreadyExists') {
+                $validator->errors()->add('email', 'Sorry, this email has already been taken');
+            }
+        });
+
+        return $validator;
     }
 
     /**
@@ -64,8 +81,10 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        dd('got past');
         return User::create([
-            'name' => $data['name'],
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);

@@ -14,7 +14,7 @@ Update profile
         [
             'MANAGE' => 
             [
-                [ 'label' => 'profile', 'link' => '/profile'],
+                [ 'label' => 'Profile', 'link' => '/profile'],
                 [ 'label' => 'Approved apps', 'link' => '/apps'],
                 [ 'label' => 'Revoked apps', 'link' => '/apps']
             ],
@@ -64,7 +64,7 @@ Update profile
                 </label>
                 @endforeach
             </div>
-            <button class="dark mt-2">Save</button>
+            <button class="dark">Save</button>
         </form>
     </div>
 @endsection
