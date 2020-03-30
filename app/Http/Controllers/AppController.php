@@ -7,6 +7,7 @@ use App\Http\Requests\CreateAppRequest;
 use App\Http\Requests\DeleteAppRequest;
 use App\Product;
 use App\Services\ApigeeService;
+use App\Services\ProductLocationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,25 +34,9 @@ class AppController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(ProductLocationService $productLocationService)
     {
-        $products = Product::all()
-            ->sortBy('category')
-            ->groupBy('category');
-
-        $productLocations = Product::isPublic()
-            ->whereNotNull('locations')
-            ->select('locations')
-            ->get()
-            ->implode('locations', ',');
-
-        $productLocations = array_unique(explode(',', $productLocations));
-
-        $filteredCountries = Country::whereIn('code', $productLocations)->get();
-
-        $countries = $filteredCountries->each(function ($query) {
-            return $query;
-        })->pluck('name', 'code');
+        [$products, $countries] = $productLocationService->fetch();
 
         return view('templates.apps.create', [
                 'products' => $products,
@@ -91,13 +76,18 @@ class AppController extends Controller
         return redirect('apps.index')->with('status', 'Application created successfully');
     }
 
-    public function edit(Request $request)
+    public function edit(ProductLocationService $productLocationService, Request $request)
     {
+        [$products, $countries] = $productLocationService->fetch();
+
         $app = ApigeeService::get("developers/wes@plusnarrative.com/apps/{$request->name}/?expand=true");
 
         // dd($app);
 
         return view('templates.apps.edit', [
+            'products' => $products,
+            'productCategories' => array_keys($products->toArray()),
+            'countries' => $countries ?? '',
             'app' => $app
         ]);
     }
