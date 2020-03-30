@@ -91,11 +91,6 @@ class AppController extends Controller
         return redirect('apps.index')->with('status', 'Application created successfully');
     }
 
-    public function show(Request $request)
-    {
-        return view('templates.apps.show');
-    }
-
     public function edit(Request $request)
     {
         $app = ApigeeService::get("developers/wes@plusnarrative.com/apps/{$request->name}/?expand=true");
