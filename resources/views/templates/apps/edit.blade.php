@@ -105,14 +105,15 @@
 
                     <div class="products">
                         @foreach ($products as $category => $products)
-                            <div class="category"  data-category="{{ $category }}">
+                            <div class="category" data-category="{{ $category }}">
                                 <h3>{{ $category }}</h3>
                                 @foreach ($products as $product)
                                     @php
                                         $tags = array($product->group, $product->category);
+                                        $class = in_array($product->name, $selectedProducts) ? 'product-block selected' : 'product-block';
                                     @endphp
                                     <x-card-product :title="$product->display_name"
-                                                    class="product-block "
+                                                    :class="$class"
                                                     :href="$product->slug"
                                                     :tags="$tags"
                                                     :addButtonId="$product->id"
@@ -152,6 +153,7 @@
         var buttons = document.querySelectorAll('.next');
         var backButtons = document.querySelectorAll('.back');
         var checkedBoxes = document.querySelectorAll('input[name=country-checkbox]:checked');
+        var appProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
 
         function init() {
             handleButtonClick();
@@ -349,6 +351,11 @@
             console.log(products);
             console.log(product);
 
+        }
+
+        for(var p = 0; p < appProducts.length; ++p) {
+            appProducts[p].classList.remove('plus');
+            appProducts[p].classList.add('done');
         }
 
         var submit = document.getElementById('create').addEventListener('click', handleCreate);

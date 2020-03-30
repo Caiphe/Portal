@@ -201,6 +201,12 @@
                                 border-color: $grey900;
                             }
                         }
+
+                        &.selected {
+                            .card {
+                                border-color: $grey900;
+                            }
+                        }
                     }
                 }
             }

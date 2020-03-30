@@ -87,6 +87,7 @@
     <nav class="menu">
         <a href="{{ route('app.edit', $app['name']) }}">Edit</a>
         <form class="delete">
+            @method('DELETE')
             @csrf
             <button class="app-delete" data-name="{{ $app['name'] }}">Delete</button>
         </form>
