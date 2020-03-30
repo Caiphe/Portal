@@ -52,13 +52,13 @@
                     </div>
 
                     <div class="group">
-                        <label for="url">Callback url *</label>
-                        <input type="url" name="url" id="url" placeholder="Enter callback url" required>
+                        <label for="url">Callback url</label>
+                        <input type="url" name="url" id="url" placeholder="Enter callback url">
                     </div>
 
                     <div class="group">
-                        <label for="description">Description *</label>
-                        <textarea name="description" id="description" rows="5" placeholder="Enter description" required></textarea>
+                        <label for="description">Description</label>
+                        <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>
                     </div>
 
                     <button class="dark next">
