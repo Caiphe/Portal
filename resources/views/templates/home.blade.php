@@ -5,6 +5,7 @@
 @endpush
 
 @section('content')
+<div class="banner-carousel">
 <x-carousel wait="5000" duration="0.34">
         <x-carousel-item>
         <div class="carousel-content">
@@ -38,10 +39,13 @@
             </div>
         </x-carousel-item>
     </x-carousel>
+</div>
 
-    <div class="introduction section-padding">
-        <h2>Get started using using our products in 4 steps</h2>
-        <p>You can browse our products and documentation without registering an account, but when you want to create an App you will need to register an account.</p>
+    <div class="intro-steps section-padding">
+        <div class="introduction">
+            <h1>Get started using using our products in 4 steps</h1>
+            <p>You can browse our products and documentation without registering an account, but when you want to create an App you will need to register an account.</p>
+        </div>
         <div class="steps">
             <x-key-feature title="" icon="account-plus-outline">Sign-in/Register</x-key-feature>
             <x-key-feature title="" icon="card-search">Browse our products</x-key-feature>
@@ -52,7 +56,7 @@
 
     <div class="sign-in grey-bg section-padding">
         <div class="content-left">
-            <h2>Sign-in</h2>
+            <h1>Sign-in</h1>
             <p>Register your account if you want to create an App.</p>
             <ol>
                 <li>Go to <strong>Register</strong></li> 
@@ -69,7 +73,7 @@
     <div class="browse-products section-padding">
         <div class="image-left"><img src="/images/products.png"></div>
         <div class="content-right">
-            <h2>Browse our products</h2>
+            <h1>Browse our products</h1>
             <p>MTN is consistently developing new APIs for developers and businesses to create powerful products. Follow the steps to browse APIs</p>
             <ol>
                 <li>Navigate to products</li>
@@ -83,7 +87,7 @@
 
     <div class="register-app grey-bg section-padding">
         <div class="content-left">
-            <h2>Register an app</h2>
+            <h1>Register an app</h1>
             <p>When you have chosen the API you want to use to build your app, you need to register your app. Follow the steps below</p>
             <ol>
                 <li>Go to Profile</li>
@@ -101,7 +105,7 @@
     <div class="access-keys section-padding">
         <div class="image-left"><img src="/images/access-key.png"></div>
         <div class="content-right">
-            <h2>Access the keys</h2>
+            <h1>Access the keys</h1>
             <p>Once your App submission is approved you can now use Consumer/API Key and Secret on your profile page.</p>
             <ol>
                 <li>For APIs that require API Key, use the Consumer Key as the x-api-key header</li>
@@ -112,32 +116,28 @@
         </div>
     </div>
 
-    <div class="latest-products">
-        <h2>Latest products</h2>
-        <div class="product-cards">
-            @foreach ($productsCollection ?? '' as $category=>$products)
-            <div class="category" data-category="{{ $category }}">
-                <x-carousel wait="5000" duration="0.34">
-                    @foreach ($products as $product)
-                        @php //setting variables
-                        if ($product->locations !== 'all' && $product->locations !== null) :
-                            $countries = explode(',',$product->locations);
-                        else :
-                            $countries = array('globe');	
-                        endif;
-                        $tags = array($product->group,$product->category);
-                        $slug = 'products/'.$product->slug;
-                        @endphp
-                        <x-carousel-item>
-                        <x-card-product :title="$product->display_name" :href="'/' . $slug" :countries="$countries" :tags="$tags"
-                        :data-title="$product->display_name"
-                        :data-group="$product->group"
-                        :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}</x-card-product>
-                    </x-carousel-item>
-                        @endforeach	
-                <x-carousel>
-                </div>
-            @endforeach
+    <div class="latest-products grey-bg section-padding">
+        <h1>Latest products</h1>
+        <div class="products-carousel">
+            <x-carousel wait="5000" duration="0.34">
+            @foreach ($productsCollection as $product)
+                @php //setting variables
+                if ($product->locations !== 'all' && $product->locations !== null) :
+                    $countries = explode(',',$product->locations);
+                else :
+                    $countries = array('globe');	
+                endif;
+                $tags = array($product->group,$product->category);
+                $slug = 'products/'.$product->slug;
+                @endphp
+                <x-carousel-item>
+                    <x-card-product :title="$product->display_name" :href="'/' . $slug" :countries="$countries" :tags="$tags"
+                    :data-title="$product->display_name"
+                    :data-group="$product->group"
+                    :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}</x-card-product>
+                </x-carousel-item>
+                @endforeach	
+            </x-carousel>
         </div>
     </div>
 @endsection 

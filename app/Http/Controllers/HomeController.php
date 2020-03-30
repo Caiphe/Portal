@@ -15,19 +15,9 @@ class HomeController extends Controller
      */
     public function home()
     {
-        $productsCollection = Product::all()->sortBy('category')->groupBy('category');
-		$productLocations = Product::isPublic()->WhereNotNull('locations')->select('locations')->get()->implode('locations', ',');
-		$locations = array_unique(explode(',', $productLocations));
-		$countries = Country::whereIn('code', $locations)->get();
-		$countryArray = array();
-		foreach ($countries as $country) {
-			$countryArray[$country->code] = $country->name;
-		}
-		$groups = Product::distinct('group')->pluck('group');
+        $productsCollection = Product::all()->sortBy('created_at');
 		return view('templates.home',[
-			'productsCollection' => $productsCollection, 
-			'productCategories' => array_keys($productsCollection->toArray()), 'countries' => $countryArray, 
-			'groups'=> $groups]);
+			'productsCollection' => $productsCollection]);
     }
 
     /**
