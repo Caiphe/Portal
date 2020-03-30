@@ -26,7 +26,7 @@
 
     <x-heading heading="Apps" tags="EDIT"></x-heading>
 
-{{--    {{ dd($app) }}--}}
+{{--    {{ dd($selectedProducts) }}--}}
 
     <div class="container" id="app-create">
 
@@ -50,17 +50,17 @@
                     @svg('app-avatar', '#ffffff')
                     <div class="group">
                         <label for="name">Name your app *</label>
-                        <input type="text" name="name" id="name" placeholder="Enter name" required value="{{ $app['attributes'][1]['value'] }}">
+                        <input type="text" name="name" id="name" placeholder="Enter name" required value="{{ $data['attributes'][1]['value'] }}">
                     </div>
 
                     <div class="group">
                         <label for="url">Callback url</label>
-                        <input type="url" name="url" id="url" placeholder="Enter callback url" value="{{ $app['callbackUrl'] }}">
+                        <input type="url" name="url" id="url" placeholder="Enter callback url" value="{{ $data['callbackUrl'] }}">
                     </div>
 
                     <div class="group">
                         <label for="description">Description</label>
-                        <textarea name="description" id="description" rows="5" placeholder="Enter description">{{ $app['attributes'][0]['value'] }}</textarea>
+                        <textarea name="description" id="description" rows="5" placeholder="Enter description">{{ $data['attributes'][0]['value'] }}</textarea>
                     </div>
 
                     <button class="dark next">
@@ -85,7 +85,7 @@
                     <div class="form-actions">
                         <button class="dark outline back">Back</button>
                         <button class="dark next">
-                            Add products
+                            Select products
                             @svg('arrow-forward', '#ffffff')
                         </button>
                     </div>
@@ -104,14 +104,14 @@
 
                     <div class="products">
                         @foreach ($products as $category => $products)
-                            <div class="category" data-category="{{ $category }}">
+                            <div class="category"  data-category="{{ $category }}">
                                 <h3>{{ $category }}</h3>
                                 @foreach ($products as $product)
                                     @php
                                         $tags = array($product->group, $product->category);
                                     @endphp
                                     <x-card-product :title="$product->display_name"
-                                                    class="product-block"
+                                                    class="product-block "
                                                     :href="$product->slug"
                                                     :tags="$tags"
                                                     :addButtonId="$product->id"

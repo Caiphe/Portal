@@ -83,7 +83,7 @@
                     <div class="form-actions">
                         <button class="dark outline back">Back</button>
                         <button class="dark next">
-                            Add products
+                            Select products
                             @svg('arrow-forward', '#ffffff')
                         </button>
                     </div>

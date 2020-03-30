@@ -9,6 +9,7 @@ use App\Product;
 use App\Services\ApigeeService;
 use App\Services\ProductLocationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class AppController extends Controller
@@ -80,15 +81,20 @@ class AppController extends Controller
     {
         [$products, $countries] = $productLocationService->fetch();
 
-        $app = ApigeeService::get("developers/wes@plusnarrative.com/apps/{$request->name}/?expand=true");
+        $data = ApigeeService::get("developers/wes@plusnarrative.com/apps/{$request->name}/?expand=true");
 
-        // dd($app);
+        $selectedProducts = collect(end($data['credentials'])['apiProducts'])->map(function ($query) {
+           return $query['apiproduct'];
+        })->flatten();
+
+        dd($selectedProducts);
 
         return view('templates.apps.edit', [
             'products' => $products,
             'productCategories' => array_keys($products->toArray()),
             'countries' => $countries ?? '',
-            'app' => $app
+            'data' => $data,
+            'selectedProducts' => $selectedProducts
         ]);
     }
 
