@@ -40,7 +40,7 @@ class ApigeeService
     public static function updateApp(array $data)
     {
         $user = auth()->user();
-        return self::put("developers/{$user->email}/apps/{$data['appName']}", $data);
+        return self::put("developers/{$user->email}/apps/{$data['name']}", $data);
     }
 
     public static function getAppAttributes(array $attributes)

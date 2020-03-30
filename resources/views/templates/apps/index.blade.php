@@ -206,7 +206,7 @@
             var deleteApp = confirm('Are you sure you want to delete this app?');
 
             if(deleteApp) {
-                xhr.send();
+                xhr.send(JSON.stringify(app.dataset.name));
             } else {
                 document.querySelector(".menu.show").classList.remove('show');
             }

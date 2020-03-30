@@ -95,9 +95,35 @@ class AppController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function update(CreateAppRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        // TODO: REMOVE LOGIN
+        Auth::loginUsingId(1);
+
+        $apiProducts = Product::findMany($request->products[0])->pluck('name')->toArray();
+
+        $data = [
+            'name' => strtolower(str_replace(' ', '-', $validated['name'])),
+            'apiProducts' => $apiProducts,
+            'keyExpiresIn' => -1,
+            'attributes' => [
+                [
+                    'name' => 'DisplayName',
+                    'value' => $validated['name']
+                ],
+                [
+                    'name' => 'Description',
+                    'value' => preg_replace('/[<>"]*/', '', strip_tags($validated['description']))
+                ]
+            ],
+            'callbackUrl' => preg_replace('/[<>"]*/', '', strip_tags($validated['url'])) ?? ''
+        ];
+
+        ApigeeService::updateApp($data);
+
+        return redirect()->back()->with('status', 'Application updated successfully');
     }
 
     public function destroy(DeleteAppRequest $request)

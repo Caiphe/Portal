@@ -128,8 +128,8 @@
 
                     <div class="form-actions">
                         <button class="dark outline back">Back</button>
-                        <button class="dark" id="create">
-                            Create app
+                        <button class="dark" id="update">
+                            Update app
                         </button>
                     </div>
                 </div>
@@ -339,18 +339,8 @@
                     var selectedProduct = this.parentNode.parentNode;
 
                     selectedProduct.classList.toggle('selected');
-
-                    addProduct(selectedProduct);
                 }
             });
-        }
-
-        function addProduct(product) {
-            var products = document.querySelector('#products');
-
-            console.log(products);
-            console.log(product);
-
         }
 
         for(var p = 0; p < appProducts.length; ++p) {
@@ -358,9 +348,9 @@
             appProducts[p].classList.add('done');
         }
 
-        var submit = document.getElementById('create').addEventListener('click', handleCreate);
+        var update = document.getElementById('update').addEventListener('click', handleUpdate);
 
-        function handleCreate(event) {
+        function handleUpdate(event) {
             event.preventDefault();
 
             var app = {
@@ -379,10 +369,10 @@
 
             app.products.push(products);
 
-            var url = "{{ route('app.store') }}";
+            var url = "{{ route('app.update', $data) }}";
             var xhr = new XMLHttpRequest();
 
-            xhr.open('POST', url);
+            xhr.open('PUT', url);
             xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 

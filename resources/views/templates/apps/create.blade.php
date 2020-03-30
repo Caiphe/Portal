@@ -334,18 +334,8 @@
                 var selectedProduct = this.parentNode.parentNode;
 
                 selectedProduct.classList.toggle('selected');
-
-                addProduct(selectedProduct);
             }
         });
-    }
-
-    function addProduct(product) {
-        var products = document.querySelector('#products');
-
-        console.log(products);
-        console.log(product);
-
     }
 
     var submit = document.getElementById('create').addEventListener('click', handleCreate);
