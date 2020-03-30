@@ -32,6 +32,10 @@ mix.scripts("resources/js/scripts.js", "public/js/scripts.js")
         "resources/js/templates/products/show.js",
         "public/js/templates/products/show.js"
     )
+    .scripts(
+        "resources/js/templates/faq/index.js",
+        "public/js/templates/faq/index.js"
+    )
     .sass("resources/sass/components/carousel.scss", "public/css/components")
     .scripts(
         "resources/js/components/multiselect.js",
@@ -61,6 +65,10 @@ mix.scripts("resources/js/scripts.js", "public/js/scripts.js")
     .sass(
         "resources/sass/templates/getting-started/index.scss",
         "public/css/templates/getting-started"
+    )
+    .sass(
+        "resources/sass/templates/faq/index.scss",
+        "public/css/templates/faq"
     )
     .sass("resources/sass/styles.scss", "public/css")
     .version();

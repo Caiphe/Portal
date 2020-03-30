@@ -24,4 +24,6 @@ Route::get('products/{product:slug}/download/swagger', 'ProductController@downlo
 
 Route::view('/getting-started', 'templates.getting-started.index');
 
+Route::get('/faq', 'FaqController@index')->name('faq.index');
+
 Auth::routes();
