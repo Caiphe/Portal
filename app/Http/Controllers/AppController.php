@@ -85,10 +85,8 @@ class AppController extends Controller
         $data = ApigeeService::get("developers/wes@plusnarrative.com/apps/{$request->name}/?expand=true");
 
         $selectedProducts = collect(end($data['credentials'])['apiProducts'])->map(function ($query) {
-           return ['name' => $query['apiproduct']];
+           return Product::where('name', $query['apiproduct'])->get();
         })->flatten();
-
-//        dd($selectedProducts);
 
         return view('templates.apps.edit', [
             'products' => $products,
