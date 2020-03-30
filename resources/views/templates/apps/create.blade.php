@@ -36,7 +36,7 @@
                 <span>2</span> Select countries
             </a>
             <a href="#">
-                <span>3</span> Add products
+                <span>3</span> Select products
             </a>
         </nav>
 

@@ -26,6 +26,8 @@
 
     <x-heading heading="Apps" tags="EDIT"></x-heading>
 
+{{--    {{ dd($app) }}--}}
+
     <div class="container" id="app-create">
 
         <nav>
@@ -36,29 +38,29 @@
                 <span>2</span> Select countries
             </a>
             <a href="#">
-                <span>3</span> Add products
+                <span>3</span> Select products
             </a>
         </nav>
 
         <div class="row">
 
-            <form id="create-app" action="{{ route('app.store') }}" method="POST">
+            <form id="create-app">
 
                 <div class="active">
                     @svg('app-avatar', '#ffffff')
                     <div class="group">
                         <label for="name">Name your app *</label>
-                        <input type="text" name="name" id="name" placeholder="Enter name" required value="{{ $app['name'] }}">
+                        <input type="text" name="name" id="name" placeholder="Enter name" required value="{{ $app['attributes'][1]['value'] }}">
                     </div>
 
                     <div class="group">
                         <label for="url">Callback url</label>
-                        <input type="url" name="url" id="url" placeholder="Enter callback url">
+                        <input type="url" name="url" id="url" placeholder="Enter callback url" value="{{ $app['callbackUrl'] }}">
                     </div>
 
                     <div class="group">
                         <label for="description">Description</label>
-                        <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>
+                        <textarea name="description" id="description" rows="5" placeholder="Enter description">{{ $app['attributes'][0]['value'] }}</textarea>
                     </div>
 
                     <button class="dark next">
@@ -101,7 +103,7 @@
                     </div>
 
                     <div class="products">
-                        @foreach ($products as $category=>$products)
+                        @foreach ($products as $category => $products)
                             <div class="category" data-category="{{ $category }}">
                                 <h3>{{ $category }}</h3>
                                 @foreach ($products as $product)
