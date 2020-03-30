@@ -130,7 +130,7 @@ class AppController extends Controller
     {
         $validated = $request->validated();
 
-        ApigeeService::delete("developers/wes@plusnarrative.com/apps/{$request->name}");
+        ApigeeService::delete("developers/wes@plusnarrative.com/apps/{$validated['name']}");
 
         return redirect()->back()->with('status', 'App has been deleted');
     }
