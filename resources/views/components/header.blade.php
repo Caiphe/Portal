@@ -8,13 +8,18 @@
             <li><a href="/">FAQ</a></li>
         </ul>
         <input type="search" name="search" id="search" class="thin see-through" placeholder="Search">
+        @if(\Auth::check())
         <button class="dark">Build app</button>
-        <button id="profile" class="fab image" style="background-image: url(/images/profile.jpg)"></button>
+        <button id="user-profile-image" class="fab image" style="background-image: url({{\Auth::user()->profile_picture}})"></button>
+        @else
+        <a href="{{route('login')}}" class="button dark outline mr-1">Login</a>
+        <a href="{{route('register')}}" class="button dark">Register</a>
+        @endif
     </div>
 </header>
 <div id="profile-menu-background"></div>
 <ul id="profile-menu" class="shadow">
     <li><a href="/profile">Profile</a></li>
     <li><a href="/apps">Apps</a></li>
-    <li><a href="/user/logout">Sign out</a></li>
+    <li><form action="{{route('logout')}}" method="post">@csrf<button>Sign out</button></form></li>
 </ul>

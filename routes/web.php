@@ -1,6 +1,6 @@
 <?php
 
-use App\Services\OpenApiService;
+// Auth::loginUsingId(1);
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +15,7 @@ use App\Services\OpenApiService;
 
 Route::get('/', function () {
     return view('layouts.sidebar');
-});
+})->name('home');
 
 Route::get('/products', 'ProductController@index');
 Route::get('products/{product:slug}', 'ProductController@show')->name('product.show');
@@ -24,5 +24,9 @@ Route::get('products/{product:slug}/download/swagger', 'ProductController@downlo
 
 Route::get('/getting-started', 'GettingStartedController@index');
 Route::get('getting-started/{content:slug}', 'GettingStartedController@show');
+
+Route::get('profile', 'UserController@show')->name('user.profile');
+Route::put('profile/{user}/update', 'UserController@update')->name('user.profile.update');
+Route::post('profile/update/picture', 'UserController@updateProfilePicture')->name('user.profile.update.picture');
 
 Auth::routes();
