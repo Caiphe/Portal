@@ -25,7 +25,7 @@
             display: none;
         }
 
-        input:checked + svg {
+        input:checked + span {
             opacity: 0.1;
         }
     }
@@ -79,6 +79,20 @@
         display: block;
         width: 100%;
         margin-bottom: 10px;
+    }
+
+    label {
+        position: relative;
+    }
+
+    .show-password {
+        display: block;
+        position: absolute;
+        top: 0;
+        right: $gutterSmall;
+        background-image: get-icon("edit", #FFFFFF);
+        width: 32px;
+        height: 32px;
     }
 
     button {

@@ -46,21 +46,24 @@ Update profile
             @csrf
             @method('put')
             <h2>Personal details</h2>
-            <input type="text" name="first_name" value="{{$user['first_name']}}" placeholder="First name">
-            <input type="text" name="second_name" value="{{$user['last_name']}}" placeholder="Second name">
-            <input type="email" name="email" value="{{$user['email']}}" placeholder="Email">
+            <input type="text" name="first_name" value="{{$user['first_name']}}" placeholder="First name" autocomplete="first_name">
+            <input type="text" name="second_name" value="{{$user['last_name']}}" placeholder="Second name" autocomplete="last_name">
+            <input type="email" name="email" value="{{$user['email']}}" placeholder="Email" autocomplete="email">
             <h2>Password</h2>
-            <input type="password" name="password" placeholder="Password" autocomplete="off">
-            <input type="password" name="password_confirmation" placeholder="Confirm password" autocomplete="off">
+            <label for="password">
+                <input type="password" name="password" id="password" placeholder="Password" autocomplete="off">
+                <span class="show-password"></span>
+            </label>
+            <label for="passwordConfirmation">
+                <input type="password" name="password_confirmation" id="passwordConfirmation" placeholder="Confirm password" autocomplete="off">
+                <span class="show-password"></span>
+            </label>
             <h2>Your selected countries</h2>
             <div class="locations">
                 @foreach($locations as $location)
                 <label for="{{$location}}">
-                    @if ($location === 'all')
-                        @continue
-                    @endif
                     <input type="checkbox" name="locations[]" value="{{$location}}" id="{{$location}}" autocomplete="off" @if(in_array($location, $userLocations)) checked @endif>
-                    @svg($location, '#000000', 'images/locations')
+                    <span title="{{$location}}">@svg($location, '#000000', 'images/locations')</span>
                 </label>
                 @endforeach
             </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Country;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Services\ApigeeService;
@@ -81,12 +82,18 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        dd('got past');
-        return User::create([
+        $user = User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+
+        if (isset($data['locations'])) {
+            $countryIds = Country::whereIn('code', $data['locations'])->pluck('id');
+            $user->countries()->sync($countryIds);
+        }
+
+        return $user;
     }
 }

@@ -58,6 +58,7 @@ class UserController extends Controller
 
         $productLocations = Product::isPublic()
             ->WhereNotNull('locations')
+            ->Where('locations', '!=', 'all')
             ->select('locations')
             ->get()
             ->implode('locations', ',');
