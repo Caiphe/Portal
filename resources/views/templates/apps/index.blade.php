@@ -215,6 +215,12 @@
             } else {
                 document.querySelector(".menu.show").classList.remove('show');
             }
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    window.location.href = "{{ route('app.index') }}"
+                }
+            };
         }
 
         // FIXME: COPYING KEY AND SECRET IS NOT WORKING.
