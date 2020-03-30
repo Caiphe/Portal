@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Country;
 use App\Http\Requests\CreateAppRequest;
 use App\Http\Requests\DeleteAppRequest;
 use App\Product;
 use App\Services\ApigeeService;
 use App\Services\ProductLocationService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class AppController extends Controller

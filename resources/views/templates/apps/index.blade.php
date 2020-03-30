@@ -28,12 +28,6 @@
         <button class="outline dark" id="create">Create new</button>
     </x-heading>
 
-    @if (session('status'))
-        <div class="alert alert-success">
-            {{ session('status') }}
-        </div>
-    @endif
-
     @if(empty($approvedApps) && empty($revokedApps))
         <div class="container" id="app-empty">
             <div class="row">
