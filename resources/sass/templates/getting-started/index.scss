@@ -14,7 +14,6 @@
     padding-top: 15px;
 
     .card{
-        display: inline-block;
         width: 30%;
         margin: 10px;
         margin-bottom: 20px;
@@ -23,13 +22,6 @@
             fill: $grey700;
             width: 30px;
             height: 30px;
-        }
-
-        .card__header{
-            min-height: 45px;
-            margin: 5px 0;
-            display: flex;
-            align-items: center;
         }
 
         .card__body{
