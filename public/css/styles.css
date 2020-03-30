@@ -653,6 +653,13 @@ a {
   pointer-events: auto;
 }
 
+#profile-menu button {
+  background-color: #FFF;
+  border: none;
+  padding: 0;
+  height: auto;
+}
+
 #profile-menu-picture {
   width: 40px;
   height: 40px;
@@ -1095,6 +1102,51 @@ button.blue.fab.arrow-forward.outline:hover,
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
+button.before.edit::before,
+button.after.edit::after,
+.button.before.edit::before,
+.button.after.edit::after {
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+}
+
+button.dark.before.edit:not(.outline)::before,
+button.dark.after.edit:not(.outline)::after,
+button.medium.before.edit:not(.outline)::before,
+button.medium.after.edit:not(.outline)::after,
+button.blue.before.edit:not(.outline)::before,
+button.blue.after.edit:not(.outline)::after,
+.button.dark.before.edit:not(.outline)::before,
+.button.dark.after.edit:not(.outline)::after,
+.button.medium.before.edit:not(.outline)::before,
+.button.medium.after.edit:not(.outline)::after,
+.button.blue.before.edit:not(.outline)::before,
+.button.blue.after.edit:not(.outline)::after {
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+}
+
+button.fab.edit,
+.button.fab.edit {
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+}
+
+button.dark.fab.edit:not(.outline),
+button.medium.fab.edit:not(.outline),
+button.blue.fab.edit:not(.outline),
+.button.dark.fab.edit:not(.outline),
+.button.medium.fab.edit:not(.outline),
+.button.blue.fab.edit:not(.outline) {
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+}
+
+button.blue.before.edit.outline:hover::before,
+button.blue.after.edit.outline:hover::after,
+button.blue.fab.edit.outline:hover,
+.button.blue.before.edit.outline:hover::before,
+.button.blue.after.edit.outline:hover::after,
+.button.blue.fab.edit.outline:hover {
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+}
+
 button.outline,
 .button.outline {
   background-color: transparent;
@@ -1193,6 +1245,7 @@ select.dark {
 
 input[type=text],
 input[type=email],
+input[type=password],
 input[type=search],
 input[type=number] {
   height: 40px;
@@ -1200,6 +1253,7 @@ input[type=number] {
 
 input[type=text].thin,
 input[type=email].thin,
+input[type=password].thin,
 input[type=search].thin,
 input[type=number].thin {
   height: 32px;
@@ -1207,6 +1261,7 @@ input[type=number].thin {
 
 input[type=text].alt,
 input[type=email].alt,
+input[type=password].alt,
 input[type=search].alt,
 input[type=number].alt {
   height: 32px;
@@ -1217,6 +1272,7 @@ input[type=number].alt {
 
 input[type=text].see-through,
 input[type=email].see-through,
+input[type=password].see-through,
 input[type=search].see-through,
 input[type=number].see-through {
   background-color: rgba(255, 255, 255, 0.4);
@@ -1881,6 +1937,21 @@ h6.arrow-forward::before {
   width: 30px;
   height: 30px;
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FC0" height="24" viewBox="0 0 24 24" width="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+  position: absolute;
+  left: 0;
+}
+
+h1.edit::before,
+h2.edit::before,
+h3.edit::before,
+h4.edit::before,
+h5.edit::before,
+h6.edit::before {
+  content: "";
+  position: relative;
+  width: 30px;
+  height: 30px;
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FC0" height="24" viewBox="0 0 24 24" width="24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
   position: absolute;
   left: 0;
 }

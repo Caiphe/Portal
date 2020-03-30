@@ -23,14 +23,19 @@
             <li><a href="/">FAQ</a></li>
         </ul>
         <input type="search" name="search" id="search" class="thin see-through" placeholder="Search">
+        @if(\Auth::check())
         <button class="dark">Build app</button>
         <div id="profile-menu">
-            <div id="profile-menu-picture" style="background-image: url(/images/profile.jpg)"></div>
+            <div id="profile-menu-picture" style="background-image: url({{\Auth::user()->profile_picture}})"></div>
             <ul class="profile-menu-options shadow">
                 <li><a href="/profile">Profile</a></li>
                 <li><a href="/apps">Apps</a></li>
-                <li><a href="/user/logout">Sign out</a></li>
+                <li><form action="{{route('logout')}}" method="post">@csrf<button>Sign out</button></form></li>
             </ul>
         </div>
+        @else
+        <a href="{{route('login')}}" class="button dark outline mr-1">Login</a>
+        <a href="{{route('register')}}" class="button dark">Register</a>
+        @endif
     </div>
 </header>

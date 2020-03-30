@@ -17,7 +17,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = ['first_name', 'last_name', 'email', 'password'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -34,6 +34,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime'
     ];
+
+    /**
+     * The dynamic attributes from mutators that should be returned with the user object.
+     *
+     * @var array
+     */
+    protected $appends = ['profile_picture'];
+
 
     public function roles()
     {
@@ -60,5 +68,16 @@ class User extends Authenticatable
     public function countries()
     {
         return $this->belongsToMany(Country::class);
+    }
+
+    /**
+     * Get the user's full name.
+     *
+     * @return string
+     */
+    public function getProfilePictureAttribute()
+    {
+        $img = base64_encode('jsklaf88sfjdsfjl' . $this->id);
+        return "/storage/profile/$img.png";
     }
 }

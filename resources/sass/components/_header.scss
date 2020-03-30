@@ -130,6 +130,13 @@
         opacity: 1;
         pointer-events: auto;
     }
+
+    button {
+        background-color: #FFF;
+        border: none;
+        padding: 0;
+        height: auto;
+    }
 }
 
 #profile-menu-picture {
