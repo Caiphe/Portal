@@ -26,6 +26,6 @@ class ProductCategoriesServiceProvider extends ServiceProvider
     {
         $productCategories = Product::isPublic()->orderBy('category')->get()->pluck('category')->unique();
 
-        \View::share( 'productCategories', $productCategories );
+        \View::share('productCategories', $productCategories);
     }
 }
