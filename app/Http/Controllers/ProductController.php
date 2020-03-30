@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\Country;
+use App\Services\OpenApiService;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -14,7 +16,19 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+		$productsCollection = Product::all()->sortBy('category')->groupBy('category');
+		$productLocations = Product::isPublic()->WhereNotNull('locations')->select('locations')->get()->implode('locations', ',');
+		$locations = array_unique(explode(',', $productLocations));
+		$countries = Country::whereIn('code', $locations)->get();
+		$country_array = array();
+		foreach ($countries as $country) {
+			$country_array[$country->code] = $country->name;
+		}
+		$groups = Product::distinct('group')->pluck('group');
+		return view('templates.products.index',[
+			'productsCollection' => $productsCollection, 
+			'productCategories' => array_keys($productsCollection->toArray()), 'countries' => $country_array, 
+			'groups'=> $groups]);
     }
 
     /**
@@ -46,7 +60,43 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        $openApiClass = new OpenApiService($product->swagger);
+        $prod = $product->load(['content', 'keyFeatures']);
+        $productList = Product::isPublic()->get()->sortBy('category')->groupBy('category');
+        $content = [];
+        $sidebarAccordion = [];
+        $startingPoint = "product-specification";
+
+        foreach ($prod->content as $c) {
+            $content[$c->type] = $c;
+        }
+
+        if(isset($content['product_overview'])){
+            $startingPoint = 'product-overview';
+        } else if(isset($content['product_docs'])){
+            $startingPoint = 'product-docs';
+        }
+
+        foreach ($productList as $category => $products) {
+            if(!isset($sidebarAccordion[$category])){
+                $sidebarAccordion[$category] = [];
+            }
+
+            foreach ($products as $key => $product) {
+                $sidebarAccordion[$category][] = ["label" => $product['display_name'], "link" => '/products/' . $product['slug']];
+            }
+            
+            asort($sidebarAccordion[$category]);
+        }
+
+
+        return view('templates.products.show', [
+            "product" => $prod,
+            "sidebarAccordion" => $sidebarAccordion,
+            "content" => $content,
+            "startingPoint" => $startingPoint,
+            "specification" => $openApiClass->buildOpenApiJson()
+        ]);
     }
 
     /**
@@ -81,5 +131,20 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         //
+    }
+
+    public function downloadPostman(Product $product)
+    {
+        $openApiClass = new OpenApiService($product->swagger);
+        $openApi = $openApiClass->buildOpenApiJson();
+
+        return response()->streamDownload(function () use ($product, $openApi) {
+            echo json_encode($openApi, JSON_PRETTY_PRINT);
+        }, $product->slug . '.json');
+    }
+
+    public function downloadSwagger(Product $product)
+    {
+        return response()->download(public_path() . '/openapi/' . $product->swagger);
     }
 }

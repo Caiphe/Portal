@@ -1,15 +1,17 @@
+var event = new Event('multiselect');
+
 function multiselectChanged(el) {
     var value = el.value;
     var tagEl = document.getElementById(el.id.replace(/select$/, 'tags'));
     var multiselectEl = document.getElementById(el.id.replace(/-select$/, ''));
-    
-    if(multiselectEl.options[el.selectedIndex].selected) {
+
+    if (multiselectEl.options[el.selectedIndex].selected) {
         el.selectedIndex = 0;
         return;
     };
 
     for (var i = multiselectEl.options.length - 1; i >= 0; i--) {
-        if(multiselectEl.options[i].value !== value) continue;
+        if (multiselectEl.options[i].value !== value) continue;
         multiselectEl.options[i].selected = true;
         value = multiselectEl.options[i].textContent;
         break;
@@ -17,6 +19,8 @@ function multiselectChanged(el) {
 
     tagEl.appendChild(createTag(value, el.selectedIndex, multiselectEl.id));
     el.selectedIndex = 0;
+
+    multiselectEl.dispatchEvent(event);
 }
 
 function createTag(value, index, id) {
@@ -30,6 +34,8 @@ function createTag(value, index, id) {
 }
 
 function removeTag(ev) {
-   ev.target.parentNode.removeChild(ev.target);
-   document.getElementById(ev.target.dataset.id).options[ev.target.dataset.index].selected = false;
+    var multiselectEl = document.getElementById(ev.target.dataset.id);
+    ev.target.parentNode.removeChild(ev.target);
+    multiselectEl.options[ev.target.dataset.index].selected = false;
+    multiselectEl.dispatchEvent(event);
 }

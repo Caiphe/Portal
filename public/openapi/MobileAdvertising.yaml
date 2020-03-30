@@ -1,0 +1,318 @@
+# Example YAML to get you started quickly.
+# Be aware that YAML has indentation based coping.
+# Code completion support is available so start typing for available options.
+swagger: '2.0'
+
+# This is your document metadata
+info:
+  version: "0.0.1"
+  title: Mobile Advertisement API
+  description: |
+    A brief description of the API.
+    It can be multiple lines.
+
+host:
+  api.mtn.com
+
+schemes:
+  - https
+
+# Describe your paths here
+paths:
+  # This is a path endpoint. Change it.
+  '/adverts/feeds/web-feeds':
+    # This is a HTTP operation
+    get:
+      # Describe this verb here. Note: you can use markdown
+      description:
+        Optional query param of **size** determines size of returned array
+      # This is array of GET operation parameters:
+      parameters:
+        # An example parameter that is in query and is required
+        - name: inventoryId
+          in: query
+          description: plid
+          required: true
+          type: string
+        - name: userAgent
+          in: query
+          description: ua
+          required: true
+          type: string
+        - name: userId
+          in: query
+          description: uid
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: password
+          required: true
+          type: string
+        - name: mobileSubscriberNumber
+          in: query
+          description: msn
+          required: false
+          type: string
+        - name: transactionId
+          in: query
+          description: ot
+          required: false
+          type: string
+        - name: bandWidth
+          in: query
+          description: force size to given width value
+          required: false
+          type: integer
+        - name: User-Agent
+          in: header
+          description: User Agent in header
+          required: true
+          type: string
+        - name: x-up-subno
+          in: header
+          description: Unique use identifier
+          required: false
+          type: string
+        - name: screenpixelwidth
+          in: header
+          description: overwrites handset width
+          required: false
+          type: string
+          
+          
+          
+    
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            $ref: '#/definitions/WebData'
+  
+  '/adverts/feeds/sms-feeds':
+    # This is a HTTP operation
+    get:
+      # Describe this verb here. Note: you can use markdown
+      description:
+        Optional query param of **size** determines size of returned array
+      # This is array of GET operation parameters:
+      parameters:
+        # An example parameter that is in query and is required
+        - name: inventoryId
+          in: query
+          description: plid
+          required: true
+          type: string
+        - name: userAgent
+          in: query
+          description: ua
+          required: true
+          type: string
+        - name: userId
+          in: query
+          description: uid
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: password
+          required: true
+          type: string
+        - name: mobileSubscriberNumber
+          in: query
+          description: msn
+          required: false
+          type: string
+        - name: transactionId
+          in: query
+          description: ot
+          required: false
+          type: string
+        - name: bandWidth
+          in: query
+          description: force size to given width value
+          required: false
+          type: integer
+        - name: User-Agent
+          in: header
+          description: User Agent in header
+          required: true
+          type: string
+        - name: x-up-subno
+          in: header
+          description: Unique use identifier
+          required: false
+          type: string
+        - name: screenpixelwidth
+          in: header
+          description: overwrites handset width
+          required: false
+          type: string
+          
+   
+          
+    
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            $ref: '#/definitions/SMSData'
+            
+  '/adverts/feeds/pcm-feeds':
+    # This is a HTTP operation
+    get:
+      # Describe this verb here. Note: you can use markdown
+      description:
+        Optional query param of **size** determines size of returned array
+      # This is array of GET operation parameters:
+      parameters:
+        # An example parameter that is in query and is required
+        - name: inventoryId
+          in: query
+          description: plid
+          required: true
+          type: string
+        - name: userAgent
+          in: query
+          description: ua
+          required: true
+          type: string
+        - name: userId
+          in: query
+          description: uid
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: password
+          required: true
+          type: string
+        - name: mobileSubscriberNumber
+          in: query
+          description: msn
+          required: false
+          type: string
+        - name: transactionId
+          in: query
+          description: ot
+          required: false
+          type: string
+        - name: bandWidth
+          in: query
+          description: force size to given width value
+          required: false
+          type: integer
+        - name: User-Agent
+          in: header
+          description: User Agent in header
+          required: true
+          type: string
+        - name: x-up-subno
+          in: header
+          description: Unique use identifier
+          required: false
+          type: string
+        - name: screenpixelwidth
+          in: header
+          description: overwrites handset width
+          required: false
+          type: string
+    
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            $ref: '#/definitions/PCMData'
+
+    
+
+definitions:
+  WebResponse:
+    title: content
+    properties:
+      main:
+        type: object
+        properties:
+          imgUrl:
+            type: string
+          imgText:
+            type: string
+          title:
+            type: string
+          imageLink:
+            type: string
+      error:
+        type: object
+        properties:
+          code:
+            type: string
+  WebData:
+    properties:
+      data:
+        $ref: '#/definitions/WebResponse'
+  
+  
+  SMSResponse:
+    title: content
+    properties:
+      main:
+        type: object
+        properties:
+          imgUrl:
+            type: string
+          imgText:
+            type: string
+          title:
+            type: string
+          imageLink:
+            type: string
+      error:
+        type: object
+        properties:
+          code:
+            type: string
+      
+  SMSData:
+    properties:
+      data:
+        $ref: '#/definitions/SMSResponse'
+        
+  PCMResponse:
+    title: content
+    properties:
+      adNmame:
+        type: object
+        properties:
+          adValid:
+            type: boolean
+            example: true
+          imgUrl:
+            type: string
+          clickUrl:
+            type: string
+          adText:
+            type: string
+          adId:
+            type: integer
+          pcmTransId:
+            type: string
+          MarbilTransId:
+            type: integer
+  
+  PCMData:
+    properties:
+      data:
+        $ref: '#/definitions/PCMResponse'
+
