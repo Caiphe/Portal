@@ -34,7 +34,7 @@
         </div>
     @endif
 
-    @if(empty($approved_apps) && empty($revoked_apps))
+    @if(empty($approvedApps) && empty($revokedApps))
         <div class="container" id="app-empty">
             <div class="row">
                 <div class="col-12">
@@ -78,7 +78,7 @@
                     </div>
                 </div>
                 <div class="body">
-                    @forelse($approved_apps as $app)
+                    @forelse($approvedApps as $app)
                         @if(!empty($app['attributes']))
                             <x-app :app="$app" :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"></x-app>
                         @endif
@@ -119,7 +119,7 @@
                     </div>
                 </div>
                 <div class="body">
-                    @forelse($revoked_apps as $app)
+                    @forelse($revokedApps as $app)
                         @if(!empty($app['attributes']))
                             <x-app :app="$app" :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"></x-app>
                         @endif

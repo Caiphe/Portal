@@ -18,20 +18,20 @@ class AppController extends Controller
     {
         $apps = ApigeeService::get('developers/wes@plusnarrative.com/apps/?expand=true');
 
-        $approved_apps = [];
-        $revoked_apps = [];
+        $approvedApps = [];
+        $revokedApps = [];
 
         foreach ($apps['app'] as $app) {
             if($app['status'] === 'approved') {
-                $approved_apps[] = $app;
+                $approvedApps[] = $app;
             } else {
-                $revoked_apps[] = $app;
+                $revokedApps[] = $app;
             }
         }
 
         return view('templates.apps.index', [
-            'approved_apps' => $approved_apps,
-            'revoked_apps' => $revoked_apps
+            'approvedApps' => $approvedApps,
+            'revokedApps' => $revokedApps
         ]);
     }
 
@@ -75,7 +75,7 @@ class AppController extends Controller
 
         ApigeeService::createApp($data);
 
-        return redirect('apps.index')->with('status', 'Application created successfully');
+        return redirect(route('app.index'))->with('status', 'Application created successfully');
     }
 
     public function edit(ProductLocationService $productLocationService, Request $request)
@@ -123,7 +123,7 @@ class AppController extends Controller
 
         ApigeeService::updateApp($data);
 
-        return redirect()->back()->with('status', 'Application updated successfully');
+        return redirect(route('app.index'))->with('status', 'Application updated successfully');
     }
 
     public function destroy(DeleteAppRequest $request)
@@ -132,6 +132,6 @@ class AppController extends Controller
 
         ApigeeService::delete("developers/wes@plusnarrative.com/apps/{$validated['name']}");
 
-        return redirect()->back()->with('status', 'App has been deleted');
+        return redirect(route('app.index'))->with('status', 'App has been deleted');
     }
 }
