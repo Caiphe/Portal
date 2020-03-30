@@ -1,0 +1,224 @@
+@import "../variables";
+  
+  /* Hide all steps by default: */
+  .step__wizzard_item {
+    display: none;
+    .terms_and_conditions {
+      background-color: #F3F3F3;
+      overflow-y: scroll;
+      height: 300px;
+      padding: 10px 5px;
+    }
+    .item_content {
+      margin-top: 100px;
+      width: 100%;
+    }
+    .intro {
+      margin-top: 100px;
+      a.login_link {
+        color: #FC0 !important;
+        text-decoration: none;
+      }
+      .intro_header {
+        font-size: 50px;
+      }
+      .intro_text {
+        max-width: 80%;
+      }
+    }
+  }
+
+  .step_wizzard__footer {
+      display: block;
+      position: absolute;
+      bottom: 15%;
+
+      p {
+        display: inline;
+        color: grey;
+        input {
+          display: none;
+        }
+      }
+      button {
+        display: inline;
+      }
+  }
+  .step__wizzard_container {
+    height: 100vh;
+    float: left;
+    &.left {
+      width: 35vw;
+      padding: 50px;
+    }
+    &.right {
+      width: 65vw;
+    }
+    input {
+      height: 35px;
+      width: 100%;
+    }
+    input:focus,
+    select:focus,
+    textarea:focus,
+    button:focus {
+        outline: none;
+    }
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus,
+    textarea:-webkit-autofill,
+    textarea:-webkit-autofill:hover,
+    textarea:-webkit-autofill:focus,
+    select:-webkit-autofill,
+    select:-webkit-autofill:hover,
+    select:-webkit-autofill:focus {
+      transition: background-color 5000s ease-in-out 0s;
+      border-bottom: 1.5px solid $grey400;
+      width: 100%;
+      border-radius: 5px;
+      padding: 0 10px;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .carousel_item_cnt {
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      div {
+        position: absolute;
+        left: 20%;
+        margin-left: -50px;
+        bottom: 14%;
+        margin-bottom: -50px;
+        max-width: 800px;
+        h2 {
+          color: #fff;
+          font-size: 6em;
+        }
+        p {
+          color: #fff;
+          display: block;
+          font-size: 1.5em;
+          line-height: 1.6em;
+        }
+      }
+    }
+  }
+  .step__wizzard__content {
+      padding: 80px;
+      margin: 50px;
+      display: table;
+      vertical-align: middle;
+
+  }
+  .step__wizzard_progress_bar {
+    height: 5px;
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+  }
+  .step__wizzard_bar_container {
+      width: 100%;
+      background: rgba(128, 128, 128, 0.31);
+  }
+  #stepWizzardProgress {
+        background: $yellow;
+  }
+
+  .step__wizzard_content {
+    padding: 10px;
+  }
+  .step__wizzard_header {
+      margin: 20px auto 50px;
+      display: flex;
+      vertical-align: middle;
+      img {
+        width: 60px;
+      }
+      h2 {
+        padding-top: 5px;
+        margin-left: 30px;
+      }
+  }
+
+  .mtn-yellow {
+    color: #FC0;
+  }
+
+  h2 {
+    &.header {
+      font-size: 60px;
+    }
+  }
+
+  .input_group {
+    margin-top: 30px;
+    label {
+      display: block;
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+    input {
+      border: none;
+      border-bottom: 1.5px solid $grey400;
+      width: 100%;
+      ::-webkit-input-placeholder { /* Edge */
+        color: #1D1D1D;
+      }
+      :-ms-input-placeholder { /* Internet Explorer 10-11 */
+        color: #1D1D1D;
+      }
+      ::placeholder {
+        color: #1D1D1D;
+        font-size: 10px;
+      }
+    }
+
+    span {
+      &.password_strength {
+        border-radius: 5px;
+        padding: 5px 10px;
+        margin-top: 10px;
+      }
+      &.grey {
+        background-color: #D2D2D2;
+      }
+      &.good {
+        background-color: green;
+      }
+      &.yellow {
+        background-color: #FC0;
+      }
+    }
+
+    &.location_container {
+      display: inline-flex;
+      max-width: 200px;
+    }
+    .location_select_item {
+      &.untouched {
+        img {
+          opacity: 1 !important;
+          cursor: pointer;
+        }
+      }
+      img {
+        border-radius: 50%;
+        width: 25px;
+        margin-right: 10px;
+        margin-bottom: 5px;
+        opacity: 0.2;
+        &.selected {
+          opacity: 1 !important;
+        }
+      }
+    }
+  }
+
+  p.locations_error_text {
+    color: red;
+    display: none;
+  }

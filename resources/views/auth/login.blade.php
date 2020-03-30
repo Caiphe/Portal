@@ -11,7 +11,7 @@
         <div >
             <h2>You're in!</h2>
             <p>
-                Thank you for verifying your email address, you’re all setup. Happy coding!
+                Thank you for verifying your email address, you’re all setup. <strong>Happy coding!</strong>
             </p>
 
             <input style="display: block;" type="text" name="username" placeholder="Username" />
