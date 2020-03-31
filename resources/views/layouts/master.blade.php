@@ -15,8 +15,9 @@
     <link rel="preload" href="/fonts/Montserrat-Regular.woff2" as="font" type="font/woff2">
     <link rel="preload" href="/fonts/Montserrat-Light.woff2" as="font" type="font/woff2">
 </head>
-<body>
+<body class="layout-master">
     <x-header/>
+    <x-alert/>
     <main id="main">
         @yield("content")
     </main>
