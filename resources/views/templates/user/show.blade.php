@@ -63,7 +63,7 @@ Update profile
                 @foreach($locations as $location)
                 <label for="{{$location}}">
                     <input type="checkbox" name="locations[]" value="{{$location}}" id="{{$location}}" autocomplete="off" @if(in_array($location, $userLocations)) checked @endif>
-                    <span title="{{$location}}">@svg($location, '#000000', 'images/locations')</span>
+                    <img src="/images/locations/{{$location}}.svg" alt="{{$location}}" title="{{$location}}">
                 </label>
                 @endforeach
             </div>

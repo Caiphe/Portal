@@ -4,6 +4,8 @@
     <link rel="stylesheet" href="/css/templates/getting-started/show.css">
 @endpush
 
+@section('title', $content['title'] . '::Working with our products')
+
 @section('sidebar')
     <x-sidebar-accordion id="sidebar-accordion" :active="'/' . request()->path()"  
     :list="$list" />  
