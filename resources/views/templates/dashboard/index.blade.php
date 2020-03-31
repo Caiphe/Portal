@@ -175,57 +175,8 @@
             })
         }
 
-        var deleteButtons = document.querySelectorAll('.app-delete');
-        for (var m = 0; m < modals.length; m ++) {
-            deleteButtons[m].addEventListener('click', handleDeleteMenuClick);
-        }
+        var productButtons = document.querySelectorAll('.menu button[class*="product-"]');
 
-        function handleDeleteMenuClick(event) {
-            event.preventDefault();
-
-            var app = event.currentTarget;
-
-            var data = {
-                name: app.dataset.name,
-                _method: 'DELETE'
-            };
-
-            var url = '/apps/' + app.dataset.name;
-            var xhr = new XMLHttpRequest();
-
-            xhr.open('POST', url, true);
-            xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
-            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-
-            var deleteApp = confirm('Are you sure you want to delete this app?');
-
-            if(deleteApp) {
-                xhr.send(JSON.stringify(data));
-            } else {
-                document.querySelector(".menu.show").classList.remove('show');
-            }
-
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    window.location.href = "{{ route('app.index') }}"
-                }
-            };
-        }
-
-        // FIXME: COPYING KEY AND SECRET IS NOT WORKING.
-        var keys = document.querySelectorAll('.copy');
-
-        for (var i = 0; i < keys.length; i ++) {
-            keys[i].addEventListener('click', copyText);
-        }
-
-        function copyText(id) {
-            var el = document.getElementById(id);
-            el.select();
-            /* Copy the text inside the text field */
-            document.execCommand("copy");
-            el.blur();
-        }
-
+        console.log(productButtons);
     </script>
 @endpush

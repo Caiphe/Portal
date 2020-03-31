@@ -1,5 +1,5 @@
 @allowonce('card_link')
-<link href="/css/components/app.css" rel="stylesheet"/>
+<link href="/css/components/_app.css" rel="stylesheet"/>
 @endallowonce
 
 @props(['app', 'attr'])

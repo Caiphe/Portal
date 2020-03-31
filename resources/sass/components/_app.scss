@@ -206,6 +206,12 @@
                     margin-bottom: 10px;
                 }
 
+                button[class^="product-"], button[class*="product-"] {
+                    background-color: transparent;
+                    border-color: transparent;
+                    padding: 0;
+                }
+
                 svg {
                     width: 15px;
                 }
