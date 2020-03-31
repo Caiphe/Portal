@@ -1,6 +1,26 @@
-.wrapper {
+.layout-sidebar .wrapper {
     display: flex;
     flex: 1 0 auto;
+
+    &::before {
+        content: '';
+        width: 50%;
+        background-color: $grey200;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+
+    &::after {
+        content: '';
+        width: 50%;
+        background-color: $grey400;
+        height: 68px;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
 
     #sidebar {
         flex: 1;
@@ -9,6 +29,10 @@
         max-width: 300px;
         background-color: $grey200;
         height: 100%;
+    }
+
+    #main {
+        background-color: #FFF;
     }
 }
 

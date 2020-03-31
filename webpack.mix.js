@@ -31,5 +31,6 @@ mix.scripts(["resources/js/scripts.js", "resources/js/components/alert.js"], "pu
     .sass("resources/sass/templates/products/index.scss", "public/css/templates/products")
     .sass("resources/sass/templates/products/show.scss", "public/css/templates/products")
     .sass("resources/sass/templates/getting-started/index.scss", "public/css/templates/getting-started")
+    .sass("resources/sass/templates/home.scss", "public/css/templates")
     .sass("resources/sass/styles.scss", "public/css")
     .version();
