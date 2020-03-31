@@ -18,12 +18,12 @@
 // })->name('home');
 Route::get('/', 'HomeController@home')->name('home');
 
-Route::get('/products', 'ProductController@index');
+Route::get('products', 'ProductController@index');
 Route::get('products/{product:slug}', 'ProductController@show')->name('product.show');
 Route::get('products/{product:slug}/download/postman', 'ProductController@downloadPostman')->name('product.download.postman');
 Route::get('products/{product:slug}/download/swagger', 'ProductController@downloadSwagger')->name('product.download.swagger');
 
-Route::get('/getting-started', 'GettingStartedController@index');
+Route::get('getting-started', 'GettingStartedController@index');
 Route::get('getting-started/{content:slug}', 'GettingStartedController@show');
 
 Route::get('profile', 'UserController@show')->name('user.profile');

@@ -51,11 +51,11 @@ Update profile
             <input type="email" name="email" value="{{$user['email']}}" placeholder="Email" autocomplete="email">
             <h2>Password</h2>
             <label class="password-label" for="password">
-                <input type="password" name="password" id="password" placeholder="Password" autocomplete="off">
+                <input type="password" name="password" id="password" placeholder="Password" autocomplete="new-password">
                 <button type="button" class="fab show-password" onclick="togglePasswordVisibility(this)"></button>
             </label>
             <label class="password-label" for="passwordConfirmation">
-                <input type="password" name="password_confirmation" id="passwordConfirmation" placeholder="Confirm password" autocomplete="off">
+                <input type="password" name="password_confirmation" id="passwordConfirmation" placeholder="Confirm password" autocomplete="new-password">
                 <button type="button" class="fab show-password" onclick="togglePasswordVisibility(this)"></button>
             </label>
             <h2>Your selected countries</h2>
