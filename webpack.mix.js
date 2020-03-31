@@ -11,69 +11,42 @@ const mix = require("laravel-mix");
  |
  */
 
-mix.scripts('resources/js/scripts.js', 'public/js/scripts.js')
-    .scripts(
-        "resources/js/register.js", 
-        "public/js/register.js"
-    )
-    .scripts(
-        "resources/js/components/carousel.js",
-        "public/js/components/carousel.js"
-    )
-    .scripts(
-        "resources/js/components/sidebar-accordion.js",
-        "public/js/components/sidebar-accordion.js"
-    )
-    .scripts(
-        "resources/js/components/multiselect.js",
-        "public/js/components/multiselect.js"
-    )
-    .scripts(
-        "resources/js/templates/products/index.js",
-        "public/js/templates/products/index.js"
-    )
-    .scripts(
-        "resources/js/templates/products/show.js",
-        "public/js/templates/products/show.js"
-    )
+mix.scripts(["resources/js/scripts.js", "resources/js/components/alert.js"], "public/js/scripts.js")
+    .scripts("resources/js/templates/user/show.js", "public/js/templates/user/show.js")
+    .scripts("resources/js/components/carousel.js", "public/js/components/carousel.js")
+    .scripts("resources/js/components/sidebar-accordion.js", "public/js/components/sidebar-accordion.js")
+    .scripts("resources/js/components/multiselect.js", "public/js/components/multiselect.js")
+    .scripts("resources/js/templates/products/index.js", "public/js/templates/products/index.js")
+    .scripts("resources/js/templates/products/show.js", "public/js/templates/products/show.js")
+    .scripts("resources/js/components/multiselect.js", "public/js/components/multiselect.js")
+    .scripts("resources/js/register.js", "public/js/register.js")
+    .sass("resources/sass/components/step-wizzard.scss", "public/css/components")
+    .sass("resources/sass/components/carousel.scss", "public/css/components")
+    .sass("resources/sass/components/multiselect.scss", "public/css/components")
+    .sass("resources/sass/components/card.scss", "public/css/components")
     .sass(
-        "resources/sass/components/carousel.scss", 
-        "public/css/components")
-    .scripts(
-        "resources/js/components/multiselect.js",
-        "public/js/components/multiselect.js"
-    )
-    .sass(
-        "resources/sass/components/multiselect.scss", 
+        "resources/sass/components/contact-form.scss",
         "public/css/components"
     )
-    .sass(
-        "resources/sass/components/step-wizzard.scss", 
-        "public/css/components"
-    )
-    .sass(
-        "resources/sass/components/card.scss", 
-        "public/css/components"
-    )
-    .sass(
-        "resources/sass/components/card-link.scss", 
-        "public/css/components"
-    )
+    .sass("resources/sass/components/card-link.scss", "public/css/components")
     .sass(
         "resources/sass/components/card-product.scss",
         "public/css/components"
     )
-    .sass(
-        "resources/sass/components/key-feature.scss", 
-        "public/css/components"
-    )
+    .sass("resources/sass/components/key-feature.scss", "public/css/components")
     .sass(
         "resources/sass/components/sidebar-accordion.scss",
         "public/css/components"
     )
+    .sass("resources/sass/components/heading.scss", "public/css/components")
+    .sass("resources/sass/templates/faq/index.scss", "public/css/templates/faq")
     .sass(
-        "resources/sass/components/heading.scss", 
-        "public/css/components"
+        "resources/sass/templates/user/show.scss",
+        "public/css/templates/user"
+    )
+    .scripts(
+        "resources/js/templates/faq/index.js",
+        "public/js/templates/faq/index.js"
     )
     .sass(
         "resources/sass/templates/products/index.scss",
@@ -87,8 +60,6 @@ mix.scripts('resources/js/scripts.js', 'public/js/scripts.js')
         "resources/sass/templates/getting-started/index.scss",
         "public/css/templates/getting-started"
     )
-    .sass(
-        "resources/sass/styles.scss", 
-        "public/css"
-    )
+    .sass("resources/sass/templates/home.scss", "public/css/templates")
+    .sass("resources/sass/styles.scss", "public/css")
     .version();

@@ -1,4 +1,3 @@
-
 function closeAlert() {
     document.getElementById('alert').classList.remove('open');
     setTimeout(function(){

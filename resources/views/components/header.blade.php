@@ -1,5 +1,5 @@
 <header id="header">
-    <div class="header-inner">
+    <div class="header-inner container">
         <a href="/"><img src="/images/mtn-logo.svg" alt="MTN logo"></a>
         <div class="site-name">Developer Portal</div>
         <ul class="main-menu" role="navigation" aria-label="Main">
@@ -18,8 +18,8 @@
                     </div>
                 </div>
             </li>
-            <li><a href="/">Insights</a></li>
-            <li><a href="/">FAQ</a></li>
+			<li><a href="/faq">FAQ</a></li>
+			<li><a href="/contact">Contact us</a></li>
         </ul>
         <input type="search" name="search" id="search" class="thin see-through" placeholder="Search">
         @if(\Auth::check())

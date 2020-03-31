@@ -30,6 +30,14 @@
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12), 0 3px 6px rgba(0, 0, 0, 0.16);
 }
 
+.container {
+    padding: 0 8%;
+    max-width: 1440px;
+    width: 100%;
+    position: relative;
+    margin: 0 auto;
+}
+
 .cols {
     &:not(.inline) {
         display: flex;

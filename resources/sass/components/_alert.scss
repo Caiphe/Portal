@@ -1,0 +1,76 @@
+#alert {
+    color: #FFF;
+    text-align: center;
+    transition: max-height 0.512s;
+    max-height: 0;
+    overflow: hidden;
+	flex: 1 0 auto;
+    
+    &.open {
+        max-height: 180px;
+    }
+
+    .fab {
+        position: absolute;
+        top: 12px;
+        right: 8%;
+    }
+
+    &.success {
+        background-color: $success;
+
+        .fab {
+            background-color: $success;
+            border-color: $success;
+
+            &:hover {
+                background-color: $success900;
+            }
+        }
+    }
+
+    &.warning {
+        background-color: $warning;
+
+        .fab {
+            background-color: $warning;
+            border-color: $warning;
+
+            &:hover {
+                background-color: $warning900;
+            }
+        }
+    }
+
+    &.error {
+        background-color: $error;
+
+        .fab {
+            background-color: $error;
+            border-color: $error;
+
+            &:hover {
+                background-color: $error900;
+            }
+        }
+    }
+
+    &.info {
+        background-color: $info;
+
+        .fab {
+            background-color: $info;
+            border-color: $info;
+
+            &:hover {
+                background-color: $info900;
+            }
+        }
+    }
+
+    ul {
+        list-style: none;
+        padding: $gutterSmall 0;
+        margin: 0;
+    }
+}
