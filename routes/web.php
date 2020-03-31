@@ -13,9 +13,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('layouts.sidebar');
-})->name('home');
+Route::get('/', 'HomeController@home')->name('home');
 
 Route::get('apps', 'AppController@index')->name('app.index');
 Route::get('apps/create', 'AppController@create')->name('app.create');
