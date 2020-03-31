@@ -15,7 +15,7 @@ class HomeController extends Controller
      */
     public function home()
     {
-        $productsCollection = Product::all()->sortBy('created_at');
+        $productsCollection = Product::all()->sortBy('created_at')->take(3);
 		return view('templates.home',[
 			'productsCollection' => $productsCollection]);
     }

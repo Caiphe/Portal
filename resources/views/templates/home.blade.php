@@ -19,7 +19,7 @@
             <div class="carousel-content">
                 <h1>Build an app</h1>
                 <p>When you have chosen the API you want to use to build your app, you need to register your app. Follow the steps below</p>
-                <a class="button after arrow-forward" href="/apps">Apps</a>
+                <a class="button after arrow-forward" href="/apps/create">Create</a>
             </div>
         </x-carousel-item>
 
@@ -27,15 +27,7 @@
             <div class="carousel-content">
                 <h1>Add products</h1>
                 <p>MTN is consistently developing new APIs for developers and businesses to create powerful products. Follow the steps to browse APIs</p>
-                <a class="button after arrow-forward" href="/products">Products</a>
-            </div>
-        </x-carousel-item>
-
-        <x-carousel-item >
-            <div class="carousel-content">
-                <h1>Change the world</h1>
-                <p>Lorem ipsum dolor sit amet, consetetur.</p>
-                <a class="button after arrow-forward" href="#">View</a>
+                <a class="button after arrow-forward" href="/products">Add</a>
             </div>
         </x-carousel-item>
     </x-carousel>
@@ -43,7 +35,7 @@
 
     <div class="intro-steps section-padding">
         <div class="introduction">
-            <h1>Get started using using our products in 4 steps</h1>
+            <h1>Get started using our products in 4 steps</h1>
             <p>You can browse our products and documentation without registering an account, but when you want to create an App you will need to register an account.</p>
         </div>
         <div class="steps">
@@ -97,7 +89,7 @@
                 <li>Submit your request</li>
                 <li>Await the approvals</li>
             </ol>
-            <a class="button" href="/apps">View</a>
+            <a class="button" href="/apps/create">View</a>
         </div>
         <div class="image-right"><img src="/images/register-app.png"></div>
     </div>
@@ -112,14 +104,13 @@
                 <li>For APIs that require OAuth, copy the key and secret and use them to generate an OAuth 2.0 access token, which is required to access MTN APIs.</li>
                 <li>Information on our OAuth flow can be accessed on the OAuth page Browse APIs</li>
             </ol>
-            <a class="button" href="/approved-apps">View</a>
+            <a class="button" href="/apps">View</a>
         </div>
     </div>
 
     <div class="latest-products grey-bg section-padding">
         <h1>Latest products</h1>
-        <div class="products-carousel">
-            <x-carousel wait="5000" duration="0.34">
+        <div class="products-cards">
             @foreach ($productsCollection as $product)
                 @php //setting variables
                 if ($product->locations !== 'all' && $product->locations !== null) :
@@ -130,14 +121,12 @@
                 $tags = array($product->group,$product->category);
                 $slug = 'products/'.$product->slug;
                 @endphp
-                <x-carousel-item>
                     <x-card-product :title="$product->display_name" :href="'/' . $slug" :countries="$countries" :tags="$tags"
                     :data-title="$product->display_name"
                     :data-group="$product->group"
                     :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}</x-card-product>
-                </x-carousel-item>
                 @endforeach	
-            </x-carousel>
         </div>
+        <div class="view-products"><a href="/products" class="button">View all products</a></div>
     </div>
 @endsection 
