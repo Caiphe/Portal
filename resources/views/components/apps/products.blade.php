@@ -5,12 +5,12 @@
         <span class="status-{{ $product['status'] }}"></span>
         <span class="name">{{ $product['apiproduct'] }}</span>
         @if(Request::is('dashboard'))
-            <span>
+            <button class="dashboard-approve">
                 @svg('thumbs-up', '#000000')
-            </span>
-            <span>
+            </button>
+            <button class="dashboard-revoke">
                 @svg('thumbs-down', '#000000')
-            </span>
+            </button>
         @else
             @svg('arrow-forward', '#000000')
         @endif

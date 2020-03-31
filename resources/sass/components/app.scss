@@ -1,6 +1,6 @@
 @import '../variables';
 
-.my-app {
+.app {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -73,10 +73,6 @@
             font-size: 12px;
             border: transparent;
             padding: 0;
-        }
-
-        button[class^="dashboard-"], button[class*=" dashboard-"] {
-            cursor: pointer;
         }
 
         &.show {

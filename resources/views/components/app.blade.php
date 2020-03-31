@@ -4,7 +4,7 @@
 
 @props(['app', 'attr'])
 
-<div class="my-app">
+<div class="app">
     <div class="column">
         <p class="name">
             @svg('app-avatar', '#fff')
