@@ -1,7 +1,7 @@
 @extends('layouts.sidebar')
 
 @push('styles')
-<link rel="stylesheet" href="/css/templates/products/index.css">
+<link rel="stylesheet" href="{{ mix('/css/templates/products/index.css') }}">
 @endpush
 
 @section('title', 'Products')
@@ -66,5 +66,5 @@ $filters = array('Group'=> $groups,'Categories'=> $productCategories);
 @endsection
 
 @pushscript('products')
-<script src="/js/templates/products/index.js" defer></script>
+<script src="{{ mix('/js/templates/products/index.js') }}" defer></script>
 @endpushscript

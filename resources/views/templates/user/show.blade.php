@@ -1,7 +1,7 @@
 @extends('layouts.sidebar')
 
 @push('styles')
-<link rel="stylesheet" href="/css/templates/user/show.css">
+<link rel="stylesheet" href="{{ mix('/css/templates/user/show.css') }}">
 @endpush
 
 @section('title')
@@ -73,5 +73,5 @@ Update profile
 @endsection
 
 @push('scripts')
-<script src="/js/templates/user/show.js"></script>
+<script src="{{ mix('/js/templates/user/show.js') }}"></script>
 @endpush
