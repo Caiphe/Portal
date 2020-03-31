@@ -18,8 +18,6 @@
     <main class="container-fluid" style="padding: 0" id="main">
         @yield("content")
     </main>
-    <!-- <script src="/js/register.js"></script>
-    @stack("register") -->
     @stack("scripts")
 </body>
 </html>
