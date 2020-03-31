@@ -14,7 +14,7 @@ if($errors->any()){
     $messages = preg_split('/;\s?/', $messages);
 }
 @endphp
-<div id="alert" class="{{$type}}">
+<div id="alert" class="{{$type}} open">
     <div class="container">
         <ul>
             @foreach ($messages as $message)

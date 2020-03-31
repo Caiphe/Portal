@@ -1,16 +1,16 @@
 #alert {
     color: #FFF;
     text-align: center;
-    max-height: 180px;
     transition: max-height 0.512s;
+    max-height: 0;
     overflow: hidden;
 
     .layout-sidebar & {
         flex: 1 0 auto;
     }
 
-    &.close {
-        max-height: 0;
+    &.open {
+        max-height: 180px;
     }
 
     .fab {

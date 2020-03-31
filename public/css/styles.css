@@ -2135,8 +2135,8 @@ h6.close::before {
 #alert {
   color: #FFF;
   text-align: center;
-  max-height: 180px;
   transition: max-height 0.512s;
+  max-height: 0;
   overflow: hidden;
 }
 
@@ -2144,8 +2144,8 @@ h6.close::before {
   flex: 1 0 auto;
 }
 
-#alert.close {
-  max-height: 0;
+#alert.open {
+  max-height: 180px;
 }
 
 #alert .fab {
