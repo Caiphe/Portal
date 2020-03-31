@@ -14,9 +14,9 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-		$productsCollection = Product::all()->sortBy('category')->groupBy('category');
+		$productsCollection = Product::isPublic()->get()->sortBy('category')->groupBy('category');
 		$productLocations = Product::isPublic()->WhereNotNull('locations')->select('locations')->get()->implode('locations', ',');
 		$locations = array_unique(explode(',', $productLocations));
 		$countries = Country::whereIn('code', $locations)->get();
@@ -27,7 +27,8 @@ class ProductController extends Controller
 		$groups = Product::distinct('group')->pluck('group');
 		return view('templates.products.index',[
 			'productsCollection' => $productsCollection, 
-			'productCategories' => array_keys($productsCollection->toArray()), 'countries' => $country_array, 
+			'productCategories' => array_keys($productsCollection->toArray()), 'countries' => $country_array,
+			'selectedCategory' => $request['category'], 
 			'groups'=> $groups]);
     }
 

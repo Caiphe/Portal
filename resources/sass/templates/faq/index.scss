@@ -1,0 +1,47 @@
+@import "../../variables";
+
+#main {
+    padding: 0 !important;
+}
+section {
+    padding: $gutter 150px;
+}
+.faq-section {
+    .accordion {
+        margin-bottom: 10px;
+        .question {
+            font-family: "mtn-regular", sans-serif;
+            cursor: pointer;
+            transition: 0.4s;
+            padding-bottom: 20px;
+            border-bottom: solid 1px $grey300;
+            svg {
+                position: absolute;
+                right: 0;
+                transform: rotate(0deg);
+                transition: transform 0.1s linear;
+            }
+            &.active {
+                svg {
+                    transform: rotate(180deg);
+                    transition: transform 0.1s linear;
+                }
+            }
+        }
+        .answer {
+            max-height: 0;
+            font-size: 16px;
+            color: $grey700;
+            overflow: hidden;
+            transition: max-height 0.2s;
+            &::after {
+                content: "";
+                height: 20px;
+                display: block;
+            }
+        }
+    }
+}
+.contact-section {
+    background-color: $grey300;
+}
