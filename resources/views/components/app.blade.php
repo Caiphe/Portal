@@ -16,7 +16,7 @@
         + 2 more
     </div>
     <div class="column">
-        {{ $app['callbackUrl'] }}
+        Developer email
     </div>
     <div class="column">
         {{ date('d M Y', end($app['credentials'])['issuedAt'] / 1000) }}

@@ -175,7 +175,7 @@
             })
         }
 
-        var approveButtons = document.querySelectorAll('button[class*="product-"]');
+        var approveButtons = document.querySelectorAll('button[class*="product-approve"]');
         for(var m = 0; m < approveButtons.length; m++) {
             approveButtons[m].addEventListener('click', handleProductApprove)
         }
@@ -186,25 +186,37 @@
         }
 
         function handleProductApprove(event) {
-            console.log(event.currentTarget);
 
             var selectedProduct = event.currentTarget;
-            var product = selectedProduct.parentElement.children[1].textContent;
 
-            console.log(product);
+            var product = {
+                name: selectedProduct.parentElement.children[1].textContent,
+            };
 
-            var url = "/apps/approve";
             var xhr = new XMLHttpRequest();
 
-            xhr.open('POST', url, true);
+            xhr.open('POST', '/apps/approve');
             xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 
-            xhr.send(product);
+            xhr.send(JSON.stringify(product));
         }
 
         function handleProductRevoke(event) {
 
+            var selectedProduct = event.currentTarget;
+
+            var product = {
+                name: selectedProduct.parentElement.children[1].textContent,
+            };
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('POST', '/apps/revoke');
+            xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+            xhr.send(JSON.stringify(product));
         }
     </script>
 @endpush
