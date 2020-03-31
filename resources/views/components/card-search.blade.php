@@ -1,7 +1,7 @@
 {{-- 
     This component allows for adding search cards.
     Eg:
-    <x-card-search  title="My Apps" href="http://www.google.com" link="http://www.google.com">This is the description</x-card-search>
+    <x-card-search  title="My Apps" link="http://www.google.com">This is the description</x-card-search>
 	title - the card title
 	The card description is passed through the $slot and search attributes can be added to the card to be applied to the a tag
 --}}
@@ -17,7 +17,7 @@
     $card_text = strlen($slot) > 165 ? substr($slot,0,165) : $slot;
 @endphp
 
-<a {{ $attributes }}>
+<a href="{{ $link }}">
 	<div class="card card--search">
 		<div class="card__content">
 			@isset($title)
