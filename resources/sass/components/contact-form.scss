@@ -5,8 +5,8 @@
     position: relative;
     margin: 0 auto;
 
-    h1 {
-        margin: $gutter 0 $gutterSmall;
+    h1, p {
+		text-align: center;
     }
 
     input, textarea {
