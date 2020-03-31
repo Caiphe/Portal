@@ -43,7 +43,10 @@ mix.scripts("resources/js/scripts.js", "public/js/scripts.js")
     .sass("resources/sass/components/carousel.scss", "public/css/components")
     .sass("resources/sass/components/multiselect.scss", "public/css/components")
     .sass("resources/sass/components/card.scss", "public/css/components")
-    .sass("resources/sass/components/contact-form.scss", "public/css/components")
+    .sass(
+        "resources/sass/components/contact-form.scss",
+        "public/css/components"
+    )
     .sass("resources/sass/components/card-link.scss", "public/css/components")
     .sass(
         "resources/sass/components/card-product.scss",
@@ -76,5 +79,6 @@ mix.scripts("resources/js/scripts.js", "public/js/scripts.js")
         "resources/sass/templates/getting-started/index.scss",
         "public/css/templates/getting-started"
     )
+    .sass("resources/sass/templates/home.scss", "public/css/templates")
     .sass("resources/sass/styles.scss", "public/css")
     .version();
