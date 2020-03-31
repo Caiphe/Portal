@@ -5,21 +5,30 @@
 @extends('layouts.sidebar')
 
 @section('sidebar')
-    <x-sidebar-accordion id="sidebar-accordion"
-                         :list="
-    [ 'Manage' =>
-        [
-            [ 'label' => 'Profile', 'link' => '#'],
-            [ 'label' => 'Approved apps', 'link' => '#'],
-            [ 'label' => 'Revoked apps','link' => '#'],
-        ],
-        'Discover' =>
-        [
-            [ 'label' => 'Browse all products', 'link' => '#'],
-            [ 'label' => 'Working with our products','link' => '#'],
-        ]
-    ]
-    " />
+{{--    @php--}}
+{{--        $filters = array('Group'=> $groups,'Categories'=> $productCategories);--}}
+{{--    @endphp--}}
+    <div class="filter-sidebar">
+        <h2>Filter by</h2>
+        <h3>Search</h3>
+
+        <input type="text" name="search">
+
+{{--        @foreach ($filters as $filterTitle => $filterGroup)--}}
+{{--            <h3>{{$filterTitle}}</h3>--}}
+{{--            @foreach ($filterGroup as $filterItem)--}}
+{{--                <div class="filter-checkbox">--}}
+{{--                    <input type="checkbox" name="{{$filterTitle}}" value="{{$filterItem}}" id="{{$filterTitle}}" onclick="filterProducts('{{$filterTitle}}');"/><label class="filter-label" for="{{$filterTitle}}">{{$filterItem}}</label>--}}
+{{--                </div>--}}
+{{--            @endforeach--}}
+{{--        @endforeach--}}
+        <div class="country-filter">
+            <h3>Country</h3>
+{{--            <x-multiselect id="filter-country" name="filter-country" label="Select country" :options="$countries" />--}}
+        </div>
+
+        <button id="clearFilter" class="dark outline" onclick="clearFilter()">Clear filters</button>
+    </div>
 @endsection
 
 @section('content')
@@ -59,10 +68,10 @@
                     </div>
                 </div>
                 <div class="body">
-                    @forelse($approvedApps as $app)
-{{--                        @if(!empty($app['attributes']))--}}
-{{--                            <x-app :app="$app" :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"></x-app>--}}
-{{--                        @endif--}}
+                    @forelse($approvedApps as $key => $app)
+                        @if(!empty($app['attributes']))
+                            <x-app :app="$app" :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"></x-app>
+                        @endif
                     @empty
                         <p>No approved apps.</p>
                     @endforelse
@@ -101,9 +110,9 @@
                 </div>
                 <div class="body">
                     @forelse($revokedApps as $app)
-{{--                        @if(!empty($app['attributes']))--}}
-{{--                            <x-app :app="$app" :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"></x-app>--}}
-{{--                        @endif--}}
+                        @if(!empty($app['attributes']))
+                            <x-app :app="$app" :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"></x-app>
+                        @endif
                     @empty
                         <p>No revoked apps.</p>
                     @endforelse
