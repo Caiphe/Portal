@@ -24,7 +24,7 @@ class DashboardController extends Controller
 
     public function approve(Request $request)
     {
-        dd($request->all());
+        return redirect()->back()->with('alert', 'Success');
     }
 
     public function revoke()

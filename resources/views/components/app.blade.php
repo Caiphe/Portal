@@ -31,11 +31,10 @@
                     <p><strong>Developer name:</strong></p>
                     <p><strong>Developer email:</strong></p>
                 </div>
-                <div class="consumer">
+                <div>
                     <p>Test</p>
                     <p>Test</p>
                 </div>
-                <div class="copy-column"></div>
                 <div>
                     <p><strong>Regions:</strong></p>
                 </div>

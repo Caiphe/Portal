@@ -175,9 +175,26 @@
             })
         }
 
-        var approveButtons = document.querySelectorAll('button[class*="product-approve"]');
-        for(var m = 0; m < approveButtons.length; m++) {
-            approveButtons[m].addEventListener('click', handleProductApprove)
+        var approveForm = document.querySelectorAll('.app-product-approve');
+        for(var m = 0; m < approveForm.length; m++) {
+            approveForm[m].addEventListener('submit', handleProductApprove)
+        }
+
+        function handleProductApprove(event) {
+            event.preventDefault();
+
+            var approveProduct = confirm('Are you sure you want to approve this product?');
+
+            if(approveProduct) {
+                this.submit();
+            } else {
+                document.querySelector(".menu.show").classList.remove('show');
+            }
+
+            {{--var product = {--}}
+            {{--    name: this.parentElement.children[1].textContent,--}}
+            {{--};--}}
+
         }
 
         var revokeButtons = document.querySelectorAll('button[class*="product-revoke"]');
@@ -185,38 +202,36 @@
             revokeButtons[n].addEventListener('click', handleProductRevoke)
         }
 
-        function handleProductApprove(event) {
-
-            var selectedProduct = event.currentTarget;
+        function handleProductRevoke() {
 
             var product = {
-                name: selectedProduct.parentElement.children[1].textContent,
-            };
-
-            var xhr = new XMLHttpRequest();
-
-            xhr.open('POST', '/apps/approve');
-            xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
-            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-
-            xhr.send(JSON.stringify(product));
-        }
-
-        function handleProductRevoke(event) {
-
-            var selectedProduct = event.currentTarget;
-
-            var product = {
-                name: selectedProduct.parentElement.children[1].textContent,
+                name: this.parentElement.children[1].textContent,
             };
 
             var xhr = new XMLHttpRequest();
 
             xhr.open('POST', '/apps/revoke');
             xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
-            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            xhr.setRequestHeader('Content-type', 'application/json;');
 
             xhr.send(JSON.stringify(product));
+        }
+
+        var approveAllButtons = document.querySelectorAll('button[class*="dashboard-approve"]');
+        for(var o = 0; o < approveAllButtons.length; o++) {
+            approveAllButtons[o].addEventListener('click', handleApproveAll)
+        }
+
+        function handleApproveAll() {
+            console.log(this);
+        }
+
+        function revokeAll() {
+
+        }
+
+        function complete() {
+
         }
     </script>
 @endpush
