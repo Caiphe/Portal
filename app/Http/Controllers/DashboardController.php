@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Services\ApigeeService;
 use App\Services\ProductLocationService;
-use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {

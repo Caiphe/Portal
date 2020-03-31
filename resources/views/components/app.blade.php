@@ -25,44 +25,66 @@
         <button class="actions"></button>
     </div>
     <div class="detail">
-        <div>
-            <div>
-                <p><strong>Consumer key:</strong> </p>
-                <p><strong>Consumer secret:</strong> </p>
-                <p><strong>Callback URL:</strong> </p>
-            </div>
-            <div class="consumer">
-                <p class="key">
-                    {{ end($app['credentials'])['consumerKey']  }}
-                </p>
-                <p class="key">
-                    {{ end($app['credentials'])['consumerSecret'] }}
-                </p>
-                <p>{{ $app['callbackUrl'] }}</p>
-            </div>
-            <div class="copy-column">
-                <button class="copy">
-                    @svg('copy', '#000000')
-                </button>
-                <button class="copy">
-                    @svg('copy', '#000000')
-                </button>
-            </div>
-            <div>
-                <p><strong>Regions:</strong></p>
-                <p><strong>Key issued:</strong></p>
-                <p><strong>Expires:</strong></p>
-            </div>
+        @if(Request::is('dashboard'))
             <div>
                 <div>
-                    @svg('za', '#000000', 'images/locations')
+                    <p><strong>Developer name:</strong></p>
+                    <p><strong>Developer email:</strong></p>
                 </div>
-                <p>
-                    {{ date('d M Y H:i:s', end($app['credentials'])['issuedAt'] / 1000) }}
-                </p>
-                <p>Never</p>
+                <div class="consumer">
+                    <p>Test</p>
+                    <p>Test</p>
+                </div>
+                <div class="copy-column"></div>
+                <div>
+                    <p><strong>Regions:</strong></p>
+                </div>
+                <div>
+                    <div>
+                        @svg('za', '#000000', 'images/locations')
+                    </div>
+                </div>
             </div>
-        </div>
+        @else
+            <div>
+                <div>
+                    <p><strong>Consumer key:</strong> </p>
+                    <p><strong>Consumer secret:</strong> </p>
+                    <p><strong>Callback URL:</strong> </p>
+                </div>
+                <div class="consumer">
+                    <p class="key">
+                        {{ end($app['credentials'])['consumerKey']  }}
+                    </p>
+                    <p class="key">
+                        {{ end($app['credentials'])['consumerSecret'] }}
+                    </p>
+                    <p>{{ $app['callbackUrl'] }}</p>
+                </div>
+                <div class="copy-column">
+                    <button class="copy">
+                        @svg('copy', '#000000')
+                    </button>
+                    <button class="copy">
+                        @svg('copy', '#000000')
+                    </button>
+                </div>
+                <div>
+                    <p><strong>Regions:</strong></p>
+                    <p><strong>Key issued:</strong></p>
+                    <p><strong>Expires:</strong></p>
+                </div>
+                <div>
+                    <div>
+                        @svg('za', '#000000', 'images/locations')
+                    </div>
+                    <p>
+                        {{ date('d M Y H:i:s', end($app['credentials'])['issuedAt'] / 1000) }}
+                    </p>
+                    <p>Never</p>
+                </div>
+            </div>
+        @endif
 
         <p>
             <strong>Description:</strong>

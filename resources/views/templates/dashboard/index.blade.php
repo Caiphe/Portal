@@ -68,7 +68,7 @@
                     </div>
                 </div>
                 <div class="body">
-                    @forelse($approvedApps as $key => $app)
+                    @forelse($approvedApps as $app)
                         @if(!empty($app['attributes']))
                             <x-app :app="$app" :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"></x-app>
                         @endif
