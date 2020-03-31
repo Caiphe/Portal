@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @push('styles')
-<link rel="stylesheet" href="/css/templates/home.css">
+<link rel="stylesheet" href="{{ mix('/css/templates/home.css') }}">
 @endpush
 
 @section('content')

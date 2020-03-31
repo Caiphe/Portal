@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @push('styles')
-<link rel="stylesheet" href="/css/templates/faq/index.css">
+<link rel="stylesheet" href="{{ mix('/css/templates/faq/index.css') }}">
 @endpush
 
 @section('title','FAQs')
