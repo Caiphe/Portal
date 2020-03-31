@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Services\ApigeeService;
 use App\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -51,27 +53,52 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        $validator = Validator::make($data, [
+        return Validator::make($data, [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
+    }
 
-        $validator->after(function ($validator) use($data) {
-            $developer = ApigeeService::post('developers', [
-                "email" => $data['email'],
-                "firstName" => $data['first_name'],
-                "lastName" => $data['last_name'],
-                "userName" => $data['first_name'] . $data['last_name'],
-            ])->json();
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function register(Request $request)
+    {
+        $data = $request->all();
+        
+        $this->validator($data)->validate();
 
-            if ($developer['code'] === 'developer.service.DeveloperAlreadyExists') {
-                $validator->errors()->add('email', 'Sorry, this email has already been taken');
-            }
-        });
+        $apigeeDeveloper = ApigeeService::post('developers', [
+            "email" => $data['email'],
+            "firstName" => $data['first_name'],
+            "lastName" => $data['last_name'],
+            "userName" => $data['first_name'] . $data['last_name'],
+        ])->json();
 
-        return $validator;
+        if (isset($apigeeDeveloper['code']) && $apigeeDeveloper['code'] === 'developer.service.DeveloperAlreadyExists') {
+            return redirect('/register')
+                ->withErrors(['email' => 'Sorry, this email has already been taken'])
+                ->withInput();
+        }
+
+        $data['developer_id'] = $apigeeDeveloper['developerId'];
+
+        event(new Registered($user = $this->create($data)));
+
+        $this->guard()->login($user);
+
+        if ($response = $this->registered($request, $user)) {
+            return $response;
+        }
+
+        return $request->wantsJson()
+                    ? new Response('', 201)
+                    : redirect($this->redirectPath());
     }
 
     /**
@@ -86,6 +113,7 @@ class RegisterController extends Controller
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
+            'developer_id' => $data['developer_id'],
             'password' => Hash::make($data['password']),
         ]);
 
