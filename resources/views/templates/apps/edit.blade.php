@@ -1,5 +1,5 @@
 @push('styles')
-    <link rel="stylesheet" href="/css/templates/apps/_create.css">
+    <link rel="stylesheet" href="/css/templates/apps/create.css">
 @endpush
 
 @extends('layouts.sidebar')
