@@ -6,10 +6,10 @@
         <span class="name">{{ $product['apiproduct'] }}</span>
         @if(Request::is('dashboard'))
             <span>
-                @svg('arrow-forward', '#000000')
+                @svg('thumbs-up', '#000000')
             </span>
             <span>
-                @svg('arrow-forward', '#000000')
+                @svg('thumbs-down', '#000000')
             </span>
         @else
             @svg('arrow-forward', '#000000')
