@@ -30,6 +30,14 @@
                 <a class="button after arrow-forward" href="/products">Add</a>
             </div>
         </x-carousel-item>
+
+        <x-carousel-item>
+            <div class="carousel-content">
+                <h1>Access the keys</h1>
+                <p>Once your App submission is approved you can now use Consumer/API Key and Secret on your profile page.</p>
+                <a class="button after arrow-forward" href="/apps">Access</a>
+            </div>
+        </x-carousel-item>
     </x-carousel>
 </div>
 
