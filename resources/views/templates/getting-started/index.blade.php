@@ -4,6 +4,8 @@
     <link rel="stylesheet" href="/css/templates/getting-started/index.css">
 @endpush
 
+@section('title', 'Getting started')
+
 @section('sidebar')
     <x-sidebar-accordion id="sidebar-accordion" :active="'/' . request()->path()"
     :list="$list" />   
