@@ -8,6 +8,12 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return view('templates.dashboard.index');
+        $approvedApps = [];
+        $revokedApps = [];
+
+        return view('templates.dashboard.index', [
+            'approvedApps' => $approvedApps ?? [],
+            'revokedApps' => $revokedApps ?? []
+        ]);
     }
 }

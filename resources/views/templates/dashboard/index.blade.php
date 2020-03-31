@@ -1,5 +1,5 @@
 @push('styles')
-    <link rel="stylesheet" href="/css/templates/apps/_index.css">
+    <link rel="stylesheet" href="/css/templates/apps/index.css">
 @endpush
 
 @extends('layouts.sidebar')
@@ -28,103 +28,89 @@
         <button class="outline dark" id="create">Create new</button>
     </x-heading>
 
-    @if(empty($approvedApps) && empty($revokedApps))
-        <div class="container" id="app-empty">
-            <div class="row">
-                <div class="col-12">
-                    @svg('app', '#ffffff')
-                    <h1>Looks like you don’t have any apps yet.</h1>
-                    <p>Fortunately, it’s very easy to create one.</p>
+    <div class="container" id="app-index">
+        <div class="row">
+            <div class="heading-app">
+                @svg('chevron-down', '#000000')
 
-                    <button class="outline dark">Create app</button>
+                <h3>Approved Apps</h3>
+            </div>
+
+            <div class="my-apps">
+                <div class="head">
+                    <div class="column">
+                        <p>App name</p>
+                    </div>
+
+                    <div class="column">
+                        <p>Regions</p>
+                    </div>
+
+                    <div class="column">
+                        <p>Callback URL</p>
+                    </div>
+
+                    <div class="column">
+                        <p>Date created</p>
+                    </div>
+
+                    <div class="column">
+                        &nbsp;
+                    </div>
+                </div>
+                <div class="body">
+                    @forelse($approvedApps as $app)
+{{--                        @if(!empty($app['attributes']))--}}
+{{--                            <x-app :app="$app" :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"></x-app>--}}
+{{--                        @endif--}}
+                    @empty
+                        <p>No approved apps.</p>
+                    @endforelse
                 </div>
             </div>
         </div>
-    @else
-        <div class="container" id="app-index">
-            <div class="row">
-                <div class="heading-app">
-                    @svg('chevron-down', '#000000')
 
-                    <h3>Approved Apps</h3>
-                </div>
+        <div class="row" id="app">
+            <div class="heading-app">
+                @svg('chevron-down', '#000000')
 
-                <div class="my-apps">
-                    <div class="head">
-                        <div class="column">
-                            <p>App name</p>
-                        </div>
-
-                        <div class="column">
-                            <p>Regions</p>
-                        </div>
-
-                        <div class="column">
-                            <p>Callback URL</p>
-                        </div>
-
-                        <div class="column">
-                            <p>Date created</p>
-                        </div>
-
-                        <div class="column">
-                            &nbsp;
-                        </div>
-                    </div>
-                    <div class="body">
-                        @forelse($approvedApps as $app)
-                            @if(!empty($app['attributes']))
-                                <x-app :app="$app" :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"></x-app>
-                            @endif
-                        @empty
-                            <p>No approved apps.</p>
-                        @endforelse
-                    </div>
-                </div>
+                <h3>Revoked Apps</h3>
             </div>
 
-            <div class="row" id="app">
-                <div class="heading-app">
-                    @svg('chevron-down', '#000000')
+            <div class="my-apps">
+                <div class="head">
+                    <div class="column">
+                        <p>App name</p>
+                    </div>
 
-                    <h3>Revoked Apps</h3>
+                    <div class="column">
+                        <p>Reason</p>
+                    </div>
+
+                    <div class="column">
+                        <p>Callback URL</p>
+                    </div>
+
+                    <div class="column">
+                        <p>Date created</p>
+                    </div>
+
+                    <div class="column">
+
+                    </div>
                 </div>
-
-                <div class="my-apps">
-                    <div class="head">
-                        <div class="column">
-                            <p>App name</p>
-                        </div>
-
-                        <div class="column">
-                            <p>Reason</p>
-                        </div>
-
-                        <div class="column">
-                            <p>Callback URL</p>
-                        </div>
-
-                        <div class="column">
-                            <p>Date created</p>
-                        </div>
-
-                        <div class="column">
-
-                        </div>
-                    </div>
-                    <div class="body">
-                        @forelse($revokedApps as $app)
-                            @if(!empty($app['attributes']))
-                                <x-app :app="$app" :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"></x-app>
-                            @endif
-                        @empty
-                            <p>No revoked apps.</p>
-                        @endforelse
-                    </div>
+                <div class="body">
+                    @forelse($revokedApps as $app)
+{{--                        @if(!empty($app['attributes']))--}}
+{{--                            <x-app :app="$app" :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"></x-app>--}}
+{{--                        @endif--}}
+                    @empty
+                        <p>No revoked apps.</p>
+                    @endforelse
                 </div>
             </div>
         </div>
-    @endif
+    </div>
 
 @endsection
 

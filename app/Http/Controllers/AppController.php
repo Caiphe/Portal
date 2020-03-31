@@ -28,8 +28,8 @@ class AppController extends Controller
         }
 
         return view('templates.apps.index', [
-            'approvedApps' => $approvedApps,
-            'revokedApps' => $revokedApps
+            'approvedApps' => $approvedApps ?? [],
+            'revokedApps' => $revokedApps ?? []
         ]);
     }
 
