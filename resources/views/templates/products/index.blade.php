@@ -4,6 +4,8 @@
 <link rel="stylesheet" href="/css/templates/products/index.css">
 @endpush
 
+@section('title', 'Products')
+
 @section('sidebar')
 @php
 $filters = array('Group'=> $groups,'Categories'=> $productCategories);
@@ -15,7 +17,8 @@ $filters = array('Group'=> $groups,'Categories'=> $productCategories);
 		<h3>{{$filterTitle}}</h3>
 		@foreach ($filterGroup as $filterItem)
 			<div class="filter-checkbox">
-				<input type="checkbox" name="{{$filterTitle}}" value="{{$filterItem}}" id="{{$filterTitle}}" onclick="filterProducts('{{$filterTitle}}');"/><label class="filter-label" for="{{$filterTitle}}">{{$filterItem}}</label>
+				<input type="checkbox" name="{{$filterTitle}}" value="{{$filterItem}}" id="{{$filterTitle}}" onclick="filterProducts('{{$filterTitle}}');" @if(isset($selectedCategory) && $selectedCategory===$filterItem) checked=checked @endif
+				/><label class="filter-label" for="{{$filterTitle}}">{{$filterItem}}</label>
 			</div>
 		@endforeach	
 	@endforeach
@@ -24,7 +27,10 @@ $filters = array('Group'=> $groups,'Categories'=> $productCategories);
 		<x-multiselect id="filter-country" name="filter-country" label="Select country" :options="$countries" />
 	</div>
 
-	<button id="clearFilter" class="dark outline" onclick="clearFilter()">Clear filters</button>
+	<button id="clearFilter" class="dark outline" onclick="clearFilter()" 
+	@isset($selectedCategory)
+		style="display:block"
+	@endisset>Clear filters</button>
 </div>
 @endsection
 
@@ -34,7 +40,10 @@ $filters = array('Group'=> $groups,'Categories'=> $productCategories);
 	<hr class="search-hr"/>
 	<div class="products">
 	@foreach ($productsCollection as $category=>$products)
-	<div class="category" data-category="{{ $category }}">
+	<div class="category" data-category="{{ $category }}" 
+	@if(isset($selectedCategory) && $selectedCategory!==$category)
+		style="display:none"
+	@endif>
 			<h3>{{ $category }}</h3>
 			@foreach ($products as $product)
 				@php //setting variables
