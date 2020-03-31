@@ -15,35 +15,9 @@
     <link rel="preload" href="/fonts/Montserrat-Regular.woff2" as="font" type="font/woff2">
     <link rel="preload" href="/fonts/Montserrat-Light.woff2" as="font" type="font/woff2">
 </head>
-<body>
+<body class="layout-master">
     <x-header/>
-    @if ($errors->any() || Session::has('alert'))
-    @php
-    if($errors->any()){
-        $type = 'error';
-        $messages = $errors->all();
-    } else {
-        $alert = explode(':', Session::get('alert'));
-        $type = 'success';
-        $messages = $alert[0];
-        if(count($alert) > 1){
-            $type = strtolower($alert[0]);
-            $messages = $alert[1];
-        }
-        $messages = preg_split('/;\s?/', $messages);
-    }
-    @endphp
-    <div id="alert" class="{{$type}}">
-        <div class="container">
-            <ul>
-                @foreach ($messages as $message)
-                    <li>{{ $message }}</li>
-                @endforeach
-            </ul>
-            <button class="fab blue close" onclick="closeAlert()"></button>
-        </div>
-    </div>
-    @endif
+    <x-alert/>
     <main id="main">
         @yield("content")
     </main>

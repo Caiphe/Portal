@@ -5,13 +5,17 @@
     transition: max-height 0.512s;
     overflow: hidden;
 
+    .layout-sidebar & {
+        flex: 1 0 auto;
+    }
+
     &.close {
         max-height: 0;
     }
 
     .fab {
         position: absolute;
-        top: $gutterSmall;
+        top: 12px;
         right: 8%;
     }
 

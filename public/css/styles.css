@@ -2140,13 +2140,17 @@ h6.close::before {
   overflow: hidden;
 }
 
+.layout-sidebar #alert {
+  flex: 1 0 auto;
+}
+
 #alert.close {
   max-height: 0;
 }
 
 #alert .fab {
   position: absolute;
-  top: 20px;
+  top: 12px;
   right: 8%;
 }
 
