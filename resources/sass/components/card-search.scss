@@ -1,0 +1,19 @@
+.card--search {
+    svg {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
+
+    .card__header {
+        min-height: 70px;
+        margin: 5px 0;
+        display: flex;
+        align-items: center;
+    }
+    
+    .card__body{
+        min-height: 60px;
+        margin-bottom: 5px;
+    }
+}
