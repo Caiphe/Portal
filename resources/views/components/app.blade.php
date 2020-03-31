@@ -19,7 +19,7 @@
         {{ $app['callbackUrl'] }}
     </div>
     <div class="column">
-        {{ \Carbon\Carbon::parse()->format('d M') }}
+        {{ date('d M Y', end($app['credentials'])['issuedAt'] / 1000) }}
     </div>
     <div class="column">
         <button class="actions"></button>
@@ -58,7 +58,7 @@
                     @svg('za', '#000000', 'images/locations')
                 </div>
                 <p>
-                    {{ \Carbon\Carbon::parse(end($app['credentials'])['issuedAt'])->format('d/m/y - H:i') }}
+                    {{ date('d M Y H:i:s', end($app['credentials'])['issuedAt'] / 1000) }}
                 </p>
                 <p>Never</p>
             </div>
