@@ -56,7 +56,7 @@
                     </div>
 
                     <div class="column">
-                        <p>Callback URL</p>
+                        <p>Developer email</p>
                     </div>
 
                     <div class="column">
@@ -97,7 +97,7 @@
                     </div>
 
                     <div class="column">
-                        <p>Callback URL</p>
+                        <p>Developer email</p>
                     </div>
 
                     <div class="column">

@@ -75,13 +75,7 @@
         <p class="products-title"><strong>Products</strong></p>
 
         <div class="products">
-            @foreach(end($app['credentials'])['apiProducts'] as $product)
-                <div class="product">
-                    <span class="status-{{ $product['status'] }}"></span>
-                    <span class="name">{{ $product['apiproduct'] }}</span>
-                    @svg('arrow-forward', '#000000')
-                </div>
-            @endforeach
+            <x-apps.products :products="end($app['credentials'])['apiProducts']" />
         </div>
     </div>
     <nav class="menu">
