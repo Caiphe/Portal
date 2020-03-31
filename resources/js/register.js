@@ -131,3 +131,62 @@ function checkIfClassExists(elem, className) {
   }
   return false;
 }
+
+function checkPasswordStrength(event) {
+  var password = event.target.value;
+  var passwordStrengthBtn = document.getElementById("passwordStrengthBtn");
+  var passwordStrengthArray = ["grey", "yellow", "good"];
+  // Do not show anything when the length of password is zero.
+  if (password.length === 0) {
+      return;
+  }
+  // Create an array and push all possible values that you want in password
+  var matchedCase = new Array();
+  matchedCase.push("[$@$!%*#?&]");
+  matchedCase.push("[A-Z]");
+  matchedCase.push("[0-9]");
+  matchedCase.push("[a-z]");
+
+
+  // Check the conditions
+  var counditionsPassed = 0;
+  if (password.length >= 8 ) {
+    counditionsPassed += 1;
+    for (var i = 0; i < matchedCase.length; i++) {
+        if (new RegExp(matchedCase[i]).test(password)) {
+          counditionsPassed += 1;
+        }
+    }
+  }
+
+  // Display it
+  var className = "";
+  var strength = "";
+  switch (counditionsPassed) {
+      case 0:
+      case 1:
+      case 2:
+          strength = "Very Weak";
+          className = "grey";
+          break;
+      case 3:
+          strength = "Medium Password";
+          className = "grey_dark";
+          break;
+      case 4:
+          strength = "Strong Password";
+          className = "yellow";
+          break;
+  }
+  if (!passwordStrengthBtn.classList.contains(className)) {
+    for(var i = 0; i < passwordStrengthArray.length; i++) {
+      if(checkIfClassExists(passwordStrengthBtn, passwordStrengthArray[i])) {
+        removeUntouchedClass(passwordStrengthBtn, passwordStrengthArray[i]);
+        i = passwordStrengthArray.length;
+      }
+    }
+    passwordStrengthBtn.classList.add(className);
+    passwordStrengthBtn.innerHTML = strength;
+  }
+  
+}

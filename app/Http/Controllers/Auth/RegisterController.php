@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\Product;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -39,6 +40,24 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+    }
+
+
+    /**
+     * Show the application registration form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRegistrationForm()
+    {
+        $productLocations = Product::isPublic()
+            ->WhereNotNull('locations')
+            ->Where('locations', '!=', 'all')
+            ->select('locations')
+            ->get()
+            ->implode('locations', ',');
+
+        return view('auth.register', ['locations' => array_unique(explode(',', $productLocations))]);
     }
 
     /**

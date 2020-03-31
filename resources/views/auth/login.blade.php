@@ -1,5 +1,10 @@
 @extends('layouts.auth')
 
+@push('styles')
+    <link rel="stylesheet" href="/css/components/step-wizzard.css">
+@endpush
+
+
 @section('content')
 <div class="row m-0">
     <div style="padding: 50px; width: 35vw; height: 100vh; float: left;">

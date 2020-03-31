@@ -7,10 +7,14 @@
       background-color: #F3F3F3;
       overflow-y: scroll;
       height: 300px;
-      padding: 10px 5px;
+      padding: 0px  25px 20px; 
+
+      ul {
+        font-size: 11px;
+        line-height: 14px;
+      }
     }
     .item_content {
-      margin-top: 100px;
       width: 100%;
     }
     .intro {
@@ -19,11 +23,21 @@
         color: #FC0 !important;
         text-decoration: none;
       }
-      .intro_header {
+      .header {
         font-size: 50px;
       }
-      .intro_text {
+      .text {
         max-width: 80%;
+      }
+      .return_user {
+        color: #777777;
+      }
+    }
+
+    ul {
+      padding: 10px;
+      li {
+        margin-top: 5px;
       }
     }
   }
@@ -95,7 +109,7 @@
         max-width: 800px;
         h2 {
           color: #fff;
-          font-size: 6em;
+          font-size:4em;
         }
         p {
           color: #fff;
@@ -153,6 +167,11 @@
     }
   }
 
+  h4 {
+    margin-left: 30px;
+    font-size: 1.25em;
+  }
+
   .input_group {
     margin-top: 30px;
     label {
@@ -165,6 +184,8 @@
       border: none;
       border-bottom: 1.5px solid $grey400;
       width: 100%;
+      padding: 0px;
+      border-radius: 0px;
       ::-webkit-input-placeholder { /* Edge */
         color: #1D1D1D;
       }
@@ -174,23 +195,6 @@
       ::placeholder {
         color: #1D1D1D;
         font-size: 10px;
-      }
-    }
-
-    span {
-      &.password_strength {
-        border-radius: 5px;
-        padding: 5px 10px;
-        margin-top: 10px;
-      }
-      &.grey {
-        background-color: #D2D2D2;
-      }
-      &.good {
-        background-color: green;
-      }
-      &.yellow {
-        background-color: #FC0;
       }
     }
 
@@ -218,7 +222,45 @@
     }
   }
 
-  p.locations_error_text {
-    color: red;
-    display: none;
+  button {
+    &.password_strength {
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      margin-top: 30px;
+      cursor: auto;
+    }
+    &.grey {
+      background-color: #D2D2D2;
+    }
+    &.grey_dark {
+      background-color: rgb(139, 139, 139);
+    }
+    &.yellow {
+      background-color: #FC0;
+    }
   }
+
+  .locations {
+    width: 260px;
+    text-align: left;
+
+    label {
+        cursor: pointer;
+        float: left;
+        margin: 10px;
+    }
+
+    svg {
+        width: 25px;
+        height: 25px;
+    }
+
+    input {
+        display: none;
+    }
+
+    input:checked+span {
+        opacity: 0.1;
+    }
+}
