@@ -4,7 +4,7 @@
         <div class="site-name">Developer Portal</div>
         <ul class="main-menu" role="navigation" aria-label="Main">
             <li class="has-children">
-                <a href="/">Products @svg("chevron-down")</a>
+                <a href="/products">Products @svg("chevron-down")</a>
                 <div class="product-nav shadow">
                     <div class="nav-left">
                         <a href="/getting-started">Working with our products</a>
