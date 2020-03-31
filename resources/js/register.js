@@ -16,11 +16,18 @@ function showTab(n) {
   }
   if (n == (x.length - 1)) {
     document.getElementById("stepWizzardNextBtn").innerHTML = "Create new account";
+    // document.getElementById("stepWizzardNextBtn").disabled = true;
   } else {
     document.getElementById("stepWizzardNextBtn").innerHTML = "Next";
   }
   // ... and run a function that displays the correct step indicator:
   calcProgress(n, x.length)
+}
+
+function readyToSubmit(event) {
+  var termAndConditionsSwitchBtn = document.getElementById("termsSwitch");
+  termAndConditionsSwitchBtn.disabled = false;
+  termAndConditionsSwitchBtn.setAttribute('type', 'submit');
 }
 
 function nextPrev(n) {
@@ -44,12 +51,13 @@ function nextPrev(n) {
     // if (checkInputNotEmpty(password) && checkInputNotEmpty(passwordConf) && password == passwordConf)
     //   return;
   } else if (n == (x.length - 1)) {
-    FormData.firstName = document.getElementById("formFirstName");
-    FormData.lastName = document.getElementById("formFirstName");
-    FormData.email = document.getElementById("formEmail");
-    FormData.password = document.getElementById("formPassword");
-    FormData.passwordConfirm = document.getElementById("formPasswordConf");
-    FormData.locations = document.getElementById("formCountry");
+    console.log("makes it here! 2 ");
+    // FormData.firstName = document.getElementById("formFirstName");
+    // FormData.lastName = document.getElementById("formFirstName");
+    // FormData.email = document.getElementById("formEmail");
+    // FormData.password = document.getElementById("formPassword");
+    // FormData.passwordConfirm = document.getElementById("formPasswordConf");
+    // FormData.locations = document.getElementById("formCountry");
     console.log(FormData);
   }
 

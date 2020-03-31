@@ -28,7 +28,7 @@
 
                 <div class="input_group">
                     <label for="firstname"><strong>What's your first name? *</strong></label>
-                    <input class="@error('firstname') is-invalid @enderror" type="text" id="formFirstName" name="firstname" value="{{ old('firstname') }}" required autocomplete="firstname" placeholder="First Name" autofocus />
+                    <input class="@error('firstname') is-invalid @enderror" type="text" id="formFirstName" name="first_name" value="{{ old('firstname') }}" required autocomplete="firstname" placeholder="First Name" autofocus />
                     @error('firstname')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -51,7 +51,7 @@
                 <div class="item_content" style="margin-top: 80%;">
                     <div class="input_group">
                         <label><strong>And your last name, <span class="first__name_slot"></span>? *</strong></label>
-                        <input class="@error('lastname') is-invalid @enderror" type="text" id="formLastName" name="lastname" value="{{ old('lastname') }}" required autocomplete="off" placeholder="Last name" />
+                        <input class="@error('lastname') is-invalid @enderror" type="text" id="formLastName" name="last_name" value="{{ old('lastname') }}" required autocomplete="off" placeholder="Last name" />
                         @error('lastname')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -146,8 +146,8 @@
                         </li>
                     </ul>
                 </div>
-                <div>
-                    <x-switch></x-switch> Accept
+                <div class="switch_container">
+                    <x-switch id="termsSwitch" onclick="readyToSubmit(event)"></x-switch> Accept
                 </div>
             </div>
         </form>
@@ -167,7 +167,7 @@
     
     <x-carousel class="step__wizzard_container right" wait="5000" duration="0.34">
         <x-carousel-item class="carousel_item_cnt" style="background-image: url('/images/mtn-carousel-img-01.png');">
-            <div>
+            <div class="overlay">
                 <h2>Create an account</h2>
                 <p>
                     Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
