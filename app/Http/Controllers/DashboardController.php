@@ -22,13 +22,32 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function approve(Request $request)
+    public function approveProduct(Request $request)
     {
         return redirect()->back()->with('alert', 'Success');
     }
 
-    public function revoke()
+    public function revokeProduct(Request $request)
     {
 
+        return redirect()->back()->with('alert', 'Success');
+    }
+
+    public function approveAll(Request $request)
+    {
+
+        return redirect()->back()->with('alert', 'Success');
+    }
+
+    public function revokeAll(Request $request)
+    {
+
+        return redirect()->back()->with('alert', 'Success');
+    }
+
+    public function complete(Request $request)
+    {
+
+        return redirect()->back()->with('alert', 'Success');
     }
 }
