@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\ApigeeService;
 use App\Services\ProductLocationService;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -21,9 +22,9 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function approve()
+    public function approve(Request $request)
     {
-
+        dd($request->all());
     }
 
     public function revoke()

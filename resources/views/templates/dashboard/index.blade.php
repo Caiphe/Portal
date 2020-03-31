@@ -177,20 +177,34 @@
 
         var approveButtons = document.querySelectorAll('button[class*="product-"]');
         for(var m = 0; m < approveButtons.length; m++) {
-            approveButtons[m].addEventListener('click', handleProductStatus)
+            approveButtons[m].addEventListener('click', handleProductApprove)
         }
 
-        function handleProductStatus(event) {
+        var revokeButtons = document.querySelectorAll('button[class*="product-revoke"]');
+        for(var n = 0; n < revokeButtons.length; n++) {
+            revokeButtons[n].addEventListener('click', handleProductRevoke)
+        }
+
+        function handleProductApprove(event) {
             console.log(event.currentTarget);
 
-            var url = '';
+            var selectedProduct = event.currentTarget;
+            var product = selectedProduct.parentElement.children[1].textContent;
+
+            console.log(product);
+
+            var url = "/apps/approve";
             var xhr = new XMLHttpRequest();
 
             xhr.open('POST', url, true);
             xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 
-            xhr.send();
+            xhr.send(product);
+        }
+
+        function handleProductRevoke(event) {
+
         }
     </script>
 @endpush
