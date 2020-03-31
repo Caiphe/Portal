@@ -1346,15 +1346,14 @@ body > #main {
 
 .wrapper {
   display: flex;
-  padding: 0 8% 0 0;
   flex: 1 0 auto;
 }
 
 .wrapper #sidebar {
   flex: 1;
-  padding: 4% 0 4% 8%;
-  max-width: 300px;
+  padding: 40px;
   min-width: 300px;
+  max-width: 300px;
   background-color: #fafafa;
   height: 100%;
 }
@@ -1389,6 +1388,14 @@ body > #main {
 
 .shadow {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12), 0 3px 6px rgba(0, 0, 0, 0.16);
+}
+
+.container {
+  padding: 0 8%;
+  max-width: 1440px;
+  width: 100%;
+  position: relative;
+  margin: 0 auto;
 }
 
 .cols:not(.inline) {

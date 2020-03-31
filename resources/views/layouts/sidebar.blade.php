@@ -17,7 +17,7 @@
 </head>
 <body>
     <x-header/>
-    <div class="wrapper">
+    <div class="wrapper container">
         <nav id="sidebar">
             @yield('sidebar')
         </nav>

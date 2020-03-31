@@ -17,6 +17,15 @@
 </head>
 <body>
     <x-header/>
+    @if ($errors->any())
+        <div id="alert" class="error">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <main id="main">
         @yield("content")
     </main>

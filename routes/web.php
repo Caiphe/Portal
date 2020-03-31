@@ -14,7 +14,7 @@
 */
 
 Route::get('/', function () {
-    return view('layouts.sidebar');
+    return view('layouts.master');
 })->name('home');
 
 Route::get('/products', 'ProductController@index');
