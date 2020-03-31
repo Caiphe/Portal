@@ -175,8 +175,33 @@
             })
         }
 
-        var productButtons = document.querySelectorAll('.menu button[class*="product-"]');
+        var approveButtons = document.querySelectorAll('button[class*="product-approve"]');
+        for(var m = 0; m < approveButtons.length; m++) {
+            approveButtons[m].addEventListener('click', handleApproveProduct)
+        }
 
-        console.log(productButtons);
+        var revokeButtons = document.querySelectorAll('button[class*="product-revoke"]');
+        for(var n = 0; n < revokeButtons.length; n++) {
+            revokeButtons[n].addEventListener('click', handleRevokeProduct)
+        }
+
+        function handleApproveProduct(event) {
+            console.log(event.currentTarget);
+
+            var url = '';
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+            xhr.send();
+        }
+
+        function handleRevokeProduct(event) {
+            console.log(event.currentTarget);
+        }
+
+        //console.log(approveButtons);
     </script>
 @endpush
