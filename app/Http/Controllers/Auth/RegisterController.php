@@ -94,6 +94,9 @@ class RegisterController extends Controller
             $user->countries()->sync($countryIds);
         }
 
+        $imageName = 'public/profile/' . base64_encode('jsklaf88sfjdsfjl' . $user->id) . '.png';
+        \Storage::copy('public/profile/profile.png', $imageName);
+
         return $user;
     }
 }

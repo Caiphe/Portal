@@ -10,7 +10,7 @@
 		<x-faq.accordion :question="$faq->question">{!! $faq->answer !!}</x-faq.accordion>
 	@endforeach
 	<section class="grey-section">
-		Contact form template
+		<x-contact-form/>
 	</section>	
 @endsection
 

@@ -1,7 +1,10 @@
 @import "../../variables";
 
+#main{
+	padding-bottom: 0 !important;
+}
 .accordion {
-	margin-bottom: 10px;
+    margin-bottom: 10px;
     .question {
         font-family: "mtn-regular", sans-serif;
         cursor: pointer;
@@ -22,8 +25,11 @@
     }
 }
 .grey-section {
-    position: absolute;
-    left: 0;
-    right: 0;
     background-color: $grey300;
+    width: 100vw;
+    position: relative;
+    margin-left: -50vw;
+	padding-top: 30px;
+	padding-bottom: 30px;
+    left: 50%;
 }

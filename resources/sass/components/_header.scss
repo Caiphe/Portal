@@ -1,6 +1,8 @@
 #header {
     height: 80px;
     background-color: $yellow;
+    position: relative;
+    z-index: 1;
 
     .header-inner {
         height: 80px;
@@ -16,13 +18,99 @@
         flex-grow: 1;
     }
 
+    .has-children {
+        &>div {
+            position: absolute;
+            top: 50px;
+            background-color: #fff;
+            padding: 20px;
+            display: flex;
+            width: 440px;
+            margin-left: -200px;
+            font-size: 1.4rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.356s, transform 0.356s;
+
+            .nav-left {
+                position: relative;
+                flex: 2;
+                margin-right: $gutterSmall;
+                padding-right: $gutterSmall;
+
+                a {
+                    background: url("/images/icons/arrow-forward.svg") no-repeat right center / 16px;
+                }
+
+                &::after {
+                    content: "";
+                    width: 1px;
+                    height: 100%;
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    background-color: $grey900;
+                }
+            }
+
+            .nav-right {
+                flex: 1;
+
+                h3 {
+                    color: $grey500;
+                    font-family: "mtn-bold";
+                    font-size: 1rem;
+                    line-height: 28px;
+                    display: block;
+                    margin: 0;
+                }
+            }
+
+            a {
+                display: block;
+                line-height: 28px;
+            }
+        }
+
+        &:hover>div {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translate(0, 18px);
+        }
+    }
+
     .main-menu {
         list-style: none;
+        height: 80px;
 
-        li {
+        &>li {
             display: inline-block;
             font-size: 1.6rem;
             padding: 0 10px;
+            height: 80px;
+            line-height: 80px;
+
+            &>a {
+                display: flex;
+                align-items: center;
+            }
+
+            svg {
+                width: 18px;
+                margin-left: 6px;
+            }
+
+            &:hover {
+                background-color: $grey900;
+
+                &>a {
+                    color: #FFF;
+                }
+
+                svg {
+                    fill: #FFF;
+                }
+            }
         }
     }
 
@@ -31,30 +119,16 @@
     }
 }
 
-#user-profile-image {
-    margin-left: $gutterSmall;
-    z-index: 4;
-    border-radius: 50%;
-}
-
 #profile-menu {
-    position: absolute;
-    background-color: #FFF;
-    padding: 20px;
-    top: 54px;
-    right: 8%;
-    list-style: none;
-    margin: 0 -32px 0 0;
-    width: 64px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.180s ease-in, transform 0.180s ease-in;
+    position: relative;
+    margin-left: 20px;
+    cursor: pointer;
+    height: 80px;
 
-    .show-profile-menu & {
+    &:hover .profile-menu-options {
+        transform: translate(0, 18px);
         opacity: 1;
         pointer-events: auto;
-        transform: translate(0, 10px);
-        z-index: 2;
     }
 
     button {
@@ -65,16 +139,25 @@
     }
 }
 
-#profile-menu-background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    pointer-events: none;
+#profile-menu-picture {
+    width: 40px;
+    height: 40px;
+    margin-top: 20px;
+    border-radius: 50%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
 
-    .show-profile-menu & {
-        pointer-events: auto;
-        z-index: 2;
-    }
+.profile-menu-options {
+    position: absolute;
+    list-style: none;
+    padding: 20px;
+    width: 64px;
+    background-color: #FFF;
+    top: 36px;
+    margin-left: -26px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.356s, transform 0.356s;
 }
