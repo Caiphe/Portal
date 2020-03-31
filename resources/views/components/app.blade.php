@@ -58,7 +58,7 @@
                     <p class="key">
                         {{ end($app['credentials'])['consumerSecret'] }}
                     </p>
-                    <p>Developer email</p>
+                    <p>{{ $app['callbackUrl'] }}</p>
                 </div>
                 <div class="copy-column">
                     <button class="copy">
