@@ -36,6 +36,6 @@ Route::get('profile', 'UserController@show')->name('user.profile');
 Route::put('profile/{user}/update', 'UserController@update')->name('user.profile.update');
 Route::post('profile/update/picture', 'UserController@updateProfilePicture')->name('user.profile.update.picture');
 
-Route::get('dashboard', 'DashboardController@index');
+Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 
 Auth::routes();

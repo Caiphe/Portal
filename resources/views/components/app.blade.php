@@ -85,12 +85,18 @@
         </div>
     </div>
     <nav class="menu">
-        <a href="{{ route('app.edit', $app['name']) }}">Edit</a>
-        <form class="delete">
-            @method('DELETE')
-            @csrf
-            <button class="app-delete" data-name="{{ $app['name'] }}">Delete</button>
-        </form>
+        @if(Request::is('dashboard'))
+            <a href="">Approve all</a>
+            <a href="">Revoke all</a>
+            <a href="">Complete</a>
+        @else
+            <a href="{{ route('app.edit', $app['name']) }}">Edit</a>
+            <form class="delete">
+                @method('DELETE')
+                @csrf
+                <button class="app-delete" data-name="{{ $app['name'] }}">Delete</button>
+            </form>
+        @endif
     </nav>
     <div class="modal"></div>
 </div>
