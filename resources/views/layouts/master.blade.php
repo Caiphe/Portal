@@ -22,7 +22,7 @@
         @yield("content")
     </main>
     <x-footer/>
-    <script src="/js/scripts.js"></script>
+    <script src="{{ mix('/js/scripts.js') }}"></script>
     @stack("scripts")
 </body>
 </html>
