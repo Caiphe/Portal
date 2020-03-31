@@ -52,6 +52,16 @@ class ApigeeService
         return $a;
     }
 
+    public static function approve()
+    {
+
+    }
+
+    public static function revoke()
+    {
+
+    }
+
     protected static function HttpWithBasicAuth()
     {
         return Http::withBasicAuth(env('APIGEE_USERNAME'), env('APIGEE_PASSWORD'));

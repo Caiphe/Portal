@@ -21,12 +21,17 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function approveAll()
+    public function approve()
     {
 
     }
 
-    public function revokeAll()
+    public function revoke()
+    {
+
+    }
+
+    public function complete()
     {
 
     }
