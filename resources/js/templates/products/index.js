@@ -25,7 +25,7 @@ function filterProducts(filterGroup = "") {
                     categories[i].dataset.category
                 )
             )
-                categories[i].style.display = "block";
+                categories[i].style.display = "flex";
         }
     } else {
         var groupChecked = document.querySelectorAll(
@@ -124,7 +124,7 @@ function clearFilter() {
 
     var categories = document.querySelectorAll(".category");
     for (var i = categories.length - 1; i >= 0; i--) {
-        categories[i].style.display = "block";
+        categories[i].style.display = "flex";
     }
     var products = document.querySelectorAll(".card--product");
     for (var i = products.length - 1; i >= 0; i--) {

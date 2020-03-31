@@ -27,7 +27,7 @@
             @endisset
             @isset($title)
             <h3 class="card__header">
-                {{ $title }}
+                {{ str_replace("_", " ", $title) }}
             </h3>
             @endisset
             <p class="card__body">
