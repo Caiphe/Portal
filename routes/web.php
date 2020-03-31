@@ -1,6 +1,6 @@
 <?php
 
-use App\Services\OpenApiService;
+// Auth::loginUsingId(1);
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +15,7 @@ use App\Services\OpenApiService;
 
 Route::get('/', function () {
     return view('layouts.sidebar');
-});
+})->name('home');
 
 Route::get('apps', 'AppController@index')->name('app.index');
 Route::get('apps/create', 'AppController@create')->name('app.create');
@@ -24,11 +24,16 @@ Route::post('apps', 'AppController@store')->name('app.store');
 Route::put('apps/{name}', 'AppController@update')->name('app.update');
 Route::delete('apps/{name}', 'AppController@destroy')->name('app.destroy');
 
-Route::get('/products', 'ProductController@index');
+Route::get('products', 'ProductController@index');
 Route::get('products/{product:slug}', 'ProductController@show')->name('product.show');
 Route::get('products/{product:slug}/download/postman', 'ProductController@downloadPostman')->name('product.download.postman');
 Route::get('products/{product:slug}/download/swagger', 'ProductController@downloadSwagger')->name('product.download.swagger');
 
-Route::view('/getting-started', 'templates.getting-started.index');
+Route::get('getting-started', 'GettingStartedController@index');
+Route::get('getting-started/{content:slug}', 'GettingStartedController@show');
+
+Route::get('profile', 'UserController@show')->name('user.profile');
+Route::put('profile/{user}/update', 'UserController@update')->name('user.profile.update');
+Route::post('profile/update/picture', 'UserController@updateProfilePicture')->name('user.profile.update.picture');
 
 Auth::routes();
