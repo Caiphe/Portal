@@ -20,4 +20,14 @@ class DashboardController extends Controller
             'countries' => $countries
         ]);
     }
+
+    public function approveAll()
+    {
+
+    }
+
+    public function revokeAll()
+    {
+
+    }
 }
