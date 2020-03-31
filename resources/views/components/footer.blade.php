@@ -1,6 +1,6 @@
 <footer id="footer">
     @svg('curve', '#1a1a1a')
-    <div class="footer-inner">
+    <div class="footer-inner container">
         <p>
             &copy; {{date("Y")}} MTN. All rights reserved.<br>
             MTN (PTY) LTD is an authorised Financial Service Provider underwritten by Guardrisk Insurance Company. FSP license number: 44774

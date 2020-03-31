@@ -15,9 +15,10 @@
     <link rel="preload" href="/fonts/Montserrat-Regular.woff2" as="font" type="font/woff2">
     <link rel="preload" href="/fonts/Montserrat-Light.woff2" as="font" type="font/woff2">
 </head>
-<body>
+<body class="layout-sidebar">
     <x-header/>
-    <div class="wrapper">
+    <x-alert/>
+    <div class="wrapper container">
         <nav id="sidebar">
             @yield('sidebar')
         </nav>
