@@ -22,15 +22,42 @@ mix.scripts(["resources/js/scripts.js", "resources/js/components/alert.js"], "pu
     .sass("resources/sass/components/carousel.scss", "public/css/components")
     .sass("resources/sass/components/multiselect.scss", "public/css/components")
     .sass("resources/sass/components/card.scss", "public/css/components")
+    .sass(
+        "resources/sass/components/contact-form.scss",
+        "public/css/components"
+    )
     .sass("resources/sass/components/card-link.scss", "public/css/components")
-    .sass("resources/sass/components/card-product.scss", "public/css/components")
+    .sass(
+        "resources/sass/components/card-product.scss",
+        "public/css/components"
+    )
     .sass("resources/sass/components/key-feature.scss", "public/css/components")
-    .sass("resources/sass/components/sidebar-accordion.scss", "public/css/components")
+    .sass(
+        "resources/sass/components/sidebar-accordion.scss",
+        "public/css/components"
+    )
     .sass("resources/sass/components/heading.scss", "public/css/components")
-    .sass("resources/sass/templates/user/show.scss", "public/css/templates/user")
-    .sass("resources/sass/templates/products/index.scss", "public/css/templates/products")
-    .sass("resources/sass/templates/products/show.scss", "public/css/templates/products")
-    .sass("resources/sass/templates/getting-started/index.scss", "public/css/templates/getting-started")
+    .sass("resources/sass/templates/faq/index.scss", "public/css/templates/faq")
+    .sass(
+        "resources/sass/templates/user/show.scss",
+        "public/css/templates/user"
+    )
+    .scripts(
+        "resources/js/templates/faq/index.js",
+        "public/js/templates/faq/index.js"
+    )
+    .sass(
+        "resources/sass/templates/products/index.scss",
+        "public/css/templates/products"
+    )
+    .sass(
+        "resources/sass/templates/products/show.scss",
+        "public/css/templates/products"
+    )
+    .sass(
+        "resources/sass/templates/getting-started/index.scss",
+        "public/css/templates/getting-started"
+    )
     .sass("resources/sass/templates/home.scss", "public/css/templates")
     .sass("resources/sass/styles.scss", "public/css")
     .version();

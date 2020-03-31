@@ -4,11 +4,8 @@
     transition: max-height 0.512s;
     max-height: 0;
     overflow: hidden;
-
-    .layout-sidebar & {
-        flex: 1 0 auto;
-    }
-
+	flex: 1 0 auto;
+    
     &.open {
         max-height: 180px;
     }
