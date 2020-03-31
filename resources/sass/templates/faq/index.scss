@@ -1,44 +1,42 @@
 @import "../../variables";
 
 #main {
-    padding-bottom: 0 !important;
-    overflow-x: hidden;
+    padding: 0 !important;
 }
-.accordion {
-    margin-bottom: 10px;
-    .question {
-        font-family: "mtn-regular", sans-serif;
-        cursor: pointer;
-        transition: 0.4s;
-        padding-bottom: 20px;
-        border-bottom: solid 1px $grey300;
-        svg {
-            position: absolute;
-            right: 0;
-            transform: rotate(0deg);
-            transition: transform 0.1s linear;
-        }
-        &.active {
-            svg {
-                transform: rotate(180deg);
-                transition: transform 0.1s linear;
-            }
-        }
-    }
-    .answer {
-        max-height: 0;
-        font-size: 16px;
-        color: $grey700;
-        overflow: hidden;
-        transition: max-height 0.2s;
-    }
+section{
+	padding: $gutter 150px;
 }
-.grey-section {
+.faq-section{
+	.accordion {
+		margin-bottom: 10px;
+		.question {
+			font-family: "mtn-regular", sans-serif;
+			cursor: pointer;
+			transition: 0.4s;
+			padding-bottom: 20px;
+			border-bottom: solid 1px $grey300;
+			svg {
+				position: absolute;
+				right: 0;
+				transform: rotate(0deg);
+				transition: transform 0.1s linear;
+			}
+			&.active {
+				svg {
+					transform: rotate(180deg);
+					transition: transform 0.1s linear;
+				}
+			}
+		}
+		.answer {
+			max-height: 0;
+			font-size: 16px;
+			color: $grey700;
+			overflow: hidden;
+			transition: max-height 0.2s;
+		}
+	}
+}
+.contact-section {
     background-color: $grey300;
-    width: 100vw;
-    position: relative;
-    margin-left: -50vw;
-    padding-top: 30px;
-    padding-bottom: 30px;
-    left: 50%;
 }
