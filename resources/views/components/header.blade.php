@@ -18,8 +18,8 @@
                     </div>
                 </div>
             </li>
-            <li><a href="/">Insights</a></li>
-            <li><a href="/">FAQ</a></li>
+			<li><a href="/faq">FAQ</a></li>
+			<li><a href="/contact">Contact us</a></li>
         </ul>
         <input type="search" name="search" id="search" class="thin see-through" placeholder="Search">
         @if(\Auth::check())

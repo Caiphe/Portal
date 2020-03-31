@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ContactForm;
 
 class ContactController extends Controller
 {
@@ -32,7 +34,9 @@ class ContactController extends Controller
 			'message'   =>   $request->message
 		);
 
-		return back()->with('success', 'Thanks for contacting us!');
+		Mail::to(config('mail.from.address'))->send(new ContactForm($data));
 
+		$request->session()->flash('success', 'Thanks for contacting us!');
+		return back();
 	}
 }
