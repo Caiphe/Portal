@@ -14,6 +14,7 @@
 */
 
 Route::get('/', function () {
+    Session::flash('alert', 'Warning:This is a message!; This is another message'); 
     return view('layouts.master');
 })->name('home');
 

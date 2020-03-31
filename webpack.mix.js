@@ -11,7 +11,7 @@ const mix = require("laravel-mix");
  |
  */
 
-mix.scripts("resources/js/scripts.js", "public/js/scripts.js")
+mix.scripts(["resources/js/scripts.js", "resources/js/components/alert.js"], "public/js/scripts.js")
     .scripts("resources/js/templates/user/show.js", "public/js/templates/user/show.js")
     .scripts("resources/js/components/carousel.js", "public/js/components/carousel.js")
     .scripts("resources/js/components/sidebar-accordion.js", "public/js/components/sidebar-accordion.js")
