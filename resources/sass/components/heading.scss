@@ -3,7 +3,7 @@
 #main {
     padding: 90px $gutter $gutter;
 
-    body>& {
+    .layout-master & {
         padding: 90px 8vw $gutter;
         #heading {
             padding: $gutterSmall 8vw;
@@ -23,6 +23,9 @@
     position: absolute;
     padding: $gutterSmall $gutter;
     background-color: $grey400;
+    height: 68px;
+    overflow: hidden;
+    z-index: 1;
 
     h1 {
         margin: 0;
@@ -46,7 +49,7 @@
 
     .right-side {
         position: absolute;
-        right: $gutter;
+        right: 0;
         display: flex;
         top: 0;
         height: 100%;
