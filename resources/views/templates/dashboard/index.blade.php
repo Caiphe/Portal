@@ -187,14 +187,7 @@
 
             if(approveProduct) {
                 this.submit();
-            } else {
-                document.querySelector(".menu.show").classList.remove('show');
             }
-
-            {{--var product = {--}}
-            {{--    name: this.parentElement.children[1].textContent,--}}
-            {{--};--}}
-
         }
 
         var revokeButtons = document.querySelectorAll('button[class*="product-revoke"]');
@@ -202,19 +195,14 @@
             revokeButtons[n].addEventListener('click', handleProductRevoke)
         }
 
-        function handleProductRevoke() {
+        function handleProductRevoke(event) {
+            event.preventDefault();
 
-            var product = {
-                name: this.parentElement.children[1].textContent,
-            };
+            var revokeProduct = confirm('Are you sure you want to approve this product?');
 
-            var xhr = new XMLHttpRequest();
-
-            xhr.open('POST', '/apps/revoke');
-            xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
-            xhr.setRequestHeader('Content-type', 'application/json;');
-
-            xhr.send(JSON.stringify(product));
+            if(revokeProduct) {
+                this.submit();
+            }
         }
 
         var approveAllButtons = document.querySelectorAll('button[class*="dashboard-approve"]');
