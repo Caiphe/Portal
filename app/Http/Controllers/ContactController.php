@@ -35,7 +35,7 @@ class ContactController extends Controller
 		);
 
 		Mail::to(config('mail.from.address'))->send(new ContactForm($data));
-		\Session::flash('alert', 'Success:This is a success message');
+		\Session::flash('alert', 'Success:Thank you for contacting us');
 
 		return redirect()->back();
 	}

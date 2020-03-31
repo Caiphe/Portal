@@ -4,6 +4,8 @@
 <link rel="stylesheet" href="/css/templates/faq/index.css">
 @endpush
 
+@section('title','FAQs')
+
 @section('content')
 	<x-heading heading="FAQs"></x-heading>
 	<section class="faq-section mt-5">
