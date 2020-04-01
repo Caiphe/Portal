@@ -1,5 +1,5 @@
 @allowonce('contact_form')
-<link href="/css/components/contact-form.css" rel="stylesheet"/>
+<link href="{{ mix('/css/components/contact-form.css') }}" rel="stylesheet"/>
 @endallowonce
 
 <div class="contact-form mb-4">

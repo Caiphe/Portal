@@ -45,6 +45,9 @@ $filters = array('Group'=> $groups,'Categories'=> $productCategories);
 		style="display:none"
 	@endif>
 			<h3>{{ $category }}</h3>
+			@php
+			$products = $products->sortBy('display_name');			
+			@endphp
 			@foreach ($products as $product)
 				@php //setting variables
 				if ($product->locations !== 'all' && $product->locations !== null) :

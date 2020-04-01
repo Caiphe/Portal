@@ -15,6 +15,7 @@
         [data-toggle="accordion-item"] {
             position: relative;
             display: block;
+            padding-left: 20px;
         }
 
 
@@ -22,7 +23,7 @@
             position: absolute;
             display: block;
             top: 0;
-            left: -20px;
+            left: 0;
             fill: $grey700;
             height: 20px;
             width: 20px;
@@ -48,6 +49,7 @@
                     position: relative;
                     display: block;
                     padding-left: 20px;
+                    margin-left: 20px;
 
                     svg{
                         display: none;
