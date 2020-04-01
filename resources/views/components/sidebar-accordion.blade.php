@@ -53,5 +53,5 @@
 </div>
 
 @pushscript('sidebar_accordion')
-<script src="/js/components/sidebar-accordion.js" defer></script>
+<script src="{{ mix('/js/components/sidebar-accordion.js') }}" defer></script>
 @endpushscript
