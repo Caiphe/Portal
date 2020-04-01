@@ -7,8 +7,8 @@
 --}}
 
 @allowonce('card_search')
-<search href="/css/components/card-search.css" rel="stylesheet"/>
-<search href="/css/components/card.css" rel="stylesheet"/>
+<link href="/css/components/card-search.css" rel="stylesheet"/>
+<link href="/css/components/card.css" rel="stylesheet"/>
 @endallowonce
 
 @props(['title', 'icon', 'link'])

@@ -2156,24 +2156,6 @@ h6.close::before {
   background-color: #1a1a1a;
 }
 
-.card--search svg {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-}
-
-.card--search .card__header {
-  min-height: 70px;
-  margin: 5px 0;
-  display: flex;
-  align-items: center;
-}
-
-.card--search .card__body {
-  min-height: 60px;
-  margin-bottom: 5px;
-}
-
 #alert {
   color: #FFF;
   text-align: center;
