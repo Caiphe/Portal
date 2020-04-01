@@ -279,17 +279,16 @@
         margin: 10px;
     }
 
-    svg {
+    img {
         width: 25px;
         height: 25px;
     }
 
     input {
         display: none; 
-        opacity: 0.1;
     }
 
-    input:checked+span {
+    input:checked+img {
         opacity: 1;
     }
 }
