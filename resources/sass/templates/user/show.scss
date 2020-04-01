@@ -15,17 +15,22 @@
             cursor: pointer;
         }
 
-        svg {
+        img {
+            opacity: 0.2;
             width: 25px;
             height: 25px;
+
+            &:hover {
+                opacity: 1;
+            }
         }
 
         input {
             display: none;
         }
 
-        input:checked+span {
-            opacity: 0.1;
+        input:checked+img {
+            opacity: 1;
         }
     }
 }

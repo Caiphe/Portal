@@ -2180,9 +2180,6 @@ h6.close::before {
   transition: max-height 0.512s;
   max-height: 0;
   overflow: hidden;
-}
-
-.layout-sidebar #alert {
   flex: 1 0 auto;
 }
 

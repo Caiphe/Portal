@@ -19,7 +19,7 @@
 @php $tags = isset($tags) ? preg_split('/,\s?/', $tags) : [] @endphp
 
 @allowonce('heading')
-<link rel="stylesheet" href="/css/components/heading.css">
+<link rel="stylesheet" href="{{ mix('/css/components/heading.css') }}">
 @endallowonce
 
 <div id="heading">
