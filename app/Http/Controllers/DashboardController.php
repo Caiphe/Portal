@@ -22,42 +22,9 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function approve(Request $request)
+    public function update(Request $request)
     {
-        dd(ApigeeService::post("developers/$request->email/apps/$request->app_name/$request->consumer_key/apiproducts/$request->product_name", ['action' => $request['action']]));
-
-//        developers/$request['email']/apps/$request['app_name']/$request['consumer_key']/apiproducts/$request['productName']
-//        $responseInfo = postToApigee(
-//                “developers/{$_POST[‘user_email’]}/apps/{$_POST[‘app_name’]}/keys/{$_POST[‘consumer_key’]}/apiproducts/{$productName}“,
-//[
-//    “action” => $_POST[‘action’]
-//],
-//‘query’
-//);
-
-        return redirect()->back();
-    }
-
-    public function revoke(Request $request)
-    {
-
-        return redirect()->back();
-    }
-
-    public function approveAll(Request $request)
-    {
-
-        return redirect()->back();
-    }
-
-    public function revokeAll(Request $request)
-    {
-
-        return redirect()->back();
-    }
-
-    public function complete(Request $request)
-    {
+        ApigeeService::updateProductStatus($request->email, $request->app_name, $request->key, $request->product_name, $request->action);
 
         return redirect()->back();
     }

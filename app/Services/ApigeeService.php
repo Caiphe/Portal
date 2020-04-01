@@ -52,14 +52,14 @@ class ApigeeService
         return $a;
     }
 
-    public static function getOrgApps($rows, $status)
+    public static function getOrgApps(string $rows, string $status)
     {
         return self::get("/apps?rows={$rows}&expand=true&status={$status}");
     }
 
-    public static function updateProductStatus()
+    public static function updateProductStatus(string $email, string $app, string $key, string $product, string $action)
     {
-
+        return self::post("developers/{$email}/apps/{$app}/{$key}/apiproducts/{$product}", ['action' => $action]);
     }
 
     protected static function HttpWithBasicAuth()
