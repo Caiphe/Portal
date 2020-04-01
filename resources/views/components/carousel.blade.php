@@ -29,5 +29,5 @@
 </div>
 
 @pushscript('carousel')
-<script src="/js/components/carousel.js" defer></script>
+<script src="{{ mix('/js/components/carousel.js') }}" defer></script>
 @endpushscript

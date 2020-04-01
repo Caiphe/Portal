@@ -22,7 +22,7 @@
 --}}
 @props(['id', 'list', 'active'])
 @allowonce('sidebar_accordion')
-<link href="/css/components/sidebar-accordion.css" rel="stylesheet"/>
+<link href="{{ mix('/css/components/sidebar-accordion.css') }}" rel="stylesheet"/>
 @endallowonce
 
 @php
