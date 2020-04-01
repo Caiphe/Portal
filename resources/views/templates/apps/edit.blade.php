@@ -9,14 +9,14 @@
                          :list="
     [ 'Manage' =>
         [
-            [ 'label' => 'Profile', 'link' => '#'],
-            [ 'label' => 'Approved apps', 'link' => '#'],
-            [ 'label' => 'Revoked apps','link' => '#'],
+            [ 'label' => 'Profile', 'link' => '/profile'],
+            [ 'label' => 'Approved apps', 'link' => '/apps'],
+            [ 'label' => 'Revoked apps','link' => '/apps'],
         ],
         'Discover' =>
         [
-            [ 'label' => 'Browse all products', 'link' => '#'],
-            [ 'label' => 'Working with our products','link' => '#'],
+            [ 'label' => 'Browse all products', 'link' => '/products'],
+            [ 'label' => 'Working with our products','link' => '/getting-started'],
         ]
     ]
     " />
