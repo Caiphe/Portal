@@ -50,9 +50,6 @@ class AppController extends Controller
     {
         $validated = $request->validated();
 
-        // TODO: REMOVE LOGIN
-        Auth::loginUsingId(1);
-
         $apiProducts = Product::findMany($request->products[0])->pluck('name')->toArray();
 
         $data = [
@@ -98,9 +95,6 @@ class AppController extends Controller
     public function update(CreateAppRequest $request)
     {
         $validated = $request->validated();
-
-        // TODO: REMOVE LOGIN
-        Auth::loginUsingId(1);
 
         $apiProducts = Product::findMany($request->products[0])->pluck('name')->toArray();
 
