@@ -22,6 +22,10 @@
     " />
 @endsection
 
+@section('title')
+    Create app
+@endsection
+
 @section('content')
 
     <x-heading heading="Apps" tags="CREATE NEW"></x-heading>

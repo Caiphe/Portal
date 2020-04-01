@@ -22,6 +22,10 @@
     " />
 @endsection
 
+@section('title')
+    Edit app
+@endsection
+
 @section('content')
 
     <x-heading heading="Apps" tags="EDIT"></x-heading>

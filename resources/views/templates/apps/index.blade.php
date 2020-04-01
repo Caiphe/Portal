@@ -22,6 +22,10 @@
     " />
 @endsection
 
+@section('title')
+    Apps
+@endsection
+
 @section('content')
 
     <x-heading heading="Apps" tags="DASHBOARD">
