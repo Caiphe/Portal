@@ -61,6 +61,10 @@ mix.scripts(["resources/js/scripts.js", "resources/js/components/alert.js"], "pu
         "public/css/templates/products"
     )
     .sass(
+        "resources/sass/templates/contact/index.scss",
+        "public/css/templates/contact"
+    )
+    .sass(
         "resources/sass/templates/getting-started/index.scss",
         "public/css/templates/getting-started"
     )

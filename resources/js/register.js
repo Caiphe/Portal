@@ -1,4 +1,4 @@
-var currentTab = 0; // Current tab is set to be the first tab (0)
+var currentTab = 2; // Current tab is set to be the first tab (0)
 var selectedLocationsCount = 0;
 showTab(currentTab); // Display the current tab
 var FormData = {};
@@ -43,13 +43,14 @@ function nextPrev(n) {
         }
         if (!checkInputNotEmpty(firstName) || !checkInputNotEmpty(email)) {
           document.getElementById("FormStepErrorMsg").style.display = "block";
-          console.log("Some steps not complete...");
+          document.getElementById("FormStepErrorMsg").children[0].innerHTML = "Please fill in all fields in Step!";
           return;
         }
     } else if (currentTab == 1) {
       var lastName = document.getElementById("formLastName");
       if (!checkInputNotEmpty(lastName)) {
         document.getElementById("FormStepErrorMsg").style.display = "block";
+        document.getElementById("FormStepErrorMsg").children[0].innerHTML = "Please fill in all fields in Step!";
         return;
       }
     } else if (currentTab == 2) {
@@ -57,15 +58,15 @@ function nextPrev(n) {
       var passwordConf = document.getElementById("formPasswordConf");
       if (!checkInputNotEmpty(password) || !checkInputNotEmpty(passwordConf)) {
         document.getElementById("FormStepErrorMsg").style.display = "block";
+        document.getElementById("FormStepErrorMsg").children[0].innerHTML = "Please fill in all fields in Step!";
         return;
       }
       if (password.value !== passwordConf.value) {
+        console.log(document.getElementById("FormStepErrorMsg").children[0].innerHTML);
         document.getElementById("FormStepErrorMsg").style.display = "block";
-        document.getElementById("FormStepErrorMsg").innerHTML = "Passwords don't match";
+        document.getElementById("FormStepErrorMsg").children[0].innerHTML = "Passwords don't match";
         return ;
       }
-    } else if (currentTab == 3) {
-      var password = document.getElementById("formPassword");
     }
   }
 

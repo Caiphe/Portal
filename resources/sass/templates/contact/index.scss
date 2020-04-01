@@ -1,0 +1,58 @@
+@import "../../variables";
+@import "../../functions";
+
+#main {
+    padding: 0 !important;
+}
+
+.grey-bg {
+    background-color: $grey200;
+}
+
+.section-padding {
+    padding: $gutter 150px;
+}
+
+span {
+    display: block;
+}
+
+.faqs-section {
+    padding-top: 60px !important;
+    text-align: center;
+}
+
+.contact-details-section {
+    .contact-details {
+		padding-top:60px;
+        .contact-icon,
+        .location-icon {
+            display: flex;
+        }
+        .location-icon::before {
+            content: "";
+            position: relative;
+            width: 60px;
+            height: 60px;
+            float: left;
+            left: -12px;
+            top: 5px;
+            background-image: get-icon("map-marker", $yellow);
+        }
+
+        .contact-icon::before {
+            content: "";
+            position: relative;
+            width: 60px;
+            height: 60px;
+            float: left;
+            left: -5px;
+            top: 5px;
+            background-image: get-icon("phone", $yellow);
+        }
+
+        p {
+            align-self: center;
+		}
+    }
+}

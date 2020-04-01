@@ -15,7 +15,7 @@ class ContactController extends Controller
      */
     public function index()
     {
-        //
+        return view('templates.contact.index');
     }
 
 	function sendMail(Request $request)

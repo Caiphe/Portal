@@ -156,7 +156,7 @@
         </form>
 
         <div class="step_wizzard__footer">
-            <p id="FormStepErrorMsg" style="display: none; font-size: 16px; text-align: center; color: red;"><i>Please fill in all fields in Step!</i></p>
+            <p id="FormStepErrorMsg" style="display: none; font-size: 16px; text-align: center; color: red; margin: 0px; margin-bottom: 20px;"><i>Please fill in all fields in Step!</i></p>
             <button id="stepWizzardPrevBtn" onclick="nextPrev(-1)" class="dark outline">Back</button>
             <button id="stepWizzardNextBtn" onclick="nextPrev(1)" >Next</button>
             <button type="submit" onclick="readyToSubmit(event)" id="stepWizardSubmitBtn">Create New Account</button>
