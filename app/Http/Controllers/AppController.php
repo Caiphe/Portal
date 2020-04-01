@@ -14,7 +14,8 @@ class AppController extends Controller
 {
     public function index()
     {
-        $apps = ApigeeService::get('developers/wes@plusnarrative.com/apps/?expand=true');
+        $user = \Auth::user();
+        $apps = ApigeeService::get("developers/{$user->email}/apps/?expand=true");
 
         $approvedApps = [];
         $revokedApps = [];
@@ -79,8 +80,9 @@ class AppController extends Controller
     public function edit(ProductLocationService $productLocationService, Request $request)
     {
         [$products, $countries] = $productLocationService->fetch();
-
-        $data = ApigeeService::get("developers/wes@plusnarrative.com/apps/{$request->name}/?expand=true");
+        
+        $user = \Auth::user();
+        $data = ApigeeService::get("developers/{$user->email}/apps/{$request->name}/?expand=true");
 
         $selectedProducts = array_column(end($data['credentials'])['apiProducts'], 'apiproduct');
 
@@ -128,7 +130,8 @@ class AppController extends Controller
     {
         $validated = $request->validated();
 
-        ApigeeService::delete("developers/wes@plusnarrative.com/apps/{$validated['name']}");
+        $user = \Auth::user();
+        ApigeeService::delete("developers/{$user->email}/apps/{$validated['name']}");
 
         return redirect(route('app.index'));
     }
