@@ -149,18 +149,19 @@
                     </ul>
                 </div>
                 <div class="switch_container">
-                    <x-switch id="termsSwitch" onclick="readyToSubmit(event)"></x-switch> 
+                    <x-switch id="termsSwitch"></x-switch> 
                     <span class="text">Accept</span>
                 </div>
             </div>
         </form>
 
         <div class="step_wizzard__footer">
+            <p id="FormStepErrorMsg" style="display: none; font-size: 16px; text-align: center; color: red;"><i>Please fill in all fields in Step!</i></p>
             <button id="stepWizzardPrevBtn" onclick="nextPrev(-1)" class="dark outline">Back</button>
             <button id="stepWizzardNextBtn" onclick="nextPrev(1)" >Next</button>
+            <button type="submit" onclick="readyToSubmit(event)" id="stepWizardSubmitBtn">Create New Account</button>
             <p>
                 press Enter &crarr;
-                <!-- <input id="keyUpListner" name="keyUpListner"/> -->
             </p>
         </div>
 

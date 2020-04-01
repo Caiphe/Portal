@@ -98,10 +98,10 @@ class RegisterController extends Controller
             "lastName" => $data['last_name'],
             "userName" => $data['first_name'] . $data['last_name'],
         ])->json();
-
-        if (isset($apigeeDeveloper['code']) && $apigeeDeveloper['code'] === 'developer.service.DeveloperAlreadyExists') {
+        
+        if (isset($apigeeDeveloper['code'])) {
             return redirect('/register')
-                ->withErrors(['email' => 'Sorry, this email has already been taken'])
+                ->withErrors(['email' => $apigeeDeveloper['message']])
                 ->withInput();
         }
 

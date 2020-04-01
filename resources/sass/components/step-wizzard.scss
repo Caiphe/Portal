@@ -340,3 +340,11 @@
 .password-visible .show-password {
   background-image: url('/images/icons/hidden.svg');
 }
+
+.invalid-feedback {
+  color: #FC0;
+}
+
+#stepWizardSubmitBtn {
+  display: none;
+}

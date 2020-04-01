@@ -15,8 +15,8 @@ function showTab(n) {
     document.getElementById("stepWizzardPrevBtn").style.display = "inline";
   }
   if (n == (x.length - 1)) {
-    document.getElementById("stepWizzardNextBtn").innerHTML = "Create new account";
-    // document.getElementById("stepWizzardNextBtn").disabled = true;
+    document.getElementById("stepWizardSubmitBtn").style.display = "inline";
+    document.getElementById("stepWizzardNextBtn").style.display = "none";
   } else {
     document.getElementById("stepWizzardNextBtn").innerHTML = "Next";
   }
@@ -25,41 +25,47 @@ function showTab(n) {
 }
 
 function readyToSubmit(event) {
-  var termAndConditionsSwitchBtn = document.getElementById("termsSwitch");
-  termAndConditionsSwitchBtn.disabled = false;
-  termAndConditionsSwitchBtn.setAttribute('type', 'submit');
+  var stepWizzardForm = document.getElementById("stepWizzardForm");
+  stepWizzardForm.submit();
 }
 
 function nextPrev(n) {
-  // removeClassFromLocations();
+  console.log(n)
   // This function will figure out which tab to display
   var x = document.getElementsByClassName("step__wizzard_item");
   if (n == 1) {
-    var firstName = document.getElementById("formFirstName");
-    // var email = document.getElementById("formEmail");
-    // if (!checkInputNotEmpty(firstName) && !checkInputNotEmpty(email)) {
-    //   return;
-    // }
-    setFormUserName(firstName.value);
-  } else if (n == 2) {
-    // var lastName = document.getElementById("formLastName");
-    // if (checkInputNotEmpty(lastName))
-    //   return;
-  } else if (n == 3) {
-    // var password = document.getElementById("formPassword");
-    // var passwordConf = document.getElementById("formPasswordConf");
-    // if (checkInputNotEmpty(password) && checkInputNotEmpty(passwordConf) && password == passwordConf)
-    //   return;
-  } else if (n == (x.length - 1)) {
-    console.log("makes it here! 2 ");
-    // FormData.firstName = document.getElementById("formFirstName");
-    // FormData.lastName = document.getElementById("formFirstName");
-    // FormData.email = document.getElementById("formEmail");
-    // FormData.password = document.getElementById("formPassword");
-    // FormData.passwordConfirm = document.getElementById("formPasswordConf");
-    // FormData.locations = document.getElementById("formCountry");
-    console.log(FormData);
+    if (currentTab == 0) {
+        var firstName = document.getElementById("formFirstName");
+        var email = document.getElementById("formEmail");
+        if (checkInputNotEmpty(firstName)) {
+          setFormUserName(firstName.value);
+        }
+        if (!checkInputNotEmpty(firstName) || !checkInputNotEmpty(email)) {
+          document.getElementById("FormStepErrorMsg").style.display = "block";
+          console.log("Some steps not complete...");
+          return;
+        }
+    } else if (currentTab == 1) {
+      var lastName = document.getElementById("formLastName");
+      if (!checkInputNotEmpty(lastName)) {
+        document.getElementById("FormStepErrorMsg").style.display = "block";
+        return;
+      }
+    } else if (currentTab == 2) {
+      var password = document.getElementById("formPassword");
+      var passwordConf = document.getElementById("formPasswordConf");
+      if (!checkInputNotEmpty(password) || !checkInputNotEmpty(passwordConf)) {
+        document.getElementById("FormStepErrorMsg").style.display = "block";
+        return;
+      }
+      if (password.value !== passwordConf.value) {
+        document.getElementById("FormStepErrorMsg").style.display = "block";
+        document.getElementById("FormStepErrorMsg").innerHTML = "Passwords don't match";
+      }
+    }
   }
+
+  document.getElementById("FormStepErrorMsg").style.display = "none";
 
   // Hide the current tab
   x[currentTab].style.display = "none";
@@ -158,7 +164,7 @@ function checkPasswordStrength(event) {
 
   // Check the conditions
   var counditionsPassed = 0;
-  if (password.length >= 8 ) {
+  if (password.length >= 12 ) {
     counditionsPassed += 1;
     for (var i = 0; i < matchedCase.length; i++) {
         if (new RegExp(matchedCase[i]).test(password)) {
