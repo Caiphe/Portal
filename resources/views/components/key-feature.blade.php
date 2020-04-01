@@ -1,7 +1,7 @@
 @props(['title'])
 
 @allowonce('key_feature')
-<link href="/css/components/key-feature.css" rel="stylesheet"/>
+<link href="{{ mix('/css/components/key-feature.css') }}" rel="stylesheet"/>
 @endallowonce
 
 <div class="key-feature">

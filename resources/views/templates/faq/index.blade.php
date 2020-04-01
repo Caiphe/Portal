@@ -19,5 +19,5 @@
 @endsection
 
 @pushscript('faq')
-<script src="/js/templates/faq/index.js" defer></script>
+<script src="{{ mix('/js/templates/faq/index.js') }}" defer></script>
 @endpushscript
