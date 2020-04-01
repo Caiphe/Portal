@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\ApigeeService;
 use App\Services\ProductLocationService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
 {
@@ -24,6 +25,10 @@ class DashboardController extends Controller
 
     public function update(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'photos.profile' => 'required|image',
+        ]);
+
         ApigeeService::updateProductStatus($request->email, $request->app_name, $request->key, $request->product_name, $request->action);
 
         return redirect()->back();
