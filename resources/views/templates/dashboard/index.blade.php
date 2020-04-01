@@ -186,7 +186,8 @@
             var approveProduct = confirm('Are you sure you want to approve this product?');
 
             if(approveProduct) {
-                this.submit();
+                //this.submit();
+                console.log(event.currentTarget);
             }
         }
 
@@ -201,7 +202,8 @@
             var revokeProduct = confirm('Are you sure you want to approve this product?');
 
             if(revokeProduct) {
-                this.submit();
+                //this.submit();
+                console.log(event.currentTarget);
             }
         }
 
@@ -215,11 +217,11 @@
         }
 
         function revokeAll() {
-
+            console.log(this);
         }
 
         function complete() {
-
+            console.log(this);
         }
     </script>
 @endpush

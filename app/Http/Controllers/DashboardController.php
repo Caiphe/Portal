@@ -15,6 +15,8 @@ class DashboardController extends Controller
 
         [$countries] = $productLocationService->fetch();
 
+//        dd($approvedApps['app']);
+
         return view('templates.dashboard.index', [
             'approvedApps' => $approvedApps['app'] ?? [],
             'revokedApps' => $revokedApps['app'] ?? [],
@@ -36,18 +38,18 @@ class DashboardController extends Controller
     public function approveAll(Request $request)
     {
 
-        return redirect()->back()->with('alert', 'Success');
+        return redirect()->back();
     }
 
     public function revokeAll(Request $request)
     {
 
-        return redirect()->back()->with('alert', 'Success');
+        return redirect()->back();
     }
 
     public function complete(Request $request)
     {
 
-        return redirect()->back()->with('alert', 'Success');
+        return redirect()->back();
     }
 }
