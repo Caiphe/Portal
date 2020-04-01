@@ -1,0 +1,83 @@
+@import "../../variables";
+@import "../../functions";
+
+h1, h2 {
+    text-align: center;
+}
+
+.add-pt-69 {
+    padding-top: 69px;
+}
+
+.add-pt-20 {
+    padding-top: 20px;
+}
+
+.add-pt-80 {
+    padding-top: 80px;
+}
+
+.btn {
+    display: flex;
+    justify-content: center;
+}
+
+.location-icon::before {
+    content: "";
+    position: relative;
+    width: 60px;
+    height: 60px;
+    float: left;
+    left: -12px;
+    top: 5px;
+    background-image: get-icon("location-icon", $yellow);
+}
+
+.contact-icon::before {
+    content: "";
+    position: relative;
+    width: 60px;
+    height: 60px;
+    float: left;
+    left: -12px;
+    top: 5px;
+    background-image: get-icon("contact-icon", $yellow);
+}
+
+.text {
+    align-self: center;
+    text-align: left;
+    float: left;
+    left: -40px;
+    top: -70px;
+}
+
+.bg-color {
+    background-color: #FBFBFB;
+}
+
+.s-left {
+    text-align: left;
+}
+
+span {
+    display: block;
+    text-align: center;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.column {
+    align-items: center;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    position: relative;
+    flex: auto;
+}

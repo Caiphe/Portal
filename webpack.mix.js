@@ -30,6 +30,7 @@ mix.scripts("resources/js/scripts.js", "public/js/scripts.js")
     .sass("resources/sass/templates/user/show.scss", "public/css/templates/user")
     .sass("resources/sass/templates/products/index.scss", "public/css/templates/products")
     .sass("resources/sass/templates/products/show.scss", "public/css/templates/products")
+    .sass("resources/sass/templates/contact/index.scss", "public/css/templates/contact")
     .sass("resources/sass/templates/getting-started/index.scss", "public/css/templates/getting-started")
     .sass("resources/sass/styles.scss", "public/css")
     .version();

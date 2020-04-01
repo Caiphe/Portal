@@ -17,6 +17,8 @@ Route::get('/', function () {
     return view('layouts.sidebar');
 })->name('home');
 
+Route::view('/contact', 'templates.contact');
+
 Route::get('products', 'ProductController@index');
 Route::get('products/{product:slug}', 'ProductController@show')->name('product.show');
 Route::get('products/{product:slug}/download/postman', 'ProductController@downloadPostman')->name('product.download.postman');
