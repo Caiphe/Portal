@@ -25,9 +25,13 @@ class DashboardController extends Controller
 
     public function update(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'photos.profile' => 'required|image',
-        ]);
+        Validator::make($request->all(), [
+            'email' => 'required|email',
+            'app_name' => 'required',
+            'consumer_key' => 'required',
+            'product_name' => 'required|exists:products,name',
+            'action' => 'required'
+        ])->validate();
 
         ApigeeService::updateProductStatus($request->email, $request->app_name, $request->key, $request->product_name, $request->action);
 
