@@ -20,14 +20,15 @@ class ProductController extends Controller
 		$productLocations = Product::isPublic()->WhereNotNull('locations')->select('locations')->get()->implode('locations', ',');
 		$locations = array_unique(explode(',', $productLocations));
 		$countries = Country::whereIn('code', $locations)->get();
-		$country_array = array();
+		$countryArray = array();
 		foreach ($countries as $country) {
-			$country_array[$country->code] = $country->name;
+			$countryArray[$country->code] = $country->name;
 		}
 		$groups = Product::distinct('group')->pluck('group');
 		return view('templates.products.index',[
 			'productsCollection' => $productsCollection, 
-			'productCategories' => array_keys($productsCollection->toArray()), 'countries' => $country_array,
+			'productCategories' => array_keys($productsCollection->toArray()),
+            'countries' => $countryArray,
 			'selectedCategory' => $request['category'], 
 			'groups'=> $groups]);
     }

@@ -12,8 +12,8 @@
 --}}
 
 @allowonce('card_product')
-<link href="/css/components/card-product.css" rel="stylesheet"/>
-<link href="/css/components/card.css" rel="stylesheet"/>
+<link href="{{ mix('/css/components/card-product.css') }}" rel="stylesheet"/>
+<link href="{{ mix('/css/components/card.css') }}" rel="stylesheet"/>
 @endallowonce
 
 @props(['title','countries','tags', 'href', 'addButtonId', 'addUrl'])

@@ -23,7 +23,7 @@
         </ul>
         <input type="search" name="search" id="search" class="thin see-through" placeholder="Search">
         @if(\Auth::check())
-        <button class="dark">Build app</button>
+        <a href="/apps/create" class="button dark">Build app</a>
         <div id="profile-menu">
             <div id="profile-menu-picture" style="background-image: url({{\Auth::user()->profile_picture}})"></div>
             <ul class="profile-menu-options shadow">

@@ -185,3 +185,9 @@ button,
         border-color: mix(#FFFFFF, $yellow, 20%);
     }
 }
+
+button[disabled]{
+    background-color: $grey300;
+    border-color: $grey300;
+    color: $grey700;
+}
