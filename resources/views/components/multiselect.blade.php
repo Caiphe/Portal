@@ -15,7 +15,7 @@
 @props(['id', 'name', 'options', 'selected', 'label'])
 
 @allowonce('multiselect')
-<link rel="stylesheet" href="/css/components/multiselect.css">
+<link rel="stylesheet" href="{{ mix('/css/components/multiselect.css') }}">
 @endallowonce
 
 @php
@@ -45,5 +45,5 @@
 <div id="{{$id}}-tags" class="multiselect-tags" onclick="removeTag(event)">{!!$tags!!}</div>
 
 @pushscript('multiselect')
-<script src="/js/components/multiselect.js" defer></script>
+<script src="{{ mix('/js/components/multiselect.js') }}" defer></script>
 @endpushscript

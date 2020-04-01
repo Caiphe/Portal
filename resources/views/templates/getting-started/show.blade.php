@@ -1,9 +1,5 @@
 @extends('layouts.sidebar')
 
-@push('styles')
-    <link rel="stylesheet" href="/css/templates/getting-started/show.css">
-@endpush
-
 @section('title', $content['title'] . '::Working with our products')
 
 @section('sidebar')

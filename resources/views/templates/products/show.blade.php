@@ -1,7 +1,7 @@
 @extends('layouts.sidebar')
 
 @push('styles')
-<link rel="stylesheet" href="/css/templates/products/show.css">
+<link rel="stylesheet" href="{{ mix('/css/templates/products/show.css') }}">
 @endpush
 
 @section('title', $product->display_name)

@@ -1,7 +1,7 @@
 @extends('layouts.sidebar')
 
 @push('styles')
-    <link rel="stylesheet" href="/css/templates/getting-started/index.css">
+    <link rel="stylesheet" href="{{ mix('/css/templates/getting-started/index.css') }}">
 @endpush
 
 @section('title', 'Getting started')
