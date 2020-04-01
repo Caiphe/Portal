@@ -14,7 +14,7 @@
 @props(['title', 'icon', 'link'])
 
 @php 
-    $card_text = strlen($slot) > 165 ? substr($slot,0,165) : $slot;
+    $cardText = strlen($slot) > 165 ? substr($slot,0,165) : $slot;
 @endphp
 
 <a href="{{ $link }}">
@@ -26,7 +26,7 @@
 			</h3>
 			@endisset
 			<p class="card__body">
-				{{ $card_text }}
+				{{ $cardText }}
             </p>
             <a href="{{ $link }}">{{ $link }}</a>
             @svg('arrow-forward', '#000000')
