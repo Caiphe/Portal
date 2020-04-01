@@ -341,6 +341,9 @@
     function handleCreate(event) {
         event.preventDefault();
 
+        var button = document.getElementById('create');
+        button.disabled = true;
+
         var app = {
             name: document.querySelector('#name').value,
             url: document.querySelector('#url').value,
@@ -368,8 +371,11 @@
 
         xhr.onload = function() {
             if (xhr.status === 200) {
-                window.location.href = "{{ route('app.index') }}";
-                addAlert('Success', 'Application created successfully');
+                window.location.href = "/apps";
+
+                if (window.location.href === "/apps") {
+                    addAlert('success', 'Application created successfully');
+                }
             }
         };
     }

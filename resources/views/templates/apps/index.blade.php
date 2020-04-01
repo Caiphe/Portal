@@ -206,6 +206,7 @@
 
             if(deleteApp) {
                 xhr.send(JSON.stringify(data));
+                document.querySelector(".menu.show").classList.remove('show');
             } else {
                 document.querySelector(".menu.show").classList.remove('show');
             }
@@ -213,7 +214,7 @@
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     window.location.href = "{{ route('app.index') }}";
-                    addAlert('Success', 'Application deleted successfully');
+                    addAlert('success', 'Application deleted successfully');
                 }
             };
         }
