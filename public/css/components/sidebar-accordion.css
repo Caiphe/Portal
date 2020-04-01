@@ -11,13 +11,14 @@
 #sidebar-accordion .accordion-item [data-toggle=accordion-item] {
   position: relative;
   display: block;
+  padding-left: 20px;
 }
 
 #sidebar-accordion .accordion-item svg {
   position: absolute;
   display: block;
   top: 0;
-  left: -20px;
+  left: 0;
   fill: #666666;
   height: 20px;
   width: 20px;
@@ -45,6 +46,7 @@
   position: relative;
   display: block;
   padding-left: 20px;
+  margin-left: 20px;
 }
 
 #sidebar-accordion .accordion-item .accordion-sub-items li a svg {

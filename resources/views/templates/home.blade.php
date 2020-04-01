@@ -4,6 +4,8 @@
 <link rel="stylesheet" href="{{ mix('/css/templates/home.css') }}">
 @endpush
 
+@section('title','MTN Developer Portal')
+
 @section('content')
 <div class="banner-carousel">
 <x-carousel wait="5000" duration="0.34">

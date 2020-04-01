@@ -1320,6 +1320,12 @@ button:hover,
   border-color: #ffd633;
 }
 
+button[disabled] {
+  background-color: #f2f2f2;
+  border-color: #f2f2f2;
+  color: #666666;
+}
+
 input,
 textarea {
   border-radius: 5px;
@@ -1591,9 +1597,9 @@ body > #main {
 
 .layout-sidebar .wrapper #sidebar {
   flex: 1;
-  padding: 40px;
-  min-width: 300px;
-  max-width: 300px;
+  padding: 40px 0;
+  min-width: 250px;
+  max-width: 250px;
   background-color: #fafafa;
   height: 100%;
 }
@@ -2278,6 +2284,24 @@ h6.close::before {
 
 .tag.grey {
   background-color: #1a1a1a;
+}
+
+.card--search svg {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.card--search .card__header {
+  min-height: 70px;
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+}
+
+.card--search .card__body {
+  min-height: 60px;
+  margin-bottom: 5px;
 }
 
 #alert {
