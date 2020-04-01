@@ -72,5 +72,5 @@
 @endsection
 
 @push('scripts')
-<script src="/js/templates/products/show.js" defer></script>
+<script src="{{ mix('/js/templates/products/show.js') }}" defer></script>
 @endpush
