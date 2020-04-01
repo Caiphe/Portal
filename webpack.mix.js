@@ -38,10 +38,6 @@ mix.scripts(["resources/js/scripts.js", "resources/js/components/alert.js"], "pu
         "public/css/components"
     )
     .sass("resources/sass/components/heading.scss", "public/css/components")
-    .sass("resources/sass/templates/user/show.scss", "public/css/templates/user")
-    .sass("resources/sass/templates/products/index.scss", "public/css/templates/products")
-    .sass("resources/sass/templates/products/show.scss", "public/css/templates/products")
-    .sass("resources/sass/templates/getting-started/index.scss", "public/css/templates/getting-started")
     .sass("resources/sass/templates/apps/index.scss", "public/css/templates/apps")
     .sass("resources/sass/templates/apps/create.scss", "public/css/templates/apps")
     .sass("resources/sass/templates/faq/index.scss", "public/css/templates/faq")
