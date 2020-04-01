@@ -30,9 +30,10 @@ function readyToSubmit(event) {
 }
 
 function nextPrev(n) {
-  console.log(n)
   // This function will figure out which tab to display
   var x = document.getElementsByClassName("step__wizzard_item");
+
+  // User clicked on the next button
   if (n == 1) {
     if (currentTab == 0) {
         var firstName = document.getElementById("formFirstName");
@@ -61,9 +62,14 @@ function nextPrev(n) {
       if (password.value !== passwordConf.value) {
         document.getElementById("FormStepErrorMsg").style.display = "block";
         document.getElementById("FormStepErrorMsg").innerHTML = "Passwords don't match";
+        return ;
       }
+    } else if (currentTab == 3) {
+      var password = document.getElementById("formPassword");
     }
   }
+
+  // User clicked on the back button
   if (n == -1) {
     if (currentTab == 4) {
       document.getElementById("stepWizzardNextBtn").style.display = "inline";
@@ -71,6 +77,7 @@ function nextPrev(n) {
     }
   }
 
+  // Remove the error message box from view if it was set previously
   document.getElementById("FormStepErrorMsg").style.display = "none";
 
   // Hide the current tab
@@ -79,7 +86,6 @@ function nextPrev(n) {
   currentTab = currentTab + n;
   // if you have reached the end of the form... :
   if (currentTab >= x.length) {
-    console.log("made it to the end of the form!");
     return false;
   }
   // Otherwise, display the correct tab:
