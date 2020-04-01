@@ -217,6 +217,12 @@
             };
         }
 
+        document.getElementById('create').addEventListener('click', handleCreateAppClick);
+
+        function handleCreateAppClick() {
+            window.location.href = '/apps/create'
+        }
+
         // FIXME: COPYING KEY AND SECRET IS NOT WORKING.
         var keys = document.querySelectorAll('.copy');
 

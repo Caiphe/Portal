@@ -73,7 +73,7 @@ class AppController extends Controller
 
         ApigeeService::createApp($data);
 
-        return redirect(route('app.index'))->with('status', 'Application created successfully');
+        return redirect(route('app.index'));
     }
 
     public function edit(ProductLocationService $productLocationService, Request $request)
@@ -121,7 +121,7 @@ class AppController extends Controller
 
         ApigeeService::updateApp($validated['name'], $data);
 
-        return redirect(route('app.index'))->with('status', 'Application updated successfully');
+        return redirect(route('app.index'));
     }
 
     public function destroy(DeleteAppRequest $request)
@@ -130,6 +130,6 @@ class AppController extends Controller
 
         ApigeeService::delete("developers/wes@plusnarrative.com/apps/{$validated['name']}");
 
-        return redirect(route('app.index'))->with('status', 'App has been deleted');
+        return redirect(route('app.index'));
     }
 }
