@@ -7,8 +7,8 @@
                 <a href="/products">Products @svg("chevron-down")</a>
                 <div class="product-nav shadow">
                     <div class="nav-left">
-                        <a href="/getting-started">Working with our products</a>
                         <a href="/products">Browse all our products</a>
+                        <a href="/getting-started">Working with our products</a>
                     </div>
                     <div class="nav-right">
                         <h3>BROWSE BY CATEGORY</h3>

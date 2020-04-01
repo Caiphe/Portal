@@ -9,7 +9,8 @@ class ProductLocationService
 {
     public function fetch()
     {
-        $products = Product::all()
+        $products = Product::isPublic()
+            ->get()
             ->sortBy('category')
             ->groupBy('category');
 

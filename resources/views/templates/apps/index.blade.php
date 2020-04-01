@@ -5,12 +5,11 @@
 @extends('layouts.sidebar')
 
 @section('sidebar')
-    <x-sidebar-accordion id="sidebar-accordion" active="Approved apps" :list="
+    <x-sidebar-accordion id="sidebar-accordion" active="/apps" :list="
     [ 'Manage' =>
         [
             [ 'label' => 'Profile', 'link' => '/profile'],
-            [ 'label' => 'Approved apps', 'link' => '/apps'],
-            [ 'label' => 'Revoked apps','link' => '/apps'],
+            [ 'label' => 'My apps', 'link' => '/apps'],
         ],
         'Discover' =>
         [
@@ -28,7 +27,7 @@
 @section('content')
 
     <x-heading heading="Apps" tags="DASHBOARD">
-        <button class="outline dark" id="create">Create new</button>
+        <a href="{{route('app.create')}}" class="button outline dark" id="create">Create new</a>
     </x-heading>
 
     @if(empty($approvedApps) && empty($revokedApps))
@@ -39,7 +38,7 @@
                     <h1>Looks like you don’t have any apps yet.</h1>
                     <p>Fortunately, it’s very easy to create one.</p>
 
-                    <button class="outline dark">Create app</button>
+                    <a href="{{route('app.create')}}" class="button outline dark">Create app</a>
                 </div>
             </div>
         </div>

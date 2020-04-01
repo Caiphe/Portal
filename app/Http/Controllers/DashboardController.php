@@ -34,9 +34,8 @@ class DashboardController extends Controller
     /**
      * @param array $apigeeApps
      * @param array $approvedApps
-     * @return array
      */
-    public function apps(array $apigeeApps, array $approvedApps): array
+    public function apps(array $apigeeApps, array $approvedApps)
     {
         foreach ($apigeeApps['app'] as $key => $app) {
             $approvedApps[] = $app;

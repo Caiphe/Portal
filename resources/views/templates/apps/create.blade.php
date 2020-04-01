@@ -1,17 +1,15 @@
 @push('styles')
-    <link rel="stylesheet" href="/css/templates/apps/create.css">
+    <link rel="stylesheet" href="{{ mix('/css/templates/apps/create.css') }}">
 @endpush
 
 @extends('layouts.sidebar')
 
 @section('sidebar')
-    <x-sidebar-accordion id="sidebar-accordion"
-                         :list="
+    <x-sidebar-accordion id="sidebar-accordion" active="/apps" :list="
     [ 'Manage' =>
         [
             [ 'label' => 'Profile', 'link' => '/profile'],
-            [ 'label' => 'Approved apps', 'link' => '/apps'],
-            [ 'label' => 'Revoked apps','link' => '/apps'],
+            [ 'label' => 'My apps', 'link' => '/apps'],
         ],
         'Discover' =>
         [
@@ -111,10 +109,11 @@
                                 @foreach ($products as $product)
                                     @php
 				                    $tags = array($product->group, $product->category);
+                                    $href = "/products/$product->slug";
                                     @endphp
                                     <x-card-product :title="$product->display_name"
                                                     class="product-block"
-                                                    :href="$product->slug"
+                                                    :href="$href"
                                                     :tags="$tags"
                                                     :addButtonId="$product->id"
                                                     :data-title="$product->display_name"
