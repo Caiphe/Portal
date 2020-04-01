@@ -11,14 +11,38 @@ const mix = require("laravel-mix");
  |
  */
 
-mix.scripts(["resources/js/scripts.js", "resources/js/components/alert.js"], "public/js/scripts.js")
-    .scripts("resources/js/templates/user/show.js", "public/js/templates/user/show.js")
-    .scripts("resources/js/components/carousel.js", "public/js/components/carousel.js")
-    .scripts("resources/js/components/sidebar-accordion.js", "public/js/components/sidebar-accordion.js")
-    .scripts("resources/js/components/multiselect.js", "public/js/components/multiselect.js")
-    .scripts("resources/js/templates/products/index.js", "public/js/templates/products/index.js")
-    .scripts("resources/js/templates/products/show.js", "public/js/templates/products/show.js")
-    .scripts("resources/js/components/multiselect.js", "public/js/components/multiselect.js")
+mix.scripts(
+    ["resources/js/scripts.js", "resources/js/components/alert.js"],
+    "public/js/scripts.js"
+)
+    .scripts(
+        "resources/js/templates/user/show.js",
+        "public/js/templates/user/show.js"
+    )
+    .scripts(
+        "resources/js/components/carousel.js",
+        "public/js/components/carousel.js"
+    )
+    .scripts(
+        "resources/js/components/sidebar-accordion.js",
+        "public/js/components/sidebar-accordion.js"
+    )
+    .scripts(
+        "resources/js/components/multiselect.js",
+        "public/js/components/multiselect.js"
+    )
+    .scripts(
+        "resources/js/templates/products/index.js",
+        "public/js/templates/products/index.js"
+    )
+    .scripts(
+        "resources/js/templates/products/show.js",
+        "public/js/templates/products/show.js"
+    )
+    .scripts(
+        "resources/js/components/multiselect.js",
+        "public/js/components/multiselect.js"
+    )
     .sass("resources/sass/components/carousel.scss", "public/css/components")
     .sass("resources/sass/components/multiselect.scss", "public/css/components")
     .sass("resources/sass/components/card.scss", "public/css/components")
@@ -53,6 +77,10 @@ mix.scripts(["resources/js/scripts.js", "resources/js/components/alert.js"], "pu
     .sass(
         "resources/sass/templates/products/show.scss",
         "public/css/templates/products"
+    )
+    .sass(
+        "resources/sass/templates/contact/index.scss",
+        "public/css/templates/contact"
     )
     .sass(
         "resources/sass/templates/getting-started/index.scss",
