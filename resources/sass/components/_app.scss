@@ -1,6 +1,6 @@
 @import '../variables';
 
-.app {
+#main .app {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -169,6 +169,7 @@
                 background-color: $grey300;
                 border-radius: 5px;
                 display: flex;
+                color: $grey900;
                 justify-content: space-between;
                 align-items: stretch;
                 font-size: 12px;

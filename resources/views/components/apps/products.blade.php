@@ -1,7 +1,7 @@
 @props(['products'])
 
 @foreach($products as $product)
-    <div class="product">
+    <a href="/products/@strSlug($product['apiproduct'])" class="product">
         <span class="status-{{ $product['status'] }}"></span>
         <span class="name">{{ $product['apiproduct'] }}</span>
         @if(Request::is('dashboard'))
@@ -17,5 +17,5 @@
         @else
             @svg('arrow-forward', '#000000')
         @endif
-    </div>
+    </a>
 @endforeach

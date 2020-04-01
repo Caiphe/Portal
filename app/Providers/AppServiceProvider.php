@@ -24,6 +24,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Blade::directive('strSlug', function ($expression) {
+            return <<<SLU
+            <?php echo \Illuminate\Support\Str::slug(trim($expression, " '\"")) ?>
+            SLU;
+        });
+
         Blade::directive('svg', function ($expression) {
             $options = explode(',', $expression);
             $icon = trim($options[0], " '\"");

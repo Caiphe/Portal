@@ -1,22 +1,21 @@
 @push('styles')
-    <link rel="stylesheet" href="/css/templates/apps/index.css">
+    <link rel="stylesheet" href="{{ mix('/css/templates/apps/index.css') }}">
 @endpush
 
 @extends('layouts.sidebar')
 
 @section('sidebar')
-    <x-sidebar-accordion id="sidebar-accordion"
-                         :list="
+    <x-sidebar-accordion id="sidebar-accordion" active="Approved apps" :list="
     [ 'Manage' =>
         [
-            [ 'label' => 'Profile', 'link' => '#'],
-            [ 'label' => 'Approved apps', 'link' => '#'],
-            [ 'label' => 'Revoked apps','link' => '#'],
+            [ 'label' => 'Profile', 'link' => '/profile'],
+            [ 'label' => 'Approved apps', 'link' => '/apps'],
+            [ 'label' => 'Revoked apps','link' => '/apps'],
         ],
         'Discover' =>
         [
-            [ 'label' => 'Browse all products', 'link' => '#'],
-            [ 'label' => 'Working with our products','link' => '#'],
+            [ 'label' => 'Browse all products', 'link' => '/products'],
+            [ 'label' => 'Working with our products','link' => '/getting-started'],
         ]
     ]
     " />
