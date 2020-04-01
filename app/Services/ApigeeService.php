@@ -37,10 +37,10 @@ class ApigeeService
         return self::post("developers/{$user->email}/apps", $data);
     }
 
-    public static function updateApp(array $data)
+    public static function updateApp(string $name, array $data)
     {
         $user = auth()->user();
-        return self::put("developers/{$user->email}/apps/{$data['appName']}", $data);
+        return self::put("developers/{$user->email}/apps/{$name}", $data);
     }
 
     public static function getAppAttributes(array $attributes)
@@ -50,6 +50,16 @@ class ApigeeService
             $a[$attribute['name']] = $attribute['value'];
         }
         return $a;
+    }
+
+    public static function approve()
+    {
+
+    }
+
+    public static function revoke()
+    {
+
     }
 
     protected static function HttpWithBasicAuth()
