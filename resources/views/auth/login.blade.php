@@ -16,10 +16,7 @@
             <form class="step__wizzard_content" id="stepWizzardForm" method="POST" action="{{ route('login') }}">
                 @csrf
                 <div class="intro">
-                    <h2 class="header">You're in!</h2>
-                    <p class="text">
-                        Thank you for verifying your email address, you’re all setup. <strong>Happy coding!</strong>
-                    </p>
+                    <h2 class="header">Login</h2>
                 </div>
                 <div class="login__input_group">
                     <input class="@error('email') is-invalid @enderror" type="text" id="formEmail" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="Username" autofocus />

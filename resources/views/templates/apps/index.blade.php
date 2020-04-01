@@ -5,12 +5,11 @@
 @extends('layouts.sidebar')
 
 @section('sidebar')
-    <x-sidebar-accordion id="sidebar-accordion" active="Approved apps" :list="
+    <x-sidebar-accordion id="sidebar-accordion" active="/apps" :list="
     [ 'Manage' =>
         [
             [ 'label' => 'Profile', 'link' => '/profile'],
-            [ 'label' => 'Approved apps', 'link' => '/apps'],
-            [ 'label' => 'Revoked apps','link' => '/apps'],
+            [ 'label' => 'My apps', 'link' => '/apps'],
         ],
         'Discover' =>
         [
