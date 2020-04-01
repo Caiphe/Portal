@@ -105,6 +105,10 @@ class UserController extends Controller
 
         $validatedData = $request->validate($validateOn);
 
+        if(isset($validatedData['password'])){
+            $validatedData['password'] = bcrypt($validatedData['password']);
+        }
+
         $user->update($validatedData);
 
         if ($request->has('locations')) {
