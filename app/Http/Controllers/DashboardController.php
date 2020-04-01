@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateStatusRequest;
 use App\Services\ApigeeService;
 use App\Services\ProductLocationService;
 use Illuminate\Http\Request;
@@ -23,19 +24,11 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function update(UpdateStatusRequest $request)
     {
-        Validator::make($request->all(), [
-            'email' => 'required|email',
-            'app_name' => 'required',
-            'consumer_key' => 'required',
-            'product_name' => 'required|exists:products,name',
-            'action' => 'required'
-        ])->validate();
+        $validated = $request->validated();
 
-        ApigeeService::updateProductStatus($request->email, $request->app_name, $request->key, $request->product_name, $request->action);
-
-        return redirect()->back();
+         ApigeeService::updateProductStatus($request->email, $request->app_name, $request->key, $request->product_name, $request->action);
     }
 
     /**
