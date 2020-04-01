@@ -42,7 +42,7 @@
 
         <div class="row">
 
-            <form>
+            <form id="form-create-app">
 
                 <div class="active">
                     @svg('app-avatar', '#ffffff')
@@ -143,7 +143,7 @@
     document.addEventListener('DOMContentLoaded', init);
 
     var nav = document.querySelector('#app-create nav');
-    var form = document.querySelector('form');
+    var form = document.getElementById('form-create-app');
     var buttons = document.querySelectorAll('.next');
     var backButtons = document.querySelectorAll('.back');
     var checkedBoxes = document.querySelectorAll('input[name=country-checkbox]:checked');
