@@ -42,7 +42,7 @@
 
         <div class="row">
 
-            <form id="create-app" action="{{ route('app.store') }}" method="POST">
+            <form>
 
                 <div class="active">
                     @svg('app-avatar', '#ffffff')
@@ -129,8 +129,6 @@
                         </button>
                     </div>
                 </div>
-
-                @csrf
 
             </form>
         </div>
@@ -370,7 +368,8 @@
 
         xhr.onload = function() {
             if (xhr.status === 200) {
-                window.location.href = "{{ route('app.index') }}"
+                window.location.href = "{{ route('app.index') }}";
+                addAlert('Success', 'Application created successfully');
             }
         };
     }

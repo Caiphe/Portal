@@ -384,7 +384,8 @@
 
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    window.location.href = "{{ route('app.index') }}"
+                    window.location.href = "{{ route('app.index') }}";
+                    addAlert('Success', 'Application updated successfully');
                 }
             };
         }
