@@ -1,83 +1,58 @@
 @import "../../variables";
 @import "../../functions";
 
-h1, h2 {
-    text-align: center;
+#main {
+    padding: 0 !important;
 }
 
-.add-pt-69 {
-    padding-top: 69px;
+.grey-bg {
+    background-color: $grey200;
 }
 
-.add-pt-20 {
-    padding-top: 20px;
-}
-
-.add-pt-80 {
-    padding-top: 80px;
-}
-
-.btn {
-    display: flex;
-    justify-content: center;
-}
-
-.location-icon::before {
-    content: "";
-    position: relative;
-    width: 60px;
-    height: 60px;
-    float: left;
-    left: -12px;
-    top: 5px;
-    background-image: get-icon("location-icon", $yellow);
-}
-
-.contact-icon::before {
-    content: "";
-    position: relative;
-    width: 60px;
-    height: 60px;
-    float: left;
-    left: -12px;
-    top: 5px;
-    background-image: get-icon("contact-icon", $yellow);
-}
-
-.text {
-    align-self: center;
-    text-align: left;
-    float: left;
-    left: -40px;
-    top: -70px;
-}
-
-.bg-color {
-    background-color: #FBFBFB;
-}
-
-.s-left {
-    text-align: left;
+.section-padding {
+    padding: $gutter 150px;
 }
 
 span {
     display: block;
+}
+
+.faqs-section {
+    padding-top: 60px !important;
     text-align: center;
 }
 
-.row {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
+.contact-details-section {
+    .contact-details {
+		padding-top:60px;
+        .contact-icon,
+        .location-icon {
+            display: flex;
+        }
+        .location-icon::before {
+            content: "";
+            position: relative;
+            width: 60px;
+            height: 60px;
+            float: left;
+            left: -12px;
+            top: 5px;
+            background-image: get-icon("map-marker", $yellow);
+        }
 
-.column {
-    align-items: center;
-    display: inline-flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    align-self: center;
-    position: relative;
-    flex: auto;
+        .contact-icon::before {
+            content: "";
+            position: relative;
+            width: 60px;
+            height: 60px;
+            float: left;
+            left: -5px;
+            top: 5px;
+            background-image: get-icon("phone", $yellow);
+        }
+
+        p {
+            align-self: center;
+		}
+    }
 }
