@@ -1,8 +1,10 @@
 @extends('layouts.sidebar')
 
 @push('styles')
-<link rel="stylesheet" href="/css/templates/products/show.css">
+<link rel="stylesheet" href="{{ mix('/css/templates/products/show.css') }}">
 @endpush
+
+@section('title', $product->display_name)
 
 @section('sidebar')
     <x-sidebar-accordion id="product-page-sidebar" :active="'/' . request()->path()" :list="$sidebarAccordion"/>

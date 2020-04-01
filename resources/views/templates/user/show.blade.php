@@ -1,7 +1,7 @@
 @extends('layouts.sidebar')
 
 @push('styles')
-<link rel="stylesheet" href="/css/templates/user/show.css">
+<link rel="stylesheet" href="{{ mix('/css/templates/user/show.css') }}">
 @endpush
 
 @section('title')
@@ -63,7 +63,7 @@ Update profile
                 @foreach($locations as $location)
                 <label for="{{$location}}">
                     <input type="checkbox" name="locations[]" value="{{$location}}" id="{{$location}}" autocomplete="off" @if(in_array($location, $userLocations)) checked @endif>
-                    <span title="{{$location}}">@svg($location, '#000000', 'images/locations')</span>
+                    <img src="/images/locations/{{$location}}.svg" alt="{{$location}}" title="{{$location}}">
                 </label>
                 @endforeach
             </div>
@@ -73,5 +73,5 @@ Update profile
 @endsection
 
 @push('scripts')
-<script src="/js/templates/user/show.js"></script>
+<script src="{{ mix('/js/templates/user/show.js') }}"></script>
 @endpush

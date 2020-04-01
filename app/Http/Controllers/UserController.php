@@ -112,6 +112,8 @@ class UserController extends Controller
             $user->countries()->sync($countryIds);
         }
 
+        \Session::flash('alert', 'Success:Your profile has been updated.');
+
         return redirect()->back();
     }
 
