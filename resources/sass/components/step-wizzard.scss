@@ -286,10 +286,11 @@
 
     input {
         display: none; 
+        opacity: 0.1;
     }
 
     input:checked+span {
-        opacity: 0.1;
+        opacity: 1;
     }
 }
 .login__input_group {

@@ -1,4 +1,4 @@
-var currentTab = 0; // Current tab is set to be the first tab (0)
+var currentTab = 3; // Current tab is set to be the first tab (0)
 var selectedLocationsCount = 0;
 showTab(currentTab); // Display the current tab
 var FormData = {};
@@ -62,6 +62,12 @@ function nextPrev(n) {
         document.getElementById("FormStepErrorMsg").style.display = "block";
         document.getElementById("FormStepErrorMsg").innerHTML = "Passwords don't match";
       }
+    }
+  }
+  if (n == -1) {
+    if (currentTab == 4) {
+      document.getElementById("stepWizzardNextBtn").style.display = "inline";
+      document.getElementById("stepWizardSubmitBtn").style.display = "none";
     }
   }
 
