@@ -36,7 +36,7 @@
                     <p id="developer-email">test@plusnarrative.com</p>
                     <input id="developer-key" type="hidden" value="{{ end($app['credentials'])['consumerKey']  }}">
                 </div>
-                <div>
+                <div class="dashboard-regions">
                     <p><strong>Regions:</strong></p>
                 </div>
                 <div>
