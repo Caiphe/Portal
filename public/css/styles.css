@@ -214,9 +214,9 @@ select {
  */
 
 button,
-[type="button"],
-[type="reset"],
-[type="submit"] {
+[type=button],
+[type=reset],
+[type=submit] {
   -webkit-appearance: button;
 }
 
@@ -225,9 +225,9 @@ button,
  */
 
 button::-moz-focus-inner,
-[type="button"]::-moz-focus-inner,
-[type="reset"]::-moz-focus-inner,
-[type="submit"]::-moz-focus-inner {
+[type=button]::-moz-focus-inner,
+[type=reset]::-moz-focus-inner,
+[type=submit]::-moz-focus-inner {
   border-style: none;
   padding: 0;
 }
@@ -237,9 +237,9 @@ button::-moz-focus-inner,
  */
 
 button:-moz-focusring,
-[type="button"]:-moz-focusring,
-[type="reset"]:-moz-focusring,
-[type="submit"]:-moz-focusring {
+[type=button]:-moz-focusring,
+[type=reset]:-moz-focusring,
+[type=submit]:-moz-focusring {
   outline: 1px dotted ButtonText;
 }
 
@@ -294,8 +294,8 @@ textarea {
  * 2. Remove the padding in IE 10.
  */
 
-[type="checkbox"],
-[type="radio"] {
+[type=checkbox],
+[type=radio] {
   box-sizing: border-box;
   /* 1 */
   padding: 0;
@@ -306,8 +306,8 @@ textarea {
  * Correct the cursor style of increment and decrement buttons in Chrome.
  */
 
-[type="number"]::-webkit-inner-spin-button,
-[type="number"]::-webkit-outer-spin-button {
+[type=number]::-webkit-inner-spin-button,
+[type=number]::-webkit-outer-spin-button {
   height: auto;
 }
 
@@ -316,7 +316,7 @@ textarea {
  * 2. Correct the outline style in Safari.
  */
 
-[type="search"] {
+[type=search] {
   -webkit-appearance: textfield;
   /* 1 */
   outline-offset: -2px;
@@ -327,7 +327,7 @@ textarea {
  * Remove the inner padding in Chrome and Safari on macOS.
  */
 
-[type="search"]::-webkit-search-decoration {
+[type=search]::-webkit-search-decoration {
   -webkit-appearance: none;
 }
 
@@ -391,8 +391,7 @@ body {
   flex-direction: column;
 }
 
-a
-p,
+a p,
 div,
 main,
 footer,
@@ -406,7 +405,7 @@ textarea {
 }
 
 @font-face {
-  font-family: 'mtn-regular';
+  font-family: "mtn-regular";
   font-style: normal;
   font-weight: 400;
   font-display: auto;
@@ -414,7 +413,7 @@ textarea {
 }
 
 @font-face {
-  font-family: 'mtn-bold';
+  font-family: "mtn-bold";
   font-style: bold;
   font-weight: 700;
   font-display: auto;
@@ -422,7 +421,7 @@ textarea {
 }
 
 @font-face {
-  font-family: 'mtn-medium';
+  font-family: "mtn-medium";
   font-style: medium;
   font-weight: 500;
   font-display: auto;
@@ -430,7 +429,7 @@ textarea {
 }
 
 @font-face {
-  font-family: 'mtn-italic';
+  font-family: "mtn-italic";
   font-style: italic;
   font-weight: 400;
   font-display: auto;
@@ -438,7 +437,7 @@ textarea {
 }
 
 @font-face {
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
   font-style: normal;
   font-weight: 400;
   font-display: auto;
@@ -446,7 +445,7 @@ textarea {
 }
 
 @font-face {
-  font-family: 'Montserrat-Light';
+  font-family: "Montserrat-Light";
   font-style: normal;
   font-weight: 300;
   font-display: auto;
@@ -454,7 +453,7 @@ textarea {
 }
 
 @font-face {
-  font-family: 'Montserrat-Bold';
+  font-family: "Montserrat-Bold";
   font-style: normal;
   font-weight: 700;
   font-display: auto;
@@ -878,6 +877,51 @@ button.blue.fab.plus.outline:hover,
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
 }
 
+button.before.done::before,
+button.after.done::after,
+.button.before.done::before,
+.button.after.done::after {
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>');
+}
+
+button.dark.before.done:not(.outline)::before,
+button.dark.after.done:not(.outline)::after,
+button.medium.before.done:not(.outline)::before,
+button.medium.after.done:not(.outline)::after,
+button.blue.before.done:not(.outline)::before,
+button.blue.after.done:not(.outline)::after,
+.button.dark.before.done:not(.outline)::before,
+.button.dark.after.done:not(.outline)::after,
+.button.medium.before.done:not(.outline)::before,
+.button.medium.after.done:not(.outline)::after,
+.button.blue.before.done:not(.outline)::before,
+.button.blue.after.done:not(.outline)::after {
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>');
+}
+
+button.fab.done,
+.button.fab.done {
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>');
+}
+
+button.dark.fab.done:not(.outline),
+button.medium.fab.done:not(.outline),
+button.blue.fab.done:not(.outline),
+.button.dark.fab.done:not(.outline),
+.button.medium.fab.done:not(.outline),
+.button.blue.fab.done:not(.outline) {
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>');
+}
+
+button.blue.before.done.outline:hover::before,
+button.blue.after.done.outline:hover::after,
+button.blue.fab.done.outline:hover,
+.button.blue.before.done.outline:hover::before,
+.button.blue.after.done.outline:hover::after,
+.button.blue.fab.done.outline:hover {
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>');
+}
+
 button.before.arrow-left::before,
 button.after.arrow-left::after,
 .button.before.arrow-left::before,
@@ -1056,6 +1100,51 @@ button.blue.fab.chevron-right.outline:hover,
 .button.blue.after.chevron-right.outline:hover::after,
 .button.blue.fab.chevron-right.outline:hover {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+}
+
+button.before.chevron-down::before,
+button.after.chevron-down::after,
+.button.before.chevron-down::before,
+.button.after.chevron-down::after {
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>');
+}
+
+button.dark.before.chevron-down:not(.outline)::before,
+button.dark.after.chevron-down:not(.outline)::after,
+button.medium.before.chevron-down:not(.outline)::before,
+button.medium.after.chevron-down:not(.outline)::after,
+button.blue.before.chevron-down:not(.outline)::before,
+button.blue.after.chevron-down:not(.outline)::after,
+.button.dark.before.chevron-down:not(.outline)::before,
+.button.dark.after.chevron-down:not(.outline)::after,
+.button.medium.before.chevron-down:not(.outline)::before,
+.button.medium.after.chevron-down:not(.outline)::after,
+.button.blue.before.chevron-down:not(.outline)::before,
+.button.blue.after.chevron-down:not(.outline)::after {
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>');
+}
+
+button.fab.chevron-down,
+.button.fab.chevron-down {
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000000" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>');
+}
+
+button.dark.fab.chevron-down:not(.outline),
+button.medium.fab.chevron-down:not(.outline),
+button.blue.fab.chevron-down:not(.outline),
+.button.dark.fab.chevron-down:not(.outline),
+.button.medium.fab.chevron-down:not(.outline),
+.button.blue.fab.chevron-down:not(.outline) {
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>');
+}
+
+button.blue.before.chevron-down.outline:hover::before,
+button.blue.after.chevron-down.outline:hover::after,
+button.blue.fab.chevron-down.outline:hover,
+.button.blue.before.chevron-down.outline:hover::before,
+.button.blue.after.chevron-down.outline:hover::after,
+.button.blue.fab.chevron-down.outline:hover {
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>');
 }
 
 button.before.arrow-forward::before,
@@ -1385,43 +1474,47 @@ select.dark {
   color: #FFF;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="search"],
-input[type="number"] {
+input[type=text],
+input[type=email],
+input[type=password],
+input[type=search],
+input[type=url],
+input[type=number] {
   height: 40px;
 }
 
-input[type="text"].thin,
-input[type="email"].thin,
-input[type="password"].thin,
-input[type="search"].thin,
-input[type="number"].thin {
+input[type=text].thin,
+input[type=email].thin,
+input[type=password].thin,
+input[type=search].thin,
+input[type=url].thin,
+input[type=number].thin {
   height: 32px;
 }
 
-input[type="text"].alt,
-input[type="email"].alt,
-input[type="password"].alt,
-input[type="search"].alt,
-input[type="number"].alt {
+input[type=text].alt,
+input[type=email].alt,
+input[type=password].alt,
+input[type=search].alt,
+input[type=url].alt,
+input[type=number].alt {
   height: 32px;
   border: none;
   border-bottom: 1px solid #e6e6e6;
   padding: 0;
 }
 
-input[type="text"].see-through,
-input[type="email"].see-through,
-input[type="password"].see-through,
-input[type="search"].see-through,
-input[type="number"].see-through {
+input[type=text].see-through,
+input[type=email].see-through,
+input[type=password].see-through,
+input[type=search].see-through,
+input[type=url].see-through,
+input[type=number].see-through {
   background-color: rgba(255, 255, 255, 0.4);
   border: none;
 }
 
-:not(.switch) > input[type="checkbox"] {
+:not(.switch) > input[type=checkbox] {
   width: 24px;
   height: 24px;
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
@@ -1432,7 +1525,7 @@ input[type="number"].see-through {
   cursor: pointer;
 }
 
-:not(.switch) > input[type="checkbox"]:checked {
+:not(.switch) > input[type=checkbox]:checked {
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>');
 }
 
@@ -1573,7 +1666,7 @@ body > #main {
 }
 
 .layout-sidebar .wrapper::before {
-  content: '';
+  content: "";
   width: 50%;
   background-color: #fafafa;
   height: 100%;
@@ -1583,7 +1676,7 @@ body > #main {
 }
 
 .layout-sidebar .wrapper::after {
-  content: '';
+  content: "";
   width: 50%;
   background-color: #e6e6e6;
   height: 68px;
@@ -2039,6 +2132,21 @@ h6.plus::before {
   left: 0;
 }
 
+h1.done::before,
+h2.done::before,
+h3.done::before,
+h4.done::before,
+h5.done::before,
+h6.done::before {
+  content: "";
+  position: relative;
+  width: 30px;
+  height: 30px;
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FC0" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>');
+  position: absolute;
+  left: 0;
+}
+
 h1.arrow-left::before,
 h2.arrow-left::before,
 h3.arrow-left::before,
@@ -2095,6 +2203,21 @@ h6.chevron-right::before {
   width: 30px;
   height: 30px;
   background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FC0" height="24" viewBox="0 0 24 24" width="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+  position: absolute;
+  left: 0;
+}
+
+h1.chevron-down::before,
+h2.chevron-down::before,
+h3.chevron-down::before,
+h4.chevron-down::before,
+h5.chevron-down::before,
+h6.chevron-down::before {
+  content: "";
+  position: relative;
+  width: 30px;
+  height: 30px;
+  background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23FC0" height="24" viewBox="0 0 24 24" width="24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>');
   position: absolute;
   left: 0;
 }

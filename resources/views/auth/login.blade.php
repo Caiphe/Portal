@@ -13,7 +13,7 @@
                 <h4>Developer Portal</h4>
             </div>
 
-            <form class="step__wizzard_content" id="stepWizzardForm" method="POST" action="{{ route('register') }}">
+            <form class="step__wizzard_content" id="stepWizzardForm" method="POST" action="{{ route('login') }}">
                 @csrf
                 <div class="intro">
                     <h2 class="header">You're in!</h2>
@@ -22,8 +22,8 @@
                     </p>
                 </div>
                 <div class="login__input_group">
-                    <input class="@error('username') is-invalid @enderror" type="text" id="formEmail" name="email" value="{{ old('username') }}" required autocomplete="username" placeholder="Username" autofocus />
-                    @error('username')
+                    <input class="@error('email') is-invalid @enderror" type="text" id="formEmail" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="Username" autofocus />
+                    @error('email')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>

@@ -8,7 +8,7 @@
   font-size: 12px;
 }
 
-#sidebar-accordion .accordion-item [data-toggle="accordion-item"] {
+#sidebar-accordion .accordion-item [data-toggle=accordion-item] {
   position: relative;
   display: block;
   padding-left: 20px;
