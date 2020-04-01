@@ -1,0 +1,854 @@
+swagger: "2.0"
+info:
+  version: "v2.4" 
+  title: "MTN Customer Subscription Management API"
+  contact:
+    name: "MTN API Support"
+    email: "developer-support@mtn.com"
+host: "api.mtn.com"
+basePath: "/v2"
+schemes:
+- "https"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+
+securityDefinitions:
+  ApiKeyAuth:
+    type: "apiKey"
+    name: "X-API-Key"
+    in: "header"
+  OAuth2:
+    type: oauth2
+    flow: application
+    tokenUrl: https://api.mtn.com/oauth/client_credential/accesstoken
+
+security:
+  - ApiKeyAuth: []
+  - OAuth2: []
+
+paths:
+  /customers/{customerId}/subscriptions:
+    get:
+      tags:
+      - "Customers"
+      summary: "List all Subscriptions"
+      description: "Get a Customer's Subscriptions given the Customer's id"
+      operationId: "List all Subscriptions"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "customerId"
+        in: "path"
+        description: "ID for the Customer"
+        required: true
+        type: "string"
+      - name: "subscriptionProviderId"
+        in: "query"
+        description: Subscription Provider to query
+        type: string
+      - name: "transactionId"
+        in: header
+        description: Client generated Id to include for tracing requests
+        type: string
+      responses:
+        200:
+          description: "List of customer's subscriptions"
+          schema:
+            $ref: "#/definitions/CustomerSubscription"
+        207:
+          description: "Multi-Status response - Partial list of customer's subscriptions"
+          schema:
+            $ref: "#/definitions/CustomerSubscription"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "Customer not found"
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            The services object/envelope will be null: >
+              {
+                "services": null
+              }
+        405:
+          description: "Method Not allowed"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"
+
+    post:
+      tags:
+       - "Customers"
+      summary: "Subscribe the customer to a new service"
+      description: "Provision/add a new subscription to the customers account"
+      operationId: "Subscribe the customer to a new service"
+      parameters: 
+      - name: customerId
+        in: path
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/subscription'
+      - name: "transactionId"
+        in: header
+        description: Client generated Id to include for tracing requests
+        type: string
+      responses:
+        201:
+          description: Created
+          headers:
+            Location:
+              type: string
+              description: Location header will include the link to the newly created subscription
+          schema:
+            $ref: "#/definitions/subscription"
+        202:
+          description: Accepted
+          headers:
+            Location:
+              type: string
+              description: Location header will include the link to the status URL for the new subscription
+          schema:
+            $ref: "#/definitions/SubscribeAsync"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "Customer not found"
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            The services object/envelope will be null: >
+              {  
+                "services": null
+              }
+        405:
+          description: "Method Not allowed"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"
+    
+    delete:
+      tags:
+      - Customers
+      summary: Unsubscribe All Subscriptions for a Customer
+      description: Unsubscribe All Subscriptions for a Customer
+      operationId: Delete All subscriptions
+      produces:
+      - application/json
+      parameters:
+      - name: customerId
+        in: path
+        description: id for the Customer
+        required: true
+        type: string
+      - name: subscriptionProviderId
+        in: query
+        description: Identity of the subscription provider hosting the subscription
+        required: true
+        type: string
+      - name: callbackUrl
+        in: body
+        schema:
+          $ref: '#/definitions/Callback'
+      - name: "transactionId"
+        in: header
+        description: Client generated Id to include for tracing requests
+        type: string
+
+      responses:
+        200:
+          description: Result of the unsubscribe action
+          schema:
+            $ref: '#/definitions/Unsubscribe'
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "Customer not found"
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            The services object/envelope will be null: >
+              {  
+                "services": null
+              }
+        405:
+          description: "Method Not allowed"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"
+
+  /customers/{customerId}/subscriptions/{subscriptionId}:
+    get:
+      tags:
+      - "Customers"
+      summary: "Get Subscription details"
+      description: "Retrieve specific subscription details for a customer"
+      operationId: "Get Subscription Details"
+      parameters:
+      - name: "customerId"
+        in: "path"
+        description: "id for the Customer; if id is msisdn, format must be E.123"
+        required: true
+        type: "string"
+      - name: "subscriptionId"
+        in: "path"
+        description: "ID for the Subscription"
+        required: true
+        type: "string"
+      - name: "subscriptionProviderId"
+        in: "query"
+        description: "Identity of the subscription provider hosting the subscription"
+        required: true
+        type: "string"
+      - name: "transactionId"
+        in: header
+        description: Client generated Id to include for tracing requests
+        type: string
+      responses:
+        200:
+          description: "Subscription details"
+          schema:
+            $ref: "#/definitions/CustomerSubscription"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "Customer not found"
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            The services object/envelope will be null: >
+              {  
+                "services": null
+              }
+        405:
+          description: "Method Not allowed"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"          
+    
+    delete:
+      tags:
+      - "Customers"
+      summary: "Unsubscribe a specific subscription"
+      description: "Delete a specific subscription"
+      operationId: "Delete a specific subscription"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "customerId"
+        in: "path"
+        description: "id of the Customer"
+        required: true
+        type: "string"
+      - name: "subscriptionId"
+        in: "path"
+        description: "ID for the Subscription"
+        required: true
+        type: "string"
+      - name: "subscriptionProviderId"
+        in: "query"
+        description: "Identity of the subscription provider hosting the subscription"
+        required: true
+        type: "string"
+      - name: "transactionId"
+        in: header
+        description: Client generated Id to include for tracing requests
+        type: string
+      responses:
+        200:
+          description: "Result of the unsubscribe action"
+          schema:
+            $ref: "#/definitions/Unsubscribe"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "Customer not found"
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            The services object/envelope will be null: >
+              {  
+                "services": null
+              }
+        405:
+          description: "Method Not allowed"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"
+
+  /customers/{customerId}/subscriptions/{subscriptionId}/status/{statusId}:
+    get:
+      tags:
+      - "Customers"
+      summary: "Get provisioning status of a recently added Subscription"
+      description: "For certain provisioning requests to add a new subscription, the response will be asynchronous, with a status of PENDING. 
+      Use this query to poll the final status of the provisioning, using the transactionID that was used for the original provisioning request."
+      operationId: "Get Subscription Provisioning Status"
+      parameters:
+      - name: "customerId"
+        in: "path"
+        description: "id for the Customer; if id is msisdn, format must be E.123"
+        required: true
+        type: "string"
+      - name: "subscriptionId"
+        in: "path"
+        description: "ID for the Subscription"
+        required: true
+        type: "string"
+      - name: "subscriptionProviderId"
+        in: "query"
+        description: "Identity of the subscription provider hosting the subscription"
+        required: true
+        type: "string"
+      - name: "statusId"
+        in: "path"
+        description: "id for the provisioning request that needs to be queried"
+        required: true
+        type: "string"
+      - name: "transactionId"
+        in: header
+        description: Client generated Id to include for tracing requests
+        type: string
+      responses:
+        200:
+          description: "Subscription details"
+          schema:
+            $ref: "#/definitions/CustomerSubscription"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "Customer not found"
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            The services object/envelope will be null: >
+              {  
+                "services": null
+              }
+        405:
+          description: "Method Not allowed"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"            
+
+  /customers/{customerId}/subscriptions-providers:
+    get:
+      tags:
+      - "Customers"
+      summary: "Retrieve subscription providers"
+      description: "Show the list of all Subscription providers that a customer may have subscriptions with"
+      operationId: "Retrieve subscription providers"
+      parameters:
+      - name: "customerId"
+        in: "path"
+        description: "id for the Customer; if id is msisdn, format must be E.123"
+        required: true
+        type: "string"
+      - name: "transactionId"
+        in: header
+        description: Client generated Id to include for tracing requests
+        type: string
+      responses:
+        200:
+          description: "Subscription details"
+          schema:
+            $ref: "#/definitions/CustomerSubscriptionProvider"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "Customer not found"
+          schema:
+            $ref: "#/definitions/Error"
+          examples:
+            The services object/envelope will be null: >
+              {  
+                "services": null
+              }
+        405:
+          description: "Method Not allowed"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"       
+
+  /callback/delete-all-subscriptions:
+    post:
+      tags:
+       - "Callback"
+      summary: "Callback service that MTN API will POST to with the result of the DELETE all subscriptions"
+      description: "The result of the asynchronous DELETE for all a customers subscriptions will be POSTed to the callback URL that the developer must host. 
+      If there were multiple subscriptions, each result will be posted individually as it completes."
+      operationId: "Callback service that MTN API will POST to with the result of the DELETE all subscriptions"
+      parameters: 
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Unsubscribe'
+      responses:
+        200:
+          description: "OK"
+                         
+
+definitions:
+
+
+  
+  CustomerSubscription:
+    type: object
+    properties:
+      customerId:
+        type: string
+      services:
+        additionalProperties:
+          $ref: "#/definitions/SubscriptionServices"
+          
+        example: {
+            "vas_hlr": {
+            "statusCode": "2000",
+            "data": {
+               "subscriptionId": "4",
+               "subscriptionProviderId": "RBT",
+               "subscriptionName": "CallerTunez",
+               "subscriptionDescription": null,
+               "subscriptionStatus": "Inactive",
+               "subscriptionType": "Adhoc",
+               "subscriptionLength": null,
+               "registrationChannel": null,
+               "startDate": "2019-04-30",
+               "endDate": "2019-05-06",
+               "subscriptionPaymentSource": "Airtime",
+               "sendSMSNotification": true,
+               "beneficiaryId": null, 
+               "auto-renew": true, 
+               "email": null}
+               ,},"_links": {"self": {"href": "https://api.mtn.com/v2/customers/27832000000/subscriptions"}}}
+
+  CustomerSubscriptionProvider:
+    type: object
+    properties:
+      customerId:
+        type: string
+      services:
+        additionalProperties:
+          $ref: "#/definitions/SubscriptionServicesProviders"
+        example: {"imi":{"subscriptionProviderName":"MTN Play Services", "subscriptionProviderDescription": "MTN Play services"}}
+      
+  SubscriptionServices:
+    properties:
+      statusCode:
+        type: string
+      data:
+        type: object
+        properties:
+          subscriptions:
+            type: array
+            items:
+              $ref: "#/definitions/Subscription"
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+
+  SubscriptionServicesProviders:
+    properties:
+      subscriptionProviderName:
+        type: "string"
+        default: "null"
+        description: "Service the customer is subscribed to"
+      subscriptionProviderDescription:
+        type: "string"
+        default: "null"
+        description: "Description of the service the customer is subscribed to" 
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string  
+
+  
+  Callback:
+    type: object
+    title: "Callback"
+    properties:
+        callbackUrl:
+          type: string
+        description:
+          type: string
+
+  Unsubscribe:
+    type: "object"
+    title: "unsubscribe"
+    required:
+    - "status"
+    - "statusCode"
+    - "description"
+    properties:
+      subscriptionId:
+        type: integer
+        description: "ID for the Subscription"
+      subscriptionProviderId:
+        type: integer
+        description: "Identity of the subscription provider hosting the subscription"
+      statusCode:
+        type: integer
+        description: "Status Code"
+      status:
+        $ref: "#/definitions/StatusEnum"
+      description:
+        type: "string"
+        description: "Details of the result of the unsubscribe action"
+      
+  SubscribeAsync:
+    type: "object"
+    title: "SubscribeAsync"
+    required:
+    - "status"
+    - "statusCode"
+    - "description"
+    properties:
+      subscriptionId:
+        type: integer
+        description: "ID for the Subscription"
+      subscriptionProviderId:
+        type: integer
+        description: "Identity of the subscription provider hosting the subscription"
+      statusCode:
+        type: integer
+        description: "Status Code"
+      status:
+        $ref: "#/definitions/SubscriptionStatusEnum"
+        default: "Pending"
+      description:
+        type: "string"
+        description: "Details of the result of the unsubscribe action"
+      
+
+  Error:
+    type: "object"
+    title: "Error"
+    required:
+    - "status"
+    - "message"
+    properties:
+      timestamp:
+        type: "string"
+        format: "date-time"
+        description: "Error response code"
+      status:
+        type: "string"
+        description: "HTTP Status code"
+      error:
+        type: "string"
+        description: "Status description"
+      message:
+        type: "string"
+        description: "More error details and corrective measures"
+      path:
+        type: "string"
+        description: "the path that caused the error"
+
+
+  subscription:
+    type: "object"
+    title: "subscription"
+    required:
+    - "subscriptionId"
+    - "subscriptionProviderId"
+    - "subscriptionName"
+    properties:
+      subscriptionId:
+        type: "string"
+        default: "null"
+        description: "Unique identifier for the Subscription"
+      subscriptionProviderId:
+        type: "string"
+        default: "null"
+        description: "Identifier for the provider within which the Subscription lives"
+      subscriptionName:
+        type: "string"
+        default: "null"
+        description: "Service the customer is subscribed to"
+      subscriptionStatus:
+        $ref: "#/definitions/SubscriptionStatusEnum"
+      subscriptionDescription:
+        type: "string"
+        default: "null"
+        description: "Description of the service the customer is subscribed to"
+      subscriptionType:
+        $ref: "#/definitions/SubscriptionTypeEnum"
+      subscriptionLength:
+        type: "string"
+        default: "null"
+        description: "Duration of the subscription the customer is subscribed to"
+      registrationChannel:
+        type: "string"
+        default: "null"
+        description: "Channel through which the customer subscribed to the service"
+      startDate:
+        type: "string"
+        format: "date-time"
+        default: "null"
+        description: "Start date of the Subscription; full-date notation RFC 3339"
+      endDate:
+        type: "string"
+        format: "date-time"
+        default: "null"
+        description: "End date of the Subscription; full-date notation RFC 3339"
+      subscriptionPaymentSource:
+        type: "string"
+        default: "Airtime"
+        description: "Which payment balance to use to pay: Airtime, MoMo, EVDS, Loyalty"
+      sendSMSNotification:
+        type: "boolean"
+        default: "true"
+        description: "Should an SMS be sent to the subscriber to inform them of the subscription"
+      beneficiaryId:
+        type: "string"
+        default: "null"
+        description: "Subscription will be added to the beneficiary, but payment deducted from the main customerId"
+      auto-renew:
+        type: "boolean"
+        default: "false"
+        description: "Recurring subscription to auto-renew at the end of the expiry period"
+      email:
+        type: "string"
+        default: "null"
+        description: "Email address associated with the Subscription"
+
+  Subscription:
+    type: "object"
+    title: "Subscription"
+    required:
+    - "subscriptionId"
+    - "subscriptionProviderId"
+    - "subscriptionName"
+    properties:
+      subscriptionId:
+        type: "string"
+        default: "null"
+        description: "Unique system identifier for the Subscription"
+      subscriptionProviderId:
+        type: "string"
+        default: "null"
+        description: "Identifier for the provider within which the Subscription lives"
+      subscriptionName:
+        type: "string"
+        default: "null"
+        description: "Service the customer is subscribed to"
+      subscriptionStatus:
+        $ref: "#/definitions/SubscriptionStatusEnum"
+      subscriptionDescription:
+        type: "string"
+        default: "null"
+        description: "Description of the service the customer is subscribed to"
+      subscriptionType:
+        $ref: "#/definitions/SubscriptionTypeEnum"
+      subscriptionLength:
+        type: "string"
+        default: "null"
+        description: "Duration of the subscription the customer is subscribed to"
+      registrationChannel:
+        type: "string"
+        default: "null"
+        description: "Channel through which the customer subscribed to the service"
+      startDate:
+        type: "string"
+        format: "date-time"
+        default: "null"
+        description: "Start date of the Subscription; full-date notation RFC 3339"
+      endDate:
+        type: "string"
+        format: "date-time"
+        default: "null"
+        description: "End date of the Subscription; full-date notation RFC 3339"
+      subscriptionPaymentSource:
+        type: "string"
+        default: "null"
+        description: "Payment balance to use: Airtime, MoMo, EVDS, Loyalty"
+      sendSMSNotification:
+        type: "boolean"
+        default: "true"
+        description: "Should an SMS be sent to the subscriber to inform them of the subscription"
+      beneficiaryId:
+        type: "string"
+        default: "null"
+        description: "Subscription will be added to the beneficiary msisdn, but payment deducted from the main customerId. format will be E.123"
+      email:
+        type: "string"
+        default: "null"
+        description: "Email associated with the Subscription"
+      auto-renew:
+        type: "boolean"
+        default: "false"
+        description: "Recurring subscription to auto-renew at the end of the expiry period"
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+      
+    
+  SubscriptionStatusEnum:
+    type: "string"
+    title: "subscriptionStatusEnum"
+    default: "null"
+    example: "Active"
+    enum:
+    - "Active"
+    - "Inactive"
+    - "Pending"
+    x-enum-elements:
+    - name: "Active"
+      description: "Subscription is active"
+    - name: "Inactive"
+      description: "Subscription has been cancelled, paused, or set for deletion at the end of the period. It is listed because the period may still be valid"
+    - name: "Pending"
+      description: "Provisioning is still in progress"
+
+  StatusEnum:
+    type: "string"
+    title: "statusEnum"
+    example: "Unsubscribe successful"
+    enum:
+    - "Unsubscribe successful"
+    - "Unsubscribe unsuccessful"
+
+  SubscriptionTypeEnum:
+    type: "string"
+    title: "subscriptionTypeEnum"
+    default: "Adhoc"
+    enum:
+    - "Adhoc"
+    - "Recurring"
+    x-enum-elements:
+    - name: "Adhoc"
+      description: "Once off subscription, it wont recur or renew"
+    - name: "Recurring"
+      description: "Will renew at the end of the period"
+
+  SubscriptionPaymentSourceEnum:
+    type: "string"
+    title: "subscriptionPaymentSourceEnum"
+    default: "Airtime"
+    enum:
+    - "Airtime"
+    - "MobileMoney"
+    - "EVDS"
+    - "Loyalty"
+    x-enum-elements:
+    - name: "Airtime"
+      description: "Use the airtime balance to pay"
+    - name: "MobileMoney"
+      description: "Use MoMo balance to pay"
+    - name: "EVDS"
+      description: "Use voucher to pay"
+    - name: "Loyalty"
+      description: "Use Loyalty to pay"
+    
+  
