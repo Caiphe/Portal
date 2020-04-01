@@ -62,7 +62,7 @@
             </div>
 
             <div class="step__wizzard_item">
-                <div class="item_content" style="margin-top: 50%; width: 100%;">
+                <div class="item_content" style="margin-top: 40%; width: 100%;">
                     <div class="input_group">
                         <label><strong>And your secret password? *</strong></label>
                         <input class="@error('password') is-invalid @enderror" type="password" id="formPassword" name="password" value="{{ old('password') }}" required autocomplete="new-password" placeholder="Password" onkeyup="checkPasswordStrength(event)"/>
@@ -160,7 +160,7 @@
             <button id="stepWizzardNextBtn" onclick="nextPrev(1)" >Next</button>
             <p>
                 press Enter &crarr;
-                <input id="keyUpListner" name="keyUpListner"/>
+                <!-- <input id="keyUpListner" name="keyUpListner"/> -->
             </p>
         </div>
 

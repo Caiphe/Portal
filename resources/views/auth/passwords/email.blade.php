@@ -24,9 +24,12 @@
                 <div class="form-group row">
                     <div class="login__input_group">
                         <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="Email Address" required autocomplete="email" autofocus>
-
+                        <p>
+                            press Enter &crarr;
+                            <input id="keyUpListner" name="keyUpListner"/>
+                        </p>
                         @error('email')
-                            <span class="invalid-feedback" role="alert">
+                            <span style="color: #FC0;" class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror

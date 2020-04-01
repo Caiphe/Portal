@@ -199,7 +199,8 @@
   }
 
   .input_group {
-    margin-top: 30px;
+    margin-top: 10px;
+    margin-bottom: 30px;
     label {
       display: block;
       font-size: 20px;
@@ -212,6 +213,7 @@
       width: 100%;
       padding: 0px;
       border-radius: 0px;
+      margin-top: 15px;
       ::-webkit-input-placeholder { /* Edge */
         color: #1D1D1D;
       }
@@ -313,6 +315,7 @@
 .show-password {
   margin: 0;
   position: absolute;
+  bottom: 5px;
   right: 0rem;
   background-image: url('/images/icons/visible.svg');
   background-size: 20px;
