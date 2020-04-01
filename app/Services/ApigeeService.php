@@ -52,12 +52,12 @@ class ApigeeService
         return $a;
     }
 
-    public static function approve()
+    public static function getOrgApps($rows, $status)
     {
-
+        return self::get("/apps?rows={$rows}&expand=true&status={$status}");
     }
 
-    public static function revoke()
+    public static function updateProductStatus()
     {
 
     }
