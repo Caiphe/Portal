@@ -3,17 +3,32 @@
   /* Hide all steps by default: */
   .step__wizzard_item {
     display: none;
+    width: 100%;
     .terms_and_conditions {
       background-color: #F3F3F3;
       overflow-y: scroll;
-      height: 300px;
-      padding: 0px  25px 20px; 
+      height: 400px;
+      padding: 0px  25px 20px;
+      border-radius: 10px; 
 
       ul {
         font-size: 11px;
         line-height: 14px;
       }
+      &:after {
+        margin-bottom: 10px;
+      }
     }
+    .switch_container {
+      margin-top: 20px;
+      display: flex;
+      span {
+        &.text {
+          margin-left: 15px;
+        }
+      }
+    }
+
     .item_content {
       width: 100%;
     }
@@ -24,6 +39,7 @@
       }
     }
   }
+  
   .intro {
     margin-top: 100px;
     a.login_link {
@@ -61,11 +77,11 @@
     height: 100vh;
     float: left;
     &.left {
-      width: 35vw;
+      width: 30vw;
       padding: 50px;
     }
     &.right {
-      width: 65vw;
+      width: 70vw;
     }
     input {
       height: 35px;
@@ -268,23 +284,22 @@
 
     input {
         display: none; 
-        span {
-          opacity: 0.1;
-        }
     }
 
     input:checked+span {
-        opacity: 1;
+        opacity: 0.1;
     }
 }
 .login__input_group {
   input {
     display: block;
     width: 100%;
-    margin-top: 20px;
-    margin-bottom: 10px;
-    padding-top: 25px;
-    padding-bottom: 25px;
+    margin-top: 20px !important;
+    margin-bottom: 10px !important;
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
+    margin-right: 0px !important;
+    padding-right: 0px !important;
   }
 }
 
@@ -294,4 +309,31 @@
       color: $yellow !important;
     }
   }
+}
+.show-password {
+  margin: 0;
+  position: absolute;
+  right: 0rem;
+  background-image: url('/images/icons/visible.svg');
+  background-size: 20px;
+  background-color: #FFF;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  width: 30px;
+  height: 30px;
+  z-index: 1;
+
+  &:hover {
+      background-color: $yellow700;
+  }
+  button {
+    margin: $gutter auto 0;
+    display: block;
+    position: relative;
+  }
+}
+
+.password-visible .show-password {
+  background-image: url('/images/icons/hidden.svg');
 }

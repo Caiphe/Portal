@@ -14,12 +14,14 @@
                 Please supply your email addres and we’ll send you a reset email.
             </p>
 
-            <input style="display: block;" type="email" name="email" placeholder="Email Address" />
+            <div class="login__input_group">
+                <input style="display: block;" type="email" name="email" placeholder="Email Address" />
+            </div>
 
             <button style="display: inline;">Remind me</button>
         </div>
     </div>
-    <!-- <div class="col-md-8 m-0 p-0" style="background-image: url('/images/carousel-placeholder-img.png'); background-position: center; background-size: contain; padding: 10px; min-height: 100vh;"></div> -->
+
     <x-carousel style="width: 65vw; height: 100vh; float: left;" wait="5000" duration="0.34">
         <x-carousel-item style="background-image: url('/images/mtn-carousel-img-01.png'); background-position: center; background-size: cover; background-repeat: no-repeat;">
         <div style="position: absolute; left: 20%; margin-left: -50px; bottom: 14%; margin-bottom: -50px; max-width: 800px;">

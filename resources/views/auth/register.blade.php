@@ -27,9 +27,9 @@
                 </div>
 
                 <div class="input_group">
-                    <label for="firstname"><strong>What's your first name? *</strong></label>
-                    <input class="@error('firstname') is-invalid @enderror" type="text" id="formFirstName" name="first_name" value="{{ old('firstname') }}" required autocomplete="firstname" placeholder="First Name" autofocus />
-                    @error('firstname')
+                    <label for="first_name"><strong>What's your first name? *</strong></label>
+                    <input class="@error('first_name') is-invalid @enderror" type="text" id="formFirstName" name="first_name" value="{{ old('first_name') }}" required autocomplete="first_name" placeholder="First Name" autofocus />
+                    @error('first_name')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
@@ -51,8 +51,8 @@
                 <div class="item_content" style="margin-top: 80%;">
                     <div class="input_group">
                         <label><strong>And your last name, <span class="first__name_slot"></span>? *</strong></label>
-                        <input class="@error('lastname') is-invalid @enderror" type="text" id="formLastName" name="last_name" value="{{ old('lastname') }}" required autocomplete="off" placeholder="Last name" />
-                        @error('lastname')
+                        <input class="@error('last_name') is-invalid @enderror" type="text" id="formLastName" name="last_name" value="{{ old('last_name') }}" required autocomplete="off" placeholder="Last name" />
+                        @error('last_name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
@@ -62,10 +62,11 @@
             </div>
 
             <div class="step__wizzard_item">
-                <div class="item_content" style="margin-top: 50%;">
+                <div class="item_content" style="margin-top: 50%; width: 100%;">
                     <div class="input_group">
                         <label><strong>And your secret password? *</strong></label>
                         <input class="@error('password') is-invalid @enderror" type="password" id="formPassword" name="password" value="{{ old('password') }}" required autocomplete="new-password" placeholder="Password" onkeyup="checkPasswordStrength(event)"/>
+                        <button type="button" class="fab show-password" onclick="togglePasswordVisibility(this)"></button>
                         @error('password')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -74,7 +75,8 @@
                     </div>
                     <div class="input_group">
                         <label><strong>Can you confirm that please, <span class="first__name_slot"></span>? *</strong></label>
-                        <input type="password" id="formPasswordConf" name="confirmPass" value="{{ old('confirmPass') }}" required autocomplete="off" placeholder="Confirm Password" />
+                        <input type="password" id="formPasswordConf" name="password_confirmation" value="{{ old('password_confirmation') }}" required autocomplete="off" placeholder="Confirm Password" />
+                        <button type="button" class="fab show-password" onclick="togglePasswordVisibility(this)"></button>
                     </div>
                     
                     <button disabled id="passwordStrengthBtn" class="password_strength grey">Strong Password</button>
@@ -98,7 +100,7 @@
             </div>
 
             <div class="step__wizzard_item">
-                <label class="step-input-label">Please accept our terms and conditions*</label>
+                <h4>Please accept our terms and conditions*</h4>
                 <div class="terms_and_conditions">
                     <h5>Terms of use for MTN Developer Portal (sandbox version)</h5>
                     <h5><strong>IMPORTANT NOTICE:</strong></h5>
@@ -147,7 +149,8 @@
                     </ul>
                 </div>
                 <div class="switch_container">
-                    <x-switch id="termsSwitch" onclick="readyToSubmit(event)"></x-switch> Accept
+                    <x-switch id="termsSwitch" onclick="readyToSubmit(event)"></x-switch> 
+                    <span class="text">Accept</span>
                 </div>
             </div>
         </form>

@@ -30,9 +30,9 @@
                     @enderror
                 </div>
                 <div class="login__input_group">
-                    <input class="@error('password') is-invalid @enderror" type="text" id="formPassword" name="password" value="{{ old('password ') }}" required autocomplete="password" placeholder="Password" />
+                    <input class="@error('password') is-invalid @enderror" type="password" id="formPassword" name="password" value="{{ old('password ') }}" required autocomplete="password" placeholder="Password" />
                     @error('password')
-                        <span class="invalid-feedback" role="alert">
+                        <span class="invalid-feedback" role="alert" style="margin-bottom: 10px;">
                             <strong>{{ $message }}</strong>
                         </span>
                     @enderror
