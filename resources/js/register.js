@@ -1,4 +1,4 @@
-var currentTab = 2; // Current tab is set to be the first tab (0)
+var currentTab = 0; // Current tab is set to be the first tab (0)
 var selectedLocationsCount = 0;
 showTab(currentTab); // Display the current tab
 var FormData = {};
@@ -6,7 +6,7 @@ var FormData = {};
 function showTab(n) {
   // This function will display the specified tab of the form ...
   var x = document.getElementsByClassName("step__wizzard_item");
-  x[n].style.display = "table-cell";
+  x[n].style.display = "block";
   // ... and fix the Previous/Next buttons:
   if (n == 0) {
     document.getElementById("stepWizzardPrevBtn").style.display = "none";
@@ -221,4 +221,10 @@ function checkPasswordStrength(event) {
 function togglePasswordVisibility(that) {
   that.parentNode.classList.toggle('password-visible');
   that.previousElementSibling.setAttribute('type',that.parentNode.classList.contains('password-visible') ? "text" : "password");
+}
+
+document.getElementById('termsSwitch').addEventListener('change', toggleAgree);
+
+function toggleAgree() {
+  document.getElementById('stepWizardSubmitBtn').disabled = !this.checked;
 }

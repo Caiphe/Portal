@@ -48,10 +48,10 @@
             </div>
 
             <div class="step__wizzard_item">
-                <div class="item_content" style="margin-top: 80%;">
+                <div class="item_content">
                     <div class="input_group">
                         <label><strong>And your last name, <span class="first__name_slot"></span>? *</strong></label>
-                        <input class="@error('last_name') is-invalid @enderror" type="text" id="formLastName" name="last_name" value="{{ old('last_name') }}" required autocomplete="off" placeholder="Last name" />
+                        <input class="@error('last_name') is-invalid @enderror" type="text" id="formLastName" name="last_name" value="{{ old('last_name') }}" required autocomplete="last_name" placeholder="Last name" />
                         @error('last_name')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -62,7 +62,7 @@
             </div>
 
             <div class="step__wizzard_item">
-                <div class="item_content" style="margin-top: 40%; width: 100%;">
+                <div class="item_content">
                     <div class="input_group">
                         <label><strong>And your secret password? *</strong></label>
                         <input class="@error('password') is-invalid @enderror" type="password" id="formPassword" name="password" value="{{ old('password') }}" required autocomplete="new-password" placeholder="Password" onkeyup="checkPasswordStrength(event)"/>
@@ -159,7 +159,7 @@
             <p id="FormStepErrorMsg" style="display: none; font-size: 16px; text-align: center; color: red; margin: 0px; margin-bottom: 20px;"><i>Please fill in all fields in Step!</i></p>
             <button id="stepWizzardPrevBtn" onclick="nextPrev(-1)" class="dark outline">Back</button>
             <button id="stepWizzardNextBtn" onclick="nextPrev(1)" >Next</button>
-            <button type="submit" onclick="readyToSubmit(event)" id="stepWizardSubmitBtn">Create New Account</button>
+            <button type="submit" onclick="readyToSubmit(event)" id="stepWizardSubmitBtn" disabled>Create New Account</button>
             <p>
                 press Enter &crarr;
             </p>
