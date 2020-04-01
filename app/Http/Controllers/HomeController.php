@@ -15,7 +15,7 @@ class HomeController extends Controller
      */
     public function __invoke()
     {
-        $productsCollection = Product::all()->sortBy('created_at')->take(3);
+        $productsCollection = Product::isPublic()->get()->sortBy('created_at')->take(3);
 		return view('templates.home',[
 			'productsCollection' => $productsCollection]);
     }
