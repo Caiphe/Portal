@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Country;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\Product;
 use App\Services\ApigeeService;
 use App\User;
 use Illuminate\Auth\Events\Registered;
@@ -45,6 +46,24 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+
+    /**
+     * Show the application registration form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRegistrationForm()
+    {
+        $productLocations = Product::isPublic()
+            ->WhereNotNull('locations')
+            ->Where('locations', '!=', 'all')
+            ->select('locations')
+            ->get()
+            ->implode('locations', ',');
+
+        return view('auth.register', ['locations' => array_unique(explode(',', $productLocations))]);
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *
@@ -79,10 +98,10 @@ class RegisterController extends Controller
             "lastName" => $data['last_name'],
             "userName" => $data['first_name'] . $data['last_name'],
         ])->json();
-
-        if (isset($apigeeDeveloper['code']) && $apigeeDeveloper['code'] === 'developer.service.DeveloperAlreadyExists') {
+        
+        if (isset($apigeeDeveloper['code'])) {
             return redirect('/register')
-                ->withErrors(['email' => 'Sorry, this email has already been taken'])
+                ->withErrors(['email' => $apigeeDeveloper['message']])
                 ->withInput();
         }
 
