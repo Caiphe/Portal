@@ -49,10 +49,6 @@ class UserController extends Controller
      */
     public function show()
     {
-        if (!\Auth::check()) {
-            return redirect()->home();
-        }
-
         $user = \Auth::user();
         $user->load('countries');
 
