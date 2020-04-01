@@ -40,7 +40,7 @@ class DashboardController extends Controller
     {
         foreach ($apigeeApps['app'] as $key => $app) {
             $approvedApps[] = $app;
-            $approvedApps[$key]['createdAt'] = date('d M Y H:i:s', $app['createdAt'] / 1000);
+            $approvedApps[$key]['createdAt'] = date('d M Y', $app['createdAt'] / 1000);
         }
         return $approvedApps;
     }
