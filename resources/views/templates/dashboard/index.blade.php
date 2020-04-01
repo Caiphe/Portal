@@ -31,6 +31,10 @@
     </div>
 @endsection
 
+@section('title')
+    Dashboard
+@endsection
+
 @section('content')
 
     <x-heading heading="Apps" tags="DASHBOARD">
@@ -186,8 +190,7 @@
             var approveProduct = confirm('Are you sure you want to approve this product?');
 
             if(approveProduct) {
-                //this.submit();
-                console.log(event.currentTarget);
+                this.submit();
             }
         }
 
