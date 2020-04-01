@@ -15,8 +15,7 @@ Update profile
             'MANAGE' => 
             [
                 [ 'label' => 'Profile', 'link' => '/profile'],
-                [ 'label' => 'Approved apps', 'link' => '/apps'],
-                [ 'label' => 'Revoked apps', 'link' => '/apps']
+                [ 'label' => 'My apps', 'link' => '/apps'],
             ],
             'DISCOVER' =>
             [
