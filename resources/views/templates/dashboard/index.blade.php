@@ -179,52 +179,44 @@
             })
         }
 
-        var approveForm = document.querySelectorAll('.app-product-approve');
-        for(var m = 0; m < approveForm.length; m++) {
-            approveForm[m].addEventListener('submit', handleProductApprove)
+        var productStatusButtons = document.querySelectorAll('button[class*="product-"]');
+        for(var m = 0; m < productStatusButtons.length; m++) {
+            productStatusButtons[m].addEventListener('click', handleProductStatus)
         }
 
-        function handleProductApprove(event) {
+        function handleProductStatus(event) {
             event.preventDefault();
 
-            var approveProduct = confirm('Are you sure you want to approve this product?');
+            var app = event.currentTarget.parentNode.parentNode.parentNode.parentNode;
+            var email = app;
+            var key = app;
+            var product = event.currentTarget.parentNode.dataset.name;
+            var action = event.currentTarget.dataset.action;
 
-            if(approveProduct) {
-                this.submit();
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('POST', '/apps/' + product + '/' + action);
+            xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+            var data = {
+                email: '',
+                app_name: app.dataset.name,
+                consumer_key: '',
+                product_name: product,
+                action: action
+            };
+
+            if(confirm('Are you sure you want to ' + action + ' this product?')) {
+                xhr.send(JSON.stringify(data));
             }
-        }
 
-        var revokeButtons = document.querySelectorAll('button[class*="product-revoke"]');
-        for(var n = 0; n < revokeButtons.length; n++) {
-            revokeButtons[n].addEventListener('click', handleProductRevoke)
-        }
-
-        function handleProductRevoke(event) {
-            event.preventDefault();
-
-            var revokeProduct = confirm('Are you sure you want to approve this product?');
-
-            if(revokeProduct) {
-                //this.submit();
-                console.log(event.currentTarget);
-            }
-        }
-
-        var approveAllButtons = document.querySelectorAll('button[class*="dashboard-approve"]');
-        for(var o = 0; o < approveAllButtons.length; o++) {
-            approveAllButtons[o].addEventListener('click', handleApproveAll)
-        }
-
-        function handleApproveAll() {
-            console.log(this);
-        }
-
-        function revokeAll() {
-            console.log(this);
-        }
-
-        function complete() {
-            console.log(this);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    addAlert('success', 'Product approved successfully');
+                }
+            };
         }
     </script>
 @endpush

@@ -24,7 +24,17 @@ class DashboardController extends Controller
 
     public function approve(Request $request)
     {
-        dd($request->input('name'));
+        dd($request->all());
+
+//        ApigeeService::post('', ['action' => $request['action']]);
+//        developers/$request['email']/apps/$request['app_name']/$request['consumer_key']/apiproducts/$request['productName']
+//        $responseInfo = postToApigee(
+//                “developers/{$_POST[‘user_email’]}/apps/{$_POST[‘app_name’]}/keys/{$_POST[‘consumer_key’]}/apiproducts/{$productName}“,
+//[
+//    “action” => $_POST[‘action’]
+//],
+//‘query’
+//);
 
         return redirect()->back();
     }

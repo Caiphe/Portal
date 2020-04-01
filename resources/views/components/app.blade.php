@@ -4,7 +4,7 @@
 
 @props(['app', 'attr'])
 
-<div class="app">
+<div class="app" data-name="{{ $app['name'] }}">
     <div class="column">
         <p class="name">
             @svg('app-avatar', '#fff')
@@ -32,8 +32,9 @@
                     <p><strong>Developer email:</strong></p>
                 </div>
                 <div>
-                    <p>Test</p>
-                    <p>Test</p>
+                    <p id="developer-name">Test</p>
+                    <p id="developer-email">test@plusnarrative.com</p>
+                    <input id="developer-key" type="hidden" value="{{ end($app['credentials'])['consumerKey']  }}">
                 </div>
                 <div>
                     <p><strong>Regions:</strong></p>
