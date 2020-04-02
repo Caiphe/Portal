@@ -32,8 +32,8 @@
                     <p><strong>Developer email:</strong></p>
                 </div>
                 <div>
-                    <p id="developer-name">Test</p>
-                    <p id="developer-email">test@plusnarrative.com</p>
+                    <p id="developer-name">{{ $app['firstName']  ?? '' }}</p>
+                    <p id="developer-email">{{ $app['email'] ?? '' }}</p>
                     <input id="developer-key" type="hidden" value="{{ end($app['credentials'])['consumerKey']  }}">
                 </div>
                 <div class="dashboard-regions">
