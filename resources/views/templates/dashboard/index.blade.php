@@ -182,51 +182,6 @@
             })
         }
 
-        var productStatusButtons = document.querySelectorAll('button[class*="product-"]');
-        for(var m = 0; m < productStatusButtons.length; m++) {
-            productStatusButtons[m].addEventListener('click', handleProductStatus)
-        }
-
-        function handleProductStatus(event) {
-            event.preventDefault();
-
-            var app = event.currentTarget.parentNode.parentNode.parentNode.parentNode;
-            var id = app.querySelector('#developer-id').value;
-            var key = app.querySelector('#developer-key').value;
-            var product = event.currentTarget.parentNode.dataset.name;
-            var action = event.currentTarget.dataset.action;
-
-            var lookup = {
-                approve: 'approved',
-                revoke: 'revoked',
-                pending: 'pending'
-            };
-
-            var xhr = new XMLHttpRequest();
-
-            xhr.open('POST', '/apps/' + product + '/' + action);
-            xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
-            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-
-            var data = {
-                developer_id: id,
-                app_name: app.dataset.name,
-                consumer_key: key,
-                product_name: product,
-                action: action
-            };
-
-            if(confirm('Are you sure you want to ' + action + ' this product?')) {
-                xhr.send(JSON.stringify(data));
-            }
-
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    addAlert('success', 'Product ' + lookup[action] + ' successfully');
-                }
-            };
-        }
-
         var match = new RegExp(filterText, "gi");
         var countrySelect = getSelected(
             document.getElementById("filter-country")
@@ -278,6 +233,51 @@
             // }
 
             document.getElementById("clearFilter").style.display = "none";
+        }
+
+        var productStatusButtons = document.querySelectorAll('button[class*="product-"]');
+        for(var m = 0; m < productStatusButtons.length; m++) {
+            productStatusButtons[m].addEventListener('click', handleProductStatus)
+        }
+
+        function handleProductStatus(event) {
+            event.preventDefault();
+
+            var app = event.currentTarget.parentNode.parentNode.parentNode.parentNode;
+            var id = app.querySelector('#developer-id').value;
+            var key = app.querySelector('#developer-key').value;
+            var product = event.currentTarget.parentNode.dataset.name;
+            var action = event.currentTarget.dataset.action;
+
+            var lookup = {
+                approve: 'approved',
+                revoke: 'revoked',
+                pending: 'pending'
+            };
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('POST', '/apps/' + product + '/' + action);
+            xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+            var data = {
+                developer_id: id,
+                app_name: app.dataset.name,
+                consumer_key: key,
+                product_name: product,
+                action: action
+            };
+
+            if(confirm('Are you sure you want to ' + action + ' this product?')) {
+                xhr.send(JSON.stringify(data));
+            }
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    addAlert('success', 'Product ' + lookup[action] + ' successfully');
+                }
+            };
         }
 
         function arrayCompare(a, b) {
