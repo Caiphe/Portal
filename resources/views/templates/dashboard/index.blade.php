@@ -5,23 +5,12 @@
 @extends('layouts.sidebar')
 
 @section('sidebar')
-{{--    @php--}}
-{{--        $filters = array('Group'=> $groups,'Categories'=> $productCategories);--}}
-{{--    @endphp--}}
     <div class="filter-sidebar">
         <h2>Filter by</h2>
         <h3>Search</h3>
 
-        <input type="text" name="search">
+        <input type="text" name="search" placeholder="App or developer name">
 
-{{--        @foreach ($filters as $filterTitle => $filterGroup)--}}
-{{--            <h3>{{$filterTitle}}</h3>--}}
-{{--            @foreach ($filterGroup as $filterItem)--}}
-{{--                <div class="filter-checkbox">--}}
-{{--                    <input type="checkbox" name="{{$filterTitle}}" value="{{$filterItem}}" id="{{$filterTitle}}" onclick="filterProducts('{{$filterTitle}}');"/><label class="filter-label" for="{{$filterTitle}}">{{$filterItem}}</label>--}}
-{{--                </div>--}}
-{{--            @endforeach--}}
-{{--        @endforeach--}}
         <div class="country-filter">
             <h3>Country</h3>
             <x-multiselect id="filter-country" name="filter-country" label="Select country" :options="$countries" />
