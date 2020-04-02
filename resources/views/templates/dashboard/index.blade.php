@@ -275,6 +275,7 @@
 
             xhr.onload = function() {
                 if (xhr.status === 200) {
+                    location.reload();
                     addAlert('success', 'Product ' + lookup[action] + ' successfully');
                 }
             };
