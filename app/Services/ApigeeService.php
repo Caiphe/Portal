@@ -57,9 +57,9 @@ class ApigeeService
         return self::get("/apps?rows={$rows}&expand=true&status={$status}");
     }
 
-    public static function updateProductStatus(string $email, string $app, string $key, string $product, string $action)
+    public static function updateProductStatus(string $id, string $app, string $key, string $product, string $action)
     {
-        return self::post("developers/{$email}/apps/{$app}/{$key}/apiproducts/{$product}", ['action' => $action]);
+        return self::post("developers/{$id}/apps/{$app}/{$key}/apiproducts/{$product}", ['action' => $action]);
     }
 
     protected static function HttpWithBasicAuth()

@@ -26,7 +26,7 @@ class DashboardController extends Controller
     {
         $validated = $request->validated();
 
-         ApigeeService::updateProductStatus($request->email, $request->app_name, $request->key, $request->product_name, $request->action);
+         ApigeeService::updateProductStatus($request->developer_id, $request->app_name, $request->key, $request->product_name, $request->action);
 
          return redirect()->back();
     }
@@ -41,8 +41,12 @@ class DashboardController extends Controller
     {
         foreach ($apigeeApps['app'] as $key => $app) {
             $outputArray[] = $app;
-            $outputArray[$key]['createdAt'] = date('d M Y', substr($app['createdAt'], 0, 10));
+            $outputArray[$key]['createdAt'] = strtotime($app['createdAt']);
         }
+
+//        usort($outputArray, function($a, $b) {
+//            return ($a['createdAt'] < $b['createdAt']) ? -1 : 1;
+//        });
 
         return $outputArray;
     }

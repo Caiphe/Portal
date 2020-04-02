@@ -180,7 +180,7 @@
             event.preventDefault();
 
             var app = event.currentTarget.parentNode.parentNode.parentNode.parentNode;
-            var email = app.querySelector('#developer-email').textContent;
+            var id = app.querySelector('#developer-id').value;
             var key = app.querySelector('#developer-key').value;
             var product = event.currentTarget.parentNode.dataset.name;
             var action = event.currentTarget.dataset.action;
@@ -198,7 +198,7 @@
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 
             var data = {
-                email: email,
+                developer_id: id,
                 app_name: app.dataset.name,
                 consumer_key: key,
                 product_name: product,

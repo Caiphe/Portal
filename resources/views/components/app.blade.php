@@ -35,6 +35,7 @@
                     <p id="developer-name">{{ $app['firstName']  ?? '' }}</p>
                     <p id="developer-email">{{ $app['email'] ?? '' }}</p>
                     <input id="developer-key" type="hidden" value="{{ end($app['credentials'])['consumerKey']  }}">
+                    <input id="developer-id" type="hidden" value="{{ $app['developerId']  }}">
                 </div>
                 <div class="dashboard-regions">
                     <p><strong>Regions:</strong></p>
