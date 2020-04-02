@@ -9,7 +9,7 @@
         <h2>Filter by</h2>
         <h3>Search</h3>
 
-        <input type="text" name="search" placeholder="App or developer name">
+        <input type="text" name="search" id="filter-text" class="filter-text" placeholder="App or developer name">
 
         <div class="country-filter">
             <h3>Country</h3>
@@ -211,6 +211,42 @@
                     addAlert('success', 'Product ' + lookup[action] + ' successfully');
                 }
             };
+        }
+
+        function clearFilter() {
+            var countrySelect = getSelected(document.getElementById("filter-country"));
+            if (countrySelect.length > 0) {
+                clearSelected(document.getElementById("filter-country"));
+                var multiselectTags = document.getElementById("filter-country-tags");
+                while (multiselectTags.firstChild) {
+                    multiselectTags.removeChild(multiselectTags.firstChild);
+                }
+            }
+            document.getElementById("filter-text").value = "";
+
+            // var products = document.querySelectorAll(".card--product");
+            // for (var i = products.length - 1; i >= 0; i--) {
+            //     products[i].style.display = "inline-block";
+            // }
+
+            document.getElementById("clearFilter").style.display = "none";
+        }
+
+        function getSelected(multiSelect) {
+            var selected = [];
+            for (var option of multiSelect.options) {
+                if (option.selected) {
+                    selected.push(option.value);
+                }
+            }
+            return selected;
+        }
+
+        function clearSelected(multiselect) {
+            var elements = multiselect.options;
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].selected = false;
+            }
         }
     </script>
 @endpush

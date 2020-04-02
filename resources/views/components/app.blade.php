@@ -4,7 +4,7 @@
 
 @props(['app', 'attr'])
 
-<div class="app" data-name="{{ $app['name'] }}">
+<div class="app" data-name="{{ $app['name'] }}" data-developer="{{ $app['firstName'] ?? '' }}">
     <div class="column">
         <p class="name">
             @svg('app-avatar', '#fff')
