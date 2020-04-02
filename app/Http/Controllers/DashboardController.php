@@ -33,7 +33,7 @@ class DashboardController extends Controller
      * @param array $apigeeApps
      * @param array $outputArray
      *
-     * @return \Illuminate\Support\Collection
+     * @return array
      */
     public function apps(array $apigeeApps, array $outputArray)
     {
@@ -42,6 +42,6 @@ class DashboardController extends Controller
             $outputArray[$key]['createdAt'] = date('d M Y', substr($app['createdAt'], 0, 10));
         }
 
-        return collect($outputArray);
+        return $outputArray;
     }
 }

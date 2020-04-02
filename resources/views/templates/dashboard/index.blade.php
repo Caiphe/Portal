@@ -119,6 +119,9 @@
 @push('scripts')
     <script>
         var headings = document.querySelectorAll('.heading-app');
+        var filterText = document.getElementById('filter-text').value;
+
+        document.getElementById('filter-text').addEventListener('keyup', filterApps);
 
         for (var i = 0; i < headings.length; i++) {
             headings[i].addEventListener('click', handleHeadingClick)
@@ -213,15 +216,49 @@
             };
         }
 
-        function clearFilter() {
-            var countrySelect = getSelected(document.getElementById("filter-country"));
-            if (countrySelect.length > 0) {
-                clearSelected(document.getElementById("filter-country"));
-                var multiselectTags = document.getElementById("filter-country-tags");
-                while (multiselectTags.firstChild) {
-                    multiselectTags.removeChild(multiselectTags.firstChild);
+        var match = new RegExp(filterText, "gi");
+        var countrySelect = getSelected(
+            document.getElementById("filter-country")
+        );
+
+        function filterApps() {
+
+            var apps = document.querySelectorAll('.app');
+
+            for (var i = apps.length - 1; i >= 0; i--) {
+                apps[i].style.display = 'none';
+
+                textValid =
+                    filterText === "" || apps[i].dataset.name.match(match) || apps[i].dataset.developer.match(match) ;
+
+                var locations =
+                    apps[i].dataset.locations !== undefined
+                        ? apps[i].dataset.locations.split(",")
+                        : ["all"];
+
+                countriesValid =
+                    countrySelect.length === 0 ||
+                    locations[0] === "all" ||
+                    arrayCompare(locations, countrySelect);
+
+                if (textValid && countriesValid) {
+                    apps[i].style.display = 'flex';
                 }
             }
+        }
+
+        function clearFilter() {
+
+            var countrySelect = getSelected(document.getElementById("filter-country"));
+
+            if (countrySelect.length > 0) {
+                clearSelected(document.getElementById("filter-country"));
+                var multiSelectTags = document.getElementById("filter-country-tags");
+                while (multiSelectTags.firstChild) {
+                    multiSelectTags.removeChild(multiSelectTags.firstChild);
+                }
+            }
+
             document.getElementById("filter-text").value = "";
 
             // var products = document.querySelectorAll(".card--product");
@@ -230,6 +267,16 @@
             // }
 
             document.getElementById("clearFilter").style.display = "none";
+        }
+
+        function arrayCompare(a, b) {
+            var matches = [];
+            for (var i = 0; i < a.length; i++) {
+                for (var e = 0; e < b.length; e++) {
+                    if (a[i] === b[e]) matches.push(a[i]);
+                }
+            }
+            return matches.length > 0;
         }
 
         function getSelected(multiSelect) {
