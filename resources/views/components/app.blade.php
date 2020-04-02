@@ -4,14 +4,16 @@
 
 @props(['app', 'attr', 'countries'])
 
-<div class="app" data-name="{{ $app['name'] }}" data-developer="{{ $app['firstName'] ?? '' }}" data-locations="">
+{{--{{ dd($countries->keys()->all()) }}--}}
+
+<div class="app" data-name="{{ $app['name'] }}" data-developer="{{ $app['firstName'] ?? '' }}" data-locations="{{ implode(',', $countries->keys()->all()) }}">
     <div class="column">
         <p class="name">
             @svg('app-avatar', '#fff')
             {{ $attr['DisplayName'] }}
         </p>
     </div>
-    <div class="column regions">
+    <div class="column countries">
         @foreach($countries as $key => $country)
             @if($loop->first)
                 @svg($key, '#000000', 'images/locations')
@@ -80,7 +82,7 @@
                     </button>
                 </div>
                 <div>
-                    <p><strong>Regions:</strong></p>
+                    <p><strong>Countries:</strong></p>
                     <p><strong>Key issued:</strong></p>
                     <p><strong>Expires:</strong></p>
                 </div>

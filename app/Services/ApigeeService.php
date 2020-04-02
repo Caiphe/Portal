@@ -61,12 +61,12 @@ class ApigeeService
 
     public static function getAppCountries(array $products)
     {
-        $a = [];
+        $countries = [];
         foreach ($products as $product) {
-            $a[] = array_unique(explode(',', (Product::where('name', $product)->select('locations')->get()->implode('locations', ','))));
+            $countries[] = array_unique(explode(',', (Product::where('name', $product)->select('locations')->get()->implode('locations', ','))));
         }
 
-        $filteredCountries = Country::whereIn('code', $a)->get();
+        $filteredCountries = Country::whereIn('code', $countries)->get();
 
         $countries = $filteredCountries->each(function ($query) {
             return $query;
