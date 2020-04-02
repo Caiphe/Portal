@@ -193,6 +193,12 @@
             var product = event.currentTarget.parentNode.dataset.name;
             var action = event.currentTarget.dataset.action;
 
+            var lookup = {
+                approve: 'approved',
+                revoke: 'revoked',
+                pending: 'pending'
+            };
+
             var xhr = new XMLHttpRequest();
 
             xhr.open('POST', '/apps/' + product + '/' + action);
@@ -213,7 +219,7 @@
 
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    addAlert('success', 'Product approved successfully');
+                    addAlert('success', 'Product ' + lookup[action] + ' successfully');
                 }
             };
         }
