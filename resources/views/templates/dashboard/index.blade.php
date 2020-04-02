@@ -24,7 +24,7 @@
 {{--        @endforeach--}}
         <div class="country-filter">
             <h3>Country</h3>
-{{--            <x-multiselect id="filter-country" name="filter-country" label="Select country" :options="$countries" />--}}
+            <x-multiselect id="filter-country" name="filter-country" label="Select country" :options="$countries" />
         </div>
 
         <button id="clearFilter" class="dark outline" onclick="clearFilter()">Clear filters</button>
