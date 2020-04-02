@@ -37,16 +37,14 @@ table {
     }
 
     tr {
-        padding: 5px 0;
-
         &:nth-child(2n) {
-            background-color: $grey200;
+            background-color: $grey300;
         }
     }
 
     td,
     th {
-        padding: .75rem;
+        padding: 1rem;
         vertical-align: top;
         border: none;
     }
