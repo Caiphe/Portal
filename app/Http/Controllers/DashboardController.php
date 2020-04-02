@@ -27,6 +27,8 @@ class DashboardController extends Controller
         $validated = $request->validated();
 
          ApigeeService::updateProductStatus($request->email, $request->app_name, $request->key, $request->product_name, $request->action);
+
+         return redirect()->back();
     }
 
     /**
