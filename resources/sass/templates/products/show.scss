@@ -258,11 +258,6 @@
                 .detail-example {
                     display: none;
                 }
-
-                .example {
-                    background-color: transparent;
-                    color: $grey700;
-                }
             }
 
             &.show-example {
@@ -337,17 +332,6 @@
             &>.schema,
             .schema.open>.schema {
                 display: block;
-            }
-        }
-
-        .detail-example {
-            font-size: 10px;
-            background-color: $grey700;
-            border-radius: 8px;
-            padding: $gutterSmall;
-
-            pre {
-                margin: 0;
             }
         }
     }

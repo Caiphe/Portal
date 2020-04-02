@@ -1,6 +1,7 @@
 @import "vendor/normalize";
 
-html,body{
+html,
+body {
     height: 100%;
 }
 
@@ -9,7 +10,7 @@ body {
     flex-direction: column;
 }
 
-a
+a,
 p,
 div,
 main,
@@ -17,8 +18,40 @@ footer,
 nav,
 input,
 button,
+table,
 select,
 textarea {
     box-sizing: border-box;
     position: relative;
+}
+
+table {
+    border-collapse: collapse;
+    border: none;
+    border-bottom: 1px solid $grey400;
+    width: 100%;
+
+    thead {
+        background-color: $grey600;
+        color: $grey800;
+    }
+
+    tr {
+        padding: 5px 0;
+
+        &:nth-child(2n) {
+            background-color: $grey200;
+        }
+    }
+
+    td,
+    th {
+        padding: .75rem;
+        vertical-align: top;
+        border: none;
+    }
+}
+
+li {
+    padding: 6px 0;
 }

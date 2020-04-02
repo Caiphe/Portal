@@ -78,6 +78,6 @@ class User extends Authenticatable
     public function getProfilePictureAttribute()
     {
         $img = base64_encode('jsklaf88sfjdsfjl' . $this->id);
-        return "/storage/profile/$img.png";
+        return "/storage/profile/$img.png?v=" . date('his');
     }
 }

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Content;
+use App\Faq;
+use App\Product;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
@@ -11,74 +14,80 @@ class SearchController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke()
+    public function __invoke(Request $request)
     {
-        return view('templates.search');
+        $searchTerm = $request->get('q', '');
+        $query = '%' . $searchTerm . '%';
+        $page = $request->get('page', 1) - 1;
+        $length = 6;
+        
+        $products = Product::where('name', 'like', $query)->orWhere('display_name', 'like', $query)->get()->map(function($detail){
+            return ['title' => $detail['display_name'], 'description' => 'View the product', 'link' => "/products/{$detail['slug']}"];
+        })->toArray();
+
+        $faqs = Faq::where('question', 'like', $query)->orWhere('answer', 'like', $query)->get()->map(function($detail) use($searchTerm){
+            return ['title' => substr($detail['question'], 0, 80), 'description' => $this->findSearchTerm($detail['answer'], $searchTerm), 'link' => "/faq?q={$detail['slug']}"];
+        })->toArray();
+
+        $content = Content::with('product')->where('title', 'like', $query)->orWhere('body', 'like', $query)->get()->map(function($detail) use($searchTerm){
+            $linkPrefix = [
+                'general_docs' => '/getting-started/',
+                'general_doc' => '/getting-started/',
+                'product_docs' => '/products/',
+                'product_doc' => '/products/',
+                'product_overview' => '/products/',
+            ][$detail['type']] ?? '/';
+
+            $linkSufix = [
+                'product_docs' => '/#/docs',
+                'product_doc' => '/#/docs',
+                'product_overview' => '/#/overview',
+            ][$detail['type']] ?? '';
+
+            $linkSlug = $detail['slug'];
+            if(!$detail->product->isEmpty()){
+                $linkSlug = $detail->product[0]['slug'];
+            }
+
+            return [
+                'title' => substr($detail['title'], 0, 80),
+                'description' => $this->findSearchTerm($detail['body'], $searchTerm),
+                'link' => $linkPrefix . $linkSlug . $linkSufix
+            ];
+        })->toArray();
+
+        $results = array_merge($products, $faqs, $content);
+        $total = count($results);
+
+        return view('templates.search', [
+            'results' => array_slice($results, ($page * $length), $length),
+            'searchTerm' => $searchTerm,
+            'total' => $total,
+            'page' => $page,
+            'pages' => (int)ceil($total / $length)
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    protected function findSearchTerm($content, $searchTerm)
     {
-        //
-    }
+        $c = preg_replace('/\n|\s+/', ' ', strip_tags($content));
+        $termAt = stripos($c, $searchTerm);
+        if(!$termAt){
+            return substr($c, 0, 200);
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $halfLength = 100;
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        if($termAt < $halfLength){
+            $prefix = substr($c, 0, $termAt);
+            $halfLength += $halfLength - $termAt;
+        } else {
+            $prefix = substr($c, ($termAt - $halfLength), $halfLength);
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+        $match = '<span class="highlight">' . substr($c, $termAt, strlen($searchTerm)) . '</span>';
+        $sufix = substr($c, ($termAt + strlen($searchTerm)), $halfLength);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return $prefix . $match . $sufix;
     }
 }

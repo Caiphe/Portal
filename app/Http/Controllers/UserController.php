@@ -49,10 +49,6 @@ class UserController extends Controller
      */
     public function show()
     {
-        if (!\Auth::check()) {
-            return redirect()->home();
-        }
-
         $user = \Auth::user();
         $user->load('countries');
 
@@ -104,6 +100,10 @@ class UserController extends Controller
         }
 
         $validatedData = $request->validate($validateOn);
+
+        if(isset($validatedData['password'])){
+            $validatedData['password'] = bcrypt($validatedData['password']);
+        }
 
         $user->update($validatedData);
 

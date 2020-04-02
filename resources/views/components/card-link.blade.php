@@ -8,8 +8,8 @@
 --}}
 
 @allowonce('card_link')
-<link href="/css/components/card-link.css" rel="stylesheet"/>
-<link href="/css/components/card.css" rel="stylesheet"/>
+<link href="{{ mix('/css/components/card-link.css') }}" rel="stylesheet"/>
+<link href="{{ mix('/css/components/card.css') }}" rel="stylesheet"/>
 @endallowonce
 
 @props(['title', 'icon'])

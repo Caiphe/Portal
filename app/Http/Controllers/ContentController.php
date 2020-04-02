@@ -46,7 +46,7 @@ class ContentController extends Controller
      */
     public function show(Content $content)
     {
-        //
+        return view('templates.content.show', ['content' => $content]);
     }
 
     /**
