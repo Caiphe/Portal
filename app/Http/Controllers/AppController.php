@@ -77,7 +77,7 @@ class AppController extends Controller
     public function edit(ProductLocationService $productLocationService, Request $request)
     {
         [$products, $countries] = $productLocationService->fetch();
-        
+
         $user = \Auth::user();
         $data = ApigeeService::get("developers/{$user->email}/apps/{$request->name}/?expand=true");
 

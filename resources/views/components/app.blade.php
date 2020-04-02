@@ -2,7 +2,7 @@
 <link href="{{ mix('/css/components/_app.css') }}" rel="stylesheet"/>
 @endallowonce
 
-@props(['app', 'attr'])
+@props(['app', 'attr', 'countries'])
 
 <div class="app" data-name="{{ $app['name'] }}" data-developer="{{ $app['firstName'] ?? '' }}" data-locations="">
     <div class="column">
@@ -12,8 +12,15 @@
         </p>
     </div>
     <div class="column regions">
-        @svg('za', '#000000', 'images/locations')
-        + 2 more
+        @foreach($countries as $key => $country)
+            @if($loop->first)
+                @svg($key, '#000000', 'images/locations')
+            @endif
+        @endforeach
+
+        @if($countries->count() > 1)
+        + {{ $countries->count() }} more
+        @endif
     </div>
     <div class="column">
         {{ $app['callbackUrl'] }}
@@ -37,12 +44,14 @@
                     <input id="developer-key" type="hidden" value="{{ end($app['credentials'])['consumerKey']  }}">
                     <input id="developer-id" type="hidden" value="{{ $app['developerId']  }}">
                 </div>
-                <div class="dashboard-regions">
-                    <p><strong>Regions:</strong></p>
+                <div class="dashboard-countries">
+                    <p><strong>Countries:</strong></p>
                 </div>
                 <div>
                     <div>
-                        @svg('za', '#000000', 'images/locations')
+                        @foreach($countries as $key => $country)
+                            @svg($key, '#000000', 'images/locations')
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -77,7 +86,9 @@
                 </div>
                 <div>
                     <div>
-                        @svg('za', '#000000', 'images/locations')
+                        @foreach($countries as $key => $country)
+                            @svg($key, '#000000', 'images/locations')
+                        @endforeach
                     </div>
                     <p>
                         {{ date('d M Y H:i:s', end($app['credentials'])['issuedAt'] / 1000) }}

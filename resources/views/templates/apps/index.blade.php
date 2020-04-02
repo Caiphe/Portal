@@ -76,7 +76,11 @@
                 <div class="body">
                     @forelse($approvedApps as $app)
                         @if(!empty($app['attributes']))
-                            <x-app :app="$app" :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"></x-app>
+                            <x-app
+                                :app="$app"
+                                :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"
+                                :countries="App\Services\ApigeeService::getAppCountries(array_column(end($app['credentials'])['apiProducts'], 'apiproduct'))">
+                            ></x-app>
                         @endif
                     @empty
                         <p>No approved apps.</p>
@@ -117,7 +121,11 @@
                 <div class="body">
                     @forelse($revokedApps as $app)
                         @if(!empty($app['attributes']))
-                            <x-app :app="$app" :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"></x-app>
+                            <x-app
+                                :app="$app"
+                                :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"
+                                :countries="App\Services\ApigeeService::getAppCountries(array_column(end($app['credentials'])['apiProducts'], 'apiproduct'))">
+                            </x-app>
                         @endif
                     @empty
                         <p>No revoked apps.</p>

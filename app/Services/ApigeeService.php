@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Country;
+use App\Product;
 use Illuminate\Support\Facades\Http;
 
 /**
@@ -55,6 +57,22 @@ class ApigeeService
     public static function getOrgApps(string $rows, string $status)
     {
         return self::get("/apps?rows={$rows}&expand=true&status={$status}");
+    }
+
+    public static function getAppCountries(array $products)
+    {
+        $a = [];
+        foreach ($products as $product) {
+            $a[] = array_unique(explode(',', (Product::where('name', $product)->select('locations')->get()->implode('locations', ','))));
+        }
+
+        $filteredCountries = Country::whereIn('code', $a)->get();
+
+        $countries = $filteredCountries->each(function ($query) {
+            return $query;
+        })->pluck('name', 'code');
+
+        return $countries;
     }
 
     public static function updateProductStatus(string $id, string $app, string $key, string $product, string $action)
