@@ -120,9 +120,9 @@
     </div>
     <nav class="menu">
         @if(Request::is('dashboard'))
-            <button class="dashboard-approve">Approve all</button>
-            <button class="dashboard-revoke">Revoke all</button>
-            <button class="dashboard-complete">Complete</button>
+            <button class="product-all" data-method="approve">Approve all</button>
+            <button class="product-all" data-method="revoke">Revoke all</button>
+            <button class="product-complete">Complete</button>
         @else
             <a href="{{ route('app.edit', $app['name']) }}">Edit</a>
             <form class="delete">

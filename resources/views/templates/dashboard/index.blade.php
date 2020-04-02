@@ -227,11 +227,6 @@
 
             document.getElementById("filter-text").value = "";
 
-            // var products = document.querySelectorAll(".card--product");
-            // for (var i = products.length - 1; i >= 0; i--) {
-            //     products[i].style.display = "inline-block";
-            // }
-
             document.getElementById("clearFilter").style.display = "none";
         }
 
@@ -248,6 +243,10 @@
             var key = app.querySelector('#developer-key').value;
             var product = event.currentTarget.parentNode.dataset.name;
             var action = event.currentTarget.dataset.action;
+
+            if (event.currentTarget.classList.value === 'product-all') {
+                product = 'all';
+            }
 
             var lookup = {
                 approve: 'approved',
