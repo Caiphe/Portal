@@ -2,9 +2,7 @@
 <link href="{{ mix('/css/components/_app.css') }}" rel="stylesheet"/>
 @endallowonce
 
-@props(['app', 'attr', 'countries'])
-
-{{--{{ dd($countries->keys()->all()) }}--}}
+@props(['app', 'type', 'attr', 'countries'])
 
 <div class="app" data-name="{{ $app['name'] }}" data-developer="{{ $app['firstName'] ?? '' }}" data-locations="{{ implode(',', $countries->keys()->all()) }}">
     <div class="column">
@@ -13,6 +11,7 @@
             {{ $attr['DisplayName'] }}
         </p>
     </div>
+    @if($type === 'approved')
     <div class="column countries">
         @foreach($countries as $key => $country)
             @if($loop->first)
@@ -24,6 +23,11 @@
         + {{ $countries->count() }} more
         @endif
     </div>
+    @else
+        <div class="column">
+            Lorem ipsum dolor sit amet, consetetur.
+        </div>
+    @endif
     <div class="column">
         {{ $app['callbackUrl'] }}
     </div>
