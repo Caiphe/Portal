@@ -50,9 +50,9 @@ class DashboardController extends Controller
             $outputArray[$key]['createdAt'] = date('d M Y', substr($app['createdAt'], 0, 10));
         }
 
-//        usort($outputArray, function($a, $b) {
-//            return ($a['createdAt'] < $b['createdAt']) ? -1 : 1;
-//        });
+        usort($outputArray, function($a, $b) {
+            return ($a['createdAt'] < $b['createdAt']) ? -1 : 1;
+        });
 
         return $outputArray;
     }
