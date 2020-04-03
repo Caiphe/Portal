@@ -1,7 +1,7 @@
 @props(['products'])
 
 @foreach($products as $product)
-    <a href="/products/@strSlug($product['apiproduct'])" class="product" data-name="{{ $product['apiproduct'] }}">
+    <a href="/products/@strSlug($product['apiproduct'])" class="product" data-name="{{ $product['apiproduct'] }}" data-status="{{ $product['status'] }}">
         <span class="status-{{ $product['status'] }}"></span>
         <span class="name">{{ $product['apiproduct'] }}</span>
         @if(Request::is('dashboard'))

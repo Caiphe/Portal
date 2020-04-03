@@ -232,10 +232,10 @@
 
         var productStatusButtons = document.querySelectorAll('button[class*="product-"]');
         for(var m = 0; m < productStatusButtons.length; m++) {
-            productStatusButtons[m].addEventListener('click', handleProductStatus)
+            productStatusButtons[m].addEventListener('click', getProductStatus)
         }
 
-        function handleProductStatus(event) {
+        function getProductStatus(event) {
             event.preventDefault();
 
             var app = event.currentTarget.parentNode.parentNode.parentNode.parentNode;
@@ -245,8 +245,26 @@
             var action = event.currentTarget.dataset.action;
 
             if (event.currentTarget.classList.value === 'product-all') {
-                product = 'all';
+
+                var appProducts = event.currentTarget.parentNode.parentNode.querySelectorAll('.product');
+
+                var lookBack = {
+                    approved: 'approve',
+                    revoked: 'revoke'
+                };
+
+                for (var i = appProducts.length - 1; i >= 0; i--) {
+                    if (lookBack[appProducts[i].dataset.status] === action) continue;
+
+                    handleUpdateStatus(action, app, id, key, appProducts[i].dataset.name);
+                }
+                return;
             }
+
+            handleUpdateStatus(action, app, id, key, product);
+        }
+
+        function handleUpdateStatus(action, app, id, key, product) {
 
             var lookup = {
                 approve: 'approved',
@@ -263,8 +281,8 @@
             var data = {
                 developer_id: id,
                 app_name: app.dataset.name,
-                consumer_key: key,
-                product_name: product,
+                key: key,
+                product: product,
                 action: action
             };
 
