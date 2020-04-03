@@ -36,7 +36,7 @@ $filters = array('Group'=> $groups,'Categories'=> $productCategories);
 
 @section('content')
 	<x-heading heading="Products"></x-heading>
-	<input type="text" name="filter-text" id="filter-text" class="filter-text" placeholder="Search"/>
+	<input type="text" name="filter-text" id="filter-text" class="filter-text" placeholder="Search" autofocus/>
 	<hr class="search-hr"/>
 	<div class="products">
 	@foreach ($productsCollection as $category=>$products)

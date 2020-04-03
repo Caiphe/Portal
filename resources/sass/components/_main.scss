@@ -7,4 +7,6 @@
 body > #main {
     flex: 1 0 auto;
     padding: $gutter 8%;
+    max-width: 1440px;
+    margin: 0 auto;
 }
