@@ -9,7 +9,9 @@
     <form action="{{route('search')}}">
         <input class="search" name="q" placeholder="Search term" autofocus>
     </form>
+    @if(!empty($results))
     <p class="tally"><strong>{{$total}}</strong> results for <strong>{{$searchTerm}}</strong></p>
+    @endif
     <div class="search-results cols">
         @foreach($results as $result)
         <x-card-search :title="$result['title']" :link="$result['link']">{!!$result['description']!!}</x-card-search>

@@ -19,7 +19,17 @@ class SearchController extends Controller
         $searchTerm = $request->get('q', '');
         $query = '%' . $searchTerm . '%';
         $page = $request->get('page', 1) - 1;
-        $length = 6;
+        $length = 8;
+
+        if(empty($searchTerm)){
+            return view('templates.search', [
+                'results' => [],
+                'searchTerm' => $searchTerm,
+                'total' => 0,
+                'page' => 0,
+                'pages' => 0
+            ]);
+        }
         
         $products = Product::where('name', 'like', $query)->orWhere('display_name', 'like', $query)->get()->map(function($detail){
             return ['title' => $detail['display_name'], 'description' => 'View the product', 'link' => "/products/{$detail['slug']}"];
