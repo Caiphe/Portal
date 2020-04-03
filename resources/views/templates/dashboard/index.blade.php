@@ -195,7 +195,7 @@
                 apps[i].style.display = 'none';
 
                 textValid =
-                    filterText === "" || apps[i].dataset.name.match(match);
+                    filterText === "" || apps[i].dataset.name.match(match) || apps[i].dataset.developer.match(match);
 
                 var locations =
                     apps[i].dataset.locations !== undefined
