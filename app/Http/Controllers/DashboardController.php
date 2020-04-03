@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UpdateStatusRequest;
 use App\Services\ApigeeService;
 use App\Services\ProductLocationService;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -29,6 +30,11 @@ class DashboardController extends Controller
          ApigeeService::updateProductStatus($request->developer_id, $request->app_name, $request->key, $request->product, $request->action);
 
          return redirect()->back();
+    }
+
+    public function destroy($id, Request $request)
+    {
+        dd($request->all());
     }
 
     /**

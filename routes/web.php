@@ -24,7 +24,7 @@ Route::put('apps/{name}', 'AppController@update')->name('app.update');
 Route::delete('apps/{name}', 'AppController@destroy')->name('app.destroy');
 Route::post('apps/{product}/approve', 'DashboardController@update')->name('app.product.approve');
 Route::post('apps/{product}/revoke', 'DashboardController@update')->name('app.product.revoke');
-Route::post('apps/{name}/complete', 'DashboardController@complete')->name('app.products.complete');
+Route::delete('apps/{id}/complete', 'DashboardController@destroy')->name('app.products.complete');
 
 Route::get('products', 'ProductController@index');
 Route::get('products/{product:slug}', 'ProductController@show')->name('product.show');

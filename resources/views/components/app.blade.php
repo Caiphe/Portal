@@ -4,7 +4,8 @@
 
 @props(['app', 'type', 'attr', 'countries'])
 
-<div class="app" data-name="{{ $app['name'] }}" data-developer="{{ $app['firstName'] ?? '' }}" data-locations="{{ implode(',', $countries->keys()->all()) }}">
+<div class="app" data-name="{{ $app['name'] }}" data-id="{{ $app['appId'] }}" data-developer="{{ $app['firstName'] ?? '' }}"
+     data-locations="{{ implode(',', $countries->keys()->all()) }}">
     <div class="column">
         <p class="name">
             @svg('app-avatar', '#fff')
@@ -122,7 +123,7 @@
         @if(Request::is('dashboard'))
             <button class="product-all" data-action="approve">Approve all</button>
             <button class="product-all" data-action="revoke">Revoke all</button>
-            <button class="product-complete">Complete</button>
+            <button class="complete">Complete</button>
         @else
             <a href="{{ route('app.edit', $app['name']) }}">Edit</a>
             <form class="delete">
