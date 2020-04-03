@@ -14,7 +14,9 @@ class DashboardController extends Controller
         $approvedApps = $this->apps(ApigeeService::getOrgApps('approved'), $approvedApps = []);
         $revokedApps = $this->apps(ApigeeService::getOrgApps('revoked'), $revokedApps = []);
 
-//        $developers[] = ApigeeService::getDevelopers();
+        $developers[] = ApigeeService::getDevelopers();
+
+        dd($developers[0]['developer']);
 
         [$products, $countries] = $productLocationService->fetch();
 
