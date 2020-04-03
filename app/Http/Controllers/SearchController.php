@@ -26,7 +26,7 @@ class SearchController extends Controller
         })->toArray();
 
         $faqs = Faq::where('question', 'like', $query)->orWhere('answer', 'like', $query)->get()->map(function($detail) use($searchTerm){
-            return ['title' => substr($detail['question'], 0, 80), 'description' => $this->findSearchTerm($detail['answer'], $searchTerm), 'link' => "/faq?q={$detail['slug']}"];
+            return ['title' => substr($detail['question'], 0, 80), 'description' => $this->findSearchTerm($detail['answer'], $searchTerm), 'link' => "/faq/#{$detail['slug']}"];
         })->toArray();
 
         $content = Content::with('product')->where('title', 'like', $query)->orWhere('body', 'like', $query)->get()->map(function($detail) use($searchTerm){

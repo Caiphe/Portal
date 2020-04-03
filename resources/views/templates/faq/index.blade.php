@@ -10,7 +10,7 @@
 	<x-heading heading="FAQs"></x-heading>
 	<section class="faq-section mt-5">
 	@foreach ($faqs as $faq)
-		<x-faq.accordion :question="$faq->question">{!! $faq->answer !!}</x-faq.accordion>
+		<x-faq.accordion :id="$faq->slug" :question="$faq->question">{!! $faq->answer !!}</x-faq.accordion>
 	@endforeach
 	</section>
 	<section class="contact-section">
