@@ -132,7 +132,7 @@
         var headings = document.querySelectorAll('.heading-app');
 
         document.getElementById('filter-text').addEventListener('keyup', filterApps);
-        document.getElementById("filter-country").addEventListener('change', filterApps);
+        document.getElementById("filter-country-select").addEventListener('change', filterApps);
         document.getElementById("filter-country-tags").addEventListener('click', filterApps);
 
         for (var i = 0; i < headings.length; i++) {
