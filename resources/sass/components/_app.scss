@@ -84,7 +84,7 @@
         }
     }
 
-    .menu.show + .modal {
+    .menu.show+.modal {
         display: block;
     }
 
@@ -116,11 +116,11 @@
             width: 20px;
         }
 
-        > div {
+        >div {
             display: flex;
             flex-wrap: wrap;
 
-            > div:first-of-type {
+            >div:first-of-type {
                 padding-right: 30px;
             }
 
@@ -139,6 +139,20 @@
 
                     svg {
                         width: 15px;
+                    }
+
+                    svg+svg {
+                        display: none;
+                    }
+
+                    &.copied {
+                        svg {
+                            display: none;
+                        }
+
+                        svg+svg {
+                            display: block;
+                        }
                     }
                 }
             }
@@ -179,7 +193,8 @@
                 margin-bottom: 10px;
                 height: 100%;
 
-                span[class^="status-"], span[class*="status-"] {
+                span[class^="status-"],
+                span[class*="status-"] {
                     height: auto;
                     width: 10px;
                     border-radius: 7px;
@@ -208,7 +223,8 @@
                     margin-bottom: 10px;
                 }
 
-                button[class^="product-"], button[class*="product-"] {
+                button[class^="product-"],
+                button[class*="product-"] {
                     background-color: transparent;
                     border-color: transparent;
                     padding: 0;
@@ -219,5 +235,12 @@
                 }
             }
         }
+    }
+
+    input[readonly] {
+        border: 0;
+        background-color: transparent;
+        padding: 0;
+        height: auto;
     }
 }
