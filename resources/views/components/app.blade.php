@@ -71,19 +71,21 @@
                 </div>
                 <div class="consumer">
                     <p class="key">
-                        {{ end($app['credentials'])['consumerKey']  }}
+                        <input type="text" name="consumerKey" id="{{$app['appId']}}-consumer-key" value="{{ end($app['credentials'])['consumerKey']  }}" readonly>
                     </p>
                     <p class="key">
-                        {{ end($app['credentials'])['consumerSecret'] }}
+                        <input type="text" name="consumerSecret" id="{{$app['appId']}}-consumer-secret" value="{{ end($app['credentials'])['consumerSecret']  }}" readonly>
                     </p>
                     <p>{{ $app['callbackUrl'] }}</p>
                 </div>
                 <div class="copy-column">
-                    <button class="copy">
+                    <button class="copy" data-reference="{{$app['appId']}}-consumer-key">
                         @svg('copy', '#000000')
+                        @svg('clipboard', '#000000')
                     </button>
-                    <button class="copy">
+                    <button class="copy" data-reference="{{$app['appId']}}-consumer-secret">
                         @svg('copy', '#000000')
+                        @svg('clipboard', '#000000')
                     </button>
                 </div>
                 <div>

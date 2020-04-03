@@ -243,11 +243,13 @@
         }
 
         function copyText(id) {
-            var el = document.getElementById(id);
+            var el = document.getElementById(this.dataset.reference);
             el.select();
             /* Copy the text inside the text field */
             document.execCommand("copy");
             el.blur();
+
+            this.className = 'copy copied';
         }
 
     </script>
