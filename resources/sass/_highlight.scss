@@ -1,8 +1,15 @@
+pre {
+    font-size: 10px;
+    background-color: $grey750;
+    border-radius: 8px;
+    padding: $gutterSmall;
+    font-family: "Montserrat";
+}
+
 .hljs {
     display: block;
     overflow-x: auto;
     color: #FC0;
-    font-family: "Montserrat" !important;
 }
 
 .hljs-comment,
