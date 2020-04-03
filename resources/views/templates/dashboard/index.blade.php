@@ -130,7 +130,6 @@
 @push('scripts')
     <script>
         var headings = document.querySelectorAll('.heading-app');
-        var filterText = document.getElementById('filter-text').value;
 
         document.getElementById('filter-text').addEventListener('keyup', filterApps);
 
@@ -182,6 +181,7 @@
             })
         }
 
+        var filterText = document.getElementById('filter-text').value;
         var match = new RegExp(filterText, "gi");
         var countrySelect = getSelected(
             document.getElementById("filter-country")
@@ -195,22 +195,39 @@
                 apps[i].style.display = 'none';
 
                 textValid =
-                    filterText === "" || apps[i].dataset.name.match(match) || apps[i].dataset.developer.match(match) ;
+                    filterText === "" || apps[i].dataset.name.match(match);
 
-                var locations =
-                    apps[i].dataset.locations !== undefined
-                        ? apps[i].dataset.locations.split(",")
-                        : ["all"];
+                // var locations =
+                //     apps[i].dataset.locations !== undefined
+                //         ? apps[i].dataset.locations.split(",")
+                //         : ["all"];
+                //
+                // countriesValid =
+                //     countrySelect.length === 0 ||
+                //     locations[0] === "all" ||
+                //     arrayCompare(locations, countrySelect);
 
-                countriesValid =
-                    countrySelect.length === 0 ||
-                    locations[0] === "all" ||
-                    arrayCompare(locations, countrySelect);
-
-                if (textValid && countriesValid) {
+                if (textValid) {
                     apps[i].style.display = 'flex';
                 }
             }
+
+            toggleFilter();
+        }
+
+        function toggleFilter() {
+            // var countrySelect = getSelected(document.getElementById("filter-country"));
+            var filterText = document.getElementById("filter-text").value;
+            if (
+                // countrySelect.length !== 0 ||
+                filterText.length !== 0
+            )
+                document.getElementById("clearFilter").style.display = "block";
+            else if (
+                // countrySelect.length === 0 ||
+                filterText.length === 0
+            )
+                document.getElementById("clearFilter").style.display = "none";
         }
 
         function clearFilter() {
