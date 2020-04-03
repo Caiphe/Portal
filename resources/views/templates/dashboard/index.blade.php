@@ -181,15 +181,15 @@
             })
         }
 
-        var filterText = document.getElementById('filter-text').value;
-        var match = new RegExp(filterText, "gi");
-        var countrySelect = getSelected(
-            document.getElementById("filter-country")
-        );
-
         function filterApps() {
 
             var apps = document.querySelectorAll('.app');
+
+            var filterText = document.getElementById('filter-text').value;
+            var match = new RegExp(filterText, "gi");
+            var countrySelect = getSelected(
+                document.getElementById("filter-country")
+            );
 
             for (var i = apps.length - 1; i >= 0; i--) {
                 apps[i].style.display = 'none';
@@ -197,17 +197,17 @@
                 textValid =
                     filterText === "" || apps[i].dataset.name.match(match);
 
-                // var locations =
-                //     apps[i].dataset.locations !== undefined
-                //         ? apps[i].dataset.locations.split(",")
-                //         : ["all"];
-                //
-                // countriesValid =
-                //     countrySelect.length === 0 ||
-                //     locations[0] === "all" ||
-                //     arrayCompare(locations, countrySelect);
+                var locations =
+                    apps[i].dataset.locations !== undefined
+                        ? apps[i].dataset.locations.split(",")
+                        : ["all"];
 
-                if (textValid) {
+                countriesValid =
+                    countrySelect.length === 0 ||
+                    locations[0] === "all" ||
+                    arrayCompare(locations, countrySelect);
+
+                if (textValid && countriesValid) {
                     apps[i].style.display = 'flex';
                 }
             }
@@ -216,15 +216,16 @@
         }
 
         function toggleFilter() {
-            // var countrySelect = getSelected(document.getElementById("filter-country"));
+            var countrySelect = getSelected(document.getElementById("filter-country"));
+            console.log(countrySelect)
             var filterText = document.getElementById("filter-text").value;
             if (
-                // countrySelect.length !== 0 ||
+                countrySelect.length !== 0 ||
                 filterText.length !== 0
             )
                 document.getElementById("clearFilter").style.display = "block";
             else if (
-                // countrySelect.length === 0 ||
+                countrySelect.length === 0 ||
                 filterText.length === 0
             )
                 document.getElementById("clearFilter").style.display = "none";
