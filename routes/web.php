@@ -15,16 +15,19 @@
 
 Route::get('/', 'HomeController')->name('home');
 
+Route::get('search', 'SearchController')->name('search');
+
 Route::get('apps', 'AppController@index')->middleware('auth')->name('app.index');
 Route::get('apps/create', 'AppController@create')->middleware('auth')->name('app.create');
 Route::get('apps/{name}/edit', 'AppController@edit')->middleware('auth')->name('app.edit');
 Route::post('apps', 'AppController@store')->name('app.store');
 
-Route::put('apps/{name}', 'AppController@update')->name('app.update');
-Route::delete('apps/{name}', 'AppController@destroy')->name('app.destroy');
-Route::post('apps/{product}/approve', 'DashboardController@update')->name('app.product.approve');
-Route::post('apps/{product}/revoke', 'DashboardController@update')->name('app.product.revoke');
-Route::delete('apps/{id}/complete', 'DashboardController@destroy')->name('app.products.complete');
+Route::put('apps/{name}', 'AppController@update')->middleware('auth')->name('app.update');
+Route::delete('apps/{name}', 'AppController@destroy')->middleware('auth')->name('app.destroy');
+
+Route::post('apps/{product}/approve', 'DashboardController@update')->middleware('auth')->name('app.product.approve');
+Route::post('apps/{product}/revoke', 'DashboardController@update')->middleware('auth')->name('app.product.revoke');
+Route::delete('apps/{id}/complete', 'DashboardController@destroy')->middleware('auth')->name('app.products.complete');
 
 Route::get('products', 'ProductController@index');
 Route::get('products/{product:slug}', 'ProductController@show')->name('product.show');
@@ -46,3 +49,5 @@ Route::post('profile/update/picture', 'UserController@updateProfilePicture')->mi
 Route::get('dashboard', 'DashboardController@index')->middleware('auth')->name('dashboard');
 
 Auth::routes();
+
+Route::get('{content:slug}', 'ContentController@show')->name('page.show');

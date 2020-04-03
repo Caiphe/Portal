@@ -46,7 +46,11 @@ class ContentController extends Controller
      */
     public function show(Content $content)
     {
-        //
+        if($content->type !== 'page'){
+            abort('404');
+        }
+        
+        return view('templates.content.show', ['content' => $content]);
     }
 
     /**

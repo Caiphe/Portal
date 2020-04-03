@@ -7,29 +7,20 @@
 --}}
 
 @allowonce('card_search')
-<search href="/css/components/card-search.css" rel="stylesheet"/>
-<search href="/css/components/card.css" rel="stylesheet"/>
+<link href="{{ mix('/css/components/card-search.css') }}" rel="stylesheet"/>
 @endallowonce
 
 @props(['title', 'icon', 'link'])
 
-@php 
-    $cardText = strlen($slot) > 165 ? substr($slot,0,165) : $slot;
-@endphp
-
-<a href="{{ $link }}">
-	<div class="card card--search">
-		<div class="card__content">
-			@isset($title)
-			<h3 class="card__header">
-				{{ $title }}
-			</h3>
-			@endisset
-			<p class="card__body">
-				{{ $cardText }}
-            </p>
-            <a href="{{ $link }}">{{ $link }}</a>
-            @svg('arrow-forward', '#000000')
-		</div>
-	</div>
+<a {{$attributes->merge(['class' => 'search-card'])}} href="{{ $link }}">
+	@isset($title)
+	<h3 class="header">
+		{{ $title }}
+	</h3>
+	@endisset
+	<p class="body">
+		{!! $slot !!}
+    </p>
+    <span class="href">{{ strlen($link) > 60 ? substr($link, 0, 60) . '...' : $link }}</span>
+    @svg('arrow-forward', '#000000')
 </a>	

@@ -21,7 +21,7 @@ class CreateContentsTable extends Migration
             $table->foreignId('category_id')
                 ->nullable()
                 ->constrained();
-            $table->text('body');
+            $table->longText('body');
             $table->json('editor_jcon');
             $table->dateTime('published_at')->nullable();
             $table->timestamps();

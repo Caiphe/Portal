@@ -1,6 +1,6 @@
 @extends('layouts.sidebar')
 
-@section('title', $content['title'] . '::Working with our products')
+@section('title', $content['title'])
 
 @section('sidebar')
     <x-sidebar-accordion id="sidebar-accordion" :active="'/' . request()->path()"  

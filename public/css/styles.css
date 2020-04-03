@@ -391,17 +391,46 @@ body {
   flex-direction: column;
 }
 
-a p,
+a,
+p,
 div,
 main,
 footer,
 nav,
 input,
 button,
+table,
 select,
 textarea {
   box-sizing: border-box;
   position: relative;
+}
+
+table {
+  border-collapse: collapse;
+  border: none;
+  border-bottom: 1px solid #e6e6e6;
+  width: 100%;
+}
+
+table thead {
+  background-color: #999999;
+  color: #333333;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f2f2f2;
+}
+
+table td,
+table th {
+  padding: 1rem;
+  vertical-align: top;
+  border: none;
+}
+
+li {
+  padding: 6px 0;
 }
 
 @font-face {
@@ -521,11 +550,18 @@ a {
   font-size: 1.8rem;
 }
 
+pre {
+  font-size: 10px;
+  background-color: #4d4d4d;
+  border-radius: 8px;
+  padding: 20px;
+  font-family: "Montserrat";
+}
+
 .hljs {
   display: block;
   overflow-x: auto;
   color: #FC0;
-  font-family: "Montserrat" !important;
 }
 
 .hljs-comment,
@@ -2479,24 +2515,6 @@ h6.phone::before {
 
 .tag.grey {
   background-color: #1a1a1a;
-}
-
-.card--search svg {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-}
-
-.card--search .card__header {
-  min-height: 70px;
-  margin: 5px 0;
-  display: flex;
-  align-items: center;
-}
-
-.card--search .card__body {
-  min-height: 60px;
-  margin-bottom: 5px;
 }
 
 #alert {
