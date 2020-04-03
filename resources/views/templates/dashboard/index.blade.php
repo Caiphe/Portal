@@ -13,7 +13,7 @@
 
         <div class="country-filter">
             <h3>Country</h3>
-            <x-multiselect id="filter-country" name="filter-country" label="Select country" :options="$countries" />
+            <x-multiselect id="filter-country-select" name="filter-country-select" label="Select country" :options="$countries" />
         </div>
 
         <button id="clearFilter" class="dark outline" onclick="clearFilter()">Clear filters</button>
@@ -188,7 +188,7 @@
             var filterText = document.getElementById('filter-text').value;
             var match = new RegExp(filterText, "gi");
             var countrySelect = getSelected(
-                document.getElementById("filter-country")
+                document.getElementById("filter-country-select")
             );
 
             for (var i = apps.length - 1; i >= 0; i--) {
@@ -216,8 +216,8 @@
         }
 
         function toggleFilter() {
-            var countrySelect = getSelected(document.getElementById("filter-country"));
-            console.log(countrySelect)
+            var countrySelect = getSelected(document.getElementById("filter-country-select"));
+
             var filterText = document.getElementById("filter-text").value;
             if (
                 countrySelect.length !== 0 ||
@@ -233,10 +233,10 @@
 
         function clearFilter() {
 
-            var countrySelect = getSelected(document.getElementById("filter-country"));
+            var countrySelect = getSelected(document.getElementById("filter-country-select"));
 
             if (countrySelect.length > 0) {
-                clearSelected(document.getElementById("filter-country"));
+                clearSelected(document.getElementById("filter-country-select"));
                 var multiSelectTags = document.getElementById("filter-country-tags");
                 while (multiSelectTags.firstChild) {
                     multiSelectTags.removeChild(multiSelectTags.firstChild);

@@ -1,6 +1,6 @@
 @import '../variables';
 
-#main .app {
+.app {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -247,5 +247,11 @@
         background-color: transparent;
         padding: 0;
         height: auto;
+    }
+
+    .name {
+        svg {
+            border-radius: 50%;
+        }
     }
 }
