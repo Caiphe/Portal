@@ -30,7 +30,11 @@
         </div>
     @endif
     <div class="column">
-        {{ $app['callbackUrl'] }}
+        @if(Request::is('dashboard'))
+            {{ $app['email'] ?? '' }}
+        @else
+            {{ $app['callbackUrl'] }}
+        @endif
     </div>
     <div class="column">
         {{ $app['createdAt'] }}
