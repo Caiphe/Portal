@@ -21,7 +21,7 @@
 			<li><a href="/faq">FAQ</a></li>
 			<li><a href="/contact">Contact us</a></li>
         </ul>
-        <input type="search" name="search" id="search" class="thin see-through" placeholder="Search">
+        <form action="{{route('search')}}"><input type="search" name="q" id="search" class="thin see-through" placeholder="Search"></form>
         @if(\Auth::check())
         <a href="/apps/create" class="button dark">Build app</a>
         <div id="profile-menu">

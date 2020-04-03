@@ -15,6 +15,8 @@
 
 Route::get('/', 'HomeController')->name('home');
 
+Route::get('search', 'SearchController')->name('search');
+
 Route::get('apps', 'AppController@index')->middleware('auth')->name('app.index');
 Route::get('apps/create', 'AppController@create')->middleware('auth')->name('app.create');
 Route::get('apps/{name}/edit', 'AppController@edit')->middleware('auth')->name('app.edit');
@@ -47,3 +49,5 @@ Route::post('profile/update/picture', 'UserController@updateProfilePicture')->mi
 Route::get('dashboard', 'DashboardController@index')->middleware('auth')->name('dashboard');
 
 Auth::routes();
+
+Route::get('{content:slug}', 'ContentController@show')->name('page.show');
