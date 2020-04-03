@@ -37,7 +37,7 @@
         @endif
     </div>
     <div class="column">
-        {{ $app['createdAt'] }}
+        {{ date('d M Y', substr($app['createdAt'], 0, 10)) }}
     </div>
     <div class="column">
         <button class="actions"></button>
@@ -104,7 +104,7 @@
                         @endforeach
                     </div>
                     <p>
-                        {{ date('d M Y H:i:s', end($app['credentials'])['issuedAt'] / 1000) }}
+                        {{ date('d M Y H:i:s', substr(end($app['credentials'])['issuedAt'], 0, 10)) }}
                     </p>
                     <p>Never</p>
                 </div>
@@ -116,7 +116,7 @@
         </p>
 
         <p class="description">
-            {{ $attr['Description'] }}
+            {{ $attr['Description'] ?? '' }}
         </p>
 
         <p class="products-title"><strong>Products</strong></p>

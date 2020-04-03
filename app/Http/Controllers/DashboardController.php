@@ -11,8 +11,8 @@ class DashboardController extends Controller
 {
     public function index(ProductLocationService $productLocationService)
     {
-        $approvedApps = $this->apps(ApigeeService::getOrgApps('10', 'approved'), $approvedApps = []);
-        $revokedApps = $this->apps(ApigeeService::getOrgApps('10', 'revoked'), $revokedApps = []);
+        $approvedApps = $this->apps(ApigeeService::getOrgApps('approved'), $approvedApps = []);
+        $revokedApps = $this->apps(ApigeeService::getOrgApps('revoked'), $revokedApps = []);
 
 //        $developers[] = ApigeeService::getDevelopers();
 
@@ -49,13 +49,12 @@ class DashboardController extends Controller
     {
         foreach ($apigeeApps['app'] as $key => $app) {
             $outputArray[] = $app;
-            $outputArray[$key]['createdAt'] = date('d M Y', substr($app['createdAt'], 0, 10));
         }
 
         usort($outputArray, function($a, $b) {
             return ($a['createdAt'] < $b['createdAt']) ? -1 : 1;
         });
 
-        return $outputArray;
+        return array_reverse($outputArray, true);
     }
 }
