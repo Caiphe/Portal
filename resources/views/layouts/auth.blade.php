@@ -15,7 +15,7 @@
     <link rel="preload" href="/fonts/Montserrat-Light.woff2" as="font" type="font/woff2">
 </head>
 <body>
-    <main class="container-fluid" style="padding: 0" id="main">
+    <main id="auth-main">
         @yield("content")
     </main>
     @stack("scripts")

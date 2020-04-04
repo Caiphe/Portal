@@ -5,33 +5,33 @@ var FormData = {};
 
 function showTab(n) {
   // This function will display the specified tab of the form ...
-  var x = document.getElementsByClassName("step__wizzard_item");
+  var x = document.getElementsByClassName("step__wizard_item");
   x[n].style.display = "block";
   // ... and fix the Previous/Next buttons:
   if (n == 0) {
-    document.getElementById("stepWizzardPrevBtn").style.display = "none";
-    addKeyListner("stepWizzardForm");
+    document.getElementById("stepwizardPrevBtn").style.display = "none";
+    addKeyListner("stepwizardForm");
   } else {
-    document.getElementById("stepWizzardPrevBtn").style.display = "inline";
+    document.getElementById("stepwizardPrevBtn").style.display = "inline";
   }
   if (n == (x.length - 1)) {
     document.getElementById("stepWizardSubmitBtn").style.display = "inline";
-    document.getElementById("stepWizzardNextBtn").style.display = "none";
+    document.getElementById("stepwizardNextBtn").style.display = "none";
   } else {
-    document.getElementById("stepWizzardNextBtn").innerHTML = "Next";
+    document.getElementById("stepwizardNextBtn").innerHTML = "Next";
   }
   // ... and run a function that displays the correct step indicator:
   calcProgress(n, x.length)
 }
 
 function readyToSubmit(event) {
-  var stepWizzardForm = document.getElementById("stepWizzardForm");
-  stepWizzardForm.submit();
+  var stepwizardForm = document.getElementById("stepwizardForm");
+  stepwizardForm.submit();
 }
 
 function nextPrev(n) {
   // This function will figure out which tab to display
-  var x = document.getElementsByClassName("step__wizzard_item");
+  var x = document.getElementsByClassName("step__wizard_item");
 
   // User clicked on the next button
   if (n == 1) {
@@ -62,7 +62,6 @@ function nextPrev(n) {
         return;
       }
       if (password.value !== passwordConf.value) {
-        console.log(document.getElementById("FormStepErrorMsg").children[0].innerHTML);
         document.getElementById("FormStepErrorMsg").style.display = "block";
         document.getElementById("FormStepErrorMsg").children[0].innerHTML = "Passwords don't match";
         return ;
@@ -73,7 +72,7 @@ function nextPrev(n) {
   // User clicked on the back button
   if (n == -1) {
     if (currentTab == 4) {
-      document.getElementById("stepWizzardNextBtn").style.display = "inline";
+      document.getElementById("stepwizardNextBtn").style.display = "inline";
       document.getElementById("stepWizardSubmitBtn").style.display = "none";
     }
   }
@@ -101,7 +100,7 @@ function setFormUserName(name) {
 }
 
 function calcProgress(n, numberOfSteps) {
-    var progress = document.getElementById("stepWizzardProgress");
+    var progress = document.getElementById("stepwizardProgress");
     var step = Math.round(100 / numberOfSteps);
     progress.style.width = (n == 0) ? (step) + "%" : (step * (n + 1)) + "%";
 }
@@ -117,7 +116,7 @@ function addKeyListner(elemId) {
   key.addEventListener("keyup", function(event) {
     if (event.keyCode === 13) {
       event.preventDefault();
-      document.getElementById("stepWizzardNextBtn").click();
+      document.getElementById("stepwizardNextBtn").click();
     }
   });
 }
@@ -128,7 +127,6 @@ function selectLocation(event) {
     if (checkIfClassExists(locations, "untouched")) {
       removeUntouchedClass(locations, "untouched");
     }
-    // console.log(event.target.getAttribute("data-value"));
     toggleSelectedOption(event.target, locations);
   }
   if (selectedLocationsCount == 0) {

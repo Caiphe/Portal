@@ -1,67 +1,39 @@
 @extends('layouts.auth')
 
+@push('styles')
+    <link rel="stylesheet" href="/css/auth/step-wizard.css">
+@endpush
+
+@section('title', 'Forgot password?')
+
 @section('content')
-<div class="row m-0">
-    <div style="padding: 50px; width: 35vw; height: 100vh; float: left;">
-        <div class="row m-0 step__wizzard_header">
-            <img style="width: 60px;"src="/images/mtn-logo.svg" alt="MTN logo">
-            <h2 style="padding-top: 5px; margin-left: 30px;">Developer Portal</h2>
-        </div>
+	<div class="step__wizard_container left">
+		<x-auth.header/>
 
-        <div >
-            <h2>Did you forget something…</h2>
-            <p>
-                Please supply your email addres and we’ll send you a reset email.
-            </p>
-
-            <div class="login__input_group">
-                <input style="display: block;" type="email" name="email" placeholder="Email Address" />
-            </div>
-
-            <button style="display: inline;">Remind me</button>
-        </div>
-    </div>
-
-    <x-carousel style="width: 65vw; height: 100vh; float: left;" wait="5000" duration="0.34">
-        <x-carousel-item style="background-image: url('/images/mtn-carousel-img-01.png'); background-position: center; background-size: cover; background-repeat: no-repeat;">
-        <div style="position: absolute; left: 20%; margin-left: -50px; bottom: 14%; margin-bottom: -50px; max-width: 800px;">
-            <h1 style="color: #fff; font-size: 6em;">Create an account</h1>
-            <p style="color: #fff; display: block; font-size: 1.5em; line-height: 1.6em;">
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                sed diam nonumy eirmod tempor invidunt ut labore et dolore magna.
-            </p>
-        </div>
-        </x-carousel-item>
-
-        <x-carousel-item style="background-image: url('/images/mtn-carousel-img-02.png'); background-position: center; background-size: cover; background-repeat: no-repeat;">
-            <div style="position: absolute; left: 20%; margin-left: -50px; bottom: 14%; margin-bottom: -50px; max-width: 800px;">
-                <h2 style="color: #fff; font-size: 6em;">Register today!</h2>
-                <p style="color: #fff; display: block; font-size: 1.5em; line-height: 1.6em;">
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                    sed diam nonumy eirmod tempor invidunt ut labore et dolore magna.
-                </p>
-            </div>
-        </x-carousel-item>
-
-        <x-carousel-item style="background-image: url('/images/mtn-carousel-img-01.png'); background-position: center; background-size: cover; background-repeat: no-repeat;">
-            <div style="position: absolute; left: 20%; margin-left: -50px; bottom: 14%; margin-bottom: -50px; max-width: 800px;">
-                <h2 style="color: #fff; font-size: 6em;">Create an account</h2>
-                <p style="color: #fff; display: block; font-size: 1.5em; line-height: 1.6em;">
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                    sed diam nonumy eirmod tempor invidunt ut labore et dolore magna.
-                </p>
-            </div>
-        </x-carousel-item>
-
-        <x-carousel-item style="background-image: url('/images/mtn-carousel-img-02.png'); background-position: center; background-size: cover; background-repeat: no-repeat;">
-            <div style="position: absolute; left: 20%; margin-left: -50px; bottom: 14%; margin-bottom: -50px; max-width: 800px;">
-                <h2 style="color: #fff; font-size: 6em;">Join Us today</h2>
-                <p style="color: #fff; display: block; font-size: 1.5em; line-height: 1.6em;">
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                    sed diam nonumy eirmod tempor invidunt ut labore et dolore magna.
-                </p>
-            </div>
-        </x-carousel-item>
-    </x-carousel>
-</div>
+		<form method="POST" action="{{ route('password.email') }}" class="step__wizard_content">
+			@csrf
+			<div class="intro">
+				<h2 class="header">Did you forget something…</h2>
+				<p>
+					Please supply your email address and we’ll send you a reset email.
+				</p>
+			</div>
+			<div class="form-group row">
+				<div class="login__input_group">
+					<input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="Email Address" required autocomplete="email" autofocus>
+					@error('email')
+						<span class="invalid-feedback" role="alert">
+							<strong>{{ $message }}</strong>
+						</span>
+					@enderror
+				</div>
+			</div>
+			<div class="step_wizard_button_group">
+				<button type="submit">
+					{{ __('Remind me') }}
+				</button>
+			</div>
+		</form>
+	</div>
+    <x-auth.carousel />
 @endsection
