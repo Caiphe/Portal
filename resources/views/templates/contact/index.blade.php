@@ -16,7 +16,7 @@
 		<a class="button arrow-right after" href="/faq" role="button">View FAQ's</a>
 	</section>
 
-    <section class="contact-details-section grey-bg mb-4 section-padding">
+    <section class="grey-bg mb-4">
 		<div class="columns">
 			<div class="column contact-details">
 				<h3>Contact Details</h3>
@@ -42,7 +42,9 @@
 	</section>
 
     <section class="contact-form section-padding">
-		<x-contact-form title="Need more help? Get in touch"/>
+        <div class="container">
+            <x-contact-form title="Need more help? Get in touch"/>
+        </div>
 	</section>
 
 @endsection
