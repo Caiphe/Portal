@@ -9,50 +9,64 @@
     background-color: $grey200;
 }
 
-.section-padding {
+section:last-of-type {
     padding: $gutter 150px;
+}
+
+address {
+    font-style: normal;
+    margin-left: 30px;
+
+    .left {
+        display: flex;
+        margin-bottom: 30px;
+
+        > div {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+
+    .right {
+        display: flex;
+        align-items: center;
+    }
+
+    svg {
+        margin-right: 20px;
+        height: 36px;
+        width: 36px;
+    }
+
+    a {
+        color: $grey900 !important;
+    }
 }
 
 span {
     display: block;
 }
 
-.faqs-section {
-    padding-top: 60px !important;
-    text-align: center;
+.columns {
+    display: flex;
+    flex-flow: row wrap;
+
+    .column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        flex-basis: 50%;
+    }
 }
 
-.contact-details-section {
-    .contact-details {
-		padding-top:60px;
-        .contact-icon,
-        .location-icon {
-            display: flex;
-        }
-        .location-icon::before {
-            content: "";
-            position: relative;
-            width: 60px;
-            height: 60px;
-            float: left;
-            left: -12px;
-            top: 5px;
-            background-image: get-icon("map-marker", $yellow);
-        }
+.faqs-section {
+    margin-top: 80px;
+    margin-bottom: 80px;
+    text-align: center;
 
-        .contact-icon::before {
-            content: "";
-            position: relative;
-            width: 60px;
-            height: 60px;
-            float: left;
-            left: -5px;
-            top: 5px;
-            background-image: get-icon("phone", $yellow);
-        }
-
-        p {
-            align-self: center;
-		}
+    a {
+        margin-top: 10px;
     }
 }
