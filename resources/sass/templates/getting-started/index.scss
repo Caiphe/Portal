@@ -1,32 +1,46 @@
 @import "../../variables";
 
-.getting-started{
-    h2{
-        display: flex;
+#main {
+    padding: 0 !important;
+    margin-bottom: 60px;
 
-        svg{
-            padding-left: 10px;
+    #heading {
+        margin-bottom: 40px;
+    }
+
+    .content {
+        margin-left: 40px;
+
+        h2 {
+            display: flex;
+
+            svg {
+                padding-left: 10px;
+            }
         }
+
+        .product-usage {
+            padding-top: 15px;
+
+            .card {
+                width: 30%;
+                margin: 10px 10px 20px 0;
+
+                .card__header {
+                    min-height: 0;
+                }
+
+                svg {
+                    fill: $grey700;
+                    width: 30px;
+                    height: 30px;
+                }
+
+                .card__body {
+                    font-size: 12px;
+                }
+            }
+        }
+
     }
 }
-
-#product-usage{
-    padding-top: 15px;
-
-    .card{
-        width: 30%;
-        margin: 10px;
-        margin-bottom: 20px;
-
-        svg{
-            fill: $grey700;
-            width: 30px;
-            height: 30px;
-        }
-
-        .card__body{
-            font-size: 12px;
-        }
-    }
-}
-
