@@ -1,19 +1,20 @@
 @import "../variables";
 
-#main, body > #main{
+#main,
+body>#main {
     padding: 0;
 }
 
-.grey-bg{
+.grey-bg {
     background-color: $grey300;
 }
 
-.banner-carousel .carousel{
+.banner-carousel .carousel {
     width: 100vw;
-    height: 67vh;
+    height: 500px;
 }
 
-.banner-carousel .carousel .carousel-item{
+.banner-carousel .carousel .carousel-item {
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -29,68 +30,84 @@
         pointer-events: none;
     }
 
-    &:first-child{
-        background-image: url('/images/mtn-illustration-01.png'); 
-    }
-
-    &:nth-child(2){
-        background-image: url('/images/mtn-illustration-02.png');
-    }
-    &:nth-child(3){
-        background-image: url('/images/mtn-illustration-03.png');
-    }
-    &:nth-child(4){
+    &:first-child {
         background-image: url('/images/mtn-illustration-01.png');
     }
 
-    .carousel-content{
-        position: absolute;
-        width: 50%;
-        top: 50%;
-        left: 15%;
-        -webkit-transform: translateY(-50%);
-        -o-transform: translateY(-50%);
-        transform: translateY(-50%);
+    &:nth-child(2) {
+        background-image: url('/images/mtn-illustration-02.png');
+    }
 
-        h1{
+    &:nth-child(3) {
+        background-image: url('/images/mtn-illustration-03.png');
+    }
+
+    &:nth-child(4) {
+        background-image: url('/images/mtn-illustration-01.png');
+    }
+
+    .carousel-content {
+        padding: $gutter 8%;
+        max-width: 1440px;
+        margin: 0 auto;
+        position: relative;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        h1 {
             color: #FFFFFF;
             font-size: 70px;
         }
 
-        p{
+        p {
             color: #FFFFFF;
             font-size: 20px;
+        }
+
+        .button {
+            width: 110px;
         }
     }
 }
 
-.section-padding{
+.section-padding {
     padding: $gutter 150px;
-    padding-top: 60px!important;
+    padding-top: 60px !important;
 }
 
-.intro-steps{
-    padding-top: $gutter!important;
+.intro-steps {
+    padding-top: $gutter !important;
 }
 
-.latest-products{
-    padding-bottom: 60px!important;
+.latest-products .container-inner {
+    padding-bottom: 60px !important;
+    max-width: 960px;
+
+    .products-cards {
+        justify-content: space-between;
+    }
 }
 
-.introduction{
+.introduction {
     text-align: center;
 
-    p{
+    p {
         padding: 0 15em;
     }
 }
 
-.access-keys, .register-app, .browse-products, .sign-in{
+.access-keys .container-inner,
+.register-app .container-inner,
+.browse-products .container-inner,
+.sign-in .container-inner {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    max-width: 960px;
 
-    h1{
+    h1 {
         margin-top: 0;
     }
 
@@ -98,8 +115,8 @@
         list-style: none;
         display: table;
         padding: 0;
-        
-        li{
+
+        li {
             counter-increment: foo;
             display: table-row;
 
@@ -113,16 +130,19 @@
         }
     }
 
-    .content-right, .image-right {
+    .content-right,
+    .image-right {
         padding-left: 30px;
     }
 
-    .content-left, .image-left {
+    .content-left,
+    .image-left {
         padding-right: 30px;
     }
 }
 
-.steps, .view-products{
+.steps,
+.view-products {
     display: flex;
     justify-content: center;
     margin-top: $gutter;
@@ -133,11 +153,11 @@
     max-width: 150px;
 }
 
-.products-cards{
+.products-cards {
     display: flex;
     flex-flow: row wrap;
 
-    .card{
+    .card {
         margin-bottom: 30px;
         margin-right: 20px;
         width: 30%;
