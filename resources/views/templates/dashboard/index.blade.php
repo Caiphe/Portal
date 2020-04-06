@@ -66,9 +66,12 @@
                             <x-app
                                 :app="$app"
                                 :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"
+                                :details="App\Services\ApigeeService::getDeveloperDetails($app['developerId'])"
                                 :countries="App\Services\ApigeeService::getAppCountries(array_column(end($app['credentials'])['apiProducts'], 'apiproduct'))"
                                 :type="$type = 'approved'">
                             </x-app>
+
+
                         @endif
                     @empty
                         <p>No approved apps.</p>
@@ -112,6 +115,7 @@
                             <x-app
                                 :app="$app"
                                 :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"
+                                :details="App\Services\ApigeeService::getDeveloperDetails($app['developerId'])"
                                 :countries="App\Services\ApigeeService::getAppCountries(array_column(end($app['credentials'])['apiProducts'], 'apiproduct'))"
                                 :type="$type = 'revoked'">
                             </x-app>

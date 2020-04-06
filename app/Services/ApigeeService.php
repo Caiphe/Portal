@@ -59,9 +59,9 @@ class ApigeeService
         return self::get("/apps?expand=true&status={$status}");
     }
 
-    public static function getDevelopers()
+    public static function getDeveloperDetails(string $developer_id)
     {
-        return self::get('/developers?expand=true');
+        return self::get("/developers/{$developer_id}?expand=true");
     }
 
     public static function getAppCountries(array $products)

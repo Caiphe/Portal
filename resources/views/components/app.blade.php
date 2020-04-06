@@ -2,7 +2,7 @@
 <link href="{{ mix('/css/components/_app.css') }}" rel="stylesheet"/>
 @endallowonce
 
-@props(['app', 'type', 'attr', 'countries'])
+@props(['app', 'details', 'type', 'attr', 'countries'])
 
 <div class="app" data-name="{{ $app['name'] }}" data-id="{{ $app['appId'] }}" data-developer="{{ $app['firstName'] ?? '' }}"
      data-locations="{{ implode(',', $countries->keys()->all()) }}">
@@ -50,8 +50,8 @@
                     <p><strong>Developer email:</strong></p>
                 </div>
                 <div>
-                    <p id="developer-name">{{ $app['firstName']  ?? '' }}</p>
-                    <p id="developer-email">{{ $app['email'] ?? '' }}</p>
+                    <p id="developer-name">{{ $details['firstName']  . ' ' . $details['lastName'] }}</p>
+                    <p id="developer-email">{{ $details['email'] ?? '' }}</p>
                     <input id="developer-key" type="hidden" value="{{ end($app['credentials'])['consumerKey']  }}">
                     <input id="developer-id" type="hidden" value="{{ $app['developerId']  }}">
                 </div>
