@@ -29,116 +29,110 @@
     <x-heading heading="Apps" tags="CREATE NEW"></x-heading>
 
     <div class="content">
-        <div class="container">
+        <nav>
+            <a href="#" class="active">
+                <span>1</span> App details
+            </a>
+            <a href="#">
+                <span>2</span> Select countries
+            </a>
+            <a href="#">
+                <span>3</span> Select products
+            </a>
+        </nav>
 
-            <nav>
-                <a href="#" class="active">
-                    <span>1</span> App details
-                </a>
-                <a href="#">
-                    <span>2</span> Select countries
-                </a>
-                <a href="#">
-                    <span>3</span> Select products
-                </a>
-            </nav>
+        <form id="form-create-app">
 
-            <div class="row">
+            <div class="active">
+                @svg('app-avatar', '#ffffff')
+                <div class="group">
+                    <label for="name">Name your app *</label>
+                    <input type="text" name="name" id="name" placeholder="Enter name" required>
+                </div>
 
-                <form id="form-create-app">
+                <div class="group">
+                    <label for="url">Callback url</label>
+                    <input type="url" name="url" id="url" placeholder="Enter callback url">
+                </div>
 
-                    <div class="active">
-                        @svg('app-avatar', '#ffffff')
-                        <div class="group">
-                            <label for="name">Name your app *</label>
-                            <input type="text" name="name" id="name" placeholder="Enter name" required>
-                        </div>
+                <div class="group">
+                    <label for="description">Description</label>
+                    <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>
+                </div>
 
-                        <div class="group">
-                            <label for="url">Callback url</label>
-                            <input type="url" name="url" id="url" placeholder="Enter callback url">
-                        </div>
-
-                        <div class="group">
-                            <label for="description">Description</label>
-                            <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>
-                        </div>
-
-                        <button class="dark next">
-                            Select countries
-                            @svg('arrow-forward', '#ffffff')
-                        </button>
-                    </div>
-
-                    <div class="select-countries">
-                        <p>Select the countries you would like to associate with your app *</p>
-
-                        <div class="countries">
-                            @foreach($countries as $key => $country)
-                                <label class="country" for="country-{{ $loop->index + 1 }}" data-location="{{ $key }}">
-                                    @svg('$key', '#000000', 'images/locations')
-                                    <input type="checkbox" id="country-{{ $loop->index + 1 }}" name="country-checkbox" data-location="{{ $key }}">
-                                    {{ $country }}
-                                </label>
-                            @endforeach
-                        </div>
-
-                        <div class="form-actions">
-                            <button class="dark outline back">Back</button>
-                            <button class="dark next">
-                                Select products
-                                @svg('arrow-forward', '#ffffff')
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="select-products">
-                        <p>Select the products you would like to add to your app.</p>
-
-                        <p>Showing products for</p>
-
-                        <div class="filtered-countries">
-                            @foreach($countries as $key => $country)
-                                <img src="/images/locations/{{$key}}.svg" title="{{$country}} flag" alt="{{$country}} flag" data-location="{{ $key }}">
-                            @endforeach
-                        </div>
-
-                        <div class="products">
-                            @foreach ($products as $category=>$products)
-                                <div class="category" data-category="{{ $category }}">
-                                    <h3>{{ $category }}</h3>
-                                    @foreach ($products as $product)
-                                        @php
-                                            $tags = array($product->group, $product->category);
-                                            $href = "/products/$product->slug";
-                                        @endphp
-                                        <x-card-product :title="$product->display_name"
-                                                        class="product-block"
-                                                        :href="$href"
-                                                        :tags="$tags"
-                                                        :addButtonId="$product->id"
-                                                        :data-title="$product->display_name"
-                                                        :data-group="$product->group"
-                                                        :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}
-                                        </x-card-product>
-                                    @endforeach
-                                </div>
-                            @endforeach
-                        </div>
-
-                        <div class="form-actions">
-                            <button class="dark outline back">Back</button>
-                            <button class="dark" id="create">
-                                Create app
-                            </button>
-                        </div>
-                    </div>
-
-                </form>
+                <button class="dark next">
+                    Select countries
+                    @svg('arrow-forward', '#ffffff')
+                </button>
             </div>
 
-            <button type="reset">Cancel</button>
-        </div>
+            <div class="select-countries">
+                <p>Select the countries you would like to associate with your app *</p>
+
+                <div class="countries">
+                    @foreach($countries as $key => $country)
+                        <label class="country" for="country-{{ $loop->index + 1 }}" data-location="{{ $key }}">
+                            @svg('$key', '#000000', 'images/locations')
+                            <input type="checkbox" id="country-{{ $loop->index + 1 }}" name="country-checkbox" data-location="{{ $key }}">
+                            {{ $country }}
+                        </label>
+                    @endforeach
+                </div>
+
+                <div class="form-actions">
+                    <button class="dark outline back">Back</button>
+                    <button class="dark next">
+                        Select products
+                        @svg('arrow-forward', '#ffffff')
+                    </button>
+                </div>
+            </div>
+
+            <div class="select-products">
+                <p>Select the products you would like to add to your app.</p>
+
+                <p>Showing products for</p>
+
+                <div class="filtered-countries">
+                    @foreach($countries as $key => $country)
+                        <img src="/images/locations/{{$key}}.svg" title="{{$country}} flag" alt="{{$country}} flag" data-location="{{ $key }}">
+                    @endforeach
+                </div>
+
+                <div class="products">
+                    @foreach ($products as $category=>$products)
+                        <div class="category" data-category="{{ $category }}">
+                            <h3>{{ $category }}</h3>
+                            @foreach ($products as $product)
+                                @php
+                                    $tags = array($product->group, $product->category);
+                                    $href = "/products/$product->slug";
+                                @endphp
+                                <x-card-product :title="$product->display_name"
+                                                class="product-block"
+                                                :href="$href"
+                                                :tags="$tags"
+                                                :addButtonId="$product->id"
+                                                :data-title="$product->display_name"
+                                                :data-group="$product->group"
+                                                :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}
+                                </x-card-product>
+                            @endforeach
+                        </div>
+                    @endforeach
+                </div>
+
+                <div class="form-actions">
+                    <button class="dark outline back">Back</button>
+                    <button class="dark" id="create">
+                        Create app
+                    </button>
+                </div>
+            </div>
+
+        </form>
+
+        <button type="reset">Cancel</button>
     </div>
 
 @endsection
