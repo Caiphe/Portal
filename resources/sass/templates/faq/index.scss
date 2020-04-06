@@ -4,8 +4,9 @@
     padding: 0 !important;
 }
 
-section {
-    padding: $gutter 150px;
+section:last-of-type {
+    padding-top: 80px;
+    padding-bottom: 40px;
 }
 
 .faq-section {
@@ -48,8 +49,4 @@ section {
             }
         }
     }
-}
-
-.contact-section {
-    background-color: $grey300;
 }

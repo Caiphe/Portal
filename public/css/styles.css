@@ -2224,6 +2224,10 @@ body > #main {
   padding-bottom: 5rem;
 }
 
+.grey-bg {
+  background-color: #f2f2f2;
+}
+
 h1.with-icon,
 h2.with-icon,
 h3.with-icon,
