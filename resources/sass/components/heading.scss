@@ -1,5 +1,30 @@
 @import "../variables";
 
+.layout-master {
+    &::before {
+        content: '';
+        width: 100vw;
+        background-color: $grey400;
+        height: 68px;
+        position: absolute;
+        top: 80px;
+        right: 0;
+        left: 0;
+    }
+}
+
+.layout-sidebar {
+    &::after {
+        content: '';
+        width: 50%;
+        background-color: $grey400;
+        height: 68px;
+        position: absolute;
+        top: 80px;
+        right: 0;
+    }
+}
+
 #main {
     padding: 90px $gutter $gutter;
 

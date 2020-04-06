@@ -1,7 +1,7 @@
 <header id="header">
     <div class="header-inner container">
         <a href="/"><img src="/images/mtn-logo.svg" alt="MTN logo"></a>
-        <div class="site-name">Developer Portal</div>
+        <a href="/" class="site-name">Developer Portal</a>
         <ul class="main-menu" role="navigation" aria-label="Main">
             <li class="has-children">
                 <a href="/products">Products @svg("chevron-down")</a>

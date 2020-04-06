@@ -38,6 +38,17 @@
     margin: 0 auto;
 }
 
+.container-inner {
+    max-width: 1440px;
+    width: 100%;
+    position: relative;
+    margin: 0 auto;
+
+    &.flex {
+        display: flex;
+    }
+}
+
 .cols {
     &:not(.inline) {
         display: flex;

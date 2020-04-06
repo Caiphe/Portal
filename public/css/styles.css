@@ -429,7 +429,7 @@ table th {
   border: none;
 }
 
-li {
+#main li {
   padding: 6px 0;
 }
 
@@ -1717,6 +1717,8 @@ input[type=number].see-through {
 body > #main {
   flex: 1 0 auto;
   padding: 40px 8%;
+  max-width: 1440px;
+  margin: 0 auto;
 }
 
 #footer {
@@ -1771,29 +1773,19 @@ body > #main {
   margin-left: 10px;
 }
 
-.layout-sidebar .wrapper {
-  display: flex;
-  flex: 1 0 auto;
-}
-
-.layout-sidebar .wrapper::before {
+.layout-sidebar::before {
   content: "";
   width: 50%;
   background-color: #fafafa;
   height: 100%;
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
 }
 
-.layout-sidebar .wrapper::after {
-  content: "";
-  width: 50%;
-  background-color: #e6e6e6;
-  height: 68px;
-  position: absolute;
-  right: 0;
-  top: 0;
+.layout-sidebar .wrapper {
+  display: flex;
+  flex: 1 0 auto;
 }
 
 .layout-sidebar .wrapper #sidebar {
@@ -1847,6 +1839,17 @@ body > #main {
   width: 100%;
   position: relative;
   margin: 0 auto;
+}
+
+.container-inner {
+  max-width: 1440px;
+  width: 100%;
+  position: relative;
+  margin: 0 auto;
+}
+
+.container-inner.flex {
+  display: flex;
 }
 
 .cols:not(.inline) {
