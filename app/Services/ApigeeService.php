@@ -56,7 +56,7 @@ class ApigeeService
 
     public static function getOrgApps(string $status)
     {
-        return self::get("/apps?expand=true&status={$status}");
+        return self::get("/apps?rows=10&expand=true&status={$status}");
     }
 
     public static function getDeveloperDetails(string $developer_id)
