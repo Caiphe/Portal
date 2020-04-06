@@ -29,6 +29,7 @@
     <x-heading heading="Apps" tags="CREATE NEW"></x-heading>
 
     <div class="content">
+
         <nav>
             <a href="#" class="active">
                 <span>1</span> App details
@@ -141,7 +142,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', init);
 
-    var nav = document.querySelector('#app-create nav');
+    var nav = document.querySelector('.content nav');
     var form = document.getElementById('form-create-app');
     var buttons = document.querySelectorAll('.next');
     var backButtons = document.querySelectorAll('.back');
@@ -158,7 +159,7 @@
 
             buttons[i].addEventListener('click', function (event) {
                 event.preventDefault();
-
+                console.log(form.firstElementChild);
                 if(form.firstElementChild.classList.contains('active')) {
 
                     nav.querySelector('a').nextElementSibling.classList.add('active');
