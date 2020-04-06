@@ -25,11 +25,13 @@ class CreateAppRequest extends FormRequest
     public function rules()
     {
         return [
+            'key' => 'sometimes',
             'name' => 'required',
             'new_name' => 'sometimes',
             'url' => 'sometimes',
             'description' => 'sometimes',
-            'products' => 'required:array'
+            'products' => 'required:array',
+            'original_products' => 'sometimes:array'
         ];
     }
 }

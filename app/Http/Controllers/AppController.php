@@ -15,7 +15,7 @@ class AppController extends Controller
     public function index()
     {
         $user = \Auth::user();
-        $apps = ApigeeService::get("developers/{$user->email}/apps/?expand=true");
+        $apps = ApigeeService::getDeveloperApps($user->email);
 
         $approvedApps = [];
         $revokedApps = [];
@@ -69,7 +69,11 @@ class AppController extends Controller
             'callbackUrl' => preg_replace('/[<>"]*/', '', strip_tags($validated['url'])) ?? ''
         ];
 
-        ApigeeService::createApp($data);
+        $createdResponse = ApigeeService::createApp($data);
+
+        if($request->ajax()){
+            return response()->json(['response' => $createdResponse]);
+        }
 
         return redirect(route('app.index'));
     }
@@ -79,9 +83,9 @@ class AppController extends Controller
         [$products, $countries] = $productLocationService->fetch();
 
         $user = \Auth::user();
-        $data = ApigeeService::get("developers/{$user->email}/apps/{$request->name}/?expand=true");
+        $data = ApigeeService::getDeveloperApp($user->email,$request->name);
 
-        $selectedProducts = array_column(end($data['credentials'])['apiProducts'], 'apiproduct');
+        $selectedProducts = array_column($data['credentials']['apiProducts'], 'apiproduct');
 
         return view('templates.apps.edit', [
             'products' => $products,
@@ -100,7 +104,9 @@ class AppController extends Controller
 
         $data = [
             'name' => $validated['name'],
+            'key' => $validated['key'],
             'apiProducts' => $apiProducts,
+            'originalProducts' => $validated['original_products'],
             'keyExpiresIn' => -1,
             'attributes' => [
                 [
@@ -115,7 +121,11 @@ class AppController extends Controller
             'callbackUrl' => preg_replace('/[<>"]*/', '', strip_tags($validated['url'])) ?? ''
         ];
 
-        ApigeeService::updateApp($validated['name'], $data);
+        $updatedResponse = ApigeeService::updateApp($data);
+
+        if($request->ajax()){
+            return response()->json(['response' => $updatedResponse]);
+        }
 
         return redirect(route('app.index'));
     }

@@ -16,7 +16,7 @@
             <x-multiselect id="filter-country" name="filter-country" label="Select country" :options="$countries" />
         </div>
 
-        <button id="clearFilter" class="dark outline" onclick="clearFilter()">Clear filters</button>
+        <button id="clearFilter" class="dark outline mt-1" onclick="clearFilter()">Clear filters</button>
     </div>
 @endsection
 
@@ -67,7 +67,7 @@
                                 :app="$app"
                                 :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"
                                 :details="App\Services\ApigeeService::getDeveloperDetails($app['developerId'])"
-                                :countries="App\Services\ApigeeService::getAppCountries(array_column(end($app['credentials'])['apiProducts'], 'apiproduct'))"
+                                :countries="App\Services\ApigeeService::getAppCountries(array_column($app['credentials']['apiProducts'], 'apiproduct'))"
                                 :type="$type = 'approved'">
                             </x-app>
 
@@ -116,7 +116,7 @@
                                 :app="$app"
                                 :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"
                                 :details="App\Services\ApigeeService::getDeveloperDetails($app['developerId'])"
-                                :countries="App\Services\ApigeeService::getAppCountries(array_column(end($app['credentials'])['apiProducts'], 'apiproduct'))"
+                                :countries="App\Services\ApigeeService::getAppCountries(array_column($app['credentials']['apiProducts'], 'apiproduct'))"
                                 :type="$type = 'revoked'">
                             </x-app>
                         @endif

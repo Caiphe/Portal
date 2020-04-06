@@ -16,12 +16,12 @@
     <div class="column countries">
         @foreach($countries as $key => $country)
             @if($loop->first)
-                @svg($key, '#000000', 'images/locations')
+                <span title="{{$country}}">@svg($key, '#000000', 'images/locations')</span>
             @endif
         @endforeach
 
         @if($countries->count() > 1)
-        + {{ $countries->count() }} more
+        + {{ $countries->count() - 1 }} more
         @endif
     </div>
     @else
@@ -52,7 +52,7 @@
                 <div>
                     <p id="developer-name">{{ $details['firstName']  . ' ' . $details['lastName'] }}</p>
                     <p id="developer-email">{{ $details['email'] ?? '' }}</p>
-                    <input id="developer-key" type="hidden" value="{{ end($app['credentials'])['consumerKey']  }}">
+                    <input id="developer-key" type="hidden" value="{{ $app['credentials']['consumerKey']  }}">
                     <input id="developer-id" type="hidden" value="{{ $app['developerId']  }}">
                 </div>
                 <div class="dashboard-countries">
@@ -61,7 +61,7 @@
                 <div>
                     <div>
                         @foreach($countries as $key => $country)
-                            @svg($key, '#000000', 'images/locations')
+                            <span title="{{$country}}">@svg($key, '#000000', 'images/locations')</span>
                         @endforeach
                     </div>
                 </div>
@@ -75,10 +75,10 @@
                 </div>
                 <div class="consumer">
                     <p class="key">
-                        <input type="text" name="consumerKey" id="{{$app['appId']}}-consumer-key" value="{{ end($app['credentials'])['consumerKey']  }}" readonly>
+                        <input type="text" name="consumerKey" id="{{$app['appId']}}-consumer-key" value="{{ $app['credentials']['consumerKey']  }}" readonly>
                     </p>
                     <p class="key">
-                        <input type="text" name="consumerSecret" id="{{$app['appId']}}-consumer-secret" value="{{ end($app['credentials'])['consumerSecret']  }}" readonly>
+                        <input type="text" name="consumerSecret" id="{{$app['appId']}}-consumer-secret" value="{{ $app['credentials']['consumerSecret']  }}" readonly>
                     </p>
                     <p>{{ $app['callbackUrl'] }}</p>
                 </div>
@@ -104,7 +104,7 @@
                         @endforeach
                     </div>
                     <p>
-                        {{ date('d M Y H:i:s', substr(end($app['credentials'])['issuedAt'], 0, 10)) }}
+                        {{ date('d M Y H:i:s', substr($app['credentials']['issuedAt'], 0, 10)) }}
                     </p>
                     <p>Never</p>
                 </div>
@@ -122,7 +122,7 @@
         <p class="products-title"><strong>Products</strong></p>
 
         <div class="products">
-            <x-apps.products :products="end($app['credentials'])['apiProducts']" />
+            <x-apps.products :products="$app['credentials']['apiProducts']" />
         </div>
     </div>
     <nav class="menu">

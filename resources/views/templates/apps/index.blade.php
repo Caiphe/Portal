@@ -79,7 +79,7 @@
                             <x-app
                                 :app="$app"
                                 :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"
-                                :countries="App\Services\ApigeeService::getAppCountries(array_column(end($app['credentials'])['apiProducts'], 'apiproduct'))"
+                                :countries="App\Services\ApigeeService::getAppCountries(array_column($app['credentials']['apiProducts'], 'apiproduct'))"
                                 :type="$type = 'approved'">
                             </x-app>
                         @endif
@@ -125,7 +125,7 @@
                             <x-app
                                 :app="$app"
                                 :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"
-                                :countries="App\Services\ApigeeService::getAppCountries(array_column(end($app['credentials'])['apiProducts'], 'apiproduct'))"
+                                :countries="App\Services\ApigeeService::getAppCountries(array_column($app['credentials']['apiProducts'], 'apiproduct'))"
                                 :type="$type = 'revoked'">
                             </x-app>
                         @endif

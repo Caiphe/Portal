@@ -12,13 +12,13 @@ class DashboardController extends Controller
     public function index(ProductLocationService $productLocationService)
     {
         $approvedApps = $this->apps(ApigeeService::getOrgApps('approved'), $approvedApps = []);
-        $revokedApps = $this->apps(ApigeeService::getOrgApps('revoked'), $revokedApps = []);
+        // $revokedApps = $this->apps(ApigeeService::getOrgApps('revoked'), $revokedApps = []);
 
         [$products, $countries] = $productLocationService->fetch();
 
         return view('templates.dashboard.index', [
             'approvedApps' => $approvedApps ?? [],
-            'revokedApps' => $revokedApps ?? [],
+            'revokedApps' => [],//$revokedApps ?? [],
             'countries' => $countries
         ]);
     }
