@@ -111,7 +111,6 @@
                         @if(!empty($app['attributes']))
                             <x-app
                                 :app="$app"
-                                :type="revoked"
                                 :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"
                                 :countries="App\Services\ApigeeService::getAppCountries(array_column(end($app['credentials'])['apiProducts'], 'apiproduct'))"
                                 :type="$type = 'revoked'">
