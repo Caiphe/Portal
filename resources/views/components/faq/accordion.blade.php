@@ -1,5 +1,5 @@
-<div class="accordion">
-	<h3 class="question" onclick="toggleAnswer(this)">
+<div id="{{$id}}" class="accordion">
+	<h3 class="question">
 		{{$question}}
         @svg('chevron-down')
     </h3>

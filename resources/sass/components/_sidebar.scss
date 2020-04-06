@@ -1,39 +1,29 @@
-.layout-sidebar .wrapper {
-    display: flex;
-    flex: 1 0 auto;
-
+.layout-sidebar {
     &::before {
         content: '';
         width: 50%;
         background-color: $grey200;
         height: 100%;
-        position: absolute;
+        position: fixed;
         left: 0;
         top: 0;
     }
 
-    &::after {
-        content: '';
-        width: 50%;
-        background-color: $grey400;
-        height: 68px;
-        position: absolute;
-        right: 0;
-        top: 0;
-    }
+    .wrapper {
+        display: flex;
+        flex: 1 0 auto;
 
-    #sidebar {
-        flex: 1;
-        padding: $gutter 0;
-        min-width: 250px;
-        max-width: 250px;
-        background-color: $grey200;
-        height: 100%;
-    }
+        #sidebar {
+            flex: 1;
+            padding: $gutter 0;
+            min-width: 250px;
+            max-width: 250px;
+            background-color: $grey200;
+            height: 100%;
+        }
 
-    #main {
-        background-color: #FFF;
+        #main {
+            background-color: #FFF;
+        }
     }
 }
-
-
