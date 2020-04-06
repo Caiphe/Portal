@@ -52,6 +52,11 @@
             }
 
             .has-children {
+
+                a:first-of-type {
+                    padding-left: 2px;
+                }
+
                 &>div {
                     position: absolute;
                     top: 50px;

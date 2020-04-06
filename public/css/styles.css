@@ -688,6 +688,10 @@ pre {
   fill: #FFF;
 }
 
+#header .header-inner .main-menu .has-children a:first-of-type {
+  padding-left: 2px;
+}
+
 #header .header-inner .main-menu .has-children > div {
   position: absolute;
   top: 50px;
