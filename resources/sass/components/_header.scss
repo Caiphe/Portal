@@ -63,7 +63,7 @@
                     background-color: #fff;
                     padding: 20px;
                     display: flex;
-                    width: 440px;
+                    width: 460px;
                     margin-left: -200px;
                     font-size: 1.4rem;
                     opacity: 0;
@@ -93,6 +93,8 @@
 
                     .nav-right {
                         flex: 1;
+                        padding-left: 5px;
+                        padding-right: 5px;
 
                         h3 {
                             color: $grey500;
