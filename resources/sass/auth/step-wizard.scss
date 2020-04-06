@@ -29,23 +29,6 @@
         }
     }
 
-    .step_wizard__footer {
-        display: block;
-        position: absolute;
-        bottom: 70px;
-
-        p {
-            display: inline;
-            color: grey;
-            input {
-                display: none;
-            }
-        }
-        button {
-            display: inline;
-        }
-    }
-
     .item_content {
         width: 100%;
     }
@@ -114,6 +97,32 @@
                     svg {
                         vertical-align: middle;
                     }
+                }
+            }
+            .step_wizard__footer {
+                display: flex;
+                position: absolute;
+                bottom: 70px;
+
+                .step_wizard--error-message {
+                    display: none;
+                    font-size: 16px;
+                    text-align: center;
+                    color: $red;
+                    font-style: italic;
+                    margin: 0px;
+                    margin-bottom: 20px;
+                }
+
+                p {
+                    display: inline;
+                    color: $grey700;
+                    input {
+                        display: none;
+                    }
+                }
+                button {
+                    display: inline;
                 }
             }
         }

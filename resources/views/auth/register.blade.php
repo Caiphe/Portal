@@ -150,18 +150,17 @@
                     <x-switch id="termsSwitch"></x-switch> 
                     <span class="text">Accept</span>
                 </div>
-            </div>
+			</div>
+			<div class="step_wizard__footer">
+				<p id="FormStepErrorMsg" class="step_wizard--error-message"><i>Please fill in all fields in Step!</i></p>
+				<button id="stepwizardPrevBtn" onclick="nextPrev(-1)" class="dark outline">Back</button>
+				<button id="stepwizardNextBtn" onclick="nextPrev(1)" >Next</button>
+				<button type="submit" onclick="readyToSubmit(event)" id="stepWizardSubmitBtn" disabled>Create New Account</button>
+				<p>
+					press Enter &crarr;
+				</p>
+			</div>
         </form>
-
-        <div class="step_wizard__footer">
-            <p id="FormStepErrorMsg" style="display: none; font-size: 16px; text-align: center; color: red; margin: 0px; margin-bottom: 20px;"><i>Please fill in all fields in Step!</i></p>
-            <button id="stepwizardPrevBtn" onclick="nextPrev(-1)" class="dark outline">Back</button>
-            <button id="stepwizardNextBtn" onclick="nextPrev(1)" >Next</button>
-            <button type="submit" onclick="readyToSubmit(event)" id="stepWizardSubmitBtn" disabled>Create New Account</button>
-            <p>
-                press Enter &crarr;
-            </p>
-        </div>
 
         <div class="step__wizard_progress_bar step__wizard_bar_container"></div>
         <div id="stepwizardProgress" class="step__wizard_progress_bar"></div>
@@ -171,5 +170,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ mix('/js/register.js') }}"></script>
+    <script src="{{ mix('/js/templates/auth/register.js') }}"></script>
 @endpush

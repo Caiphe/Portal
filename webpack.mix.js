@@ -18,7 +18,7 @@ mix.scripts(["resources/js/scripts.js", "resources/js/components/alert.js"], "pu
     .scripts("resources/js/components/multiselect.js", "public/js/components/multiselect.js")
     .scripts("resources/js/templates/products/index.js", "public/js/templates/products/index.js")
     .scripts("resources/js/templates/products/show.js", "public/js/templates/products/show.js")
-    .scripts("resources/js/register.js", "public/js/register.js")
+    .scripts("resources/js/templates/auth/register.js", "public/js/templates/auth/register.js")
     .scripts("resources/js/templates/faq/index.js", "public/js/templates/faq/index.js")
     .sass("resources/sass/auth/step-wizard.scss", "public/css/auth")
     .sass("resources/sass/components/carousel.scss", "public/css/components")
