@@ -4,7 +4,11 @@
     padding: 0 !important;
 }
 
-section:last-of-type {
+section:first-of-type {
+    padding-bottom: 60px;
+}
+
+section:not(:first-of-type) {
     padding-top: 80px;
     padding-bottom: 40px;
 }
