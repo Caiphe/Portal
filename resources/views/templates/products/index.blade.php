@@ -20,14 +20,14 @@ $filters = array('Group'=> $groups,'Categories'=> $productCategories);
 				<input type="checkbox" name="{{$filterTitle}}" value="{{$filterItem}}" id="{{$filterTitle}}" onclick="filterProducts('{{$filterTitle}}');" @if(isset($selectedCategory) && $selectedCategory===$filterItem) checked=checked @endif
 				/><label class="filter-label" for="{{$filterTitle}}">{{$filterItem}}</label>
 			</div>
-		@endforeach	
+		@endforeach
 	@endforeach
 	<div class="country-filter">
 		<h3>Country</h3>
 		<x-multiselect id="filter-country" name="filter-country" label="Select country" :options="$countries" />
 	</div>
 
-	<button id="clearFilter" class="dark outline" onclick="clearFilter()" 
+	<button id="clearFilter" class="dark outline" onclick="clearFilter()"
 	@isset($selectedCategory)
 		style="display:block"
 	@endisset>Clear filters</button>
@@ -35,37 +35,39 @@ $filters = array('Group'=> $groups,'Categories'=> $productCategories);
 @endsection
 
 @section('content')
-	<x-heading heading="Products"></x-heading>
-	<input type="text" name="filter-text" id="filter-text" class="filter-text" placeholder="Search" autofocus/>
-	<hr class="search-hr"/>
-	<div class="products">
-	@foreach ($productsCollection as $category=>$products)
-	<div class="category" data-category="{{ $category }}" 
-	@if(isset($selectedCategory) && $selectedCategory!==$category)
-		style="display:none"
-	@endif>
-			<h3>{{ $category }}</h3>
-			@php
-			$products = $products->sortBy('display_name');			
-			@endphp
-			@foreach ($products as $product)
-				@php //setting variables
+    <x-heading heading="Products"></x-heading>
+    <div class="content">
+        <input type="text" name="filter-text" id="filter-text" class="filter-text" placeholder="Search" autofocus/>
+        <hr class="search-hr"/>
+        <div class="products">
+            @foreach ($productsCollection as $category=>$products)
+                <div class="category" data-category="{{ $category }}"
+                     @if(isset($selectedCategory) && $selectedCategory!==$category)
+                     style="display:none"
+                    @endif>
+                    <h3>{{ $category }}</h3>
+                    @php
+                        $products = $products->sortBy('display_name');
+                    @endphp
+                    @foreach ($products as $product)
+                        @php //setting variables
 				if ($product->locations !== 'all' && $product->locations !== null) :
 					$countries = explode(',',$product->locations);
 				else :
-					$countries = array('globe');	
+					$countries = array('globe');
 				endif;
 				$tags = array($product->group,$product->category);
 				$slug = 'products/'.$product->slug;
-				@endphp
-				<x-card-product :title="$product->display_name" :href="'/' . $slug" :countries="$countries" :tags="$tags"
-				:data-title="$product->display_name"
-				:data-group="$product->group"
-				:data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}</x-card-product>
-			@endforeach	
-		</div>
-	@endforeach
-	</div>
+                        @endphp
+                        <x-card-product :title="$product->display_name" :href="'/' . $slug" :countries="$countries" :tags="$tags"
+                                        :data-title="$product->display_name"
+                                        :data-group="$product->group"
+                                        :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}</x-card-product>
+                    @endforeach
+                </div>
+            @endforeach
+        </div>
+    </div>
 @endsection
 
 @pushscript('products')

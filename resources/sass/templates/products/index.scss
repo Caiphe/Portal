@@ -8,27 +8,41 @@ h3 {
 .search-hr {
     color: $grey300;
 }
-.products {
-    display: flex;
-    flex-flow: row wrap;
 
-    .category {
-        display: flex;
-        flex-flow: row wrap;
-        margin-bottom: 10px;
-        width: 100%;
+#main {
+    padding: 0 !important;
 
-        h3 {
-            width: 100%;
-        }
+    #heading {
+        margin-bottom: 40px;
+    }
 
-        .card {
-            margin-bottom: 30px;
-            margin-right: 20px;
-            width: 30%;
+    .content {
+        margin-left: 40px;
+
+        .products {
+            display: flex;
+            flex-flow: row wrap;
+
+            .category {
+                display: flex;
+                flex-flow: row wrap;
+                margin-bottom: 10px;
+                width: 100%;
+
+                h3 {
+                    width: 100%;
+                }
+
+                .card {
+                    margin-bottom: 30px;
+                    margin-right: 20px;
+                    width: 30%;
+                }
+            }
         }
     }
 }
+
 .filter-sidebar {
     .filter-checkbox {
         display: flex;
