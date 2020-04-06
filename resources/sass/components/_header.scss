@@ -10,105 +10,105 @@
         display: flex;
         align-items: center;
         justify-content: flex-start;
-    }
 
-    .site-name {
-        margin-left: $gutterSmall;
-        font-size: 1.8rem;
-        flex-grow: 1;
-    }
-
-    .has-children {
-        &>div {
-            position: absolute;
-            top: 50px;
-            background-color: #fff;
-            padding: 20px;
-            display: flex;
-            width: 440px;
-            margin-left: -200px;
-            font-size: 1.4rem;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.356s, transform 0.356s;
-
-            .nav-left {
-                position: relative;
-                flex: 2;
-                margin-right: $gutterSmall;
-                padding-right: $gutterSmall;
-
-                a {
-                    background: url("/images/icons/arrow-forward.svg") no-repeat right center / 16px;
-                }
-
-                &::after {
-                    content: "";
-                    width: 1px;
-                    height: 100%;
-                    position: absolute;
-                    right: 0;
-                    top: 0;
-                    background-color: $grey900;
-                }
-            }
-
-            .nav-right {
-                flex: 1;
-
-                h3 {
-                    color: $grey500;
-                    font-family: "mtn-bold";
-                    font-size: 1rem;
-                    line-height: 28px;
-                    display: block;
-                    margin: 0;
-                }
-            }
-
-            a {
-                display: block;
-                line-height: 28px;
-            }
+        .site-name {
+            margin-left: $gutterSmall;
+            font-size: 1.8rem;
+            flex-grow: 1;
         }
 
-        &:hover>div {
-            opacity: 1;
-            pointer-events: auto;
-            transform: translate(0, 18px);
-        }
-    }
-
-    .main-menu {
-        list-style: none;
-        height: 80px;
-
-        &>li {
-            display: inline-block;
-            font-size: 1.6rem;
-            padding: 0 10px;
+        .main-menu {
+            list-style: none;
             height: 80px;
-            line-height: 80px;
 
-            &>a {
-                display: flex;
-                align-items: center;
-            }
-
-            svg {
-                width: 18px;
-                margin-left: 6px;
-            }
-
-            &:hover {
-                background-color: $grey900;
+            &>li {
+                display: inline-block;
+                font-size: 1.6rem;
+                padding: 0 10px;
+                height: 80px;
+                line-height: 80px;
 
                 &>a {
-                    color: #FFF;
+                    display: flex;
+                    align-items: center;
                 }
 
                 svg {
-                    fill: #FFF;
+                    width: 18px;
+                    margin-left: 6px;
+                }
+
+                &:hover {
+                    background-color: $grey900;
+
+                    &>a {
+                        color: #FFF;
+                    }
+
+                    svg {
+                        fill: #FFF;
+                    }
+                }
+            }
+
+            .has-children {
+                &>div {
+                    position: absolute;
+                    top: 50px;
+                    background-color: #fff;
+                    padding: 20px;
+                    display: flex;
+                    width: 440px;
+                    margin-left: -200px;
+                    font-size: 1.4rem;
+                    opacity: 0;
+                    pointer-events: none;
+                    transition: opacity 0.356s, transform 0.356s;
+
+                    .nav-left {
+                        position: relative;
+                        flex: 2;
+                        margin-right: $gutterSmall;
+                        padding-right: $gutterSmall;
+
+                        a {
+                            background: url("/images/icons/arrow-forward.svg") no-repeat right center / 16px;
+                        }
+
+                        &::after {
+                            content: "";
+                            width: 1px;
+                            height: 100%;
+                            position: absolute;
+                            right: 0;
+                            top: 0;
+                            background-color: $grey900;
+                        }
+                    }
+
+                    .nav-right {
+                        flex: 1;
+
+                        h3 {
+                            color: $grey500;
+                            font-family: "mtn-bold";
+                            font-size: 1rem;
+                            line-height: 28px;
+                            display: block;
+                            margin: 0;
+                        }
+                    }
+
+                    a {
+                        display: block;
+                        line-height: 28px;
+                    }
+                }
+
+                &:hover>div {
+                    opacity: 1;
+                    pointer-events: auto;
+                    transform: translate(0, 18px);
                 }
             }
         }

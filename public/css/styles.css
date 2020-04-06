@@ -647,13 +647,48 @@ pre {
   justify-content: flex-start;
 }
 
-#header .site-name {
+#header .header-inner .site-name {
   margin-left: 20px;
   font-size: 1.8rem;
   flex-grow: 1;
 }
 
-#header .has-children > div {
+#header .header-inner .main-menu {
+  list-style: none;
+  height: 80px;
+}
+
+#header .header-inner .main-menu > li {
+  display: inline-block;
+  font-size: 1.6rem;
+  padding: 0 10px;
+  height: 80px;
+  line-height: 80px;
+}
+
+#header .header-inner .main-menu > li > a {
+  display: flex;
+  align-items: center;
+}
+
+#header .header-inner .main-menu > li svg {
+  width: 18px;
+  margin-left: 6px;
+}
+
+#header .header-inner .main-menu > li:hover {
+  background-color: #1a1a1a;
+}
+
+#header .header-inner .main-menu > li:hover > a {
+  color: #FFF;
+}
+
+#header .header-inner .main-menu > li:hover svg {
+  fill: #FFF;
+}
+
+#header .header-inner .main-menu .has-children > div {
   position: absolute;
   top: 50px;
   background-color: #fff;
@@ -667,18 +702,18 @@ pre {
   transition: opacity 0.356s, transform 0.356s;
 }
 
-#header .has-children > div .nav-left {
+#header .header-inner .main-menu .has-children > div .nav-left {
   position: relative;
   flex: 2;
   margin-right: 20px;
   padding-right: 20px;
 }
 
-#header .has-children > div .nav-left a {
+#header .header-inner .main-menu .has-children > div .nav-left a {
   background: url("/images/icons/arrow-forward.svg") no-repeat right center/16px;
 }
 
-#header .has-children > div .nav-left::after {
+#header .header-inner .main-menu .has-children > div .nav-left::after {
   content: "";
   width: 1px;
   height: 100%;
@@ -688,11 +723,11 @@ pre {
   background-color: #1a1a1a;
 }
 
-#header .has-children > div .nav-right {
+#header .header-inner .main-menu .has-children > div .nav-right {
   flex: 1;
 }
 
-#header .has-children > div .nav-right h3 {
+#header .header-inner .main-menu .has-children > div .nav-right h3 {
   color: #cccccc;
   font-family: "mtn-bold";
   font-size: 1rem;
@@ -701,50 +736,15 @@ pre {
   margin: 0;
 }
 
-#header .has-children > div a {
+#header .header-inner .main-menu .has-children > div a {
   display: block;
   line-height: 28px;
 }
 
-#header .has-children:hover > div {
+#header .header-inner .main-menu .has-children:hover > div {
   opacity: 1;
   pointer-events: auto;
   transform: translate(0, 18px);
-}
-
-#header .main-menu {
-  list-style: none;
-  height: 80px;
-}
-
-#header .main-menu > li {
-  display: inline-block;
-  font-size: 1.6rem;
-  padding: 0 10px;
-  height: 80px;
-  line-height: 80px;
-}
-
-#header .main-menu > li > a {
-  display: flex;
-  align-items: center;
-}
-
-#header .main-menu > li svg {
-  width: 18px;
-  margin-left: 6px;
-}
-
-#header .main-menu > li:hover {
-  background-color: #1a1a1a;
-}
-
-#header .main-menu > li:hover > a {
-  color: #FFF;
-}
-
-#header .main-menu > li:hover svg {
-  fill: #FFF;
 }
 
 #header input {
