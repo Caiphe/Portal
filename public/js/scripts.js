@@ -24,7 +24,7 @@ function addAlert(type, messages) {
             messageList += '<li>' + messages[i] + '</li>';
         }
     }
-    
+
     alert = '<div id="alert" class="' + type + '"><div class="container"><ul>' + messageList + '</ul><button class="fab blue close" onclick="closeAlert()"></button></div></div>';
 
     document.getElementById('header').insertAdjacentHTML('afterend', alert);

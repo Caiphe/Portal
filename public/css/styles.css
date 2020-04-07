@@ -2537,6 +2537,7 @@ h6.phone::before {
   max-height: 0;
   overflow: hidden;
   flex: 1 0 auto;
+  z-index: 2;
 }
 
 #alert.open {

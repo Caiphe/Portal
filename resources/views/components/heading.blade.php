@@ -1,4 +1,4 @@
-{{-- 
+{{--
     This component adds a heading to the page. It consists of the h1 tag as well as the ability
     to add tags, a fab button and content that will be in the far right of the heading.
     What is in the slot part of the component will be added to the right side of the heading.
@@ -34,6 +34,6 @@
     @if(isset($fab))
     <button id="heading-fab" class="fab {{$fab}}"></button>
     @endif
-    
+
     <div class="right-side">{{$slot}}</div>
 </div>
