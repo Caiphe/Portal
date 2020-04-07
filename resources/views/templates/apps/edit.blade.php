@@ -28,11 +28,7 @@
 
     <x-heading heading="Apps" tags="EDIT"></x-heading>
 
-{{--    {{ dd($selectedProducts) }}--}}
-{{--    {{ dd($productCategories) }}--}}
-
-    <div class="container" id="app-create">
-
+    <div class="content">
         <nav>
             <a href="#" class="active">
                 <span>1</span> App details
@@ -152,7 +148,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', init);
 
-        var nav = document.querySelector('#app-create nav');
+        var nav = document.querySelector('.content nav');
         var form = document.getElementById('form-edit-app');
         var buttons = document.querySelectorAll('.next');
         var backButtons = document.querySelectorAll('.back');
