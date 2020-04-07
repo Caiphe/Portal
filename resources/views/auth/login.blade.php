@@ -35,7 +35,7 @@
                     @enderror
                 </div>
                 <div class="step_wizard_button_group">
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary mt-2 mr-1">
                         Log in &#8594;
                     </button>
                     @if (Route::has('password.request'))
