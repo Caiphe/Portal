@@ -1,6 +1,6 @@
 function closeAlert() {
     document.getElementById('alert').classList.remove('open');
-    setTimeout(function(){
+    setTimeout(function() {
         document.body.removeChild(document.getElementById('alert'));
     }, 600);
 }
@@ -21,7 +21,12 @@ function addAlert(type, messages) {
 
     document.getElementById('header').insertAdjacentHTML('afterend', alert);
 
-    setTimeout(function(){
+    setTimeout(function() {
         document.getElementById('alert').classList.add('open');
+        setTimeout(closeAlert, 2000);
     }, 10);
+}
+
+if (document.getElementById('alert')) {
+    setTimeout(closeAlert, 2000);
 }

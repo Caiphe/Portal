@@ -5,29 +5,18 @@
 @extends('layouts.sidebar')
 
 @section('sidebar')
-{{--    @php--}}
-{{--        $filters = array('Group'=> $groups,'Categories'=> $productCategories);--}}
-{{--    @endphp--}}
     <div class="filter-sidebar">
         <h2>Filter by</h2>
         <h3>Search</h3>
 
-        <input type="text" name="search">
+        <input type="text" name="search" id="filter-text" class="filter-text" placeholder="App or developer name">
 
-{{--        @foreach ($filters as $filterTitle => $filterGroup)--}}
-{{--            <h3>{{$filterTitle}}</h3>--}}
-{{--            @foreach ($filterGroup as $filterItem)--}}
-{{--                <div class="filter-checkbox">--}}
-{{--                    <input type="checkbox" name="{{$filterTitle}}" value="{{$filterItem}}" id="{{$filterTitle}}" onclick="filterProducts('{{$filterTitle}}');"/><label class="filter-label" for="{{$filterTitle}}">{{$filterItem}}</label>--}}
-{{--                </div>--}}
-{{--            @endforeach--}}
-{{--        @endforeach--}}
         <div class="country-filter">
             <h3>Country</h3>
-{{--            <x-multiselect id="filter-country" name="filter-country" label="Select country" :options="$countries" />--}}
+            <x-multiselect id="filter-country" name="filter-country" label="Select country" :options="$countries" />
         </div>
 
-        <button id="clearFilter" class="dark outline" onclick="clearFilter()">Clear filters</button>
+        <button id="clearFilter" class="dark outline mt-1" onclick="clearFilter()">Clear filters</button>
     </div>
 @endsection
 
@@ -56,7 +45,7 @@
                     </div>
 
                     <div class="column">
-                        <p>Regions</p>
+                        <p>Countries</p>
                     </div>
 
                     <div class="column">
@@ -74,7 +63,15 @@
                 <div class="body">
                     @forelse($approvedApps as $app)
                         @if(!empty($app['attributes']))
-                            <x-app :app="$app" :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"></x-app>
+                            <x-app
+                                :app="$app"
+                                :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"
+                                :details="App\Services\ApigeeService::getDeveloperDetails($app['developerId'])"
+                                :countries="App\Services\ApigeeService::getAppCountries(array_column($app['credentials']['apiProducts'], 'apiproduct'))"
+                                :type="$type = 'approved'">
+                            </x-app>
+
+
                         @endif
                     @empty
                         <p>No approved apps.</p>
@@ -115,7 +112,13 @@
                 <div class="body">
                     @forelse($revokedApps as $app)
                         @if(!empty($app['attributes']))
-                            <x-app :app="$app" :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"></x-app>
+                            <x-app
+                                :app="$app"
+                                :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"
+                                :details="App\Services\ApigeeService::getDeveloperDetails($app['developerId'])"
+                                :countries="App\Services\ApigeeService::getAppCountries(array_column($app['credentials']['apiProducts'], 'apiproduct'))"
+                                :type="$type = 'revoked'">
+                            </x-app>
                         @endif
                     @empty
                         <p>No revoked apps.</p>
@@ -130,6 +133,10 @@
 @push('scripts')
     <script>
         var headings = document.querySelectorAll('.heading-app');
+
+        document.getElementById('filter-text').addEventListener('keyup', filterApps);
+        document.getElementById("filter-country-select").addEventListener('change', filterApps);
+        document.getElementById("filter-country-tags").addEventListener('click', filterApps);
 
         for (var i = 0; i < headings.length; i++) {
             headings[i].addEventListener('click', handleHeadingClick)
@@ -179,52 +186,200 @@
             })
         }
 
-        var approveForm = document.querySelectorAll('.app-product-approve');
-        for(var m = 0; m < approveForm.length; m++) {
-            approveForm[m].addEventListener('submit', handleProductApprove)
+        function filterApps() {
+
+            var apps = document.querySelectorAll('.app');
+
+            var filterText = document.getElementById('filter-text').value;
+            var match = new RegExp(filterText, "gi");
+            var countrySelect = getSelected(
+                document.getElementById("filter-country")
+            );
+
+            console.log(countrySelect);
+
+            for (var i = apps.length - 1; i >= 0; i--) {
+                apps[i].style.display = 'none';
+
+                textValid =
+                    filterText === "" || apps[i].dataset.name.match(match) || apps[i].dataset.developer.match(match);
+
+                var locations =
+                    apps[i].dataset.locations !== undefined
+                        ? apps[i].dataset.locations.split(",")
+                        : ["all"];
+
+                countriesValid =
+                    countrySelect.length === 0 ||
+                    locations[0] === "all" ||
+                    arrayCompare(locations, countrySelect);
+
+                if (textValid && countriesValid) {
+                    apps[i].style.display = 'flex';
+                }
+            }
+
+            toggleFilter();
         }
 
-        function handleProductApprove(event) {
+        function toggleFilter() {
+            var countrySelect = getSelected(document.getElementById("filter-country"));
+
+            var filterText = document.getElementById("filter-text").value;
+            if (
+                countrySelect.length !== 0 ||
+                filterText.length !== 0
+            )
+                document.getElementById("clearFilter").style.display = "block";
+            else if (
+                countrySelect.length === 0 ||
+                filterText.length === 0
+            )
+                document.getElementById("clearFilter").style.display = "none";
+        }
+
+        function clearFilter() {
+
+            var countrySelect = getSelected(document.getElementById("filter-country"));
+
+            if (countrySelect.length > 0) {
+                clearSelected(document.getElementById("filter-country"));
+                var multiSelectTags = document.getElementById("filter-country-tags");
+                while (multiSelectTags.firstChild) {
+                    multiSelectTags.removeChild(multiSelectTags.firstChild);
+                }
+            }
+
+            document.getElementById("filter-text").value = "";
+
+            document.getElementById("clearFilter").style.display = "none";
+        }
+
+        var productStatusButtons = document.querySelectorAll('button[class*="product-"]');
+        for(var m = 0; m < productStatusButtons.length; m++) {
+            productStatusButtons[m].addEventListener('click', getProductStatus)
+        }
+
+        function getProductStatus(event) {
             event.preventDefault();
 
-            var approveProduct = confirm('Are you sure you want to approve this product?');
+            var app = event.currentTarget.parentNode.parentNode.parentNode.parentNode;
+            var id = app.querySelector('#developer-id').value;
+            var key = app.querySelector('#developer-key').value;
+            var product = event.currentTarget.parentNode.dataset.name;
+            var action = event.currentTarget.dataset.action;
 
-            if(approveProduct) {
-                this.submit();
+            if (event.currentTarget.classList.value === 'product-all') {
+
+                var appProducts = event.currentTarget.parentNode.parentNode.querySelectorAll('.product');
+
+                var lookBack = {
+                    approved: 'approve',
+                    revoked: 'revoke'
+                };
+
+                for (var i = appProducts.length - 1; i >= 0; i--) {
+                    if (lookBack[appProducts[i].dataset.status] === action) continue;
+
+                    handleUpdateStatus(action, app, id, key, appProducts[i].dataset.name);
+                }
+                return;
             }
+
+            handleUpdateStatus(action, app, id, key, product);
         }
 
-        var revokeButtons = document.querySelectorAll('button[class*="product-revoke"]');
-        for(var n = 0; n < revokeButtons.length; n++) {
-            revokeButtons[n].addEventListener('click', handleProductRevoke)
-        }
+        function handleUpdateStatus(action, app, id, key, product) {
 
-        function handleProductRevoke(event) {
-            event.preventDefault();
+            var lookup = {
+                approve: 'approved',
+                revoke: 'revoked',
+                pending: 'pending'
+            };
 
-            var revokeProduct = confirm('Are you sure you want to approve this product?');
+            var xhr = new XMLHttpRequest();
 
-            if(revokeProduct) {
-                //this.submit();
-                console.log(event.currentTarget);
+            xhr.open('POST', '/apps/' + product + '/' + action);
+            xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+            var data = {
+                developer_id: id,
+                app_name: app.dataset.name,
+                key: key,
+                product: product,
+                action: action
+            };
+
+            if(confirm('Are you sure you want to ' + action + ' this product?')) {
+                xhr.send(JSON.stringify(data));
             }
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    location.reload();
+                    addAlert('success', 'Product ' + lookup[action] + ' successfully');
+                }
+            };
         }
 
-        var approveAllButtons = document.querySelectorAll('button[class*="dashboard-approve"]');
-        for(var o = 0; o < approveAllButtons.length; o++) {
-            approveAllButtons[o].addEventListener('click', handleApproveAll)
+        var productCompleteButtons = document.querySelectorAll('.complete');
+        for(var n = 0; n < productCompleteButtons.length; n++) {
+            productCompleteButtons[n].addEventListener('click', handleCompleteApp)
         }
 
-        function handleApproveAll() {
-            console.log(this);
+        function handleCompleteApp(event) {
+
+            var app = event.currentTarget.parentNode.parentNode;
+            var id = app.dataset.id;
+
+            var data = {
+                id: id,
+                _method: 'DELETE'
+            };
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('POST', '/apps/' + id + '/complete');
+            xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+            if(confirm('Are you sure you want to complete this app?')) {
+                xhr.send(JSON.stringify(data));
+            }
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    addAlert('success', 'App completed successfully');
+                }
+            };
         }
 
-        function revokeAll() {
-            console.log(this);
+        function arrayCompare(a, b) {
+            var matches = [];
+            for (var i = 0; i < a.length; i++) {
+                for (var e = 0; e < b.length; e++) {
+                    if (a[i] === b[e]) matches.push(a[i]);
+                }
+            }
+            return matches.length > 0;
         }
 
-        function complete() {
-            console.log(this);
+        function getSelected(multiSelect) {
+            var selected = [];
+            for (var option of multiSelect.options) {
+                if (option.selected) {
+                    selected.push(option.value);
+                }
+            }
+            return selected;
+        }
+
+        function clearSelected(multiselect) {
+            var elements = multiselect.options;
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].selected = false;
+            }
         }
     </script>
 @endpush

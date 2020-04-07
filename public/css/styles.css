@@ -2538,6 +2538,9 @@ h6.phone::before {
   overflow: hidden;
   flex: 1 0 auto;
   z-index: 2;
+  position: absolute;
+  top: 80px;
+  width: 100%;
 }
 
 #alert.open {

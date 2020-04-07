@@ -44,7 +44,6 @@
         <div class="row">
 
             <form id="form-edit-app">
-
                 <div class="active">
                     @svg('app-avatar', '#ffffff')
                     <div class="group">
@@ -354,11 +353,13 @@
             event.preventDefault();
 
             var app = {
+                key: '{{$data['credentials']['consumerKey'] ?? ''}}',
                 name: {!! json_encode($data['name']) !!},
                 new_name: document.querySelector('#name').value,
                 url: document.querySelector('#url').value,
                 description: document.querySelector('#description').value,
                 products: [],
+                original_products: @json(array_column($data['credentials']['apiProducts'], 'apiproduct')),
                 _method: 'PUT'
             };
 
@@ -377,13 +378,23 @@
             xhr.open('POST', url, true);
             xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
             xhr.send(JSON.stringify(app));
 
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    window.location.href = "{{ route('app.index') }}";
+                    window.scrollTo({
+                        top: 0,
+                        left: 0,
+                        behavior: 'smooth'
+                    });
+                    
                     addAlert('success', 'Application updated successfully');
+
+                    setTimeout(function(){
+                        window.location.href = "{{ route('app.index') }}";
+                    }, 1000);
                 }
             };
         }
