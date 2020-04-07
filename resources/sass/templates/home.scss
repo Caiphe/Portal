@@ -9,84 +9,69 @@ body>#main {
     background-color: $grey300;
 }
 
-.banner-carousel .carousel {
-    width: 100vw;
-    height: 500px;
-}
+.banner-carousel {
+    padding: 0;
+    .carousel {
+        width: 100vw;
+        height: 500px;
 
-.banner-carousel .carousel .carousel-item {
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+        .carousel-item {
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
 
-    &:before {
-        content: "";
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4)) !important;
-        pointer-events: none;
-    }
+            &:before {
+                content: "";
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4)) !important;
+                pointer-events: none;
+            }
 
-    &:first-child {
-        background-image: url('/images/mtn-illustration-01.png');
-    }
+            &:first-child {
+                background-image: url('/images/mtn-illustration-01.png');
+            }
 
-    &:nth-child(2) {
-        background-image: url('/images/mtn-illustration-02.png');
-    }
+            &:nth-child(2) {
+                background-image: url('/images/mtn-illustration-02.png');
+            }
 
-    &:nth-child(3) {
-        background-image: url('/images/mtn-illustration-03.png');
-    }
+            &:nth-child(3) {
+                background-image: url('/images/mtn-illustration-03.png');
+            }
 
-    &:nth-child(4) {
-        background-image: url('/images/mtn-illustration-01.png');
-    }
+            &:nth-child(4) {
+                background-image: url('/images/mtn-illustration-01.png');
+            }
 
-    .carousel-content {
-        padding: $gutter 8%;
-        max-width: 1440px;
-        margin: 0 auto;
-        position: relative;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+            .carousel-content {
+                padding: $gutter 8%;
+                max-width: 1440px;
+                margin: 0 auto;
+                position: relative;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
 
-        h1 {
-            color: #FFFFFF;
-            font-size: 70px;
+                h1 {
+                    color: #FFFFFF;
+                    font-size: 70px;
+                }
+
+                p {
+                    color: #FFFFFF;
+                    font-size: 20px;
+                }
+
+                .button {
+                    width: 110px;
+                }
+            }
         }
-
-        p {
-            color: #FFFFFF;
-            font-size: 20px;
-        }
-
-        .button {
-            width: 110px;
-        }
-    }
-}
-
-.section-padding {
-    padding: $gutter 150px;
-    padding-top: 60px !important;
-}
-
-.intro-steps {
-    padding-top: $gutter !important;
-}
-
-.latest-products .container-inner {
-    padding-bottom: 60px !important;
-    max-width: 960px;
-
-    .products-cards {
-        justify-content: space-between;
     }
 }
 
@@ -96,48 +81,83 @@ body>#main {
     p {
         padding: 0 15em;
     }
+
+    .key-feature {
+        margin: 0 60px;
+        max-width: 150px;
+
+        .content {
+            padding: 0;
+        }
+    }
 }
 
-.access-keys .container-inner,
-.register-app .container-inner,
-.browse-products .container-inner,
-.sign-in .container-inner {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 960px;
+section {
+    padding-top: 80px;
+    padding-bottom: 80px;
 
-    h1 {
-        margin-top: 0;
-    }
+    .container-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 960px;
 
-    ol {
-        list-style: none;
-        display: table;
-        padding: 0;
+        h1 {
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
 
-        li {
-            counter-increment: foo;
-            display: table-row;
+        ol {
+            list-style: none;
+            display: table;
+            padding: 0;
 
-            &:before {
-                content: '\2714\0020';
-                color: $yellow;
-                padding-right: 10px;
-                display: table-cell;
-                text-align: right;
+            li {
+                counter-increment: foo;
+                display: table-row;
+
+                &:before {
+                    content: '\2714\0020';
+                    color: $yellow;
+                    padding-right: 10px;
+                    display: table-cell;
+                    text-align: right;
+                }
             }
+        }
+
+        .content-right,
+        .image-right {
+            padding-left: 30px;
+        }
+
+        .content-left,
+        .image-left {
+            padding-right: 30px;
         }
     }
 
-    .content-right,
-    .image-right {
-        padding-left: 30px;
+    a {
+        margin-top: 15px;
     }
+}
 
-    .content-left,
-    .image-left {
-        padding-right: 30px;
+.latest-products {
+    .container-inner {
+        display: block;
+        max-width: 960px;
+
+        .products-cards {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-between;
+
+            .card {
+                margin-bottom: 30px;
+                margin-right: 20px;
+                width: 30%;
+            }
+        }
     }
 }
 
@@ -148,18 +168,3 @@ body>#main {
     margin-top: $gutter;
 }
 
-.key-feature {
-    margin: 0 60px;
-    max-width: 150px;
-}
-
-.products-cards {
-    display: flex;
-    flex-flow: row wrap;
-
-    .card {
-        margin-bottom: 30px;
-        margin-right: 20px;
-        width: 30%;
-    }
-}

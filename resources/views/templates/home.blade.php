@@ -16,13 +16,13 @@
 </head>
 <body class="layout-home">
     <x-header/>
-    <div class="banner-carousel">
+    <section class="banner-carousel">
         <x-carousel wait="5000" duration="0.34">
             <x-carousel-item>
             <div class="carousel-content">
                 <h1>Create an account</h1>
                 <p>Register your account if you want to create an App.</p>
-                <a class="button after arrow-forward" href="/register">Register</a>
+                <a class="button after arrow-forward" href="/register" role="button">Register</a>
             </div>
             </x-carousel-item>
 
@@ -30,7 +30,7 @@
                 <div class="carousel-content">
                     <h1>Build an app</h1>
                     <p>When you have chosen the API you want to use to build your app, you need to register your app. Follow the steps below</p>
-                    <a class="button after arrow-forward" href="/apps/create">Create</a>
+                    <a class="button after arrow-forward" href="/apps/create" role="button">Create</a>
                 </div>
             </x-carousel-item>
 
@@ -38,7 +38,7 @@
                 <div class="carousel-content">
                     <h1>Add products</h1>
                     <p>MTN is consistently developing new APIs for developers and businesses to create powerful products. Follow the steps to browse APIs</p>
-                    <a class="button after arrow-forward" href="/products">Add</a>
+                    <a class="button after arrow-forward" href="/products" role="button">Add</a>
                 </div>
             </x-carousel-item>
 
@@ -46,15 +46,15 @@
                 <div class="carousel-content">
                     <h1>Access the keys</h1>
                     <p>Once your App submission is approved you can now use Consumer/API Key and Secret on your profile page.</p>
-                    <a class="button after arrow-forward" href="/apps">Access</a>
+                    <a class="button after arrow-forward" href="/apps" role="button">Access</a>
                 </div>
             </x-carousel-item>
         </x-carousel>
-    </div>
+    </section>
 
-    <div class="intro-steps section-padding">
+    <section class="introduction">
         <div class="container">
-            <div class="introduction">
+            <div>
                 <h1>Get started using our products in 4 steps</h1>
                 <p>You can browse our products and documentation without registering an account, but when you want to create an App you will need to register an account.</p>
             </div>
@@ -65,27 +65,27 @@
                 <x-key-feature title="" icon="textbox-password">Access the keys</x-key-feature>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="sign-in grey-bg section-padding">
+    <section class="grey-bg">
        <div class="container-inner flex">
             <div class="content-left">
                 <h1>Sign-in</h1>
                 <p>Register your account if you want to create an App.</p>
                 <ol>
-                    <li>Go to <strong>Register</strong></li> 
+                    <li>Go to <strong>Register</strong></li>
                     <li>Complete the sign-up steps</li>
                     <li>Agree to the T&C’s</li>
                     <li>You’re in Sign in to register an App</li>
                     <li>Go to <strong>‘Build an app’</strong></li>
                 </ol>
-                <a class="button" href="/register">View</a>
+                <a class="button" href="/register" role="button">View</a>
             </div>
             <div class="image-right"><img src="/images/register.png"></div>
        </div>
-    </div>
+    </section>
 
-    <div class="browse-products section-padding">
+    <section>
         <div class="container-inner flex">
             <div class="image-left"><img src="/images/products.png"></div>
             <div class="content-right">
@@ -97,12 +97,12 @@
                     <li>Read the documentation on the page</li>
                     <li>Review the endpoints</li>
                 </ol>
-                <a class="button" href="/products">View</a>
+                <a class="button" href="/products" role="button">View</a>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="register-app grey-bg section-padding">
+    <section class="grey-bg">
         <div class="container-inner flex">
             <div class="content-left">
                 <h1>Register an app</h1>
@@ -115,13 +115,13 @@
                     <li>Submit your request</li>
                     <li>Await the approvals</li>
                 </ol>
-                <a class="button" href="/apps/create">View</a>
+                <a class="button" href="/apps/create" role="button">View</a>
             </div>
             <div class="image-right"><img src="/images/register-app.png"></div>
         </div>
-    </div>
+    </section>
 
-    <div class="access-keys section-padding">
+    <section>
         <div class="container-inner flex">
             <div class="image-left"><img src="/images/access-key.png"></div>
             <div class="content-right">
@@ -132,12 +132,12 @@
                     <li>For APIs that require OAuth, copy the key and secret and use them to generate an OAuth 2.0 access token, which is required to access MTN APIs.</li>
                     <li>Information on our OAuth flow can be accessed on the OAuth page Browse APIs</li>
                 </ol>
-                <a class="button" href="/apps">View</a>
+                <a class="button" href="/apps" role="button">View</a>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="latest-products grey-bg section-padding">
+    <section class="grey-bg latest-products">
         <div class="container-inner">
             <h1>Latest products</h1>
             <div class="products-cards">
@@ -146,7 +146,7 @@
                     if ($product->locations !== 'all' && $product->locations !== null) :
                         $countries = explode(',',$product->locations);
                     else :
-                        $countries = array('globe');	
+                        $countries = array('globe');
                     endif;
                     $tags = array($product->group,$product->category);
                     $slug = 'products/'.$product->slug;
@@ -155,11 +155,13 @@
                         :data-title="$product->display_name"
                         :data-group="$product->group"
                         :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}</x-card-product>
-                    @endforeach	
+                    @endforeach
             </div>
-            <div class="view-products"><a href="/products" class="button">View all products</a></div>
+            <div class="view-products">
+                <a href="/products" class="button" role="button">View all products</a>
+            </div>
         </div>
-    </div>
+    </section>
     <x-footer/>
     @stack("scripts")
 </body>

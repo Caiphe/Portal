@@ -26,9 +26,7 @@
 
 @section('content')
 
-    <x-heading heading="Apps" tags="DASHBOARD">
-        <button class="outline dark" id="create">Create new</button>
-    </x-heading>
+    <x-heading heading="Apps" tags="DASHBOARD"></x-heading>
 
     <div class="container" id="app-index">
         <div class="row">

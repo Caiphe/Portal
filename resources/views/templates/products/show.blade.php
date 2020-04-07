@@ -22,51 +22,53 @@
         </div>
     </x-heading>
 
-    <div id="product-sections" class="{{$startingPoint}}">
-        @if(isset($content['product_overview']))
-        <button id="button-overview" class="light small product-section-button" onclick="switchSection('product-overview');">OVERVIEW</button>
-        @endif
-        @if(isset($content['product_docs']))
-        <button id="button-docs" class="light small product-section-button" onclick="switchSection('product-docs');">DOCS</button>
-        @endif
-        <button id="button-specification" class="light small product-section-button" onclick="switchSection('product-specification');">SPECIFICATION</button>
-            
-        @if(isset($content['product_overview']))
-        <div id="product-overview" class="product-section">
-            {!!$product->content[0]['body']!!}
-            <div class="key-features">
-                @foreach($product->keyFeatures as $keyFeature)
-                <x-key-feature :title="$keyFeature['title']">
-                    {{$keyFeature['description'] ?? ''}}
-                </x-key-feature>
+    <div class="content">
+        <div id="product-sections" class="{{$startingPoint}}">
+            @if(isset($content['product_overview']))
+                <button id="button-overview" class="light small product-section-button" onclick="switchSection('product-overview');">OVERVIEW</button>
+            @endif
+            @if(isset($content['product_docs']))
+                <button id="button-docs" class="light small product-section-button" onclick="switchSection('product-docs');">DOCS</button>
+            @endif
+            <button id="button-specification" class="light small product-section-button" onclick="switchSection('product-specification');">SPECIFICATION</button>
+
+            @if(isset($content['product_overview']))
+                <div id="product-overview" class="product-section">
+                    {!!$product->content[0]['body']!!}
+                    <div class="key-features">
+                        @foreach($product->keyFeatures as $keyFeature)
+                            <x-key-feature :title="$keyFeature['title']">
+                                {{$keyFeature['description'] ?? ''}}
+                            </x-key-feature>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
+            @if(isset($content['product_docs']))
+                <div id="product-docs" class="product-section">
+                    {!!$product->content[1]['body']!!}
+                </div>
+            @endif
+
+            <div id="product-specification" class="product-section">
+                <h2 class="mt-0">Download</h2>
+                <a href="{{ route('product.download.postman', [$product->slug]) }}" class="button">Download Postman collection</a>
+                <a href="{{ route('product.download.swagger', [$product->slug]) }}" class="button">Download Swagger</a>
+
+                <h2 class="mt-4">Available endpoints</h2>
+                @foreach($specification['item'] as $spec)
+                    <div class="specification-detail">
+                        <div class="endpoint" onclick="toggleParent(this)">
+                            @svg('chevron-right') <span class="tag {{strtolower($spec['request']['method'])}}">{{strtoupper($spec['request']['method'])}}</span> {{implode('/', $spec['request']['url']['path'])}}
+                        </div>
+
+                        <x-products.options :description="$spec['description']" :request="$spec['request']"/>
+
+                        <x-products.breakdown :responses="$spec['response']"/>
+                    </div>
                 @endforeach
             </div>
-        </div>
-        @endif
-
-        @if(isset($content['product_docs']))
-        <div id="product-docs" class="product-section">
-            {!!$product->content[1]['body']!!}
-        </div>
-        @endif
-
-        <div id="product-specification" class="product-section">
-            <h2 class="mt-0">Download</h2>
-            <a href="{{ route('product.download.postman', [$product->slug]) }}" class="button">Download Postman collection</a>
-            <a href="{{ route('product.download.swagger', [$product->slug]) }}" class="button">Download Swagger</a>
-            
-            <h2 class="mt-4">Available endpoints</h2>
-            @foreach($specification['item'] as $spec)
-            <div class="specification-detail">
-                <div class="endpoint" onclick="toggleParent(this)">
-                    @svg('chevron-right') <span class="tag {{strtolower($spec['request']['method'])}}">{{strtoupper($spec['request']['method'])}}</span> {{implode('/', $spec['request']['url']['path'])}}
-                </div>
-
-                <x-products.options :description="$spec['description']" :request="$spec['request']"/>
-
-                <x-products.breakdown :responses="$spec['response']"/>
-            </div>
-            @endforeach
         </div>
     </div>
 @endsection

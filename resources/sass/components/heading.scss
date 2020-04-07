@@ -46,6 +46,8 @@
 
 #heading {
     position: absolute;
+    display: flex;
+    align-items: center;
     padding: $gutterSmall $gutter;
     background-color: $grey400;
     height: 68px;
