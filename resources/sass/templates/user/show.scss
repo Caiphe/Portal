@@ -1,125 +1,136 @@
 @import "../../variables";
 @import "../../functions";
 
-#profile {
-    margin-top: $gutterSmall;
-    border: 1px solid $grey300;
-    border-radius: 8px;
-    padding: $gutter;
+#main {
+    padding: 0 !important;
+    margin-bottom: 60px;
 
-    .locations {
-        width: 150px;
-        text-align: left;
+    #heading {
+        margin-bottom: 40px;
+    }
 
-        label {
-            cursor: pointer;
-        }
+    .content {
+        margin-left: 40px;
+        border: 2px solid $grey300;
+        border-radius: 8px;
+        padding: $gutter;
 
-        img {
-            opacity: 0.2;
-            width: 25px;
-            height: 25px;
+        .locations {
+            width: 150px;
+            text-align: left;
 
-            &:hover {
+            label {
+                cursor: pointer;
+            }
+
+            img {
+                opacity: 0.2;
+                width: 25px;
+                height: 25px;
+
+                &:hover {
+                    opacity: 1;
+                }
+            }
+
+            input {
+                display: none;
+            }
+
+            input:checked+img {
                 opacity: 1;
             }
         }
 
-        input {
-            display: none;
+        #profile-picture-label {
+            position: relative;
+            cursor: pointer;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            display: block;
+            width: 226px;
+            height: 226px;
+            margin: 0 auto;
+            border-radius: 50%;
+
+            &::after {
+                content: '';
+                background-image: get-icon("edit", #FFFFFF);
+                background-repeat: no-repeat;
+                background-position: center;
+                background-color: $grey900;
+                position: absolute;
+                width: 40px;
+                height: 40px;
+                margin: 0 0 -18px -20px;
+                bottom: 0;
+                left: 50%;
+                border-radius: 50%;
+            }
+
+
+            input {
+                display: none;
+            }
         }
 
-        input:checked+img {
-            opacity: 1;
+        #profile-form {
+            width: 478px;
+            position: relative;
+            margin: 0 auto;
+
+            h2 {
+                font-size: 1.8rem;
+                text-align: left;
+                margin: $gutter 0 $gutterSmall;
+            }
+
+            input {
+                display: block;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            label {
+                position: relative;
+            }
+
+            .password-label {
+                display: block;
+            }
+
+            .show-password {
+                margin: 0;
+                position: absolute;
+                top: 5px;
+                right: 1rem;
+                background-image: url('/images/icons/visible.svg');
+                background-size: 20px;
+                background-color: #FFF;
+                background-repeat: no-repeat;
+                background-position: center;
+                border: none;
+                width: 30px;
+                height: 30px;
+                z-index: 1;
+
+                &:hover {
+                    background-color: $yellow700;
+                }
+            }
+
+            .password-visible .show-password {
+                background-image: url('/images/icons/hidden.svg');
+            }
+
+            button {
+                margin: $gutter auto 0;
+                display: block;
+                position: relative;
+            }
         }
     }
 }
 
-#profile-picture-label {
-    position: relative;
-    cursor: pointer;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    display: block;
-    width: 226px;
-    height: 226px;
-    margin: 0 auto;
-    border-radius: 50%;
 
-    &::after {
-        content: '';
-        background-image: get-icon("edit", #FFFFFF);
-        background-repeat: no-repeat;
-        background-position: center;
-        background-color: $grey900;
-        position: absolute;
-        width: 40px;
-        height: 40px;
-        margin: 0 0 -18px -20px;
-        bottom: 0;
-        left: 50%;
-        border-radius: 50%;
-    }
-
-
-    input {
-        display: none;
-    }
-}
-
-#profile-form {
-    width: 478px;
-    position: relative;
-    margin: 0 auto;
-
-    h2 {
-        font-size: 1.8rem;
-        text-align: left;
-        margin: $gutter 0 $gutterSmall;
-    }
-
-    input {
-        display: block;
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
-    label {
-        position: relative;
-    }
-
-    .password-label {
-        display: block;
-    }
-
-    .show-password {
-        margin: 0;
-        position: absolute;
-        top: 5px;
-        right: 1rem;
-        background-image: url('/images/icons/visible.svg');
-        background-size: 20px;
-        background-color: #FFF;
-        background-repeat: no-repeat;
-        background-position: center;
-        border: none;
-        width: 30px;
-        height: 30px;
-        z-index: 1;
-
-        &:hover {
-            background-color: $yellow700;
-        }
-    }
-
-    .password-visible .show-password {
-        background-image: url('/images/icons/hidden.svg');
-    }
-
-    button {
-        margin: $gutter auto 0;
-        display: block;
-        position: relative;
-    }
-}

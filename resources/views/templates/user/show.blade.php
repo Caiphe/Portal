@@ -12,7 +12,7 @@ Update profile
     <x-sidebar-accordion id="sidebar-accordion" :active="'/' . request()->path()"
         :list="
         [
-            'MANAGE' => 
+            'MANAGE' =>
             [
                 [ 'label' => 'Profile', 'link' => '/profile'],
                 [ 'label' => 'My apps', 'link' => '/apps'],
@@ -23,12 +23,13 @@ Update profile
                 [ 'label' => 'Working with our products', 'link' => '/getting-started']
             ]
         ]"
-    />   
+    />
 @endsection
 
 @section("content")
     <x-heading heading="Profile"/>
-    <div id="profile">
+
+    <div class="content" id="profile">
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
