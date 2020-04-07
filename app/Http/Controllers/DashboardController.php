@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateStatusRequest;
 use App\Services\ApigeeService;
 use App\Services\ProductLocationService;
 use Illuminate\Http\Request;
@@ -10,46 +11,48 @@ class DashboardController extends Controller
 {
     public function index(ProductLocationService $productLocationService)
     {
-        $approvedApps = ApigeeService::get('/apps?rows=10&expand=true&status=approved');
-        $revokedApps = ApigeeService::get('/apps?rows=10&expand=true&status=revoked');
+        $approvedApps = $this->apps(ApigeeService::getOrgApps('approved'), $approvedApps = []);
+        $revokedApps = $this->apps(ApigeeService::getOrgApps('revoked'), $revokedApps = []);
 
-        [$countries] = $productLocationService->fetch();
+        [$products, $countries] = $productLocationService->fetch();
 
         return view('templates.dashboard.index', [
-            'approvedApps' => $approvedApps['app'] ?? [],
-            'revokedApps' => $revokedApps['app'] ?? [],
+            'approvedApps' => $approvedApps ?? [],
+            'revokedApps' => $revokedApps ?? [],
             'countries' => $countries
         ]);
     }
 
-    public function approve(Request $request)
+    public function update(UpdateStatusRequest $request)
     {
-        dd($request->input('name'));
+        $validated = $request->validated();
 
-        return redirect()->back();
+         ApigeeService::updateProductStatus($request->developer_id, $request->app_name, $request->key, $request->product, $request->action);
+
+         return redirect()->back();
     }
 
-    public function revoke(Request $request)
+    public function destroy($id, Request $request)
     {
-
-        return redirect()->back();
+        dd($request->all());
     }
 
-    public function approveAll(Request $request)
+    /**
+     * @param array $apigeeApps
+     * @param array $outputArray
+     *
+     * @return array
+     */
+    public function apps(array $apigeeApps, array $outputArray)
     {
+        foreach ($apigeeApps['app'] as $key => $app) {
+            $outputArray[] = $app;
+        }
 
-        return redirect()->back();
-    }
+        usort($outputArray, function($a, $b) {
+            return ($a['createdAt'] < $b['createdAt']) ? -1 : 1;
+        });
 
-    public function revokeAll(Request $request)
-    {
-
-        return redirect()->back();
-    }
-
-    public function complete(Request $request)
-    {
-
-        return redirect()->back();
+        return array_reverse($outputArray, true);
     }
 }

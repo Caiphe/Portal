@@ -369,16 +369,23 @@
         xhr.open('POST', url);
         xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
         xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
         xhr.send(JSON.stringify(app));
 
         xhr.onload = function() {
             if (xhr.status === 200) {
-                window.location.href = "/apps";
+                window.scrollTo({
+                    top: 0,
+                    left: 0,
+                    behavior: 'smooth'
+                });
 
-                if (window.location.href === "/apps") {
-                    addAlert('success', 'Application created successfully');
-                }
+                addAlert('success', 'Application created successfully');
+
+                setTimeout(function(){
+                    window.location.href = "{{ route('app.index') }}";
+                }, 1000);
             }
         };
     }
