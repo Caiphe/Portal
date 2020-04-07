@@ -35,8 +35,8 @@
             <div class="row">
                 <div class="col-12">
                     @svg('app', '#ffffff')
-                    <h1>Looks like you donâ€™t have any apps yet.</h1>
-                    <p>Fortunately, itâ€™s very easy to create one.</p>
+                    <h1>Looks like you don’t have any apps yet.</h1>
+                    <p>Fortunately, it’s very easy to create one.</p>
 
                     <a href="{{route('app.create')}}" class="button outline dark">Create app</a>
                 </div>
