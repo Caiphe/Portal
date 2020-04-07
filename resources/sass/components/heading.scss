@@ -37,7 +37,7 @@
 
     &>#heading {
         padding: $gutterSmall $gutter;
-        position: relative;
+        position: absolute;
         top: 0;
         left: 0;
         right: 0;
@@ -45,7 +45,7 @@
 }
 
 #heading {
-    position: relative;
+    position: absolute;
     display: flex;
     align-items: center;
     padding: $gutterSmall $gutter;

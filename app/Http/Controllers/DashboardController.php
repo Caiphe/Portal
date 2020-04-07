@@ -16,8 +16,8 @@ class DashboardController extends Controller
         [$countries] = $productLocationService->fetch();
 
         return view('templates.dashboard.index', [
-            'approvedApps' => $approvedApps['app'] ?? [],
-            'revokedApps' => $revokedApps['app'] ?? [],
+            'approvedApps' => [],
+            'revokedApps' => [],
             'countries' => $countries
         ]);
     }
