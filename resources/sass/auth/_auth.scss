@@ -1,0 +1,30 @@
+form {
+    margin: $gutter 0 0 $gutter;
+    width: 34%;
+    height: calc(100vh - 170px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    input {
+        margin-bottom: $gutterSmall;
+    }
+
+    button {
+        width: 110px;
+    }
+
+    .inline {
+        display: flex;
+        align-items: center;
+
+        .yellow {
+            color: $yellow;
+        }
+
+        a {
+            display: flex;
+            text-align: center;
+        }
+    }
+}

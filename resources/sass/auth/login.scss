@@ -1,0 +1,14 @@
+@import "../variables";
+@import "../components/utility";
+@import "auth";
+
+.header {
+    margin: $gutterSmall 0 0 $gutter;
+    display: flex;
+    position: relative;
+    align-items: center;
+    div {
+        margin-left: 2rem;
+        font-size: 1.8rem;
+    }
+}
