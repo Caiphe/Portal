@@ -43,99 +43,99 @@
             </div>
         </div>
     @else
-    <div class="container" id="app-index">
-        <div class="row">
-            <div class="heading-app">
-                @svg('chevron-down', '#000000')
+        <div class="container" id="app-index">
+            <div class="row">
+                <div class="heading-app">
+                    @svg('chevron-down', '#000000')
 
-                <h3>Approved Apps</h3>
-            </div>
+                    <h3>Approved Apps</h3>
+                </div>
 
-            <div class="my-apps">
-                <div class="head">
-                    <div class="column">
-                        <p>App name</p>
+                <div class="my-apps">
+                    <div class="head">
+                        <div class="column">
+                            <p>App name</p>
+                        </div>
+
+                        <div class="column">
+                            <p>Regions</p>
+                        </div>
+
+                        <div class="column">
+                            <p>Callback URL</p>
+                        </div>
+
+                        <div class="column">
+                            <p>Date created</p>
+                        </div>
+
+                        <div class="column">
+                            &nbsp;
+                        </div>
                     </div>
-
-                    <div class="column">
-                        <p>Regions</p>
-                    </div>
-
-                    <div class="column">
-                        <p>Callback URL</p>
-                    </div>
-
-                    <div class="column">
-                        <p>Date created</p>
-                    </div>
-
-                    <div class="column">
-                        &nbsp;
+                    <div class="body">
+                        @forelse($approvedApps as $app)
+                            @if(!empty($app['attributes']))
+                                <x-app
+                                    :app="$app"
+                                    :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"
+                                    :countries="App\Services\ApigeeService::getAppCountries(array_column($app['credentials']['apiProducts'], 'apiproduct'))"
+                                    :type="$type = 'approved'">
+                                </x-app>
+                            @endif
+                        @empty
+                            <p>No approved apps.</p>
+                        @endforelse
                     </div>
                 </div>
-                <div class="body">
-                    @forelse($approvedApps as $app)
-                        @if(!empty($app['attributes']))
-                            <x-app
-                                :app="$app"
-                                :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"
-                                :countries="App\Services\ApigeeService::getAppCountries(array_column($app['credentials']['apiProducts'], 'apiproduct'))"
-                                :type="$type = 'approved'">
-                            </x-app>
-                        @endif
-                    @empty
-                        <p>No approved apps.</p>
-                    @endforelse
+            </div>
+
+            <div class="row" id="app">
+                <div class="heading-app">
+                    @svg('chevron-down', '#000000')
+
+                    <h3>Revoked Apps</h3>
+                </div>
+
+                <div class="my-apps">
+                    <div class="head">
+                        <div class="column">
+                            <p>App name</p>
+                        </div>
+
+                        <div class="column">
+                            <p>Reason</p>
+                        </div>
+
+                        <div class="column">
+                            <p>Callback URL</p>
+                        </div>
+
+                        <div class="column">
+                            <p>Date created</p>
+                        </div>
+
+                        <div class="column">
+
+                        </div>
+                    </div>
+                    <div class="body">
+                        @forelse($revokedApps as $app)
+                            @if(!empty($app['attributes']))
+                                <x-app
+                                    :app="$app"
+                                    :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"
+                                    :countries="App\Services\ApigeeService::getAppCountries(array_column($app['credentials']['apiProducts'], 'apiproduct'))"
+                                    :type="$type = 'revoked'">
+                                </x-app>
+                            @endif
+                        @empty
+                            <p>No revoked apps.</p>
+                        @endforelse
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div class="row" id="app">
-            <div class="heading-app">
-                @svg('chevron-down', '#000000')
-
-                <h3>Revoked Apps</h3>
-            </div>
-
-            <div class="my-apps">
-                <div class="head">
-                    <div class="column">
-                        <p>App name</p>
-                    </div>
-
-                    <div class="column">
-                        <p>Reason</p>
-                    </div>
-
-                    <div class="column">
-                        <p>Callback URL</p>
-                    </div>
-
-                    <div class="column">
-                        <p>Date created</p>
-                    </div>
-
-                    <div class="column">
-
-                    </div>
-                </div>
-                <div class="body">
-                    @forelse($revokedApps as $app)
-                        @if(!empty($app['attributes']))
-                            <x-app
-                                :app="$app"
-                                :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"
-                                :countries="App\Services\ApigeeService::getAppCountries(array_column($app['credentials']['apiProducts'], 'apiproduct'))"
-                                :type="$type = 'revoked'">
-                            </x-app>
-                        @endif
-                    @empty
-                        <p>No revoked apps.</p>
-                    @endforelse
-                </div>
-            </div>
-        </div>
-    </div>
     @endif
 
 @endsection

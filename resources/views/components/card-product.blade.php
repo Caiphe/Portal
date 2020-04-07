@@ -48,7 +48,7 @@
         </div>
     </a>
     <div class="buttons">
-        <a class="flex button" href="{{$href}}">View</a>
+        <a class="flex button" href="{{$href}}" role="button">View</a>
         @isset($addButtonId)
 		<a
 		@isset($addUrl)
