@@ -78,7 +78,7 @@
                         <input type="password" id="formPasswordConf" name="password_confirmation" value="{{ old('password_confirmation') }}" required autocomplete="off" placeholder="Confirm Password" />
                         <button type="button" class="fab show-password" onclick="togglePasswordVisibility(this)"></button>
                     </div>
-                    
+
                     <button disabled id="passwordStrengthBtn" class="password_strength grey">Strong Password</button>
                 </div>
             </div>
@@ -149,7 +149,7 @@
                     </ul>
                 </div>
                 <div class="switch_container">
-                    <x-switch id="termsSwitch"></x-switch> 
+                    <x-switch id="termsSwitch"></x-switch>
                     <span class="text">Accept</span>
                 </div>
             </div>
@@ -158,7 +158,7 @@
         <div class="step_wizzard__footer">
             <p id="FormStepErrorMsg" style="display: none; font-size: 16px; text-align: center; color: red; margin: 0px; margin-bottom: 20px;"><i>Please fill in all fields in Step!</i></p>
             <button id="stepWizzardPrevBtn" onclick="nextPrev(-1)" class="dark outline">Back</button>
-            <button id="stepWizzardNextBtn" onclick="nextPrev(1)" >Next</button>
+            <button class="mr-1" id="stepWizzardNextBtn" onclick="nextPrev(1)" >Next</button>
             <button type="submit" onclick="readyToSubmit(event)" id="stepWizardSubmitBtn" disabled>Create New Account</button>
             <p>
                 press Enter &crarr;
@@ -168,7 +168,7 @@
         <div class="step__wizzard_progress_bar step__wizzard_bar_container"></div>
         <div id="stepWizzardProgress" class="step__wizzard_progress_bar"></div>
     </div>
-    
+
     <x-carousel class="step__wizzard_container right" wait="5000" duration="0.34">
         <x-carousel-item class="carousel_item_cnt" style="background-image: url('/images/mtn-carousel-img-01.png');">
             <div class="overlay">
