@@ -1,17 +1,14 @@
 @props(['products'])
 
 @foreach($products as $product)
-    <a href="/products/@strSlug($product['apiproduct'])" class="product">
+    <a href="/products/@strSlug($product['apiproduct'])" class="product" data-name="{{ $product['apiproduct'] }}" data-status="{{ $product['status'] }}">
         <span class="status-{{ $product['status'] }}"></span>
         <span class="name">{{ $product['apiproduct'] }}</span>
         @if(Request::is('dashboard'))
-            <form class="app-product-approve" action="{{ route('app.product.approve', $product['apiproduct']) }}" method="POST">
-                @csrf
-                <button class="product-approve" type="submit">
-                    @svg('thumbs-up', '#000000')
-                </button>
-            </form>
-            <button class="product-revoke">
+            <button class="product-approve" data-action="approve">
+                @svg('thumbs-up', '#000000')
+            </button>
+            <button class="product-revoke" data-action="revoke">
                 @svg('thumbs-down', '#000000')
             </button>
         @else

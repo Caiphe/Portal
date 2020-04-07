@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class CreateAppRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class CreateAppRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Auth::check();
     }
 
     /**
@@ -24,11 +25,13 @@ class CreateAppRequest extends FormRequest
     public function rules()
     {
         return [
+            'key' => 'sometimes',
             'name' => 'required',
             'new_name' => 'sometimes',
             'url' => 'sometimes',
             'description' => 'sometimes',
-            'products' => 'required:array'
+            'products' => 'required:array',
+            'original_products' => 'sometimes:array'
         ];
     }
 }
