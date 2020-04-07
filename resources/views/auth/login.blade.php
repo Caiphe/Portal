@@ -8,8 +8,9 @@
 
 @section('content')
 	<x-auth.header/>
-	<form method="POST" class="login-form" action="{{ route('login') }}">
+	<form method="POST" action="{{ route('login') }}">
 		@csrf
+		<h1 class="t-large">Login</h1>
 		<input class="@error('email') invalid @enderror" type="text" id="email" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="Email address" autofocus />
 		@error('email')
 			<span class="invalid-feedback" role="alert">
@@ -29,5 +30,6 @@
 			</a>
 		</div>
 	</form>
+	<a class="yellow bottom t-small" href="{{route('register')}}"><span>Don’t have an account?</span> Create one here @svg('arrow-forward', '#fc0')</a></div>
 	<x-auth.carousel />
 @endsection

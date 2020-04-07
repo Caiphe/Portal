@@ -1,30 +1,127 @@
-form {
-    margin: $gutter 0 0 $gutter;
-    width: 34%;
-    height: calc(100vh - 170px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+#auth-main {
+    height: 100%;
 
-    input {
-        margin-bottom: $gutterSmall;
-    }
-
-    button {
-        width: 110px;
-    }
-
-    .inline {
+    .header {
+        margin: $gutterSmall 0 0 $gutter;
         display: flex;
+        position: relative;
         align-items: center;
 
-        .yellow {
-            color: $yellow;
+        div {
+            margin-left: 2rem;
+            font-size: 1.8rem;
+        }
+    }
+
+    svg {
+        width: 16px;
+    }
+
+    form {
+        margin: $gutter 0 0 $gutter;
+        width: 25%;
+        height: calc(100vh - 170px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+
+        input {
+            margin-top: 1rem;
+            width: 100%;
         }
 
-        a {
+        .inline {
+            margin-top: 2rem;
             display: flex;
-            text-align: center;
+            align-items: center;
+
+            a {
+                display: flex;
+                text-align: center;
+
+                svg {
+                    margin-left: 4px;
+                }
+            }
         }
+    }
+
+    .invalid {
+        border-color: $error;
+    }
+
+    .invalid-feedback {
+        font-size: 1rem;
+        color: $error;
+    }
+
+    .yellow {
+        color: $yellow;
+    }
+
+    .carousel {
+        position: absolute;
+        height: 100%;
+        width: calc(75% - 80px);
+        top: 0;
+        right: 0;
+    }
+}
+
+.carousel-item:first-child {
+    background-image: url("/images/mtn-illustration-01.png");
+}
+
+.carousel-item:nth-child(2) {
+    background-image: url("/images/mtn-illustration-02.png");
+}
+
+.carousel-item:nth-child(3) {
+    background-image: url("/images/mtn-illustration-03.png");
+}
+
+.carousel-item:nth-child(4) {
+    background-image: url("/images/mtn-illustration-01.png");
+}
+
+.carousel-item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4)) !important;
+    pointer-events: none;
+}
+
+.carousel-content {
+    position: absolute;
+    bottom: 100px;
+    margin: 0 80px;
+    color: #FFF;
+
+    h1 {
+        color: currentColor;
+        margin-bottom: $gutterSmall;
+    }
+}
+
+.bottom {
+    position: absolute;
+    bottom: $gutterSmall;
+    left: $gutter;
+    display: flex;
+    align-items: center;
+
+    span {
+        color: $grey900;
+        margin-right: 6px;
+    }
+
+    svg {
+        width: 12px;
+        margin-left: 4px;
     }
 }
