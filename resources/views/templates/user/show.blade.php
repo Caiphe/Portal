@@ -42,6 +42,7 @@ Update profile
         <label id="profile-picture-label" for="profile-picture" style="background-image: url({{$user['profile_picture']}});">
             <input type="file" name="profile-picture" id="profile-picture" accept="image/*">
         </label>
+
         <form action="{{route('user.profile.update', [$user['id']])}}" id="profile-form" method="POST">
             @csrf
             @method('put')
@@ -69,6 +70,7 @@ Update profile
             </div>
             <button class="dark">Save</button>
         </form>
+
     </div>
 @endsection
 
