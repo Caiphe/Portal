@@ -5,8 +5,8 @@
             &copy; {{date("Y")}} MTN. All rights reserved.<br>
             MTN (PTY) LTD is an authorised Financial Service Provider underwritten by Guardrisk Insurance Company. FSP license number: 44774
         </p>
-        <a href="privacy-policy" class="link-to">Privacy policy</a>
-        <a href="terms-and-conditions" class="link-to">Terms and conditions</a>
+        <a href="{{route('page.show', ['privacy-policy'])}}" class="link-to">Privacy policy</a>
+        <a href="{{route('page.show', ['terms-and-conditions'])}}" class="link-to">Terms and conditions</a>
 
         <a class="logo" href="https://www.mtn.com"><img src="/images/mtn-logo.svg" alt="MTN logo"></a>
         <div class="social">

@@ -3,10 +3,7 @@
 @section('content')
 <div class="row m-0">
     <div style="padding: 50px; width: 35vw; height: 100vh; float: left;">
-        <div class="row m-0 step__wizzard_header">
-            <img style="width: 60px;"src="/images/mtn-logo.svg" alt="MTN logo">
-            <h2 style="padding-top: 5px; margin-left: 30px;">Developer Portal</h2>
-        </div>
+        <x-auth.header/>
 
         <div >
             <h2>Almost there...</h2>

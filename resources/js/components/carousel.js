@@ -105,6 +105,8 @@
     }
 
     function transitionStart() {
+        if(transitionTimer[this.dataset.name] !== null) return;
+
         transitionTimer[this.dataset.name] = window.setTimeout(transitionCarousel.bind(null, this), +this.dataset.wait);
     }
 }());

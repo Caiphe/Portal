@@ -4,4 +4,7 @@
     <input type="checkbox" name="{{$name ?? 'switch'}}" id="{{$id ?? $name ?? 'switch'}}" value="{{$value ?? ''}}">
     <span class="track"></span>
     <span class="ball"></span>
+    @if(!empty(trim($slot)))
+    <span class="swatch-label">{{$slot}}</span>
+    @endisset
 </label>
