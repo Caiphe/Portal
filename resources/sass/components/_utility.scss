@@ -162,3 +162,25 @@
 .grey-bg {
     background-color: $grey300;
 }
+
+.layout-master section.grey-bg {
+    position: relative;
+
+    @media screen and (min-width: 1440px) {
+        &:before,
+        &:after {
+            content: "";
+            height: 100%;
+            width: calc((100vw - 1440px) / 2);
+            background-color: $grey300;
+            position: absolute;
+            top: 0;
+        }
+        &:before {
+            left: 100%;
+        }
+        &:after {
+            right: 100%;
+        }
+    }
+}
