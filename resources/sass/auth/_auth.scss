@@ -18,8 +18,8 @@
     }
 
     form {
-        margin: $gutter 0 0 $gutter;
-        width: 25%;
+        padding: $gutter $gutter 0 $gutter;
+        width: 35%;
         height: calc(100vh - 170px);
         display: flex;
         flex-direction: column;
@@ -63,65 +63,72 @@
     .carousel {
         position: absolute;
         height: 100%;
-        width: calc(75% - 80px);
+        width: 65%;
         top: 0;
         right: 0;
     }
-}
 
-.carousel-item:first-child {
-    background-image: url("/images/mtn-illustration-01.png");
-}
-
-.carousel-item:nth-child(2) {
-    background-image: url("/images/mtn-illustration-02.png");
-}
-
-.carousel-item:nth-child(3) {
-    background-image: url("/images/mtn-illustration-03.png");
-}
-
-.carousel-item:nth-child(4) {
-    background-image: url("/images/mtn-illustration-01.png");
-}
-
-.carousel-item::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4)) !important;
-    pointer-events: none;
-}
-
-.carousel-content {
-    position: absolute;
-    bottom: 100px;
-    margin: 0 80px;
-    color: #FFF;
-
-    h1 {
-        color: currentColor;
-        margin-bottom: $gutterSmall;
-    }
-}
-
-.bottom {
-    position: absolute;
-    bottom: $gutterSmall;
-    left: $gutter;
-    display: flex;
-    align-items: center;
-
-    span {
-        color: $grey900;
-        margin-right: 6px;
+    p {
+        font-family: "Montserrat-Light";
     }
 
-    svg {
-        width: 12px;
-        margin-left: 4px;
+    .carousel-item:first-child {
+        background-image: url("/images/mtn-illustration-01.png");
+    }
+
+    .carousel-item:nth-child(2) {
+        background-image: url("/images/mtn-illustration-02.png");
+    }
+
+    .carousel-item:nth-child(3) {
+        background-image: url("/images/mtn-illustration-03.png");
+    }
+
+    .carousel-item:nth-child(4) {
+        background-image: url("/images/mtn-illustration-01.png");
+    }
+
+    .carousel-item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4)) !important;
+        pointer-events: none;
+    }
+
+    .carousel-content {
+        position: absolute;
+        bottom: 100px;
+        margin: 0 80px;
+        color: #FFF;
+
+        h1 {
+            color: currentColor;
+            margin-bottom: $gutterSmall;
+        }
+    }
+
+    .try-somewhere-else {
+        display: flex;
+        align-items: center;
+
+        span {
+            color: $grey900;
+            margin-right: 6px;
+        }
+
+        svg {
+            width: 12px;
+            margin-left: 4px;
+        }
+    }
+
+    .bottom {
+        position: absolute;
+        bottom: $gutterSmall;
+        left: $gutter;
     }
 }

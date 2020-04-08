@@ -1,6 +1,7 @@
 {
-    "/css/auth/login.css": "/css/auth/login.css?id=f7e4ba6582d8f2686e5d",
-    "/css/auth/forgot-password.css": "/css/auth/forgot-password.css?id=c2c20da17becbe091ff2",
+    "/css/auth/login.css": "/css/auth/login.css?id=8dcc81055b3a0d47a0aa",
+    "/css/auth/register.css": "/css/auth/register.css?id=97477fb1dd9357ad6661",
+    "/css/auth/forgot-password.css": "/css/auth/forgot-password.css?id=cc8d2100b844d6989ff3",
     "/css/components/carousel.css": "/css/components/carousel.css?id=526011b89c6cbab29788",
     "/css/components/multiselect.css": "/css/components/multiselect.css?id=9f19774870e94b5729ad",
     "/css/components/contact-form.css": "/css/components/contact-form.css?id=957d4e4558772f204cec",
@@ -22,7 +23,7 @@
     "/css/templates/getting-started/index.css": "/css/templates/getting-started/index.css?id=cbb25db295bb3ad69792",
     "/css/templates/home.css": "/css/templates/home.css?id=afa0207263a5edd40db4",
     "/css/components/_app.css": "/css/components/_app.css?id=5e0f8f49188f936a96b2",
-    "/css/styles.css": "/css/styles.css?id=f0ddb8aed38ac702b0f7",
+    "/css/styles.css": "/css/styles.css?id=1825b9f7d5dc0e1f06c2",
     "/js/scripts.js": "/js/scripts.js?id=630b9ab90b406906c5f3",
     "/js/templates/user/show.js": "/js/templates/user/show.js?id=670a2b57ad56c3b5e7b8",
     "/js/components/carousel.js": "/js/components/carousel.js?id=1bc537eb2cfa6998183d",
@@ -30,6 +31,6 @@
     "/js/components/multiselect.js": "/js/components/multiselect.js?id=90d9eb9e4956c24f1451",
     "/js/templates/products/index.js": "/js/templates/products/index.js?id=7744f8a1e0ae3b7ad009",
     "/js/templates/products/show.js": "/js/templates/products/show.js?id=6b7d80178a2833e52bde",
-    "/js/templates/auth/register.js": "/js/templates/auth/register.js?id=a52e01b622a216142688",
+    "/js/templates/auth/register.js": "/js/templates/auth/register.js?id=1b80f6831686681922d4",
     "/js/templates/faq/index.js": "/js/templates/faq/index.js?id=48ae99f9b86098a97fa7"
 }

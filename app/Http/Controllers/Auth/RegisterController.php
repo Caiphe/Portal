@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Content;
 use App\Country;
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use App\Product;
+use App\Providers\RouteServiceProvider;
 use App\Services\ApigeeService;
+use App\Services\ProductLocationService;
 use App\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -52,16 +54,15 @@ class RegisterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function showRegistrationForm()
+    public function showRegistrationForm(ProductLocationService $productLocationService)
     {
-        $productLocations = Product::isPublic()
-            ->WhereNotNull('locations')
-            ->Where('locations', '!=', 'all')
-            ->select('locations')
-            ->get()
-            ->implode('locations', ',');
+        [$products, $locations] = $productLocationService->fetch();
+        $terms = Content::where('slug', 'terms-and-conditions')->first();
 
-        return view('auth.register', ['locations' => array_unique(explode(',', $productLocations))]);
+        return view('auth.register', [
+            'locations' => $locations,
+            'terms' => $terms->body
+        ]);
     }
 
     /**

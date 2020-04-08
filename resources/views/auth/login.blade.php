@@ -30,6 +30,6 @@
 			</a>
 		</div>
 	</form>
-	<a class="yellow bottom t-small" href="{{route('register')}}"><span>Don’t have an account?</span> Create one here @svg('arrow-forward', '#fc0')</a></div>
+	<a class="try-somewhere-else yellow bottom t-small" href="{{route('register')}}"><span>Don’t have an account?</span> Create one here @svg('arrow-forward', '#fc0')</a></div>
 	<x-auth.carousel />
 @endsection

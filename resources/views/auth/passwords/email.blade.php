@@ -27,6 +27,6 @@
 			{{ __('Remind me') }}
 		</button>
 	</form>
-	<a class="yellow bottom t-small" href="{{route('login')}}"><span>Not the right place?</span> Click here to log in @svg('arrow-forward', '#fc0')</a></div>
+	<a class="try-somewhere-else yellow bottom t-small" href="{{route('login')}}"><span>Not the right place?</span> Click here to log in @svg('arrow-forward', '#fc0')</a></div>
     <x-auth.carousel />
 @endsection
