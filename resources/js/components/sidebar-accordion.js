@@ -1,9 +1,8 @@
 window.onload = function() {
     var accordion = document.querySelectorAll('.accordion-item');
     var menu = document.querySelector('.accordion-menu');
-    var i = 0;
 
-    for (i; i < accordion.length; i++) {
+    for (var i = 0; i < accordion.length; i++) {
         var button = accordion[i].querySelector('a[data-toggle="accordion-item"]');
         var submenu = accordion[i].querySelector('.accordion-sub-items');
 
