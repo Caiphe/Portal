@@ -2,6 +2,26 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/products/show.css') }}">
+@if(!empty($content['product_tab']))
+<style>
+    @foreach($content['product_tab'] as $tab)
+    #product-sections.product-{{$tab->slug}} #product-{{$tab->slug}}{
+        display: block;
+    }
+    #product-sections.product-{{$tab->slug}} #button-{{$tab->slug}},
+    #product-sections.product-{{$tab->slug}} #button-{{$tab->slug}} {
+        background-color: #666;
+        color: #FFF;
+    }
+    #product-sections.product-{{$tab->slug}} #button-{{$tab->slug}}:hover,
+    #product-sections.product-{{$tab->slug}} #button-{{$tab->slug}}:hover {
+        background-color: #858585;
+        border-color: #858585;
+        color: #FFF;
+    }
+    @endforeach
+</style>
+@endif
 @endpush
 
 @section('title', $product->display_name)
@@ -25,16 +45,19 @@
     <div class="content">
         <div id="product-sections" class="{{$startingPoint}}">
             @if(isset($content['product_overview']))
-                <button id="button-overview" class="light small product-section-button" onclick="switchSection('product-overview');">OVERVIEW</button>
+                <button id="button-overview" class="light small outline product-section-button" onclick="switchSection('product-overview');">OVERVIEW</button>
             @endif
             @if(isset($content['product_docs']))
-                <button id="button-docs" class="light small product-section-button" onclick="switchSection('product-docs');">DOCS</button>
+                <button id="button-docs" class="light small outline product-section-button" onclick="switchSection('product-docs');">DOCS</button>
             @endif
-            <button id="button-specification" class="light small product-section-button" onclick="switchSection('product-specification');">SPECIFICATION</button>
+            <button id="button-specification" class="light small outline product-section-button" onclick="switchSection('product-specification');">SPECIFICATION</button>
+            @foreach($content['product_tab'] as $tab)
+            <button id="button-{{$tab->slug}}" class="light small outline product-section-button" onclick="switchSection('product-{{$tab->slug}}');">{{strtoupper($tab->title)}}</button>
+            @endforeach
 
             @if(isset($content['product_overview']))
                 <div id="product-overview" class="product-section">
-                    {!!$product->content[0]['body']!!}
+                    {!!$content['product_overview']['body']!!}
                     <div class="key-features">
                         @foreach($product->keyFeatures as $keyFeature)
                             <x-key-feature :title="$keyFeature['title']">
@@ -47,7 +70,7 @@
 
             @if(isset($content['product_docs']))
                 <div id="product-docs" class="product-section">
-                    {!!$product->content[1]['body']!!}
+                    {!!$content['product_docs']['body']!!}
                 </div>
             @endif
 
@@ -69,6 +92,12 @@
                     </div>
                 @endforeach
             </div>
+
+            @foreach($content['product_tab'] as $tab)
+                <div id="product-{{$tab->slug}}" class="product-section">
+                    {!!$tab->body!!}
+                </div>
+            @endforeach
         </div>
     </div>
 @endsection

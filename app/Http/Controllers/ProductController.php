@@ -65,11 +65,15 @@ class ProductController extends Controller
         $openApiClass = new OpenApiService($product->swagger);
         $prod = $product->load(['content', 'keyFeatures']);
         $productList = Product::isPublic()->get()->sortBy('category')->groupBy('category');
-        $content = [];
+        $content = ['product_tab' => []];
         $sidebarAccordion = [];
         $startingPoint = "product-specification";
 
         foreach ($prod->content as $c) {
+            if($c->type === "product_tab"){
+                $content[$c->type][] = $c;
+                continue;
+            }
             $content[$c->type] = $c;
         }
 
