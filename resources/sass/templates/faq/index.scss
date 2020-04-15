@@ -22,6 +22,7 @@ section:not(:first-of-type) {
             font-family: "mtn-regular", sans-serif;
             cursor: pointer;
             border-bottom: solid 1px $grey300;
+            padding-bottom: 20px;
 
             svg {
                 position: absolute;
