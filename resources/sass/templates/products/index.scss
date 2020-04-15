@@ -34,7 +34,7 @@ h3 {
             .category {
                 display: flex;
                 flex-flow: row wrap;
-                justify-content: space-between;
+                //justify-content: space-between;
                 margin-bottom: 10px;
                 width: 100%;
 
@@ -44,8 +44,8 @@ h3 {
                 }
 
                 .card {
+                    flex: 0 1 32%;
                     margin-bottom: 30px;
-                    width: 32%;
 
                     .card__header {
                         margin-bottom: 10px;
