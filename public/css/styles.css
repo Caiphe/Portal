@@ -1868,6 +1868,7 @@ body > #main {
 
 .layout-sidebar .wrapper #main {
   background-color: #FFF;
+  padding-right: 0;
 }
 
 .curve {
