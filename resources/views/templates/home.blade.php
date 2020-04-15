@@ -68,7 +68,7 @@
     </section>
 
     <section class="grey-bg">
-       <div class="container-inner flex">
+       <div class="container flex">
             <div class="content-left">
                 <h1>Sign-in</h1>
                 <p>Register your account if you want to create an App.</p>
@@ -86,7 +86,7 @@
     </section>
 
     <section>
-        <div class="container-inner flex">
+        <div class="container flex">
             <div class="image-left"><img src="/images/products.png"></div>
             <div class="content-right">
                 <h1>Browse our products</h1>
@@ -103,7 +103,7 @@
     </section>
 
     <section class="grey-bg">
-        <div class="container-inner flex">
+        <div class="container flex">
             <div class="content-left">
                 <h1>Register an app</h1>
                 <p>When you have chosen the API you want to use to build your app, you need to register your app. Follow the steps below</p>
@@ -122,7 +122,7 @@
     </section>
 
     <section>
-        <div class="container-inner flex">
+        <div class="container flex">
             <div class="image-left"><img src="/images/access-key.png"></div>
             <div class="content-right">
                 <h1>Access the keys</h1>
@@ -137,8 +137,8 @@
         </div>
     </section>
 
-    <section class="grey-bg latest-products">
-        <div class="container-inner">
+    <section class="grey-bg">
+        <div class="container">
             <h1>Latest products</h1>
             <div class="products-cards">
                 @foreach ($productsCollection as $product)
