@@ -38,55 +38,27 @@
 
 #product-sections {
 
-    &.product-overview #button-docs,
-    &.product-overview #button-specification {
-        background-color: #FFF;
-        color: $grey600;
+    .product-section{
+        display:none;
+    }
+
+    &.product-docs #button-docs,
+    &.product-overview #button-overview,
+    &.product-specification #button-specification{
+        background-color: $grey700;
+        color: #FFF;
 
         &:hover {
-            background-color: mix(#FFFFFF, $grey600, 20%);
-            border-color: mix(#FFFFFF, $grey600, 20%);
+            background-color: mix(#FFFFFF, $grey700, 20%);
+            border-color: mix(#FFFFFF, $grey700, 20%);
             color: #FFF;
         }
     }
 
-    &.product-docs #button-overview,
-    &.product-docs #button-specification {
-        background-color: #FFF;
-        color: $grey600;
-
-        &:hover {
-            background-color: mix(#FFFFFF, $grey600, 20%);
-            border-color: mix(#FFFFFF, $grey600, 20%);
-            color: #FFF;
-        }
-    }
-
-    &.product-specification #button-overview,
-    &.product-specification #button-docs {
-        background-color: #FFF;
-        color: $grey600;
-
-        &:hover {
-            background-color: mix(#FFFFFF, $grey600, 20%);
-            border-color: mix(#FFFFFF, $grey600, 20%);
-            color: #FFF;
-        }
-    }
-
-    &.product-overview #product-docs,
-    &.product-overview #product-specification {
-        display: none;
-    }
-
-    &.product-docs #product-overview,
-    &.product-docs #product-specification {
-        display: none;
-    }
-
-    &.product-specification #product-overview,
-    &.product-specification #product-docs {
-        display: none;
+    &.product-docs #product-docs,
+    &.product-overview #product-overview,
+    &.product-specification #product-specification {
+        display: block;
     }
 
     .key-features {

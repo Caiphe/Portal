@@ -14,7 +14,7 @@ pre {
 
 .hljs-comment,
 .hljs-quote {
-    color: #586e75;
+    color: $grey500;
     font-style: italic
 }
 
@@ -78,4 +78,18 @@ pre {
 
 .hljs-strong {
     font-weight: bold
+}
+
+div > code,
+li > code,
+h1 > code,
+h2 > code,
+h3 > code,
+h4 > code,
+h5 > code,
+h6 > code,
+p > code{
+    background-color: $yellow500;
+    color: $yellow;
+    padding: 5px;
 }
