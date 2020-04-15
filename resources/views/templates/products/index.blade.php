@@ -11,8 +11,6 @@
 $filters = array('Group'=> $groups,'Categories'=> $productCategories);
 @endphp
 <div class="filter-sidebar">
-	<h2>Filter by</h2>
-
 	@foreach ($filters as $filterTitle => $filterGroup)
 		<h3>{{$filterTitle}}</h3>
 		@foreach ($filterGroup as $filterItem)

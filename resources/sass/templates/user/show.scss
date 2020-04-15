@@ -4,6 +4,7 @@
 #main {
     padding: 0 !important;
     margin-bottom: 60px;
+    height: 100%;
 
     #heading {
         margin-bottom: 40px;
@@ -17,8 +18,7 @@
         padding: $gutter;
 
         .locations {
-            width: 150px;
-            text-align: left;
+            width: 100%;
 
             label {
                 cursor: pointer;
@@ -28,6 +28,8 @@
                 opacity: 0.2;
                 width: 25px;
                 height: 25px;
+                margin-right: 5px;
+                margin-bottom: 5px;
 
                 &:hover {
                     opacity: 1;

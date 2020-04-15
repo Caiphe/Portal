@@ -34,6 +34,7 @@ h3 {
             .category {
                 display: flex;
                 flex-flow: row wrap;
+                justify-content: space-between;
                 margin-bottom: 10px;
                 width: 100%;
 
@@ -44,8 +45,7 @@ h3 {
 
                 .card {
                     margin-bottom: 30px;
-                    margin-right: 20px;
-                    width: 30%;
+                    width: 32%;
 
                     .card__header {
                         margin-bottom: 10px;
@@ -57,13 +57,19 @@ h3 {
 }
 
 .filter-sidebar {
+    h3 {
+        font-size: 12px;
+    }
+
     .filter-checkbox {
         display: flex;
         align-items: center;
         margin-bottom: 10px;
+
         .filter-label {
             margin-left: 5px;
             color: $grey700;
+            font-size: 12px;
         }
     }
 
