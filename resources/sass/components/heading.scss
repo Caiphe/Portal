@@ -76,7 +76,10 @@
     }
 
     .right-side {
+        position: absolute;
+        right: 0;
         display: flex;
+        top: 0;
         height: 100%;
         align-items: center;
     }
