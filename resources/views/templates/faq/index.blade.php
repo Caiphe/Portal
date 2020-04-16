@@ -4,10 +4,10 @@
 <link rel="stylesheet" href="{{ mix('/css/templates/faq/index.css') }}">
 @endpush
 
-@section('title','FAQs')
+@section('title','FAQ')
 
 @section('content')
-	<x-heading heading="FAQs"></x-heading>
+	<x-heading heading="FAQ"></x-heading>
 	<section class="faq-section mt-5">
         <div class="container">
             @foreach ($faqs as $faq)
