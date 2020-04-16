@@ -2,8 +2,8 @@
 <link href="{{ mix('/css/components/action_tab.css') }}" rel="stylesheet"/>
 @endallowonce
 
-@props(['title' => '', 'text', 'logo', 'status' => ''])
-<a class="action-tab {{ $status }}">
+@props(['link' => '', 'title' => '', 'text', 'logo', 'status' => ''])
+<a class="action-tab {{ $status }}" href="{{ $link }}" target="_blank" rel="noopener noreferrer">
     @isset($title)
         <strong>
             {{ $title }}

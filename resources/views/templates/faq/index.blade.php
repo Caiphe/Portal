@@ -11,9 +11,18 @@
 
     <section>
         <div class="container">
-            <x-action-tab text="For more help, connect with us on Spectrum" logo="spectrum"></x-action-tab>
+            <x-action-tab
+                link="https://spectrum.chat/mtn-developer-hub"
+                text="For more help, connect with us on Spectrum"
+                logo="spectrum">
+            </x-action-tab>
 
-            <x-action-tab title="Network status." text="See more on our status page" status="green"></x-action-tab>
+            <x-action-tab
+                link="https://madapi.statuspage.io/"
+                title="Network status."
+                text="See more on our status page"
+                status="green">
+            </x-action-tab>
         </div>
     </section>
 
