@@ -81,13 +81,17 @@
                 </ol>
                 <a class="button" href="/register" role="button">View</a>
             </div>
-            <div class="image-right"><img src="/images/register.png"></div>
+            <div class="image-right">
+                <img src="/images/illustration-sign-up.png">
+            </div>
        </div>
     </section>
 
     <section>
         <div class="container flex">
-            <div class="image-left"><img src="/images/products.png"></div>
+            <div class="image-left">
+                <img src="/images/illustration-products.png">
+            </div>
             <div class="content-right">
                 <h1>Browse our products</h1>
                 <p>MTN is consistently developing new APIs for developers and businesses to create powerful products. Follow the steps to browse APIs</p>
@@ -117,13 +121,17 @@
                 </ol>
                 <a class="button" href="/apps/create" role="button">View</a>
             </div>
-            <div class="image-right"><img src="/images/register-app.png"></div>
+            <div class="image-right">
+                <img src="/images/illustration--apps.png">
+            </div>
         </div>
     </section>
 
     <section>
         <div class="container flex">
-            <div class="image-left"><img src="/images/access-key.png"></div>
+            <div class="image-left">
+                <img src="/images/illustration-keys.png">
+            </div>
             <div class="content-right">
                 <h1>Access the keys</h1>
                 <p>Once your App submission is approved you can now use Consumer/API Key and Secret on your profile page.</p>
