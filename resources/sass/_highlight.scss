@@ -88,8 +88,11 @@ h3 > code,
 h4 > code,
 h5 > code,
 h6 > code,
+a > code,
 p > code{
-    background-color: $yellow500;
-    color: $yellow;
+    background-color: $grey300;
+    color: $red;
     padding: 5px;
+    border-radius: 3px;
+    font-size: 80%;
 }
