@@ -23,6 +23,7 @@ mix.scripts(["resources/js/scripts.js", "resources/js/components/alert.js"], "pu
     .sass("resources/sass/auth/login.scss", "public/css/auth")
     .sass("resources/sass/auth/register.scss", "public/css/auth")
     .sass("resources/sass/auth/forgot-password.scss", "public/css/auth")
+    .sass("resources/sass/components/action_tab.scss", "public/css/components")
     .sass("resources/sass/components/carousel.scss", "public/css/components")
     .sass("resources/sass/components/multiselect.scss", "public/css/components")
     .sass("resources/sass/components/contact-form.scss", "public/css/components")

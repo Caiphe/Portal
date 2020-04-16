@@ -8,6 +8,15 @@
 
 @section('content')
 	<x-heading heading="FAQ"></x-heading>
+
+    <section>
+        <div class="container">
+            <x-action-tab text="For more help, connect with us on Spectrum" logo="spectrum"></x-action-tab>
+
+            <x-action-tab title="Network status." text="See more on our status page" status="green"></x-action-tab>
+        </div>
+    </section>
+
 	<section class="faq-section mt-5">
         <div class="container">
             @foreach ($faqs as $faq)
@@ -15,11 +24,13 @@
             @endforeach
         </div>
 	</section>
+
 	<section class="grey-bg">
         <div class="container">
-            <x-contact-form title="Need help? Get in touch"/>
+            <x-contact-form title="Need help? Get in touch"></x-contact-form>
         </div>
 	</section>
+
 @endsection
 
 @pushscript('faq')
