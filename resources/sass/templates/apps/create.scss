@@ -13,7 +13,7 @@
         margin-top: 100px;
         height: 100%;
         width: 100%;
-        padding: 0 80px 0 0;
+        padding: 0 40px 0 0;
 
         nav {
             display: flex;
@@ -120,6 +120,7 @@
             .countries {
                 display: flex;
                 flex-flow: row wrap;
+                justify-content: space-between;
                 margin-top: 20px;
                 margin-bottom: 40px;
 

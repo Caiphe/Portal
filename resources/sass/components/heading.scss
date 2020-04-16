@@ -48,6 +48,7 @@
     position: absolute;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: $gutterSmall $gutter;
     background-color: $grey400;
     height: 68px;

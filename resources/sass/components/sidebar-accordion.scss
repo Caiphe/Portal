@@ -12,12 +12,12 @@
     }
 
     .accordion-item {
+
         [data-toggle="accordion-item"] {
             position: relative;
             display: block;
             padding-left: 20px;
         }
-
 
         svg {
             position: absolute;

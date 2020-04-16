@@ -21,9 +21,8 @@ section:not(:first-of-type) {
         .question {
             font-family: "mtn-regular", sans-serif;
             cursor: pointer;
-            transition: 0.4s;
-            padding-bottom: 20px;
             border-bottom: solid 1px $grey300;
+            padding-bottom: 20px;
 
             svg {
                 position: absolute;

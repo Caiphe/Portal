@@ -15,22 +15,22 @@ class ApigeeService
 {
     public static function get(string $url)
     {
-        return self::HttpWithBasicAuth()->get(env('APIGEE_BASE') . $url)->json();
+        return self::HttpWithBasicAuth()->get(config('apigee.base') . $url)->json();
     }
 
     public static function post(string $url, array $data)
     {
-        return self::HttpWithBasicAuth()->post(env('APIGEE_BASE') . $url, $data);
+        return self::HttpWithBasicAuth()->post(config('apigee.base') . $url, $data);
     }
 
     public static function put(string $url, array $data)
     {
-        return self::HttpWithBasicAuth()->put(env('APIGEE_BASE') . $url, $data);
+        return self::HttpWithBasicAuth()->put(config('apigee.base') . $url, $data);
     }
 
     public static function delete(string $url)
     {
-        return self::HttpWithBasicAuth()->delete(env('APIGEE_BASE') . $url);
+        return self::HttpWithBasicAuth()->delete(config('apigee.base') . $url);
     }
 
     public static function createApp(array $data)
@@ -76,7 +76,7 @@ class ApigeeService
     {
         $apps = self::get("/apps?rows=10&expand=true&status={$status}");
 
-        for ($i=0; $i < count($apps['app']); $i++) { 
+        for ($i=0; $i < count($apps['app']); $i++) {
             if(!isset($apps['app'][$i]['credentials'])) continue;
             $apps['app'][$i]['credentials'] = self::getLatestCredentials($apps['app'][$i]['credentials']);
         }
@@ -93,7 +93,7 @@ class ApigeeService
     {
         $apps = self::get("developers/{$email}/apps/?expand=true");
 
-        for ($i=0; $i < count($apps['app']); $i++) { 
+        for ($i=0; $i < count($apps['app']); $i++) {
             if(!isset($apps['app'][$i]['credentials'])) continue;
             $apps['app'][$i]['credentials'] = self::getLatestCredentials($apps['app'][$i]['credentials']);
         }
@@ -133,12 +133,12 @@ class ApigeeService
 
     protected static function HttpWithBasicAuth()
     {
-        return Http::withBasicAuth(env('APIGEE_USERNAME'), env('APIGEE_PASSWORD'));
+        return Http::withBasicAuth(config('apigee.username'), config('apigee.password'));
     }
 
     protected static function getLatestCredentials(array $credentials)
     {
-        for ($i = count($credentials) - 1; $i >= 0 ; $i--) { 
+        for ($i = count($credentials) - 1; $i >= 0 ; $i--) {
             if($credentials[$i]['status'] === 'approved'){
                 return $credentials[$i];
             }

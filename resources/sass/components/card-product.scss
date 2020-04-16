@@ -1,24 +1,37 @@
 .card--product {
     .card__content {
-        padding-bottom: 50px;
+        padding-bottom: 30px;
+
+        h3 {
+            margin: 10px 0 0;
+        }
+
+        p {
+            margin: 15px 0;
+        }
+
         .country-selector {
             display: flex;
             align-items: center;
             position: absolute;
             bottom: 0;
+
             .countries {
                 width: 15px;
                 max-height: 15px;
                 overflow: hidden;
+
                 img {
                     height: 15px;
                 }
             }
+
             .view-more {
                 margin-left: 5px;
                 display: flex;
                 color: #000000;
             }
+
             &:hover {
                 > .countries {
                     width: 100%;
@@ -32,13 +45,15 @@
             }
         }
     }
+
     .buttons {
         display: flex;
         align-items: center;
         position: absolute;
         right: 20px;
         bottom: -18px;
-        a.button {
+
+        a {
             margin-right: 5px;
         }
     }
