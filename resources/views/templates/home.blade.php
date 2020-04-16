@@ -68,77 +68,85 @@
     </section>
 
     <section class="grey-bg">
-       <div class="container-inner flex">
+       <div class="container flex">
             <div class="content-left">
-                <h1>Sign-in</h1>
-                <p>Register your account if you want to create an App.</p>
+                <h1>Sign up</h1>
+                <p>To be able to create an app, you would need to register an account first. Simply follow the registration process and you’ll be good to go.</p>
+                <span>Steps involved</span>
                 <ol>
-                    <li>Go to <strong>Register</strong></li>
-                    <li>Complete the sign-up steps</li>
-                    <li>Agree to the T&C’s</li>
-                    <li>You’re in Sign in to register an App</li>
-                    <li>Go to <strong>‘Build an app’</strong></li>
+                    <li>Complete the registration steps</li>
+                    <li>Verify your email address</li>
                 </ol>
-                <a class="button" href="/register" role="button">View</a>
+                <a class="button" href="/register" role="button">Get started</a>
             </div>
-            <div class="image-right"><img src="/images/register.png"></div>
+            <div class="image-right">
+                <img src="/images/illustration-sign-up.png">
+            </div>
        </div>
     </section>
 
     <section>
-        <div class="container-inner flex">
-            <div class="image-left"><img src="/images/products.png"></div>
+        <div class="container flex">
+            <div class="image-left">
+                <img src="/images/illustration-products.png">
+            </div>
             <div class="content-right">
                 <h1>Browse our products</h1>
-                <p>MTN is consistently developing new APIs for developers and businesses to create powerful products. Follow the steps to browse APIs</p>
+                <p>
+                    MTN is consistently developing new APIs for developers and businesses to create powerful products. After signing in, you can explore the list of available products and familiarise yourself with the documentaion and endpoints to determine if they would be a match for your next app.
+                </p>
+                <span>Steps involved</span>
                 <ol>
-                    <li>Navigate to products</li>
-                    <li>Select a product that interests you</li>
-                    <li>Read the documentation on the page</li>
-                    <li>Review the endpoints</li>
+                    <li>Explore available products</li>
+                    <li>Review the documentation and endpoints</li>
                 </ol>
-                <a class="button" href="/products" role="button">View</a>
+                <a class="button" href="/products" role="button">Browse products</a>
             </div>
         </div>
     </section>
 
     <section class="grey-bg">
-        <div class="container-inner flex">
+        <div class="container flex">
             <div class="content-left">
                 <h1>Register an app</h1>
-                <p>When you have chosen the API you want to use to build your app, you need to register your app. Follow the steps below</p>
+                <p>
+                    Now that you’re more familiar with our products, you can proceed to registering your app. Simply click on “Build app” and follow the on-screen instructions to complete the app registration.
+                </p>
+                <span>Steps involved</span>
                 <ol>
-                    <li>Go to Profile</li>
-                    <li>Click ‘Add a new app’ on the button as seen below​</li>
-                    <li>Fill in your App name, and optionally the Callback URL, and a description of your app</li>
-                    <li>Choose which APIs you require for your product</li>
-                    <li>Submit your request</li>
-                    <li>Await the approvals</li>
+                    <li>Supply your app details</li>
+                    <li>Select the regions for your app</li>
+                    <li>Enable the available products for your app</li>
                 </ol>
-                <a class="button" href="/apps/create" role="button">View</a>
+                <a class="button" href="/apps/create" role="button">Create app</a>
             </div>
-            <div class="image-right"><img src="/images/register-app.png"></div>
+            <div class="image-right">
+                <img src="/images/illustration--apps.png">
+            </div>
         </div>
     </section>
 
     <section>
-        <div class="container-inner flex">
-            <div class="image-left"><img src="/images/access-key.png"></div>
+        <div class="container flex">
+            <div class="image-left">
+                <img src="/images/illustration-keys.png">
+            </div>
             <div class="content-right">
                 <h1>Access the keys</h1>
-                <p>Once your App submission is approved you can now use Consumer/API Key and Secret on your profile page.</p>
+                <p>
+                    Once your app has been approved, you can access all your app’s details such as consumer/secret keys and more from your app dashboard.                </p>
+                <span>Steps involved</span>
                 <ol>
-                    <li>For APIs that require API Key, use the Consumer Key as the x-api-key header</li>
-                    <li>For APIs that require OAuth, copy the key and secret and use them to generate an OAuth 2.0 access token, which is required to access MTN APIs.</li>
-                    <li>Information on our OAuth flow can be accessed on the OAuth page Browse APIs</li>
+                    <li>Access your app dashboard under your profile</li>
+                    <li>Review your app details under the “Approved apps” section</li>
                 </ol>
                 <a class="button" href="/apps" role="button">View</a>
             </div>
         </div>
     </section>
 
-    <section class="grey-bg latest-products">
-        <div class="container-inner">
+    <section class="grey-bg">
+        <div class="container">
             <h1>Latest products</h1>
             <div class="products-cards">
                 @foreach ($productsCollection as $product)

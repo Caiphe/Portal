@@ -11,8 +11,6 @@
 $filters = array('Group'=> $groups,'Categories'=> $productCategories);
 @endphp
 <div class="filter-sidebar">
-	<h2>Filter by</h2>
-
 	@foreach ($filters as $filterTitle => $filterGroup)
 		<h3>{{$filterTitle}}</h3>
 		@foreach ($filterGroup as $filterItem)
@@ -35,17 +33,17 @@ $filters = array('Group'=> $groups,'Categories'=> $productCategories);
 @endsection
 
 @section('content')
-    <x-heading heading="Products"></x-heading>
-    <div class="content">
+    <x-heading heading="Products">
         <input type="text" name="filter-text" id="filter-text" class="filter-text" placeholder="Search" autofocus/>
-        <hr class="search-hr"/>
+    </x-heading>
+    <div class="content">
         <div class="products">
             @foreach ($productsCollection as $category=>$products)
                 <div class="category" data-category="{{ $category }}"
                      @if(isset($selectedCategory) && $selectedCategory!==$category)
                      style="display:none"
                     @endif>
-                    <h3>{{ $category }}</h3>
+                    <h3 class="category-title">{{ $category }}</h3>
                     @php
                         $products = $products->sortBy('display_name');
                     @endphp

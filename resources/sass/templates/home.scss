@@ -64,7 +64,6 @@ body>#main {
 
                 p {
                     color: #FFFFFF;
-                    font-size: 20px;
                 }
 
                 .button {
@@ -77,6 +76,7 @@ body>#main {
 
 .introduction {
     text-align: center;
+    padding-bottom: 40px;
 
     p {
         padding: 0 15em;
@@ -96,68 +96,76 @@ section {
     padding-top: 80px;
     padding-bottom: 80px;
 
-    .container-inner {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        max-width: 960px;
+    h1 {
+        margin-top: 0;
+        margin-bottom: 25px;
+    }
 
-        h1 {
-            margin-top: 0;
-            margin-bottom: 25px;
-        }
+    ol {
+        counter-reset: listCounter;
+        list-style: circle;
+        display: table;
+        padding: 0;
 
-        ol {
-            list-style: none;
-            display: table;
-            padding: 0;
+        li {
+            display: block;
 
-            li {
-                counter-increment: foo;
-                display: table-row;
-
-                &:before {
-                    content: '\2714\0020';
-                    color: $yellow;
-                    padding-right: 10px;
-                    display: table-cell;
-                    text-align: right;
-                }
+            &:before {
+                counter-increment: listCounter;
+                content: counter(listCounter);
+                color: $yellow;
+                border: 2px solid $yellow;
+                border-radius: 50%;
+                display: inline-block;
+                text-align: center;
+                margin-right: 15px;
+                width: 20px;
+                padding-right: 1px;
             }
         }
 
-        .content-right,
-        .image-right {
-            padding-left: 30px;
+        li:not(:last-of-type) {
+            margin-bottom: 5px;
         }
+    }
 
-        .content-left,
-        .image-left {
-            padding-right: 30px;
+    span {
+        font-size: 10px;
+        text-transform: uppercase;
+    }
+
+    .flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .products-cards {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .card {
+            width: 100%;
+
+            &:not(:last-of-type) {
+                margin-right: 20px;
+            }
         }
+    }
+
+    .content-right,
+    .image-right {
+        padding-left: 30px;
+    }
+
+    .content-left,
+    .image-left {
+        padding-right: 30px;
     }
 
     a {
         margin-top: 15px;
-    }
-}
-
-.latest-products {
-    .container-inner {
-        display: block;
-        max-width: 960px;
-
-        .products-cards {
-            display: flex;
-            flex-flow: row wrap;
-            justify-content: space-between;
-
-            .card {
-                margin-bottom: 30px;
-                margin-right: 20px;
-                width: 30%;
-            }
-        }
     }
 }
 
