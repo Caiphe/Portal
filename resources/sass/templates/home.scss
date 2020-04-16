@@ -101,22 +101,35 @@ section {
     }
 
     ol {
-        list-style: none;
+        counter-reset: listCounter;
+        list-style: circle;
         display: table;
         padding: 0;
 
         li {
-            counter-increment: foo;
-            display: table-row;
+            display: block;
 
             &:before {
-                content: '\2714\0020';
+                counter-increment: listCounter;
+                content: counter(listCounter);
                 color: $yellow;
-                padding-right: 10px;
-                display: table-cell;
-                text-align: right;
+                border: 2px solid $yellow;
+                border-radius: 50%;
+                display: inline-block;
+                text-align: center;
+                margin-right: 15px;
+                width: 20px;
             }
         }
+
+        li:not(:last-of-type) {
+            margin-bottom: 5px;
+        }
+    }
+
+    span {
+        font-size: 10px;
+        text-transform: uppercase;
     }
 
     .flex {
