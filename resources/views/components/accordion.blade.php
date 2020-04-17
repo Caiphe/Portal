@@ -7,10 +7,10 @@
 <div id="{{ $id }}" class="accordion">
     <div class="title">
         @svg('chevron-right')
-        <h3 class="">
+        <h3>
             {{ $title }}
             @isset($icon)
-                <a href="#">
+                <a href="#{{ $link }}">
                     @svg($icon, '#000000')
                 </a>
             @endisset

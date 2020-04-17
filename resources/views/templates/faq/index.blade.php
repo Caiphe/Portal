@@ -37,7 +37,7 @@
                 </x-panel>
 
                 @foreach ($categories as $category)
-                    <x-accordion :id="$category->id" :title="$category->title" icon="link">
+                    <x-accordion :id="$category->slug" :title="$category->title" :link="$category->slug" icon="link">
                         <article>
                             <header>
                                 <p>
@@ -59,21 +59,11 @@
             <div class="faq-categories">
                 <span>Categories</span>
                 <ul>
-                    <li>
-                        <a href="">Authentication</a>
-                    </li>
-                    <li>
-                        <a href="">Callback</a>
-                    </li>
-                    <li>
-                        <a href="">Error code</a>
-                    </li>
-                    <li>
-                        <a href="">Support</a>
-                    </li>
-                    <li>
-                        <a href="">Onboarding</a>
-                    </li>
+                    @foreach ($categories as $category)
+                        <li>
+                            <a href="#{{ $category->slug }}">{{ $category->title }}</a>
+                        </li>
+                    @endforeach
                 </ul>
             </div>
         </div>
