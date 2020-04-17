@@ -60,7 +60,10 @@ country.options.selectedIndex = 0;
 country.addEventListener('change', handleSelectCountry);
 
 function handleSelectCountry(event) {
-    var selected = event.currentTarget.value;
+    var selected = event.currentTarget;
+    var selectedCountry = selected.options[selected.selectedIndex];
 
-    console.log(selected);
+    document.querySelector('.connect').style.display = 'block';
+    document.querySelector('.skype').href = selectedCountry.dataset.skype;
+    document.querySelector('.whatsapp').href = selectedCountry.dataset.whatsapp;
 }

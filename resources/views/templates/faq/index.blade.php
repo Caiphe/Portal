@@ -128,9 +128,13 @@
                 <x-select></x-select>
 
                 <div class="connect">
-                    @svg('skype')
+                    <a class="skype" href="" target="_blank" rel="noopener noreferrer">
+                        @svg('skype')
+                    </a>
 
-                    @svg('whatsapp', '#FFFFFF')
+                    <a class="whatsapp" href="" target="_blank" rel="noopener noreferrer">
+                        @svg('whatsapp', '#FFFFFF')
+                    </a>
                 </div>
             </div>
         </div>
