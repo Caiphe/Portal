@@ -27,14 +27,6 @@
         background-color: $green;
     }
 
-    &.warning {
-        background-color: $warning;
-    }
-
-    &.error {
-        background-color: $error;
-    }
-
     &:not(:last-of-type) {
         margin-right: 15px;
     }
