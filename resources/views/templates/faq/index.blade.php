@@ -45,7 +45,7 @@
                                 </p>
                                 <span class="tag outline yellow">MTN</span>
                                 <span class="tag outline yellow">Advertising</span>
-                                @svg('plus', '#000000')
+                                <button class="button fab plus"></button>
                             </header>
                             <ul class="content">
                                 <li>Subscription Key – received upon subscription to a product. It is used for authenticating the number of API calls. For information about subscription keys, refer to point 2</li>

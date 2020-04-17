@@ -46,7 +46,8 @@
         header {
             display: flex;
             align-items: center;
-            padding-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid $grey300;
 
             p {
                 font-size: 16px;
@@ -59,13 +60,15 @@
                 margin-right: 10px;
             }
 
-            svg {
+            button {
+                background-color: transparent;
+                border: transparent;
                 margin-left: auto;
-            }
-        }
 
-        header:not(:last-of-type) {
-            border-bottom: 2px solid $grey300;
+                &:hover {
+                    background-color: transparent;
+                }
+            }
         }
 
         header + .content {
@@ -73,9 +76,11 @@
         }
 
         ul {
-            padding: 15px 20px 0;
+            cursor: pointer;
             margin-bottom: 0;
+            margin-top: 0;
             list-style: none;
+            padding: 20px 20px 0;
 
             li {
 
@@ -84,6 +89,11 @@
                     text-indent: -1.5em;
                     display: inline-block;
                 }
+            }
+
+            &.expand {
+                display: block;
+                animation: expand 0.1s;
             }
         }
 
