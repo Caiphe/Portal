@@ -81,7 +81,7 @@
             <x-panel>
                 <label for="categories"></label>
                 <select name="categories" id="categories">
-                    <option value="Advertising" selected="selected">
+                    <option value="Advertising">
                         Advertising
                     </option>
                     <option value="Customer">

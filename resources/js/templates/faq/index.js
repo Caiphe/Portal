@@ -29,6 +29,7 @@ function toggleAccordionContent(event) {
 }
 
 var select = document.getElementById('categories');
+var value = document.getElementById('categories').value;
 
 select.value = 'Advertising';
 select.addEventListener('change', handleSelectCategory);
@@ -36,6 +37,15 @@ select.addEventListener('change', handleSelectCategory);
 function handleSelectCategory(event) {
     var form = document.querySelector('.contact-form');
     var fintech = document.getElementById('fintech');
+
+    for(var i = 0, j = select.options.length; i < j; ++i) {
+        if(select.options[i].innerHTML === value) {
+            select.selectedIndex = i;
+            break;
+        }
+    }
+
+    console.log(select.selectedIndex);
 
     if (event.target.value === 'Fintech') {
         form.classList.add('hide');
