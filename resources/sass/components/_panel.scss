@@ -1,0 +1,8 @@
+@import "../variables";
+
+.panel {
+    background-color: $grey300;
+    border-radius: 10px;
+    box-shadow: #00000040 0 2px 4px;
+    padding: 20px;
+}

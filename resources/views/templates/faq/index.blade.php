@@ -29,15 +29,17 @@
     <section class="search">
         <div class="container">
             <div class="content">
-                <div class="faq-search">
+                <x-panel>
                     <h2>Looking for something specific?</h2>
                     <form action="">
                         <input type="text" name="search" placeholder="Search" autofocus>
                     </form>
-                </div>
+                </x-panel>
 
-                @foreach ($faqs as $faq)
-                    <x-faq.accordion :id="$faq->slug" :question="$faq->question">{!! $faq->answer !!}</x-faq.accordion>
+                @foreach ($categories as $category)
+                    <x-faq.accordion :id="$category->id" :category="$category->title">
+{{--                        {!! $faq->answer !!}--}}
+                    </x-faq.accordion>
                 @endforeach
             </div>
 
@@ -66,9 +68,36 @@
 
 	<section class="contact">
         <div class="container">
+            <h1>
+                Need more help? Get in touch
+            </h1>
             <p>
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.
             </p>
+
+            <x-panel>
+                <label for="categories"></label>
+                <select name="categories" id="categories">
+                    <option value="Advertising">
+                        Advertising
+                    </option>
+                </select>
+            </x-panel>
+
+            <p>
+                Connect with our developer support team, and other developers who are integrating with MTN Open API using Whatsapp or Skype.
+            </p>
+
+            <select name="countries" id="countries">
+                <option value="Cameroon">Cameroon</option>
+            </select>
+
+            <div class="connect">
+                @svg('skype', '#FFFFFFF')
+
+                @svg('whatsapp', '#FFFFFF')
+            </div>
+
 
 {{--            <form action="{{url('contact/sendMail')}}" id="contact-form" method="POST">--}}
 {{--                @csrf--}}
