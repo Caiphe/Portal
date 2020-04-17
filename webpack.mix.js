@@ -45,5 +45,6 @@ mix.scripts(["resources/js/scripts.js", "resources/js/components/alert.js"], "pu
     .sass("resources/sass/templates/getting-started/index.scss", "public/css/templates/getting-started")
     .sass("resources/sass/templates/home.scss", "public/css/templates")
     .sass("resources/sass/components/_app.scss", "public/css/components")
+    .sass("resources/sass/components/_accordion.scss", "public/css/components")
     .sass("resources/sass/styles.scss", "public/css")
     .version();

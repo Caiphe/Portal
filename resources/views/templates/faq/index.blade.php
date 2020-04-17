@@ -28,11 +28,17 @@
 
     <section class="search">
         <div class="container">
-            <div class="faq-search">
-                <h2>Looking for something specific?</h2>
-                <form action="">
-                    <input type="text" name="search" placeholder="Search" autofocus>
-                </form>
+            <div class="content">
+                <div class="faq-search">
+                    <h2>Looking for something specific?</h2>
+                    <form action="">
+                        <input type="text" name="search" placeholder="Search" autofocus>
+                    </form>
+                </div>
+
+                @foreach ($faqs as $faq)
+                    <x-faq.accordion :id="$faq->slug" :question="$faq->question">{!! $faq->answer !!}</x-faq.accordion>
+                @endforeach
             </div>
 
             <div class="faq-categories">
@@ -57,14 +63,6 @@
             </div>
         </div>
     </section>
-
-	<section class="faq-section mt-5">
-        <div class="container">
-            @foreach ($faqs as $faq)
-                <x-faq.accordion :id="$faq->slug" :question="$faq->question">{!! $faq->answer !!}</x-faq.accordion>
-            @endforeach
-        </div>
-	</section>
 
 	<section class="contact">
         <div class="container">
