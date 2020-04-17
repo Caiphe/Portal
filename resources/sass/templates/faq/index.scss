@@ -17,6 +17,10 @@ section:not(:first-of-type) {
     padding-bottom: 40px;
 }
 
+section:last-of-type {
+    margin-bottom: 20px;
+}
+
 .accordion:not(:last-of-type) {
     margin-bottom: 20px;
 }
@@ -97,7 +101,6 @@ section:not(:first-of-type) {
     }
 }
 
-
 .contact {
     text-align: center;
     width: 600px;
@@ -121,5 +124,44 @@ section:not(:first-of-type) {
 
     .connect {
         display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    form {
+        input, textarea {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        label {
+            position: relative;
+        }
+
+        button {
+            margin: $gutter auto 0;
+            display: block;
+            position: relative;
+        }
+    }
+
+    .contact-form {
+
+        &.hide {
+            display: none;
+        }
+    }
+
+    #fintech {
+        display: none;
+
+        &.show {
+            display: block;
+        }
     }
 }

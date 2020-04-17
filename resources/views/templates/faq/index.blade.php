@@ -81,38 +81,54 @@
             <x-panel>
                 <label for="categories"></label>
                 <select name="categories" id="categories">
-                    <option value="Advertising">
+                    <option value="Advertising" selected>
                         Advertising
+                    </option>
+                    <option value="Customer">
+                        Customer
+                    </option>
+                    <option value="Fintech">
+                        Fintech
+                    </option>
+                    <option value="Messaging">
+                        Messaging
+                    </option>
+                    <option value="SMS">
+                        SMS
+                    </option>
+                    <option value="Tickets">
+                        Tickets
                     </option>
                 </select>
             </x-panel>
 
-            <p>
-                Connect with our developer support team, and other developers who are integrating with MTN Open API using Whatsapp or Skype.
-            </p>
+            <div class="contact-form">
+                <p>
+                    Connect with our developer support team, and other developers who are integrating with MTN Open API using Whatsapp or Skype.
+                </p>
 
-            <select name="countries" id="countries">
-                <option value="Cameroon">Cameroon</option>
-            </select>
+                <form action="" method="POST">
+                    @csrf
 
-            <div class="connect">
-                @svg('skype', '#FFFFFFF')
+                    <input type="text" name="first_name" placeholder="Enter first name" autocomplete="first_name">
+                    <input type="text" name="last_name" placeholder="Enter last name" autocomplete="last_name">
+                    <input type="email" name="email" placeholder="Enter email address" autocomplete="email">
 
-                @svg('whatsapp', '#FFFFFF')
+                    <textarea name="message" placeholder="Enter message" rows="4"></textarea>
+
+                    <button>Send message</button>
+                </form>
             </div>
 
+            <div id="fintech">
+                <x-select></x-select>
 
-{{--            <form action="{{url('contact/sendMail')}}" id="contact-form" method="POST">--}}
-{{--                @csrf--}}
-{{--                @isset($slot)--}}
-{{--                    <p class="mb-2">{{$slot}}</p>--}}
-{{--                @endisset--}}
-{{--                <input type="text" name="first_name" placeholder="Enter first name" autocomplete="first_name">--}}
-{{--                <input type="text" name="last_name" placeholder="Enter last name" autocomplete="last_name">--}}
-{{--                <input type="email" name="email" placeholder="Enter email address" autocomplete="email">--}}
-{{--                <textarea name="message" placeholder="Enter message" rows="4"></textarea>--}}
-{{--                <button>Send message</button>--}}
-{{--            </form>--}}
+                <div class="connect">
+                    @svg('skype')
+
+                    @svg('whatsapp', '#FFFFFF')
+                </div>
+            </div>
         </div>
 	</section>
 

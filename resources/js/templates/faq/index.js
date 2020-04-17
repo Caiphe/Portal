@@ -28,3 +28,18 @@ function toggleAccordionContent(event) {
     article.querySelector('button').classList.toggle('minus');
     console.log(article);
 }
+
+var select = document.querySelector('#categories').addEventListener('change', handleSelectCategory);
+
+function handleSelectCategory(event) {
+    var form = document.querySelector('.contact-form');
+    var fintech = document.getElementById('fintech');
+
+    if (event.target.value === 'Fintech') {
+        form.classList.add('hide');
+        fintech.classList.add('show');
+    } else {
+        form.classList.remove('hide');
+        fintech.classList.remove('show');
+    }
+}

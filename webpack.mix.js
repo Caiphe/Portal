@@ -16,6 +16,7 @@ mix.scripts(["resources/js/scripts.js", "resources/js/components/alert.js"], "pu
     .scripts("resources/js/components/carousel.js", "public/js/components/carousel.js")
     .scripts("resources/js/components/sidebar-accordion.js", "public/js/components/sidebar-accordion.js")
     .scripts("resources/js/components/multiselect.js", "public/js/components/multiselect.js")
+    .scripts("resources/js/components/select.js", "public/js/components/select.js")
     .scripts("resources/js/templates/products/index.js", "public/js/templates/products/index.js")
     .scripts("resources/js/templates/products/show.js", "public/js/templates/products/show.js")
     .scripts("resources/js/templates/auth/register.js", "public/js/templates/auth/register.js")
@@ -47,5 +48,6 @@ mix.scripts(["resources/js/scripts.js", "resources/js/components/alert.js"], "pu
     .sass("resources/sass/components/_app.scss", "public/css/components")
     .sass("resources/sass/components/_panel.scss", "public/css/components")
     .sass("resources/sass/components/_accordion.scss", "public/css/components")
+    .sass("resources/sass/components/_select.scss", "public/css/components")
     .sass("resources/sass/styles.scss", "public/css")
     .version();
