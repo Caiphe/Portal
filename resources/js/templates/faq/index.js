@@ -45,8 +45,6 @@ function handleSelectCategory(event) {
         }
     }
 
-    console.log(select.selectedIndex);
-
     if (event.target.value === 'Fintech') {
         form.classList.add('hide');
         fintech.classList.add('show');
@@ -54,4 +52,15 @@ function handleSelectCategory(event) {
         form.classList.remove('hide');
         fintech.classList.remove('show');
     }
+}
+
+var country = document.getElementById('countries');
+country.options.selectedIndex = 0;
+
+country.addEventListener('change', handleSelectCountry);
+
+function handleSelectCountry(event) {
+    var selected = event.currentTarget.value;
+
+    console.log(selected);
 }
