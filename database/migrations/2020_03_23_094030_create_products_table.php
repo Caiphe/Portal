@@ -14,7 +14,8 @@ class CreateProductsTable extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id();
+            $table->primary('pid');
+            $table->string('pid')->index();
             $table->string('name');
             $table->string('slug');
             $table->string('display_name')->nullable();
@@ -25,18 +26,24 @@ class CreateProductsTable extends Migration
             $table->string('access')->nullable();
             $table->string('locations')->nullable();
             $table->string('swagger')->nullable();
+            $table->json('attributes')->nullable();
             $table->timestamps();
         });
         
         Schema::create('content_product', function (Blueprint $table) {
-            $table->primary(['content_id', 'product_id']);
+            $table->primary(['content_id', 'product_pid']);
 
-            $table->foreignId('content_id')
-                ->constrained()
+            $table->unsignedBigInteger('content_id');
+            $table->string('product_pid');
+
+            $table->foreign('content_id')
+                ->references('id')
+                ->on('contents')
                 ->onDelete('cascade');
 
-            $table->foreignId('product_id')
-                ->constrained()
+            $table->foreign('product_pid')
+                ->references('pid')
+                ->on('products')
                 ->onDelete('cascade');
         });
     }
@@ -48,10 +55,6 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
-        Schema::table('content_product', function (Blueprint $table) {
-            $table->dropForeign(['content_id', 'product_id']);
-        });
-
         Schema::dropIfExists('products');
     }
 }

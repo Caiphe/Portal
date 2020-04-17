@@ -21,6 +21,7 @@ class ProductSeeder extends Seeder
             $attributes = ApigeeService::getAppAttributes($product['attributes']);
 
             Product::create([
+                'pid' => $product['name'],
                 'name' => $product['name'],
                 'display_name' => $product['displayName'],
                 'description' => $product['description'],
@@ -30,6 +31,7 @@ class ProductSeeder extends Seeder
                 'access' => $attributes['access'] ?? null,
                 'locations' => $attributes['locations'] ?? null,
                 'swagger' => $attributes['swagger'] ?? null,
+                'attributes' => json_encode($attributes)
             ]);
         }
     }

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Product;
+use App\Content;
 use App\Country;
+use App\Product;
+use App\Services\ApigeeService;
 use App\Services\OpenApiService;
 use Illuminate\Http\Request;
 
@@ -63,13 +65,13 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         $openApiClass = new OpenApiService($product->swagger);
-        $prod = $product->load(['content', 'keyFeatures']);
+        $product->load(['content', 'keyFeatures']);
         $productList = Product::isPublic()->get()->sortBy('category')->groupBy('category');
         $content = ['product_tab' => []];
         $sidebarAccordion = [];
         $startingPoint = "product-specification";
 
-        foreach ($prod->content as $c) {
+        foreach ($product->content as $c) {
             if($c->type === "product_tab"){
                 $content[$c->type][] = $c;
                 continue;
@@ -97,7 +99,7 @@ class ProductController extends Controller
 
 
         return view('templates.products.show', [
-            "product" => $prod,
+            "product" => $product,
             "sidebarAccordion" => $sidebarAccordion,
             "content" => $content,
             "startingPoint" => $startingPoint,

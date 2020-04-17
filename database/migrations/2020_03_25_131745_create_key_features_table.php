@@ -21,14 +21,19 @@ class CreateKeyFeaturesTable extends Migration
         });
 
         Schema::create('key_feature_product', function(Blueprint $table){
-            $table->primary(['key_feature_id', 'product_id']);
+            $table->primary(['key_feature_id', 'product_pid']);
 
-            $table->foreignId('key_feature_id')
-                ->constrained()
+            $table->unsignedBigInteger('key_feature_id');
+            $table->string('product_pid');
+
+            $table->foreign('key_feature_id')
+                ->references('id')
+                ->on('key_features')
                 ->onDelete('cascade');
 
-            $table->foreignId('product_id')
-                ->constrained()
+            $table->foreign('product_pid')
+                ->references('pid')
+                ->on('products')
                 ->onDelete('cascade');
         });
     }
@@ -40,10 +45,6 @@ class CreateKeyFeaturesTable extends Migration
      */
     public function down()
     {
-        Schema::table('key_feature_product', function (Blueprint $table) {
-            $table->dropForeign(['key_feature_id', 'product_id']);
-        });
-        
         Schema::dropIfExists('key_features');
     }
 }
