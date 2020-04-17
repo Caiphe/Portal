@@ -81,7 +81,7 @@
             <x-panel>
                 <label for="categories"></label>
                 <select name="categories" id="categories">
-                    <option value="Advertising" selected>
+                    <option value="Advertising" selected="selected">
                         Advertising
                     </option>
                     <option value="Customer">
@@ -104,7 +104,7 @@
 
             <div class="contact-form">
                 <p>
-                    Connect with our developer support team, and other developers who are integrating with MTN Open API using Whatsapp or Skype.
+                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.
                 </p>
 
                 <form action="" method="POST">
@@ -121,6 +121,10 @@
             </div>
 
             <div id="fintech">
+                <p>
+                    Connect with our developer support team, and other developers who are integrating with MTN Open API using Whatsapp or Skype.
+                </p>
+
                 <x-select></x-select>
 
                 <div class="connect">

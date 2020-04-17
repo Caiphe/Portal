@@ -26,10 +26,12 @@ function toggleAccordionContent(event) {
     article.nextElementSibling.classList.toggle('expand');
     article.querySelector('button').classList.toggle('plus');
     article.querySelector('button').classList.toggle('minus');
-    console.log(article);
 }
 
-var select = document.querySelector('#categories').addEventListener('change', handleSelectCategory);
+var select = document.getElementById('categories');
+
+select.value = 'Advertising';
+select.addEventListener('change', handleSelectCategory);
 
 function handleSelectCategory(event) {
     var form = document.querySelector('.contact-form');
