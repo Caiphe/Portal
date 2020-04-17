@@ -26,6 +26,38 @@
         </div>
     </section>
 
+    <section class="search">
+        <div class="container">
+            <div class="faq-search">
+                <h2>Looking for something specific?</h2>
+                <form action="">
+                    <input type="text" name="search" placeholder="Search" autofocus>
+                </form>
+            </div>
+
+            <div class="faq-categories">
+                <span>Categories</span>
+                <ul>
+                    <li>
+                        <a href="">Authentication</a>
+                    </li>
+                    <li>
+                        <a href="">Callback</a>
+                    </li>
+                    <li>
+                        <a href="">Error code</a>
+                    </li>
+                    <li>
+                        <a href="">Support</a>
+                    </li>
+                    <li>
+                        <a href="">Onboarding</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
 	<section class="faq-section mt-5">
         <div class="container">
             @foreach ($faqs as $faq)
@@ -34,9 +66,23 @@
         </div>
 	</section>
 
-	<section class="grey-bg">
+	<section class="contact">
         <div class="container">
-            <x-contact-form title="Need help? Get in touch"></x-contact-form>
+            <p>
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.
+            </p>
+
+{{--            <form action="{{url('contact/sendMail')}}" id="contact-form" method="POST">--}}
+{{--                @csrf--}}
+{{--                @isset($slot)--}}
+{{--                    <p class="mb-2">{{$slot}}</p>--}}
+{{--                @endisset--}}
+{{--                <input type="text" name="first_name" placeholder="Enter first name" autocomplete="first_name">--}}
+{{--                <input type="text" name="last_name" placeholder="Enter last name" autocomplete="last_name">--}}
+{{--                <input type="email" name="email" placeholder="Enter email address" autocomplete="email">--}}
+{{--                <textarea name="message" placeholder="Enter message" rows="4"></textarea>--}}
+{{--                <button>Send message</button>--}}
+{{--            </form>--}}
         </div>
 	</section>
 
