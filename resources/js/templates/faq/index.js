@@ -1,19 +1,24 @@
-var questions = document.getElementsByClassName("question");
-for (var i = 0; i < questions.length; i++) {
-    questions[i].addEventListener("click", toggleFaq);
+var accordions = document.querySelectorAll('.accordion');
+
+for (var i = 0; i < accordions.length; i++) {
+    accordions[i].addEventListener('click', toggleAccordion)
 }
 
-if (window.location.hash !== undefined) {
-    document.getElementById(window.location.hash.replace(/#\/?/, '')).querySelector('.question').click();
+function toggleAccordion(event) {
+    var accordion = event.currentTarget;
+
+    accordion.querySelector('svg').classList.toggle('active');
+    accordion.querySelector('article').classList.toggle('expand');
+
+    console.log(accordion)
 }
 
-function toggleFaq() {
-    this.classList.toggle("active");
-    
-    var answer = this.nextElementSibling;
-    if (answer.style.maxHeight) {
-        answer.style.maxHeight = null;
-    } else {
-        answer.style.maxHeight = answer.scrollHeight + "px";
-    }
-}
+// var accordionContents = document.querySelectorAll('.content');
+//
+// for (var j = 0; j < accordionContents.length; j++) {
+//     accordionContents[j].addEventListener('click', toggleAccordionContent)
+// }
+//
+// function toggleAccordionContent(event) {
+//     console.log(event.currentTarget);
+// }

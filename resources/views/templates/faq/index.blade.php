@@ -38,7 +38,20 @@
 
                 @foreach ($categories as $category)
                     <x-accordion :id="$category->id" :title="$category->title" icon="link">
-{{--                        {!! $faq->answer !!}--}}
+                        <article>
+                            <header>
+                                <p>
+                                    What credentials do I need once I have subscribed to a product?
+                                </p>
+                                <span class="tag outline yellow">MTN</span>
+                                <span class="tag outline yellow">Advertising</span>
+                                @svg('plus', '#000000')
+                            </header>
+                            <ul class="content">
+                                <li>Subscription Key – received upon subscription to a product. It is used for authenticating the number of API calls. For information about subscription keys, refer to point 2</li>
+                                <li>API User and API Key for bearer Oauth 2.0 token. In the sandbox they are self-generated from the APIs. In production these are generated from the partner portal (part of onboarding)</li>
+                            </ul>
+                        </article>
                     </x-accordion>
                 @endforeach
             </div>

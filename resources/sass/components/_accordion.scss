@@ -1,32 +1,101 @@
+@import '../variables';
+
 .accordion {
-    align-items: center;
     display: flex;
+    flex-direction: column;
     cursor: pointer;
     border: 2px solid #F2F2F2;
     border-radius: 10px;
-    padding-left: 20px;
-    padding-top: 15px;
-    padding-bottom: 12px;
+    padding: 20px 20px 12px;
 
-    h3 {
+    .title {
         display: flex;
-        margin-left: 10px;
-        margin-top: 0;
-        margin-bottom: 0;
+        width: 100%;
 
-        a {
-            margin-left: 15px;
+        h3 {
+            display: flex;
+            margin-left: 10px;
+            margin-top: 0;
+            margin-bottom: 0;
+
+            a {
+                margin-left: 15px;
+            }
+        }
+
+        svg {
+            cursor: pointer;
+            display: flex;
+            transform: rotate(0deg);
+            transition: transform .1s linear;
+
+            &.active {
+                transform: rotate(90deg);
+                transition: transform .1s linear;
+            }
         }
     }
 
-    svg {
-        display: flex;
-        transform: rotate(0deg);
-        transition: transform .1s linear;
+    .title + article {
+        display: none;
+    }
 
-        &.active {
-            transform: rotate(180deg);
-            transition: transform .1s linear;
+    article {
+        margin-top: 30px;
+
+        header {
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid $grey300;
+            padding-bottom: 20px;
+
+            p {
+                font-size: 16px;
+                margin-top: 0;
+                margin-bottom: 0;
+                margin-right: 15px;
+            }
+
+            span {
+                margin-right: 10px;
+            }
+
+            svg {
+                margin-left: auto;
+            }
         }
+
+        header + .content {
+            display: none;
+        }
+
+        ul {
+            padding: 15px 20px 0;
+            margin-bottom: 0;
+            list-style: none;
+
+            li {
+
+                &:before{
+                    content: "-";
+                    text-indent: -1.5em;
+                    display: inline-block;
+                }
+            }
+        }
+
+        &.expand {
+            display: block;
+            animation: expand 0.1s;
+        }
+    }
+}
+
+@keyframes expand {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
     }
 }
