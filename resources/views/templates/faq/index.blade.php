@@ -37,9 +37,9 @@
                 </x-panel>
 
                 @foreach ($categories as $category)
-                    <x-faq.accordion :id="$category->id" :category="$category->title">
+                    <x-accordion :id="$category->id" :title="$category->title" icon="link">
 {{--                        {!! $faq->answer !!}--}}
-                    </x-faq.accordion>
+                    </x-accordion>
                 @endforeach
             </div>
 

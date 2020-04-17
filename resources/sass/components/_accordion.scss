@@ -1,20 +1,32 @@
 .accordion {
+    align-items: center;
     display: flex;
-    flex-direction: column;
+    cursor: pointer;
     border: 2px solid #F2F2F2;
     border-radius: 10px;
-    margin-top: 20px;
-    padding: 10px 20px 10px;
+    padding-left: 20px;
+    padding-top: 15px;
+    padding-bottom: 12px;
 
     h3 {
         display: flex;
-
-        svg {
-            margin-right: 15px;
-        }
+        margin-left: 10px;
+        margin-top: 0;
+        margin-bottom: 0;
 
         a {
             margin-left: 15px;
+        }
+    }
+
+    svg {
+        display: flex;
+        transform: rotate(0deg);
+        transition: transform .1s linear;
+
+        &.active {
+            transform: rotate(180deg);
+            transition: transform .1s linear;
         }
     }
 }
