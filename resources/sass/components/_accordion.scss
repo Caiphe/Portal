@@ -36,7 +36,7 @@
         }
     }
 
-    .title + article {
+    .title ~ * {
         display: none;
     }
 
@@ -46,8 +46,6 @@
         header {
             display: flex;
             align-items: center;
-            padding-bottom: 15px;
-            border-bottom: 2px solid $grey300;
 
             p {
                 font-size: 16px;
@@ -68,6 +66,10 @@
                 &:hover {
                     background-color: transparent;
                 }
+            }
+
+            &.bottom {
+                padding-bottom: 15px;
             }
         }
 
@@ -93,6 +95,7 @@
 
             &.expand {
                 display: block;
+                border-top: 2px solid $grey300;
                 animation: expand 0.1s;
             }
         }
@@ -100,6 +103,11 @@
         &.expand {
             display: block;
             animation: expand 0.1s;
+        }
+
+        &:not(:last-of-type) {
+            padding-bottom: 15px;
+            border-bottom: 2px solid $grey300;
         }
     }
 }

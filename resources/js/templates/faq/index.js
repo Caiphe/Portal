@@ -6,15 +6,12 @@ for (var i = 0; i < accordions.length; i++) {
 
 function toggleAccordion(event) {
     var accordion = event.currentTarget;
-    var active = document.querySelectorAll('.active');
-    console.log(active);
+    var children = accordion.parentNode.children;
 
-    // if (active !== this) {
-    //     active.classList.remove("active");
-    // }
-
-    accordion.querySelector('svg').classList.toggle('active');
-    accordion.nextElementSibling.classList.toggle('expand');
+    for (var i = 1; i < children.length; i++) {
+        children[i].classList.toggle('active');
+        children[i].classList.toggle('expand');
+    }
 }
 
 var accordionContents = document.querySelectorAll('article header');
@@ -27,6 +24,13 @@ function toggleAccordionContent(event) {
     var article = event.currentTarget;
 
     article.nextElementSibling.classList.toggle('expand');
+
+    if(article.nextElementSibling.classList.contains('expand')) {
+        article.classList.add('bottom');
+    } else {
+        article.classList.remove('bottom');
+    }
+
     article.querySelector('button').classList.toggle('plus');
     article.querySelector('button').classList.toggle('minus');
 }

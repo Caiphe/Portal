@@ -26,7 +26,7 @@
     "/css/templates/home.css": "/css/templates/home.css?id=41ec172f09899e0845fc",
     "/css/components/_app.css": "/css/components/_app.css?id=1725b70d4bfc1858d04b",
     "/css/components/_panel.css": "/css/components/_panel.css?id=d59ebb2d4b41a347020e",
-    "/css/components/_accordion.css": "/css/components/_accordion.css?id=84db10f3d66be4ba1ea5",
+    "/css/components/_accordion.css": "/css/components/_accordion.css?id=a0958150b3e7e1088128",
     "/css/components/_select.css": "/css/components/_select.css?id=72d96c5820d54680618d",
     "/css/styles.css": "/css/styles.css?id=454745b26806efae740f",
     "/js/scripts.js": "/js/scripts.js?id=630b9ab90b406906c5f3",
@@ -38,5 +38,5 @@
     "/js/templates/products/index.js": "/js/templates/products/index.js?id=7744f8a1e0ae3b7ad009",
     "/js/templates/products/show.js": "/js/templates/products/show.js?id=6b7d80178a2833e52bde",
     "/js/templates/auth/register.js": "/js/templates/auth/register.js?id=1b80f6831686681922d4",
-    "/js/templates/faq/index.js": "/js/templates/faq/index.js?id=4c07b1915690cb0cf2ea"
+    "/js/templates/faq/index.js": "/js/templates/faq/index.js?id=29be2057a97a52bfd5b0"
 }
