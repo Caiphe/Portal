@@ -7,16 +7,16 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class ContactForm extends Mailable
+class ContactMail extends Mailable
 {
 	use Queueable, SerializesModels;
-	
+
 	public $data;
 
     /**
      * Create a new message instance.
      *
-     * @return void
+     * @param $data
      */
     public function __construct($data)
     {
@@ -30,6 +30,7 @@ class ContactForm extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.contact-form')->with('email', $this->data);
+        return $this->markdown('emails.contact-form')
+            ->with('email', $this->data);
     }
 }

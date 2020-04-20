@@ -6,12 +6,15 @@ for (var i = 0; i < accordions.length; i++) {
 
 function toggleAccordion(event) {
     var accordion = event.currentTarget;
+    var active = document.querySelectorAll('.active');
+    console.log(active);
 
-    console.log(accordion);
+    // if (active !== this) {
+    //     active.classList.remove("active");
+    // }
 
     accordion.querySelector('svg').classList.toggle('active');
     accordion.nextElementSibling.classList.toggle('expand');
-
 }
 
 var accordionContents = document.querySelectorAll('article header');
