@@ -40,7 +40,7 @@ Route::get('getting-started/{content:slug}', 'GettingStartedController@show');
 Route::get('faq', 'FaqController@index')->name('faq.index');
 
 Route::get('contact', 'ContactController@index')->name('contact.index');
-Route::post('contact/sendMail', 'ContactController@sendMail')->name('contact.sendEmail');
+Route::post('contact', 'ContactController@send')->name('contact.send');
 
 Route::get('profile', 'UserController@show')->middleware('verified')->name('user.profile');
 Route::put('profile/{user}/update', 'UserController@update')->middleware('verified')->name('user.profile.update');

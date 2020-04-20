@@ -3,9 +3,8 @@
 @endallowonce
 
 <div class="contact-form mb-4">
-	<form action="{{url('contact/sendMail')}}" id="contact-form" method="POST">
+	<form action="{{ route('contact.send') }}" id="contact-form" method="POST">
 		@csrf
-		@method('post')
 		<h1 class="mb-4">{{ !empty($title) ? $title : 'Get in touch' }}</h1>
 		@isset($slot)
 		<p class="mb-2">{{$slot}}</p>

@@ -43,7 +43,7 @@
 
     <section class="contact-form section-padding">
         <div class="container">
-            <x-contact-form title="Need more help? Get in touch"/>
+            <x-contact-form title="Need more help? Get in touch"></x-contact-form>
         </div>
 	</section>
 
