@@ -15,6 +15,8 @@ class Product extends Model
      * @var array
      */
     protected $guarded = [];
+    protected $primaryKey = "pid";
+    public $incrementing = false;
 
     public function setNameAttribute($value)
     {
@@ -42,11 +44,11 @@ class Product extends Model
 
     public function content()
     {
-        return $this->belongsToMany(Content::class);
+        return $this->belongsToMany(Content::class, "content_product", "product_pid");
     }
 
     public function keyFeatures()
     {
-        return $this->belongsToMany(KeyFeature::class);
+        return $this->belongsToMany(KeyFeature::class, "key_feature_product", "product_pid", "key_feature_id");
     }
 }

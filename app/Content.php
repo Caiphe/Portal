@@ -56,6 +56,6 @@ class Content extends Model
 
     public function product()
     {
-        return $this->belongsToMany(Product::class);
+        return $this->belongsToMany(Product::class, "content_product", "content_id", "product_pid");
     }
 }
