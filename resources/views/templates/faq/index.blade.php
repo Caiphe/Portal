@@ -31,9 +31,7 @@
             <div class="content">
                 <x-panel>
                     <h2>Looking for something specific?</h2>
-                    <form action="">
-                        <input type="text" name="search" placeholder="Search" autofocus>
-                    </form>
+                    <input id="filter-categories" type="text" name="search" placeholder="Search" autofocus>
                 </x-panel>
 
                 @foreach ($categories as $category)

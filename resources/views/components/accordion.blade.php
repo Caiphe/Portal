@@ -4,7 +4,7 @@
 
 @props(['id' => '', 'title' => '', 'link' => '', 'icon' => ''])
 
-<div id="{{ $id }}" class="accordion">
+<div id="{{ $id }}" class="accordion" data-category="{{ $id }}">
     <div class="title">
         @svg('chevron-right')
         <h3>

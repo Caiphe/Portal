@@ -70,3 +70,27 @@ function handleSelectCountry(event) {
     document.querySelector('.skype').href = selectedCountry.dataset.skype;
     document.querySelector('.whatsapp').href = selectedCountry.dataset.whatsapp;
 }
+
+document.getElementById("filter-categories").addEventListener("keyup", filterCategories);
+
+function filterCategories() {
+    var categories = document.querySelectorAll(".accordion");
+    var filter = document.getElementById("filter-categories").value;
+    var match = new RegExp(filter, "gi");
+
+    for (var i = categories.length - 1; i >= 0; i--) {
+        categories[i].style.display = "none";
+
+        textValid = filter === "" || categories[i].dataset.category.match(match);
+
+        if (textValid) categories[i].style.display = "flex";
+
+        categories[i].querySelector('svg').classList.add('active');
+        categories[i].querySelector('article').classList.add('expand');
+
+        if (filter === "") {
+            categories[i].querySelector('svg').classList.remove('active');
+            categories[i].querySelector('article').classList.remove('expand');
+        }
+    }
+}
