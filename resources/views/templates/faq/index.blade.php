@@ -43,8 +43,6 @@
                                         <p>
                                             {{ $faq->question }}
                                         </p>
-                                        <span class="tag outline yellow">MTN</span>
-                                        <span class="tag outline yellow">Advertising</span>
                                         <button class="button fab plus"></button>
                                     </header>
                                     <ul class="content">
