@@ -107,7 +107,7 @@
                     Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.
                 </p>
 
-                <form action="" method="POST">
+                <form action="{{ route('contact.send') }}" method="POST">
                     @csrf
 
                     <input type="text" name="first_name" placeholder="Enter first name" autocomplete="first_name">
