@@ -34,23 +34,26 @@
                     <input id="filter-categories" type="text" name="search" placeholder="Search" autofocus>
                 </x-panel>
 
-                @foreach ($categories as $category)
-                    <x-accordion :id="$category->slug" :title="$category->title" :link="$category->slug" icon="link">
-                        <article>
-                            <header>
-                                <p>
-                                    What credentials do I need once I have subscribed to a product?
-                                </p>
-                                <span class="tag outline yellow">MTN</span>
-                                <span class="tag outline yellow">Advertising</span>
-                                <button class="button fab plus"></button>
-                            </header>
-                            <ul class="content">
-                                <li>Subscription Key – received upon subscription to a product. It is used for authenticating the number of API calls. For information about subscription keys, refer to point 2</li>
-                                <li>API User and API Key for bearer Oauth 2.0 token. In the sandbox they are self-generated from the APIs. In production these are generated from the partner portal (part of onboarding)</li>
-                            </ul>
-                        </article>
-                    </x-accordion>
+                @foreach($categories as $category)
+                    @if(!$category->faqs->isEmpty())
+                        <x-accordion :id="$category->slug" :title="$category->title" :link="$category->slug" icon="link">
+                            @foreach($category->faqs as $faq)
+                                <article>
+                                    <header>
+                                        <p>
+                                            {{ $faq->question }}
+                                        </p>
+                                        <span class="tag outline yellow">MTN</span>
+                                        <span class="tag outline yellow">Advertising</span>
+                                        <button class="button fab plus"></button>
+                                    </header>
+                                    <ul class="content">
+                                        <li>{{ $faq->answer }}</li>
+                                    </ul>
+                                </article>
+                            @endforeach
+                        </x-accordion>
+                    @endif
                 @endforeach
             </div>
 
@@ -58,9 +61,11 @@
                 <span>Categories</span>
                 <ul>
                     @foreach ($categories as $category)
-                        <li>
-                            <a href="#{{ $category->slug }}">{{ $category->title }}</a>
-                        </li>
+                        @if(!$category->faqs->isEmpty())
+                            <li>
+                                <a href="#{{ $category->slug }}">{{ $category->title }}</a>
+                            </li>
+                        @endif
                     @endforeach
                 </ul>
             </div>

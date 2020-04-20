@@ -36,4 +36,9 @@ class Category extends Model
         $this->attributes['title'] = $value;
         $this->attributes['slug'] = Str::slug($value);
     }
+
+    public function faqs()
+    {
+        return $this->hasMany(Faq::class);
+    }
 }
