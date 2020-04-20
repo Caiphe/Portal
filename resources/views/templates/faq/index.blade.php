@@ -41,12 +41,12 @@
                                 <article>
                                     <header>
                                         <p>
-                                            {{ $faq->question }}
+                                            {!! $faq->question !!}
                                         </p>
                                         <button class="button fab plus"></button>
                                     </header>
                                     <ul class="content">
-                                        <li>{{ $faq->answer }}</li>
+                                        <li>{!! $faq->answer  !!}</li>
                                     </ul>
                                 </article>
                             @endforeach
@@ -61,7 +61,7 @@
                     @foreach ($categories as $category)
                         @if(!$category->faqs->isEmpty())
                             <li>
-                                <a href="#{{ $category->slug }}">{{ $category->title }}</a>
+                                <a href="#{!! $category->slug  !!}">{!! $category->title !!}</a>
                             </li>
                         @endif
                     @endforeach
