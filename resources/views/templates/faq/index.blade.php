@@ -75,9 +75,6 @@
             <h1>
                 Need more help? Get in touch
             </h1>
-            <p>
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.
-            </p>
 
             <x-panel>
                 <label for="categories"></label>
@@ -104,9 +101,6 @@
             </x-panel>
 
             <div class="contact-form">
-                <p>
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.
-                </p>
 
                 <form action="{{ route('contact.send') }}" method="POST">
                     @csrf
