@@ -44,7 +44,7 @@ section {
                 }
 
                 svg {
-                    margin-right: 20px;
+                    margin-right: 15px;
                     height: 36px;
                     width: 36px;
                 }
@@ -59,4 +59,8 @@ section {
             }
         }
     }
+}
+
+section:last-of-type {
+    margin-bottom: 40px;
 }
