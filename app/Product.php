@@ -42,6 +42,15 @@ class Product extends Model
         });
     }
 
+    public function scopeBasedOnUser($query, $user)
+    {
+        if ($user->hasPermissionTo('view_internal_products')) {
+            return $query->isPublicWithInternal();
+        }
+        
+        return $query->isPublic();
+    }
+
     public function scopeGetEnvironment($query, $environment)
     {
         return $query
