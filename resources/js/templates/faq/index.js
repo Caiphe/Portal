@@ -77,6 +77,44 @@ function handleSelectCountry(event) {
 
 document.getElementById("filter-categories").addEventListener("keyup", filterCategories);
 
+var faqDict = {
+    'faq-1': [
+        'category',
+        '',
+        ''
+    ],
+    'faq-2': [
+
+    ],
+    'faq-3': [
+
+    ],
+    'faq-4': [
+
+    ],
+    'faq-5': [
+
+    ],
+    'faq-6': [
+
+    ],
+    'faq-7': [
+
+    ],
+    'faq-8': [
+
+    ],
+    'faq-9': [
+
+    ],
+    'faq-10': [
+
+    ],
+    'faq-11': [
+
+    ]
+}
+
 function filterCategories() {
     var categories = document.querySelectorAll(".accordion");
     var filter = document.getElementById("filter-categories").value;
