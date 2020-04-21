@@ -18,7 +18,7 @@
             <input type="text" name="first_name" id="first-name" class="alt @error('name') invalid @enderror" value="{{ old('first_name') }}" required placeholder="First name" autocomplete="first_name" autofocus>
             <span class="invalid-feedback" role="alert">@error('first_name') {{ $message }} @enderror</span>
             <label for="email">What is your email address? *</label>
-            <input id="email" type="email" class="alt @error('email') invalid @enderror" name="email" value="{{ old('email') }}" required placeholder="Email" autocomplete="email">
+            <input id="email" type="email" class="alt @error('email') invalid @enderror" name="email" value="{{ old('email') }}" required placeholder="Email" autocomplete="username">
             <span class="invalid-feedback" role="alert">@error('email') {{ $message }} @enderror</span>
         </section>
 

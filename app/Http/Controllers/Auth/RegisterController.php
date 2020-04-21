@@ -102,7 +102,7 @@ class RegisterController extends Controller
         
         if (isset($apigeeDeveloper['code'])) {
             return redirect('/register')
-                ->withErrors(['email' => $apigeeDeveloper['message']])
+                ->withErrors(['email' => preg_replace('/ ?in organization mtn-prod/', '', $apigeeDeveloper['message'])])
                 ->withInput();
         }
 

@@ -1,10 +1,9 @@
 @component('mail::message')
+New message from the MTN Developer Portal contact form.
 
-Hi,
-You have received an email from contact form on {{ config('app.name') }}
-
-{{$email['message']}}
-
-Thanks,<br>
-{{ config('app.name') }}
+|Field              |    |Response   |
+|:------------------|:---|:----------|
+@foreach($email as $key => $value)
+|{{ucwords(str_replace('_', ' ', $key))}}:| |{{$value}}|
+@endforeach
 @endcomponent
