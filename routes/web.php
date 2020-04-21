@@ -17,17 +17,27 @@ Route::get('/', 'HomeController')->name('home');
 
 Route::get('search', 'SearchController')->name('search');
 
-Route::get('apps', 'AppController@index')->middleware('verified')->name('app.index');
-Route::get('apps/create', 'AppController@create')->middleware('verified')->name('app.create');
-Route::get('apps/{name}/edit', 'AppController@edit')->middleware('verified')->name('app.edit');
-Route::post('apps', 'AppController@store')->name('app.store');
+Route::middleware('verified')->group(function () {
+    Route::get('apps', 'AppController@index')->name('app.index');
+    Route::get('apps/create', 'AppController@create')->name('app.create');
+    Route::get('apps/{name}/edit', 'AppController@edit')->name('app.edit');
+    Route::post('apps', 'AppController@store')->name('app.store');
 
-Route::put('apps/{name}', 'AppController@update')->middleware('verified')->name('app.update');
-Route::delete('apps/{name}', 'AppController@destroy')->middleware('verified')->name('app.destroy');
+    Route::put('apps/{name}', 'AppController@update')->name('app.update');
+    Route::delete('apps/{name}', 'AppController@destroy')->name('app.destroy');
 
-Route::post('apps/{product}/approve', 'DashboardController@update')->middleware('verified')->name('app.product.approve');
-Route::post('apps/{product}/revoke', 'DashboardController@update')->middleware('verified')->name('app.product.revoke');
-Route::delete('apps/{id}/complete', 'DashboardController@destroy')->middleware('verified')->name('app.products.complete');
+    Route::post('apps/{product}/approve', 'DashboardController@update')->name('app.product.approve');
+    Route::post('apps/{product}/revoke', 'DashboardController@update')->name('app.product.revoke');
+    Route::delete('apps/{id}/complete', 'DashboardController@destroy')->name('app.products.complete');
+
+    Route::get('profile', 'UserController@show')->name('user.profile');
+    Route::put('profile/{user}/update', 'UserController@update')->name('user.profile.update');
+    Route::post('profile/update/picture', 'UserController@updateProfilePicture')->name('user.profile.update.picture');
+
+});
+
+Route::get('dashboard', 'DashboardController@index')->middleware('can:view-dashboard')->name('dashboard');
+
 
 Route::get('products', 'ProductController@index');
 Route::get('products/{product:slug}', 'ProductController@show')->name('product.show');
@@ -41,12 +51,6 @@ Route::get('faq', 'FaqController@index')->name('faq.index');
 
 Route::get('contact', 'ContactController@index')->name('contact.index');
 Route::post('contact/sendMail', 'ContactController@sendMail')->name('contact.sendEmail');
-
-Route::get('profile', 'UserController@show')->middleware('verified')->name('user.profile');
-Route::put('profile/{user}/update', 'UserController@update')->middleware('verified')->name('user.profile.update');
-Route::post('profile/update/picture', 'UserController@updateProfilePicture')->middleware('verified')->name('user.profile.update.picture');
-
-Route::get('dashboard', 'DashboardController@index')->middleware('verified')->name('dashboard');
 
 Auth::routes(['verify' => true]);
 

@@ -117,7 +117,7 @@ class UserSeeder extends Seeder
             'label' => "Opco Admin"
         ]);
 
-        $opcoAdminRole->allowTo(['create_app', 'administer_dashboard_products']);
+        $opcoAdminRole->allowTo(['create_app', 'view_dashboard_products', 'administer_dashboard_products']);
         $opcoAdminUser->assignRole($opcoAdminRole);
 
         $opcoRole = Role::create([

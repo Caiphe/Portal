@@ -25,6 +25,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('view-dashboard', function ($user) {
+            return $user->hasPermissionTo('view_dashboard_products');
+        });
     }
 }
