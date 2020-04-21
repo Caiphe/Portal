@@ -126,11 +126,8 @@ function filterCategories() {
 
     var entries = Object.entries(faqDict);
 
-    for (var i = 0; i < entries.length; i++) {
+    console.log(entries)
 
-    }
-
-    console.log(found)
     // for (var i = categories.length - 1; i >= 0; i--) {
     //     categories[i].style.display = "none";
     //
