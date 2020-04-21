@@ -128,7 +128,7 @@
                     </a>
 
                     <a class="whatsapp" href="" target="_blank" rel="noopener noreferrer">
-                        @svg('whatsapp', '#FFFFFF')
+                        @svg('whatsapp')
                     </a>
                 </div>
             </div>
