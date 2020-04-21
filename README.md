@@ -173,3 +173,10 @@ Below is a living //TODO of what needs to be done to get parity with the current
 ## Opco Dashboard
 
 ## Admin portal to create and edit content
+
+##Notes
+### Add product to product bundle
+curl -X POST --header "Content-Type: application/json" --header "Authorization: Basic xxx-I-will-not-tell-xx" -d "{}" "https://api.enterprise.apigee.com/v1/mint/organizations/<org>/monetization-packages/mint-kickstart-bundle-credits-v7-xkj3/products/mint-kickstart-api-product-v105"
+Returns 204 No Content
+### Monitization cli
+https://github.com/mikesson/apigee-mint-node
