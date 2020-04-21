@@ -110,6 +110,12 @@ class RegisterController extends Controller
 
         event(new Registered($user = $this->create($data)));
 
+        if(preg_match('/@mtn\.com$/', $user['email'])){
+            $user->assignRole("internal");
+        } else {
+            $user->assignRole("developer");
+        }
+
         $this->guard()->login($user);
 
         if ($response = $this->registered($request, $user)) {

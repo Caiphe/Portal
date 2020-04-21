@@ -14,32 +14,51 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
+        $now = date('Y-m-d H:i:s');
+
         $adminUser = User::create([
             'first_name' => 'Wesley',
             'last_name' => 'Martin',
             'email' => 'wes@plusnarrative.com',
-            'password' => bcrypt('devport')
+            'password' => bcrypt('devport'),
+            'email_verified_at' => $now,
+            'developer_id' => 'thisisnotadeveloperid'
         ]);
 
         $developerUser = User::create([
             'first_name' => 'developer',
             'last_name' => 'User',
             'email' => 'developer@user.com',
-            'password' => bcrypt('devport')
+            'password' => bcrypt('devport'),
+            'email_verified_at' => $now,
+            'developer_id' => 'thisisnotadeveloperid'
         ]);
 
         $opcoAdminUser = User::create([
             'first_name' => 'Opco Admin',
             'last_name' => 'User',
             'email' => 'opco-admin@user.com',
-            'password' => bcrypt('devport')
+            'password' => bcrypt('devport'),
+            'email_verified_at' => $now,
+            'developer_id' => 'thisisnotadeveloperid'
         ]);
 
         $opcoUser = User::create([
             'first_name' => 'Opco',
             'last_name' => 'User',
             'email' => 'opco@user.com',
-            'password' => bcrypt('devport')
+            'password' => bcrypt('devport'),
+            'email_verified_at' => $now,
+            'developer_id' => 'thisisnotadeveloperid'
+        ]);
+
+        $internalUser = User::create([
+            'first_name' => 'Internal',
+            'last_name' => 'User',
+            'email' => 'internal@user.com',
+            'password' => bcrypt('devport'),
+            'email_verified_at' => $now,
+            'developer_id' => 'thisisnotadeveloperid'
         ]);
 
         $administerContentPermission = Permission::create([
@@ -63,13 +82,18 @@ class UserSeeder extends Seeder
         ]);
 
         $administerProductsPermission = Permission::create([
-            'name' => "administer_products",
-            'label' => "Administer user created products"
+            'name' => "administer_dashboard_products",
+            'label' => "Administer products in the dashboard"
         ]);
 
         $viewProductsPermission = Permission::create([
-            'name' => "view_products",
-            'label' => "View user created products"
+            'name' => "view_dashboard_products",
+            'label' => "View products in the dashboard"
+        ]);
+
+        $viewInternalProductsPermission = Permission::create([
+            'name' => "view_internal_products",
+            'label' => "View internal products"
         ]);
 
         $adminRole = Role::create([
@@ -93,7 +117,7 @@ class UserSeeder extends Seeder
             'label' => "Opco Admin"
         ]);
 
-        $opcoAdminRole->allowTo(['create_app', 'administer_products']);
+        $opcoAdminRole->allowTo(['create_app', 'administer_dashboard_products']);
         $opcoAdminUser->assignRole($opcoAdminRole);
 
         $opcoRole = Role::create([
@@ -101,7 +125,15 @@ class UserSeeder extends Seeder
             'label' => "Opco"
         ]);
 
-        $opcoRole->allowTo(['create_app', 'view_products']);
+        $opcoRole->allowTo(['create_app', 'view_dashboard_products']);
         $opcoUser->assignRole($opcoRole);
+
+        $internalRole = Role::create([
+            'name' => "internal",
+            'label' => "Internal"
+        ]);
+
+        $internalRole->allowTo(['create_app', 'view_internal_products']);
+        $internalUser->assignRole($internalRole);
     }
 }

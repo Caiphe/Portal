@@ -18,7 +18,11 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-		$productsCollection = Product::isPublic()->get()->sortBy('category')->groupBy('category');
+        if($request->user()->hasPermissionTo('view_internal_products')){
+            $productsCollection = Product::isPublicWithInternal()->get()->sortBy('category')->groupBy('category');
+        } else {
+            $productsCollection = Product::isPublic()->get()->sortBy('category')->groupBy('category');
+        }
 		$productLocations = Product::isPublic()->WhereNotNull('locations')->select('locations')->get()->implode('locations', ',');
 		$locations = array_unique(explode(',', $productLocations));
 		$countries = Country::whereIn('code', $locations)->get();

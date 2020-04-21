@@ -34,6 +34,14 @@ class Product extends Model
         return $query->hasSwagger()->whereAccess("public");
     }
 
+    public function scopeIsPublicWithInternal($query)
+    {
+        return $query->hasSwagger()->where(function ($query) {
+            $query->where('access', 'public')
+                ->orWhere('access', 'internal');
+        });
+    }
+
     public function scopeGetEnvironment($query, $environment)
     {
         return $query
