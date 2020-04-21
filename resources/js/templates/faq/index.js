@@ -77,65 +77,74 @@ function handleSelectCountry(event) {
 
 document.getElementById("filter-categories").addEventListener("keyup", filterCategories);
 
-var faqDict = {
-    'faq-1': [
-        'category',
-        '',
-        ''
-    ],
-    'faq-2': [
-
-    ],
-    'faq-3': [
-
-    ],
-    'faq-4': [
-
-    ],
-    'faq-5': [
-
-    ],
-    'faq-6': [
-
-    ],
-    'faq-7': [
-
-    ],
-    'faq-8': [
-
-    ],
-    'faq-9': [
-
-    ],
-    'faq-10': [
-
-    ],
-    'faq-11': [
-
-    ]
-}
-
 function filterCategories() {
     var categories = document.querySelectorAll(".accordion");
     var filter = document.getElementById("filter-categories").value;
     var questions = document.querySelectorAll('article').innerHTML;
     var match = new RegExp(filter, "gi");
 
-    // console.log(questions);
-
-    for (var i = categories.length - 1; i >= 0; i--) {
-        categories[i].style.display = "none";
-
-        textValid = filter === "" || categories[i].dataset.category.match(match);
-
-        if (textValid) categories[i].style.display = "flex";
-
-        categories[i].querySelector('svg').classList.add('active');
-        categories[i].querySelector('article').classList.add('expand');
-
-        if (filter === "") {
-            categories[i].querySelector('svg').classList.remove('active');
-            categories[i].querySelector('article').classList.remove('expand');
-        }
+    var faqDict = {
+        'faq-1': [
+            'category',
+            'Is the API down?',
+            'If you need verify if the MTN API Platform is up and responsive, or perhaps down due to maintenance, then check out the status page'
+        ],
+        'faq-2': [
+            'test',
+            'testing',
+            'test test'
+        ],
+        // 'faq-3': [
+        //
+        // ],
+        // 'faq-4': [
+        //
+        // ],
+        // 'faq-5': [
+        //
+        // ],
+        // 'faq-6': [
+        //
+        // ],
+        // 'faq-7': [
+        //
+        // ],
+        // 'faq-8': [
+        //
+        // ],
+        // 'faq-9': [
+        //
+        // ],
+        // 'faq-10': [
+        //
+        // ],
+        // 'faq-11': [
+        //
+        // ]
     }
+    var found = [];
+
+    var entries = Object.entries(faqDict);
+
+    for (var i = 0; i < entries.length; i++) {
+
+    }
+
+
+
+    // for (var i = categories.length - 1; i >= 0; i--) {
+    //     categories[i].style.display = "none";
+    //
+    //     textValid = filter === "" || categories[i].dataset.category.match(match);
+    //
+    //     if (textValid) categories[i].style.display = "flex";
+    //
+    //     categories[i].querySelector('svg').classList.add('active');
+    //     categories[i].querySelector('article').classList.add('expand');
+    //
+    //     if (filter === "") {
+    //         categories[i].querySelector('svg').classList.remove('active');
+    //         categories[i].querySelector('article').classList.remove('expand');
+    //     }
+    // }
 }
