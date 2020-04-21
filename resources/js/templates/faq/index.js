@@ -80,7 +80,10 @@ document.getElementById("filter-categories").addEventListener("keyup", filterCat
 function filterCategories() {
     var categories = document.querySelectorAll(".accordion");
     var filter = document.getElementById("filter-categories").value;
+    var questions = document.querySelectorAll('article').innerHTML;
     var match = new RegExp(filter, "gi");
+
+    // console.log(questions);
 
     for (var i = categories.length - 1; i >= 0; i--) {
         categories[i].style.display = "none";
