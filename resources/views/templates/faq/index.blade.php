@@ -320,9 +320,23 @@
     }
 
     function inArray(haystack, needle) {
+
         for (var i = 0; i < haystack.length; i++) {
-            return !!haystack[i].indexOf(needle);
+            if(haystack[i].indexOf(needle)) {
+                console.log(haystack[i])
+                continue;
+            } else {
+                return false;
+            }
         }
+
+        // if(haystack.indexOf(needle)) {
+        //     console.log(true)
+        //     return true;
+        // } else {
+        //     console.log(false)
+        //     return false;
+        // }
     }
 
 </script>
