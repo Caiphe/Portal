@@ -134,13 +134,15 @@ function filterCategories() {
             return item.includes(filter) || item.toLowerCase().includes(filter);
         });
 
-        found.push(item);
+        found.push(item)
     }
+
+    // console.log(found)
 
     // for (var i = categories.length - 1; i >= 0; i--) {
     //     categories[i].style.display = "none";
     //
-    //     textValid = filter === "" || categories[i].dataset.category.match(match);
+    //     textValid = filter === "" || categories[i].dataset.category.match(found);
     //
     //     if (textValid) categories[i].style.display = "flex";
     //
