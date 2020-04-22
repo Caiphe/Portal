@@ -126,7 +126,16 @@ function filterCategories() {
 
     var entries = Object.entries(faqDict);
 
-    console.log(entries)
+    for (var i = 0; i < entries.length; i++) {
+
+        var sub = entries[i];
+
+        var item = sub[1].filter(function(item) {
+            return item.includes(filter) || item.toLowerCase().includes(filter);
+        });
+
+        found.push(item);
+    }
 
     // for (var i = categories.length - 1; i >= 0; i--) {
     //     categories[i].style.display = "none";
