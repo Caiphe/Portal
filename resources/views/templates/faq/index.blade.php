@@ -282,14 +282,14 @@
         var match = new RegExp(filter, "gi");
 
         var found = [];
+        var keys = [];
 
         for (var key in faqDict) {
             var value = faqDict[key];
 
-            found.push(value)
+            keys.push(key);
+            found.push(value);
         }
-
-        console.log(found)
 
         for (var j = 0; j < categories.length; j++) {
             categories[j].style.display = "none";
