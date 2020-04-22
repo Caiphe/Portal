@@ -138,22 +138,19 @@ function filterCategories() {
         found.push(item);
     }
 
-    console.log(found);
-
-    for (var j = categories.length - 1; j >= 0; j--) {
-
+    for (var j = 0; j < categories.length; j++) {
         categories[j].style.display = "none";
 
-        textValid = categories[i].dataset.category.match(match);
+        textValid = filter === "" || categories[j].dataset.category.match(match) || found;
 
-        if (textValid) categories[i].style.display = "flex";
+        if (textValid) categories[j].style.display = "flex";
 
-        categories[i].querySelector('svg').classList.add('active');
-        categories[i].querySelector('article').classList.add('expand');
+        categories[j].querySelector('svg').classList.add('active');
+        categories[j].querySelector('article').classList.add('expand');
 
         if (filter === "") {
-            categories[i].querySelector('svg').classList.remove('active');
-            categories[i].querySelector('article').classList.remove('expand');
+            categories[j].querySelector('svg').classList.remove('active');
+            categories[j].querySelector('article').classList.remove('expand');
         }
     }
 }
