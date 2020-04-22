@@ -38,7 +38,6 @@ Route::middleware('verified')->group(function () {
 
 Route::get('dashboard', 'DashboardController@index')->middleware('can:view-dashboard')->name('dashboard');
 
-
 Route::get('products', 'ProductController@index');
 Route::get('products/{product:slug}', 'ProductController@show')->name('product.show');
 Route::get('products/{product:slug}/download/postman', 'ProductController@downloadPostman')->name('product.download.postman');
