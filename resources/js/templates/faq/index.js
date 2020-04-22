@@ -131,27 +131,37 @@ function filterCategories() {
         var sub = entries[i];
 
         var item = sub[1].filter(function(item) {
-            return item.includes(filter) || item.toLowerCase().includes(filter);
+            sentenceCase(item.toLowerCase());
+            return item.match(filter) || item.toLowerCase().match(match);
         });
 
-        found.push(item)
+        found.push(item);
     }
 
-    // console.log(found)
+    console.log(found);
 
-    // for (var i = categories.length - 1; i >= 0; i--) {
-    //     categories[i].style.display = "none";
-    //
-    //     textValid = filter === "" || categories[i].dataset.category.match(found);
-    //
-    //     if (textValid) categories[i].style.display = "flex";
-    //
-    //     categories[i].querySelector('svg').classList.add('active');
-    //     categories[i].querySelector('article').classList.add('expand');
-    //
-    //     if (filter === "") {
-    //         categories[i].querySelector('svg').classList.remove('active');
-    //         categories[i].querySelector('article').classList.remove('expand');
-    //     }
-    // }
+    for (var j = categories.length - 1; j >= 0; j--) {
+
+        categories[j].style.display = "none";
+
+        textValid = categories[i].dataset.category.match(match);
+
+        if (textValid) categories[i].style.display = "flex";
+
+        categories[i].querySelector('svg').classList.add('active');
+        categories[i].querySelector('article').classList.add('expand');
+
+        if (filter === "") {
+            categories[i].querySelector('svg').classList.remove('active');
+            categories[i].querySelector('article').classList.remove('expand');
+        }
+    }
+}
+
+function sentenceCase (str) {
+    return str.replace(/[a-z]/i, function (letter) {
+
+        return letter.toUpperCase();
+
+    }).trim();
 }
