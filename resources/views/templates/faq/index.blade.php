@@ -216,7 +216,7 @@
         document.querySelector('.whatsapp').href = selectedCountry.dataset.whatsapp;
     }
 
-    document.getElementById("filter-categories").addEventListener("keyup", filterCategories);
+    // document.getElementById("filter-categories").addEventListener("keyup", filterCategories);
 
     var faqDict = {
         'faq-1': [
