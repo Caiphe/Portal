@@ -141,7 +141,7 @@ function filterCategories() {
     for (var j = 0; j < categories.length; j++) {
         categories[j].style.display = "none";
 
-        textValid = filter === "" || categories[j].dataset.category.match(match) || found;
+        textValid = filter === "" || categories[j].dataset.category.match(match) || inArray(found, filter);
 
         if (textValid) categories[j].style.display = "flex";
 
@@ -155,10 +155,14 @@ function filterCategories() {
     }
 }
 
-function sentenceCase (str) {
+function sentenceCase(str) {
     return str.replace(/[a-z]/i, function (letter) {
-
         return letter.toUpperCase();
-
     }).trim();
+}
+
+function inArray(haystack, needle) {
+    for (var i = 0; i < haystack.length; i++) {
+        return !!haystack[i].indexOf(needle);
+    }
 }
