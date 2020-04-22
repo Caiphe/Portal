@@ -20,7 +20,6 @@ mix.scripts(["resources/js/scripts.js", "resources/js/components/alert.js"], "pu
     .scripts("resources/js/templates/products/index.js", "public/js/templates/products/index.js")
     .scripts("resources/js/templates/products/show.js", "public/js/templates/products/show.js")
     .scripts("resources/js/templates/auth/register.js", "public/js/templates/auth/register.js")
-    .scripts("resources/js/templates/faq/index.js", "public/js/templates/faq/index.js")
     .sass("resources/sass/auth/login.scss", "public/css/auth")
     .sass("resources/sass/auth/register.scss", "public/css/auth")
     .sass("resources/sass/auth/verify.scss", "public/css/auth")
