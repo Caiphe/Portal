@@ -1,0 +1,122 @@
+@import '../variables';
+
+.accordion {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    border: 2px solid #F2F2F2;
+    border-radius: 10px;
+    padding: 20px 20px 12px;
+
+    .title {
+        display: flex;
+        width: 100%;
+
+        h3 {
+            display: flex;
+            margin-left: 10px;
+            margin-top: 0;
+            margin-bottom: 0;
+
+            a {
+                margin-left: 15px;
+            }
+        }
+
+        svg {
+            cursor: pointer;
+            display: flex;
+            transform: rotate(0deg);
+            transition: transform .1s linear;
+
+            &.active {
+                transform: rotate(90deg);
+                transition: transform .1s linear;
+            }
+        }
+    }
+
+    .title ~ * {
+        display: none;
+    }
+
+    article {
+        margin-top: 30px;
+
+        header {
+            display: flex;
+            align-items: center;
+
+            p {
+                font-size: 16px;
+                margin-top: 0;
+                margin-bottom: 0;
+                margin-right: 15px;
+            }
+
+            span {
+                margin-right: 10px;
+            }
+
+            button {
+                background-color: transparent;
+                border: transparent;
+                margin-left: auto;
+
+                &:hover {
+                    background-color: transparent;
+                }
+            }
+
+            &.bottom {
+                padding-bottom: 15px;
+            }
+        }
+
+        header + .content {
+            display: none;
+        }
+
+        ul {
+            cursor: pointer;
+            margin-bottom: 0;
+            margin-top: 0;
+            list-style: none;
+            padding: 20px 20px 0;
+
+            li {
+
+                &:before{
+                    content: "-";
+                    text-indent: -1.5em;
+                    display: inline-block;
+                }
+            }
+
+            &.expand {
+                display: block;
+                border-top: 2px solid $grey300;
+                animation: expand 0.1s;
+            }
+        }
+
+        &.expand {
+            display: block;
+            animation: expand 0.1s;
+        }
+
+        &:not(:last-of-type) {
+            padding-bottom: 15px;
+            border-bottom: 2px solid $grey300;
+        }
+    }
+}
+
+@keyframes expand {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

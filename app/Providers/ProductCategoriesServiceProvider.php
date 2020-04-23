@@ -6,7 +6,7 @@ use App\Product;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
 
-class ProductCategoriesServiceProvider extends ServiceProvider implements DeferrableProvider
+class ProductCategoriesServiceProvider extends ServiceProvider
 {
     /**
      * Register services.
