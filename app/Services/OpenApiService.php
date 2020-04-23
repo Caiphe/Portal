@@ -391,7 +391,7 @@ class OpenApiService {
 				}
 
 				if (isset($props[$key]['example']) && gettype($props[$key]['example']) === 'array') {
-					$props[$key] = ['type' => 'array', 'example' => $props[$key]['example']];
+					$props[$key] = ['type' => 'object', 'example' => $props[$key]['example']];
 				}
 
 				if (empty($p)) {
@@ -410,11 +410,11 @@ class OpenApiService {
 
 	private function buildResponsesExample($schema, $level = 0) {
 		$exampleKeys = array_keys($schema);
-		$types = ["string" => "string", "integer" => 1, "boolean" => true, "array" => []];
+		$types = ["string" => "string", "integer" => 1, "boolean" => true, "array" => [], "object" => []];
 		$example = array_reduce(
 			$exampleKeys,
 			function ($carry, $key) use ($schema, $types) {
-				if (isset($schema[$key]['example']) && $schema[$key]['type'] === 'array') {
+				if (isset($schema[$key]['example']) && $schema[$key]['type'] === 'object') {
 					$carry[$key] = $schema[$key]['example'];
 					return $carry;
 				}
