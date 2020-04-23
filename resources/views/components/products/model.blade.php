@@ -20,7 +20,7 @@
     @if(!$hasChildren && isset($schema['description']))
     {{$schema['description']}}
     @endif
-    
+
     @if($hasChildren)
     <x-products.model :schemas="$schema" />
     @endif
