@@ -22,7 +22,7 @@
             <div class="carousel-content">
                 <h1>Create an account</h1>
                 <p>Register your account if you want to create an App.</p>
-                <a class="button after arrow-forward" href="/register" role="button">Register</a>
+                <a class="button dark after arrow-forward" href="/register" role="button">Register</a>
             </div>
             </x-carousel-item>
 
