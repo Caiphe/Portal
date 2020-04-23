@@ -190,17 +190,21 @@
 
         for (i = accordions.length - 1; i >= 0; i--) {
             if(categories.indexOf(accordions[i].id) === -1) {
-                accordions[i].classList.add('hide-accordion')
+                accordions[i].classList.add('hide-accordion');
             } else {
-                accordions[i].classList.remove('hide-accordion')
+                accordions[i].classList.remove('hide-accordion');
             };
         }
 
         for (i = faqs.length - 1; i >= 0; i--) {
             if(found.indexOf(faqs[i].id) === -1) {
-                faqs[i].classList.add('hide-accordion')
+                faqs[i].classList.add('hide-accordion');
+                faqs[i].classList.remove('active');
+                faqs[i].classList.remove('expand');
             } else {
-                faqs[i].classList.remove('hide-accordion')
+                faqs[i].classList.remove('hide-accordion');
+                faqs[i].classList.add('active');
+                faqs[i].classList.add('expand');
             };
         }
     }

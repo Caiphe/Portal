@@ -61,27 +61,4 @@
             </div>
         </div>
     </section>
-
-{{--    <section class="grey-bg mb-4">--}}
-{{--		<div class="columns">--}}
-{{--			<div class="column contact-details">--}}
-{{--				<h3>Contact Details</h3>--}}
-{{--                <address>--}}
-{{--                    <div class="left">--}}
-{{--                        @svg('map-marker', '#FC0')--}}
-{{--                        <div>--}}
-{{--                            <span>14th Avenue</span>--}}
-{{--                            <span>Johannesburg</span>--}}
-{{--                            <span>2196, South Africa</span>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                    <div class="right">--}}
-{{--                        @svg('phone', '#FC0')--}}
-{{--                        <a href="tel:+27 11 912 3000">+27 11 912 3000</a>--}}
-{{--                    </div>--}}
-{{--                </address>--}}
-{{--			</div>--}}
-{{--		</div>--}}
-{{--	</section>--}}
-
 @endsection
