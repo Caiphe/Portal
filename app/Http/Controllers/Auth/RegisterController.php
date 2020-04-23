@@ -102,13 +102,19 @@ class RegisterController extends Controller
         
         if (isset($apigeeDeveloper['code'])) {
             return redirect('/register')
-                ->withErrors(['email' => $apigeeDeveloper['message']])
+                ->withErrors(['email' => preg_replace('/ ?in organization mtn-prod/', '', $apigeeDeveloper['message'])])
                 ->withInput();
         }
 
         $data['developer_id'] = $apigeeDeveloper['developerId'];
 
         event(new Registered($user = $this->create($data)));
+
+        if(preg_match('/@mtn\.com$/', $user['email'])){
+            $user->assignRole("internal");
+        } else {
+            $user->assignRole("developer");
+        }
 
         $this->guard()->login($user);
 
