@@ -7,52 +7,48 @@ use App\Services\ApigeeService;
 use App\Services\ProductLocationService;
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller
-{
-    public function index(ProductLocationService $productLocationService)
-    {
-        $approvedApps = $this->apps(ApigeeService::getOrgApps('approved'), $approvedApps = []);
-        $revokedApps = $this->apps(ApigeeService::getOrgApps('revoked'), $revokedApps = []);
+class DashboardController extends Controller {
 
-        [$products, $countries] = $productLocationService->fetch();
+	public function index(ProductLocationService $productLocationService) {
+		$approvedApps = $this->apps(ApigeeService::getOrgApps('approved'), $approvedApps = []);
+		$revokedApps = $this->apps(ApigeeService::getOrgApps('revoked'), $revokedApps = []);
 
-        return view('templates.dashboard.index', [
-            'approvedApps' => $approvedApps ?? [],
-            'revokedApps' => $revokedApps ?? [],
-            'countries' => $countries
-        ]);
-    }
+		[$products, $countries] = $productLocationService->fetch();
 
-    public function update(UpdateStatusRequest $request)
-    {
-        $validated = $request->validated();
+		return view('templates.dashboard.index', [
+			'approvedApps' => $approvedApps ?? [],
+			'revokedApps' => $revokedApps ?? [],
+			'countries' => $countries,
+		]);
+	}
 
-         ApigeeService::updateProductStatus($request->developer_id, $request->app_name, $request->key, $request->product, $request->action);
+	public function update(UpdateStatusRequest $request) {
+		$validated = $request->validated();
 
-         return redirect()->back();
-    }
+		ApigeeService::updateProductStatus($request->developer_id, $request->app_name, $request->key, $request->product, $request->action);
 
-    public function destroy($id, Request $request)
-    {
-        dd($request->all());
-    }
+		return redirect()->back();
+	}
 
-    /**
-     * @param array $apigeeApps
-     * @param array $outputArray
-     *
-     * @return array
-     */
-    public function apps(array $apigeeApps, array $outputArray)
-    {
-        foreach ($apigeeApps['app'] as $key => $app) {
-            $outputArray[] = $app;
-        }
+	public function destroy($id, Request $request) {
+		dd($request->all());
+	}
 
-        usort($outputArray, function($a, $b) {
-            return ($a['createdAt'] < $b['createdAt']) ? -1 : 1;
-        });
+	/**
+	 * @param array $apigeeApps
+	 * @param array $outputArray
+	 *
+	 * @return array
+	 */
+	public function apps(array $apigeeApps, array $outputArray) {
+		foreach ($apigeeApps['app'] as $key => $app) {
+			$outputArray[] = $app;
+		}
 
-        return array_reverse($outputArray, true);
-    }
+		usort($outputArray, function ($a, $b) {
+			return ($a['createdAt'] < $b['createdAt']) ? -1 : 1;
+		});
+
+		return array_reverse($outputArray, true);
+	}
 }
