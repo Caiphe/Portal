@@ -35,10 +35,7 @@
                     Want to know about available data, localisation, sandbox, costs and more? So do many others. Check out the answers to some frequentlky asked questions.
                 </p>
 
-                <button>
-                    View FAQ's
-                    @svg('arrow-forward')
-                </button>
+                <a class="button after arrow-right" href="{{route('faq.index')}}">View FAQ's</a>
             </div>
             <div class="column">
                 <h2>Get in touch</h2>
