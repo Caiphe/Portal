@@ -31,27 +31,25 @@
             <div class="content">
                 <x-panel>
                     <h2>Looking for something specific?</h2>
-                    <input id="filter-categories" type="text" name="search" placeholder="Search" autofocus>
+                    <input id="filter-categories" type="text" name="search" placeholder="Search" autofocus autocomplete="off">
                 </x-panel>
 
                 @foreach($categories as $category)
-                    @if(!$category->faqs->isEmpty())
-                        <x-accordion :id="$category->slug" :title="$category->title" :link="$category->slug" icon="link">
-                            @foreach($category->faqs as $faq)
-                                <article>
-                                    <header>
-                                        <p>
-                                            {!! $faq->question !!}
-                                        </p>
-                                        <button class="button fab plus"></button>
-                                    </header>
-                                    <ul class="content">
-                                        <li>{!! $faq->answer  !!}</li>
-                                    </ul>
-                                </article>
-                            @endforeach
-                        </x-accordion>
-                    @endif
+                    <x-accordion :id="$category->slug" :title="$category->title" :link="$category->slug" icon="link">
+                        @foreach($category->faqs as $faq)
+                            <article id="faq-{{$faq->id}}" class="faq">
+                                <header>
+                                    <p>
+                                        {!! $faq->question !!}
+                                    </p>
+                                    <button class="button fab plus"></button>
+                                </header>
+                                <ul class="content">
+                                    <li>{!! $faq->answer  !!}</li>
+                                </ul>
+                            </article>
+                        @endforeach
+                    </x-accordion>
                 @endforeach
             </div>
 
@@ -76,62 +74,41 @@
                 Need more help? Get in touch
             </h1>
 
-            <x-panel>
-                <label for="categories"></label>
-                <select name="categories" id="categories">
-                    <option value="Advertising">
-                        Advertising
-                    </option>
-                    <option value="Customer">
-                        Customer
-                    </option>
-                    <option value="Fintech">
-                        Fintech
-                    </option>
-                    <option value="Messaging">
-                        Messaging
-                    </option>
-                    <option value="SMS">
-                        SMS
-                    </option>
-                    <option value="Tickets">
-                        Tickets
-                    </option>
-                </select>
-            </x-panel>
+            <form action="{{ route('contact.send') }}" method="POST">
+                @csrf
 
-            <div class="contact-form">
+                <x-panel>
+                    <label for="categories"></label>
+                    <select name="categories" id="categories">
+                        <option value="Advertising">
+                            Advertising
+                        </option>
+                        <option value="Customer">
+                            Customer
+                        </option>
+                        <option value="Fintech">
+                            Fintech
+                        </option>
+                        <option value="Messaging">
+                            Messaging
+                        </option>
+                        <option value="SMS">
+                            SMS
+                        </option>
+                        <option value="Tickets">
+                            Tickets
+                        </option>
+                    </select>
+                </x-panel>
 
-                <form action="{{ route('contact.send') }}" method="POST">
-                    @csrf
+                <input type="text" name="first_name" placeholder="Enter first name" autocomplete="first_name">
+                <input type="text" name="last_name" placeholder="Enter last name" autocomplete="last_name">
+                <input type="email" name="email" placeholder="Enter email address" autocomplete="email">
 
-                    <input type="text" name="first_name" placeholder="Enter first name" autocomplete="first_name">
-                    <input type="text" name="last_name" placeholder="Enter last name" autocomplete="last_name">
-                    <input type="email" name="email" placeholder="Enter email address" autocomplete="email">
+                <textarea name="message" placeholder="Enter message" rows="4"></textarea>
 
-                    <textarea name="message" placeholder="Enter message" rows="4"></textarea>
-
-                    <button>Send message</button>
-                </form>
-            </div>
-
-            <div id="fintech">
-                <p>
-                    Connect with our developer support team, and other developers who are integrating with MTN Open API using Whatsapp or Skype.
-                </p>
-
-                <x-select></x-select>
-
-                <div class="connect">
-                    <a class="skype" href="" target="_blank" rel="noopener noreferrer">
-                        @svg('skype')
-                    </a>
-
-                    <a class="whatsapp" href="" target="_blank" rel="noopener noreferrer">
-                        @svg('whatsapp')
-                    </a>
-                </div>
-            </div>
+                <button>Send message</button>
+            </form>
         </div>
 	</section>
 
@@ -139,10 +116,18 @@
 
 @pushscript('faq')
 <script>
-    var accordions = document.querySelectorAll('.accordion .title');
+(function(){
+    var search = document.getElementById('filter-categories');
+    var accordionTitles = document.querySelectorAll('.accordion .title');
+    var faqDict = @json($faqs);
+    var categoryLookup = @json($categoryLookup);
+    var accordionContents = document.querySelectorAll('article header');
+    var timeOut = null;
 
-    for (var i = 0; i < accordions.length; i++) {
-        accordions[i].addEventListener('click', toggleAccordion)
+    search.addEventListener('keyup', searchFaq);
+
+    for (var i = 0; i < accordionTitles.length; i++) {
+        accordionTitles[i].addEventListener('click', toggleAccordion)
     }
 
     function toggleAccordion(event) {
@@ -154,8 +139,6 @@
             children[i].classList.toggle('expand');
         }
     }
-
-    var accordionContents = document.querySelectorAll('article header');
 
     for (var j = 0; j < accordionContents.length; j++) {
         accordionContents[j].addEventListener('click', toggleAccordionContent)
@@ -176,135 +159,49 @@
         article.querySelector('button').classList.toggle('minus');
     }
 
-    var select = document.getElementById('categories');
-    var value = document.getElementById('categories').value;
+    function searchFaq() {
+        if(timeOut) window.clearTimeout(timeOut);
+        timeOut = window.setTimeout(filterCategories.bind(this), 720);
+    }
 
-    select.value = 'Advertising';
-    select.addEventListener('change', handleSelectCategory);
+    function filterCategories() {
+        var accordions = document.querySelectorAll('.accordion');
+        var faqs = document.querySelectorAll('.faq');
+        var found = [];
+        var categories = [];
+        var category = "";
+        var reg = new RegExp(this.value, 'i');
+        var i = 0;
 
-    function handleSelectCategory(event) {
-        var form = document.querySelector('.contact-form');
-        var fintech = document.getElementById('fintech');
+        for (var i = faqDict.length - 1; i >= 0; i--) {
+            for(var column in faqDict[i]){
+                if(!reg.test(faqDict[i][column])) continue;
 
-        for(var i = 0, j = select.options.length; i < j; ++i) {
-            if(select.options[i].innerHTML === value) {
-                select.selectedIndex = i;
+                found.push('faq-' + faqDict[i].id);
+
+                category = categoryLookup[faqDict[i].category_id];
+                if(categories.indexOf(category) === -1){
+                    categories.push(category);
+                }
+
                 break;
             }
         }
 
-        if (event.target.value === 'Fintech') {
-            form.classList.add('hide');
-            fintech.classList.add('show');
-        } else {
-            form.classList.remove('hide');
-            fintech.classList.remove('show');
-        }
-    }
-
-    var country = document.getElementById('countries');
-    country.options.selectedIndex = 0;
-
-    country.addEventListener('change', handleSelectCountry);
-
-    function handleSelectCountry(event) {
-        var selected = event.currentTarget;
-        var selectedCountry = selected.options[selected.selectedIndex];
-
-        document.querySelector('.connect').style.display = 'block';
-        document.querySelector('.skype').href = selectedCountry.dataset.skype;
-        document.querySelector('.whatsapp').href = selectedCountry.dataset.whatsapp;
-    }
-
-    // document.getElementById("filter-categories").addEventListener("keyup", filterCategories);
-
-    var faqDict = {
-        'faq-1': [
-            'Authentication',
-            'Is the API down?',
-            'If you need verify if the MTN API Platform is up and responsive, or perhaps down due to maintenance, then check out the status page'
-        ],
-        'faq-2': [
-            'Onboarding',
-            'Do you have sample or reference applications that could demonstrate some API calls for me?',
-            'Stay posted at our GitHub to see various reference helper applications and SDKs.'
-        ],
-        'faq-3': [
-            'Support',
-            'I\'m looking for a specific API functionality – how do I know if you offer it?',
-            'Take a look at our products page – it will let you know what APIs are available on a market-by-market basis. If you have a really strong business case for a new API we\'d love to hear about it! Send us a message through our contact us page.'
-        ],
-        'faq-4': [
-            'Authentication',
-            'What system of authorization do you use for your APIs, and how do I get authorized to make calls?',
-            'We currently have two authorisation mechanisms: API Key, and OAuth. Most of the MTN APIs use API Key today to support legacy apps, but is swtiching over to OAuth. Each API products page will specify what authorisation mechanisms each API uses. API Key uses the x-api-key header, which you can get from the apps section on your profile, under Consumer Key. We use a standard OAuth 2.0 scheme for authorization. To make calls, check out our OAuth page to get information on implementing a 2-legged and 3-legged OAuth flow.'
-        ],
-        'faq-5': [
-            'Onboarding',
-            'How do I move my application to production?',
-            'We\'re excited to see your creation! If you\'ve done some testing and have a valid prototype or idea worked out, check out our contact us page and fill out the form. We\'ll engage your team and start vetting you for production access.'
-        ],
-        'faq-6': [
-            'Support',
-            'I\'ve forgotten my User ID and my Password. How do I recover them?',
-            'Head to the login page and hit the forgot User ID/Password.'
-        ],
-        'faq-7': [
-            'Support',
-            'I have an idea for an API that would really enable my product. Can MTN help me?',
-            'Please let us know at our Contact Us page! We are always looking for new ways to expose APIs that enable the financial technology space and create new opportunities.'
-        ],
-        'faq-8': [
-            'Onboarding',
-            'What does it cost me?',
-            'There are no fees currently to access our sandbox.  If we allow you to move beyond the sandbox, at that time we can discuss next steps and pricing.'
-        ],
-        'faq-9': [
-            'Onboarding',
-            'What functionality is available in the sandbox?',
-            'Our functionality varies from region to region – though we provide simulated access to our points platform, customer profiles, accounts, and transactions across all regions. To see if your desired functionality is available in your product\'s region, be sure to check out our API catalog and documentation. Please be reminded that this a sandbox, which means a test environment, that only uses dummy data.'
-        ],
-        'faq-10': [
-            'Onboarding',
-            'What kind of data and access do I get in the portal?',
-            'The MTN Developer portal consists of: API Products Catalogue - listing the different APIs that can be used, the related documentation, and a way to "Try it Out", test out the APIs directly on the portal. User Profiles - allowing developers to Register, and create apps that use APIs, and the the related credentials/keys for those APIs. ‘sandbox\', which allows you to make API calls that are the same in form and function to our production environments. It contains mock test data so that you can prototype your application as if it were the real thing. We keep our public APIs sandboxed to protect our clients\' data and validate products before moving them to production.'
-        ],
-        'faq-11': [
-            'Onboarding',
-            'Get started',
-            'Read the Welcome page, then head over to Things every developer should know.'
-        ]
-    }
-
-    function filterCategories() {
-        var categories = document.querySelectorAll(".accordion");
-        var filter = document.getElementById("filter-categories").value;
-        var match = new RegExp(filter, "gi");
-
-        var found = [];
-        var keys = [];
-
-        for (var key in faqDict) {
-            var value = faqDict[key];
-
-            keys.push(key);
-            found.push(value);
+        for (i = accordions.length - 1; i >= 0; i--) {
+            if(categories.indexOf(accordions[i].id) === -1) {
+                accordions[i].classList.add('hide-accordion')
+            } else {
+                accordions[i].classList.remove('hide-accordion')
+            };
         }
 
-        for (var j = 0; j < categories.length; j++) {
-            categories[j].style.display = "none";
-
-            textValid = filter === "" || categories[j].dataset.category.match(match) || inArray(found, filter);
-
-            if (textValid) categories[j].style.display = "flex";
-
-            categories[j].querySelector('svg').classList.add('active');
-            categories[j].querySelector('article').classList.add('expand');
-
-            if (filter === "") {
-                categories[j].querySelector('svg').classList.remove('active');
-                categories[j].querySelector('article').classList.remove('expand');
-            }
+        for (i = faqs.length - 1; i >= 0; i--) {
+            if(found.indexOf(faqs[i].id) === -1) {
+                faqs[i].classList.add('hide-accordion')
+            } else {
+                faqs[i].classList.remove('hide-accordion')
+            };
         }
     }
 
@@ -324,6 +221,6 @@
         }
         return found;
     }
-
+}());
 </script>
 @endpushscript

@@ -21,14 +21,6 @@ section:last-of-type {
     margin-bottom: 40px;
 }
 
-.skype {
-    margin-right: 15px;
-
-    .a {
-        fill: #0078d7;
-    }
-}
-
 .accordion:not(:last-of-type) {
     margin-bottom: 20px;
 }
@@ -70,6 +62,10 @@ section:last-of-type {
                         color: $grey800;
                     }
                 }
+            }
+
+            .hide-accordion {
+                display: none;
             }
         }
     }
@@ -115,7 +111,7 @@ section:last-of-type {
     margin: auto;
 
     .panel {
-        margin-bottom: 60px;
+        margin-bottom: 20px;
     }
 
     p:last-of-type {
@@ -137,7 +133,9 @@ section:last-of-type {
     }
 
     form {
-        input, textarea {
+
+        input,
+        textarea {
             display: block;
             width: 100%;
             margin-bottom: 10px;
