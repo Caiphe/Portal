@@ -20,6 +20,9 @@
             </li>
             <li><a href="/faq">FAQ</a></li>
             <li><a href="/contact">Contact us</a></li>
+            @can('view-dashboard')
+            <li><a href="/dashboard">Dashboard</a></li>
+            @endcan
         </ul>
         <form action="{{route('search')}}">
             <input type="search" name="q" id="search" class="thin see-through" placeholder="Search">

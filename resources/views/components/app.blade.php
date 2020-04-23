@@ -25,9 +25,7 @@
         @endif
     </div>
     @else
-        <div class="column">
-            Lorem ipsum dolor sit amet, consetetur.
-        </div>
+        <div class="column"></div>
     @endif
     <div class="column">
         @if(Request::is('dashboard'))
@@ -127,9 +125,13 @@
     </div>
     <nav class="menu">
         @if(Request::is('dashboard'))
+            @can('administer-dashboard')
             <button class="product-all" data-action="approve">Approve all</button>
             <button class="product-all" data-action="revoke">Revoke all</button>
             <button class="complete">Complete</button>
+            @else
+            <button>View only</button>
+            @endcan
         @else
             <a href="{{ route('app.edit', $app['name']) }}">Edit</a>
             <form class="delete">
