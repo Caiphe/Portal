@@ -5,81 +5,70 @@
     padding: 0 !important;
 }
 
-.grey-bg {
-    background-color: $grey300;
+section:first-of-type {
+    padding-bottom: 60px;
+    margin-top: 120px;
+}
+
+section {
+    .container {
+        display: flex;
+
+        .column {
+            flex: 1;
+
+            &:not(:first-of-type) {
+                padding-left: 40px;
+            }
+
+            &:not(:last-of-type) {
+                padding-right: 40px;
+            }
+
+            address {
+                font-style: normal;
+
+                .left {
+                    display: flex;
+                    margin-bottom: 30px;
+
+                    > div {
+                        display: flex;
+                        flex-direction: column;
+                    }
+                }
+
+                .right {
+                    display: flex;
+                    align-items: center;
+                }
+
+                svg {
+                    margin-right: 15px;
+                    height: 36px;
+                    width: 36px;
+                }
+
+                a {
+                    color: $grey900 !important;
+                }
+
+                @media screen and (min-width: 320px) and (max-width: 768px) {
+                    margin: 0;
+                }
+            }
+
+            button {
+
+                svg {
+                    margin-left: 10px;
+                    width: 15px;
+                }
+            }
+        }
+    }
 }
 
 section:last-of-type {
-    padding: $gutter 150px;
-
-    @media screen and (min-width: 320px) and (max-width: 768px) {
-        padding: 0;
-    }
-}
-
-address {
-    font-style: normal;
-    margin-left: 30px;
-
-    .left {
-        display: flex;
-        margin-bottom: 30px;
-
-        > div {
-            display: flex;
-            flex-direction: column;
-        }
-    }
-
-    .right {
-        display: flex;
-        align-items: center;
-    }
-
-    svg {
-        margin-right: 20px;
-        height: 36px;
-        width: 36px;
-    }
-
-    a {
-        color: $grey900 !important;
-    }
-
-    @media screen and (min-width: 320px) and (max-width: 768px) {
-        margin: 0;
-    }
-}
-
-span {
-    display: block;
-}
-
-.columns {
-    display: flex;
-    flex-flow: row wrap;
-
-    .column {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        flex: 1;
-        flex-basis: 50%;
-
-        @media screen and (min-width: 320px) and (max-width: 768px) {
-            flex-basis: 100%;
-            align-items: baseline;
-        }
-    }
-}
-
-.faqs-section {
-    margin-top: 160px;
-    margin-bottom: 80px;
-    text-align: center;
-
-    a {
-        margin-top: 10px;
-    }
+    margin-bottom: 40px;
 }

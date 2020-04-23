@@ -72,38 +72,35 @@
         font-family: "Montserrat-Light";
     }
 
+    .carousel-item {
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+
+        display: flex;
+        align-items: center;
+    }
+
     .carousel-item:first-child {
-        background-image: url("/images/mtn-illustration-01.png");
+        background-image: url("/images/backgrounds/bg-opt-1-yellow.svg");
     }
 
     .carousel-item:nth-child(2) {
-        background-image: url("/images/mtn-illustration-02.png");
+        background-image: url("/images/backgrounds/bg-opt-2-red.svg");
     }
 
     .carousel-item:nth-child(3) {
-        background-image: url("/images/mtn-illustration-03.png");
+        background-image: url("/images/backgrounds/bg-opt-3-blue.svg");
     }
 
     .carousel-item:nth-child(4) {
-        background-image: url("/images/mtn-illustration-01.png");
-    }
-
-    .carousel-item::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4)) !important;
-        pointer-events: none;
+        background-image: url("/images/backgrounds/bg-opt-4-black.svg");
     }
 
     .carousel-content {
-        position: absolute;
-        bottom: 100px;
         margin: 0 80px;
         color: #FFF;
+        width: 70%;
 
         h1 {
             color: currentColor;

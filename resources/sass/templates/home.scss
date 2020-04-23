@@ -20,37 +20,25 @@ body>#main {
             background-size: cover;
             background-repeat: no-repeat;
 
-            &:before {
-                content: "";
-                position: absolute;
-                top: 0;
-                right: 0;
-                bottom: 0;
-                left: 0;
-                background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4)) !important;
-                pointer-events: none;
-            }
-
             &:first-child {
-                background-image: url('/images/mtn-illustration-01.png');
+                background-image: url('/images/backgrounds/bg-opt-2-yellow.svg');
             }
 
             &:nth-child(2) {
-                background-image: url('/images/mtn-illustration-02.png');
+                background-image: url('/images/backgrounds/bg-opt-3-red.svg');
             }
 
             &:nth-child(3) {
-                background-image: url('/images/mtn-illustration-03.png');
+                background-image: url('/images/backgrounds/bg-opt-4-blue.svg');
             }
 
             &:nth-child(4) {
-                background-image: url('/images/mtn-illustration-01.png');
+                background-image: url('/images/backgrounds/bg-opt-1-black.svg');
             }
 
             .carousel-content {
                 padding: $gutter 8%;
-                max-width: 1440px;
-                margin: 0 auto;
+                max-width: 70%;
                 position: relative;
                 height: 100%;
                 display: flex;
