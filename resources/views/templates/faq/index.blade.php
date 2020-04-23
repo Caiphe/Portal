@@ -165,12 +165,13 @@
     }
 
     function filterCategories() {
+        var filter = this.value;
         var accordions = document.querySelectorAll('.accordion');
         var faqs = document.querySelectorAll('.faq');
         var found = [];
         var categories = [];
         var category = "";
-        var reg = new RegExp(this.value, 'i');
+        var reg = new RegExp(filter, 'i');
         var i = 0;
 
         for (var i = faqDict.length - 1; i >= 0; i--) {
@@ -197,7 +198,11 @@
         }
 
         for (i = faqs.length - 1; i >= 0; i--) {
-            if(found.indexOf(faqs[i].id) === -1) {
+            if(filter === ""){
+                faqs[i].classList.remove('hide-accordion');
+                faqs[i].classList.remove('active');
+                faqs[i].classList.remove('expand');
+            } else if(found.indexOf(faqs[i].id) === -1) {
                 faqs[i].classList.add('hide-accordion');
                 faqs[i].classList.remove('active');
                 faqs[i].classList.remove('expand');
