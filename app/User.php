@@ -8,91 +8,66 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable implements MustVerifyEmail
-{
-    use Notifiable;
+class User extends Authenticatable implements MustVerifyEmail {
+	use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['first_name', 'last_name', 'email', 'password', 'developer_id'];
+	/**
+	 * The attributes that are mass assignable.
+	 *
+	 * @var array
+	 */
+	protected $fillable = ['first_name', 'last_name', 'email', 'password', 'developer_id', 'profile_picture'];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = ['password', 'remember_token'];
+	/**
+	 * The attributes that should be hidden for arrays.
+	 *
+	 * @var array
+	 */
+	protected $hidden = ['password', 'remember_token'];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime'
-    ];
+	/**
+	 * The attributes that should be cast to native types.
+	 *
+	 * @var array
+	 */
+	protected $casts = [
+		'email_verified_at' => 'datetime',
+	];
 
-    /**
-     * The dynamic attributes from mutators that should be returned with the user object.
-     *
-     * @var array
-     */
-    protected $appends = ['profile_picture'];
+	public function roles() {
+		return $this->belongsToMany(Role::class);
+	}
 
+	public function assignRole($role) {
+		if (is_string($role)) {
+			$role = Role::whereName($role)->firstOrFail();
+		}
 
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class);
-    }
+		$this->roles()->sync($role, false);
+	}
 
-    public function assignRole($role)
-    {
-        if (is_string($role)) {
-            $role = Role::whereName($role)->firstOrFail();
-        }
+	public function permissions() {
+		return $this->roles->map->permissions
+			->flatten()
+			->pluck('name')
+			->unique();
+	}
 
-        $this->roles()->sync($role, false);
-    }
+	public function hasPermissionTo($permission) {
+		$userPermissions = $this->roles->map->permissions
+			->flatten()
+			->pluck('name')
+			->unique()
+			->toArray();
 
-    public function permissions()
-    {
-        return $this->roles->map->permissions
-            ->flatten()
-            ->pluck('name')
-            ->unique();
-    }
+		if (is_array($permission)) {
+			return !array_diff($permission, $userPermissions);
+		}
 
-    public function hasPermissionTo($permission)
-    {
-        $userPermissions = $this->roles->map->permissions
-            ->flatten()
-            ->pluck('name')
-            ->unique()
-            ->toArray();
+		return in_array($permission, $userPermissions);
+	}
 
-        if(is_array($permission)){
-            return !array_diff($permission, $userPermissions);
-        }
-
-        return in_array($permission, $userPermissions);
-    }
-
-    public function countries()
-    {
-        return $this->belongsToMany(Country::class);
-    }
-
-    /**
-     * Get the user's full name.
-     *
-     * @return string
-     */
-    public function getProfilePictureAttribute()
-    {
-        $img = base64_encode('jsklaf88sfjdsfjl' . $this->id);
-        return "/storage/profile/$img.png?v=" . date('his');
-    }
+	public function countries() {
+		return $this->belongsToMany(Country::class);
+	}
 }

@@ -175,14 +175,14 @@
         var i = 0;
 
         for (var i = faqDict.length - 1; i >= 0; i--) {
+            faqDict[i]['category'] = categoryLookup[faqDict[i].category_id];
             for(var column in faqDict[i]){
                 if(!reg.test(faqDict[i][column])) continue;
 
                 found.push('faq-' + faqDict[i].id);
 
-                category = categoryLookup[faqDict[i].category_id];
-                if(categories.indexOf(category) === -1){
-                    categories.push(category);
+                if(categories.indexOf(faqDict[i]['category']) === -1){
+                    categories.push(faqDict[i]['category']);
                 }
 
                 break;
