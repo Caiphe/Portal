@@ -68,8 +68,6 @@
                                 :countries="App\Services\ApigeeService::getAppCountries(array_column($app['credentials']['apiProducts'], 'apiproduct'))"
                                 :type="$type = 'approved'">
                             </x-app>
-
-
                         @endif
                     @empty
                         <p>No approved apps.</p>

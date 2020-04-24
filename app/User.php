@@ -70,4 +70,8 @@ class User extends Authenticatable implements MustVerifyEmail {
 	public function countries() {
 		return $this->belongsToMany(Country::class);
 	}
+
+	public function responsibleCountries() {
+		return $this->belongsToMany(Country::class, 'country_opco');
+	}
 }

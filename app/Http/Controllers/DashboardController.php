@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\App;
 use App\Http\Requests\UpdateStatusRequest;
 use App\Services\ApigeeService;
 use App\Services\ProductLocationService;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller {
 
 	public function index(ProductLocationService $productLocationService) {
+		return ApigeeService::getOrgApps('approved');
 		$approvedApps = $this->apps(ApigeeService::getOrgApps('approved'), $approvedApps = []);
 		$revokedApps = $this->apps(ApigeeService::getOrgApps('revoked'), $revokedApps = []);
 
