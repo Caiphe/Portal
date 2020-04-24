@@ -6,6 +6,7 @@ use App\Content;
 use App\Country;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\Services\ApigeeService;
 use App\Services\ProductLocationService;
 use App\User;
 use Illuminate\Auth\Events\Registered;
@@ -93,9 +94,7 @@ class RegisterController extends Controller {
 		])->json();
 
 		if (isset($apigeeDeveloper['code'])) {
-			return redirect('/register')
-				->withErrors(['email' => preg_replace('/ ?in organization mtn-prod/', '', $apigeeDeveloper['message'])])
-				->withInput();
+			$apigeeDeveloper = ApigeeService::get('developers/' . $data['email']);
 		}
 
 		$data['developer_id'] = $apigeeDeveloper['developerId'];
