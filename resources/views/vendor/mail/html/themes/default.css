@@ -262,6 +262,7 @@ tr.spacer {
     align-items: center;
     cursor: pointer;
     color: #1a1a1a;
+    text-decoration: none;
 }
 
 .button-blue,
