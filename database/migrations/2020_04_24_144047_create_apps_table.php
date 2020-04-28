@@ -15,10 +15,13 @@ class CreateAppsTable extends Migration {
 			$table->primary('aid');
 			$table->string('aid')->index();
 			$table->string('name');
+			$table->string('display_name');
 			$table->string('slug');
+			$table->string('callback_url')->nullable();
 			$table->json('attributes');
 			$table->string('developer_id');
 			$table->string('status');
+			$table->text('description');
 			$table->timestamps();
 		});
 
@@ -47,6 +50,11 @@ class CreateAppsTable extends Migration {
 	 * @return void
 	 */
 	public function down() {
+		Schema::table('app_product', function (Blueprint $table) {
+			$table->dropForeign('app_product_app_aid_foreign');
+			$table->dropForeign('app_product_product_pid_foreign');
+		});
+
 		Schema::dropIfExists('apps');
 	}
 }
