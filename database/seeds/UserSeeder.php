@@ -20,7 +20,7 @@ class UserSeeder extends Seeder {
 			'email' => 'wes@plusnarrative.com',
 			'password' => bcrypt('devport'),
 			'email_verified_at' => $now,
-			'developer_id' => 'thisisnotadeveloperid',
+			'developer_id' => '2a940d6f-22ce-4d58-9844-a5b4bd7fc689',
 			'profile_picture' => '/storage/profile/profile-1.svg',
 		]);
 

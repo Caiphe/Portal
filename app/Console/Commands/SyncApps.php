@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\App;
+use App\Country;
 use App\Services\ApigeeService;
 use Illuminate\Console\Command;
 
@@ -37,7 +38,10 @@ class SyncApps extends Command {
 	 */
 	public function handle() {
 		$this->info("Getting apps from Apigee");
-		$apps = ApigeeService::getOrgApps('approved', 0);
+		$apps = ApigeeService::getOrgApps('all', 0);
+		$countries = Country::all();
+		$countriesByCode = $countries->pluck('id', 'code');
+		$countriesByName = $countries->pluck('id', 'name');
 
 		$this->info("Start syncing apps");
 
@@ -46,24 +50,42 @@ class SyncApps extends Command {
 
 			$attributes = ApigeeService::getAppAttributes($app['attributes']);
 
+			$apiProducts = array_reduce($app['credentials']['apiProducts'], function ($carry, $product) {
+				$carry[$product['apiproduct']] = ['status' => $product['status']];
+				return $carry;
+			}, []);
+			unset($app['credentials']['apiProducts']);
+
+			if (isset($attributes['DisplayName']) && !empty($attributes['DisplayName'])) {
+				$displayName = $attributes['DisplayName'];
+			} else {
+				$displayName = $app['name'];
+			}
+
+			$countryId = null;
+			if (isset($attributes['Country']) && strlen($attributes['Country']) === 2) {
+				$countryId = $countriesByCode[$attributes['Country']];
+			} else if (isset($attributes['Country']) && isset($countriesByName[$attributes['Country']])) {
+				$countryId = $countriesByName[$attributes['Country']];
+			}
+
 			$a = App::updateOrCreate(
 				["aid" => $app['appId']], [
 					"aid" => $app['appId'],
 					"name" => $app['name'],
-					"display_name" => $attributes['DisplayName'] ?? $app['name'],
+					"display_name" => $displayName,
 					"callback_url" => $app['callbackUrl'],
-					"attributes" => json_encode($attributes),
+					"attributes" => $attributes,
+					"credentials" => $app['credentials'],
 					"developer_id" => $app['developerId'],
 					"status" => $app['status'],
 					"description" => $attributes['Description'] ?? '',
+					"country_id" => $countryId,
 					"updated_at" => date('Y-m-d H:i:s', $app['lastModifiedAt'] / 1000),
 					"created_at" => date('Y-m-d H:i:s', $app['createdAt'] / 1000),
 				]);
 
-			$a->products()->sync(array_reduce($app['credentials']['apiProducts'], function ($carry, $product) {
-				$carry[$product['apiproduct']] = ['status' => $product['status']];
-				return $carry;
-			}, []));
+			$a->products()->sync($apiProducts);
 		}
 	}
 }

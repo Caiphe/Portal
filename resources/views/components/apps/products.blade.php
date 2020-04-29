@@ -1,9 +1,9 @@
 @props(['products'])
 
 @foreach($products as $product)
-    <a href="/products/@strSlug($product['apiproduct'])" class="product" data-name="{{ $product['apiproduct'] }}" data-status="{{ $product['status'] }}">
-        <span class="status-{{ $product['status'] }}"></span>
-        <span class="name">{{ $product['apiproduct'] }}</span>
+    <a href="{{route('product.show', $product['slug'])}}" class="product" data-name="{{ $product['name'] }}" data-status="{{ $product['status'] }}">
+        <span class="status-{{ $product['pivot']['status'] }}"></span>
+        <span class="name">{{ $product['display_name'] }}</span>
         @if(Request::is('dashboard'))
             <button class="product-approve" data-action="approve">
                 @svg('thumbs-up', '#000000')

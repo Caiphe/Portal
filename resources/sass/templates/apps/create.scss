@@ -63,13 +63,13 @@
             margin-top: 20px;
             padding: 40px;
 
-            > div {
+            >div {
                 width: 100%;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
 
-                > svg {
+                >svg {
                     display: flex;
                     margin-left: auto;
                     margin-right: auto;
@@ -78,7 +78,7 @@
                     width: 10%;
                 }
 
-                + div {
+                +div {
                     display: none;
                 }
 
@@ -137,14 +137,28 @@
                     width: 13%;
                     font-size: 14px;
                     text-align: center;
+                    cursor: pointer;
+                    position: relative;
 
                     svg {
                         margin-bottom: 15px;
                         width: 60%;
                     }
 
-                    &:hover {
-                        cursor: pointer;
+                    .country-checked {
+                        border: 2px solid $grey900;
+                        position: absolute;
+                        top: -2px;
+                        left: -2px;
+                        width: calc(100% + 4px);
+                        height: calc(100% + 4px);
+                        border-radius: 5px;
+                        opacity: 0;
+                        pointer-events: none;
+                    }
+
+                    .country-checkbox:checked+.country-checked {
+                        opacity: 1;
                     }
                 }
 

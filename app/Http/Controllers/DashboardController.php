@@ -11,15 +11,16 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller {
 
 	public function index(ProductLocationService $productLocationService) {
-		return ApigeeService::getOrgApps('approved');
-		$approvedApps = $this->apps(ApigeeService::getOrgApps('approved'), $approvedApps = []);
-		$revokedApps = $this->apps(ApigeeService::getOrgApps('revoked'), $revokedApps = []);
+		$approvedApps = App::with(['developer', 'products', 'country'])
+			->byStatus('approved')
+			->orderBy('updated_at', 'desc')
+			->take(10)
+			->get();
 
 		[$products, $countries] = $productLocationService->fetch();
 
 		return view('templates.dashboard.index', [
-			'approvedApps' => $approvedApps ?? [],
-			'revokedApps' => $revokedApps ?? [],
+			'approvedApps' => $approvedApps,
 			'countries' => $countries,
 		]);
 	}
@@ -34,23 +35,5 @@ class DashboardController extends Controller {
 
 	public function destroy($id, Request $request) {
 		dd($request->all());
-	}
-
-	/**
-	 * @param array $apigeeApps
-	 * @param array $outputArray
-	 *
-	 * @return array
-	 */
-	public function apps(array $apigeeApps, array $outputArray) {
-		foreach ($apigeeApps['app'] as $key => $app) {
-			$outputArray[] = $app;
-		}
-
-		usort($outputArray, function ($a, $b) {
-			return ($a['createdAt'] < $b['createdAt']) ? -1 : 1;
-		});
-
-		return array_reverse($outputArray, true);
 	}
 }

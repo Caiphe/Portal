@@ -74,7 +74,8 @@
                     @foreach($countries as $key => $country)
                         <label class="country" for="country-{{ $loop->index + 1 }}" data-location="{{ $key }}">
                             @svg('$key', '#000000', 'images/locations')
-                            <input type="checkbox" id="country-{{ $loop->index + 1 }}" name="country-checkbox" data-location="{{ $key }}">
+                            <input type="radio" id="country-{{ $loop->index + 1 }}" class="country-checkbox" name="country-checkbox" value="{{ $key }}" data-location="{{ $key }}">
+                            <div class="country-checked"></div>
                             {{ $country }}
                         </label>
                     @endforeach
@@ -82,7 +83,7 @@
 
                 <div class="form-actions">
                     <button class="dark outline back">Back</button>
-                    <button class="dark next">
+                    <button class="dark next" id="select-products-button">
                         Select products
                         @svg('arrow-forward', '#ffffff')
                     </button>
@@ -107,14 +108,14 @@
                             @foreach ($products as $product)
                                 @php
                                     $tags = array($product->group, $product->category);
-                                    $href = "/products/$product->slug";
+                                    $href = route('product.show', $product->slug);
                                 @endphp
                                 <x-card-product :title="$product->display_name"
                                                 class="product-block"
                                                 :href="$href"
                                                 :tags="$tags"
-                                                :addButtonId="$product->id"
-                                                :data-title="$product->display_name"
+                                                :addButtonId="$product->slug"
+                                                :data-title="$product->name"
                                                 :data-group="$product->group"
                                                 :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}
                                 </x-card-product>
@@ -159,7 +160,6 @@
 
             buttons[i].addEventListener('click', function (event) {
                 event.preventDefault();
-                console.log(form.firstElementChild);
                 if(form.firstElementChild.classList.contains('active')) {
 
                     nav.querySelector('a').nextElementSibling.classList.add('active');
@@ -241,25 +241,13 @@
     }
 
     function selectCountry(event) {
-        var select = event.currentTarget;
-
-        select.classList.toggle('selected');
-        select.querySelector('input[type=checkbox]').classList.toggle('selected');
-
-        var selected = [];
-        var countryCheckBoxes = document.querySelectorAll('input[type=checkbox]:checked');
-
-        for (var m = 0; m < countryCheckBoxes.length; m++) {
-
-            selected.push(countryCheckBoxes[m].dataset.location);
-
-            countryCheckBoxes[m].classList.add('selected');
-            countryCheckBoxes[m].parentElement.classList.add('selected');
-
-        }
+        var countryRadioBoxes = document.querySelectorAll('.country-checkbox:checked')[0];
+        var selected = [countryRadioBoxes.dataset.location];
 
         filterLocations(selected);
         filterProducts(selected);
+
+        document.getElementById('select-products-button').click();
     }
 
     function filterLocations(selected) {
@@ -343,11 +331,13 @@
 
         var button = document.getElementById('create');
         button.disabled = true;
+        button.textContent = 'Creating...';
 
         var app = {
             name: document.querySelector('#name').value,
             url: document.querySelector('#url').value,
             description: document.querySelector('#description').value,
+            country: document.querySelector('.country-checkbox:checked').dataset.location,
             products: []
         };
 
@@ -355,10 +345,10 @@
 
         var products = [];
         for(i = 0; i < selectedProducts.length; i++) {
-            products.push(selectedProducts[i].id);
+            products.push(selectedProducts[i].dataset.name);
         }
 
-        app.products.push(products);
+        app.products = products;
 
         var url = "{{ route('app.store') }}";
         var xhr = new XMLHttpRequest();
@@ -371,18 +361,25 @@
         xhr.send(JSON.stringify(app));
 
         xhr.onload = function() {
+            window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: 'smooth'
+            });
+
             if (xhr.status === 200) {
-                window.scrollTo({
-                    top: 0,
-                    left: 0,
-                    behavior: 'smooth'
-                });
 
                 addAlert('success', 'Application created successfully');
 
-                setTimeout(function(){
-                    window.location.href = "{{ route('app.index') }}";
-                }, 1000);
+                // setTimeout(function(){
+                //     window.location.href = "{{ route('app.index') }}";
+                // }, 1000);
+            } else {
+                result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+                addAlert('error', result.message || 'Sorry there was a problem creating your app. Please try again.');
+
+                button.removeAttributer('disabled');
+                button.textContent = 'Create';
             }
         };
     }

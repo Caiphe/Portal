@@ -17,8 +17,7 @@
 
     $icon: map-get($icons, $icon);
     $data-svg-prefix: 'data:image/svg+xml;utf-8,';
-    $placeholder: '#000000';
-    $data-uri: str-replace(url($data-svg-prefix + $icon ), $placeholder, $colour);
+    $data-uri: str-replace(url($data-svg-prefix + $icon ), '2000/svg"', '2000/svg" fill="' + $colour + '"');
 
     @return str-replace($data-uri, '#', '%23');
 }

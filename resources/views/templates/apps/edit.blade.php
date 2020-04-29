@@ -1,5 +1,5 @@
 @push('styles')
-    <link rel="stylesheet" href="/css/templates/apps/create.css">
+    <link rel="stylesheet" href="{{mix('/css/templates/apps/create.css')}}">
 @endpush
 
 @extends('layouts.sidebar')
@@ -21,7 +21,7 @@
 @endsection
 
 @section('title')
-    Edit app
+    Edit {{$data['display_name']}}
 @endsection
 
 @section('content')
@@ -48,17 +48,17 @@
                     @svg('app-avatar', '#ffffff')
                     <div class="group">
                         <label for="name">Name your app *</label>
-                        <input type="text" name="name" id="name" placeholder="Enter name" required value="{{ $data['attributes'][1]['value'] }}">
+                        <input type="text" name="name" id="name" placeholder="Enter name" required value="{{ $data['name'] }}">
                     </div>
 
                     <div class="group">
                         <label for="url">Callback url</label>
-                        <input type="url" name="url" id="url" placeholder="Enter callback url" value="{{ $data['callbackUrl'] }}">
+                        <input type="url" name="url" id="url" placeholder="Enter callback url" value="{{ $data['callback_url'] }}">
                     </div>
 
                     <div class="group">
                         <label for="description">Description</label>
-                        <textarea name="description" id="description" rows="5" placeholder="Enter description">{{ $data['attributes'][0]['value'] }}</textarea>
+                        <textarea name="description" id="description" rows="5" placeholder="Enter description">{{ $data['description'] }}</textarea>
                     </div>
 
                     <button class="dark next">
@@ -74,7 +74,8 @@
                         @foreach($countries as $key => $country)
                             <label class="country" for="country-{{ $loop->index + 1 }}" data-location="{{ $key }}">
                                 @svg('$key', '#000000', 'images/locations')
-                                <input type="checkbox" id="country-{{ $loop->index + 1 }}" name="country-checkbox" data-location="{{ $key }}">
+                                <input type="radio" id="country-{{ $loop->index + 1 }}" class="country-checkbox" name="country-checkbox" value="{{ $key }}" data-location="{{ $key }}">
+                                <div class="country-checked"></div>
                                 {{ $country }}
                             </label>
                         @endforeach
@@ -82,7 +83,7 @@
 
                     <div class="form-actions">
                         <button class="dark outline back">Back</button>
-                        <button class="dark next">
+                        <button id="select-products-button" class="dark next">
                             Select products
                             @svg('arrow-forward', '#ffffff')
                         </button>
@@ -108,15 +109,16 @@
                                     @php
                                         $tags = array($product->group, $product->category);
                                         $class = in_array($product->name, $selectedProducts) ? 'product-block selected' : 'product-block';
+                                        $href = route('product.show', $product->slug);
                                     @endphp
                                     <x-card-product :title="$product->display_name"
                                                     :class="$class"
-                                                    :href="$product->slug"
+                                                    :href="$href"
                                                     :tags="$tags"
-                                                    :addButtonId="$product->id"
-                                                    :data-title="$product->display_name"
+                                                    :addButtonId="$product->slug"
+                                                    :data-title="$product->name"
                                                     :data-group="$product->group"
-                                                    :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}
+                                                    :data-locations="$product->locations">{{ $product->description ?: 'View the product' }}
                                     </x-card-product>
                                 @endforeach
                             </div>
@@ -125,9 +127,7 @@
 
                     <div class="form-actions">
                         <button class="dark outline back">Back</button>
-                        <button class="dark" id="update">
-                            Update app
-                        </button>
+                        <button class="dark" id="update">Update app</button>
                     </div>
                 </div>
 
@@ -247,25 +247,13 @@
         }
 
         function selectCountry(event) {
-            var select = event.currentTarget;
-
-            select.classList.toggle('selected');
-            select.querySelector('input[type=checkbox]').classList.toggle('selected');
-
-            var selected = [];
-            var countryCheckBoxes = document.querySelectorAll('input[type=checkbox]:checked');
-
-            for (var m = 0; m < countryCheckBoxes.length; m++) {
-
-                selected.push(countryCheckBoxes[m].dataset.location);
-
-                countryCheckBoxes[m].classList.add('selected');
-                countryCheckBoxes[m].parentElement.classList.add('selected');
-
-            }
+            var countryRadioBoxes = document.querySelectorAll('.country-checkbox:checked')[0];
+            var selected = [countryRadioBoxes.dataset.location];
 
             filterLocations(selected);
             filterProducts(selected);
+
+            document.getElementById('select-products-button').click();
         }
 
         function filterLocations(selected) {
@@ -352,25 +340,30 @@
         function handleUpdate(event) {
             event.preventDefault();
 
+            document.getElementById('update').textContent = "Updating...";
+
             var app = {
                 key: '{{$data['credentials']['consumerKey'] ?? ''}}',
                 name: {!! json_encode($data['name']) !!},
                 new_name: document.querySelector('#name').value,
                 url: document.querySelector('#url').value,
                 description: document.querySelector('#description').value,
+                country: document.querySelector('.country-checkbox:checked').dataset.location,
                 products: [],
-                original_products: @json(array_column($data['credentials']['apiProducts'], 'apiproduct')),
+                original_products: @json(array_column($data['products']->toArray(), 'name')),
                 _method: 'PUT'
             };
+
+            var result;
 
             var selectedProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
 
             var products = [];
             for(i = 0; i < selectedProducts.length; i++) {
-                products.push(selectedProducts[i].id);
+                products.push(selectedProducts[i].dataset.name);
             }
 
-            app.products.push(products);
+            app.products = products;
 
             var url = "{{ route('app.update', $data) }}";
             var xhr = new XMLHttpRequest();
@@ -383,19 +376,25 @@
             xhr.send(JSON.stringify(app));
 
             xhr.onload = function() {
+                window.scrollTo({
+                    top: 0,
+                    left: 0,
+                    behavior: 'smooth'
+                });
+
                 if (xhr.status === 200) {
-                    window.scrollTo({
-                        top: 0,
-                        left: 0,
-                        behavior: 'smooth'
-                    });
-                    
+
                     addAlert('success', 'Application updated successfully');
 
                     setTimeout(function(){
                         window.location.href = "{{ route('app.index') }}";
                     }, 1000);
+                } else {
+                    result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+                    addAlert('error', result.message || 'Sorry there was a problem updating your app. Please try again.');
                 }
+
+                document.getElementById('update').textContent = "Update";
             };
         }
     </script>

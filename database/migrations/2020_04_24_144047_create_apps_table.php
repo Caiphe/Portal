@@ -19,9 +19,11 @@ class CreateAppsTable extends Migration {
 			$table->string('slug');
 			$table->string('callback_url')->nullable();
 			$table->json('attributes');
+			$table->json('credentials');
 			$table->string('developer_id');
 			$table->string('status');
 			$table->text('description');
+			$table->string('country_id')->nullable();
 			$table->timestamps();
 		});
 
@@ -30,7 +32,7 @@ class CreateAppsTable extends Migration {
 
 			$table->string('app_aid');
 			$table->string('product_pid');
-			$table->string('status');
+			$table->string('status')->default('pending');
 
 			$table->foreign('app_aid')
 				->references('aid')

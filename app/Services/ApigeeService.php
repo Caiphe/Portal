@@ -80,7 +80,16 @@ class ApigeeService {
 	}
 
 	public static function getDeveloperDetails(string $developer_id) {
-		return self::get("/developers/{$developer_id}?expand=true");
+		$developer = self::get("/developers/{$developer_id}?expand=true");
+
+		return [
+			'first_name' => $developer['firstName'],
+			'last_name' => $developer['lastName'],
+			'email' => $developer['email'],
+			'developer_id' => $developer['developerId'],
+			'created_at' => date('Y-m-d H:i:s', $developer['createdAt'] / 1000),
+			'updated_at' => date('Y-m-d H:i:s', $developer['lastModifiedAt'] / 1000),
+		];
 	}
 
 	public static function getDeveloperApps($email) {
@@ -124,11 +133,7 @@ class ApigeeService {
 		return self::post("developers/{$id}/apps/{$app}/{$key}/apiproducts/{$product}", ['action' => $action]);
 	}
 
-	protected static function HttpWithBasicAuth() {
-		return Http::withBasicAuth(config('apigee.username'), config('apigee.password'));
-	}
-
-	protected static function getLatestCredentials(array $credentials) {
+	public static function getLatestCredentials(array $credentials) {
 		for ($i = count($credentials) - 1; $i >= 0; $i--) {
 			if ($credentials[$i]['status'] === 'approved') {
 				return $credentials[$i];
@@ -136,5 +141,9 @@ class ApigeeService {
 		}
 
 		return end($credentials);
+	}
+
+	protected static function HttpWithBasicAuth() {
+		return Http::withBasicAuth(config('apigee.username'), config('apigee.password'));
 	}
 }
