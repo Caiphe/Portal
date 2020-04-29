@@ -16,6 +16,7 @@ class AppController extends Controller {
 	public function index() {
 		$apps = App::with(['products', 'country'])
 			->byUserEmail(\Auth::user()->email)
+			->orderBy('updated_at', 'desc')
 			->get()
 			->groupBy('status');
 

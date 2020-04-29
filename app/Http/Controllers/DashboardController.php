@@ -11,11 +11,44 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller {
 
 	public function index(ProductLocationService $productLocationService) {
-		$approvedApps = App::with(['developer', 'products', 'country'])
+		$user = auth()->user();
+		$user->load('responsibleCountries');
+
+		$apigeeDevelopers = [];
+		foreach (ApigeeService::get('developers?expand=true')['developer'] as $developer) {
+			$apigeeDevelopers[$developer['developerId']] = [
+				'first_name' => $developer['firstName'],
+				'last_name' => $developer['lastName'],
+				'email' => $developer['email'],
+				'developer_id' => $developer['developerId'],
+			];
+		}
+
+		$apps = App::with(['developer', 'products', 'country'])
 			->byStatus('approved')
 			->orderBy('updated_at', 'desc')
-			->take(10)
-			->get();
+			->get()
+			->toArray();
+
+		$approvedApps = [];
+		$responsibleCountries = $user->responsibleCountries->pluck('code')->toArray();
+		foreach ($apps as $app) {
+			$appCountries = ApigeeService::getAppCountries(array_column($app['products'], 'name'));
+			if (!$user->hasRole('admin')) {
+				$appCountriesCodes = $appCountries->keys()->toArray();
+				if (count(array_intersect($responsibleCountries, $appCountriesCodes)) > 0) {
+					$app['developer'] = $apigeeDevelopers[$app['developer_id']];
+					$app['countries'] = $appCountries;
+					$approvedApps[] = $app;
+				};
+
+				continue;
+			}
+
+			$app['developer'] = $apigeeDevelopers[$app['developer_id']];
+			$app['countries'] = $appCountries;
+			$approvedApps[] = $app;
+		}
 
 		[$products, $countries] = $productLocationService->fetch();
 

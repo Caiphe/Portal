@@ -5,29 +5,17 @@ namespace App\Services;
 use App\Country;
 use App\Product;
 
-class ProductLocationService
-{
-    public function fetch()
-    {
-        $products = Product::isPublic()
-            ->get()
-            ->sortBy('category')
-            ->groupBy('category');
+class ProductLocationService {
+	public function fetch() {
+		$products = Product::isPublic()->get();
 
-        $productLocations = Product::isPublic()
-            ->whereNotNull('locations')
-            ->select('locations')
-            ->get()
-            ->implode('locations', ',');
+		$countryCodes = $products->pluck('locations')->implode(',');
 
-        $productLocations = array_unique(explode(',', $productLocations));
+		$products = $products->sortBy('category')
+			->groupBy('category');
 
-        $filteredCountries = Country::whereIn('code', $productLocations)->get();
+		$countries = Country::whereIn('code', explode(',', $countryCodes))->pluck('name', 'code');
 
-        $countries = $filteredCountries->each(function ($query) {
-            return $query;
-        })->pluck('name', 'code');
-
-        return array($products, $countries);
-    }
+		return array($products, $countries);
+	}
 }
