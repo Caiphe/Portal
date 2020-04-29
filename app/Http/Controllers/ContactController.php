@@ -6,7 +6,8 @@ use App\Http\Requests\ContactRequest;
 use App\Mail\ContactMail;
 use Illuminate\Support\Facades\Mail;
 
-class ContactController extends Controller {
+class ContactController extends Controller
+{
 	public function index() {
 		return view('templates.contact.index');
 	}
