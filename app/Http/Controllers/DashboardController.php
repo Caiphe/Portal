@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\App;
 use App\Http\Requests\UpdateStatusRequest;
+use App\Product;
 use App\Services\ApigeeService;
 use App\Services\ProductLocationService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller {
@@ -13,6 +15,7 @@ class DashboardController extends Controller {
 	public function index(ProductLocationService $productLocationService) {
 		$user = auth()->user();
 		$user->load('responsibleCountries');
+		$isAdmin = $user->hasRole('admin');
 
 		$apigeeDevelopers = [];
 		foreach (ApigeeService::get('developers?expand=true')['developer'] as $developer) {
@@ -25,6 +28,15 @@ class DashboardController extends Controller {
 		}
 
 		$apps = App::with(['developer', 'products', 'country'])
+			->whereHas('products', function (Builder $query) use ($user, $isAdmin) {
+				$q = $query
+					->whereNotNull('swagger')
+					->where('status', 'pending');
+				if (!$isAdmin) {
+					$responsibleCountriesCode = $user->responsibleCountries->pluck('code')->implode('|');
+					$q->whereRaw("CONCAT(\",\", `locations`, \",\") REGEXP \",(" . $responsibleCountriesCode . "),\"");
+				}
+			})
 			->byStatus('approved')
 			->orderBy('updated_at', 'desc')
 			->get()
@@ -34,8 +46,8 @@ class DashboardController extends Controller {
 		$responsibleCountries = $user->responsibleCountries->pluck('code')->toArray();
 		foreach ($apps as $app) {
 			$appCountries = ApigeeService::getAppCountries(array_column($app['products'], 'name'));
-			if (!$user->hasRole('admin')) {
-				$appCountriesCodes = $appCountries->keys()->toArray();
+			if (!$isAdmin) {
+				$appCountriesCodes = array_keys($appCountries);
 				if (count(array_intersect($responsibleCountries, $appCountriesCodes)) > 0) {
 					$app['developer'] = $apigeeDevelopers[$app['developer_id']];
 					$app['countries'] = $appCountries;

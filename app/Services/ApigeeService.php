@@ -116,10 +116,30 @@ class ApigeeService {
 
 	public static function getAppCountries(array $products) {
 		$countryCodes = Product::whereIn('name', $products)
-			->pluck('locations')
-			->implode(',');
+			->pluck('locations')->all();
 
-		return Country::whereIn('code', explode(',', $countryCodes))->pluck('name', 'code');
+		$countryCodesArr = [];
+		foreach ($countryCodes as $codes) {
+			if (empty($codes) || $codes === 'all') {
+				continue;
+			}
+
+			$countryCodesArr[] = explode(',', $codes);
+		}
+
+		if (empty($countryCodesArr)) {
+			return ['all' => 'All'];
+		} else if (count($countryCodesArr) > 1) {
+			$countryCodes = call_user_func_array('array_intersect', $countryCodesArr);
+		} else {
+			$countryCodes = $countryCodesArr[0];
+		}
+
+		if (empty($countryCodes)) {
+			return ['mix' => 'Mix'];
+		}
+
+		return Country::whereIn('code', $countryCodes)->pluck('name', 'code')->toArray();
 	}
 
 	public static function updateProductStatus(string $id, string $app, string $key, string $product, string $action) {

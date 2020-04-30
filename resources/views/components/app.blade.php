@@ -5,7 +5,7 @@
 @props(['app', 'details', 'type', 'attr', 'countries'])
 
 <div class="app" data-name="{{ $app['name'] }}" data-id="{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
-     data-locations="{{ implode(',', $countries->keys()->all()) }}">
+     data-locations="{{ implode(',', $countries) }}">
     <div class="column">
         <p class="name">
             @svg('app-avatar', '#fff')
@@ -20,8 +20,8 @@
             @endif
         @endforeach
 
-        @if($countries->count() > 1)
-        + {{ $countries->count() - 1 }} more
+        @if(count($countries) > 1)
+        + {{ count($countries) - 1 }} more
         @endif
     </div>
     @else
@@ -128,7 +128,6 @@
             @can('administer-dashboard')
             <button class="product-all" data-action="approve">Approve all</button>
             <button class="product-all" data-action="revoke">Revoke all</button>
-            <button class="complete">Complete</button>
             @else
             <button>View only</button>
             @endcan

@@ -28,7 +28,6 @@ Route::middleware('verified')->group(function () {
 
 	Route::post('apps/{product}/approve', 'DashboardController@update')->name('app.product.approve');
 	Route::post('apps/{product}/revoke', 'DashboardController@update')->name('app.product.revoke');
-	Route::delete('apps/{id}/complete', 'DashboardController@destroy')->name('app.products.complete');
 
 	Route::get('profile', 'UserController@show')->name('user.profile');
 	Route::put('profile/{user}/update', 'UserController@update')->name('user.profile.update');

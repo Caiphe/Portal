@@ -79,8 +79,8 @@
                             <x-app
                                     :app="$app"
                                     :attr="$app['attributes']"
-                                    :details="$app['developer'] ?: App\Services\ApigeeService::getDeveloperDetails($app['developer_id'])"
-                                    :countries="$app['country'] ? $app->country()->pluck('name', 'code') : App\Services\ApigeeService::getAppCountries($app['products']->pluck('name')->toArray())"
+                                    :details="$app['developer']"
+                                    :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products->pluck('name')->toArray())"
                                     :type="$type = 'approved'">
                                 </x-app>
                             @endif
@@ -126,8 +126,8 @@
                                 <x-app
                                     :app="$app"
                                     :attr="$app['attributes']"
-                                    :details="$app['developer'] ?: App\Services\ApigeeService::getDeveloperDetails($app['developer_id'])"
-                                    :countries="$app['country'] ? $app->country()->pluck('name', 'code') : App\Services\ApigeeService::getAppCountries($app['products']->pluck('name')->toArray())"
+                                    :details="$app['developer']"
+                                    :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products->pluck('name')->toArray())"
                                     :type="$type = 'revoked'">
                                 </x-app>
                             @endif
