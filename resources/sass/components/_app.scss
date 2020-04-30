@@ -118,13 +118,18 @@
         }
 
         svg {
-            margin-right: 5px;
+            margin: 0 5px 5px 0;
             width: 20px;
+        }
+
+        .country-flags{
+            flex-wrap: wrap;
+            display: flex;
         }
 
         >div {
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
 
             >div:first-of-type {
                 padding-right: 30px;

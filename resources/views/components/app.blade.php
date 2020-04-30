@@ -44,8 +44,8 @@
         @if(Request::is('dashboard'))
             <div>
                 <div>
-                    <p><strong>Developer name:</strong></p>
-                    <p><strong>Developer email:</strong></p>
+                    <p><strong>Developer name:</strong> </p>
+                    <p><strong>Developer email:</strong> </p>
                 </div>
                 <div>
                     <p id="developer-name">{{ $details['first_name']  . ' ' . $details['last_name'] }}</p>
@@ -53,13 +53,14 @@
                     <input id="developer-key" type="hidden" value="{{ $app['credentials']['consumerKey']  }}">
                     <input id="developer-id" type="hidden" value="{{ $details['developer_id']  }}">
                 </div>
-                <div class="dashboard-countries">
+                <div class="copy-column"><!--This is a placeholder--></div>
+                <div>
                     <p><strong>Countries:</strong></p>
                 </div>
                 <div>
-                    <div>
+                    <div class="country-flags">
                         @foreach($countries as $key => $country)
-                            <span title="{{$country}}">@svg($key, '#000000', 'images/locations')</span>
+                            @svg($key, '#000000', 'images/locations')
                         @endforeach
                     </div>
                 </div>
@@ -91,20 +92,20 @@
                     </button>
                 </div>
                 <div>
-                    <p><strong>Countries:</strong></p>
                     <p><strong>Key issued:</strong></p>
                     <p><strong>Expires:</strong></p>
+                    <p><strong>Countries:</strong></p>
                 </div>
                 <div>
-                    <div>
-                        @foreach($countries as $key => $country)
-                            @svg($key, '#000000', 'images/locations')
-                        @endforeach
-                    </div>
                     <p>
                         {{ date('d M Y H:i:s', substr($app['credentials']['issuedAt'], 0, 10)) }}
                     </p>
                     <p>Never</p>
+                    <div class="country-flags">
+                        @foreach($countries as $key => $country)
+                            @svg($key, '#000000', 'images/locations')
+                        @endforeach
+                    </div>
                 </div>
             </div>
         @endif
