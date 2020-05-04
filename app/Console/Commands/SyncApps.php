@@ -7,7 +7,8 @@ use App\Country;
 use App\Services\ApigeeService;
 use Illuminate\Console\Command;
 
-class SyncApps extends Command {
+class SyncApps extends Command
+{
 	/**
 	 * The name and signature of the console command.
 	 *
@@ -27,7 +28,8 @@ class SyncApps extends Command {
 	 *
 	 * @return void
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
 	}
 
@@ -36,7 +38,8 @@ class SyncApps extends Command {
 	 *
 	 * @return mixed
 	 */
-	public function handle() {
+	public function handle()
+	{
 		$this->info("Getting apps from Apigee");
 		$apps = ApigeeService::getOrgApps('all', 0);
 		$countries = Country::all();
@@ -70,7 +73,8 @@ class SyncApps extends Command {
 			}
 
 			$a = App::updateOrCreate(
-				["aid" => $app['appId']], [
+				["aid" => $app['appId']],
+				[
 					"aid" => $app['appId'],
 					"name" => $app['name'],
 					"display_name" => $displayName,
@@ -83,7 +87,8 @@ class SyncApps extends Command {
 					"country_id" => $countryId,
 					"updated_at" => date('Y-m-d H:i:s', $app['lastModifiedAt'] / 1000),
 					"created_at" => date('Y-m-d H:i:s', $app['createdAt'] / 1000),
-				]);
+				]
+			);
 
 			$a->products()->sync($apiProducts);
 		}
