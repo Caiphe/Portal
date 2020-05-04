@@ -61,65 +61,16 @@
                 <div class="body">
                     @forelse($approvedApps as $app)
                         @if(!empty($app['attributes']))
-                            <x-app
-                                :app="$app"
-                                :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"
-                                :details="App\Services\ApigeeService::getDeveloperDetails($app['developerId'])"
-                                :countries="App\Services\ApigeeService::getAppCountries(array_column($app['credentials']['apiProducts'], 'apiproduct'))"
-                                :type="$type = 'approved'">
-                            </x-app>
-
-
+                        <x-app
+                            :app="$app"
+                            :attr="$app['attributes']"
+                            :details="$app['developer']"
+                            :countries="$app['countries']"
+                            :type="$type = 'approved'">
+                        </x-app>
                         @endif
                     @empty
                         <p>No approved apps.</p>
-                    @endforelse
-                </div>
-            </div>
-        </div>
-
-        <div class="row" id="app">
-            <div class="heading-app">
-                @svg('chevron-down', '#000000')
-
-                <h3>Revoked Apps</h3>
-            </div>
-
-            <div class="my-apps">
-                <div class="head">
-                    <div class="column">
-                        <p>App name</p>
-                    </div>
-
-                    <div class="column">
-                        <p>Reason</p>
-                    </div>
-
-                    <div class="column">
-                        <p>Developer email</p>
-                    </div>
-
-                    <div class="column">
-                        <p>Date created</p>
-                    </div>
-
-                    <div class="column">
-
-                    </div>
-                </div>
-                <div class="body">
-                    @forelse($revokedApps as $app)
-                        @if(!empty($app['attributes']))
-                            <x-app
-                                :app="$app"
-                                :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"
-                                :details="App\Services\ApigeeService::getDeveloperDetails($app['developerId'])"
-                                :countries="App\Services\ApigeeService::getAppCountries(array_column($app['credentials']['apiProducts'], 'apiproduct'))"
-                                :type="$type = 'revoked'">
-                            </x-app>
-                        @endif
-                    @empty
-                        <p>No revoked apps.</p>
                     @endforelse
                 </div>
             </div>
@@ -317,38 +268,6 @@
                 if (xhr.status === 200) {
                     location.reload();
                     addAlert('success', 'Product ' + lookup[action] + ' successfully');
-                }
-            };
-        }
-
-        var productCompleteButtons = document.querySelectorAll('.complete');
-        for(var n = 0; n < productCompleteButtons.length; n++) {
-            productCompleteButtons[n].addEventListener('click', handleCompleteApp)
-        }
-
-        function handleCompleteApp(event) {
-
-            var app = event.currentTarget.parentNode.parentNode;
-            var id = app.dataset.id;
-
-            var data = {
-                id: id,
-                _method: 'DELETE'
-            };
-
-            var xhr = new XMLHttpRequest();
-
-            xhr.open('POST', '/apps/' + id + '/complete');
-            xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
-            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-
-            if(confirm('Are you sure you want to complete this app?')) {
-                xhr.send(JSON.stringify(data));
-            }
-
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    addAlert('success', 'App completed successfully');
                 }
             };
         }

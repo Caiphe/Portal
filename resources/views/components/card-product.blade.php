@@ -54,7 +54,7 @@
 		@isset($addUrl)
 		href="{{$addUrl}}"
 		@endisset
-		id="{{ $addButtonId }}" class="flex button fab plus dark"></a>
+		id="{{ $addButtonId }}" data-name="{{$dataTitle}}" class="flex button fab plus dark"></a>
         @endisset
     </div>
 </div>

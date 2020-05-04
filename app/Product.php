@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\App;
 use App\Content;
 use App\KeyFeature;
 use Illuminate\Database\Eloquent\Model;
@@ -54,6 +55,10 @@ class Product extends Model {
 
 	public function content() {
 		return $this->belongsToMany(Content::class, "content_product", "product_pid");
+	}
+
+	public function apps() {
+		return $this->belongsToMany(App::class, "app_product", "product_pid", "app_aid")->withPivot('status');
 	}
 
 	public function keyFeatures() {

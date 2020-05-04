@@ -20,15 +20,14 @@ Route::get('search', 'SearchController')->name('search');
 Route::middleware('verified')->group(function () {
 	Route::get('apps', 'AppController@index')->name('app.index');
 	Route::get('apps/create', 'AppController@create')->name('app.create');
-	Route::get('apps/{name}/edit', 'AppController@edit')->name('app.edit');
+	Route::get('apps/{app:slug}/edit', 'AppController@edit')->name('app.edit');
 	Route::post('apps', 'AppController@store')->name('app.store');
 
-	Route::put('apps/{name}', 'AppController@update')->name('app.update');
-	Route::delete('apps/{name}', 'AppController@destroy')->name('app.destroy');
+	Route::put('apps/{app:slug}', 'AppController@update')->name('app.update');
+	Route::delete('apps/{app:slug}', 'AppController@destroy')->name('app.destroy');
 
 	Route::post('apps/{product}/approve', 'DashboardController@update')->name('app.product.approve');
 	Route::post('apps/{product}/revoke', 'DashboardController@update')->name('app.product.revoke');
-	Route::delete('apps/{id}/complete', 'DashboardController@destroy')->name('app.products.complete');
 
 	Route::get('profile', 'UserController@show')->name('user.profile');
 	Route::put('profile/{user}/update', 'UserController@update')->name('user.profile.update');

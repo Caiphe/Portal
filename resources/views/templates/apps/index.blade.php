@@ -76,10 +76,11 @@
                     <div class="body">
                         @forelse($approvedApps as $app)
                             @if(!empty($app['attributes']))
-                                <x-app
+                            <x-app
                                     :app="$app"
-                                    :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"
-                                    :countries="App\Services\ApigeeService::getAppCountries(array_column($app['credentials']['apiProducts'], 'apiproduct'))"
+                                    :attr="$app['attributes']"
+                                    :details="$app['developer']"
+                                    :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products->pluck('name')->toArray())"
                                     :type="$type = 'approved'">
                                 </x-app>
                             @endif
@@ -124,8 +125,9 @@
                             @if(!empty($app['attributes']))
                                 <x-app
                                     :app="$app"
-                                    :attr="App\Services\ApigeeService::getAppAttributes($app['attributes'])"
-                                    :countries="App\Services\ApigeeService::getAppCountries(array_column($app['credentials']['apiProducts'], 'apiproduct'))"
+                                    :attr="$app['attributes']"
+                                    :details="$app['developer']"
+                                    :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products->pluck('name')->toArray())"
                                     :type="$type = 'revoked'">
                                 </x-app>
                             @endif
@@ -210,25 +212,25 @@
             var url = '/apps/' + app.dataset.name;
             var xhr = new XMLHttpRequest();
 
+            if(!confirm('Are you sure you want to delete this app?')) {
+                document.querySelector(".menu.show").classList.remove('show');
+                return;
+            }
+
             xhr.open('POST', url, true);
             xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 
-            var deleteApp = confirm('Are you sure you want to delete this app?');
-
-            if(deleteApp) {
                 xhr.send(JSON.stringify(data));
-                document.querySelector(".menu.show").classList.remove('show');
-            } else {
-                document.querySelector(".menu.show").classList.remove('show');
-            }
 
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    window.location.href = "{{ route('app.index') }}";
-                    addAlert('success', 'Application deleted successfully');
-                }
-            };
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        window.location.href = "{{ route('app.index') }}";
+                        addAlert('success', 'Application deleted successfully');
+                    }
+                };
+
+            document.querySelector(".menu.show").classList.remove('show');
         }
 
         document.getElementById('create').addEventListener('click', handleCreateAppClick);

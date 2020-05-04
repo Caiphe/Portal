@@ -54,7 +54,6 @@ function uploadProfilePicture(file) {
     );
 
     var formData = new FormData();
-    formData.append('test', 'test');
     formData.append('profile', file);
 
     xhr.send(formData);
