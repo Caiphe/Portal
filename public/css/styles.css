@@ -1653,6 +1653,11 @@ button.outline.light,
   color: #666666;
 }
 
+button.outline.yellow,
+.button.outline.yellow {
+  color: #FC0;
+}
+
 button.outline.lightest,
 .button.outline.lightest {
   color: #cccccc;
@@ -1663,6 +1668,11 @@ button.outline.lightest:hover,
 .button.outline.light:hover,
 .button.outline.lightest:hover {
   color: #FFF;
+}
+
+button.outline.yellow:hover,
+.button.outline.yellow:hover {
+  color: #1a1a1a;
 }
 
 button:hover,
@@ -2012,6 +2022,11 @@ body > #main {
 .cols:not(.inline) .col-8 {
   flex: 0 0 66.666666%;
   max-width: 66.666666%;
+}
+
+.cols:not(.inline) .col-12 {
+  flex: 0 0 100%;
+  max-width: 100%;
 }
 
 .cols.inline {

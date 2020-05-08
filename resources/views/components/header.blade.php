@@ -8,6 +8,7 @@
                 <div class="product-nav shadow">
                     <div class="nav-left">
                         <a href="/products">Browse all our products</a>
+                        <a href="/bundles">Browse all our bundles</a>
                         <a href="/getting-started">Working with our products</a>
                     </div>
                     <div class="nav-right">

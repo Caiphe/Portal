@@ -72,6 +72,11 @@
             flex: 0 0 66.666666%;
             max-width: 66.666666%;
         }
+
+        .col-12 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
     }
 
     &.inline {

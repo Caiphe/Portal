@@ -1,0 +1,45 @@
+@import "../../variables";
+
+#banner {
+    height: 300px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    flex-shrink: 0;
+}
+
+#main {
+    .heading-box {
+        background-color: $grey900;
+        border-radius: 5px;
+        height: 244px;
+        width: 100%;
+        position: absolute;
+        top: -60px;
+        padding: 40px;
+        color: #FFF;
+
+        h1 {
+            margin: 0;
+            color: #FFF;
+            font-size: 4rem;
+        }
+    }
+
+    .price-box {
+        background-color: $grey200;
+        width: 220px;
+        height: 325px;
+        position: absolute;
+        top: -100px;
+        right: 0;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+
+        h3 {
+            font-size: 3rem;
+            margin-top: 0;
+        }
+    }
+}
