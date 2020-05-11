@@ -172,6 +172,7 @@
     position: relative;
 
     @media screen and (min-width: 1440px) {
+
         &:before,
         &:after {
             content: "";
@@ -181,11 +182,21 @@
             position: absolute;
             top: 0;
         }
+
         &:before {
             left: 100%;
         }
+
         &:after {
             right: 100%;
         }
     }
+}
+
+.centre {
+    text-align: center;
+}
+
+.centre-flex {
+    justify-content: center;
 }

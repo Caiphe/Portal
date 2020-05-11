@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use App\Product;
+use App\KeyFeature;
 
 class Bundle extends Model
 {
@@ -28,5 +29,9 @@ class Bundle extends Model
 
     public function content() {
         return $this->belongsToMany(Content::class, "bundle_content", "bundle_bid");
+    }
+
+    public function keyFeatures() {
+        return $this->belongsToMany(KeyFeature::class, "bundle_key_feature", "bundle_bid", "key_feature_id");
     }
 }

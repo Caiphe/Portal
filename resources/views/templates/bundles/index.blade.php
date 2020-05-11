@@ -16,6 +16,11 @@
     </div>
     @endforeach
 
+    <div class="country-filter">
+        <h3>Country</h3>
+        <x-multiselect id="filter-country" name="filter-country" label="Select country" :options="$countries" />
+    </div>
+
     <button id="clearFilter" class="dark outline"
         @isset($selectedCategory)
             style="display:block"
@@ -38,11 +43,11 @@
                 <x-card-product
                     :title="$product->display_name" 
                     :href="route('product.show', $product->slug)"
-                    :countries="explode(',', $product->locations)"
+                    :countries="explode(',', $product->locations ?? 'all')"
                     :tags="[$product->group, $product->category]"
                     :data-title="$product->display_name"
                     :data-group="$product->group"
-                    :data-locations="$product->locations">
+                    :data-locations="$product->locations ?? 'all'">
                     {{ !empty($product->description)?$product->description:'View the product' }}
                 </x-card-product>
                 @endforeach

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Bundle;
+use App\Services\ProductLocationService;
 
 class BundleController extends Controller
 {
@@ -10,12 +11,17 @@ class BundleController extends Controller
      * Show all the bundles
      * @return \Illuminate\View\View Show the view
      */
-    public function index()
+    public function index(ProductLocationService $productLocationService)
     {
         $bundles = Bundle::with('products')->get();
+        $products = $bundles->reduce(function($carry, $bundle){
+            $carry = array_merge($bundle->products->pluck('pid')->toArray(), $carry);
+            return $carry;
+        }, []);
 
         return view('templates.bundles.index', [
-            'bundles' => $bundles
+            'bundles' => $bundles,
+            'countries' => $productLocationService->fetch($products, 'countries')
         ]);
     }
 
@@ -24,24 +30,19 @@ class BundleController extends Controller
      * @param  \App\Bundle $bundle      The bundle that is being requested
      * @return \Illuminate\View\View    Show the view
      */
-    public function show(Bundle $bundle)
+    public function show(Bundle $bundle, ProductLocationService $productLocationService)
     {
-
-        $bundle->load(['products', 'content']);
+        $bundle->load(['products', 'content', 'keyFeatures']);
         $bundles = Bundle::with('products')->get();
-
-        $sidebar = $bundles->reduce(function($carry, $bundle){
-            $carry[$bundle->display_name] = $bundle->products->map(function($product){
-                return [ 'label' => $product['display_name'], 'link' => route('product.show', $product['slug'])];
-            })->toArray();
-
-            return $carry;
-        }, []);
+        $sidebar = $bundles->map(function($bundle){
+            return ['name' => $bundle->display_name, 'slug' => $bundle->slug];
+        });
 
         return view('templates.bundles.show', [
             'bundle' => $bundle,
             'content' => $bundle->content->groupBy('type'),
-            'sidebar' => (array)$sidebar
+            'sidebar' => $sidebar,
+            'countries' => $productLocationService->fetch($bundle->products->pluck('pid')->toArray(), 'countries')
         ]);
     }
 }

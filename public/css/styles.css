@@ -553,6 +553,11 @@ a {
   font-size: 1.8rem;
 }
 
+strong,
+.bold {
+  font-family: "mtn-bold";
+}
+
 pre {
   font-size: 10px;
   background-color: #4d4d4d;
@@ -2397,6 +2402,14 @@ body > #main {
   .layout-master section.grey-bg:after {
     right: 100%;
   }
+}
+
+.centre {
+  text-align: center;
+}
+
+.centre-flex {
+  justify-content: center;
 }
 
 h1.with-icon,
