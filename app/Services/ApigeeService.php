@@ -159,4 +159,34 @@ class ApigeeService {
 	protected static function HttpWithBasicAuth() {
 		return Http::withBasicAuth(config('apigee.username'), config('apigee.password'));
 	}
+
+	/**
+     * Monitisation
+     */
+
+    /**
+     * @param  string $url
+     * 
+     * @return mixed
+     */
+    public static function getMint(string $url)
+    {
+        return self::HttpWithBasicAuth()->get(config('apigee.base_mint') . $url)->json();
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function getBundles()
+    {
+        return self::getMint('monetization-packages');
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function getRatePlans()
+    {
+        return self::getMint('rate-plans');
+    }
 }

@@ -176,6 +176,10 @@ button,
             color: $grey700;
         }
 
+        &.yellow {
+            color: $yellow;
+        }
+
         &.lightest {
             color: $grey500;
         }
@@ -183,6 +187,10 @@ button,
         &.light:hover,
         &.lightest:hover {
             color: #FFF;
+        }
+
+        &.yellow:hover {
+            color: $grey900;
         }
     }
 

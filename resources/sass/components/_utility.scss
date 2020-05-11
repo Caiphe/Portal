@@ -72,6 +72,11 @@
             flex: 0 0 66.666666%;
             max-width: 66.666666%;
         }
+
+        .col-12 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
     }
 
     &.inline {
@@ -167,6 +172,7 @@
     position: relative;
 
     @media screen and (min-width: 1440px) {
+
         &:before,
         &:after {
             content: "";
@@ -176,11 +182,21 @@
             position: absolute;
             top: 0;
         }
+
         &:before {
             left: 100%;
         }
+
         &:after {
             right: 100%;
         }
     }
+}
+
+.centre {
+    text-align: center;
+}
+
+.centre-flex {
+    justify-content: center;
 }

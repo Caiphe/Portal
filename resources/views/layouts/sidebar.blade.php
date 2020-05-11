@@ -18,6 +18,7 @@
 <body class="layout-sidebar">
     <x-header/>
     <x-alert/>
+    @yield('banner')
     <div class="wrapper container">
         <nav id="sidebar">
             @yield('sidebar')

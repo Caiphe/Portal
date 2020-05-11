@@ -34,6 +34,23 @@ class CreateKeyFeaturesTable extends Migration {
 				->on('products')
 				->onDelete('cascade');
 		});
+
+		Schema::create('bundle_key_feature', function (Blueprint $table) {
+			$table->primary(['bundle_bid', 'key_feature_id']);
+
+			$table->string('bundle_bid');
+			$table->unsignedBigInteger('key_feature_id');
+
+			$table->foreign('bundle_bid')
+				->references('bid')
+				->on('bundles')
+				->onDelete('cascade');
+
+			$table->foreign('key_feature_id')
+				->references('id')
+				->on('key_features')
+				->onDelete('cascade');
+		});
 	}
 
 	/**
@@ -47,6 +64,13 @@ class CreateKeyFeaturesTable extends Migration {
 			$table->dropForeign('key_feature_product_product_pid_foreign');
 		});
 
+		// Schema::table('bundle_key_feature', function (Blueprint $table) {
+		// 	$table->dropForeign('bundle_key_feature_key_feature_id_foreign');
+		// 	$table->dropForeign('bundle_key_feature_bundle_bid_foreign');
+		// });
+
+		// Schema::dropIfExists('key_feature_product');
+		// Schema::dropIfExists('bundle_key_feature');
 		Schema::dropIfExists('key_features');
 	}
 }
