@@ -63,6 +63,8 @@ class DashboardController extends Controller {
 		}
 
 		[$products, $countries] = $productLocationService->fetch();
+		$countries['all'] = "Global";
+		$countries['mix'] = "Mixed";
 
 		return view('templates.dashboard.index', [
 			'approvedApps' => $approvedApps,

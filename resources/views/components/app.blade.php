@@ -5,7 +5,7 @@
 @props(['app', 'details', 'type', 'attr', 'countries'])
 
 <div class="app" data-name="{{ $app['name'] }}" data-id="{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
-     data-locations="{{ implode(',', $countries) }}">
+     data-locations="{{ implode(',', array_keys($countries)) }}">
     <div class="column">
         <p class="name">
             @svg('app-avatar', '#fff')
@@ -35,7 +35,7 @@
         @endif
     </div>
     <div class="column">
-        {{ $app['created_at'] }}
+        {{ date('Y-m-d', strtotime($app['created_at'])) }}
     </div>
     <div class="column">
         <button class="actions"></button>
@@ -60,7 +60,7 @@
                 <div>
                     <div class="country-flags">
                         @foreach($countries as $key => $country)
-                            @svg($key, '#000000', 'images/locations')
+                            <span title="{{$country}}">@svg($key, '#000000', 'images/locations')</span>
                         @endforeach
                     </div>
                 </div>

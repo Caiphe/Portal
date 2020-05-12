@@ -15,16 +15,10 @@
     }
 
     .actions {
-        background-color: transparent;
+        background: url('../images/icons/more-vert.svg') no-repeat transparent right center / 24px;
         border: transparent;
-        padding: 0;
         margin-left: auto;
         display: flex;
-
-        &:after {
-            content: '\2807';
-            font-size: 25px;
-        }
     }
 
     .name {

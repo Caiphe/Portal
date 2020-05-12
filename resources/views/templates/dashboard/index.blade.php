@@ -84,7 +84,7 @@
         var headings = document.querySelectorAll('.heading-app');
 
         document.getElementById('filter-text').addEventListener('keyup', filterApps);
-        document.getElementById("filter-country-select").addEventListener('change', filterApps);
+        document.getElementById("filter-country").addEventListener('change', filterApps);
         document.getElementById("filter-country-tags").addEventListener('click', filterApps);
 
         for (var i = 0; i < headings.length; i++) {
@@ -136,16 +136,13 @@
         }
 
         function filterApps() {
-
             var apps = document.querySelectorAll('.app');
-
             var filterText = document.getElementById('filter-text').value;
             var match = new RegExp(filterText, "gi");
+            var locations = [];
             var countrySelect = getSelected(
                 document.getElementById("filter-country")
             );
-
-            console.log(countrySelect);
 
             for (var i = apps.length - 1; i >= 0; i--) {
                 apps[i].style.display = 'none';
@@ -153,7 +150,7 @@
                 textValid =
                     filterText === "" || apps[i].dataset.name.match(match) || apps[i].dataset.developer.match(match);
 
-                var locations =
+                locations =
                     apps[i].dataset.locations !== undefined
                         ? apps[i].dataset.locations.split(",")
                         : ["all"];
@@ -189,17 +186,15 @@
 
         function clearFilter() {
 
-            var countrySelect = getSelected(document.getElementById("filter-country"));
+            var countrySelect = document.querySelectorAll('#filter-country-tags .tag');
 
-            if (countrySelect.length > 0) {
-                clearSelected(document.getElementById("filter-country"));
-                var multiSelectTags = document.getElementById("filter-country-tags");
-                while (multiSelectTags.firstChild) {
-                    multiSelectTags.removeChild(multiSelectTags.firstChild);
-                }
+            for (var i = countrySelect.length - 1; i >= 0; i--) {
+                countrySelect[i].click();
             }
 
             document.getElementById("filter-text").value = "";
+
+            filterApps();
 
             document.getElementById("clearFilter").style.display = "none";
         }
