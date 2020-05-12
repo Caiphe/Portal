@@ -1,4 +1,4 @@
-var event = new Event('multiselect');
+var event = new Event('change');
 
 function multiselectChanged(el) {
     var value = el.value;
