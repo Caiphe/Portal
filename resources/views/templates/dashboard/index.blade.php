@@ -194,6 +194,8 @@
 
             document.getElementById("filter-text").value = "";
 
+            filterApps();
+
             document.getElementById("clearFilter").style.display = "none";
         }
 
