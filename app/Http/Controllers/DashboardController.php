@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\App;
 use App\Http\Requests\UpdateStatusRequest;
-use App\Product;
 use App\Services\ApigeeService;
 use App\Services\ProductLocationService;
 use Illuminate\Database\Eloquent\Builder;
@@ -74,6 +73,8 @@ class DashboardController extends Controller {
 
 	public function update(UpdateStatusRequest $request) {
 		$validated = $request->validated();
+
+		return $validated;
 
 		ApigeeService::updateProductStatus($request->developer_id, $request->app_name, $request->key, $request->product, $request->action);
 
