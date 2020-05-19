@@ -11,9 +11,11 @@ use Illuminate\Http\Request;
 class SearchController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Logic for the search page
      *
-     * @return \Illuminate\Http\Response
+     * @param      \Illuminate\Http\Request  $request  The request
+     *
+     * @return     \Illuminate\View\View     The view
      */
     public function __invoke(Request $request)
     {
@@ -96,7 +98,15 @@ class SearchController extends Controller
         ]);
     }
 
-    protected function findSearchTerm($content, $searchTerm)
+    /**
+     * Finds a search term.
+     *
+     * @param      string  $content     The content
+     * @param      string  $searchTerm  The search term
+     *
+     * @return     string  A sripped down version of the matched search terms
+     */
+    protected function findSearchTerm(string $content, string $searchTerm): string
     {
         $c = preg_replace('/\n|\s+/', ' ', strip_tags($content));
         $termAt = stripos($c, $searchTerm);
