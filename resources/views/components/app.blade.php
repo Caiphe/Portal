@@ -31,7 +31,7 @@
         @if(Request::is('dashboard'))
             {{ $details['email'] ?? '' }}
         @else
-            {{ $app['callback_url'] }}
+            @subStr($app['callback_url'], 30)
         @endif
     </div>
     <div class="column">
@@ -79,7 +79,7 @@
                     <p class="key">
                         <input type="text" name="consumerSecret" id="{{$app['aid']}}-consumer-secret" value="{{ $app['credentials']['consumerSecret']  }}" readonly>
                     </p>
-                    <p>{{ $app['callbackUrl'] }}</p>
+                    <p>{{ $app['callback_url'] }}</p>
                 </div>
                 <div class="copy-column">
                     <button class="copy" data-reference="{{$app['aid']}}-consumer-key">

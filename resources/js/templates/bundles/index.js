@@ -5,9 +5,6 @@
     document
         .getElementById("filter-text")
         .addEventListener("keyup", searchText);
-    document
-        .getElementById("filter-country")
-        .addEventListener("change", filterProducts);
     for (var i = packageCheckboxes.length - 1; i >= 0; i--) {
         packageCheckboxes[i].addEventListener("change", filterPackages);
     }
@@ -23,37 +20,15 @@
 
     function filterProducts() {
         var searchTerm = document.getElementById("filter-text").value;
-        var searchCountries = Array.prototype.reduce.call(
-            document.getElementById("filter-country"),
-            function(carry, option) {
-                if (option.selected) carry.push(option.value);
-
-                return carry;
-            },
-            []
-        );
-
-        var cards = document.querySelectorAll(".card--product");
+        var cards = document.querySelectorAll(".bundle-card");
         var regex = new RegExp(searchTerm, "i");
-        var productCountries = [];
 
         for (var i = cards.length - 1; i >= 0; i--) {
-            productCountries = cards[i].dataset.locations.split(",");
-
             if (
-                (searchTerm === "" && searchCountries.length === 0) ||
+                searchTerm === "" ||
                 (
-                    (
-                        searchTerm === "" ||
-                        (regex.test(cards[i].dataset.title)) ||
-                        (regex.test(cards[i].dataset.group))
-                    ) &&
-                    (
-                        searchCountries.length === 0 ||
-                        searchCountries.every(function(val) {
-                            return productCountries.indexOf(val) >= 0 || productCountries.indexOf('all') >= 0;
-                        })
-                    )
+                    (regex.test(cards[i].dataset.title)) ||
+                    (regex.test(cards[i].dataset.description))
                 )
             ) {
                 cards[i].classList.remove("hide");
@@ -66,29 +41,13 @@
     }
 
     function filterPackages() {
+        var bundleCard = void 0;
         for (var i = packageCheckboxes.length - 1; i >= 0; i--) {
+            bundleCard = document.getElementById("bundle-" + packageCheckboxes[i].dataset.name);
             if (packageCheckboxes[i].checked) {
-                document
-                    .getElementById(
-                        "bundle-title-" + packageCheckboxes[i].dataset.name
-                    )
-                    .classList.remove("hide");
-                document
-                    .getElementById(
-                        "products-" + packageCheckboxes[i].dataset.name
-                    )
-                    .classList.remove("hide");
+                bundleCard.classList.remove("hide");
             } else {
-                document
-                    .getElementById(
-                        "bundle-title-" + packageCheckboxes[i].dataset.name
-                    )
-                    .classList.add("hide");
-                document
-                    .getElementById(
-                        "products-" + packageCheckboxes[i].dataset.name
-                    )
-                    .classList.add("hide");
+                bundleCard.classList.add("hide");
             }
         }
     }
