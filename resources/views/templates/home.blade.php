@@ -199,23 +199,8 @@
             <div class="container">
                 <h1 class="t-light">Product categories</h1>
                 <div class="products-cards">
-                    @php //setting variables
-                        $icons = array(
-                            "bullhorn-outline",
-                            "account-plus-outline",
-                            "forum-outline",
-                            "ticket-confirmation-outline",
-                            "message-processing-outline",
-                            "cash-usd-outline",
-                        );
-                        $i = -1;
-                    @endphp
-
                     @foreach ($productsCollection as $product)
-                        @php
-                            $i++;
-                        @endphp
-                        <x-card-icon :icon="$icons[$i]" :title="$product" :href="'/products?category=' . $product"></x-card-icon>
+                        <x-card-icon :icon="\Illuminate\Support\Str::slug($product)" :title="$product" :href="'/products?category=' . $product"></x-card-icon>
                     @endforeach
                 </div>
             </div>
@@ -228,7 +213,7 @@
             <div class="bundle-cards">
                 @foreach ($bundleCollection as $bundle)
                     @php //setting variables
-                    $slug = 'bundles/'.$bundle->slug;
+                        $slug = 'bundles/'.$bundle->slug;
                     @endphp
                         <x-card-product :title="$bundle->display_name" :href="'/' . $slug"
                         :data-title="$bundle->display_name">{{ !empty($bundle->description)?$bundle->description:'' }}</x-card-product>
