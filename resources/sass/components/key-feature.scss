@@ -5,18 +5,51 @@
         text-align: center;
 
         .icon {
-            background-color: $yellow;
+            // background-color: $yellow;
             width: 80px;
             height: 80px;
             margin: auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 60% 60% 60% 60%/15%;
+            // border-radius: 60% 60% 60% 60%/15%;
+            overflow: hidden;
 
-            svg {
-                width: 40px;
+            &:before {
+                content: "";
+                position: absolute;
+                width: 120%;
+                background: $grey800;
                 height: 40px;
+                border-radius: 85%;
+                z-index: 0;
+                top: 0px;
+            }
+
+            &:after {
+                content: "";
+                position: absolute;
+                width: 120%;
+                background: $grey800;
+                height: 40px;
+                border-radius: 85%;
+                z-index: 0;
+                bottom: 0px;
+            }
+
+            .body {
+                width: 100%;
+                position: relative;
+                display: inline-block;
+                height: auto;
+                background: $grey800;
+                z-index: 1;
+
+                svg {
+                    width: 40px;
+                    height: 40px;
+                    fill: $white;
+                }
             }
         }
 
@@ -26,8 +59,9 @@
         }
 
         .content {
-            font-size: 14px;
+            font-size: 1.8rem;
             color: $grey900;
+            font-family: "Montserrat-Regular";
         }
     }
 }

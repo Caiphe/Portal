@@ -25,7 +25,7 @@
     position: relative;
     overflow: hidden;
     opacity: 0;
-    transition: opacity 0.340s;
+    transition: opacity 0.34s;
 
     &.ready {
         opacity: 1;
@@ -37,7 +37,7 @@
         height: 100%;
         top: 0;
         left: 100%;
-        animation-duration: 0.340s;
+        animation-duration: 0.34s;
         animation-name: slideOut;
         animation-timing-function: ease-out;
 
@@ -49,19 +49,24 @@
 
     .carousel-pager {
         position: absolute;
-        bottom: 2rem;
+        bottom: 4rem;
         display: flex;
         width: 100%;
         justify-content: center;
     }
 
     .carousel-pager-item {
-        background-color: #FFF;
+        background-color: #fff;
         border: none;
         border-radius: 100px;
-        margin: 0 2px;
+        margin: 0 10px 0 0;
+        padding: 0;
         height: 6px;
         width: 22px;
+
+        &:last-of-type {
+            margin-right: 0;
+        }
 
         &.active {
             background-color: $grey900;

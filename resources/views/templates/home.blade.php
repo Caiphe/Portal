@@ -16,13 +16,14 @@
 </head>
 <body class="layout-home">
     <x-header/>
+
     <section class="banner-carousel">
         <x-carousel wait="5000" duration="0.34">
             <x-carousel-item>
             <div class="carousel-content">
                 <h1>Create an account</h1>
                 <p>Register your account if you want to create an App.</p>
-                <a class="button dark after arrow-forward" href="/register" role="button">Register</a>
+                <a class="button after arrow-forward" href="/register" role="button">Register</a>
             </div>
             </x-carousel-item>
 
@@ -36,9 +37,9 @@
 
             <x-carousel-item>
                 <div class="carousel-content">
-                    <h1>Add products</h1>
-                    <p>MTN is consistently developing new APIs for developers and businesses to create powerful products. Follow the steps to browse APIs</p>
-                    <a class="button after arrow-forward" href="/products" role="button">Add</a>
+                    <h1 class="t-dark">Add products</h1>
+                    <p class="t-dark">MTN is consistently developing new APIs for developers and businesses to create powerful products. Follow the steps to browse APIs</p>
+                    <a class="button white after arrow-forward" href="/products" role="button">Add</a>
                 </div>
             </x-carousel-item>
 
@@ -59,117 +60,171 @@
                 <p>You can browse our products and documentation without registering an account, but when you want to create an App you will need to register an account.</p>
             </div>
             <div class="steps">
-                <x-key-feature title="" icon="account-plus-outline">Sign-in/Register</x-key-feature>
-                <x-key-feature title="" icon="card-search">Browse our products</x-key-feature>
-                <x-key-feature title="" icon="plus-box-multiple">Register an app</x-key-feature>
-                <x-key-feature title="" icon="textbox-password">Access the keys</x-key-feature>
+                <div class="container-inner">
+                    <div class="cols">
+                        <div class="col col-3">
+                            <x-key-feature title="" icon="account-plus-outline">Sign-in/Register</x-key-feature>
+                        </div>
+                        <div class="col col-3">
+                            <x-key-feature title="" icon="card-search">Browse our products</x-key-feature>
+                        </div>
+                        <div class="col col-3">
+                            <x-key-feature title="" icon="plus-box-multiple">Register an app</x-key-feature>
+                        </div>
+                        <div class="col col-3">
+                            <x-key-feature title="" icon="textbox-password">Access the keys</x-key-feature>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <section class="grey-bg">
-       <div class="container flex">
-            <div class="content-left">
-                <h1>Sign up</h1>
-                <p>To be able to create an app, you would need to register an account first. Simply follow the registration process and you’ll be good to go.</p>
-                <span>Steps involved</span>
-                <ol>
-                    <li>Complete the registration steps</li>
-                    <li>Verify your email address</li>
-                </ol>
-                <a class="button" href="/register" role="button">Get started</a>
-            </div>
-            <div class="image-right">
-                <img src="/images/illustration-sign-up.png">
-            </div>
+        <div class="container flex">
+            <div class="container-inner">
+                <div class="cols">
+                    <div class="col-6">
+                        <div class="content-left">
+                            <h1>Sign up</h1>
+                            <p class="t-pxl">To be able to create an app, you would need to register an account first. Simply follow the registration process and you’ll be good to go.</p>
+                            <span class="t-ps-header">Steps involved</span>
+                            <ol>
+                                <li>Complete the registration steps</li>
+                                <li>Verify your email address</li>
+                            </ol>
+                            <a class="button" href="/register" role="button">Get started</a>
+                        </div>
+                    </div>
+                    <div class="col-6 col-image">
+                        <div class="image-right">
+                            <img src="/images/illustration-sign-up.svg">
+                        </div>
+                   </div>
+               </div>
+           </div>
+
+
        </div>
     </section>
 
     <section>
         <div class="container flex">
-            <div class="image-left">
-                <img src="/images/illustration-products.png">
+            <div class="comtainer-inner">
+                <div class="cols">
+                    <div class="col col-6 col-image">
+                        <div class="image-left">
+                            <img src="/images/illustration-products.svg">
+                        </div>
+                    </div>
+                    <div class="col col-6">
+                        <div class="content-right">
+                            <h1>Browse our products</h1>
+                            <p class="t-pxl">
+                                MTN is consistently developing new APIs for developers and businesses to create powerful products. After signing in, you can explore the list of available products and familiarise yourself with the documentaion and endpoints to determine if they would be a match for your next app.
+                            </p>
+                            <span class="t-ps-header">Steps involved</span>
+                            <ol>
+                                <li>Explore available products</li>
+                                <li>Review the documentation and endpoints</li>
+                            </ol>
+                            <a class="button" href="/products" role="button">Browse products</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="content-right">
-                <h1>Browse our products</h1>
-                <p>
-                    MTN is consistently developing new APIs for developers and businesses to create powerful products. After signing in, you can explore the list of available products and familiarise yourself with the documentaion and endpoints to determine if they would be a match for your next app.
-                </p>
-                <span>Steps involved</span>
-                <ol>
-                    <li>Explore available products</li>
-                    <li>Review the documentation and endpoints</li>
-                </ol>
-                <a class="button" href="/products" role="button">Browse products</a>
-            </div>
+
+
         </div>
     </section>
 
     <section class="grey-bg">
         <div class="container flex">
-            <div class="content-left">
-                <h1>Register an app</h1>
-                <p>
-                    Now that you’re more familiar with our products, you can proceed to registering your app. Simply click on “Build app” and follow the on-screen instructions to complete the app registration.
-                </p>
-                <span>Steps involved</span>
-                <ol>
-                    <li>Supply your app details</li>
-                    <li>Select the regions for your app</li>
-                    <li>Enable the available products for your app</li>
-                </ol>
-                <a class="button" href="/apps/create" role="button">Create app</a>
-            </div>
-            <div class="image-right">
-                <img src="/images/illustration--apps.png">
+            <div class="container-inner">
+                <div class="cols">
+                    <div class="col col-6">
+                        <div class="content-left">
+                            <h1>Register an app</h1>
+                            <p class="t-pxl">
+                                Now that you’re more familiar with our products, you can proceed to registering your app. Simply click on “Build app” and follow the on-screen instructions to complete the app registration.
+                            </p>
+                            <span class="t-ps-header">Steps involved</span>
+                            <ol>
+                                <li>Supply your app details</li>
+                                <li>Select the regions for your app</li>
+                                <li>Enable the available products for your app</li>
+                            </ol>
+                            <a class="button" href="/apps/create" role="button">Create app</a>
+                        </div>
+                    </div>
+                    <div class="col col-6 col-image">
+                        <div class="image-right">
+                            <img src="/images/illustration--apps.svg">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <section>
         <div class="container flex">
-            <div class="image-left">
-                <img src="/images/illustration-keys.png">
-            </div>
-            <div class="content-right">
-                <h1>Access the keys</h1>
-                <p>
-                    Once your app has been approved, you can access all your app’s details such as consumer/secret keys and more from your app dashboard.                </p>
-                <span>Steps involved</span>
-                <ol>
-                    <li>Access your app dashboard under your profile</li>
-                    <li>Review your app details under the “Approved apps” section</li>
-                </ol>
-                <a class="button" href="/apps" role="button">View</a>
+            <div class="container-inner">
+                <div class="cols">
+                    <div class="col col-6 col-image">
+                        <div class="image-left">
+                            <img src="/images/illustration-keys.svg">
+                        </div>
+                    </div>
+                    <div class="col col-6">
+                        <div class="content-right">
+                            <h1>Access the keys</h1>
+                            <p class="t-pxl">
+                                Once your app has been approved, you can access all your app’s details such as consumer/secret keys and more from your app dashboard.                </p>
+                            <span class="t-ps-header">Steps involved</span>
+                            <ol>
+                                <li>Access your app dashboard under your profile</li>
+                                <li>Review your app details under the “Approved apps” section</li>
+                            </ol>
+                            <a class="button" href="/apps" role="button">View</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="grey-bg">
-        <div class="container">
-            <h1>Latest products</h1>
-            <div class="products-cards">
-                @foreach ($productsCollection as $product)
-                    @php //setting variables
-                    if ($product->locations !== 'all' && $product->locations !== null) :
-                        $countries = explode(',',$product->locations);
-                    else :
-                        $countries = array('globe');
-                    endif;
-                    $tags = array($product->group,$product->category);
-                    $slug = 'products/'.$product->slug;
-                    @endphp
-                        <x-card-product :title="$product->display_name" :href="'/' . $slug" :countries="$countries" :tags="$tags"
-                        :data-title="$product->display_name"
-                        :data-group="$product->group"
-                        :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}</x-card-product>
+    <section class="blue-bg">
+        <div class="container-flex">
+            <div class="container">
+                <h1 class="t-light">Product categories</h1>
+                <div class="products-cards">
+                    @foreach ($productsCollection as $product)
+                        <x-card-icon icon="account-plus-outline" :title="$product" :href="'/products?category=' . $product"></x-card-icon>
                     @endforeach
-            </div>
-            <div class="view-products">
-                <a href="/products" class="button" role="button">View all products</a>
+                </div>
             </div>
         </div>
     </section>
+
+    <section>
+        <div class="container">
+            <h1>Bundles</h1>
+            <div class="bundle-cards">
+                @foreach ($bundleCollection as $bundle)
+                    @php //setting variables
+                    $slug = 'bundles/'.$bundle->slug;
+                    @endphp
+                        <x-card-product :title="$bundle->display_name" :href="'/' . $slug"
+                        :data-title="$bundle->display_name">{{ !empty($bundle->description)?$bundle->description:'' }}</x-card-product>
+                    @endforeach
+            </div>
+            <div class="view-products">
+                <a href="/bundles" class="button" role="button">View all bundles</a>
+            </div>
+        </div>
+    </section>
+
     <x-footer/>
     @stack("scripts")
 </body>

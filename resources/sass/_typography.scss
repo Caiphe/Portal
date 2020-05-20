@@ -1,85 +1,86 @@
 @font-face {
-    font-family: 'mtn-regular';
+    font-family: "mtn-regular";
     font-style: normal;
     font-weight: 400;
     font-display: auto;
-    src: local('Awesome Font'),
-        url('/fonts/MTNBrighterSans-Regular.woff2') format('woff2'),
-        url('/fonts/MTNBrighterSans-Regular.woff') format('woff'),
-        url('/fonts/MTNBrighterSans-Regular.ttf') format('truetype'),
-        url('/fonts/MTNBrighterSans-Regular.eot') format('embedded-opentype');
+    src: local("Awesome Font"),
+        url("/fonts/MTNBrighterSans-Regular.woff2") format("woff2"),
+        url("/fonts/MTNBrighterSans-Regular.woff") format("woff"),
+        url("/fonts/MTNBrighterSans-Regular.ttf") format("truetype"),
+        url("/fonts/MTNBrighterSans-Regular.eot") format("embedded-opentype");
 }
 
 @font-face {
-    font-family: 'mtn-bold';
+    font-family: "mtn-bold";
     font-style: bold;
     font-weight: 700;
     font-display: auto;
-    src: local('Awesome Font'),
-        url('/fonts/MTNBrighterSans-Bold.woff2') format('woff2'),
-        url('/fonts/MTNBrighterSans-Bold.woff') format('woff'),
-        url('/fonts/MTNBrighterSans-Bold.ttf') format('truetype'),
-        url('/fonts/MTNBrighterSans-Bold.eot') format('embedded-opentype');
+    src: local("Awesome Font"),
+        url("/fonts/MTNBrighterSans-Bold.woff2") format("woff2"),
+        url("/fonts/MTNBrighterSans-Bold.woff") format("woff"),
+        url("/fonts/MTNBrighterSans-Bold.ttf") format("truetype"),
+        url("/fonts/MTNBrighterSans-Bold.eot") format("embedded-opentype");
 }
 
 @font-face {
-    font-family: 'mtn-medium';
+    font-family: "mtn-medium";
     font-style: medium;
     font-weight: 500;
     font-display: auto;
-    src: local('Awesome Font'),
-        url('/fonts/MTNBrighterSans-Medium.woff2') format('woff2'),
-        url('/fonts/MTNBrighterSans-Medium.woff') format('woff'),
-        url('/fonts/MTNBrighterSans-Medium.ttf') format('truetype'),
-        url('/fonts/MTNBrighterSans-Medium.eot') format('embedded-opentype');
+    src: local("Awesome Font"),
+        url("/fonts/MTNBrighterSans-Medium.woff2") format("woff2"),
+        url("/fonts/MTNBrighterSans-Medium.woff") format("woff"),
+        url("/fonts/MTNBrighterSans-Medium.ttf") format("truetype"),
+        url("/fonts/MTNBrighterSans-Medium.eot") format("embedded-opentype");
 }
 
 @font-face {
-    font-family: 'mtn-italic';
+    font-family: "mtn-italic";
     font-style: italic;
     font-weight: 400;
     font-display: auto;
-    src: local('Awesome Font'),
-        url('/fonts/MTNBrighterSans-RegularItalic.woff2') format('woff2'),
-        url('/fonts/MTNBrighterSans-RegularItalic.woff') format('woff'),
-        url('/fonts/MTNBrighterSans-RegularItalic.ttf') format('truetype'),
-        url('/fonts/MTNBrighterSans-RegularItalic.eot') format('embedded-opentype');
+    src: local("Awesome Font"),
+        url("/fonts/MTNBrighterSans-RegularItalic.woff2") format("woff2"),
+        url("/fonts/MTNBrighterSans-RegularItalic.woff") format("woff"),
+        url("/fonts/MTNBrighterSans-RegularItalic.ttf") format("truetype"),
+        url("/fonts/MTNBrighterSans-RegularItalic.eot")
+            format("embedded-opentype");
 }
 
 @font-face {
-    font-family: 'Montserrat';
+    font-family: "Montserrat";
     font-style: normal;
     font-weight: 400;
     font-display: auto;
-    src: local('Awesome Font'),
-        url('/fonts/Montserrat-Regular.woff2') format('woff2'),
-        url('/fonts/Montserrat-Regular.woff') format('woff'),
-        url('/fonts/Montserrat-Regular.ttf') format('truetype'),
-        url('/fonts/Montserrat-Regular.eot') format('embedded-opentype');
+    src: local("Awesome Font"),
+        url("/fonts/Montserrat-Regular.woff2") format("woff2"),
+        url("/fonts/Montserrat-Regular.woff") format("woff"),
+        url("/fonts/Montserrat-Regular.ttf") format("truetype"),
+        url("/fonts/Montserrat-Regular.eot") format("embedded-opentype");
 }
 
 @font-face {
-    font-family: 'Montserrat-Light';
+    font-family: "Montserrat-Light";
     font-style: normal;
     font-weight: 300;
     font-display: auto;
-    src: local('Awesome Font'),
-        url('/fonts/Montserrat-Light.woff2') format('woff2'),
-        url('/fonts/Montserrat-Light.woff') format('woff'),
-        url('/fonts/Montserrat-Light.ttf') format('truetype'),
-        url('/fonts/Montserrat-Light.eot') format('embedded-opentype');
+    src: local("Awesome Font"),
+        url("/fonts/Montserrat-Light.woff2") format("woff2"),
+        url("/fonts/Montserrat-Light.woff") format("woff"),
+        url("/fonts/Montserrat-Light.ttf") format("truetype"),
+        url("/fonts/Montserrat-Light.eot") format("embedded-opentype");
 }
 
 @font-face {
-    font-family: 'Montserrat-Bold';
+    font-family: "Montserrat-Bold";
     font-style: normal;
     font-weight: 700;
     font-display: auto;
-    src: local('Awesome Font'),
-        url('/fonts/Montserrat-Bold.woff2') format('woff2'),
-        url('/fonts/Montserrat-Bold.woff') format('woff'),
-        url('/fonts/Montserrat-Bold.ttf') format('truetype'),
-        url('/fonts/Montserrat-Bold.eot') format('embedded-opentype');
+    src: local("Awesome Font"),
+        url("/fonts/Montserrat-Bold.woff2") format("woff2"),
+        url("/fonts/Montserrat-Bold.woff") format("woff"),
+        url("/fonts/Montserrat-Bold.ttf") format("truetype"),
+        url("/fonts/Montserrat-Bold.eot") format("embedded-opentype");
 }
 
 html {
@@ -123,26 +124,44 @@ a {
     }
 }
 
-.t-small {
-    font-size: 1rem;
+.t {
+    &-small {
+        font-size: 1rem;
+    }
+    &-large {
+        font-size: 4rem;
+        line-height: 4rem;
+    }
+    &-xlarge {
+        font-size: 6rem;
+        line-height: 4rem;
+    }
+    &-pl {
+        font-size: 1.6rem;
+        line-height: 1em;
+    }
+    &-pxl {
+        font-size: 1.8rem;
+        line-height: 1.3em;
+    }
+    &-ps-header {
+        font-size: 1rem;
+        text-transform: uppercase;
+        font-family: "Montserrat-Bold";
+        color: $grey700;
+    }
+    &-dark {
+        color: #000000 !important;
+    }
+    &-light {
+        color: $white !important;
+    }
 }
 
-.t-large {
-    font-size: 4rem;
-    line-height: 4rem;
-}
-
-.t-xlarge {
-    font-size: 6rem;
-    line-height: 4rem;
-}
-
-.t-pl {
-    font-size: 1.6rem;
-}
-
-.t-pxl {
-    font-size: 1.8rem;
+p,
+ol,
+li {
+    font-family: "Montserrat-Light";
 }
 
 strong,
