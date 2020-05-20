@@ -7,7 +7,9 @@
 <div {{ $attributes->merge(['class' => 'key-feature']) }}>
     <div class="body">
         <div class="icon">
-            @svg($icon, '#000000')
+            <div class="body">
+                @svg($icon, '#000000')
+            </div>
         </div>
         <h3 class="header">
             {{ $title }}

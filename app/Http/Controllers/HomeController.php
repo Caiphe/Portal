@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Product;
 use App\Country;
+use App\Bundle;
 
 class HomeController extends Controller
 {
@@ -15,9 +16,11 @@ class HomeController extends Controller
      */
     public function __invoke()
     {
-        $productsCollection = Product::isPublic()->get()->sortBy('created_at')->take(3);
-		return view('templates.home',[
-			'productsCollection' => $productsCollection]);
+        return view('templates.home',
+        [
+            'productsCollection' => Product::isPublic()->get()->pluck('category')->unique()->take(6),
+            'bundleCollection' => Bundle::all()->take(4)
+        ]);
     }
 
     /**
