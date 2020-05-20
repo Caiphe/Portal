@@ -199,8 +199,23 @@
             <div class="container">
                 <h1 class="t-light">Product categories</h1>
                 <div class="products-cards">
+                    @php //setting variables
+                        $icons = array(
+                            "bullhorn-outline",
+                            "account-plus-outline",
+                            "forum-outline",
+                            "ticket-confirmation-outline",
+                            "message-processing-outline",
+                            "cash-usd-outline",
+                        );
+                        $i = -1;
+                    @endphp
+
                     @foreach ($productsCollection as $product)
-                        <x-card-icon icon="account-plus-outline" :title="$product" :href="'/products?category=' . $product"></x-card-icon>
+                        @php
+                            $i++;
+                        @endphp
+                        <x-card-icon :icon="$icons[$i]" :title="$product" :href="'/products?category=' . $product"></x-card-icon>
                     @endforeach
                 </div>
             </div>
