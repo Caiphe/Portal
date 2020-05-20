@@ -5,23 +5,26 @@ namespace App\Http\Controllers;
 use App\Content;
 use App\Faq;
 use App\Product;
+use App\Bundle;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Logic for the search page
      *
-     * @return \Illuminate\Http\Response
+     * @param      \Illuminate\Http\Request  $request  The request
+     *
+     * @return     \Illuminate\View\View     The view
      */
     public function __invoke(Request $request)
     {
         $searchTerm = $request->get('q', '');
         $query = '%' . $searchTerm . '%';
         $page = $request->get('page', 1) - 1;
-        $length = 8;
+        $length = 12;
 
-        if(empty($searchTerm)){
+        if (empty($searchTerm)) {
             return view('templates.search', [
                 'results' => [],
                 'searchTerm' => $searchTerm,
@@ -30,22 +33,37 @@ class SearchController extends Controller
                 'pages' => 0
             ]);
         }
-        
-        $products = Product::where('name', 'like', $query)->orWhere('display_name', 'like', $query)->get()->map(function($detail){
-            return ['title' => $detail['display_name'], 'description' => 'View the product', 'link' => "/products/{$detail['slug']}"];
+
+        $products = Product::basedOnUser($request->user())
+            ->where(function ($q) use ($query) {
+                $q->where('name', 'like', $query)->orWhere('display_name', 'like', $query);
+            })
+            ->get()
+            ->map(function ($detail) {
+                return ['title' => 'Product: ' . $detail['display_name'], 'description' => 'View the product', 'link' => "/products/{$detail['slug']}"];
+            })
+            ->toArray();
+
+        $bundles = Bundle::with('content')
+            ->where('display_name', 'like', $query)
+            ->orWhere('description', 'like', $query)
+            ->get()
+            ->map(function ($detail) {
+                return ['title' => 'Bundle: ' . $detail['display_name'], 'description' => 'View the product', 'link' => "/products/{$detail['slug']}"];
+            })->toArray();
+
+        $faqs = Faq::where('question', 'like', $query)->orWhere('answer', 'like', $query)->get()->map(function ($detail) use ($searchTerm) {
+            return ['title' => 'FAQ: ' . substr($detail['question'], 0, 80), 'description' => $this->findSearchTerm($detail['answer'], $searchTerm), 'link' => "/faq/#{$detail['slug']}"];
         })->toArray();
 
-        $faqs = Faq::where('question', 'like', $query)->orWhere('answer', 'like', $query)->get()->map(function($detail) use($searchTerm){
-            return ['title' => substr($detail['question'], 0, 80), 'description' => $this->findSearchTerm($detail['answer'], $searchTerm), 'link' => "/faq/#{$detail['slug']}"];
-        })->toArray();
-
-        $content = Content::with('product')->where('title', 'like', $query)->orWhere('body', 'like', $query)->get()->map(function($detail) use($searchTerm){
+        $content = Content::with('product')->where('title', 'like', $query)->orWhere('body', 'like', $query)->get()->map(function ($detail) use ($searchTerm) {
             $linkPrefix = [
                 'general_docs' => '/getting-started/',
                 'general_doc' => '/getting-started/',
                 'product_docs' => '/products/',
                 'product_doc' => '/products/',
                 'product_overview' => '/products/',
+                'bundle_overview' => '/bundles/',
             ][$detail['type']] ?? '/';
 
             $linkSufix = [
@@ -55,18 +73,20 @@ class SearchController extends Controller
             ][$detail['type']] ?? '';
 
             $linkSlug = $detail['slug'];
-            if(!$detail->product->isEmpty()){
+            if (!$detail->product->isEmpty()) {
                 $linkSlug = $detail->product[0]['slug'];
             }
 
+            $contentType = ucfirst(explode('_', $detail['type'])[0]);
+
             return [
-                'title' => substr($detail['title'], 0, 80),
+                'title' => $contentType . ': ' . substr($detail['title'], 0, 80),
                 'description' => $this->findSearchTerm($detail['body'], $searchTerm),
                 'link' => $linkPrefix . $linkSlug . $linkSufix
             ];
         })->toArray();
 
-        $results = array_merge($products, $faqs, $content);
+        $results = array_merge($products, $faqs, $content, $bundles);
         $total = count($results);
 
         return view('templates.search', [
@@ -74,21 +94,29 @@ class SearchController extends Controller
             'searchTerm' => $searchTerm,
             'total' => $total,
             'page' => $page,
-            'pages' => (int)ceil($total / $length)
+            'pages' => (int) ceil($total / $length)
         ]);
     }
 
-    protected function findSearchTerm($content, $searchTerm)
+    /**
+     * Finds a search term.
+     *
+     * @param      string  $content     The content
+     * @param      string  $searchTerm  The search term
+     *
+     * @return     string  A sripped down version of the matched search terms
+     */
+    protected function findSearchTerm(string $content, string $searchTerm): string
     {
         $c = preg_replace('/\n|\s+/', ' ', strip_tags($content));
         $termAt = stripos($c, $searchTerm);
-        if(!$termAt){
+        if (!$termAt) {
             return substr($c, 0, 200);
         }
 
         $halfLength = 100;
 
-        if($termAt < $halfLength){
+        if ($termAt < $halfLength) {
             $prefix = substr($c, 0, $termAt);
             $halfLength += $halfLength - $termAt;
         } else {

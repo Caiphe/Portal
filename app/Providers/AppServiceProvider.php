@@ -30,6 +30,27 @@ class AppServiceProvider extends ServiceProvider
             SLU;
         });
 
+        Blade::directive('subStr', function ($expression) {
+            $options = explode(',', $expression);
+            $str = trim($options[0], " '\"");
+            $limit = 50;
+            if(isset($options[1])){
+                $limit = +trim($options[1]);
+            }
+
+            // dd($options);
+
+            return <<<SUB
+            <?php
+                if(strlen($str) > $limit){
+                    echo substr($str, 0, ($limit - 3)) . '...';
+                } else {
+                    echo $str;
+                }
+            ?>
+            SUB;
+        });
+
         Blade::directive('svg', function ($expression) {
             $options = explode(',', $expression);
             $icon = trim($options[0], " '\"");
