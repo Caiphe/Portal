@@ -200,7 +200,7 @@
                 <h1 class="t-light">Product categories</h1>
                 <div class="products-cards">
                     @foreach ($productsCollection as $product)
-                        <x-card-icon icon="account-plus-outline" :title="$product" :href="'/products?category=' . $product"></x-card-icon>
+                        <x-card-icon :icon="\Illuminate\Support\Str::slug($product)" :title="$product" :href="'/products?category=' . $product"></x-card-icon>
                     @endforeach
                 </div>
             </div>
@@ -213,10 +213,10 @@
             <div class="bundle-cards">
                 @foreach ($bundleCollection as $bundle)
                     @php //setting variables
-                    $slug = 'bundles/'.$bundle->slug;
+                        $description = $bundle->description ?: 'View bundle';
                     @endphp
-                        <x-card-product :title="$bundle->display_name" :href="'/' . $slug"
-                        :data-title="$bundle->display_name">{{ !empty($bundle->description)?$bundle->description:'' }}</x-card-product>
+                        <x-card-product :title="$bundle->display_name" :href="route('bundle.show',$bundle->slug)"
+                        :data-title="$bundle->display_name">@subStr($description)</x-card-product>
                     @endforeach
             </div>
             <div class="view-products">
