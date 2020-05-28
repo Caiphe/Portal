@@ -213,10 +213,10 @@
             <div class="bundle-cards">
                 @foreach ($bundleCollection as $bundle)
                     @php //setting variables
-                        $slug = 'bundles/'.$bundle->slug;
+                        $description = $bundle->description ?: 'View bundle';
                     @endphp
-                        <x-card-product :title="$bundle->display_name" :href="'/' . $slug"
-                        :data-title="$bundle->display_name">{{ !empty($bundle->description)?$bundle->description:'' }}</x-card-product>
+                        <x-card-product :title="$bundle->display_name" :href="route('bundle.show',$bundle->slug)"
+                        :data-title="$bundle->display_name">@subStr($description)</x-card-product>
                     @endforeach
             </div>
             <div class="view-products">

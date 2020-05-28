@@ -6,8 +6,9 @@
             margin: 10px 0 0;
         }
 
-        p {
+        .card__body {
             margin: 15px 0;
+            min-height: 42px;
         }
 
         .country-selector {
