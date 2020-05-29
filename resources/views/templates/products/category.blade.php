@@ -87,5 +87,6 @@ grant_type=client_credentials -d 'client_id={consumer-key}&client_secret={consum
     <section class="container inset pricing">
         <h2 class="mt-1 centre">Pricing</h2>
         <p class="centre">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam<br>nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.</p>
+        <x-pricing></x-pricing>
     </section>
 @endsection
