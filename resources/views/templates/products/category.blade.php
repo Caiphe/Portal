@@ -40,7 +40,7 @@
         <img src="/images/businesses/acme-7.svg" alt="Acme logo">
         <img src="/images/businesses/acme-8.svg" alt="Acme logo">
     </section>
-    <section class=" grey-bg py-5">
+    <section class="grey-bg py-5">
         <div class="container inset overview">
             <h3 class="mt-5">Benefits</h3>
             <p class="benefits-copy">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no.</p>
@@ -64,5 +64,28 @@
                 </div>
             </div>
         </div>
+    </section>
+    <section class="yellow-bg py-5">
+        <div class="container inset example mt-5">
+            <div class="snippets">
+                <div class="tab">PHP</div>
+                <div class="tab active">Curl</div>
+                <div class="tab">Javascript</div>
+                <div class="tab">C#</div>
+                <div class="snippet">
+                    <pre><code>curl -X POST -H "Content-Type: application/x-www-form-urlencoded" https://api.mtn.com/oauth/client_credential/accesstoken?
+grant_type=client_credentials -d 'client_id={consumer-key}&client_secret={consumer-secret}'</code></pre></div>
+            </div>
+            <h2 class="t-large mb-1">Lorem ipsum dolor sit amet</h2>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr.</p>
+            <div class="cols">
+                <a href="#" class="button dark after arrow-right mr-4">Button</a>
+                <a href="#" class="button dark after arrow-right">Button</a>
+            </div>
+        </div>
+    </section>
+    <section class="container inset pricing">
+        <h2 class="mt-1 centre">Pricing</h2>
+        <p class="centre">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam<br>nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.</p>
     </section>
 @endsection

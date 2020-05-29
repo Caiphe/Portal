@@ -2415,6 +2415,10 @@ body > #main {
   background-color: #0c678f;
 }
 
+.yellow-bg {
+  background-color: #fc0;
+}
+
 .layout-master section.grey-bg {
   position: relative;
 }

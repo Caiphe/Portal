@@ -1,7 +1,7 @@
 @import "../../variables";
 
 .container {
-    font-size: 1.6rem;
+    font-size: 16px;
 
     h1 {
         font-size: 18px;
@@ -78,6 +78,7 @@
 }
 
 .overview {
+    margin-bottom: 100px;
     h3 {
         font-size: 30px;
     }
@@ -117,6 +118,54 @@
                 width: 16px;
                 margin-left: 10px;
             }
+        }
+    }
+}
+
+.example {
+    .snippets {
+        background-color: #4A4A4A;
+        border-radius: 5px;
+        height: 154px;
+        width: 1020px;
+        position: absolute;
+        top: -210px;
+    }
+
+    .tab {
+        display: inline-block;
+        padding: 20px;
+        font-size: 14px;
+        color: #FFF;
+    }
+
+    .active {
+        background-color: $grey900;
+    }
+
+    .snippet {
+        padding: 30px;
+        position: absolute;
+        bottom: 0;
+        background-color: $grey900;
+        width: 100%;
+        border-radius: 0 0 5px 5px;
+
+        pre {
+            background-color: $grey900;
+            padding: 0;
+            margin: 0;
+            font-size: 12px;
+        }
+    }
+
+    .cols {
+        position: absolute;
+        right: 8%;
+        top: 30px;
+
+        a {
+            height: 40px;
         }
     }
 }
