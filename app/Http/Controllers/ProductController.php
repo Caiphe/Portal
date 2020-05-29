@@ -8,13 +8,15 @@ use App\Product;
 use App\Services\OpenApiService;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller {
+class ProductController extends Controller
+{
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index(Request $request) {
+	public function index(Request $request)
+	{
 		$products = Product::basedOnUser($request->user())->get();
 		$productsCollection = $products->sortBy('category')->groupBy('category');
 		$productLocations = $products->pluck('locations')->implode(',');
@@ -26,7 +28,8 @@ class ProductController extends Controller {
 			'productCategories' => array_keys($productsCollection->toArray()),
 			'countries' => $countries,
 			'selectedCategory' => $request['category'],
-			'groups' => $products->pluck('group')->unique()]);
+			'groups' => $products->pluck('group')->unique()
+		]);
 	}
 
 	/**
@@ -34,7 +37,8 @@ class ProductController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function create() {
+	public function create()
+	{
 		//
 	}
 
@@ -44,7 +48,8 @@ class ProductController extends Controller {
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function store(Request $request) {
+	public function store(Request $request)
+	{
 		//
 	}
 
@@ -54,7 +59,8 @@ class ProductController extends Controller {
 	 * @param  \App\Product  $product
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show(Product $product) {
+	public function show(Product $product)
+	{
 		$openApiClass = new OpenApiService($product->swagger);
 		$product->load(['content', 'keyFeatures']);
 		$productList = Product::isPublic()->get()->sortBy('category')->groupBy('category');
@@ -103,7 +109,8 @@ class ProductController extends Controller {
 	 * @param  \App\Product  $product
 	 * @return \Illuminate\Http\Response
 	 */
-	public function edit(Product $product) {
+	public function edit(Product $product)
+	{
 		//
 	}
 
@@ -114,7 +121,8 @@ class ProductController extends Controller {
 	 * @param  \App\Product  $product
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, Product $product) {
+	public function update(Request $request, Product $product)
+	{
 		//
 	}
 
@@ -124,11 +132,13 @@ class ProductController extends Controller {
 	 * @param  \App\Product  $product
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy(Product $product) {
+	public function destroy(Product $product)
+	{
 		//
 	}
 
-	public function downloadPostman(Product $product) {
+	public function downloadPostman(Product $product)
+	{
 		$openApiClass = new OpenApiService($product->swagger);
 		$openApi = $openApiClass->buildOpenApiJson();
 
@@ -137,7 +147,22 @@ class ProductController extends Controller {
 		}, $product->slug . '.json');
 	}
 
-	public function downloadSwagger(Product $product) {
+	public function downloadSwagger(Product $product)
+	{
 		return response()->download(public_path() . '/openapi/' . $product->swagger);
+	}
+
+	public function categories($category)
+	{
+		$products = Product::hasCategory($category)->get();
+
+		return view(
+			'templates.products.category',
+			[
+				'theme' => 'mixed',
+				'category' => $products[0]->category,
+				'products' => $products
+			]
+		);
 	}
 }

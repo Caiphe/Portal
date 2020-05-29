@@ -99,6 +99,10 @@ mix.scripts(
         "public/css/templates/products"
     )
     .sass(
+        "resources/sass/templates/products/category.scss",
+        "public/css/templates/products"
+    )
+    .sass(
         "resources/sass/templates/bundles/index.scss",
         "public/css/templates/bundles"
     )

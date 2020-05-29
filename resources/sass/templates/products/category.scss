@@ -1,0 +1,220 @@
+@import "../../variables";
+
+.container {
+    font-size: 1.6rem;
+
+    h1 {
+        font-size: 18px;
+        font-family: Montserrat;
+        margin-top: 40px;
+    }
+}
+
+.breadcrumb {
+    position: absolute;
+    display: flex;
+    right: 8%;
+    top: 0;
+
+    a {
+        margin-left: 20px;
+        display: flex;
+    }
+
+    svg {
+        width: 12px;
+        margin-left: 4px;
+    }
+}
+
+.banner {
+
+    h2,
+    p {
+        width: 490px;
+    }
+
+    h2 {
+        margin-top: 100px;
+    }
+
+    .squiggle {
+        position: absolute;
+        top: -90px;
+        left: 633px;
+        width: 667px;
+    }
+
+    .phone {
+        position: absolute;
+        left: 775px;
+        top: -80px;
+        width: 248px;
+        height: 489px;
+        overflow: hidden;
+        border-radius: 16px;
+
+        img,
+        svg {
+            top: 0;
+            width: 100%;
+            position: absolute;
+        }
+    }
+}
+
+.businesses {
+    margin-top: 100px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+
+    h2 {
+        width: 100%;
+        text-align: center;
+        font-size: 10px;
+        color: $grey500;
+    }
+}
+
+.overview {
+    h3 {
+        font-size: 30px;
+    }
+
+    .benefits-copy {
+        width: 405px;
+        margin-bottom: 145px;
+    }
+
+    hr {
+        color: $grey300;
+        margin: 40px 0;
+    }
+
+    .included {
+        .col-4 {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+
+            >svg {
+                margin-right: 8px;
+                width: 11px;
+                height: 11px;
+                background-color: $yellow;
+                padding: 4px;
+                border-radius: 50%;
+            }
+        }
+
+        a {
+            color: $blue;
+            display: flex;
+
+            svg {
+                fill: $blue;
+                width: 16px;
+                margin-left: 10px;
+            }
+        }
+    }
+}
+
+// Stack general
+.stack-general {
+    width: 630px;
+    height: 394px;
+
+    background-size: contain;
+    background-position: right top;
+    background-repeat: no-repeat;
+
+    img {
+        width: 410px;
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    .stack-card {
+        background-color: #FFF;
+        border-radius: 5px;
+        box-shadow: 0 12px 24px $grey500;
+        width: 490px;
+        height: 238px;
+        padding: 40px;
+        position: absolute;
+        top: 50px;
+        left: 0;
+
+        &:nth-of-type(2) {
+            transform: translate(0, 30px) scale(0.95);
+        }
+
+        &:nth-of-type(1) {
+            transform: translate(0, 60px) scale(0.9);
+        }
+    }
+
+    h3 {
+        font-size: 14px;
+        background-color: $yellow;
+        border-radius: 15px;
+        padding: 5px 20px;
+        font-family: Montserrat;
+        position: absolute;
+        top: -15px;
+        left: 30px;
+        margin: 0;
+    }
+
+    h4 {
+        margin: 0px 0px 10px;
+        font-family: "Montserrat-Bold";
+        font-size: 16px;
+    }
+
+    p {
+        font-family: "Montserrat-Light";
+        font-size: 14px;
+    }
+
+    a {
+        font-size: 14px;
+        font-family: Montserrat;
+        color: $blue;
+        display: flex;
+
+        svg {
+            fill: $blue;
+            width: 14px;
+            margin-left: 10px;
+        }
+    }
+}
+
+.stack-general.benefits {
+    position: absolute;
+    top: -50px;
+    right: -20px;
+}
+
+
+// Themes
+
+.blue {
+    .banner svg path {
+        fill: $blue;
+    }
+}
+
+.mixed {
+    .banner svg path {
+        fill: $grey800;
+    }
+
+    .benefits {
+        background-image: url("../images/category/themes/mixed/squiggle-benefits.svg");
+    }
+}

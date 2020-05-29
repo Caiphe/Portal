@@ -31,6 +31,11 @@ class Product extends Model {
 		return $query->hasSwagger()->whereAccess("public");
 	}
 
+	public function scopeHasCategory($query, $category)
+	{
+		return $query->isPublic()->where('category_slug', $category);
+	}
+
 	public function scopeIsPublicWithInternal($query) {
 		return $query->hasSwagger()->where(function ($query) {
 			$query->where('access', 'public')

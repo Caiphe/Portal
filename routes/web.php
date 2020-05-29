@@ -36,10 +36,12 @@ Route::middleware('verified')->group(function () {
 
 Route::get('dashboard', 'DashboardController@index')->middleware('can:view-dashboard')->name('dashboard');
 
-Route::get('products', 'ProductController@index');
+Route::get('products', 'ProductController@index')->name('product.index');
 Route::get('products/{product:slug}', 'ProductController@show')->name('product.show');
 Route::get('products/{product:slug}/download/postman', 'ProductController@downloadPostman')->name('product.download.postman');
 Route::get('products/{product:slug}/download/swagger', 'ProductController@downloadSwagger')->name('product.download.swagger');
+
+Route::get('categories/{category}', 'ProductController@categories')->name('product.categories');
 
 Route::get('bundles', 'BundleController@index')->name('bundle.index');
 Route::get('bundles/{bundle:slug}', 'BundleController@show')->name('bundle.show');
