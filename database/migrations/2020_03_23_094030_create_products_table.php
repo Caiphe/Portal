@@ -21,6 +21,7 @@ class CreateProductsTable extends Migration {
 			$table->string('environments')->nullable();
 			$table->string('group')->nullable();
 			$table->string('category')->nullable();
+			$table->string('category_slug')->nullable();
 			$table->string('access')->nullable();
 			$table->string('locations')->nullable();
 			$table->string('swagger')->nullable();
