@@ -23,6 +23,12 @@ class Product extends Model {
 		$this->attributes['slug'] = Str::slug($value);
 	}
 
+	public function setCategoryAttribute($value) {
+		$this->attributes['category'] = $value;
+		$this->attributes['category_slug'] = Str::slug($value);
+	}
+
+
 	public function scopeHasSwagger($query) {
 		return $query->whereNotNull('swagger');
 	}
