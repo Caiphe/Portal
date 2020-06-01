@@ -1,7 +1,10 @@
+@allowonce('pricing')
+<link rel="stylesheet" href="{{ mix('/css/components/pricing.css') }}">
+@endallowonce
 <div id="pricing">
-    <div class="rate-plan">
+    <div class="rate-plan shadow">
         <div class="group">MTN</div>
-        <div class="price">ZAR 2,250</div>
+        <div class="price"><sup>ZAR</sup> 2,250</div>
         <div class="period">PER MONTH</div>
         <a href="#" class="button dark">Sign up</a>
         <div class="transactions">25,000<sup>1</sup><span>transactions per month</span></div>
@@ -14,9 +17,9 @@
             Other premium Services
         </div>
     </div>
-    <div class="rate-plan popular">
+    <div class="rate-plan shadow popular">
         <div class="group">MTN</div>
-        <div class="price">ZAR 4,250</div>
+        <div class="price"><sup>ZAR</sup> 4,250</div>
         <div class="period">PER MONTH</div>
         <a href="#" class="button dark">Sign up</a>
         <div class="transactions">50,000<sup>1</sup><span>transactions per month</span></div>
@@ -29,9 +32,9 @@
             Other premium Services
         </div>
     </div>
-    <div class="rate-plan">
+    <div class="rate-plan shadow">
         <div class="group">MTN</div>
-        <div class="price">ZAR 8,250</div>
+        <div class="price"><sup>ZAR</sup> 8,250</div>
         <div class="period">PER MONTH</div>
         <a href="#" class="button dark">Sign up</a>
         <div class="transactions">100,000<sup>1</sup><span>transactions per month</span></div>

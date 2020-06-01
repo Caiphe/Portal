@@ -79,6 +79,7 @@
 
 .overview {
     margin-bottom: 100px;
+
     h3 {
         font-size: 30px;
     }
@@ -86,6 +87,12 @@
     .benefits-copy {
         width: 405px;
         margin-bottom: 145px;
+    }
+
+    .stack-general.benefits {
+        position: absolute;
+        top: -50px;
+        right: -20px;
     }
 
     hr {
@@ -170,6 +177,46 @@
     }
 }
 
+.pricing {
+    margin: 60px auto 80px;
+}
+
+.relationships {
+    margin-top: 80px;
+
+    .stack-bundle,
+    .stack-product {
+        display: flex;
+        align-items: center;
+
+        .stack-description {
+            .tag {
+                color: $grey900;
+            }
+
+            h3 {
+                font-size: 30px;
+                margin: 20px 0;
+            }
+
+            a {
+                color: $blue;
+                display: flex;
+
+                svg {
+                    fill: $blue;
+                    width: 14px;
+                    margin-left: 10px;
+                }
+            }
+        }
+
+        .stack-cards {
+            flex: 0 0 auto;
+        }
+    }
+}
+
 // Stack general
 .stack-general {
     width: 630px;
@@ -243,10 +290,84 @@
     }
 }
 
-.stack-general.benefits {
-    position: absolute;
-    top: -50px;
-    right: -20px;
+// Stack cards
+.stack-cards {
+    width: 700px;
+    height: 570px;
+
+    background-size: contain;
+    background-repeat: no-repeat;
+    perspective: 1000px;
+
+    &.left {
+        background-position: left bottom;
+        margin-left: -140px;
+
+        .stack-card {
+            top: 0;
+            margin-left: 140px;
+            transform: translate(60px, 60px) rotateY(10deg);
+
+            &:nth-of-type(2) {
+                transform: translate(30px, 30px) scale(0.95) rotateY(10deg);
+            }
+
+            &:nth-of-type(1) {
+                transform: translate(0, 0) scale(0.9) rotateY(10deg);
+            }
+        }
+    }
+
+    &.right {
+        background-position: right top;
+        margin-right: -140px;
+
+        .stack-card {
+            bottom: 50px;
+            right: 140px;
+            transform: translate(0, 0)  rotateY(-10deg);
+
+            &:nth-of-type(2) {
+                transform: translate(30px, -30px) scale(0.95)  rotateY(-10deg);
+            }
+
+            &:nth-of-type(1) {
+                transform: translate(60px, -60px) scale(0.9)  rotateY(-10deg);
+            }
+        }
+    }
+
+    .stack-card {
+        border-radius: 12px;
+        width: 430px;
+        height: 400px;
+        padding: 40px;
+        position: absolute;
+    }
+
+    h3 {
+        font-size: 40px;
+        font-family: "mtn-bold";
+    }
+
+    .flags {
+        height: 42px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+
+        svg {
+            width: 14px;
+            margin: 0 8px 0 0;
+        }
+    }
+
+    .button {
+        background-color: $grey300;
+        border: 2px solid $grey300;
+        margin-top: 10px;
+        font-size: 14px;
+    }
 }
 
 
@@ -265,5 +386,59 @@
 
     .benefits {
         background-image: url("../images/category/themes/mixed/squiggle-benefits.svg");
+    }
+
+    .bundle {
+        background-image: url("../images/category/themes/mixed/squiggle-bundle.svg");
+
+        .tag {
+            color: $yellow;
+            border: 1px solid $yellow;
+            background-color: transparent;
+        }
+
+        h3 {
+            color: #FFF;
+        }
+
+        .stack-card {
+            background-color: $grey900;
+            color: #FFF;
+
+            &:nth-of-type(2) {
+                background-color: #A5A5A5;
+            }
+
+            &:nth-of-type(1) {
+                background-color: #D2D2D2;
+            }
+        }
+    }
+
+    .product {
+        background-image: url("../images/category/themes/mixed/squiggle-product.svg");
+
+        .tag {
+            color: $yellow;
+            border: 1px solid $yellow;
+            background-color: transparent;
+        }
+
+        h3 {
+            color: #FFF;
+        }
+
+        .stack-card {
+            background-color: $blue;
+            color: #FFF;
+
+            &:nth-of-type(2) {
+                background-color: #9EC2D2;
+            }
+
+            &:nth-of-type(1) {
+                background-color: #CEE1E8;
+            }
+        }
     }
 }
