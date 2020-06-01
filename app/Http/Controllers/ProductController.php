@@ -159,7 +159,7 @@ class ProductController extends Controller
 		return view(
 			'templates.products.category',
 			[
-				'theme' => 'mixed',
+				'theme' => 'blue',
 				'category' => $products[0]->category,
 				'products' => $products
 			]

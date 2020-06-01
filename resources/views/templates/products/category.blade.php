@@ -21,7 +21,7 @@
         <h2 class="t-xlarge mb-3">Power your apps with our MTN MoMo API</h2>
         <p class="my-0 t-medium">Learn the basics of MTN MoMo API, view available resources and join a community of developers building with the MoMo API.</p>
         <div class="row mt-3">
-            <a href="{{ route('product.index', ['category' => $category]) }}" class="button after arrow-right mr-1">View products</a>
+            <a href="{{ route('product.index', ['category' => $category]) }}" class="button mr-1 view-products">View products @svg('arrow-forward')</a>
             <button class="dark after arrow-right">Button</button>
         </div>
         <img class="squiggle" src="/images/category/themes/{{ $theme }}/squiggle-hero.svg" alt="background squiggle">
@@ -69,8 +69,8 @@
         </div>
     </section>
 
-    <section class="yellow-bg py-5">
-        <div class="container inset example mt-5">
+    <section class="yellow-bg py-5 example">
+        <div class="container inset mt-5">
             <div class="snippets">
                 <div class="tab">PHP</div>
                 <div class="tab active">Curl</div>
@@ -83,8 +83,8 @@ grant_type=client_credentials -d 'client_id={consumer-key}&client_secret={consum
             <h2 class="t-large mb-1">Lorem ipsum dolor sit amet</h2>
             <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr.</p>
             <div class="cols">
-                <a href="#" class="button dark after arrow-right mr-4">Button</a>
-                <a href="#" class="button dark after arrow-right">Button</a>
+                <a href="#" class="button dark mr-4">Button @svg('arrow-forward')</a>
+                <a href="#" class="button dark">Button @svg('arrow-forward')</a>
             </div>
         </div>
     </section>
