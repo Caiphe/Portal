@@ -69,7 +69,7 @@
         </div>
     </section>
 
-    <section class="yellow-bg py-5 pricing">
+    <section class="yellow-bg py-5">
         <div class="container inset example mt-5">
             <div class="snippets">
                 <div class="tab">PHP</div>
