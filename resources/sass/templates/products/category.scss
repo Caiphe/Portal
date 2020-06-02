@@ -110,7 +110,7 @@
     .stack-general.benefits {
         position: absolute;
         top: -50px;
-        right: -20px;
+        right: 0;
     }
 
     hr {
@@ -319,7 +319,7 @@
 
     &.left {
         background-position: left bottom;
-        margin-left: -140px;
+        margin-left: -8%;
 
         .stack-card {
             top: 0;
@@ -338,7 +338,7 @@
 
     &.right {
         background-position: right top;
-        margin-right: -140px;
+        margin-right: -8%;
 
         .stack-card {
             bottom: 50px;

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Content;
 use App\Country;
 use App\Product;
 use App\Services\OpenApiService;
@@ -17,8 +16,8 @@ class ProductController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$products = Product::basedOnUser($request->user())->get();
-		$productsCollection = $products->sortBy('category')->groupBy('category');
+		$products = Product::with('category')->basedOnUser($request->user())->get();
+		$productsCollection = $products->sortBy('category.title')->groupBy('category.title');
 		$productLocations = $products->pluck('locations')->implode(',');
 		$locations = array_unique(explode(',', $productLocations));
 		$countries = Country::whereIn('code', $locations)->pluck('name', 'code');
@@ -33,37 +32,16 @@ class ProductController extends Controller
 	}
 
 	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function create()
-	{
-		//
-	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function store(Request $request)
-	{
-		//
-	}
-
-	/**
 	 * Display the specified resource.
 	 *
 	 * @param  \App\Product  $product
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show(Product $product)
+	public function show(Request $request, Product $product)
 	{
 		$openApiClass = new OpenApiService($product->swagger);
 		$product->load(['content', 'keyFeatures']);
-		$productList = Product::isPublic()->get()->sortBy('category')->groupBy('category');
+		$productList = Product::with('category')->basedOnUser($request->user())->get()->sortBy('category.title')->groupBy('category.title');
 		$content = ['product_tab' => []];
 		$sidebarAccordion = [];
 		$startingPoint = "product-specification";
@@ -87,7 +65,7 @@ class ProductController extends Controller
 				$sidebarAccordion[$category] = [];
 			}
 
-			foreach ($products as $key => $product) {
+			foreach ($products as $product) {
 				$sidebarAccordion[$category][] = ["label" => $product['display_name'], "link" => '/products/' . $product['slug']];
 			}
 
@@ -103,46 +81,12 @@ class ProductController extends Controller
 		]);
 	}
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  \App\Product  $product
-	 * @return \Illuminate\Http\Response
-	 */
-	public function edit(Product $product)
-	{
-		//
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \App\Product  $product
-	 * @return \Illuminate\Http\Response
-	 */
-	public function update(Request $request, Product $product)
-	{
-		//
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  \App\Product  $product
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy(Product $product)
-	{
-		//
-	}
-
 	public function downloadPostman(Product $product)
 	{
 		$openApiClass = new OpenApiService($product->swagger);
 		$openApi = $openApiClass->buildOpenApiJson();
 
-		return response()->streamDownload(function () use ($product, $openApi) {
+		return response()->streamDownload(function () use ($openApi) {
 			echo json_encode($openApi, JSON_PRETTY_PRINT);
 		}, $product->slug . '.json');
 	}
@@ -150,27 +94,5 @@ class ProductController extends Controller
 	public function downloadSwagger(Product $product)
 	{
 		return response()->download(public_path() . '/openapi/' . $product->swagger);
-	}
-
-	public function categories($category)
-	{
-		$products = Product::hasCategory($category)->get();
-		$theme = [
-			'mixed',
-			'standard',
-			'dark',
-			'pink',
-			'blue',
-		][rand(0, 4)];
-
-		return view(
-			'templates.products.category',
-			[
-				'theme' => $theme,
-				'category' => $products[0]->category,
-				'slug' => $products[0]->category_slug,
-				'products' => $products
-			]
-		);
 	}
 }

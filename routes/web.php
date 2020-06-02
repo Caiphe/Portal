@@ -41,7 +41,7 @@ Route::get('products/{product:slug}', 'ProductController@show')->name('product.s
 Route::get('products/{product:slug}/download/postman', 'ProductController@downloadPostman')->name('product.download.postman');
 Route::get('products/{product:slug}/download/swagger', 'ProductController@downloadSwagger')->name('product.download.swagger');
 
-Route::get('categories/{category}', 'ProductController@categories')->name('product.categories');
+Route::get('categories/{category:slug}', 'CategoryController@show')->name('category.show');
 
 Route::get('bundles', 'BundleController@index')->name('bundle.index');
 Route::get('bundles/{bundle:slug}', 'BundleController@show')->name('bundle.show');

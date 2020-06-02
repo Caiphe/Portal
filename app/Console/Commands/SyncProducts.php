@@ -3,10 +3,12 @@
 namespace App\Console\Commands;
 
 use App\Product;
+use App\Category;
 use App\Services\ApigeeService;
 use Illuminate\Console\Command;
 
-class SyncProducts extends Command {
+class SyncProducts extends Command
+{
 	/**
 	 * The name and signature of the console command.
 	 *
@@ -26,7 +28,8 @@ class SyncProducts extends Command {
 	 *
 	 * @return void
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
 	}
 
@@ -35,7 +38,8 @@ class SyncProducts extends Command {
 	 *
 	 * @return mixed
 	 */
-	public function handle() {
+	public function handle()
+	{
 		$this->info("Getting products from Apigee");
 		$products = ApigeeService::get('apiproducts?expand=true')['apiProduct'];
 
@@ -46,6 +50,9 @@ class SyncProducts extends Command {
 			$this->info("Syncing {$product['displayName']}");
 
 			$attributes = ApigeeService::getAppAttributes($product['attributes']);
+			$category = Category::firstOrCreate([
+				'title' => $attributes['category'] ?? "Misc"
+			]);
 
 			Product::updateOrCreate(
 				['pid' => $product['name']],
@@ -56,7 +63,7 @@ class SyncProducts extends Command {
 					'description' => $product['description'],
 					'environments' => implode(',', $product['environments']),
 					'group' => $attributes['group'] ?? "MTN",
-					'category' => $attributes['category'] ?? "Misc",
+					'category_id' => $category->id,
 					'access' => $attributes['access'] ?? null,
 					'locations' => $attributes['locations'] ?? null,
 					'swagger' => $attributes['swagger'] ?? null,

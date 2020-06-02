@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Product;
+use App\Category;
 use Illuminate\Support\ServiceProvider;
 
 class ProductCategoriesServiceProvider extends ServiceProvider {
@@ -22,9 +22,9 @@ class ProductCategoriesServiceProvider extends ServiceProvider {
 	 */
 	public function boot() {
 		if (\Schema::hasTable('products')) {
-			$productCategories = Product::isPublic()->orderBy('category')->get()->pluck('category')->unique();
+			$globalCategories = Category::whereHas('products')->orWhereHas('bundles')->orderBy('title')->get()->pluck('title', 'slug');
 
-			\View::share('productCategories', $productCategories);
+			\View::share('globalCategories', $globalCategories);
 		}
 	}
 }

@@ -17,7 +17,10 @@ class CreateCategoriesTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('slug');
+            $table->string('theme')->default('mixed');
         });
+
+        \DB::insert('insert into categories (title, slug) values (?, ?)', ['Misc', 'misc']);
     }
 
     /**

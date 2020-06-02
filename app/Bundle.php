@@ -34,4 +34,9 @@ class Bundle extends Model
     public function keyFeatures() {
         return $this->belongsToMany(KeyFeature::class, "bundle_key_feature", "bundle_bid", "key_feature_id");
     }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

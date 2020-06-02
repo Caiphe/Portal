@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Casts\Slug;
 use App\Product;
 use App\Tag;
 use Illuminate\Database\Eloquent\Model;
@@ -16,15 +15,6 @@ class Content extends Model
      * @var array
      */
     protected $guarded = [];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'slug' => Slug::class,
-    ];
 
     /**
      * The attributes that should be mutated to dates.

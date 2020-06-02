@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Casts\Slug;
 use App\Content;
 use App\Faq;
 use Illuminate\Database\Eloquent\Model;
@@ -23,15 +22,6 @@ class Tag extends Model
      * @var bool
      */
     public $timestamps = false;
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'slug' => Slug::class,
-    ];
 
     public function setTitleAttribute($value)
     {

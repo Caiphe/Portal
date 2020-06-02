@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Casts\Slug;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -22,16 +21,6 @@ class Category extends Model
      */
     public $timestamps = false;
 
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'slug' => Slug::class,
-    ];
-
     public function setTitleAttribute($value)
     {
         $this->attributes['title'] = $value;
@@ -41,5 +30,15 @@ class Category extends Model
     public function faqs()
     {
         return $this->hasMany(Faq::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function bundles()
+    {
+        return $this->hasMany(Bundle::class);
     }
 }

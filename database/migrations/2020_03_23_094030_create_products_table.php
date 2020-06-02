@@ -4,13 +4,15 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductsTable extends Migration {
+class CreateProductsTable extends Migration
+{
 	/**
 	 * Run the migrations.
 	 *
 	 * @return void
 	 */
-	public function up() {
+	public function up()
+	{
 		Schema::create('products', function (Blueprint $table) {
 			$table->primary('pid');
 			$table->string('pid')->index();
@@ -20,13 +22,17 @@ class CreateProductsTable extends Migration {
 			$table->text('description')->nullable();
 			$table->string('environments')->nullable();
 			$table->string('group')->nullable();
-			$table->string('category')->nullable();
-			$table->string('category_slug')->nullable();
+			$table->unsignedBigInteger('category_id')->default(1);
 			$table->string('access')->nullable();
 			$table->string('locations')->nullable();
 			$table->string('swagger')->nullable();
 			$table->json('attributes')->nullable();
 			$table->timestamps();
+
+			$table->foreign('category_id')
+                ->references('id')
+                ->on('categories')
+                ->onDelete('cascade');
 		});
 
 		Schema::create('content_product', function (Blueprint $table) {
@@ -52,10 +58,14 @@ class CreateProductsTable extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down() {
+	public function down()
+	{
+		Schema::table('products', function (Blueprint $table) {
+			$table->dropForeign(['category_id']);
+		});
+
 		Schema::table('content_product', function (Blueprint $table) {
-			$table->dropForeign('content_product_content_id_foreign');
-			$table->dropForeign('content_product_product_pid_foreign');
+			$table->dropForeign(['content_id', 'product_pid']);
 		});
 
 		Schema::dropIfExists('products');

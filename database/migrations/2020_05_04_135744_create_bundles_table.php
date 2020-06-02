@@ -20,8 +20,14 @@ class CreateBundlesTable extends Migration
             $table->string('slug');
             $table->string('display_name');
             $table->text('description');
+            $table->unsignedBigInteger('category_id')->default(1);
             $table->string('banner')->default('/images/banner-default.png');
             $table->timestamps();
+
+            $table->foreign('category_id')
+                ->references('id')
+                ->on('categories')
+                ->onDelete('cascade');
         });
 
         Schema::create('bundle_product', function (Blueprint $table) {
@@ -66,6 +72,10 @@ class CreateBundlesTable extends Migration
      */
     public function down()
     {
+        Schema::table('bundles', function (Blueprint $table) {
+            $table->dropForeign(['category_id']);
+        });
+
         Schema::table('bundle_product', function (Blueprint $table) {
             $table->dropForeign('bundle_product_bundle_bid_foreign');
             $table->dropForeign('bundle_product_product_pid_foreign');

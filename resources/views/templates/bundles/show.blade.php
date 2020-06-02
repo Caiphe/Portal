@@ -81,7 +81,7 @@
             :title="$product->display_name" 
             :href="route('product.show', $product->slug)"
             :countries="explode(',', $product->locations)"
-            :tags="[$product->group, $product->category]"
+            :tags="[$product->group, $product->category->title]"
             :data-title="$product->display_name"
             :data-group="$product->group"
             :data-locations="$product->locations">
