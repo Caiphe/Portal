@@ -15,6 +15,7 @@
 
     .popular {
         background-color: $yellow;
+        transform: scale(1.1);
 
         &:before {
             content: "MOST POPULAR";

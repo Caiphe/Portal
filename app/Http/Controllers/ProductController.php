@@ -155,12 +155,20 @@ class ProductController extends Controller
 	public function categories($category)
 	{
 		$products = Product::hasCategory($category)->get();
+		$theme = [
+			'mixed',
+			'standard',
+			'dark',
+			'pink',
+			'blue',
+		][rand(0, 4)];
 
 		return view(
 			'templates.products.category',
 			[
-				'theme' => 'blue',
+				'theme' => $theme,
 				'category' => $products[0]->category,
+				'slug' => $products[0]->category_slug,
 				'products' => $products
 			]
 		);

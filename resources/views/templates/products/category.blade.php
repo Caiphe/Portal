@@ -26,7 +26,7 @@
         </div>
         <img class="squiggle" src="/images/category/themes/{{ $theme }}/squiggle-hero.svg" alt="background squiggle">
         <div class="phone">
-            <img src="/images/category/banner-business.jpg" alt="Phone background">
+            <div class="banner-image" style="background-image: url('/images/category/banner-{{ $slug }}.jpg'), url('/images/category/banner-default.jpg');"></div>
             @svg('phone-outline', null, 'images/category')
         </div>
     </section>
