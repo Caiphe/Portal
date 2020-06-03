@@ -18,7 +18,7 @@ class HomeController extends Controller
     {
         return view('templates.home',
         [
-            'productsCollection' => Product::isPublic()->get()->pluck('category')->unique()->take(6),
+            'productsCollection' => Product::with('content')->isPublic()->get()->pluck('category.title')->unique()->take(6),
             'bundleCollection' => Bundle::all()->take(4)
         ]);
     }
