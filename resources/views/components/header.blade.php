@@ -13,8 +13,8 @@
                     </div>
                     <div class="nav-right">
                         <h3>BROWSE BY CATEGORY</h3>
-                        @foreach($productCategories as $productCategory)
-                            <a href="{{ route('product.categories', $productCategory) }}">{{$productCategory}}</a>
+                        @foreach($globalCategories as $slug => $title)
+                            <a href="{{ route('category.show', $slug) }}">{{$title}}</a>
                         @endforeach
                     </div>
                 </div>

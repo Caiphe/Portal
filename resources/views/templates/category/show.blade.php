@@ -9,7 +9,7 @@
 @section('main-class', $theme)
 
 @section('content')
-    <section class="container inset">
+    <section class="container">
         <h1>{{ $category }}</h1>
         <div class="breadcrumb">
             <a href="#overview">Overview</a>
@@ -17,7 +17,7 @@
         </div>
     </section>
 
-    <section class="container inset banner">
+    <section class="container banner">
         <h2 class="t-xlarge mb-3">Power your apps with our MTN MoMo API</h2>
         <p class="my-0 t-medium">Learn the basics of MTN MoMo API, view available resources and join a community of developers building with the MoMo API.</p>
         <div class="row mt-3">
@@ -31,7 +31,7 @@
         </div>
     </section>
 
-    <section class="container inset businesses mb-5">
+    <section class="container businesses mb-5">
         <h2 class="mb-2">BUSINESSES THAT USES OUR PRODUCTS</h2>
         <img src="/images/businesses/acme-1.svg" alt="Acme logo">
         <img src="/images/businesses/acme-2.svg" alt="Acme logo">
@@ -44,7 +44,7 @@
     </section>
 
     <section class="grey-bg py-5">
-        <div class="container inset overview">
+        <div class="container overview">
             <h3 class="mt-5">Benefits</h3>
             <p class="benefits-copy">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no.</p>
 
@@ -70,7 +70,7 @@
     </section>
 
     <section class="yellow-bg py-5 example">
-        <div class="container inset mt-5">
+        <div class="container mt-5">
             <div class="snippets">
                 <div class="tab">PHP</div>
                 <div class="tab active">Curl</div>
@@ -89,7 +89,7 @@ grant_type=client_credentials -d 'client_id={consumer-key}&client_secret={consum
         </div>
     </section>
 
-    <section class="container inset relationships">
+    <section class="container relationships">
         <div class="stack-bundle">
             <x-stack-cards class="bundle left" :cards="[
                 [
@@ -155,7 +155,7 @@ grant_type=client_credentials -d 'client_id={consumer-key}&client_secret={consum
         </div>
     </section>
 
-    <section class="container inset pricing">
+    <section class="container pricing">
         <h2 class="mt-1 centre">Pricing</h2>
         <p class="centre mb-5">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam<br>nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.</p>
         <x-pricing></x-pricing>

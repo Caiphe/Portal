@@ -10,7 +10,7 @@ document
     .addEventListener("keyup", filterProducts);
 
 //Filters products - if category hides the category row and displays categories that are checked. Otherwise it checks the filter of the textsearch, countries and group and if all are valid will display product
-function filterProducts(filterGroup = "") {
+function filterProducts(filterGroup) {
     if (filterGroup === "Categories") {
         var categoriesChecked = document.querySelectorAll(
             "input[name=Categories]:checked"

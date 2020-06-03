@@ -18,12 +18,10 @@ class CreateContentsTable extends Migration
             $table->string('title');
             $table->string('slug');
             $table->string('type');
-            $table->foreignId('category_id')
-                ->nullable()
-                ->constrained();
             $table->longText('body');
-            $table->json('editor_jcon');
             $table->dateTime('published_at')->nullable();
+            $table->string('contentable_id')->nullable();
+            $table->string('contentable_type')->nullable();
             $table->timestamps();
         });
     }
@@ -35,10 +33,6 @@ class CreateContentsTable extends Migration
      */
     public function down()
     {
-        Schema::table('contents', function (Blueprint $table) {
-            $table->dropForeign(['category_id']);
-        });
-        
         Schema::dropIfExists('contents');
     }
 }

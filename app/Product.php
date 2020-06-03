@@ -4,6 +4,7 @@ namespace App;
 
 use App\App;
 use App\Content;
+use App\Category;
 use App\KeyFeature;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -27,7 +28,6 @@ class Product extends Model {
 		$this->attributes['category'] = $value;
 		$this->attributes['category_slug'] = Str::slug($value);
 	}
-
 
 	public function scopeHasSwagger($query) {
 		return $query->whereNotNull('swagger');
@@ -64,9 +64,13 @@ class Product extends Model {
 			->whereRaw("find_in_set('$environment',environments)");
 	}
 
-	public function content() {
-		return $this->belongsToMany(Content::class, "content_product", "product_pid");
-	}
+	/**
+     * Get the products content.
+     */
+    public function content()
+    {
+        return $this->morphMany(Content::class, 'contentable');
+    }
 
 	public function apps() {
 		return $this->belongsToMany(App::class, "app_product", "product_pid", "app_aid")->withPivot('status');
@@ -74,5 +78,10 @@ class Product extends Model {
 
 	public function keyFeatures() {
 		return $this->belongsToMany(KeyFeature::class, "key_feature_product", "product_pid", "key_feature_id");
+	}
+
+	public function category()
+	{
+		return $this->belongsTo(Category::class);
 	}
 }

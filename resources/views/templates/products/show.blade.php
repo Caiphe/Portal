@@ -2,9 +2,9 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/products/show.css') }}">
-@if(!empty($content['product_tab']))
+@if(!empty($content['tab']))
 <style>
-    @foreach($content['product_tab'] as $tab)
+    @foreach($content['tab'] as $tab)
     #product-sections.product-{{$tab->slug}} #product-{{$tab->slug}}{
         display: block;
     }
@@ -44,20 +44,20 @@
 
     <div class="content">
         <div id="product-sections" class="{{$startingPoint}}">
-            @if(isset($content['product_overview']))
+            @if(isset($content['overview']))
                 <button id="button-overview" class="light small outline product-section-button" onclick="switchSection('product-overview');">OVERVIEW</button>
             @endif
-            @if(isset($content['product_docs']))
+            @if(isset($content['docs']))
                 <button id="button-docs" class="light small outline product-section-button" onclick="switchSection('product-docs');">DOCS</button>
             @endif
             <button id="button-specification" class="light small outline product-section-button" onclick="switchSection('product-specification');">SPECIFICATION</button>
-            @foreach($content['product_tab'] as $tab)
+            @foreach($content['tab'] as $tab)
             <button id="button-{{$tab->slug}}" class="light small outline product-section-button" onclick="switchSection('product-{{$tab->slug}}');">{{strtoupper($tab->title)}}</button>
             @endforeach
 
-            @if(isset($content['product_overview']))
+            @if(isset($content['overview']))
                 <div id="product-overview" class="product-section">
-                    {!!$content['product_overview']['body']!!}
+                    {!!$content['overview']['body']!!}
                     <div class="key-features">
                         @foreach($product->keyFeatures as $keyFeature)
                             <x-key-feature :title="$keyFeature['title']">
@@ -68,9 +68,9 @@
                 </div>
             @endif
 
-            @if(isset($content['product_docs']))
+            @if(isset($content['docs']))
                 <div id="product-docs" class="product-section">
-                    {!!$content['product_docs']['body']!!}
+                    {!!$content['docs']['body']!!}
                 </div>
             @endif
 
@@ -93,7 +93,7 @@
                 @endforeach
             </div>
 
-            @foreach($content['product_tab'] as $tab)
+            @foreach($content['tab'] as $tab)
                 <div id="product-{{$tab->slug}}" class="product-section">
                     {!!$tab->body!!}
                 </div>

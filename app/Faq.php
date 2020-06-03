@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Casts\Slug;
 use App\Category;
 use App\FaqFeedback;
 use App\Tag;
@@ -17,15 +16,6 @@ class Faq extends Model
      * @var array
      */
     protected $guarded = [];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'slug' => Slug::class,
-    ];
 
     public function setQuestionAttribute($value)
     {

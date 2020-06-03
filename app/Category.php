@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Casts\Slug;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -14,6 +13,8 @@ class Category extends Model
      * @var array
      */
     protected $guarded = [];
+    protected $primaryKey = "cid";
+    public $incrementing = false;
 
     /**
      * Indicates if the model should be timestamped.
@@ -22,24 +23,33 @@ class Category extends Model
      */
     public $timestamps = false;
 
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'slug' => Slug::class,
-    ];
-
     public function setTitleAttribute($value)
     {
         $this->attributes['title'] = $value;
         $this->attributes['slug'] = Str::slug($value);
+        $this->attributes['cid'] = Str::slug($value);
     }
 
     public function faqs()
     {
         return $this->hasMany(Faq::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function bundles()
+    {
+        return $this->hasMany(Bundle::class);
+    }
+
+    /**
+     * Get the products content.
+     */
+    public function content()
+    {
+        return $this->morphMany(Content::class, 'contentable');
     }
 }

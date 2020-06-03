@@ -18,10 +18,13 @@ class CreateFaqsTable extends Migration
             $table->string('question');
             $table->text('answer');
             $table->string('slug');
-            $table->foreignId('category_id')
-                ->nullable()
-                ->constrained();
+            $table->string('category_cid')->default('misc');
             $table->timestamps();
+
+            $table->foreign('category_cid')
+                ->references('cid')
+                ->on('categories')
+                ->onDelete('cascade');
         });
 
         Schema::create('faq_feedback', function(Blueprint $table) {
@@ -44,7 +47,7 @@ class CreateFaqsTable extends Migration
     public function down()
     {
         Schema::table('faqs', function (Blueprint $table) {
-            $table->dropForeign(['category_id']);
+            $table->dropForeign(['category_cid']);
         });
 
         Schema::table('faq_feedback', function (Blueprint $table) {

@@ -107,7 +107,7 @@
                             <h3>{{ $category }}</h3>
                             @foreach ($products as $product)
                                 @php
-                                    $tags = array($product->group, $product->category);
+                                    $tags = array($product->group, $product->category->title);
                                     $href = route('product.show', $product->slug);
                                 @endphp
                                 <x-card-product :title="$product->display_name"

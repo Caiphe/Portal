@@ -107,7 +107,7 @@
                                 <h3>{{ $category }}</h3>
                                 @foreach ($products as $product)
                                     @php
-                                        $tags = array($product->group, $product->category);
+                                        $tags = array($product->group, $product->category->title);
                                         $class = in_array($product->name, $selectedProducts) ? 'product-block selected' : 'product-block';
                                         $href = route('product.show', $product->slug);
                                     @endphp
