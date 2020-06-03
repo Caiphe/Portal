@@ -25,6 +25,14 @@ class Content extends Model
         'published_at',
     ];
 
+    /**
+     * Get the owning contentable model.
+     */
+    public function contentable()
+    {
+        return $this->morphTo();
+    }
+
     public function setTitleAttribute($value)
     {
         $this->attributes['title'] = $value;

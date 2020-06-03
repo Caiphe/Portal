@@ -13,6 +13,8 @@ class Category extends Model
      * @var array
      */
     protected $guarded = [];
+    protected $primaryKey = "cid";
+    public $incrementing = false;
 
     /**
      * Indicates if the model should be timestamped.
@@ -25,6 +27,7 @@ class Category extends Model
     {
         $this->attributes['title'] = $value;
         $this->attributes['slug'] = Str::slug($value);
+        $this->attributes['cid'] = Str::slug($value);
     }
 
     public function faqs()
@@ -40,5 +43,13 @@ class Category extends Model
     public function bundles()
     {
         return $this->hasMany(Bundle::class);
+    }
+
+    /**
+     * Get the products content.
+     */
+    public function content()
+    {
+        return $this->morphMany(Content::class, 'contentable');
     }
 }

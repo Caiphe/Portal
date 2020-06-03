@@ -55,9 +55,9 @@
         @endforelse
     </div>
 
-    @if(isset($content['bundle_overview']))
+    @if(isset($content['overview']))
     <h2>Overview</h2>
-    {{$content['bundle_overview'][0]['body']}}
+    {{$content['overview'][0]['body']}}
     @endif
 
     @if(!$bundle->keyFeatures->isEmpty())

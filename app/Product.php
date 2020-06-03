@@ -64,9 +64,13 @@ class Product extends Model {
 			->whereRaw("find_in_set('$environment',environments)");
 	}
 
-	public function content() {
-		return $this->belongsToMany(Content::class, "content_product", "product_pid");
-	}
+	/**
+     * Get the products content.
+     */
+    public function content()
+    {
+        return $this->morphMany(Content::class, 'contentable');
+    }
 
 	public function apps() {
 		return $this->belongsToMany(App::class, "app_product", "product_pid", "app_aid")->withPivot('status');

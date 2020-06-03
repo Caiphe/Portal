@@ -20,12 +20,12 @@ class CreateBundlesTable extends Migration
             $table->string('slug');
             $table->string('display_name');
             $table->text('description');
-            $table->unsignedBigInteger('category_id')->default(1);
+            $table->string('category_cid')->default('misc');
             $table->string('banner')->default('/images/banner-default.png');
             $table->timestamps();
 
-            $table->foreign('category_id')
-                ->references('id')
+            $table->foreign('category_cid')
+                ->references('cid')
                 ->on('categories')
                 ->onDelete('cascade');
         });
@@ -46,23 +46,6 @@ class CreateBundlesTable extends Migration
                 ->on('products')
                 ->onDelete('cascade');
         });
-
-        Schema::create('bundle_content', function (Blueprint $table) {
-            $table->primary(['bundle_bid', 'content_id']);
-
-            $table->string('bundle_bid');
-            $table->unsignedBigInteger('content_id');
-
-            $table->foreign('bundle_bid')
-                ->references('bid')
-                ->on('bundles')
-                ->onDelete('cascade');
-
-            $table->foreign('content_id')
-                ->references('id')
-                ->on('contents')
-                ->onDelete('cascade');
-        });
     }
 
     /**
@@ -73,7 +56,7 @@ class CreateBundlesTable extends Migration
     public function down()
     {
         Schema::table('bundles', function (Blueprint $table) {
-            $table->dropForeign(['category_id']);
+            $table->dropForeign(['category_cid']);
         });
 
         Schema::table('bundle_product', function (Blueprint $table) {
@@ -81,13 +64,7 @@ class CreateBundlesTable extends Migration
             $table->dropForeign('bundle_product_product_pid_foreign');
         });
 
-        Schema::table('bundle_content', function (Blueprint $table) {
-            $table->dropForeign('bundle_content_content_id_foreign');
-            $table->dropForeign('bundle_content_bundle_bid_foreign');
-        });
-
         Schema::dropIfExists('bundle_product');
-        Schema::dropIfExists('bundle_content');
         Schema::dropIfExists('bundles');
     }
 }

@@ -27,8 +27,12 @@ class Bundle extends Model
         return $this->belongsToMany(Product::class, "bundle_product", "bundle_bid", "product_pid");
     }
 
-    public function content() {
-        return $this->belongsToMany(Content::class, "bundle_content", "bundle_bid");
+    /**
+     * Get the products content.
+     */
+    public function content()
+    {
+        return $this->morphMany(Content::class, 'contentable');
     }
 
     public function keyFeatures() {

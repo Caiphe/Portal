@@ -14,13 +14,14 @@ class CreateCategoriesTable extends Migration
     public function up()
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->id();
+            $table->primary('cid');
+            $table->string('cid')->index();
             $table->string('title');
             $table->string('slug');
             $table->string('theme')->default('mixed');
         });
 
-        \DB::insert('insert into categories (title, slug) values (?, ?)', ['Misc', 'misc']);
+        \DB::insert('insert into categories (cid, title, slug) values (?, ?, ?)', ['misc', 'Misc', 'misc']);
     }
 
     /**

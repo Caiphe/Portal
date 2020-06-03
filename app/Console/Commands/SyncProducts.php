@@ -63,7 +63,7 @@ class SyncProducts extends Command
 					'description' => $product['description'],
 					'environments' => implode(',', $product['environments']),
 					'group' => $attributes['group'] ?? "MTN",
-					'category_id' => $category->id,
+					'category_cid' => $category->cid,
 					'access' => $attributes['access'] ?? null,
 					'locations' => $attributes['locations'] ?? null,
 					'swagger' => $attributes['swagger'] ?? null,

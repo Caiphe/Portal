@@ -22,34 +22,17 @@ class CreateProductsTable extends Migration
 			$table->text('description')->nullable();
 			$table->string('environments')->nullable();
 			$table->string('group')->nullable();
-			$table->unsignedBigInteger('category_id')->default(1);
+            $table->string('category_cid')->default('misc');
 			$table->string('access')->nullable();
 			$table->string('locations')->nullable();
 			$table->string('swagger')->nullable();
 			$table->json('attributes')->nullable();
 			$table->timestamps();
 
-			$table->foreign('category_id')
-                ->references('id')
+			$table->foreign('category_cid')
+                ->references('cid')
                 ->on('categories')
                 ->onDelete('cascade');
-		});
-
-		Schema::create('content_product', function (Blueprint $table) {
-			$table->primary(['content_id', 'product_pid']);
-
-			$table->unsignedBigInteger('content_id');
-			$table->string('product_pid');
-
-			$table->foreign('content_id')
-				->references('id')
-				->on('contents')
-				->onDelete('cascade');
-
-			$table->foreign('product_pid')
-				->references('pid')
-				->on('products')
-				->onDelete('cascade');
 		});
 	}
 
@@ -61,11 +44,7 @@ class CreateProductsTable extends Migration
 	public function down()
 	{
 		Schema::table('products', function (Blueprint $table) {
-			$table->dropForeign(['category_id']);
-		});
-
-		Schema::table('content_product', function (Blueprint $table) {
-			$table->dropForeign(['content_id', 'product_pid']);
+			$table->dropForeign(['category_cid']);
 		});
 
 		Schema::dropIfExists('products');

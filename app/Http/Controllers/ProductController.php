@@ -47,17 +47,17 @@ class ProductController extends Controller
 		$startingPoint = "product-specification";
 
 		foreach ($product->content as $c) {
-			if ($c->type === "product_tab") {
+			if ($c->type === "tab") {
 				$content[$c->type][] = $c;
 				continue;
 			}
 			$content[$c->type] = $c;
 		}
 
-		if (isset($content['product_overview'])) {
-			$startingPoint = 'product-overview';
-		} else if (isset($content['product_docs'])) {
-			$startingPoint = 'product-docs';
+		if (isset($content['overview'])) {
+			$startingPoint = 'overview';
+		} else if (isset($content['docs'])) {
+			$startingPoint = 'docs';
 		}
 
 		foreach ($productList as $category => $products) {
