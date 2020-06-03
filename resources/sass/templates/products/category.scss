@@ -401,6 +401,10 @@
         background-image: url("/images/category/themes/mixed/squiggle-benefits.svg");
     }
 
+    .example .button svg {
+        fill: #FFF;
+    }
+
     .bundle {
         background-image: url("/images/category/themes/mixed/squiggle-bundle.svg");
 
@@ -475,6 +479,10 @@
 
     .benefits {
         background-image: url("/images/category/themes/standard/squiggle-benefits.svg");
+    }
+
+    .example .button svg {
+        fill: #FFF;
     }
 
     .bundle {
