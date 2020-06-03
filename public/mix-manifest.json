@@ -23,7 +23,7 @@
     "/css/templates/user/show.css": "/css/templates/user/show.css?id=0aef9ef14e671affca04",
     "/css/templates/products/index.css": "/css/templates/products/index.css?id=03ca6f345e2f8bbb32da",
     "/css/templates/products/show.css": "/css/templates/products/show.css?id=a69a25b6552ae9b0692f",
-    "/css/templates/products/category.css": "/css/templates/products/category.css?id=d249eca724857f33b2d2",
+    "/css/templates/products/category.css": "/css/templates/products/category.css?id=f937b5c3988071c75f32",
     "/css/templates/bundles/index.css": "/css/templates/bundles/index.css?id=7f2aff0548ef0b0a8963",
     "/css/templates/bundles/show.css": "/css/templates/bundles/show.css?id=a40a8327aa9f51a110f3",
     "/css/templates/contact/index.css": "/css/templates/contact/index.css?id=9df2943f5f1d021dcfc8",
@@ -40,7 +40,7 @@
     "/js/components/sidebar-accordion.js": "/js/components/sidebar-accordion.js?id=5fdde273c03ce5945462",
     "/js/components/multiselect.js": "/js/components/multiselect.js?id=0903abe48b30ec4abf11",
     "/js/components/select.js": "/js/components/select.js?id=d41d8cd98f00b204e980",
-    "/js/templates/products/index.js": "/js/templates/products/index.js?id=7744f8a1e0ae3b7ad009",
+    "/js/templates/products/index.js": "/js/templates/products/index.js?id=abf29a7d7872fd2adbdf",
     "/js/templates/products/show.js": "/js/templates/products/show.js?id=6b7d80178a2833e52bde",
     "/js/templates/bundles/index.js": "/js/templates/bundles/index.js?id=ea6d341afd9a99bcd9d9",
     "/js/templates/auth/register.js": "/js/templates/auth/register.js?id=1b80f6831686681922d4"
