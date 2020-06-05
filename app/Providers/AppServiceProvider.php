@@ -38,8 +38,6 @@ class AppServiceProvider extends ServiceProvider
                 $limit = +trim($options[1]);
             }
 
-            // dd($options);
-
             return <<<SUB
             <?php
                 if(strlen($str) > $limit){
@@ -55,7 +53,7 @@ class AppServiceProvider extends ServiceProvider
             $options = explode(',', $expression);
             $icon = trim($options[0], " '\"");
             $colour = '#000000';
-            $path = 'images/icons/';
+            $path = 'images/icons';
             
             if(isset($options[1])){
                 $colour = trim($options[1], " '\"");

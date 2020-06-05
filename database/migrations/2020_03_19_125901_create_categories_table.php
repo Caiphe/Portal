@@ -18,6 +18,7 @@ class CreateCategoriesTable extends Migration
             $table->string('cid')->index();
             $table->string('title');
             $table->string('slug');
+            $table->string('description', 255)->default('Credibly benchmark enabled intellectual work');
             $table->string('theme')->default('mixed');
         });
 
