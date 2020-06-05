@@ -42,7 +42,7 @@ class ProductController extends Controller
 		$openApiClass = new OpenApiService($product->swagger);
 		$product->load(['content', 'keyFeatures']);
 		$productList = Product::with('category')->basedOnUser($request->user())->get()->sortBy('category.title')->groupBy('category.title');
-		$content = ['product_tab' => []];
+		$content = ['tab' => []];
 		$sidebarAccordion = [];
 		$startingPoint = "product-specification";
 

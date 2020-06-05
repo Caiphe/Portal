@@ -178,7 +178,7 @@ return [
         /*
          * Custome Service Providers...
          */
-        App\Providers\ProductCategoriesServiceProvider::class,
+        App\Providers\CategoriesServiceProvider::class,
 
     ],
 

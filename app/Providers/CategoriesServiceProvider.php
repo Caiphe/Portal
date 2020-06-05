@@ -5,7 +5,7 @@ namespace App\Providers;
 use App\Category;
 use Illuminate\Support\ServiceProvider;
 
-class ProductCategoriesServiceProvider extends ServiceProvider {
+class CategoriesServiceProvider extends ServiceProvider {
 	/**
 	 * Register services.
 	 *
@@ -22,7 +22,9 @@ class ProductCategoriesServiceProvider extends ServiceProvider {
 	 */
 	public function boot() {
 		if (\Schema::hasTable('products')) {
-			$globalCategories = Category::whereHas('products')->orWhereHas('bundles')->orderBy('title')->get()->pluck('title', 'slug');
+			$globalCategories = Category::whereHas('products', function($query){
+				$query->isPublic();
+			})->orWhereHas('bundles')->orderBy('title')->get();
 
 			\View::share('globalCategories', $globalCategories);
 		}
