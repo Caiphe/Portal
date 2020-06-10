@@ -8,7 +8,7 @@
 
 @section('sidebar')
 @php
-$filters = array('Group'=> $groups,'Categories'=> $productCategories);
+$filters = array('Categories'=> $productCategories);
 @endphp
 <div class="filter-sidebar">
 	@foreach ($filters as $filterTitle => $filterGroup)

@@ -13,7 +13,8 @@ class BundleController extends Controller
      */
     public function index(ProductLocationService $productLocationService)
     {
-        $bundles = Bundle::with('products')->get();
+        $bundles = Bundle::with(['products', 'category'])->get();
+
         $products = $bundles->reduce(function($carry, $bundle){
             $carry = array_merge($bundle->products->pluck('pid')->toArray(), $carry);
             return $carry;
@@ -21,6 +22,7 @@ class BundleController extends Controller
 
         return view('templates.bundles.index', [
             'bundles' => $bundles,
+            'categories' => $bundles->pluck('category.title', 'category.cid'),
             'countries' => $productLocationService->fetch($products, 'countries')
         ]);
     }

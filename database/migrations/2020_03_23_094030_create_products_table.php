@@ -21,7 +21,7 @@ class CreateProductsTable extends Migration
 			$table->string('display_name')->nullable();
 			$table->text('description')->nullable();
 			$table->string('environments')->nullable();
-			$table->string('group')->nullable();
+			$table->string('group')->default('MTN');
             $table->string('category_cid')->default('misc');
 			$table->string('access')->nullable();
 			$table->string('locations')->nullable();
