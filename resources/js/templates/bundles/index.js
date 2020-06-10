@@ -1,6 +1,7 @@
 (function() {
     var timeOut = null;
     var packageCheckboxes = document.querySelectorAll(".filter-checkbox");
+    var cards = document.querySelectorAll(".bundle-card");
 
     document
         .getElementById("filter-text")
@@ -20,7 +21,6 @@
 
     function filterProducts() {
         var searchTerm = document.getElementById("filter-text").value;
-        var cards = document.querySelectorAll(".bundle-card");
         var regex = new RegExp(searchTerm, "i");
 
         for (var i = cards.length - 1; i >= 0; i--) {
@@ -41,13 +41,16 @@
     }
 
     function filterPackages() {
-        var bundleCard = void 0;
-        for (var i = packageCheckboxes.length - 1; i >= 0; i--) {
-            bundleCard = document.getElementById("bundle-" + packageCheckboxes[i].dataset.name);
-            if (packageCheckboxes[i].checked) {
-                bundleCard.classList.remove("hide");
+        var chosenCategories = document.querySelectorAll('.filter-checkbox:checked');
+        chosenCategories = Array.prototype.slice.call(chosenCategories).map(function(item){
+            return item.value;
+        });
+
+        for (var i = cards.length - 1; i >= 0; i--) {
+            if (chosenCategories.indexOf(cards[i].dataset.category) !== -1) {
+                cards[i].classList.remove("hide");
             } else {
-                bundleCard.classList.add("hide");
+                cards[i].classList.add("hide");
             }
         }
     }

@@ -33,7 +33,7 @@
     "/css/components/_panel.css": "/css/components/_panel.css?id=0598dde51eaf697fe35a",
     "/css/components/_accordion.css": "/css/components/_accordion.css?id=d04556e9e369081ffcff",
     "/css/components/_select.css": "/css/components/_select.css?id=617868475cf68e0f9e70",
-    "/css/styles.css": "/css/styles.css?id=24f2ad9e613b6a4f68a0",
+    "/css/styles.css": "/css/styles.css?id=ff22e90c14e8d0980070",
     "/js/scripts.js": "/js/scripts.js?id=630b9ab90b406906c5f3",
     "/js/templates/user/show.js": "/js/templates/user/show.js?id=a99c909fc95793279537",
     "/js/components/carousel.js": "/js/components/carousel.js?id=1bc537eb2cfa6998183d",
@@ -42,6 +42,6 @@
     "/js/components/select.js": "/js/components/select.js?id=d41d8cd98f00b204e980",
     "/js/templates/products/index.js": "/js/templates/products/index.js?id=abf29a7d7872fd2adbdf",
     "/js/templates/products/show.js": "/js/templates/products/show.js?id=6b7d80178a2833e52bde",
-    "/js/templates/bundles/index.js": "/js/templates/bundles/index.js?id=ea6d341afd9a99bcd9d9",
+    "/js/templates/bundles/index.js": "/js/templates/bundles/index.js?id=63c180dca5f5e8c1b0ac",
     "/js/templates/auth/register.js": "/js/templates/auth/register.js?id=1b80f6831686681922d4"
 }

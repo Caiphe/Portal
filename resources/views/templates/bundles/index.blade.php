@@ -8,11 +8,11 @@
 
 @section('sidebar')
 <div class="filter-sidebar">
-    <h3>Bundles</h3>
-    @foreach ($bundles as $bundle)
+    <h3>Categories</h3>
+    @foreach ($categories as $id => $category)
     <div class="filter-checkboxs">
-        <input class="filter-checkbox" type="checkbox" data-name="{{$bundle->slug}}" value="{{$bundle->display_name}}" checked id="{{$bundle->slug}}"/>
-        <label class="filter-label" for="{{$bundle->slug}}">{{$bundle->display_name}}</label>
+        <input class="filter-checkbox" type="checkbox" data-name="{{ $id }}" value="{{ $id }}" id="{{ $id }}" autocomplete="off" />
+        <label class="filter-label" for="{{ $id }}">{{ $category}}</label>
     </div>
     @endforeach
 
@@ -40,6 +40,7 @@
             :data-title="$bundle->display_name"
             :data-name="$bundle->name"
             :data-description="$bundle->description ?? ''"
+            :data-category="$bundle->category->cid ?? ''"
         >
             @subStr(($bundle->description ?: 'View the bundle'))
         </x-card-link>
