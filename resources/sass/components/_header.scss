@@ -53,8 +53,12 @@
             }
 
             .has-children {
-                a:first-of-type {
+                >a:first-of-type {
                     padding-left: 2px;
+
+                    svg {
+                        margin-right: -4px;
+                    }
                 }
 
                 &>div {
