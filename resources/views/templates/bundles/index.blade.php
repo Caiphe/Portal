@@ -8,6 +8,8 @@
 
 @section('sidebar')
 <div class="filter-sidebar">
+    <input type="text" name="filter-text" id="filter-text" class="filter-text" placeholder="Search" autofocus/>
+    
     <h3>Categories</h3>
     @foreach ($categories as $id => $category)
     <div class="filter-checkboxs">
@@ -25,11 +27,16 @@
 </div>
 @endsection
 
-@section('content')
-    <x-heading heading="Bundles">
-        <input type="text" name="filter-text" id="filter-text" class="filter-text" placeholder="Search" autofocus/>
-    </x-heading>
+@section('banner')
+<div id="banner"></div>
+@endsection
 
+@section('content')
+    <div class="header-block">
+        <h1>Bundles</h1>
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+        @svg('people', null, 'images/illustrations')
+    </div>
     <div class="content">
         @foreach($bundles as $bundle)
         <x-card-link

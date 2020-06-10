@@ -11,6 +11,8 @@
 $filters = array('Categories'=> $productCategories);
 @endphp
 <div class="filter-sidebar">
+	<input type="text" name="filter-text" id="filter-text" class="filter-text" placeholder="Search" autofocus/>
+
 	@foreach ($filters as $filterTitle => $filterGroup)
 		<h3>{{$filterTitle}}</h3>
 		@foreach ($filterGroup as $filterItem)
@@ -32,10 +34,17 @@ $filters = array('Categories'=> $productCategories);
 </div>
 @endsection
 
+@section('banner')
+<div id="banner"></div>
+@endsection
+
 @section('content')
-    <x-heading heading="Products">
-        <input type="text" name="filter-text" id="filter-text" class="filter-text" placeholder="Search" autofocus/>
-    </x-heading>
+    <div class="header-block">
+        <h1>Products</h1>
+        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+        @svg('people', null, 'images/illustrations')
+    </div>
+
     <div class="content">
         <div class="products">
             @foreach ($productsCollection as $category => $products)
