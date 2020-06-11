@@ -1,0 +1,111 @@
+@import "../variables";
+
+#pricing {
+    display: flex;
+    justify-content: center;
+
+    .rate-plan {
+        flex: 0 0 33%;
+        margin: 0 20px;
+        background-color: $grey400;
+        border-radius: 5px;
+        text-align: center;
+        padding: 20px 0;
+    }
+
+    .popular {
+        background-color: $yellow;
+        transform: scale(1.1);
+
+        &:before {
+            content: "MOST POPULAR";
+            position: absolute;
+            top: -10px;
+            font-size: 10px;
+            background-color: $blue;
+            color: #FFF;
+            padding: 0px 12px;
+            border-radius: 12px;
+            left: 50%;
+            margin-left: -52px;
+        }
+
+        .price {
+            color: $grey900;
+        }
+
+        .cost-per-transaction {
+            border-top: 1px solid $yellow700;
+            border-bottom: 1px solid $yellow700;
+        }
+    }
+
+    .group {
+        font-size: 10px;
+        font-family: "Montserrat-Light";
+        padding: 2px 6px;
+        background-color: $yellow;
+        display: inline;
+    }
+
+    .price {
+        font-family: "mtn-bold";
+        font-size: 40px;
+        margin: 20px 0 0;
+        color: $grey800;
+
+        sup {
+            font-family: "mtn-regular";
+            top: -16px;
+            font-size: 14px;
+        }
+    }
+
+    .period {
+        font-size: 10px;
+        margin-top: 4px;
+    }
+
+    .button {
+        width: calc(100% - 40px);
+        margin-top: 20px;
+    }
+
+    .transactions {
+        font-family: "Montserrat-Bold";
+        font-size: 14px;
+        margin-top: 20px;
+
+        span {
+            display: block;
+            font-size: 10px;
+            font-family: "Montserrat";
+        }
+    }
+
+    .cost-per-transaction {
+        font-family: "Montserrat-Bold";
+        font-size: 14px;
+        margin: 10px 0;
+        padding: 10px 0;
+        border-top: 1px solid $grey500;
+        border-bottom: 1px solid $grey500;
+
+        span {
+            display: block;
+            font-size: 10px;
+            font-family: "Montserrat";
+        }
+    }
+
+    .features {
+        font-size: 10px;
+        margin-top: 20px;
+
+        h6 {
+            margin: 0;
+            font-family: "Montserrat-Bold";
+            font-size: 10px;
+        }
+    }
+}

@@ -24,15 +24,66 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Blade::directive('svg', function ($expression) {
-            $options = explode(', ', $expression);
-            $icon = trim($options[0], " '\"");
-            $icon = file_get_contents(public_path("images/icons/{$icon}.svg"));
-            
-            if (!isset($options[1])) return $icon;
+        Blade::directive('strSlug', function ($expression) {
+            return <<<SLU
+            <?php echo \Illuminate\Support\Str::slug(trim($expression, " '\"")) ?>
+            SLU;
+        });
 
-            $colour = trim($options[1], " '\"");
-            return preg_replace('/<svg/', '<svg fill="' . $colour . '"', $icon);
+        Blade::directive('subStr', function ($expression) {
+            $options = explode(',', $expression);
+            $str = trim($options[0], " '\"");
+            $limit = 50;
+            if(isset($options[1])){
+                $limit = +trim($options[1]);
+            }
+
+            return <<<SUB
+            <?php
+                if(strlen($str) > $limit){
+                    echo substr($str, 0, ($limit - 3)) . '...';
+                } else {
+                    echo $str;
+                }
+            ?>
+            SUB;
+        });
+
+        Blade::directive('svg', function ($expression) {
+            $options = explode(',', $expression);
+            $icon = trim($options[0], " '\"");
+            $colour = '#000000';
+            $path = 'images/icons';
+            
+            if(isset($options[1])){
+                $colour = trim($options[1], " '\"");
+            }
+            
+            if(isset($options[2])){
+                $path = trim($options[2], " '\"");
+            }
+
+            return <<<SVG
+            <?php
+                echo preg_replace('/<svg/', '<svg fill="$colour"', file_get_contents(public_path("$path/$icon.svg")));
+            ?>
+            SVG;
+        });
+
+        Blade::directive('allowonce', function ($expression) {
+            $isDisplayed = '__allowonce_'.trim($expression, " '\"");
+            return "<?php if(!isset(\$__env->{$isDisplayed})): \$__env->{$isDisplayed} = true; ?>";
+        });
+        Blade::directive('endallowonce', function ($expression) {
+            return '<?php endif; ?>';
+        });
+
+        Blade::directive('pushscript', function ($expression) {
+            $isDisplayed = '__pushscript_'.trim($expression, " '\"");
+            return "<?php if(!isset(\$__env->{$isDisplayed})): \$__env->{$isDisplayed} = true; \$__env->startPush('scripts'); ?>";
+        });
+        Blade::directive('endpushscript', function ($expression) {
+            return '<?php $__env->stopPush(); endif; ?>';
         });
     }
 }

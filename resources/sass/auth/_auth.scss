@@ -1,0 +1,131 @@
+#auth-main {
+    height: 100%;
+
+    .header {
+        margin: $gutterSmall 0 0 $gutter;
+        display: flex;
+        position: relative;
+        align-items: center;
+
+        div {
+            margin-left: 2rem;
+            font-size: 1.8rem;
+        }
+    }
+
+    svg {
+        width: 16px;
+    }
+
+    form {
+        padding: $gutter $gutter 0 $gutter;
+        width: 35%;
+        height: calc(100vh - 170px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+
+        input {
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .inline {
+            margin-top: 2rem;
+            display: flex;
+            align-items: center;
+
+            a {
+                display: flex;
+                text-align: center;
+
+                svg {
+                    margin-left: 4px;
+                }
+            }
+        }
+    }
+
+    .invalid {
+        border-color: $error;
+    }
+
+    .invalid-feedback {
+        font-size: 1rem;
+        color: $error;
+    }
+
+    .yellow {
+        color: $yellow;
+    }
+
+    .carousel {
+        position: absolute;
+        height: 100%;
+        width: 65%;
+        top: 0;
+        right: 0;
+    }
+
+    p {
+        font-family: "Montserrat-Light";
+    }
+
+    .carousel-item {
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+
+        display: flex;
+        align-items: center;
+    }
+
+    .carousel-item:first-child {
+        background-image: url("/images/backgrounds/bg-opt-1-yellow.svg");
+    }
+
+    .carousel-item:nth-child(2) {
+        background-image: url("/images/backgrounds/bg-opt-2-red.svg");
+    }
+
+    .carousel-item:nth-child(3) {
+        background-image: url("/images/backgrounds/bg-opt-3-blue.svg");
+    }
+
+    .carousel-item:nth-child(4) {
+        background-image: url("/images/backgrounds/bg-opt-4-black.svg");
+    }
+
+    .carousel-content {
+        margin: 0 80px;
+        color: #FFF;
+        width: 70%;
+
+        h1 {
+            color: currentColor;
+            margin-bottom: $gutterSmall;
+        }
+    }
+
+    .try-somewhere-else {
+        display: flex;
+        align-items: center;
+
+        span {
+            color: $grey900;
+            margin-right: 6px;
+        }
+
+        svg {
+            width: 12px;
+            margin-left: 4px;
+        }
+    }
+
+    .bottom {
+        position: absolute;
+        bottom: $gutterSmall;
+        left: $gutter;
+    }
+}

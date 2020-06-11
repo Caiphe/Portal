@@ -1,31 +1,190 @@
-.curve {
-    overflow: hidden;
-    padding-top: 32px;
+.shadow {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12), 0 3px 6px rgba(0, 0, 0, 0.16);
+}
 
-    &::before {
-        content: "";
-        position: absolute;
-        width: calc(100% + 20px);
-        height: 72px;
-        background-color: #FFF;
-        border-radius: 0 0 50% 50%;
-        left: -10px;
-        top: -40px;
-    }
+.container {
+    padding: 0 8%;
+    max-width: 1440px;
+    width: 100%;
+    position: relative;
+    margin: 0 auto;
+}
 
-    &.yellow::before {
-        background-color: $yellow;
-    }
+.container-inner {
+    max-width: 1440px;
+    width: 100%;
+    position: relative;
+    margin: 0 auto;
 
-    &.dark::before {
-        background-color: $grey900;
-    }
-
-    &.medium::before {
-        background-color: $grey300;
+    &.flex {
+        display: flex;
     }
 }
 
-.shadow {
-    box-shadow: 0 3px 6px rgba(0,0,0,0.12), 0 3px 6px rgba(0,0,0,0.16);
+.cols {
+    &:not(.inline) {
+        display: flex;
+        flex-flow: row wrap;
+
+        .col {
+            flex: 1 auto;
+        }
+
+        .col-3 {
+            flex: 0 0 25%;
+            max-width: 25%;
+        }
+
+        .col-4 {
+            flex: 0 0 33.333333%;
+            max-width: 33.333333%;
+        }
+
+        .col-6 {
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+
+        .col-8 {
+            flex: 0 0 66.666666%;
+            max-width: 66.666666%;
+        }
+
+        .col-12 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+    }
+
+    &.inline {
+        font-size: 0;
+
+        .col {
+            display: inline-block;
+            font-size: 1.4rem;
+        }
+
+        .col-4 {
+            min-width: 33.333333%;
+            max-width: 33.333333%;
+            display: inline-block;
+            font-size: 1.4rem;
+        }
+
+        .col-6 {
+            min-width: 50%;
+            max-width: 50%;
+            display: inline-block;
+            font-size: 1.4rem;
+        }
+
+        .col-8 {
+            min-width: 66.666666%;
+            max-width: 66.666666%;
+            display: inline-block;
+            font-size: 1.4rem;
+        }
+    }
+}
+
+@for $i from 0 through 5 {
+    .mt-#{$i} {
+        margin-top: #{$i}rem;
+    }
+
+    .mb-#{$i} {
+        margin-bottom: #{$i}rem;
+    }
+
+    .mr-#{$i} {
+        margin-right: #{$i}rem;
+    }
+
+    .ml-#{$i} {
+        margin-left: #{$i}rem;
+    }
+
+    .mx-#{$i} {
+        margin-left: #{$i}rem;
+        margin-right: #{$i}rem;
+    }
+
+    .my-#{$i} {
+        margin-top: #{$i}rem;
+        margin-bottom: #{$i}rem;
+    }
+
+    .pt-#{$i} {
+        padding-top: #{$i}rem;
+    }
+
+    .pb-#{$i} {
+        padding-bottom: #{$i}rem;
+    }
+
+    .pr-#{$i} {
+        padding-right: #{$i}rem;
+    }
+
+    .pl-#{$i} {
+        padding-left: #{$i}rem;
+    }
+
+    .px-#{$i} {
+        padding-left: #{$i}rem;
+        padding-right: #{$i}rem;
+    }
+
+    .py-#{$i} {
+        padding-top: #{$i}rem;
+        padding-bottom: #{$i}rem;
+    }
+}
+
+.grey-bg {
+    background-color: $grey300;
+}
+
+.blue-bg {
+    background-color: $blue;
+}
+
+.yellow-bg {
+    background-color: $yellow;
+}
+
+.layout-master section.grey-bg {
+    position: relative;
+
+    @media screen and (min-width: 1440px) {
+        &:before,
+        &:after {
+            content: "";
+            height: 100%;
+            width: calc((100vw - 1440px) / 2);
+            background-color: $grey300;
+            position: absolute;
+            top: 0;
+        }
+
+        &:before {
+            left: 100%;
+        }
+
+        &:after {
+            right: 100%;
+        }
+    }
+}
+
+.right-flex {
+    justify-content: flex-end;
+}
+
+.centre {
+    text-align: center;
+}
+
+.centre-flex {
+    justify-content: center;
 }

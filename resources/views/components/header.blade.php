@@ -1,20 +1,49 @@
 <header id="header">
-    <div class="header-inner">
+    <nav class="header-inner container">
         <a href="/"><img src="/images/mtn-logo.svg" alt="MTN logo"></a>
-        <div class="site-name">Developer Portal</div>
+        <a href="/" class="site-name">Developer Portal</a>
         <ul class="main-menu" role="navigation" aria-label="Main">
-            <li><a href="/">Products</a></li>
-            <li><a href="/">Insights</a></li>
-            <li><a href="/">FAQ</a></li>
+            <li class="has-children">
+                <a href="/products">Products @svg("chevron-down")</a>
+                <div class="product-nav shadow">
+                    <div class="nav-categories">
+                        <h3>BROWSE BY CATEGORY</h3>
+                        @foreach($globalCategories as $category)
+                            <a href="{{ route('category.show', $category->slug) }}">
+                                @svg($category->slug) {{$category->title}}
+                                <span>{{ $category->description }}</span>
+                            </a>
+                        @endforeach
+                    </div>
+                    <div class="nav-pages">
+                        <a href="/products">Browse all our products</a>
+                        <a href="/bundles">Browse all our bundles</a>
+                        <a href="/getting-started">Working with our products</a>
+                    </div>
+                </div>
+            </li>
+            <li><a href="/faq">FAQ</a></li>
+            <li><a href="/contact">Contact us</a></li>
+            @can('view-dashboard')
+            <li><a href="/dashboard">Dashboard</a></li>
+            @endcan
         </ul>
-        <input type="search" name="search" id="search" class="thin see-through" placeholder="Search">
-        <button class="dark">Build app</button>
-        <button id="profile" class="fab image" style="background-image: url(/images/profile.jpg)"></button>
-    </div>
+        <form action="{{route('search')}}">
+            <input type="search" name="q" id="search" class="thin see-through" placeholder="Search">
+        </form>
+        @if(\Auth::check())
+            <a href="/apps/create" class="button dark" role="button">Build app</a>
+            <div id="profile-menu">
+                <div id="profile-menu-picture" style="background-image: url({{\Auth::user()->profile_picture}})"></div>
+                <ul class="profile-menu-options shadow">
+                    <li><a href="/profile">Profile</a></li>
+                    <li><a href="/apps">Apps</a></li>
+                    <li><form action="{{route('logout')}}" method="post">@csrf<button>Sign out</button></form></li>
+                </ul>
+            </div>
+        @else
+            <a href="{{route('login')}}" class="button dark outline mr-1" role="button">Login</a>
+            <a href="{{route('register')}}" class="button dark" role="button">Register</a>
+        @endif
+    </nav>
 </header>
-<div id="profile-menu-background"></div>
-<ul id="profile-menu" class="shadow">
-    <li><a href="/profile">Profile</a></li>
-    <li><a href="/apps">Apps</a></li>
-    <li><a href="/user/logout">Sign out</a></li>
-</ul>

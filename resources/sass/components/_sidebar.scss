@@ -1,0 +1,30 @@
+.layout-sidebar {
+    &::before {
+        content: '';
+        width: 50%;
+        background-color: $grey200;
+        height: 100%;
+        position: fixed;
+        left: 0;
+        top: 0;
+    }
+
+    .wrapper {
+        display: flex;
+        flex: 1 0 auto;
+
+        #sidebar {
+            flex: 1;
+            padding: 50px 0;
+            min-width: 250px;
+            max-width: 250px;
+            background-color: $grey200;
+            height: 100%;
+        }
+
+        #main {
+            background-color: #FFF;
+            padding-right: 0;
+        }
+    }
+}

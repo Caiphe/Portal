@@ -1,0 +1,874 @@
+@import "../../variables";
+
+.container {
+    font-size: 16px;
+
+    h1 {
+        font-size: 18px;
+        font-family: Montserrat;
+        margin-top: 40px;
+    }
+
+    .button svg,
+    button svg {
+        width: 16px;
+        margin-left: 5px;
+    }
+}
+
+.breadcrumb {
+    position: absolute;
+    display: flex;
+    right: 8%;
+    top: 0;
+
+    a {
+        margin-left: 20px;
+        display: flex;
+    }
+
+    svg {
+        width: 12px;
+        margin-left: 4px;
+    }
+}
+
+.banner {
+
+    h2,
+    p {
+        width: 490px;
+    }
+
+    h2 {
+        margin-top: 100px;
+    }
+
+    .squiggle {
+        position: absolute;
+        top: -90px;
+        right: 4%;
+        width: 667px;
+    }
+
+    .phone {
+        position: absolute;
+        right: 24%;
+        top: -80px;
+        width: 248px;
+        height: 489px;
+        overflow: hidden;
+        border-radius: 16px;
+
+        .banner-image,
+        svg {
+            top: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+
+        .banner-image {
+            background-repeat: no-repeat;
+            background-position: center top;
+            background-size: cover;
+        }
+    }
+
+    .view-products svg {
+        width: 16px;
+        margin-left: 5px;
+    }
+}
+
+.businesses {
+    margin-top: 100px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+
+    h2 {
+        width: 100%;
+        text-align: center;
+        font-size: 10px;
+        color: $grey500;
+    }
+}
+
+.overview {
+    margin-bottom: 100px;
+
+    h3 {
+        font-size: 30px;
+    }
+
+    .benefits-copy {
+        width: 405px;
+        margin-bottom: 145px;
+    }
+
+    .stack-general.benefits {
+        position: absolute;
+        top: -50px;
+        right: 0;
+    }
+
+    hr {
+        color: $grey300;
+        margin: 40px 0;
+    }
+
+    .included {
+        .col-4 {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+
+            >svg {
+                margin-right: 8px;
+                width: 11px;
+                height: 11px;
+                background-color: $yellow;
+                padding: 4px;
+                border-radius: 50%;
+            }
+        }
+
+        a {
+            color: $blue;
+            display: flex;
+
+            svg {
+                fill: $blue;
+                width: 16px;
+                margin-left: 10px;
+            }
+        }
+    }
+}
+
+.example {
+    .snippets {
+        background-color: #4A4A4A;
+        border-radius: 5px;
+        height: 154px;
+        position: absolute;
+        top: -210px;
+        left: 8%;
+        right: 8%;
+    }
+
+    .tab {
+        display: inline-block;
+        padding: 20px;
+        font-size: 14px;
+        color: #FFF;
+    }
+
+    .active {
+        background-color: $grey900;
+    }
+
+    .snippet {
+        padding: 30px;
+        position: absolute;
+        bottom: 0;
+        background-color: $grey900;
+        width: 100%;
+        border-radius: 0 0 5px 5px;
+
+        pre {
+            background-color: $grey900;
+            padding: 0;
+            margin: 0;
+            font-size: 12px;
+        }
+    }
+
+    .cols {
+        position: absolute;
+        right: 8%;
+        top: 30px;
+
+        a {
+            height: 40px;
+        }
+    }
+}
+
+.pricing {
+    margin: 60px auto 80px;
+}
+
+.relationships {
+    margin-top: 80px;
+
+    .stack-bundle,
+    .stack-product {
+        display: flex;
+        align-items: center;
+
+        .stack-description {
+            .tag {
+                color: $grey900;
+            }
+
+            h3 {
+                font-size: 30px;
+                margin: 20px 0;
+            }
+
+            a {
+                color: $blue;
+                display: flex;
+
+                svg {
+                    fill: $blue;
+                    width: 14px;
+                    margin-left: 10px;
+                }
+            }
+        }
+
+        .stack-cards {
+            flex: 0 0 auto;
+        }
+    }
+}
+
+// Stack general
+.stack-general {
+    width: 630px;
+    height: 394px;
+
+    background-size: contain;
+    background-position: right top;
+    background-repeat: no-repeat;
+
+    img {
+        width: 410px;
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
+    .stack-card {
+        background-color: #FFF;
+        border-radius: 5px;
+        box-shadow: 0 12px 24px $grey500;
+        width: 490px;
+        height: 238px;
+        padding: 40px;
+        position: absolute;
+        top: 50px;
+        left: 0;
+
+        &:nth-of-type(2) {
+            transform: translate(0, 30px) scale(0.95);
+        }
+
+        &:nth-of-type(1) {
+            transform: translate(0, 60px) scale(0.9);
+        }
+    }
+
+    h3 {
+        font-size: 14px;
+        background-color: $yellow;
+        border-radius: 15px;
+        padding: 5px 20px;
+        font-family: Montserrat;
+        position: absolute;
+        top: -15px;
+        left: 30px;
+        margin: 0;
+    }
+
+    h4 {
+        margin: 0px 0px 10px;
+        font-family: "Montserrat-Bold";
+        font-size: 16px;
+    }
+
+    p {
+        font-family: "Montserrat-Light";
+        font-size: 14px;
+    }
+
+    a {
+        font-size: 14px;
+        font-family: Montserrat;
+        color: $blue;
+        display: flex;
+
+        svg {
+            fill: $blue;
+            width: 14px;
+            margin-left: 10px;
+        }
+    }
+}
+
+// Stack cards
+.stack-cards {
+    width: 700px;
+    height: 570px;
+
+    background-size: contain;
+    background-repeat: no-repeat;
+    perspective: 1000px;
+
+    &.left {
+        background-position: left bottom;
+        margin-left: -8%;
+
+        .stack-card {
+            top: 0;
+            margin-left: 140px;
+            transform: translate(60px, 60px) rotateY(10deg) rotateX(-4deg);
+
+            &:nth-of-type(2) {
+                transform: translate(30px, 30px) scale(0.95) rotateY(10deg) rotateX(-4deg);
+            }
+
+            &:nth-of-type(1) {
+                transform: translate(0, 0) scale(0.9) rotateY(10deg) rotateX(-4deg);
+            }
+        }
+    }
+
+    &.right {
+        background-position: right top;
+        margin-right: -8%;
+
+        .stack-card {
+            bottom: 50px;
+            right: 140px;
+            transform: translate(0, 0) rotateY(-10deg) rotateX(-4deg);
+
+            &:nth-of-type(2) {
+                transform: translate(30px, -30px) scale(0.95) rotateY(-10deg) rotateX(-4deg);
+            }
+
+            &:nth-of-type(1) {
+                transform: translate(60px, -60px) scale(0.9) rotateY(-10deg) rotateX(-4deg);
+            }
+        }
+    }
+
+    .stack-card {
+        border-radius: 12px;
+        width: 430px;
+        height: 400px;
+        padding: 40px;
+        position: absolute;
+    }
+
+    h3 {
+        font-size: 40px;
+        font-family: "mtn-bold";
+    }
+
+    .flags {
+        height: 42px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+
+        svg {
+            width: 14px;
+            margin: 0 8px 0 0;
+        }
+    }
+
+    .button {
+        background-color: $grey300;
+        border: 2px solid $grey300;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+}
+
+
+// Themes
+
+.mixed {
+    .banner svg {
+        fill: $grey800;
+    }
+
+    .benefits {
+        background-image: url("/images/category/themes/mixed/squiggle-benefits.svg");
+    }
+
+    .example .button svg {
+        fill: #FFF;
+    }
+
+    .bundle {
+        background-image: url("/images/category/themes/mixed/squiggle-bundle.svg");
+
+        .tag {
+            color: $yellow;
+            border: 1px solid $yellow;
+            background-color: transparent;
+        }
+
+        h3 {
+            color: #FFF;
+        }
+
+        .stack-card {
+            background-color: $grey900;
+            color: #FFF;
+
+            &:nth-of-type(2) {
+                background-color: $grey600;
+            }
+
+            &:nth-of-type(1) {
+                background-color: $grey500;
+            }
+        }
+    }
+
+    .product {
+        background-image: url("/images/category/themes/mixed/squiggle-product.svg");
+
+        .tag {
+            color: $yellow;
+            border: 1px solid $yellow;
+            background-color: transparent;
+        }
+
+        h3 {
+            color: #FFF;
+        }
+
+        .stack-card {
+            background-color: $blue;
+            color: #FFF;
+
+            &:nth-of-type(2) {
+                background-color: #9EC2D2;
+            }
+
+            &:nth-of-type(1) {
+                background-color: #CEE1E8;
+            }
+        }
+    }
+
+    #pricing .popular:before {
+        background-color: $blue;
+    }
+}
+
+.standard {
+    .banner {
+        .view-products {
+            background-color: $grey900;
+            border: 2px solid $grey900;
+            color: #FFF;
+        }
+
+        svg {
+            fill: #FFF;
+        }
+    }
+
+    .benefits {
+        background-image: url("/images/category/themes/standard/squiggle-benefits.svg");
+    }
+
+    .example .button svg {
+        fill: #FFF;
+    }
+
+    .bundle {
+        background-image: url("/images/category/themes/standard/squiggle-bundle.svg");
+
+        .tag {
+            color: $grey900;
+            border: 1px solid $grey900;
+            background-color: transparent;
+        }
+
+        h3 {
+            color: $grey900;
+        }
+
+        .stack-card {
+            background-color: $yellow;
+            color: $grey900;
+
+            &:nth-of-type(2) {
+                background-color: $grey600;
+            }
+
+            &:nth-of-type(1) {
+                background-color: $grey500;
+            }
+        }
+    }
+
+    .product {
+        background-image: url("/images/category/themes/standard/squiggle-product.svg");
+
+        .tag {
+            color: $grey900;
+            border: 1px solid $grey900;
+            background-color: transparent;
+        }
+
+        h3 {
+            color: $grey900;
+        }
+
+        .stack-card {
+            background-color: $yellow;
+            color: $grey900;
+
+            &:nth-of-type(2) {
+                background-color: $grey600;
+            }
+
+            &:nth-of-type(1) {
+                background-color: $grey500;
+            }
+        }
+    }
+
+    #pricing .popular:before {
+        background-color: $grey900;
+    }
+}
+
+.pink {
+    .banner {
+        .view-products {
+            background-color: $pink;
+            border: 2px solid $pink;
+            color: #FFF;
+        }
+
+        svg {
+            fill: #FFF;
+        }
+
+        .phone svg path {
+            fill: $pink;
+        }
+    }
+
+    .example {
+        background-color: $pink;
+        color: #FFF;
+
+        h2 {
+            color: #FFF;
+        }
+
+        .button {
+            background-color: #FFF;
+            border: 2px solid #FFF;
+            color: $grey900;
+
+            svg {
+                fill: $grey900;
+            }
+        }
+    }
+
+    .benefits {
+        background-image: url("/images/category/themes/pink/squiggle-benefits.svg");
+
+        .stack-card h3 {
+            background-color: $pink;
+        }
+    }
+
+    .relationships .stack-description .tag {
+        background-color: $pink;
+        color: #FFF;
+    }
+
+    .bundle {
+        background-image: url("/images/category/themes/pink/squiggle-bundle.svg");
+
+        .tag {
+            color: $yellow;
+            border: 1px solid $yellow;
+            background-color: transparent;
+        }
+
+        h3 {
+            color: #FFF;
+        }
+
+        .stack-card {
+            background-color: $pink;
+            color: #FFF;
+
+            &:nth-of-type(2) {
+                background-color: $pink300;
+            }
+
+            &:nth-of-type(1) {
+                background-color: $pink200;
+            }
+        }
+    }
+
+    .product {
+        background-image: url("/images/category/themes/pink/squiggle-product.svg");
+
+        .tag {
+            color: $yellow;
+            border: 1px solid $yellow;
+            background-color: transparent;
+        }
+
+        h3 {
+            color: #FFF;
+        }
+
+        .stack-card {
+            background-color: $pink;
+            color: #FFF;
+
+            &:nth-of-type(2) {
+                background-color: $pink300;
+            }
+
+            &:nth-of-type(1) {
+                background-color: $pink200;
+            }
+        }
+    }
+
+    #pricing .popular:before {
+        background-color: $pink;
+    }
+}
+
+.blue {
+    .banner {
+        .phone svg path {
+            fill: $blue;
+        }
+    }
+
+    .example {
+        background-color: $blue;
+        color: #FFF;
+
+        h2 {
+            color: #FFF;
+        }
+
+        .button {
+            svg {
+                fill: #FFF;
+            }
+        }
+    }
+
+    .benefits {
+        background-image: url("/images/category/themes/blue/squiggle-benefits.svg");
+    }
+
+    .relationships .stack-description .tag {
+        background-color: $blue;
+        color: #FFF;
+    }
+
+    .bundle {
+        background-image: url("/images/category/themes/blue/squiggle-bundle.svg");
+
+        .tag {
+            color: $yellow;
+            border: 1px solid $yellow;
+            background-color: transparent;
+        }
+
+        h3 {
+            color: #FFF;
+        }
+
+        .stack-card {
+            background-color: $blue;
+            color: #FFF;
+
+            &:nth-of-type(2) {
+                background-color: $blue300;
+            }
+
+            &:nth-of-type(1) {
+                background-color: $blue200;
+            }
+        }
+    }
+
+    .product {
+        background-image: url("/images/category/themes/blue/squiggle-product.svg");
+
+        .tag {
+            color: $yellow;
+            border: 1px solid $yellow;
+            background-color: transparent;
+        }
+
+        h3 {
+            color: #FFF;
+        }
+
+        .stack-card {
+            background-color: $blue;
+            color: #FFF;
+
+            &:nth-of-type(2) {
+                background-color: $blue300;
+            }
+
+            &:nth-of-type(1) {
+                background-color: $blue200;
+            }
+        }
+    }
+
+    #pricing .popular:before {
+        background-color: $blue;
+    }
+}
+
+.dark {
+    .banner {
+        .view-products {
+            background-color: $grey900;
+            border: 2px solid $grey900;
+            color: #FFF;
+        }
+
+        svg {
+            fill: #FFF;
+        }
+
+        .phone svg path {
+            fill: $grey900;
+        }
+    }
+
+    .example {
+        background-color: $grey800;
+        color: #FFF;
+
+        h2 {
+            color: #FFF;
+        }
+
+        .button {
+            background-color: #FFF;
+            border: 2px solid #FFF;
+            color: $grey900;
+
+            svg {
+                fill: $grey900;
+            }
+        }
+    }
+
+    .benefits {
+        background-image: url("/images/category/themes/dark/squiggle-benefits.svg");
+
+        .stack-card h3 {
+            background-color: $grey900;
+            color: #FFF;
+        }
+    }
+
+    .relationships .stack-description .tag {
+        background-color: $grey900;
+        color: #FFF;
+    }
+
+    .bundle {
+        background-image: url("/images/category/themes/dark/squiggle-bundle.svg");
+
+        .tag {
+            color: $yellow;
+            border: 1px solid $yellow;
+            background-color: transparent;
+        }
+
+        h3 {
+            color: #FFF;
+        }
+
+        .stack-card {
+            background-color: $grey900;
+            color: #FFF;
+
+            &:nth-of-type(2) {
+                background-color: $grey600;
+            }
+
+            &:nth-of-type(1) {
+                background-color: $grey500;
+            }
+        }
+    }
+
+    .product {
+        background-image: url("/images/category/themes/dark/squiggle-product.svg");
+
+        .tag {
+            color: $yellow;
+            border: 1px solid $yellow;
+            background-color: transparent;
+        }
+
+        h3 {
+            color: #FFF;
+        }
+
+        .stack-card {
+            background-color: $grey900;
+            color: #FFF;
+
+            &:nth-of-type(2) {
+                background-color: $grey600;
+            }
+
+            &:nth-of-type(1) {
+                background-color: $grey500;
+            }
+        }
+    }
+
+    #pricing .popular {
+        background-color: $grey900;
+        color: #FFF;
+
+        .price {
+            color: #FFF;
+        }
+
+        &:before,
+        .button {
+            background-color: $grey400;
+            color: $grey900;
+        }
+
+        .group {
+            border: 1px solid $grey600;
+            color: $grey600;
+            background-color: transparent;
+        }
+
+        .cost-per-transaction {
+            border-top: 1px solid $grey400;
+            border-bottom: 1px solid $grey400;
+        }
+    }
+}

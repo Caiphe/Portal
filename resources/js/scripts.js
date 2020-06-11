@@ -1,6 +1,7 @@
-document.getElementById('profile').addEventListener('click', toggleProfileMenu);
-document.getElementById('profile-menu-background').addEventListener('click', toggleProfileMenu);
+document.addEventListener('DOMContentLoaded', function() {
+    hljs.configure({
+        languages: ['JSON', 'JavaScript']
+    });
 
-function toggleProfileMenu() {
-    document.body.classList.toggle('show-profile-menu');
-}
+    hljs.initHighlightingOnLoad();
+});

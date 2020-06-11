@@ -1,0 +1,120 @@
+@import "../../variables";
+
+#banner {
+    height: 300px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    flex-shrink: 0;
+}
+
+#main {
+    .heading-box {
+        background-color: $grey900;
+        border-radius: 5px;
+        height: 244px;
+        width: 100%;
+        position: absolute;
+        top: -60px;
+        padding: 40px;
+        color: #FFF;
+
+        h1 {
+            margin: 0;
+            color: #FFF;
+            font-size: 4rem;
+        }
+    }
+
+    .price-box {
+        background-color: $grey200;
+        width: 220px;
+        position: absolute;
+        top: -100px;
+        right: 0;
+        padding: 20px 0;
+        border-radius: 5px;
+        text-align: center;
+        color: $grey600;
+        box-shadow: 0 2px 4px $grey500;
+
+        h3 {
+            color: $grey900;
+            font-size: 3rem;
+            margin: 0 0 10px;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        small {
+            margin: 0 0 10px;
+            width: 100%;
+            display: block;
+            font-size: 10px;
+
+            &:last-child {
+                margin: 0;
+            }
+        }
+
+        .border-bottom {
+            border-bottom: 1px solid $grey400;
+            padding: 0 0 10px;
+        }
+    }
+
+    .available-in {
+        margin-top: 200px;
+
+        h4 {
+            margin: 0 0 4px;
+        }
+
+        img {
+            width: 15px;
+        }
+    }
+
+    h2 {
+        margin-top: 40px;
+    }
+
+    .products {
+        display: flex;
+        flex-flow: row wrap;
+
+        .card {
+            flex: 0 1 31%;
+            margin-bottom: 30px;
+            margin-right: 15px;
+
+            .card__header {
+                margin-bottom: 10px;
+            }
+        }
+    }
+}
+
+#sidebar-nav {
+    li {
+        list-style: none;
+        margin-bottom: 16px;
+    }
+
+    a {
+        color: $grey700;
+        font-size: 12px;
+        padding-left: 20px;
+    }
+
+    svg {
+        position: absolute;
+        display: block;
+        left: 0;
+        top: -2px;
+        height: 20px;
+        width: 13px;
+    }
+}

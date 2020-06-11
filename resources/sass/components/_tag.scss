@@ -1,0 +1,112 @@
+@import "../variables";
+
+.tag {
+    padding: 1px 9px 2px;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+    color: #ffffff;
+    background-color: #999999;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+
+    &.hoverable {
+        text-decoration: none;
+        cursor: pointer;
+
+        &.yellow:hover {
+            background-color: $yellow900;
+        }
+
+        &.blue:hover {
+            background-color: $blue900;
+        }
+
+        &.grey:hover {
+            background-color: $grey900;
+        }
+
+        &.success:hover {
+            background-color: $success900;
+        }
+
+        &.warning:hover {
+            background-color: $warning900;
+        }
+
+        &.error:hover {
+            background-color: $error900;
+        }
+    }
+
+    &.outline {
+        border: 1px solid rgb(0, 0, 0);
+        background-color: transparent !important;
+        color: rgb(0, 0, 0);
+
+        &.hoverable {
+            background-color: transparent;
+        }
+
+        &.yellow {
+            border: 1px solid $yellow;
+            color: $yellow;
+        }
+
+        &.blue {
+            border: 1px solid $blue;
+            color: $blue;
+        }
+
+        &.grey {
+            border: 1px solid $grey900;
+            color: $grey900;
+        }
+
+        &.success {
+            border: 1px solid $success;
+            color: $success;
+        }
+
+        &.warning {
+            border: 1px solid $warning;
+            color: $warning;
+        }
+
+        &.error {
+            border: 1px solid $error;
+            color: $error;
+        }
+    }
+
+    &.removeable::after {
+        content: "×";
+        margin-left: 6px;
+        font-size: 1.2rem;
+    }
+
+    &.success {
+        background-color: $success;
+    }
+
+    &.warning {
+        background-color: $warning;
+    }
+
+    &.error {
+        background-color: $error;
+    }
+
+    &.yellow {
+        background-color: $yellow;
+    }
+
+    &.blue {
+        background-color: $blue;
+    }
+
+    &.grey {
+        background-color: $grey900;
+    }
+}

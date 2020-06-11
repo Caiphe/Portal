@@ -1,0 +1,184 @@
+info:
+  title: MTN Customer KYC API
+  version: '1.0'
+  contact:
+    name: MTN API Support
+    email: developer-support@mtn.com
+  description: MTN Customer KYC API allows clients to view the KYC (Know Your Customer) details of an MTN customer. The KYC API is a subset of the Customer Profile API
+swagger: '2.0'
+schemes:
+  - https
+host: api.mtn.com
+basePath: /v1/customers
+produces:
+  - application/json
+consumes:
+  - application/json
+securityDefinitions:
+  API Key:
+    name: x-api-key
+    type: apiKey
+    in: header
+  OAuth2:
+    type: oauth2
+    tokenUrl: 'https://api.mtn.com/oauth/client_credential/accesstoken'
+    flow: application
+paths:
+  '/customers/{customerId}/kyc':
+    parameters:
+      - type: string
+        name: customerId
+        in: path
+        description: "ID of the customer. It could be MSISDN, email address, or any other customer identifier. if customerId is msisdn, then the format must be E.123"
+        required: true
+      - name: "startDate"
+        in: "query"
+        description: "An optional parameter, together with endDate, allows developers to specify a time range by which to query customer data on. 
+        If you want to request data for 2 months, then start date will need to be set to 2 months prior to today, and endDate to todays date. 
+        If this is not set, the date range will be defaulted to 6 months"
+        type: string
+        format: date
+        example: "20190329"
+      - name: "endDate"
+        in: query
+        description: "An optional parameter, together with endDate, allows developers to specify a time range by which to query customer data on. 
+        If you want to request data for 2 months, then start date will need to be set to 2 months prior to today, and endDate to todays date. 
+        If this is not set, the date range will be defaulted to 6 months"
+        type: string
+        format: date
+        example: "20190929"
+      - name: "transactionId"
+        in: header
+        description: "Client generated Id to include for tracing requests, so that the API can easily trace the HTTP request all the way from a client to MTNs backend processes (via our proxies). 
+        Each time a request is made to an MTN API the client should include a unique request reference in the HTTP Header.  
+        The value must be between 5 and 20 characters, and consist of ASCII letters, digits, or the characters +, /, =, and -. Invalid or blank IDs will be ignored and replaced with generated ones.
+        MTN may use this to detect duplicate transactions from the client, but this functionality is not always guaranteed, so clients must make their own efforts to prevent duplicate transactions. 
+        MTN will also log the transactionId in order to assist with debugging and to correlate transactions processed by the API to requests from the client."
+        type: string
+    get:
+      summary: Retrieve customer KYC data
+      tags:
+        - customer
+      responses:
+        200:
+          description: OK
+          schema:
+            description: Customer Object
+            $ref: "#/definitions/kyc"
+        400:
+          description: "Bad Request. 
+                        A Bad Request response is returned when the path info doesn't have the right format, or a parameter or request body value doesn't have the right format, or a required parameter is missing, or values have the right format but are invalid in some way.
+                        The client SHOULD NOT repeat the request without modifications."
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "Customer not found"
+          schema:
+            $ref: "#/definitions/Error"
+        405:
+          description: "Method Not allowed"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"
+
+definitions:
+  kyc:
+    type: object
+    properties:
+      data:
+        type: object
+        properties:
+          idType:
+            type: string
+            description: "Legal ID Type"
+            example: "South African ID"
+          idNumber:
+            type: string
+            description: "Legal ID Number/Reference"
+            example: "8002143987083"
+          dateOfBirth:
+            type: string
+            format: date
+            description: "Date of Birth"
+            pattern: "YYYY-MM-DD"
+            example: "1980-02-14"
+          gender:
+             $ref: "#/definitions/GenderEnum"
+          firstName:
+            type: string
+            description: "Name"
+            example: "First n Middle"
+          lastName:
+            type: string
+            description: "Surname"
+            example: "Surname"
+      _links:
+        $ref: "#/definitions/CustomerLinks"
+  
+  GenderEnum:
+    type: "string"
+    title: "Gender Enum"
+    example: "Male"
+    enum:
+    - "Male"
+    - "Female"
+    
+  Error:
+    type: "object"
+    title: "Error"
+    required:
+    - "status"
+    - "message"
+    properties:
+      timestamp:
+        type: "string"
+        format: "date-time"
+        description: "Timestamp when the error occurred, using date-time format"
+        example: "2019-08-23T07:29:25.593+0000”"
+      status:
+        type: "string"
+        description: "HTTP Status code"
+        example: "404"
+      error:
+        type: "string"
+        description: "HTTP Status description"
+        example: "Not Found"
+      message:
+        type: "string"
+        description: "More error details and corrective measures"
+        example: "No message available"
+      path:
+        type: "string"
+        description: "that URL from which the error originated"
+        example: "/customers/2783200000/subscriptions/AG8cfc7353e-23b0-578f-a041-b8bf5ef76418:23-08-201907:27:38AMGMT/status”"
+
+  CustomerLinks:
+    type: "object"
+    required: 
+    - "self"
+    properties: 
+      self:
+        type: "object"
+        required: 
+        - "href"
+        description: ""
+        properties: 
+          href:
+            type: "string"
+            description: "HATEOS links referring to this object"
+            example: "https://api.mtn.com/v1/customers/27832000000/kyc"
+          type:
+            type: string
+            description: "HTTP methods supported by the HATEOS links above"
+            example: "GET, POST"

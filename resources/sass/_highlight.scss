@@ -1,0 +1,98 @@
+pre {
+    font-size: 10px;
+    background-color: $grey750;
+    border-radius: 8px;
+    padding: $gutterSmall;
+    font-family: "Montserrat";
+}
+
+.hljs {
+    display: block;
+    overflow-x: auto;
+    color: #FC0;
+}
+
+.hljs-comment,
+.hljs-quote {
+    color: $grey500;
+    font-style: italic
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-addition {
+    color: #b64926
+}
+
+.hljs-number,
+.hljs-string,
+.hljs-doctag,
+.hljs-regexp {
+    color: #FFF;
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-built_in,
+.hljs-name {
+    color: #ffb03b
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-class .hljs-title,
+.hljs-type,
+.hljs-tag {
+    color: #b58900
+}
+
+.hljs-attribute {
+    color: #b89859
+}
+
+.hljs-symbol,
+.hljs-bullet,
+.hljs-link,
+.hljs-subst,
+.hljs-meta {
+    color: #cb4b16
+}
+
+.hljs-deletion {
+    color: #dc322f
+}
+
+.hljs-selector-id,
+.hljs-selector-class {
+    color: #d3a60c
+}
+
+.hljs-formula {
+    background: #073642
+}
+
+.hljs-emphasis {
+    font-style: italic
+}
+
+.hljs-strong {
+    font-weight: bold
+}
+
+div > code,
+li > code,
+h1 > code,
+h2 > code,
+h3 > code,
+h4 > code,
+h5 > code,
+h6 > code,
+a > code,
+p > code{
+    background-color: $grey300;
+    color: $red;
+    padding: 5px;
+    border-radius: 3px;
+    font-size: 80%;
+}

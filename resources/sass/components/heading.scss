@@ -1,0 +1,86 @@
+@import "../variables";
+
+.layout-master {
+    &::before {
+        content: '';
+        width: 100vw;
+        background-color: $grey400;
+        height: 68px;
+        position: absolute;
+        top: 80px;
+        right: 0;
+        left: 0;
+    }
+}
+
+.layout-sidebar {
+    &::after {
+        content: '';
+        width: 50%;
+        background-color: $grey400;
+        height: 68px;
+        position: absolute;
+        top: 80px;
+        right: 0;
+    }
+}
+
+#main {
+    padding: 90px $gutter $gutter;
+
+    .layout-master & {
+        padding: 90px 8vw $gutter;
+        #heading {
+            padding: $gutterSmall 8vw;
+        }
+    }
+
+    &>#heading {
+        padding: $gutterSmall $gutter;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
+}
+
+#heading {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $gutterSmall $gutter;
+    background-color: $grey400;
+    height: 68px;
+    overflow: hidden;
+    z-index: 1;
+
+    h1 {
+        margin: 0;
+        display: inline;
+    }
+
+    .tag:first-child {
+        margin-left: 10px;
+    }
+
+    .tag {
+        vertical-align: top;
+    }
+
+    .fab {
+        margin-left: 1rem;
+        display: inline;
+        vertical-align: top;
+        margin-top: -5px;
+    }
+
+    .right-side {
+        position: absolute;
+        right: 0;
+        display: flex;
+        top: 0;
+        height: 100%;
+        align-items: center;
+    }
+}

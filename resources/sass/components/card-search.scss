@@ -1,0 +1,38 @@
+@import "../variables";
+
+.search-card {
+    margin: 0 0 20px 0;
+    width: calc(50% - 10px);
+    font-family: "Montserrat";
+    border-radius: 15px;
+    padding: 20px;
+    position: relative;
+    background-color: #ffffff;
+    border: solid 1px #d2d2d2;
+
+    svg {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .header {
+        margin: 5px 0;
+        display: flex;
+        align-items: center;
+        font-family: "Montserrat-Light";
+        font-size: 18px;
+    }
+
+    .body {
+        min-height: 60px;
+        margin-bottom: 5px;
+        color: $grey900;
+    }
+
+    .highlight {
+        background-color: $yellow;
+        padding: 0 4px;
+        border-radius: 4px;
+    }
+}

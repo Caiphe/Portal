@@ -1,0 +1,308 @@
+---
+swagger: "2.0"
+info:
+  version: "v1"
+  title: "subscriptionAPI"
+  contact:
+    name: "MTN API Support"
+    email: "api.support@mtn.com"
+host: "api.mtn.com"
+basePath: "/api"
+schemes:
+- "https"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /customers/{id}/subscriptions:
+    get:
+      tags:
+      - "customers"
+      summary: "List all Subscriptions"
+      description: "Get a Customer's Subscriptions given the Customer's id"
+      operationId: "List all Subscriptions"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "ID for the Customer"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "List of customer's subscriptions"
+          schema:
+            $ref: "#/definitions/Subscriptions"
+        206:
+          description: "Partial list of customer's subscriptions"
+          schema:
+            $ref: "#/definitions/Subscriptions"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
+        405:
+          description: "Method Not allowed"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"
+  /customers/{id}/subscriptions/{subscriptionId}:
+    get:
+      tags:
+      - "customers"
+      summary: "Retrieve Subscription details"
+      description: "Retrieve specific subscription details for a customer"
+      operationId: "Retrieve Subscription details "
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "id for the Customer; if id is msisdn, format must be E.123"
+        required: true
+        type: "string"
+      - name: "subscriptionId"
+        in: "path"
+        description: "ID for the Subscription"
+        required: true
+        type: "string"
+      - name: "systemId"
+        in: "query"
+        description: "Identify the system hosting the subscription"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Subscription details"
+          schema:
+            $ref: "#/definitions/Subscription"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
+        405:
+          description: "Method Not allowed"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+      - "customers"
+      summary: "Unsubscribe a customer from a subscription"
+      description: "Delete a specific subscription"
+      operationId: "Unsubscribe a customer from a subscription"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "id for the Customer"
+        required: true
+        type: "string"
+      - name: "subscriptionId"
+        in: "path"
+        description: "ID for the Subscription"
+        required: true
+        type: "string"
+      - name: "systemId"
+        in: "query"
+        description: "Identify the system hosting the subscription"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Result of the unsubscribe action"
+          schema:
+            $ref: "#/definitions/Unsubscribe"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
+        405:
+          description: "Method Not allowed"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"
+securityDefinitions:
+  ApiKeyAuth:
+    type: "apiKey"
+    name: "X-API-Key"
+    in: "header"
+definitions:
+  Unsubscribe:
+    type: "object"
+    required:
+    - "status"
+    properties:
+      status:
+        $ref: "#/definitions/StatusEnum"
+      description:
+        type: "string"
+        description: "Details on result of the unsubscribe action"
+    title: "unsubscribe"
+    example:
+      status: "Unsubscribe successful"
+      description: "Subscription has been removed"
+  Error:
+    properties:
+      responseCode:
+        type: "string"
+        description: "Error response code"
+      reason:
+        type: "string"
+        description: "Text explaining the reason for the error"
+      message:
+        type: "string"
+        description: "More error details and corrective measures"
+  Subscription:
+    type: "object"
+    required:
+    - "subscriptionId"
+    - "subscriptionName"
+    - "subscriptionStatus"
+    - "systemId"
+    properties:
+      subscriptionId:
+        type: "string"
+        default: "null"
+        description: "Unique system identifier for the Subsription"
+      systemId:
+        type: "string"
+        default: "null"
+        description: "Identifier for the system within which the Subscription lives"
+      subscriptionName:
+        type: "string"
+        default: "null"
+        description: "Service the customer is subscribed to"
+      subscriptionStatus:
+        $ref: "#/definitions/SubscriptionStatusEnum"
+      subscriptionDescription:
+        type: "string"
+        default: "null"
+        description: "Description of the service the customer is subscribed to"
+      subscriptionType:
+        $ref: "#/definitions/SubscriptionTypeEnum"
+      subscriptionLength:
+        type: "string"
+        default: "null"
+        description: "Duration of the subscription the customer is subscribed to"
+      registrationChannel:
+        type: "string"
+        default: "null"
+        description: "Channel through which the customer subscribed to the service"
+      startDate:
+        type: "string"
+        format: "date"
+        default: "null"
+        description: "Start date of the Subscription; full-date notation RFC 3339"
+      endDate:
+        type: "string"
+        format: "date"
+        default: "null"
+        description: "End date of the Subscription; full-date notation RFC 3339"
+      email:
+        type: "string"
+        default: "null"
+        description: "Email associated with the subcription"
+    title: "subscription"
+  SubscriptionStatusEnum:
+    type: "string"
+    title: "subscriptionStatusEnum"
+    default: "null"
+    example: "Active"
+    enum:
+    - "Active"
+    - "Inactive"
+    x-enum-elements:
+    - name: "Active"
+      description: ""
+    - name: "Inactive"
+      description: ""
+  StatusEnum:
+    type: "string"
+    title: "statusEnum"
+    example: "Unsubscribe successful"
+    enum:
+    - "Unsubscribe successful"
+    - "Unsubscribe unsucccessful"
+  SubscriptionTypeEnum:
+    type: "string"
+    title: "subscriptionTypeEnum"
+    default: "null"
+    enum:
+    - "Adhoc"
+    - "Recurring"
+    x-enum-elements:
+    - name: "Adhoc"
+      description: ""
+    - name: "Recurring"
+      description: ""
+  Subscriptions:
+    type: "object"
+    required:
+    - "subscriptionList"
+    properties:
+      systems:
+        type: "array"
+        description: ""
+        items:
+          $ref: "#/definitions/SystemStatusItem"
+      subscriptionList:
+        type: "array"
+        description: ""
+        items:
+          $ref: "#/definitions/Subscription"
+    title: "subscriptions"
+    
+  SystemStatusItem:
+    type: "object"
+    required:
+    - "status"
+    - "statusCode"
+    - "systemId"
+    properties:
+      systemId:
+        type: "string"
+      status:
+        type: "string"
+        enum:
+        - "Active"
+        - "Inactive"
+      statusCode:
+        type: "string"
+      message:
+        type: "string"
+

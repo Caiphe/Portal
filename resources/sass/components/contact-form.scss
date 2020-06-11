@@ -1,0 +1,35 @@
+@import "../variables";
+
+#contact-form {
+    width: 478px;
+    position: relative;
+    margin: 0 auto;
+
+    h1, p {
+		text-align: center;
+    }
+
+    input, textarea {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    label {
+        position: relative;
+    }
+
+    button {
+        margin: $gutter auto 0;
+        display: block;
+        position: relative;
+    }
+
+    @media screen and (min-width: 320px) and (max-width: 768px) {
+        width: 100%;
+    }
+}

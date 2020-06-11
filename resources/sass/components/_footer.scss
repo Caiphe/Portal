@@ -1,13 +1,23 @@
 #footer {
     background-color: $grey900;
     color: #FFF;
-    font-size: 1rem;
     position: relative;
     flex-shrink: 0;
+
+    .footer-curve {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 100%;
+        background-color: transparent;
+        width: 100%;
+        margin-bottom: -1px;
+    }
 
     .footer-inner {
         padding: 4% 8%;
         position: relative;
+        font-size: 1rem;
     }
 
     p {
@@ -33,6 +43,7 @@
 
     .social {
         margin-top: calc(4% + 80px);
+
         a {
             margin-left: 10px;
         }

@@ -6,24 +6,8 @@ textarea {
     -moz-appearance: none;
     -webkit-appearance: none;
     appearance: none;
-
-    ::-webkit-input-placeholder {
-        color: pink;
-    }
-
-    ::-moz-placeholder {
-        opacity: 1;
-        color: pink;
-    }
-
-    :-ms-input-placeholder {
-        color: pink;
-    }
-
-    :-moz-placeholder {
-        opacity: 1;
-        color: pink;
-    }
+    outline: none;
+    box-shadow: none;
 }
 
 textarea {
@@ -54,7 +38,9 @@ select {
 
 input[type="text"],
 input[type="email"],
+input[type="password"],
 input[type="search"],
+input[type="url"],
 input[type="number"] {
     height: 40px;
 
@@ -67,11 +53,12 @@ input[type="number"] {
         border: none;
         border-bottom: 1px solid $grey400;
         padding: 0;
+        border-radius: 0;
     }
 
-    &.see-through{
-        background-color: rgba(255,255,255,0.4);
-        border:none;
+    &.see-through {
+        background-color: rgba(255, 255, 255, 0.4);
+        border: none;
     }
 }
 
@@ -111,6 +98,12 @@ input[type="number"] {
         background-color: $grey700;
         border-radius: 12px;
         transition: background-color 0.128s ease-out;
+    }
+
+    .swatch-label {
+        font-family: Montserrat-Light;
+        font-size: 1.4rem;
+        margin-left: 50px;
     }
 
     &.dark .ball {

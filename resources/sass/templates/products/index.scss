@@ -1,0 +1,120 @@
+@import "../../variables";
+
+h2,
+h3 {
+    font-family: "mtn-regular", sans-serif;
+}
+
+.search-hr {
+    color: $grey300;
+}
+
+#banner {
+    height: 300px;
+    width: 100%;
+    background: url('/images/banners/products.png') no-repeat center center / cover;
+    flex: 1 0 auto;
+}
+
+#main {
+    padding: 0 !important;
+    margin-bottom: 40px;
+
+    .header-block {
+        background-color: #000;
+        border-radius: 5px;
+        box-shadow: 0px 2px 4px #00000029;
+        height: 244px;
+        padding: 40px;
+        margin: -50px 0 0 40px;
+        width: calc(100% - 80px);
+
+        h1 {
+            color: #FFF;
+            font-size: 40px;
+            margin: 0;
+        }
+
+        p {
+            font-size: 18px;
+            color: #FFF;
+            width: 520px;
+        }
+
+        svg {
+            position: absolute;
+            right: 30px;
+            bottom: 20px;
+        }
+    }
+
+    .content {
+        padding-left: 40px;
+        margin-top: 40px;
+        height: 100%;
+        background-color: #ffffff;
+
+        .category-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .products {
+            display: flex;
+            flex-flow: row wrap;
+
+            .category {
+                display: flex;
+                flex-flow: row wrap;
+                margin-bottom: 10px;
+                width: 100%;
+
+                h3 {
+                    width: 100%;
+                    margin-bottom: 25px;
+                }
+
+                .card {
+                    flex: 0 1 31%;
+                    margin-bottom: 30px;
+                    margin-right: 15px;
+
+                    .card__header {
+                        margin-bottom: 10px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.filter-sidebar {
+    h3 {
+        font-size: 12px;
+    }
+
+    .filter-checkbox {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+
+        .filter-label {
+            margin-left: 5px;
+            color: $grey700;
+            font-size: 12px;
+        }
+    }
+
+    .country-filter {
+        margin-top: 15px;
+        width: 100%;
+
+        .multiselect-select {
+            width: 180px;
+        }
+    }
+
+    #clearFilter {
+        margin-top: 30px;
+        display: none;
+    }
+}

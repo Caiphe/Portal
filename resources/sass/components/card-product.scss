@@ -1,0 +1,65 @@
+.card--product {
+    .card__content {
+        // padding-bottom: 15px;
+
+        h3 {
+            margin: 10px 0 0;
+        }
+
+        .card__body {
+            margin: 15px 0;
+            min-height: 42px;
+        }
+
+        .country-selector {
+            display: flex;
+            align-items: center;
+            //position: absolute;
+            //bottom: 0;
+
+            .countries {
+                display: flex;
+                width: 15px;
+                // max-height: 15px;
+                overflow: hidden;
+
+                img {
+                    height: 15px;
+                    margin-right: 5px;
+                    margin-bottom: 5px;
+                }
+            }
+
+            .view-more {
+                margin-left: 5px;
+                display: flex;
+                color: #000000;
+            }
+
+            &:hover {
+                > .countries {
+                    flex: 1;
+                    flex-flow: row wrap;
+                    //max-height: 50px;
+                    //-webkit-transition: max-height 0.5s;
+                    transition: max-height 1s;
+                }
+                > .view-more {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    .buttons {
+        display: flex;
+        align-items: center;
+        position: absolute;
+        right: 20px;
+        bottom: -18px;
+
+        a {
+            margin-right: 5px;
+        }
+    }
+}
