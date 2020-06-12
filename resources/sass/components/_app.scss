@@ -116,7 +116,7 @@
             width: 20px;
         }
 
-        .country-flags{
+        .country-flags {
             flex-wrap: wrap;
             display: flex;
         }
@@ -140,14 +140,32 @@
                     background-color: transparent;
                     border: transparent;
                     height: auto;
-                    margin-top: -3px;
+                    width: 16px;
+                    height: 20px;
 
                     svg {
                         width: 15px;
+                        position: absolute;
                     }
 
-                    svg+svg {
+                    svg+svg,
+                    svg+svg+svg {
                         display: none;
+                    }
+
+                    &.loading {
+                        svg {
+                            display: none;
+                        }
+
+                        svg+svg {
+                            display: block;
+                            margin-top: -10px;
+                        }
+
+                        svg+svg+svg {
+                            display: none;
+                        }
                     }
 
                     &.copied {
@@ -155,7 +173,7 @@
                             display: none;
                         }
 
-                        svg+svg {
+                        svg+svg+svg {
                             display: block;
                         }
                     }

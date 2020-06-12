@@ -239,21 +239,40 @@
             window.location.href = '/apps/create'
         }
 
-        // FIXME: COPYING KEY AND SECRET IS NOT WORKING.
         var keys = document.querySelectorAll('.copy');
 
         for (var i = 0; i < keys.length; i ++) {
             keys[i].addEventListener('click', copyText);
         }
 
-        function copyText(id) {
-            var el = document.getElementById(this.dataset.reference);
-            el.select();
-            /* Copy the text inside the text field */
-            document.execCommand("copy");
-            el.blur();
+        function copyText() {
+            var url = '/apps/' + this.dataset.reference + '/credentials/' + this.dataset.type;
+            var xhr = new XMLHttpRequest();
+            var btn = this;
 
-            this.className = 'copy copied';
+            btn.className = 'copy loading';
+
+            xhr.open('GET', url, true);
+            xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+
+            xhr.send();
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    copyToClipboard(xhr.responseText);
+                    btn.className = 'copy copied';
+                }
+            };
+        }
+
+        function copyToClipboard(text) {
+            var dummy = document.createElement("textarea");
+            dummy.style.position = 'absolute';
+            document.body.appendChild(dummy);
+            dummy.value = text;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
         }
 
     </script>

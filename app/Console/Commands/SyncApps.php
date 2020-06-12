@@ -58,6 +58,8 @@ class SyncApps extends Command
 				return $carry;
 			}, []);
 			unset($app['credentials']['apiProducts']);
+			unset($app['credentials']['consumerKey']);
+			unset($app['credentials']['consumerSecret']);
 
 			if (isset($attributes['DisplayName']) && !empty($attributes['DisplayName'])) {
 				$displayName = $attributes['DisplayName'];

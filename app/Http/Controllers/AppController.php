@@ -161,4 +161,16 @@ class AppController extends Controller {
 
 		return redirect(route('app.index'));
 	}
+
+	public function getCredentials(App $app, $type)
+	{
+		$credentials = ApigeeService::get('apps/' . $app->aid)['credentials'];
+		$credentials = ApigeeService::getLatestCredentials($credentials);
+
+		if($type === 'all'){
+			return $credentials;
+		}
+
+		return $credentials[$type];
+	}
 }
