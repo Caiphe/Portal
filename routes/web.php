@@ -26,6 +26,8 @@ Route::middleware('verified')->group(function () {
 	Route::put('apps/{app:slug}', 'AppController@update')->name('app.update');
 	Route::delete('apps/{app:slug}', 'AppController@destroy')->name('app.destroy');
 
+	Route::get('apps/{app:slug}/credentials/{type}', 'AppController@getCredentials')->name('app.credentials');
+
 	Route::post('apps/{product}/approve', 'DashboardController@update')->name('app.product.approve');
 	Route::post('apps/{product}/revoke', 'DashboardController@update')->name('app.product.revoke');
 
