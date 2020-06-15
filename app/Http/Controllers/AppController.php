@@ -164,6 +164,8 @@ class AppController extends Controller {
 
 	public function getCredentials(App $app, $type)
 	{
+		if(auth()->user()->developer_id !== $app->developer_id) return "You can't access app keys that don't belong to you.";
+
 		$credentials = ApigeeService::get('apps/' . $app->aid)['credentials'];
 		$credentials = ApigeeService::getLatestCredentials($credentials);
 
