@@ -77,12 +77,12 @@
                         @forelse($approvedApps as $app)
                             @if(!empty($app['attributes']))
                             <x-app
-                                    :app="$app"
-                                    :attr="$app['attributes']"
-                                    :details="$app['developer']"
-                                    :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products->pluck('name')->toArray())"
-                                    :type="$type = 'approved'">
-                                </x-app>
+                                :app="$app"
+                                :attr="$app['attributes']"
+                                :details="$app['developer']"
+                                :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products->pluck('name')->toArray())"
+                                :type="$type = 'approved'">
+                            </x-app>
                             @endif
                         @empty
                             <p>No approved apps.</p>
@@ -258,7 +258,11 @@
             xhr.send();
 
             xhr.onload = function() {
-                if (xhr.status === 200) {
+                if(xhr.status === 302 || /login/.test(xhr.responseURL)){
+                     window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+                     addAlert('info', ['You are currently logged out.', 'Refresh the page to login again.']);
+                    btn.className = 'copy';
+                } else if (xhr.status === 200) {
                     copyToClipboard(xhr.responseText);
                     btn.className = 'copy copied';
                 }

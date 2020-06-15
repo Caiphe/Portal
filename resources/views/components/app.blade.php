@@ -71,12 +71,8 @@
                     <p><strong>Callback URL:</strong> </p>
                 </div>
                 <div class="consumer">
-                    <p class="key">
-                        XXXXXXXXXXXXXXXXXXXX
-                    </p>
-                    <p class="key">
-                        XXXXXXXXXXXXXXXXXXXX
-                    </p>
+                    <p class="key">{{ $app['credentials']['consumerKey'] }}</p>
+                    <p class="key">{{ $app['credentials']['consumerSecret'] }}</p>
                     <p>{{ $app['callback_url'] }}</p>
                 </div>
                 <div class="copy-column">

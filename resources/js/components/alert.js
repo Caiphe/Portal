@@ -23,10 +23,10 @@ function addAlert(type, messages) {
 
     setTimeout(function() {
         document.getElementById('alert').classList.add('open');
-        setTimeout(closeAlert, 2000);
+        setTimeout(closeAlert, 4000);
     }, 10);
 }
 
 if (document.getElementById('alert')) {
-    setTimeout(closeAlert, 2000);
+    setTimeout(closeAlert, 4000);
 }
