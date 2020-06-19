@@ -77,12 +77,12 @@
                         @forelse($approvedApps as $app)
                             @if(!empty($app['attributes']))
                             <x-app
-                                    :app="$app"
-                                    :attr="$app['attributes']"
-                                    :details="$app['developer']"
-                                    :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products->pluck('name')->toArray())"
-                                    :type="$type = 'approved'">
-                                </x-app>
+                                :app="$app"
+                                :attr="$app['attributes']"
+                                :details="$app['developer']"
+                                :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products->pluck('name')->toArray())"
+                                :type="$type = 'approved'">
+                            </x-app>
                             @endif
                         @empty
                             <p>No approved apps.</p>
@@ -239,21 +239,44 @@
             window.location.href = '/apps/create'
         }
 
-        // FIXME: COPYING KEY AND SECRET IS NOT WORKING.
         var keys = document.querySelectorAll('.copy');
 
         for (var i = 0; i < keys.length; i ++) {
             keys[i].addEventListener('click', copyText);
         }
 
-        function copyText(id) {
-            var el = document.getElementById(this.dataset.reference);
-            el.select();
-            /* Copy the text inside the text field */
-            document.execCommand("copy");
-            el.blur();
+        function copyText() {
+            var url = '/apps/' + this.dataset.reference + '/credentials/' + this.dataset.type;
+            var xhr = new XMLHttpRequest();
+            var btn = this;
 
-            this.className = 'copy copied';
+            btn.className = 'copy loading';
+
+            xhr.open('GET', url, true);
+            xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+
+            xhr.send();
+
+            xhr.onload = function() {
+                if(xhr.status === 302 || /login/.test(xhr.responseURL)){
+                     window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+                     addAlert('info', ['You are currently logged out.', 'Refresh the page to login again.']);
+                    btn.className = 'copy';
+                } else if (xhr.status === 200) {
+                    copyToClipboard(xhr.responseText);
+                    btn.className = 'copy copied';
+                }
+            };
+        }
+
+        function copyToClipboard(text) {
+            var dummy = document.createElement("textarea");
+            dummy.style.position = 'absolute';
+            document.body.appendChild(dummy);
+            dummy.value = text;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
         }
 
     </script>

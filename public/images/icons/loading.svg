@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0 (4035a4f, 2020-05-01)"
+   sodipodi:docname="loading.svg"
+   id="svg841"
+   version="1.1"
+   stroke="#ffcc00"
+   viewBox="0 0 42 42"
+   height="42"
+   width="42">
+  <metadata
+     id="metadata847">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs845" />
+  <sodipodi:namedview
+     inkscape:current-layer="g837"
+     inkscape:window-maximized="0"
+     inkscape:window-y="23"
+     inkscape:window-x="0"
+     inkscape:cy="21"
+     inkscape:cx="21"
+     inkscape:zoom="16.263158"
+     showgrid="false"
+     id="namedview843"
+     inkscape:window-height="855"
+     inkscape:window-width="1440"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <g
+     transform="translate(2,2)"
+     id="g839"
+     fill-rule="evenodd"
+     fill="none">
+    <g
+       id="g837"
+       stroke-width="2"
+       transform="translate(1,1)">
+      <circle
+         style="stroke:#ffcc00;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.2"
+         r="18"
+         id="circle833"
+         cy="18"
+         cx="18"
+         stroke-opacity="0.2" />
+      <path
+         style="stroke-width:6;stroke-miterlimit:4;stroke-dasharray:none"
+         id="path835"
+         d="M 36,18 C 36,8.06 27.94,0 18,0">
+        <animateTransform
+           repeatCount="indefinite"
+           dur="1s"
+           to="360 18 18"
+           from="0 18 18"
+           type="rotate"
+           attributeName="transform" />
+      </path>
+    </g>
+  </g>
+</svg>

@@ -50,8 +50,6 @@
                 <div>
                     <p id="developer-name">{{ $details['first_name']  . ' ' . $details['last_name'] }}</p>
                     <p id="developer-email">{{ $details['email'] ?? '' }}</p>
-                    <input id="developer-key" type="hidden" value="{{ $app['credentials']['consumerKey']  }}">
-                    <input id="developer-id" type="hidden" value="{{ $details['developer_id']  }}">
                 </div>
                 <div class="copy-column"><!--This is a placeholder--></div>
                 <div>
@@ -73,21 +71,19 @@
                     <p><strong>Callback URL:</strong> </p>
                 </div>
                 <div class="consumer">
-                    <p class="key">
-                        <input type="text" name="consumerKey" id="{{$app['aid']}}-consumer-key" value="{{ $app['credentials']['consumerKey']  }}" readonly>
-                    </p>
-                    <p class="key">
-                        <input type="text" name="consumerSecret" id="{{$app['aid']}}-consumer-secret" value="{{ $app['credentials']['consumerSecret']  }}" readonly>
-                    </p>
+                    <p class="key">{{ $app['credentials']['consumerKey'] }}</p>
+                    <p class="key">{{ $app['credentials']['consumerSecret'] }}</p>
                     <p>{{ $app['callback_url'] }}</p>
                 </div>
                 <div class="copy-column">
-                    <button class="copy" data-reference="{{$app['aid']}}-consumer-key">
+                    <button class="copy" data-reference="{{$app['slug']}}" data-type="consumerKey">
                         @svg('copy', '#000000')
+                        @svg('loading', '#000000')
                         @svg('clipboard', '#000000')
                     </button>
-                    <button class="copy" data-reference="{{$app['aid']}}-consumer-secret">
+                    <button class="copy" data-reference="{{$app['slug']}}" data-type="consumerSecret">
                         @svg('copy', '#000000')
+                        @svg('loading', '#000000')
                         @svg('clipboard', '#000000')
                     </button>
                 </div>
