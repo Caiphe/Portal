@@ -78,61 +78,66 @@
             }
         }
     }
-}
 
-#profile-form {
-    width: 478px;
-    position: relative;
-    margin: 0 auto;
-
-    h2 {
-        font-size: 1.8rem;
-        text-align: left;
-        margin: $gutter 0 $gutterSmall;
-    }
-
-    input {
-        display: block;
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
-    label {
+    form {
+        width: 478px;
         position: relative;
-    }
+        margin: 0 auto;
 
-    .password-label {
-        display: block;
-    }
+        h2 {
+            font-size: 1.8rem;
+            text-align: left;
+            margin: $gutter 0 $gutterSmall;
+        }
 
-    .show-password {
-        margin: 0;
-        position: absolute;
-        top: 5px;
-        right: 1rem;
-        background-image: url('/images/icons/visible.svg');
-        background-size: 20px;
-        background-color: #FFF;
-        background-repeat: no-repeat;
-        background-position: center;
-        border: none;
-        width: 30px;
-        height: 30px;
-        z-index: 1;
+        input {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
 
-        &:hover {
-            background-color: $yellow700;
+        label {
+            position: relative;
+        }
+
+        .password-label {
+            display: block;
+        }
+
+        .show-password {
+            margin: 0;
+            position: absolute;
+            top: 5px;
+            right: 1rem;
+            background-image: url('/images/icons/visible.svg');
+            background-size: 20px;
+            background-color: #FFF;
+            background-repeat: no-repeat;
+            background-position: center;
+            border: none;
+            width: 30px;
+            height: 30px;
+            z-index: 1;
+
+            &:hover {
+                background-color: $yellow700;
+            }
+        }
+
+        .password-visible .show-password {
+            background-image: url('/images/icons/hidden.svg');
+        }
+
+        button {
+            margin: $gutter auto 0;
+            display: block;
+            position: relative;
+        }
+
+        &.enable-2fa svg {
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 20px;
         }
     }
-
-    .password-visible .show-password {
-        background-image: url('/images/icons/hidden.svg');
-    }
-
-    button {
-        margin: $gutter auto 0;
-        display: block;
-        position: relative;
-    }
 }
-

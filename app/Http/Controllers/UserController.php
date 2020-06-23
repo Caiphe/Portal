@@ -6,16 +6,18 @@ use App\Country;
 use App\Product;
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+use App\Services\TwofaService;
 
-class UserController extends Controller {
+class UserController extends Controller
+{
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index() {
+	public function index()
+	{
 		//
 	}
 
@@ -24,7 +26,8 @@ class UserController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function create() {
+	public function create()
+	{
 		//
 	}
 
@@ -34,7 +37,8 @@ class UserController extends Controller {
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function store(Request $request) {
+	public function store(Request $request)
+	{
 		//
 	}
 
@@ -43,9 +47,13 @@ class UserController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show() {
+	public function show(Request $request)
+	{
 		$user = \Auth::user();
 		$user->load('countries');
+
+		$key = TwofaService::getSecretKey();
+		$inlineUrl = TwofaService::getInlineUrl($key, $request->user()->email);
 
 		$productLocations = Product::isPublic()
 			->WhereNotNull('locations')
@@ -58,6 +66,8 @@ class UserController extends Controller {
 			'user' => $user,
 			'userLocations' => $user->countries->pluck('code')->toArray(),
 			'locations' => array_unique(explode(',', $productLocations)),
+			'key' => $key,
+			'inlineUrl' => $inlineUrl,
 		]);
 	}
 
@@ -67,7 +77,8 @@ class UserController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function edit($id) {
+	public function edit($id)
+	{
 		//
 	}
 
@@ -78,7 +89,8 @@ class UserController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, User $user) {
+	public function update(Request $request, User $user)
+	{
 		$validateOn = [
 			'first_name' => 'required',
 			'second_name' => 'required',
@@ -116,11 +128,13 @@ class UserController extends Controller {
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy($id) {
+	public function destroy($id)
+	{
 		//
 	}
 
-	public function updateProfilePicture(Request $request) {
+	public function updateProfilePicture(Request $request)
+	{
 		$imageName = 'profile/' . base64_encode('jsklaf88sfjdsfjl' . $request->user()->email) . '.png';
 
 		$image = Image::make($request->file('profile'))
@@ -136,5 +150,28 @@ class UserController extends Controller {
 		return response()->json([
 			'success' => $success,
 		]);
+	}
+
+	public function enable2fa(Request $request)
+	{
+		$user = $request->user();
+		$valid = TwofaService::verifyKey($request->key, $request->code);
+
+		if ($valid) {
+			$user->update([
+				'2fa' => $request->key
+			]);
+
+			return redirect()->back()->with('alert', "Success:2FA is enabled successfully.");
+		}
+
+		return redirect()->back()->with('alert', "Error:Invalid verification Code, Please try again.");
+	}
+
+	public function disable2fa(Request $request)
+	{
+		$request->user()->update(['2fa' => null]);
+		
+		return redirect()->back()->with('alert', "Success:2FA has been disabled.");
 	}
 }

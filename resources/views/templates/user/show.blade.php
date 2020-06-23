@@ -71,6 +71,24 @@ Update profile
             <button class="dark">Save</button>
         </form>
 
+        @if(empty($user['2fa']))
+        <form class="enable-2fa" action="{{ route('user.2fa.enable') }}" method="POST">
+            <h2>Enable 2 Factor Authentication</h2>
+            
+            <h4>Key: {{ $key }}</h4>
+
+            {!! $inlineUrl !!}
+            @csrf
+            <input type="hidden" name="key" value="{{ $key }}">
+            <input type="text" name="code" placeholder="Authenticator code" required>
+            <button type="submit">Enable 2FA</button>
+        </form>
+        @else
+        <form action="{{ route('user.2fa.disable') }}" method="POST">
+            @csrf
+            <button type="submit">Disable 2FA</button>
+        </form>
+        @endisset
     </div>
 @endsection
 
