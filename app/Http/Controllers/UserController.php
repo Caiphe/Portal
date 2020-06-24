@@ -154,24 +154,17 @@ class UserController extends Controller
 
 	public function enable2fa(Request $request)
 	{
-		$user = $request->user();
-		$valid = TwofaService::verifyKey($request->key, $request->code);
+		$request->user()->update([
+			'2fa' => $request->key
+		]);
 
-		if ($valid) {
-			$user->update([
-				'2fa' => $request->key
-			]);
-
-			return redirect()->back()->with('alert', "Success:2FA is enabled successfully.");
-		}
-
-		return redirect()->back()->with('alert', "Error:Invalid verification Code, Please try again.");
+		return response()->json(['success' => true, 'message' => 'Key has been added.'], 200);
 	}
 
 	public function disable2fa(Request $request)
 	{
 		$request->user()->update(['2fa' => null]);
-		
-		return redirect()->back()->with('alert', "Success:2FA has been disabled.");
+
+		return redirect()->back()->with('alert', "Success:2FA has been disabled");
 	}
 }

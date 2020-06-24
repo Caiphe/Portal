@@ -134,10 +134,27 @@
             position: relative;
         }
 
-        &.enable-2fa svg {
-            display: block;
-            margin: 0 auto;
-            margin-bottom: 20px;
+        &.enable-2fa {
+            display: none;
+
+            svg {
+                display: block;
+                margin: 0 auto;
+                margin-bottom: 20px;
+            }
+
+            &.show {
+                display: block;
+            }
+
+            &.show+button {
+                display: none;
+            }
         }
+    }
+
+    .enable-2fa-button {
+        display: block;
+        margin: 20px auto 0;
     }
 }
