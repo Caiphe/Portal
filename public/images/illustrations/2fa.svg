@@ -7,13 +7,13 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:version="1.0 (4035a4f, 2020-05-01)"
-   sodipodi:docname="2fa.svg"
-   id="svg1077"
-   version="1.1"
-   viewBox="0 0 95.489998 131.99062"
+   width="95.489998"
    height="131.99063"
-   width="95.489998">
+   viewBox="0 0 95.489998 131.99062"
+   version="1.1"
+   id="svg1077"
+   sodipodi:docname="2fa.svg"
+   inkscape:version="1.0 (4035a4f, 2020-05-01)">
   <metadata
      id="metadata1081">
     <rdf:RDF>
@@ -22,155 +22,162 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <sodipodi:namedview
-     inkscape:current-layer="g1075"
-     inkscape:window-maximized="0"
-     inkscape:window-y="23"
-     inkscape:window-x="0"
-     inkscape:cy="128.32209"
-     inkscape:cx="46.992573"
-     inkscape:zoom="1.3290323"
-     showgrid="false"
-     id="namedview1079"
-     inkscape:window-height="855"
-     inkscape:window-width="1440"
-     inkscape:pageshadow="2"
-     inkscape:pageopacity="0"
-     guidetolerance="10"
-     gridtolerance="10"
-     objecttolerance="10"
-     borderopacity="1"
+     inkscape:document-rotation="0"
+     pagecolor="#ffffff"
      bordercolor="#666666"
-     pagecolor="#ffffff" />
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1440"
+     inkscape:window-height="855"
+     id="namedview1079"
+     showgrid="false"
+     inkscape:zoom="1.3290323"
+     inkscape:cx="46.992573"
+     inkscape:cy="128.32209"
+     inkscape:window-x="0"
+     inkscape:window-y="23"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="text1091" />
   <defs
      id="defs861">
     <filter
-       filterUnits="userSpaceOnUse"
-       height="123"
-       width="465"
-       y="145.683"
+       id="a"
        x="0"
-       id="a">
+       y="145.683"
+       width="465"
+       height="123"
+       filterUnits="userSpaceOnUse">
       <feOffset
-         id="feOffset833"
+         dy="12"
          input="SourceAlpha"
-         dy="12" />
+         id="feOffset833" />
       <feGaussianBlur
-         id="feGaussianBlur835"
+         stdDeviation="12"
          result="b"
-         stdDeviation="12" />
+         id="feGaussianBlur835" />
       <feFlood
-         id="feFlood837"
-         flood-opacity="0.2" />
+         flood-opacity="0.2"
+         id="feFlood837" />
       <feComposite
-         result="result1"
-         id="feComposite839"
+         operator="in"
          in2="b"
-         operator="in" />
+         id="feComposite839"
+         result="result1" />
       <feComposite
-         id="feComposite841"
+         in="SourceGraphic"
          in2="result1"
-         in="SourceGraphic" />
+         id="feComposite841" />
     </filter>
     <clipPath
        id="c">
       <rect
-         y="0"
-         x="0"
-         id="rect844"
-         fill="none"
+         width="282"
          height="31"
-         width="282" />
+         fill="none"
+         id="rect844"
+         x="0"
+         y="0" />
     </clipPath>
     <filter
-       filterUnits="userSpaceOnUse"
-       height="124"
-       width="441"
-       y="93.682999"
+       id="d"
        x="12"
-       id="d">
+       y="93.682999"
+       width="441"
+       height="124"
+       filterUnits="userSpaceOnUse">
       <feOffset
-         id="feOffset847"
+         dy="12"
          input="SourceAlpha"
-         dy="12" />
+         id="feOffset847" />
       <feGaussianBlur
-         id="feGaussianBlur849"
+         stdDeviation="12"
          result="e"
-         stdDeviation="12" />
+         id="feGaussianBlur849" />
       <feFlood
-         id="feFlood851"
-         flood-opacity="0.122" />
+         flood-opacity="0.122"
+         id="feFlood851" />
       <feComposite
-         result="result1"
-         id="feComposite853"
+         operator="in"
          in2="e"
-         operator="in" />
+         id="feComposite853"
+         result="result1" />
       <feComposite
-         id="feComposite855"
+         in="SourceGraphic"
          in2="result1"
-         in="SourceGraphic" />
+         id="feComposite855" />
     </filter>
     <clipPath
        id="f">
       <rect
-         y="0"
-         x="0"
-         id="rect858"
-         fill="none"
+         width="281"
          height="32"
-         width="281" />
+         fill="none"
+         id="rect858"
+         x="0"
+         y="0" />
     </clipPath>
   </defs>
   <g
-     id="g1075"
-     transform="translate(-325.755,-2579.316)">
+     transform="translate(-325.755,-2579.316)"
+     id="g1075">
     <g
-       id="g1073"
-       transform="translate(-622.958,616.945)">
+       transform="translate(-622.958,616.945)"
+       id="g1073">
       <path
-         style="fill:#0c678f;fill-opacity:1"
-         transform="translate(948.713,1982.371)"
-         id="path1069"
+         d="m 0,-12.525 c 0,0 23.872,-7.475 47.745,-7.475 23.873,0 47.745,7.475 47.745,7.475 v 80.54 c 0,0 -23.872,7.475 -47.745,7.475 C 23.872,75.49 0,68.015 0,68.015 Z"
          fill="#1d1d1d"
-         d="m 0,-12.525 c 0,0 23.872,-7.475 47.745,-7.475 23.873,0 47.745,7.475 47.745,7.475 v 80.54 c 0,0 -23.872,7.475 -47.745,7.475 C 23.872,75.49 0,68.015 0,68.015 Z" />
+         id="path1069"
+         transform="translate(948.713,1982.371)"
+         style="fill:#0c678f;fill-opacity:1" />
       <path
-         id="path1071"
-         fill="#ffffff"
+         d="m 24,-25.969 a 1.908,1.908 0 0 1 1.406,0.563 1.908,1.908 0 0 1 0.563,1.406 1.908,1.908 0 0 1 -0.562,1.406 A 1.908,1.908 0 0 1 24,-22.031 1.908,1.908 0 0 1 22.594,-22.593 1.908,1.908 0 0 1 22.031,-24 1.908,1.908 0 0 1 22.594,-25.406 1.908,1.908 0 0 1 24,-25.969 Z m 18,6 a 24.722,24.722 0 0 1 -2.344,10.5 25.287,25.287 0 0 1 -6.468,8.625 A 22.587,22.587 0 0 1 24,4.031 22.587,22.587 0 0 1 14.813,-0.844 25.287,25.287 0 0 1 8.344,-9.469 24.722,24.722 0 0 1 6,-19.969 v -12 l 18,-8.062 18,8.063 z M 24,-30 A 5.8,5.8 0 0 0 19.734,-28.266 5.8,5.8 0 0 0 18,-24 a 5.827,5.827 0 0 0 1.125,3.516 5.6,5.6 0 0 0 2.906,2.109 V -6 h 3.938 v -4.031 H 30 v -3.937 h -4.031 v -4.406 A 5.6,5.6 0 0 0 28.875,-20.483 5.827,5.827 0 0 0 30,-24 5.8,5.8 0 0 0 28.266,-28.266 5.8,5.8 0 0 0 24,-30 Z"
          transform="translate(972.055,2028.055)"
-         d="m 24,-25.969 a 1.908,1.908 0 0 1 1.406,0.563 1.908,1.908 0 0 1 0.563,1.406 1.908,1.908 0 0 1 -0.562,1.406 A 1.908,1.908 0 0 1 24,-22.031 1.908,1.908 0 0 1 22.594,-22.593 1.908,1.908 0 0 1 22.031,-24 1.908,1.908 0 0 1 22.594,-25.406 1.908,1.908 0 0 1 24,-25.969 Z m 18,6 a 24.722,24.722 0 0 1 -2.344,10.5 25.287,25.287 0 0 1 -6.468,8.625 A 22.587,22.587 0 0 1 24,4.031 22.587,22.587 0 0 1 14.813,-0.844 25.287,25.287 0 0 1 8.344,-9.469 24.722,24.722 0 0 1 6,-19.969 v -12 l 18,-8.062 18,8.063 z M 24,-30 A 5.8,5.8 0 0 0 19.734,-28.266 5.8,5.8 0 0 0 18,-24 a 5.827,5.827 0 0 0 1.125,3.516 5.6,5.6 0 0 0 2.906,2.109 V -6 h 3.938 v -4.031 H 30 v -3.937 h -4.031 v -4.406 A 5.6,5.6 0 0 0 28.875,-20.483 5.827,5.827 0 0 0 30,-24 5.8,5.8 0 0 0 28.266,-28.266 5.8,5.8 0 0 0 24,-30 Z" />
+         fill="#ffffff"
+         id="path1071" />
     </g>
     <g
-       id="g1067"
-       transform="matrix(0.18141312,0,0,0.5162155,341.35566,2659.73)">
+       transform="matrix(0.18141312,0,0,0.5162155,341.35566,2659.73)"
+       id="g1067">
       <g
-         id="g967"
+         transform="translate(-58,-117.77)"
          filter="url(#d)"
-         transform="translate(-58,-117.77)">
+         id="g967">
         <rect
-           y="0"
-           x="0"
-           id="rect965"
-           fill="#fbfbfb"
-           transform="translate(48,117.68)"
-           rx="5"
+           width="369"
            height="52"
-           width="369" />
+           rx="5"
+           transform="translate(48,117.68)"
+           fill="#fbfbfb"
+           id="rect965"
+           x="0"
+           y="0" />
       </g>
     </g>
-    <text
-       id="text1091"
-       y="2679.3889"
-       x="355.31308"
+    <g
        style="font-style:normal;font-weight:normal;font-size:18.6667px;line-height:1.25;font-family:sans-serif;fill:#ffcc00;fill-opacity:1;stroke:none"
-       xml:space="preserve"><tspan
+       id="text1091"
+       aria-label="2FA">
+      <path
+         id="path862"
          style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:18.6667px;font-family:'MTN Brighter Sans';-inkscape-font-specification:'MTN Brighter Sans Medium';fill:#ffcc00;fill-opacity:1"
-         y="2679.3889"
-         x="355.31308"
-         id="tspan1089"
-         sodipodi:role="line">2FA</tspan></text>
+         d="m 359.60642,2677.4102 q 2.89334,-0.1866 5.88001,-0.1866 v 2.1653 h -8.97868 v -1.792 q 2.48267,-2.0907 3.71467,-3.2853 1.25067,-1.1947 1.71734,-1.96 0.46667,-0.7654 0.46667,-1.512 0,-0.8214 -0.54134,-1.3254 -0.54133,-0.5226 -1.41867,-0.5226 -1.512,0 -2.8,1.4373 l -1.13867,-1.4187 q 0.76533,-0.9706 1.904,-1.568 1.13867,-0.5973 2.44534,-0.5973 1.19467,0 2.14667,0.4667 0.952,0.4666 1.47467,1.3066 0.54133,0.84 0.54133,1.9414 0,1.1013 -0.57866,2.1093 -0.57867,1.008 -1.69867,2.072 -1.10134,1.0453 -3.13601,2.6693 z" />
+      <path
+         id="path864"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:18.6667px;font-family:'MTN Brighter Sans';-inkscape-font-specification:'MTN Brighter Sans Medium';fill:#ffcc00;fill-opacity:1"
+         d="m 368.4241,2667.1062 h 9.22135 v 2.016 h -6.72001 v 3.584 h 5.82401 v 1.9974 h -5.82401 v 4.6853 h -2.50134 z" />
+      <path
+         id="path866"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:18.6667px;font-family:'MTN Brighter Sans';-inkscape-font-specification:'MTN Brighter Sans Medium';fill:#ffcc00;fill-opacity:1"
+         d="m 386.66555,2676.5329 h -5.54401 l -1.19467,2.856 h -2.37067 l 5.26401,-12.2827 h 2.42667 l 5.24535,12.2827 -2.61334,0.019 z m -0.84,-2.016 -1.94134,-4.6107 -1.92267,4.6107 z" />
+    </g>
   </g>
 </svg>
