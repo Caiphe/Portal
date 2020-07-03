@@ -9,13 +9,12 @@ use App\Http\Requests\DeleteAppRequest;
 use App\Services\ApigeeService;
 use App\Services\ProductLocationService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class AppController extends Controller {
 	public function index() {
 		$apps = App::with(['products', 'country'])
-			->byUserEmail(\Auth::user()->email)
+			->byUserEmail('lliam@plusnarrative.com')
 			->orderBy('updated_at', 'desc')
 			->get()
 			->groupBy('status');
