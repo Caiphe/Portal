@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use App\Services\TwofaService;
+use Google2FA;
 
 class UserController extends Controller
 {
@@ -53,7 +54,7 @@ class UserController extends Controller
 		$user->load('countries');
 
 		$key = TwofaService::getSecretKey();
-		$inlineUrl = TwofaService::getInlineUrl($key, $request->user()->email);
+		$inlineUrl = TwofaService::getInlineUrl($key, $user->email);
 
 		$productLocations = Product::isPublic()
 			->WhereNotNull('locations')
@@ -166,5 +167,32 @@ class UserController extends Controller
 		$request->user()->update(['2fa' => null]);
 
 		return redirect()->back()->with('alert', "Success:2FA has been disabled");
+	}
+
+	public function verify2fa(Request $request)
+	{
+		$message = "Success:2FA has been verified";
+
+		if ($request->has('one_time_key')) {
+			$verify = Google2FA::verifyGoogle2FA($request->one_time_key, $request->one_time_password);
+
+			if (!$verify) {
+				return redirect(URL()->previous())->with('alert', "Error:Your one time password didn't match;Please try again.");
+			}
+
+			$request->user()->update([
+				'2fa' => $request->one_time_key
+			]);
+
+			Google2FA::login();
+
+			$message = "Success:2FA has been enabled";
+		}
+
+		if (strpos(url()->previous(), '2fa/verify') !== false) {
+			return redirect()->route('app.index')->with('alert', $message);
+		}
+
+		return redirect()->back()->with('alert', $message);
 	}
 }

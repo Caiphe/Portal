@@ -66,30 +66,5 @@ function togglePasswordVisibility(that) {
 }
 
 function enable2FA() {
-    var xhr = new XMLHttpRequest();
-
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                const result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
-                console.log(result);
-                document.querySelector('.enable-2fa').classList.add('show');
-            } else {
-                console.log('Error');
-                console.log(xhr.responseText);
-            }
-        }
-    };
-
-    xhr.open("POST", "/profile/2fa/enable");
-    xhr.setRequestHeader(
-        "X-CSRF-TOKEN",
-        document.getElementsByName("csrf-token")[0].content
-    );
-    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-
-    xhr.send(JSON.stringify({
-        key: this.dataset.key
-    }));
+    document.querySelector('.enable-2fa').classList.add('show');
 }

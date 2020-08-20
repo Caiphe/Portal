@@ -39,9 +39,7 @@ Route::middleware(['verified', '2fa'])->group(function () {
 	Route::post('profile/2fa/disable', 'UserController@disable2fa')->name('user.2fa.disable');
 });
 
-Route::post('profile/2fa/verify', function () {
-	return redirect(URL()->previous());
-})->name('user.2fa.verify')->middleware('2fa');
+Route::post('profile/2fa/verify', 'UserController@verify2fa')->middleware('2fa')->name('user.2fa.verify');
 
 Route::get('dashboard', 'DashboardController@index')->middleware('can:view-dashboard')->name('dashboard');
 
