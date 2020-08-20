@@ -80,14 +80,14 @@ Update profile
             {!! $inlineUrl !!}
             @csrf
             <input type="hidden" name="one_time_key" value="{{ $key }}">
-            <input type="text" name="one_time_password" placeholder="Authenticator code" required autocomplete="off">
+            <input id="authenticator-code" type="text" name="one_time_password" placeholder="Authenticator code" required autocomplete="off">
             <button>Authenticate</button>
         </form>
         <button class="button outline dark twofa-button enable-2fa-button" data-key="{{ $key }}">Enable 2FA</button>
         @else
         <form action="{{ route('user.2fa.disable') }}" method="POST">
             @csrf
-            <button type="button outline dark twofa-button">Disable 2FA</button>
+            <button class="button outline dark twofa-button">Disable 2FA</button>
         </form>
         @endisset
     </div>

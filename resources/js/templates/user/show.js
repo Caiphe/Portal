@@ -67,4 +67,5 @@ function togglePasswordVisibility(that) {
 
 function enable2FA() {
     document.querySelector('.enable-2fa').classList.add('show');
+    document.getElementById('authenticator-code').focus();
 }
