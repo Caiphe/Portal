@@ -208,14 +208,23 @@
 
     function checkPassword() {
         var value = this.value;
-        passwordScore = 0;
+        var passwordErrors = [
+            'Password must be 12 characters or more.',
+            'Password must have at least one special character',
+            'Password must have at least one number',
+            'Password must have at least one uppercase character',
+            'Password must have at least one lowercase character',
+        ];
+        var failed = [];
 
-        if (value.length > 11) ++passwordScore;
-        if (/[!@#\$%\^\&\*\(\)_\+=\-\{\}|"':<>\?~`\.]/.test(value)) ++passwordScore;
-        if (/[0-9]/.test(value)) ++passwordScore;
-        if (/[A-Z]/.test(value)) ++passwordScore;
-        if (/[a-z]/.test(value)) ++passwordScore;
+        if (value.length < 12) failed.push(passwordErrors[0]);
+        if (!/[!@#\$%\^\&\*\(\)_\+=\-\{\}|"':<>\?~`\.]/.test(value)) failed.push(passwordErrors[1]);
+        if (!/[0-9]/.test(value)) failed.push(passwordErrors[2]);
+        if (!/[A-Z]/.test(value)) failed.push(passwordErrors[3]);
+        if (!/[a-z]/.test(value)) failed.push(passwordErrors[4]);
 
+        passwordScore = passwordErrors.length - failed.length;
+        document.getElementById('password-still-needs').innerHTML = failed.join('<br>');
         document.getElementById('password-strength').className = 'password-score-' + passwordScore;
     }
 }());

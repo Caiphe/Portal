@@ -38,6 +38,7 @@
             <button type="button" class="fab show-password" onclick="togglePasswordVisibility(this)"></button>
             <span class="invalid-feedback" role="alert"></span>
             <div id="password-strength">Password strength</div>
+            <div id="password-still-needs" class="invalid-feedback" role="alert"></div>
         </section>
 
         <section class="section-3">
