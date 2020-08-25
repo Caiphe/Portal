@@ -161,3 +161,26 @@ grant_type=client_credentials -d 'client_id={consumer-key}&client_secret={consum
         <x-pricing></x-pricing>
     </section>
 @endsection
+
+@push('scripts')
+<script src='https://cdn.polyfill.io/v3/polyfill.js?features=IntersectionObserver'></script>
+<script>
+    var observer = new IntersectionObserver(showStack, {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.5
+    });
+    observer.observe(document.querySelector('.bundle'));
+    observer.observe(document.querySelector('.product'));
+    observer.observe(document.querySelector('.benefits'));
+    observer.observe(document.querySelector('.pricing'));
+
+    function showStack(entries, observer) {
+        entries.forEach(activate);
+    }
+
+    function activate(entry) {
+        if(entry.isIntersecting) entry.target.classList.add('activate');
+    }
+</script>
+@endpush

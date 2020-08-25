@@ -17,7 +17,7 @@ Route::get('/', 'HomeController')->name('home');
 
 Route::get('search', 'SearchController')->name('search');
 
-Route::middleware('verified')->group(function () {
+Route::middleware(['verified', '2fa'])->group(function () {
 	Route::get('apps', 'AppController@index')->name('app.index');
 	Route::get('apps/create', 'AppController@create')->name('app.create');
 	Route::get('apps/{app:slug}/edit', 'AppController@edit')->name('app.edit');
@@ -26,7 +26,7 @@ Route::middleware('verified')->group(function () {
 	Route::put('apps/{app:slug}', 'AppController@update')->name('app.update');
 	Route::delete('apps/{app:slug}', 'AppController@destroy')->name('app.destroy');
 
-	Route::get('apps/{app:slug}/credentials/{type}', 'AppController@getCredentials')->name('app.credentials');
+	Route::get('apps/{app:aid}/credentials/{type}', 'AppController@getCredentials')->name('app.credentials');
 
 	Route::post('apps/{product}/approve', 'DashboardController@update')->name('app.product.approve');
 	Route::post('apps/{product}/revoke', 'DashboardController@update')->name('app.product.revoke');
@@ -34,7 +34,12 @@ Route::middleware('verified')->group(function () {
 	Route::get('profile', 'UserController@show')->name('user.profile');
 	Route::put('profile/{user}/update', 'UserController@update')->name('user.profile.update');
 	Route::post('profile/update/picture', 'UserController@updateProfilePicture')->name('user.profile.update.picture');
+
+	Route::post('profile/2fa/enable', 'UserController@enable2fa')->name('user.2fa.enable');
+	Route::post('profile/2fa/disable', 'UserController@disable2fa')->name('user.2fa.disable');
 });
+
+Route::post('profile/2fa/verify', 'UserController@verify2fa')->middleware('2fa')->name('user.2fa.verify');
 
 Route::get('dashboard', 'DashboardController@index')->middleware('can:view-dashboard')->name('dashboard');
 

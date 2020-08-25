@@ -76,12 +76,12 @@
                     <p>{{ $app['callback_url'] }}</p>
                 </div>
                 <div class="copy-column">
-                    <button class="copy" data-reference="{{$app['slug']}}" data-type="consumerKey">
+                    <button class="copy" data-reference="{{$app['aid']}}" data-type="consumerKey">
                         @svg('copy', '#000000')
                         @svg('loading', '#000000')
                         @svg('clipboard', '#000000')
                     </button>
-                    <button class="copy" data-reference="{{$app['slug']}}" data-type="consumerSecret">
+                    <button class="copy" data-reference="{{$app['aid']}}" data-type="consumerSecret">
                         @svg('copy', '#000000')
                         @svg('loading', '#000000')
                         @svg('clipboard', '#000000')

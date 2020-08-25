@@ -21,12 +21,14 @@ class CategoriesServiceProvider extends ServiceProvider {
 	 * @return void
 	 */
 	public function boot() {
-		if (\Schema::hasTable('products')) {
-			$globalCategories = Category::whereHas('products', function($query){
+		try {
+			$globalCategories = Category::whereHas('products', function ($query) {
 				$query->isPublic();
 			})->orWhereHas('bundles')->orderBy('title')->get();
 
 			\View::share('globalCategories', $globalCategories);
+		} catch (\Exception $e) {
+			// do nothing
 		}
 	}
 }

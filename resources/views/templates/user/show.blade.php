@@ -71,6 +71,25 @@ Update profile
             <button class="dark">Save</button>
         </form>
 
+        @if(empty($user['2fa']))
+        <form class="enable-2fa" action="{{ route('user.2fa.verify') }}" method="POST">
+            <h2>Add to authenticator app</h2>
+
+            <h4>Key: {{ $key }}</h4>
+
+            {!! $inlineUrl !!}
+            @csrf
+            <input type="hidden" name="one_time_key" value="{{ $key }}">
+            <input id="authenticator-code" type="text" name="one_time_password" placeholder="Authenticator code" required autocomplete="off">
+            <button>Authenticate</button>
+        </form>
+        <button class="button outline dark twofa-button enable-2fa-button" data-key="{{ $key }}">Enable 2FA</button>
+        @else
+        <form action="{{ route('user.2fa.disable') }}" method="POST">
+            @csrf
+            <button class="button outline dark twofa-button">Disable 2FA</button>
+        </form>
+        @endisset
     </div>
 @endsection
 

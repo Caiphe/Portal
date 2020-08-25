@@ -1,18 +1,20 @@
 @import "../../variables";
 
-.container {
-    font-size: 16px;
+main {
+    .container {
+        font-size: 16px;
 
-    h1 {
-        font-size: 18px;
-        font-family: Montserrat;
-        margin-top: 40px;
-    }
+        h1 {
+            font-size: 18px;
+            font-family: Montserrat;
+            margin-top: 40px;
+        }
 
-    .button svg,
-    button svg {
-        width: 16px;
-        margin-left: 5px;
+        .button svg,
+        button svg {
+            width: 16px;
+            margin-left: 5px;
+        }
     }
 }
 
@@ -196,10 +198,6 @@
     }
 }
 
-.pricing {
-    margin: 60px auto 80px;
-}
-
 .relationships {
     margin-top: 80px;
 
@@ -262,6 +260,23 @@
         position: absolute;
         top: 50px;
         left: 0;
+        transform: translate(60px, 0) scale(1);
+        transition: transform 600ms;
+
+        &:nth-of-type(2) {
+            transform: translate(60px, 30px) scale(0.95);
+            transition: transform 900ms;
+        }
+
+        &:nth-of-type(1) {
+            transform: translate(60px, 60px) scale(0.9);
+            transition: transform 1350ms;
+        }
+
+    }
+
+    &.activate .stack-card {
+        transform: translate(0, 0) scale(1);
 
         &:nth-of-type(2) {
             transform: translate(0, 30px) scale(0.95);
@@ -325,14 +340,31 @@
         .stack-card {
             top: 0;
             margin-left: 140px;
-            transform: translate(60px, 60px) rotateY(10deg) rotateX(-4deg);
+            transform: translate(0px, 60px) rotateY(10deg) rotateX(-4deg);
+            transition: transform 600ms;
 
             &:nth-of-type(2) {
-                transform: translate(30px, 30px) scale(0.95) rotateY(10deg) rotateX(-4deg);
+                transform: translate(-30px, 30px) scale(0.95) rotateY(10deg) rotateX(-4deg);
+                transition: transform 900ms;
             }
 
             &:nth-of-type(1) {
-                transform: translate(0, 0) scale(0.9) rotateY(10deg) rotateX(-4deg);
+                transform: translate(-60px, 0) scale(0.9) rotateY(10deg) rotateX(-4deg);
+                transition: transform 1350ms;
+            }
+        }
+
+        &.activate {
+            .stack-card {
+                transform: translate(60px, 60px) rotateY(10deg) rotateX(-4deg);
+
+                &:nth-of-type(2) {
+                    transform: translate(30px, 30px) scale(0.95) rotateY(10deg) rotateX(-4deg);
+                }
+
+                &:nth-of-type(1) {
+                    transform: translate(0px, 0) scale(0.9) rotateY(10deg) rotateX(-4deg);
+                }
             }
         }
     }
@@ -344,14 +376,31 @@
         .stack-card {
             bottom: 50px;
             right: 140px;
-            transform: translate(0, 0) rotateY(-10deg) rotateX(-4deg);
+            transform: translate(60px, 0) rotateY(-10deg) rotateX(-4deg);
+            transition: transform 600ms;
 
             &:nth-of-type(2) {
-                transform: translate(30px, -30px) scale(0.95) rotateY(-10deg) rotateX(-4deg);
+                transform: translate(90px, -30px) scale(0.95) rotateY(-10deg) rotateX(-4deg);
+                transition: transform 900ms;
             }
 
             &:nth-of-type(1) {
-                transform: translate(60px, -60px) scale(0.9) rotateY(-10deg) rotateX(-4deg);
+                transform: translate(120px, -60px) scale(0.9) rotateY(-10deg) rotateX(-4deg);
+                transition: transform 1350ms;
+            }
+        }
+
+        &.activate {
+            .stack-card {
+                transform: translate(0, 0) rotateY(-10deg) rotateX(-4deg);
+
+                &:nth-of-type(2) {
+                    transform: translate(30px, -30px) scale(0.95) rotateY(-10deg) rotateX(-4deg);
+                }
+
+                &:nth-of-type(1) {
+                    transform: translate(60px, -60px) scale(0.9) rotateY(-10deg) rotateX(-4deg);
+                }
             }
         }
     }
@@ -389,6 +438,17 @@
     }
 }
 
+.pricing {
+    margin: 60px auto 80px;
+
+    .popular {
+        transition: 512ms;
+    }
+
+    &:not(.activate) #pricing .popular {
+        transform: scale(1);
+    }
+}
 
 // Themes
 
