@@ -13,6 +13,11 @@
 
         <h1 class="t-large">Almost there...</h1>
 
+        @if (session('type'))
+        <p>Sorry for this extra step. We have moved over to a new, better portal and for your security need you to choose a new password</p>
+        <p>An email has also been sent in case you would like to continue the journey later.</p>
+        @endif
+
         <input type="hidden" name="token" value="{{ $token }}">
 
         <input id="email" type="email" class="@error('email') invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" placeholder="Email" autofocus>

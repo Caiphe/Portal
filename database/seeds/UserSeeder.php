@@ -44,46 +44,6 @@ class UserSeeder extends Seeder {
 			'profile_picture' => '/storage/profile/profile-3.svg',
 		]);
 
-		$developerUser = User::create([
-			'first_name' => 'developer',
-			'last_name' => 'User',
-			'email' => 'developer@user.com',
-			'password' => bcrypt('devport'),
-			'email_verified_at' => $now,
-			'developer_id' => 'thisisnotadeveloperid',
-			'profile_picture' => '/storage/profile/profile-2.svg',
-		]);
-
-		$opcoAdminUser = User::create([
-			'first_name' => 'Opco Admin',
-			'last_name' => 'User',
-			'email' => 'opco-admin@user.com',
-			'password' => bcrypt('devport'),
-			'email_verified_at' => $now,
-			'developer_id' => 'thisisnotadeveloperid',
-			'profile_picture' => '/storage/profile/profile-3.svg',
-		]);
-
-		$opcoUser = User::create([
-			'first_name' => 'Opco',
-			'last_name' => 'User',
-			'email' => 'opco@user.com',
-			'password' => bcrypt('devport'),
-			'email_verified_at' => $now,
-			'developer_id' => 'thisisnotadeveloperid',
-			'profile_picture' => '/storage/profile/profile-4.svg',
-		]);
-
-		$internalUser = User::create([
-			'first_name' => 'Internal',
-			'last_name' => 'User',
-			'email' => 'internal@user.com',
-			'password' => bcrypt('devport'),
-			'email_verified_at' => $now,
-			'developer_id' => 'thisisnotadeveloperid',
-			'profile_picture' => '/storage/profile/profile-5.svg',
-		]);
-
 		Permission::create([
 			'name' => "administer_content",
 			'label' => "Administer content",
@@ -135,7 +95,6 @@ class UserSeeder extends Seeder {
 		]);
 
 		$developerRole->allowTo('create_app');
-		$developerUser->assignRole($developerRole);
 
 		$opcoAdminRole = Role::create([
 			'name' => "opco_admin",
@@ -143,7 +102,6 @@ class UserSeeder extends Seeder {
 		]);
 
 		$opcoAdminRole->allowTo(['create_app', 'view_dashboard_products', 'administer_dashboard_products']);
-		$opcoAdminUser->assignRole($opcoAdminRole);
 
 		$opcoRole = Role::create([
 			'name' => "opco",
@@ -151,7 +109,6 @@ class UserSeeder extends Seeder {
 		]);
 
 		$opcoRole->allowTo(['create_app', 'view_dashboard_products']);
-		$opcoUser->assignRole($opcoRole);
 
 		$internalRole = Role::create([
 			'name' => "internal",
@@ -159,6 +116,5 @@ class UserSeeder extends Seeder {
 		]);
 
 		$internalRole->allowTo(['create_app', 'view_internal_products']);
-		$internalUser->assignRole($internalRole);
 	}
 }

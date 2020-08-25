@@ -6,7 +6,7 @@ use App\Content;
 use App\Country;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
-use App\Services\ApigeeService;
+use App\Services\ApigeeUserService;
 use App\Services\ProductLocationService;
 use App\User;
 use Illuminate\Auth\Events\Registered;
@@ -86,18 +86,7 @@ class RegisterController extends Controller {
 
 		$this->validator($data)->validate();
 
-		$apigeeDeveloper = ApigeeService::post('developers', [
-			"email" => $data['email'],
-			"firstName" => $data['first_name'],
-			"lastName" => $data['last_name'],
-			"userName" => $data['first_name'] . $data['last_name'],
-		])->json();
-
-		if (isset($apigeeDeveloper['code'])) {
-			$apigeeDeveloper = ApigeeService::get('developers/' . $data['email']);
-		}
-
-		$data['developer_id'] = $apigeeDeveloper['developerId'];
+		$data = ApigeeUserService::setupUser($data);
 
 		event(new Registered($user = $this->create($data)));
 
