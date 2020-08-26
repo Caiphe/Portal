@@ -36,7 +36,7 @@
         border-radius: 10px;
         margin-top: 20px;
 
-        > div {
+        >div {
             padding: 10px 20px 10px;
         }
     }
@@ -108,5 +108,21 @@
             display: none;
         }
     }
-}
 
+    .status-bar.loading {
+        background-image:
+            repeating-linear-gradient(-45deg,
+            transparent,
+            transparent 1rem,
+            #FFFFFF4D 1rem,
+            #FFFFFF4D 2rem);
+        background-size: 200% 200%;
+        animation: barberpole 4s linear infinite;
+    }
+
+    @keyframes barberpole {
+        100% {
+            background-position: 100% 100%;
+        }
+    }
+}

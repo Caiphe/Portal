@@ -9,22 +9,14 @@ use App\Services\ProductLocationService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller {
+class DashboardController extends Controller
+{
 
-	public function index(ProductLocationService $productLocationService) {
+	public function index(ProductLocationService $productLocationService)
+	{
 		$user = auth()->user();
 		$user->load('responsibleCountries');
 		$isAdmin = $user->hasRole('admin');
-
-		$apigeeDevelopers = [];
-		foreach (ApigeeService::get('developers?expand=true')['developer'] as $developer) {
-			$apigeeDevelopers[$developer['developerId']] = [
-				'first_name' => $developer['firstName'],
-				'last_name' => $developer['lastName'],
-				'email' => $developer['email'],
-				'developer_id' => $developer['developerId'],
-			];
-		}
 
 		$apps = App::with(['developer', 'products', 'country'])
 			->whereHas('products', function (Builder $query) use ($user, $isAdmin) {
@@ -36,6 +28,7 @@ class DashboardController extends Controller {
 					$q->whereRaw("CONCAT(\",\", `locations`, \",\") REGEXP \",(" . $responsibleCountriesCode . "),\"");
 				}
 			})
+			->whereHas('developer')
 			->byStatus('approved')
 			->orderBy('updated_at', 'desc')
 			->get()
@@ -48,7 +41,6 @@ class DashboardController extends Controller {
 			if (!$isAdmin) {
 				$appCountriesCodes = array_keys($appCountries);
 				if (count(array_intersect($responsibleCountries, $appCountriesCodes)) > 0) {
-					$app['developer'] = $apigeeDevelopers[$app['developer_id']];
 					$app['countries'] = $appCountries;
 					$approvedApps[] = $app;
 				};
@@ -56,12 +48,11 @@ class DashboardController extends Controller {
 				continue;
 			}
 
-			$app['developer'] = $apigeeDevelopers[$app['developer_id']];
 			$app['countries'] = $appCountries;
 			$approvedApps[] = $app;
 		}
 
-		[$products, $countries] = $productLocationService->fetch();
+		$countries = $productLocationService->fetch([], 'countries');
 		$countries['all'] = "Global";
 		$countries['mix'] = "Mixed";
 
@@ -71,17 +62,32 @@ class DashboardController extends Controller {
 		]);
 	}
 
-	public function update(UpdateStatusRequest $request) {
+	public function update(UpdateStatusRequest $request)
+	{
 		$validated = $request->validated();
+		$app = App::with('developer')->find($validated['app']);
+		$status = [
+			'approve' => 'approved',
+			'revoke' => 'revoked',
+			'pending' => 'pending'
+		][$validated['action']] ?? 'pending';
 
-		return $validated;
+		$credentials = ApigeeService::get('apps/' . $app->aid)['credentials'];
+		$credentials = ApigeeService::getLatestCredentials($credentials);
 
-		ApigeeService::updateProductStatus($request->developer_id, $request->app_name, $request->key, $request->product, $request->action);
+		ApigeeService::updateProductStatus($app->developer->email, $validated['app'], $credentials['consumerKey'], $validated['product'], $validated['action']);
+
+		$app->products()->updateExistingPivot($validated['product'], ['status' => $status]);
+
+		if ($request->ajax()) {
+			return response()->json(['success' => true]);
+		}
 
 		return redirect()->back();
 	}
 
-	public function destroy($id, Request $request) {
+	public function destroy($id, Request $request)
+	{
 		dd($request->all());
 	}
 }
