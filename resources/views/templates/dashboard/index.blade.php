@@ -129,10 +129,12 @@
 
         var modals = document.querySelectorAll('.modal');
         for (var l = 0; l < modals.length; l ++) {
-            modals[l].addEventListener('click', function() {
-                document.querySelector(".modal.show").classList.remove('show');
-                document.querySelector(".menu.show").classList.remove('show');
-            })
+            modals[l].addEventListener('click', hideMenu)
+        }
+
+        function hideMenu() {
+            document.querySelector(".modal.show").classList.remove('show');
+            document.querySelector(".menu.show").classList.remove('show');
         }
 
         function filterApps() {
@@ -205,35 +207,40 @@
         }
 
         function getProductStatus(event) {
-            var data = {
-                action: this.dataset.action,
-                app: this.dataset.aid,
-                product: this.dataset.pid
+            var data = {};
+            var appProducts = void 0;
+            var lookBack = {
+                approved: 'approve',
+                revoked: 'revoke'
             };
-            var statusBar = void 0;
 
             event.preventDefault();
 
+            hideMenu();
+
             if (event.currentTarget.classList.value === 'product-all') {
 
-                var appProducts = event.currentTarget.parentNode.parentNode.querySelectorAll('.product');
-
-                var lookBack = {
-                    approved: 'approve',
-                    revoked: 'revoke'
-                };
+                appProducts = this.parentNode.parentNode.querySelectorAll('.product');
 
                 for (var i = appProducts.length - 1; i >= 0; i--) {
-                    if (lookBack[appProducts[i].dataset.status] === action) continue;
+                    if (this.dataset.action === lookBack[appProducts[i].dataset.status]) continue;
 
-                    handleUpdateStatus(data, this.parentNode.querySelector('.status-bar'));
+                    handleUpdateStatus({
+                        action: this.dataset.action,
+                        app: appProducts[i].dataset.aid,
+                        product: appProducts[i].dataset.pid,
+                        displayName: appProducts[i].dataset.productDisplayName
+                    }, appProducts[i].querySelector('.status-bar'));
                 }
                 return;
             }
 
-            statusBar = this.parentNode.querySelector('.status-bar');
-
-            handleUpdateStatus(data, statusBar);
+            handleUpdateStatus({
+                action: this.dataset.action,
+                app: this.dataset.aid,
+                product: this.dataset.pid,
+                displayName: this.dataset.productDisplayName
+            }, this.parentNode.querySelector('.status-bar'));
         }
 
         function handleUpdateStatus(data, statusBar) {
@@ -250,15 +257,17 @@
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
-            if(confirm('Are you sure you want to ' + data.action + ' this product?')) {
+            if(confirm('Are you sure you want to ' + data.action + ' ' + data.displayName + '?')) {
                 statusBar.classList.add('loading');
-                
+
                 xhr.send(JSON.stringify(data));
             }
 
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     statusBar.className = 'status-bar status-' + lookup[data.action];
+                } else {
+                    statusBar.classList.remove('loading');
                 }
             };
         }
