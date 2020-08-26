@@ -35,8 +35,10 @@ class SearchController extends Controller
         }
 
         $products = Product::basedOnUser($request->user())
-            ->where(function ($q) use ($query) {
-                $q->where('name', 'like', $query)->orWhere('display_name', 'like', $query);
+            ->where('name', 'like', $query)
+            ->orWhere('display_name', 'like', $query)
+            ->orWhereHas('content', function ($q) use ($query) {
+                $q->where('body', 'like', $query);
             })
             ->get()
             ->map(function ($detail) {
@@ -47,6 +49,9 @@ class SearchController extends Controller
         $bundles = Bundle::with('content')
             ->where('display_name', 'like', $query)
             ->orWhere('description', 'like', $query)
+            ->orWhereHas('content', function ($q) use ($query) {
+                $q->where('body', 'like', $query);
+            })
             ->get()
             ->map(function ($detail) {
                 return ['title' => 'Bundle: ' . $detail['display_name'], 'description' => 'View the product', 'link' => "/products/{$detail['slug']}"];
@@ -56,35 +61,42 @@ class SearchController extends Controller
             return ['title' => 'FAQ: ' . substr($detail['question'], 0, 80), 'description' => $this->findSearchTerm($detail['answer'], $searchTerm), 'link' => "/faq/#{$detail['slug']}"];
         })->toArray();
 
-        $content = Content::with('product')->where('title', 'like', $query)->orWhere('body', 'like', $query)->get()->map(function ($detail) use ($searchTerm) {
-            $linkPrefix = [
-                'general_docs' => '/getting-started/',
-                'general_doc' => '/getting-started/',
-                'product_docs' => '/products/',
-                'product_doc' => '/products/',
-                'product_overview' => '/products/',
-                'bundle_overview' => '/bundles/',
-            ][$detail['type']] ?? '/';
+        $content = Content::where(function ($q) {
+            $q->whereDoesntHaveMorph('contentable', [Product::class, Bundle::class])
+                ->orWhereNull('contentable_type');
+        })
+            ->where(function ($q) use ($query) {
+                $q->where('title', 'like', $query)->orWhere('body', 'like', $query);
+            })
+            ->get()
+            ->map(function ($detail) use ($searchTerm) {
+                $linkPrefix = [
+                    'general_docs' => '/getting-started/',
+                    'general_doc' => '/getting-started/',
+                    'product_docs' => '/products/',
+                    'product_doc' => '/products/',
+                    'product_overview' => '/products/',
+                    'bundle_overview' => '/bundles/',
+                ][$detail['type']] ?? '/';
 
-            $linkSufix = [
-                'product_docs' => '/#/docs',
-                'product_doc' => '/#/docs',
-                'product_overview' => '/#/overview',
-            ][$detail['type']] ?? '';
+                $linkSufix = [
+                    'product_docs' => '/#/docs',
+                    'product_doc' => '/#/docs',
+                    'product_overview' => '/#/overview',
+                ][$detail['type']] ?? '';
 
-            $linkSlug = $detail['slug'];
-            if (!$detail->product->isEmpty()) {
-                $linkSlug = $detail->product[0]['slug'];
-            }
+                $linkSlug = $detail['slug'];
 
-            $contentType = ucfirst(explode('_', $detail['type'])[0]);
+                $contentType = ucfirst(explode('_', $detail['type'])[0]);
 
-            return [
-                'title' => $contentType . ': ' . substr($detail['title'], 0, 80),
-                'description' => $this->findSearchTerm($detail['body'], $searchTerm),
-                'link' => $linkPrefix . $linkSlug . $linkSufix
-            ];
-        })->toArray();
+                return [
+                    'title' => $contentType . ': ' . substr($detail['title'], 0, 80),
+                    'description' => $this->findSearchTerm($detail['body'], $searchTerm),
+                    'link' => $linkPrefix . $linkSlug . $linkSufix
+                ];
+            })->reject(function ($value) {
+                return count($value) === 0;
+            })->toArray();
 
         $results = array_merge($products, $faqs, $content, $bundles);
         $total = count($results);
