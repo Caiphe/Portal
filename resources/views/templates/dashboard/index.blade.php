@@ -1,5 +1,5 @@
 @push('styles')
-    <link rel="stylesheet" href="/css/templates/apps/index.css">
+    <link rel="stylesheet" href="{{ mix('/css/templates/apps/index.css') }}">
 @endpush
 
 @extends('layouts.sidebar')
@@ -129,10 +129,12 @@
 
         var modals = document.querySelectorAll('.modal');
         for (var l = 0; l < modals.length; l ++) {
-            modals[l].addEventListener('click', function() {
-                document.querySelector(".modal.show").classList.remove('show');
-                document.querySelector(".menu.show").classList.remove('show');
-            })
+            modals[l].addEventListener('click', hideMenu)
+        }
+
+        function hideMenu() {
+            document.querySelector(".modal.show").classList.remove('show');
+            document.querySelector(".menu.show").classList.remove('show');
         }
 
         function filterApps() {
@@ -205,36 +207,43 @@
         }
 
         function getProductStatus(event) {
+            var data = {};
+            var appProducts = void 0;
+            var lookBack = {
+                approved: 'approve',
+                revoked: 'revoke'
+            };
+
             event.preventDefault();
 
-            var app = event.currentTarget.parentNode.parentNode.parentNode.parentNode;
-            var id = app.querySelector('#developer-id').value;
-            var key = app.querySelector('#developer-key').value;
-            var product = event.currentTarget.parentNode.dataset.name;
-            var action = event.currentTarget.dataset.action;
+            hideMenu();
 
             if (event.currentTarget.classList.value === 'product-all') {
 
-                var appProducts = event.currentTarget.parentNode.parentNode.querySelectorAll('.product');
-
-                var lookBack = {
-                    approved: 'approve',
-                    revoked: 'revoke'
-                };
+                appProducts = this.parentNode.parentNode.querySelectorAll('.product');
 
                 for (var i = appProducts.length - 1; i >= 0; i--) {
-                    if (lookBack[appProducts[i].dataset.status] === action) continue;
+                    if (this.dataset.action === lookBack[appProducts[i].dataset.status]) continue;
 
-                    handleUpdateStatus(action, app, id, key, appProducts[i].dataset.name);
+                    handleUpdateStatus({
+                        action: this.dataset.action,
+                        app: appProducts[i].dataset.aid,
+                        product: appProducts[i].dataset.pid,
+                        displayName: appProducts[i].dataset.productDisplayName
+                    }, appProducts[i].querySelector('.status-bar'));
                 }
                 return;
             }
 
-            handleUpdateStatus(action, app, id, key, product);
+            handleUpdateStatus({
+                action: this.dataset.action,
+                app: this.dataset.aid,
+                product: this.dataset.pid,
+                displayName: this.dataset.productDisplayName
+            }, this.parentNode.querySelector('.status-bar'));
         }
 
-        function handleUpdateStatus(action, app, id, key, product) {
-
+        function handleUpdateStatus(data, statusBar) {
             var lookup = {
                 approve: 'approved',
                 revoke: 'revoked',
@@ -243,26 +252,22 @@
 
             var xhr = new XMLHttpRequest();
 
-            xhr.open('POST', '/apps/' + product + '/' + action);
+            xhr.open('POST', '/apps/' + data.product + '/' + data.action);
             xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
-            var data = {
-                developer_id: id,
-                app_name: app.dataset.name,
-                key: key,
-                product: product,
-                action: action
-            };
+            if(confirm('Are you sure you want to ' + data.action + ' ' + data.displayName + '?')) {
+                statusBar.classList.add('loading');
 
-            if(confirm('Are you sure you want to ' + action + ' this product?')) {
                 xhr.send(JSON.stringify(data));
             }
 
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    location.reload();
-                    addAlert('success', 'Product ' + lookup[action] + ' successfully');
+                    statusBar.className = 'status-bar status-' + lookup[data.action];
+                } else {
+                    statusBar.classList.remove('loading');
                 }
             };
         }

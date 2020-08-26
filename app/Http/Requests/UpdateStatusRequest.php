@@ -25,10 +25,8 @@ class UpdateStatusRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|email',
-            'app_name' => 'required',
-            'consumer_key' => 'required',
-            'product_name' => 'required|exists:products,name',
+            'app' => 'required',
+            'product' => 'required|exists:products,pid',
             'action' => 'required'
         ];
     }
