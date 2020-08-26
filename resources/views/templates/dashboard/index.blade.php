@@ -216,9 +216,8 @@
 
             event.preventDefault();
 
-            hideMenu();
-
             if (event.currentTarget.classList.value === 'product-all') {
+                hideMenu();
 
                 appProducts = this.parentNode.parentNode.querySelectorAll('.product');
 
