@@ -39,8 +39,13 @@ class ProductController extends Controller
 	 */
 	public function show(Request $request, Product $product)
 	{
-		$openApiClass = new OpenApiService($product->swagger);
 		$product->load(['content', 'keyFeatures']);
+
+		if ($product->swagger === null || !\Storage::disk('app')->exists("openapi/{$product->swagger}")) {
+			return redirect()->route('product.index');
+		}
+
+		$openApiClass = new OpenApiService($product->swagger);
 		$productList = Product::with('category')->basedOnUser($request->user())->get()->sortBy('category.title')->groupBy('category.title');
 		$content = ['tab' => []];
 		$sidebarAccordion = [];

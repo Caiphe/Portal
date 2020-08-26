@@ -1,5 +1,5 @@
 @push('styles')
-    <link rel="stylesheet" href="/css/templates/apps/index.css">
+    <link rel="stylesheet" href="{{ mix('/css/templates/apps/index.css') }}">
 @endpush
 
 @extends('layouts.sidebar')
@@ -205,13 +205,14 @@
         }
 
         function getProductStatus(event) {
-            event.preventDefault();
+            var data = {
+                action: this.dataset.action,
+                app: this.dataset.aid,
+                product: this.dataset.pid
+            };
+            var statusBar = void 0;
 
-            var app = event.currentTarget.parentNode.parentNode.parentNode.parentNode;
-            var id = app.querySelector('#developer-id').value;
-            var key = app.querySelector('#developer-key').value;
-            var product = event.currentTarget.parentNode.dataset.name;
-            var action = event.currentTarget.dataset.action;
+            event.preventDefault();
 
             if (event.currentTarget.classList.value === 'product-all') {
 
@@ -225,16 +226,17 @@
                 for (var i = appProducts.length - 1; i >= 0; i--) {
                     if (lookBack[appProducts[i].dataset.status] === action) continue;
 
-                    handleUpdateStatus(action, app, id, key, appProducts[i].dataset.name);
+                    handleUpdateStatus(data, this.parentNode.querySelector('.status-bar'));
                 }
                 return;
             }
 
-            handleUpdateStatus(action, app, id, key, product);
+            statusBar = this.parentNode.querySelector('.status-bar');
+
+            handleUpdateStatus(data, statusBar);
         }
 
-        function handleUpdateStatus(action, app, id, key, product) {
-
+        function handleUpdateStatus(data, statusBar) {
             var lookup = {
                 approve: 'approved',
                 revoke: 'revoked',
@@ -243,26 +245,20 @@
 
             var xhr = new XMLHttpRequest();
 
-            xhr.open('POST', '/apps/' + product + '/' + action);
+            xhr.open('POST', '/apps/' + data.product + '/' + data.action);
             xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
-            var data = {
-                developer_id: id,
-                app_name: app.dataset.name,
-                key: key,
-                product: product,
-                action: action
-            };
-
-            if(confirm('Are you sure you want to ' + action + ' this product?')) {
+            if(confirm('Are you sure you want to ' + data.action + ' this product?')) {
+                statusBar.classList.add('loading');
+                
                 xhr.send(JSON.stringify(data));
             }
 
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    location.reload();
-                    addAlert('success', 'Product ' + lookup[action] + ' successfully');
+                    statusBar.className = 'status-bar status-' + lookup[data.action];
                 }
             };
         }
