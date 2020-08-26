@@ -35,10 +35,13 @@ class SearchController extends Controller
         }
 
         $products = Product::basedOnUser($request->user())
-            ->where('name', 'like', $query)
-            ->orWhere('display_name', 'like', $query)
-            ->orWhereHas('content', function ($q) use ($query) {
-                $q->where('body', 'like', $query);
+            ->hasSwagger()
+            ->where(function ($q) use ($query) {
+                $q->where('name', 'like', $query)
+                    ->orWhere('display_name', 'like', $query)
+                    ->orWhereHas('content', function ($q) use ($query) {
+                        $q->where('body', 'like', $query);
+                    });
             })
             ->get()
             ->map(function ($detail) {
@@ -73,17 +76,7 @@ class SearchController extends Controller
                 $linkPrefix = [
                     'general_docs' => '/getting-started/',
                     'general_doc' => '/getting-started/',
-                    'product_docs' => '/products/',
-                    'product_doc' => '/products/',
-                    'product_overview' => '/products/',
-                    'bundle_overview' => '/bundles/',
                 ][$detail['type']] ?? '/';
-
-                $linkSufix = [
-                    'product_docs' => '/#/docs',
-                    'product_doc' => '/#/docs',
-                    'product_overview' => '/#/overview',
-                ][$detail['type']] ?? '';
 
                 $linkSlug = $detail['slug'];
 
@@ -92,7 +85,7 @@ class SearchController extends Controller
                 return [
                     'title' => $contentType . ': ' . substr($detail['title'], 0, 80),
                     'description' => $this->findSearchTerm($detail['body'], $searchTerm),
-                    'link' => $linkPrefix . $linkSlug . $linkSufix
+                    'link' => $linkPrefix . $linkSlug
                 ];
             })->reject(function ($value) {
                 return count($value) === 0;

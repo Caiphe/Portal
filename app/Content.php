@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\Product;
 use App\Tag;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
