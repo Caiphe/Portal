@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Product;
 use App\Category;
-use App\KeyFeature;
 use App\Services\ApigeeService;
 use Illuminate\Console\Command;
 
@@ -62,7 +61,7 @@ class SyncProducts extends Command
 				'title' => ucfirst(strtolower(trim($attributes['Category'] ?? "Misc")))
 			]);
 
-			$p = Product::updateOrCreate(
+			Product::withTrashed()->updateOrCreate(
 				['pid' => $product['name']],
 				[
 					'pid' => $product['name'],
@@ -78,15 +77,6 @@ class SyncProducts extends Command
 					'attributes' => json_encode($attributes),
 				]
 			);
-
-			// if (isset($attributes['KeyFeatures'])) {
-			// 	$kf = preg_split('/,\s?/', $attributes['KeyFeatures']);
-			// 	$ids = [];
-			// 	foreach($kf as $feature){
-			// 		$ids[] = KeyFeature::firstOrCreate(['description' => $feature])->id;
-			// 	}
-			// 	$p->keyFeatures()->sync($ids);
-			// }
 		}
 	}
 }

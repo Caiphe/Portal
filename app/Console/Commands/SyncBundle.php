@@ -59,7 +59,7 @@ class SyncBundle extends Command
                 continue;
             }
 
-            $p = Bundle::updateOrCreate(
+            $p = Bundle::withTrashed()->updateOrCreate(
                 ["bid" => $bundle['id']],
                 [
                     "bid" => $bundle['id'],
