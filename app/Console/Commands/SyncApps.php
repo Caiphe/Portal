@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\App;
+use App\Product;
 use App\Country;
 use App\Services\ApigeeService;
 use Illuminate\Console\Command;
@@ -45,18 +46,21 @@ class SyncApps extends Command
 		$countries = Country::all();
 		$countriesByCode = $countries->pluck('id', 'code');
 		$countriesByName = $countries->pluck('id', 'name');
+		$products = Product::pluck('name')->toArray();
 
 		$this->info("Start syncing apps");
 
 		foreach ($apps['app'] as $app) {
+			$apiProducts = [];
+			foreach ($app['credentials']['apiProducts'] as $product) {
+				if (!in_array($product['apiproduct'], $products)) continue 2;
+				$apiProducts[$product['apiproduct']] = ['status' => $product['status']];
+			}
+
 			$this->info("Syncing {$app['name']}");
 
 			$attributes = ApigeeService::getAppAttributes($app['attributes']);
 
-			$apiProducts = array_reduce($app['credentials']['apiProducts'], function ($carry, $product) {
-				$carry[$product['apiproduct']] = ['status' => $product['status']];
-				return $carry;
-			}, []);
 			unset($app['credentials']['apiProducts']);
 
 			if (isset($attributes['DisplayName']) && !empty($attributes['DisplayName'])) {

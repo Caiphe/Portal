@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Product;
 use App\Category;
+use App\KeyFeature;
 use App\Services\ApigeeService;
 use Illuminate\Console\Command;
 
@@ -41,35 +42,51 @@ class SyncProducts extends Command
 	public function handle()
 	{
 		$this->info("Getting products from Apigee");
+
+		$allow = env('APIGEE_ALLOW_PREFIX');
+		$deny = explode(',', env('APIGEE_DENY_PREFIX'));
+
 		$products = ApigeeService::get('apiproducts?expand=true')['apiProduct'];
 
 		$attributes = [];
 
 		$this->info("Start syncing products");
 		foreach ($products as $product) {
+			if ($allow !== "" && strpos($product['displayName'], $allow) === false) continue;
+			if (str_replace($deny, '', $product['displayName']) !== $product['displayName']) continue;
+
 			$this->info("Syncing {$product['displayName']}");
 
 			$attributes = ApigeeService::getAppAttributes($product['attributes']);
 			$category = Category::firstOrCreate([
-				'title' => $attributes['category'] ?? "Misc"
+				'title' => ucfirst(strtolower(trim($attributes['Category'] ?? "Misc")))
 			]);
 
-			Product::updateOrCreate(
+			$p = Product::updateOrCreate(
 				['pid' => $product['name']],
 				[
 					'pid' => $product['name'],
 					'name' => $product['name'],
-					'display_name' => $product['displayName'],
+					'display_name' => preg_replace('/[-_]+/', ' ', ltrim($product['displayName'], "$allow ")),
 					'description' => $product['description'],
 					'environments' => implode(',', $product['environments']),
-					'group' => $attributes['group'] ?? "MTN",
-					'category_cid' => $category->cid,
-					'access' => $attributes['access'] ?? null,
-					'locations' => $attributes['locations'] ?? null,
-					'swagger' => $attributes['swagger'] ?? null,
+					'group' => $attributes['Group'] ?? "MTN",
+					'category_cid' => strtolower($category->cid),
+					'access' => $attributes['Access'] ?? null,
+					'locations' => $attributes['Locations'] ?? null,
+					'swagger' => $attributes['Swagger'] ?? null,
 					'attributes' => json_encode($attributes),
 				]
 			);
+
+			// if (isset($attributes['KeyFeatures'])) {
+			// 	$kf = preg_split('/,\s?/', $attributes['KeyFeatures']);
+			// 	$ids = [];
+			// 	foreach($kf as $feature){
+			// 		$ids[] = KeyFeature::firstOrCreate(['description' => $feature])->id;
+			// 	}
+			// 	$p->keyFeatures()->sync($ids);
+			// }
 		}
 	}
 }

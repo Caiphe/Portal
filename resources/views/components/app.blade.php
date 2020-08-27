@@ -117,7 +117,7 @@
         <p class="products-title"><strong>Products</strong></p>
 
         <div class="products">
-            <x-apps.products :products="$app['products']" />
+            <x-apps.products :app="$app" />
         </div>
     </div>
     <nav class="menu">

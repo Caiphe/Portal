@@ -93,7 +93,6 @@ class LoginController extends Controller
             'developer_id' => $data['developer_id'],
             'password' => Hash::make($data['password']),
             'profile_picture' => '/storage/profile/' . $imageName,
-            'email_verified_at' => date('Y-m-d H:i:s'),
         ]);
 
         if (isset($data['locations'])) {

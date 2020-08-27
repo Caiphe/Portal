@@ -33,6 +33,7 @@ class CreateAppsTable extends Migration {
 			$table->string('app_aid');
 			$table->string('product_pid');
 			$table->string('status')->default('pending');
+			$table->unsignedBigInteger('actioned_by')->nullable();
 
 			$table->foreign('app_aid')
 				->references('aid')
@@ -42,6 +43,11 @@ class CreateAppsTable extends Migration {
 			$table->foreign('product_pid')
 				->references('pid')
 				->on('products')
+				->onDelete('cascade');
+
+			$table->foreign('actioned_by')
+				->references('id')
+				->on('users')
 				->onDelete('cascade');
 		});
 	}

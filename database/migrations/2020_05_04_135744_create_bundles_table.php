@@ -23,6 +23,7 @@ class CreateBundlesTable extends Migration
             $table->string('category_cid')->default('misc');
             $table->string('banner')->default('/images/banner-default.png');
             $table->timestamps();
+            $table->softDeletes('deleted_at', 0);
 
             $table->foreign('category_cid')
                 ->references('cid')
