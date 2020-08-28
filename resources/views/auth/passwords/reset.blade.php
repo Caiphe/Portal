@@ -8,7 +8,7 @@
 
 @section('content')
 	<x-auth.header/>
-	<form method="POST" action="{{ route('password.update') }}">
+	<form id="forgot-password-form" method="POST" action="{{ route('password.update') }}">
         @csrf
 
         <h1 class="t-large">Almost there...</h1>
@@ -36,6 +36,9 @@
 
         <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required placeholder="Confirm password" autocomplete="new-password">
 
+        <div id="password-strength">Password strength</div>
+        <div id="password-still-needs" class="invalid-feedback" role="alert"></div>
+
         <button type="submit" class="inline">
             {{ __('Reset Password') }}
         </button>
@@ -43,3 +46,7 @@
     <a class="try-somewhere-else yellow bottom t-small" href="{{route('login')}}"><span>Not the right place?</span> Click here to log in @svg('arrow-forward', '#fc0')</a></div>
     <x-auth.carousel />
 @endsection
+
+@push('scripts')
+<script src="{{ mix('/js/templates/auth/forgot-password.js') }}"></script>
+@endpush
