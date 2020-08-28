@@ -24,6 +24,7 @@ mix.scripts(
     .scripts("resources/js/templates/products/show.js", "public/js/templates/products/show.js")
     .scripts("resources/js/templates/bundles/index.js", "public/js/templates/bundles/index.js")
     .scripts("resources/js/templates/auth/register.js", "public/js/templates/auth/register.js")
+    .scripts("resources/js/templates/auth/forgot-password.js", "public/js/templates/auth/forgot-password.js")
     .sass("resources/sass/auth/login.scss", "public/css/auth")
     .sass("resources/sass/auth/register.scss", "public/css/auth")
     .sass("resources/sass/auth/verify.scss", "public/css/auth")

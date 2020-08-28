@@ -12,7 +12,7 @@
     document.getElementById('back').addEventListener('click', back);
     document.getElementById('next').addEventListener('click', next);
     document.getElementById('create-new-account').addEventListener('click', next);
-    document.getElementById('password').addEventListener('keyup', checkPassword);
+    document.getElementById('password').addEventListener('input', checkPassword);
     document.getElementById('register-form').addEventListener('submit', validateSubmit);
     document.addEventListener('keydown', pressEnter);
 

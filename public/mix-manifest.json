@@ -2,7 +2,7 @@
     "/css/auth/login.css": "/css/auth/login.css?id=dfa8cf8bc4599c09444f",
     "/css/auth/register.css": "/css/auth/register.css?id=b327d71b9599afecf651",
     "/css/auth/verify.css": "/css/auth/verify.css?id=db4028980d8fbb98b848",
-    "/css/auth/forgot-password.css": "/css/auth/forgot-password.css?id=a678a2d1dd04fd76a834",
+    "/css/auth/forgot-password.css": "/css/auth/forgot-password.css?id=ef7c5463800e34ca3cf1",
     "/css/components/action_tab.css": "/css/components/action_tab.css?id=57b927cc9f1f001d5e30",
     "/css/components/carousel.css": "/css/components/carousel.css?id=b32a02bf18290f6e480f",
     "/css/components/multiselect.css": "/css/components/multiselect.css?id=5b45a03929072cba0cd7",
@@ -43,5 +43,6 @@
     "/js/templates/products/index.js": "/js/templates/products/index.js?id=abf29a7d7872fd2adbdf",
     "/js/templates/products/show.js": "/js/templates/products/show.js?id=6b7d80178a2833e52bde",
     "/js/templates/bundles/index.js": "/js/templates/bundles/index.js?id=63c180dca5f5e8c1b0ac",
-    "/js/templates/auth/register.js": "/js/templates/auth/register.js?id=d92acaa88ae38b8f1373"
+    "/js/templates/auth/register.js": "/js/templates/auth/register.js?id=cfcafc93291d3ec5721c",
+    "/js/templates/auth/forgot-password.js": "/js/templates/auth/forgot-password.js?id=8ff5aaddf612507f794e"
 }
