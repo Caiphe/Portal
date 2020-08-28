@@ -263,10 +263,19 @@
             }
 
             xhr.onload = function() {
+                var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
                 if (xhr.status === 200) {
                     statusBar.className = 'status-bar status-' + lookup[data.action];
                 } else {
+                    window.scrollTo({
+                        top: 0,
+                        left: 0,
+                        behavior: 'smooth'
+                    });
+                        
                     statusBar.classList.remove('loading');
+                    addAlert('error', result.body.message);
                 }
             };
         }

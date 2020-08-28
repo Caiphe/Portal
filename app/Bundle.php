@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use App\Product;
 use App\KeyFeature;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Bundle extends Model
 {
+    use SoftDeletes;
+    
     /**
      * The attributes that aren't mass assignable.
      *

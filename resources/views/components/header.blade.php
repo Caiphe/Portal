@@ -22,6 +22,7 @@
                     </div>
                 </div>
             </li>
+            <li><a href="/getting-started">Docs</a></li>
             <li><a href="/faq">FAQ</a></li>
             <li><a href="/contact">Contact us</a></li>
             @can('view-dashboard')

@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Services\ApigeeService;
 use App\Bundle;
+use App\Product;
 
 class SyncBundle extends Command
 {
@@ -41,17 +42,29 @@ class SyncBundle extends Command
     {
         $this->info("Getting bundles from Apigee");
         $bundles = ApigeeService::getBundles();
+        $allow = env('APIGEE_ALLOW_PREFIX');
+        $deny = explode(',', env('APIGEE_DENY_PREFIX'));
 
         $this->info("Start syncing bundles");
         foreach ($bundles['monetizationPackage'] as $bundle) {
+            if ($allow !== "" && strpos($bundle['displayName'], $allow) === false) continue;
+            if (str_replace($deny, '', $bundle['displayName']) !== $bundle['displayName']) continue;
+
             $this->info("Syncing {$bundle['displayName']}");
 
-            $p = Bundle::updateOrCreate(
+            $product = Product::find($bundle['product'][0]['id']);
+
+            if(!$product){
+                $this->warn("Please sync the {$bundle['displayName']} products first.");
+                continue;
+            }
+
+            $p = Bundle::withTrashed()->updateOrCreate(
                 ["bid" => $bundle['id']],
                 [
                     "bid" => $bundle['id'],
                     "name" => $bundle['name'],
-                    "display_name" => $bundle['displayName'],
+                    "display_name" => preg_replace('/[-_]+/', ' ', ltrim($bundle['displayName'], "$allow ")),
                     "description" => $bundle['description'],
                 ]
             );

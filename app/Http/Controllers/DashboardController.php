@@ -65,7 +65,7 @@ class DashboardController extends Controller
 	public function update(UpdateStatusRequest $request)
 	{
 		$validated = $request->validated();
-		$app = App::with('developer')->find($validated['app']);
+		$app = App::with('developer')->where('name', $validated['app'])->first();
 		$status = [
 			'approve' => 'approved',
 			'revoke' => 'revoked',
@@ -75,9 +75,13 @@ class DashboardController extends Controller
 		$credentials = ApigeeService::get('apps/' . $app->aid)['credentials'];
 		$credentials = ApigeeService::getLatestCredentials($credentials);
 
-		ApigeeService::updateProductStatus($app->developer->email, $validated['app'], $credentials['consumerKey'], $validated['product'], $validated['action']);
-
-		$app->products()->updateExistingPivot($validated['product'], ['status' => $status]);
+		$response = ApigeeService::updateProductStatus($app->developer->email, $validated['app'], $credentials['consumerKey'], $validated['product'], $validated['action']);
+		$responseStatus = $response->status();
+		if ($responseStatus === 200) {
+			$app->products()->updateExistingPivot($validated['product'], ['status' => $status, 'actioned_by' => $request->user()->id]);
+		} else if ($request->ajax()) {
+			return response()->json(['success' => false, 'body' => json_decode($response->body())], $responseStatus);
+		}
 
 		if ($request->ajax()) {
 			return response()->json(['success' => true]);
