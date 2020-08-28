@@ -39,13 +39,13 @@
 
 #product-sections {
 
-    .product-section{
-        display:none;
+    .product-section {
+        display: none;
     }
 
     &.product-docs #button-docs,
     &.product-overview #button-overview,
-    &.product-specification #button-specification{
+    &.product-specification #button-specification {
         background-color: $grey700;
         color: #FFF;
 
@@ -285,7 +285,7 @@
                 margin-bottom: 0;
                 position: relative;
 
-                &.has-children{
+                &.has-children {
                     border-top: 2px solid $grey500;
                 }
             }
