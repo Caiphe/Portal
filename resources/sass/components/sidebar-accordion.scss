@@ -9,6 +9,10 @@
             color: $grey700;
             font-size: 12px;
         }
+
+        .accordion-item > a {
+            text-transform: uppercase;
+        }
     }
 
     .accordion-item {

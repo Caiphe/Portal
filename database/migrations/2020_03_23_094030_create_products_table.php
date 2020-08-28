@@ -28,6 +28,7 @@ class CreateProductsTable extends Migration
 			$table->string('swagger')->nullable();
 			$table->json('attributes')->nullable();
 			$table->timestamps();
+			$table->softDeletes('deleted_at', 0);
 
 			$table->foreign('category_cid')
                 ->references('cid')

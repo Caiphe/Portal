@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Country;
 use App\Product;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 /**
  * This is a helper service to connect to Apigee.
@@ -20,7 +20,9 @@ class ApigeeService
 
 	public static function post(string $url, array $data)
 	{
-		return self::HttpWithBasicAuth()->post(config('apigee.base') . $url, $data);
+		return self::HttpWithBasicAuth()->withHeaders([
+			'Content-Type' => 'application/octet-stream'
+		])->post(config('apigee.base') . $url, $data);
 	}
 
 	public static function put(string $url, array $data)
@@ -48,7 +50,7 @@ class ApigeeService
 		$originalProducts = $data['originalProducts'];
 		$removedProducts = array_diff($originalProducts, $apiProducts);
 
-		$updatedProducts = self::post("developers/{$user->email}/apps/{$name}/keys/{$key}", ["apiProducts" => $apiProducts]);
+		self::post("developers/{$user->email}/apps/{$name}/keys/{$key}", ["apiProducts" => $apiProducts]);
 		$updatedDetails = self::put("developers/{$user->email}/apps/{$name}", [
 			"name" => $name,
 			"attributes" => $data['attributes'],
@@ -66,7 +68,7 @@ class ApigeeService
 	{
 		$a = [];
 		foreach ($attributes as $attribute) {
-			$a[$attribute['name']] = $attribute['value'];
+			$a[Str::studly($attribute['name'])] = $attribute['value'];
 		}
 		return $a;
 	}
@@ -157,7 +159,7 @@ class ApigeeService
 
 	public static function updateProductStatus(string $id, string $app, string $key, string $product, string $action)
 	{
-		return self::post("developers/{$id}/apps/{$app}/{$key}/apiproducts/{$product}", ['action' => $action]);
+		return self::post("developers/{$id}/apps/{$app}/keys/{$key}/apiproducts/{$product}", ['action' => $action]);
 	}
 
 	/**
