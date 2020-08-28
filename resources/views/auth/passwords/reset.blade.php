@@ -27,14 +27,20 @@
             </span>
         @enderror
 
-        <input id="password" type="password" class="form-control @error('password') invalid @enderror" name="password" placeholder="New password" required autocomplete="new-password">
-        @error('password')
-            <span class="invalid-feedback" role="alert">
-                <strong>{{ $message }}</strong>
-            </span>
-        @enderror
+        <div class="password-section">
+            <input id="password" type="password" class="form-control @error('password') invalid @enderror" name="password" placeholder="New password" required autocomplete="new-password">
+            <button type="button" class="fab show-password" onclick="togglePasswordVisibility(this)"></button>
+            @error('password')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </div>
 
-        <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required placeholder="Confirm password" autocomplete="new-password">
+        <div class="password-section">
+            <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required placeholder="Confirm password" autocomplete="new-password">
+            <button type="button" class="fab show-password" onclick="togglePasswordVisibility(this)"></button>
+        </div>
 
         <div id="password-strength">Password strength</div>
         <div id="password-still-needs" class="invalid-feedback" role="alert"></div>

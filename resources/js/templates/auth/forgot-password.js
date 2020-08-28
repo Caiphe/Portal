@@ -55,3 +55,8 @@
         }
     }
 }());
+
+function togglePasswordVisibility(el) {
+    el.classList.toggle('password-visible');
+    el.previousElementSibling.setAttribute('type', el.classList.contains('password-visible') ? "text" : "password");
+}
