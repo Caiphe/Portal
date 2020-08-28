@@ -37,7 +37,7 @@
         <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
         @svg('people', null, 'images/illustrations')
     </div>
-    <div class="content">
+    {{-- <div class="content">
         @foreach($bundles as $bundle)
         <x-card-link
             :id="'bundle-' . $bundle->slug"
@@ -52,7 +52,7 @@
             @subStr(($bundle->description ?: 'View the bundle'))
         </x-card-link>
         @endforeach
-    </div>
+    </div> --}}
 @endsection
 
 @push('scripts')

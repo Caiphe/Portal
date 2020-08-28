@@ -32,7 +32,7 @@
     </section>
 
     <section class="container businesses mb-5">
-        <h2 class="mb-2">BUSINESSES THAT USES OUR PRODUCTS</h2>
+        {{-- <h2 class="mb-2">BUSINESSES THAT USES OUR PRODUCTS</h2>
         <img src="/images/businesses/acme-1.svg" alt="Acme logo">
         <img src="/images/businesses/acme-2.svg" alt="Acme logo">
         <img src="/images/businesses/acme-3.svg" alt="Acme logo">
@@ -40,7 +40,7 @@
         <img src="/images/businesses/acme-5.svg" alt="Acme logo">
         <img src="/images/businesses/acme-6.svg" alt="Acme logo">
         <img src="/images/businesses/acme-7.svg" alt="Acme logo">
-        <img src="/images/businesses/acme-8.svg" alt="Acme logo">
+        <img src="/images/businesses/acme-8.svg" alt="Acme logo"> --}}
     </section>
 
     <section class="grey-bg py-5">
@@ -80,11 +80,11 @@
                     <pre><code>curl -X POST -H "Content-Type: application/x-www-form-urlencoded" https://api.mtn.com/oauth/client_credential/accesstoken?
 grant_type=client_credentials -d 'client_id={consumer-key}&client_secret={consumer-secret}'</code></pre></div>
             </div>
-            <h2 class="t-large mb-1">Lorem ipsum dolor sit amet</h2>
-            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr.</p>
+            <h2 class="t-large mb-1">Create an account</h2>
+            <p>Register your account if you want to create an App.</p>
             <div class="cols">
-                <a href="#" class="button dark mr-4">Button @svg('arrow-forward')</a>
-                <a href="#" class="button dark">Button @svg('arrow-forward')</a>
+                <a href="{{ route('register') }}" class="button dark mr-4">Register @svg('arrow-forward')</a>
+                <a href="{{ route('getting-started') }}" class="button dark">Getting started @svg('arrow-forward')</a>
             </div>
         </div>
     </section>
@@ -118,7 +118,7 @@ grant_type=client_credentials -d 'client_id={consumer-key}&client_secret={consum
                 <span class="tag yellow">MTN</span>
                 <h3>Bundles</h3>
                 <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sint quas maxime inventore aspernatur dolorum, obcaecati iure rem totam accusantium provident tempora corrupti consequatur adipisci voluptatum quae modi facilis doloremque deleniti?</p>
-                <a href="{{ route('bundle.show', 'fintech') }}">View all bundles @svg('arrow-forward')</a>
+                <a href="{{ route('bundle.index') }}">View all bundles @svg('arrow-forward')</a>
             </div>
         </div>
         <div class="stack-product">
@@ -155,11 +155,11 @@ grant_type=client_credentials -d 'client_id={consumer-key}&client_secret={consum
         </div>
     </section>
 
-    <section class="container pricing">
+    {{-- <section class="container pricing">
         <h2 class="mt-1 centre">Pricing</h2>
         <p class="centre mb-5">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam<br>nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.</p>
         <x-pricing></x-pricing>
-    </section>
+    </section> --}}
 @endsection
 
 @push('scripts')
