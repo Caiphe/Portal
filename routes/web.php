@@ -53,7 +53,7 @@ Route::get('categories/{category:slug}', 'CategoryController@show')->name('categ
 Route::get('bundles', 'BundleController@index')->name('bundle.index');
 Route::get('bundles/{bundle:slug}', 'BundleController@show')->name('bundle.show');
 
-Route::get('getting-started', 'GettingStartedController@index');
+Route::get('getting-started', 'GettingStartedController@index')->name('getting-started');
 Route::get('getting-started/{content:slug}', 'GettingStartedController@show');
 
 Route::get('faq', 'FaqController@index')->name('faq.index');

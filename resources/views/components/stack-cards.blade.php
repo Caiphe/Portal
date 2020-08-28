@@ -13,7 +13,7 @@
             <span title="$country">@svg($code, null, 'images/locations')</span>
             @endforeach
         </div>
-        <a href="{{ $card['href'] }}" class="button">View</a>
+        {{-- <a href="{{ $card['href'] }}" class="button">View</a> --}}
     </div>
     @endforeach
 </div>
