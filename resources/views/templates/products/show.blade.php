@@ -4,6 +4,9 @@
 <link rel="stylesheet" href="{{ mix('/css/templates/products/show.css') }}">
 @if(!empty($content['tab']))
 <style>
+    @if(isset($content['overview']))
+    #product-sections #product-overview {display: block;}
+    @endif
     @foreach($content['tab'] as $tab)
     #product-sections.product-{{$tab->slug}} #product-{{$tab->slug}}{
         display: block;
