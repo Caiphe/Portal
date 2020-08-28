@@ -207,7 +207,7 @@
         </div>
     </section>
 
-    <section>
+    {{-- <section>
         <div class="container">
             <h1>Bundles</h1>
             <div class="bundle-cards">
@@ -223,7 +223,7 @@
                 <a href="/bundles" class="button" role="button">View all bundles</a>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <x-footer/>
     @stack("scripts")
