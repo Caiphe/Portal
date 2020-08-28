@@ -60,9 +60,9 @@ class ProductController extends Controller
 		}
 
 		if (isset($content['overview'])) {
-			$startingPoint = 'overview';
+			$startingPoint = 'product-overview';
 		} else if (isset($content['docs'])) {
-			$startingPoint = 'docs';
+			$startingPoint = 'product-docs';
 		}
 
 		foreach ($productList as $category => $products) {
