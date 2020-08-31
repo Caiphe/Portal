@@ -10,7 +10,7 @@
         <p>{{ $card['description'] }}</p>
         <div class="flags">
             @foreach($card['locations'] as $code)
-            <p>{{ $code }}</p>
+            <span title="{{ $code }}">@svg($code, null, 'images/locations')</span>
             @endforeach
         </div>
         <a href="{{ $card['href'] }}" class="button">View</a>
