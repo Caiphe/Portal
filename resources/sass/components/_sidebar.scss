@@ -28,3 +28,46 @@
         }
     }
 }
+
+.admin {
+    .wrapper {
+        display: flex;
+        flex: 1 0 auto;
+
+        #sidebar {
+            flex: 1 0 220px;
+            padding: 20px 0;
+
+            background-color: $grey900;
+            color: #FFF;
+
+            a {
+                color: #FFF;
+            }
+
+            .logo {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 20px;
+
+                img {
+                    margin-right: 10px;
+                }
+            }
+
+            >ul {
+                margin-top: 60px;
+            }
+        }
+
+        #main {
+            background-color: #FFF;
+            padding: 0;
+
+            section {
+                padding: 40px;
+            }
+        }
+    }
+}

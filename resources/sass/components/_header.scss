@@ -189,3 +189,22 @@
     pointer-events: none;
     transition: opacity 0.356s, transform 0.356s;
 }
+
+.admin #header {
+    .header-inner {
+        height: 80px;
+        padding: 0 20px;
+    }
+
+    .spacer {
+        flex: 1;
+    }
+
+    #search {
+        width: 500px;
+    }
+
+    .profile-menu-options {
+        margin-left: -48px;
+    }
+}

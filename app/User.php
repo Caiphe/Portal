@@ -71,6 +71,20 @@ class User extends Authenticatable implements MustVerifyEmail {
 		return in_array($permission, $userPermissions);
 	}
 
+	public function hasAnyPermissionTo($permission) {
+		$userPermissions = $this->roles->map->permissions
+			->flatten()
+			->pluck('name')
+			->unique()
+			->toArray();
+
+		if (is_array($permission)) {
+			return count(array_intersect($permission, $userPermissions)) > 0;
+		}
+
+		return in_array($permission, $userPermissions);
+	}
+
 	public function countries() {
 		return $this->belongsToMany(Country::class);
 	}

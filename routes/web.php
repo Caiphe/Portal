@@ -39,6 +39,10 @@ Route::middleware(['verified', '2fa'])->group(function () {
 	Route::post('profile/2fa/disable', 'UserController@disable2fa')->name('user.2fa.disable');
 });
 
+Route::namespace('Admin')->prefix('admin')->middleware('can:view-admin')->group(function () {
+	Route::get('/', 'HomeController')->name('home');
+});
+
 Route::post('profile/2fa/verify', 'UserController@verify2fa')->middleware('2fa')->name('user.2fa.verify');
 
 Route::get('dashboard', 'DashboardController@index')->middleware('can:view-dashboard')->name('dashboard');
