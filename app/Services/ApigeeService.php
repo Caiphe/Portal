@@ -19,11 +19,15 @@ class ApigeeService
 		return self::HttpWithBasicAuth()->get(config('apigee.base') . $url)->json();
 	}
 
-	public static function post(string $url, array $data)
+	public static function post(string $url, array $data, array $headers = [])
 	{
-		return self::HttpWithBasicAuth()->withHeaders([
-			'Content-Type' => 'application/octet-stream'
-		])->post(config('apigee.base') . $url, $data);
+		$h = array_merge([
+			'Content-Type' => 'application/json'
+		], $headers);
+
+		return self::HttpWithBasicAuth()
+			->withHeaders($h)
+			->post(config('apigee.base') . $url, $data);
 	}
 
 	public static function put(string $url, array $data)
@@ -160,7 +164,7 @@ class ApigeeService
 
 	public static function updateProductStatus(string $id, string $app, string $key, string $product, string $action)
 	{
-		return self::post("developers/{$id}/apps/{$app}/keys/{$key}/apiproducts/{$product}", ['action' => $action]);
+		return self::post("developers/{$id}/apps/{$app}/keys/{$key}/apiproducts/{$product}", ['action' => $action], ['Content-Type' => 'application/octet-stream']);
 	}
 
 	/**
