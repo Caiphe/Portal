@@ -37,7 +37,7 @@ class Product extends Model {
 	}
 
 	public function scopeIsPublic($query) {
-		return $query->hasSwagger()->whereAccess("public")->where("environments", "like", "%prod%");
+		return $query->hasSwagger()->whereAccess("public");
 	}
 
 	public function scopeHasCategory($query, $category)
@@ -52,18 +52,16 @@ class Product extends Model {
 		});
 	}
 
-	public function scopeBasedOnUser($query, $user) {
+	public function scopeBasedOnUser($query, $user, $environment = 'prod') {
 		if ($user && $user->hasPermissionTo('view_internal_products')) {
-			return $query->isPublicWithInternal();
+			return $query->isPublicWithInternal()->getEnvironment($environment);
 		}
 
-		return $query->isPublic();
+		return $query->isPublic()->getEnvironment($environment);
 	}
 
 	public function scopeGetEnvironment($query, $environment) {
 		return $query
-			->isPublic()
-			->hasSwagger()
 			->whereRaw("find_in_set('$environment',environments)");
 	}
 
