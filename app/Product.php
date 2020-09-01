@@ -37,7 +37,7 @@ class Product extends Model {
 	}
 
 	public function scopeIsPublic($query) {
-		return $query->hasSwagger()->whereAccess("public");
+		return $query->hasSwagger()->whereAccess("public")->where("environments", "like", "%prod%");
 	}
 
 	public function scopeHasCategory($query, $category)
