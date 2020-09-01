@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Content;
 use App\Country;
 use App\Product;
 use App\Services\OpenApiService;
@@ -21,13 +22,15 @@ class ProductController extends Controller
 		$productLocations = $products->pluck('locations')->implode(',');
 		$locations = array_unique(explode(',', $productLocations));
 		$countries = Country::whereIn('code', $locations)->pluck('name', 'code');
+		$content = Content::where('contentable_type', 'Products')->get();
 
 		return view('templates.products.index', [
 			'productsCollection' => $productsCollection,
 			'productCategories' => array_keys($productsCollection->toArray()),
 			'countries' => $countries,
 			'selectedCategory' => $request['category'],
-			'groups' => $products->pluck('group')->unique()
+			'groups' => $products->pluck('group')->unique(),
+			'content' => $content
 		]);
 	}
 

@@ -5,13 +5,15 @@ namespace App\Providers;
 use App\Category;
 use Illuminate\Support\ServiceProvider;
 
-class CategoriesServiceProvider extends ServiceProvider {
+class CategoriesServiceProvider extends ServiceProvider
+{
 	/**
 	 * Register services.
 	 *
 	 * @return void
 	 */
-	public function register() {
+	public function register()
+	{
 		//
 	}
 
@@ -20,15 +22,16 @@ class CategoriesServiceProvider extends ServiceProvider {
 	 *
 	 * @return void
 	 */
-	public function boot() {
-		try {
+	public function boot()
+	{
+		view()->composer('*', function ($view) {
 			$globalCategories = Category::whereHas('products', function ($query) {
-				$query->isPublic();
-			})->orWhereHas('bundles')->orderBy('title')->get();
+				$query->isPublic()->where('cid', '!=', 'misc');
+			})->orWhereHas('bundles', function ($query) {
+				$query->where('cid', '!=', 'misc');
+			})->orderBy('title')->get();
 
 			\View::share('globalCategories', $globalCategories);
-		} catch (\Exception $e) {
-			// do nothing
-		}
+		});
 	}
 }

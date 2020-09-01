@@ -15,7 +15,7 @@
 @props(['title', 'icon'])
 
 @php 
-    $card_text = strlen($slot) > 165 ? substr($slot,0,165) : $slot;
+    $card_text = strlen($slot) > 165 ? substr($slot,0,200) : $slot;
 @endphp
 
 <a {{ $attributes }}>
@@ -32,7 +32,7 @@
 			<p class="card__body">
 				{{ $card_text }}
 			</p>
-			<button class="fab chevron-right"></button>
 		</div>
+		<button class="fab chevron-right"></button>
 	</div>
 </a>	

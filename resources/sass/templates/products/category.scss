@@ -414,7 +414,8 @@ main {
     }
 
     h3 {
-        font-size: 40px;
+        font-size: 32px;
+        line-height: 1;
         font-family: "mtn-bold";
     }
 
@@ -453,10 +454,6 @@ main {
 // Themes
 
 .mixed {
-    .banner svg {
-        fill: $grey800;
-    }
-
     .benefits {
         background-image: url("/images/category/themes/mixed/squiggle-benefits.svg");
     }
