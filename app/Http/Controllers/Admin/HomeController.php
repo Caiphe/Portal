@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Product;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -11,8 +13,12 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke()
+    public function __invoke(Request $request)
     {
-        return view('templates.admin.home');
+        return Product::basedOnUser($request->user())->get();
+            
+        return view('templates.admin.home', [
+            'products' => Product::basedOnUser($request->user())->get()
+        ]);
     }
 }

@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
-@section('content')
+@section('title', 'Home')
 
+@section('content')
+    
 @endsection

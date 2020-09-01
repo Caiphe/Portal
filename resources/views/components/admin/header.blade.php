@@ -2,7 +2,7 @@
 
 <header id="header">
     <nav class="header-inner container">
-        <h1>{{ $heading }}</h1>
+        <h1>@yield('title')</h1>
         <div class="spacer"></div>
         <form action="{{route('search')}}">
             <input type="search" name="q" id="search" class="thin see-through" placeholder="Search">
