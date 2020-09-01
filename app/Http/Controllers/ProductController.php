@@ -17,7 +17,7 @@ class ProductController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$products = Product::with('category')->basedOnUser($request->user())->get();
+		$products = Product::with('category')->where('category_cid', '!=', 'misc')->basedOnUser($request->user())->get();
 		$productsCollection = $products->sortBy('category.title')->groupBy('category.title');
 		$productLocations = $products->pluck('locations')->implode(',');
 		$locations = array_unique(explode(',', $productLocations));
