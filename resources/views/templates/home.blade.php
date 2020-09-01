@@ -20,16 +20,16 @@
     <section class="banner-carousel">
         <x-carousel wait="5000" duration="0.34">
             <x-carousel-item>
-            <div class="carousel-content">
-                <h1>Create an account</h1>
-                <p>Register your account if you want to create an App.</p>
-                <a class="button after arrow-forward" href="/register" role="button">Register</a>
-            </div>
+                <div class="carousel-content">
+                    <h2>Create an account</h2>
+                    <p>Register your account if you want to create an App.</p>
+                    <a class="button after arrow-forward" href="/register" role="button">Register</a>
+                </div>
             </x-carousel-item>
 
             <x-carousel-item>
                 <div class="carousel-content">
-                    <h1>Build an app</h1>
+                    <h2>Build an app</h2>
                     <p>When you have chosen the API you want to use to build your app, you need to register your app. Follow the steps below</p>
                     <a class="button after arrow-forward" href="/apps/create" role="button">Create</a>
                 </div>
@@ -37,7 +37,7 @@
 
             <x-carousel-item>
                 <div class="carousel-content">
-                    <h1 class="t-dark">Add products</h1>
+                    <h2 class="t-dark">Add products</h2>
                     <p class="t-dark">MTN is consistently developing new APIs for developers and businesses to create powerful products. Follow the steps to browse APIs</p>
                     <a class="button white after arrow-forward" href="/products" role="button">Add</a>
                 </div>
@@ -45,7 +45,7 @@
 
             <x-carousel-item>
                 <div class="carousel-content">
-                    <h1>Access the keys</h1>
+                    <h2>Access the keys</h2>
                     <p>Once your App submission is approved you can now use Consumer/API Key and Secret on your profile page.</p>
                     <a class="button after arrow-forward" href="/apps" role="button">Access</a>
                 </div>
@@ -62,31 +62,31 @@
             <div class="steps">
                 <div class="container-inner">
                     <div class="cols">
-                        <div class="col col-3">
+                        <a href="#section-sign-up" class="col col-3">
                             <x-key-feature title="" icon="account-plus-outline">Sign-in/Register</x-key-feature>
-                        </div>
-                        <div class="col col-3">
+                        </a>
+                        <a href="#section-browse-our-products" class="col col-3">
                             <x-key-feature title="" icon="card-search">Browse our products</x-key-feature>
-                        </div>
-                        <div class="col col-3">
+                        </a>
+                        <a href="#section-register-an-app" class="col col-3">
                             <x-key-feature title="" icon="plus-box-multiple">Register an app</x-key-feature>
-                        </div>
-                        <div class="col col-3">
+                        </a>
+                        <a href="#section-access-the-keys" class="col col-3">
                             <x-key-feature title="" icon="textbox-password">Access the keys</x-key-feature>
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="grey-bg">
+    <section id="section-sign-up" class="grey-bg">
         <div class="container flex">
             <div class="container-inner">
                 <div class="cols">
                     <div class="col-6">
                         <div class="content-left">
-                            <h1>Sign up</h1>
+                            <h2>Sign up</h2>
                             <p class="t-pxl">To be able to create an app, you would need to register an account first. Simply follow the registration process and you’ll be good to go.</p>
                             <span class="t-ps-header">Steps involved</span>
                             <ol>
@@ -108,7 +108,7 @@
        </div>
     </section>
 
-    <section>
+    <section id="section-browse-our-products">
         <div class="container flex">
             <div class="comtainer-inner">
                 <div class="cols">
@@ -119,7 +119,7 @@
                     </div>
                     <div class="col col-6">
                         <div class="content-right">
-                            <h1>Browse our products</h1>
+                            <h2>Browse our products</h2>
                             <p class="t-pxl">
                                 MTN is consistently developing new APIs for developers and businesses to create powerful products. After signing in, you can explore the list of available products and familiarise yourself with the documentaion and endpoints to determine if they would be a match for your next app.
                             </p>
@@ -138,13 +138,13 @@
         </div>
     </section>
 
-    <section class="grey-bg">
+    <section id="section-register-an-app" class="grey-bg">
         <div class="container flex">
             <div class="container-inner">
                 <div class="cols">
                     <div class="col col-6">
                         <div class="content-left">
-                            <h1>Register an app</h1>
+                            <h2>Register an app</h2>
                             <p class="t-pxl">
                                 Now that you’re more familiar with our products, you can proceed to registering your app. Simply click on “Build app” and follow the on-screen instructions to complete the app registration.
                             </p>
@@ -167,7 +167,7 @@
         </div>
     </section>
 
-    <section>
+    <section id="section-access-the-keys">
         <div class="container flex">
             <div class="container-inner">
                 <div class="cols">
@@ -178,7 +178,7 @@
                     </div>
                     <div class="col col-6">
                         <div class="content-right">
-                            <h1>Access the keys</h1>
+                            <h2>Access the keys</h2>
                             <p class="t-pxl">
                                 Once your app has been approved, you can access all your app’s details such as consumer/secret keys and more from your app dashboard.                </p>
                             <span class="t-ps-header">Steps involved</span>
@@ -197,7 +197,7 @@
     <section class="blue-bg">
         <div class="container-flex">
             <div class="container">
-                <h1 class="t-light">Product categories</h1>
+                <h2 class="t-light">Product categories</h2>
                 <div class="products-cards">
                     @foreach ($productsCollection as $product)
                         <x-card-icon :icon="\Illuminate\Support\Str::slug($product)" :title="$product" :href="'/products?category=' . $product"></x-card-icon>
@@ -209,7 +209,7 @@
 
     {{-- <section>
         <div class="container">
-            <h1>Bundles</h1>
+            <h2>Bundles</h2>
             <div class="bundle-cards">
                 @foreach ($bundleCollection as $bundle)
                     @php //setting variables
