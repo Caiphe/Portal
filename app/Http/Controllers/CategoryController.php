@@ -16,7 +16,22 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        $category->load(['products', 'bundles']);
+        $category->load(['products', 'bundles', 'content']);
+        $products = $category->products->shuffle()->take(3)->map(function ($product) {
+            return [
+                'name' => $product['name'],
+                'group' => $product['group'],
+                'description' => $product['description'] ?: 'View the product',
+                'locations' => explode(',', $product['locations'] ?? 'all'),
+                'href' => route('product.show', $product['slug']),
+            ];
+        })->pad(-3, [
+            'name' => '',
+            'group' => '',
+            'description' => '',
+            'locations' => [],
+            'href' => '',
+        ])->toArray();
 
         return view(
             'templates.category.show',
@@ -24,6 +39,9 @@ class CategoryController extends Controller
                 'theme' => $category->theme,
                 'category' => $category->title,
                 'slug' => $category->slug,
+                'content' => $category->content->groupBy('type'),
+                'products' => $products,
+                'bundles' => [],
             ]
         );
     }

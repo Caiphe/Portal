@@ -5,9 +5,10 @@ function closeAlert() {
     }, 600);
 }
 
-function addAlert(type, messages) {
+function addAlert(type, messages, cb) {
     var messageList = '';
     var alert = '';
+    var time = type.toLowerCase() === 'error' ? 10000 : 4000;
 
     if (typeof(messages) === 'string') {
         messageList = '<li>' + messages + '</li>';
@@ -23,7 +24,7 @@ function addAlert(type, messages) {
 
     setTimeout(function() {
         document.getElementById('alert').classList.add('open');
-        setTimeout(closeAlert, 4000);
+        setTimeout((cb || closeAlert), time);
     }, 10);
 }
 

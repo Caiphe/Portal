@@ -18,11 +18,11 @@
     </section>
 
     <section class="container banner">
-        <h2 class="t-xlarge mb-3">Power your apps with our MTN MoMo API</h2>
-        <p class="my-0 t-medium">Learn the basics of MTN MoMo API, view available resources and join a community of developers building with the MoMo API.</p>
+        <h2 class="t-xlarge mb-3">{{ $content['heading'][0]['title'] ?? 'Content needed' }}</h2>
+        {!! $content['heading'][0]['body'] ?? 'Content needed' !!}
         <div class="row mt-3">
             <a href="{{ route('product.index', ['category' => $category]) }}" class="button mr-1 view-products">View products @svg('arrow-forward')</a>
-            <button class="dark after arrow-right">Button</button>
+            <a href="{{ route('bundle.index') }}" class="button dark">View bundles @svg('arrow-forward', '#FFF')</a>
         </div>
         <img class="squiggle" src="/images/category/themes/{{ $theme }}/squiggle-hero.svg" alt="background squiggle">
         <div class="phone">
@@ -45,13 +45,13 @@
 
     <section class="grey-bg py-5">
         <div class="container overview">
-            <h3 class="mt-5">Benefits</h3>
-            <p class="benefits-copy">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no.</p>
+            <h3 class="mt-5">{!! $content['benefits'][0]['title'] ?? 'Content needed' !!}</h3>
+            <div class="benefits-copy">{!! $content['benefits'][0]['body'] ?? 'Content needed' !!}</div>
 
-            <x-stack-general class="benefits"></x-stack-general>
+            <x-stack-general class="benefits" :cards="$content['product'] ?? []"></x-stack-general>
 
-            <h3 class="mt-4">Developer-centric</h3>
-            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no.</p>
+            <h3 class="mt-4">{!! $content['developer-centric'][0]['title'] ?? 'Content needed' !!}</h3>
+            {!! $content['developer-centric'][0]['body'] ?? 'Content needed' !!}
 
             <hr>
 
@@ -90,69 +90,28 @@ grant_type=client_credentials -d 'client_id={consumer-key}&client_secret={consum
     </section>
 
     <section class="container relationships">
+        @if(!empty($bundles))
         <div class="stack-bundle">
-            <x-stack-cards class="bundle left" :cards="[
-                [
-                    'name' => 'FINTECH',
-                    'group' => 'MTN',
-                    'description' => 'The Fintech bundle allows you to communcate with those who need to keep up to date with what is going on.',
-                    'countries' => ['za' => 'South Africa', 'ug' => 'Uganda', 'rw' => 'Rwanda', 'mu' => 'Mauritius', 'ma' => 'Morocco', 'my' => 'Malaysia', 'na' => 'Namibia', 'ne' => 'Niger(the)', 'ng' => 'Nigeria', 'mz' => 'Mozambique', 'st' => 'Sao Tome and Principe', 'sn' => 'Senegal', 'sc' => 'Seychelles', 'mg' => 'Madagascar', 'sb' => 'Solomon Islands', 'so' => 'Somalia', 'sl' => 'Sierra Leone'],
-                    'href' => route('bundle.index')
-                ],
-                [
-                    'name' => 'FINTECH',
-                    'group' => 'MTN',
-                    'description' => 'The Fintech bundle allows you to communcate with those who need to keep up to date with what is going on.',
-                    'countries' => ['za' => 'South Africa', 'ug' => 'Uganda', 'rw' => 'Rwanda', 'mu' => 'Mauritius', 'ma' => 'Morocco', 'my' => 'Malaysia', 'na' => 'Namibia', 'ne' => 'Niger(the)', 'ng' => 'Nigeria', 'mz' => 'Mozambique', 'st' => 'Sao Tome and Principe', 'sn' => 'Senegal', 'sc' => 'Seychelles', 'mg' => 'Madagascar', 'sb' => 'Solomon Islands', 'so' => 'Somalia', 'sl' => 'Sierra Leone'],
-                    'href' => route('bundle.index')
-                ],
-                [
-                    'name' => 'FINTECH',
-                    'group' => 'MTN',
-                    'description' => 'The Fintech bundle allows you to communcate with those who need to keep up to date with what is going on.',
-                    'countries' => ['za' => 'South Africa', 'ug' => 'Uganda', 'rw' => 'Rwanda', 'mu' => 'Mauritius', 'ma' => 'Morocco', 'my' => 'Malaysia', 'na' => 'Namibia', 'ne' => 'Niger(the)', 'ng' => 'Nigeria', 'mz' => 'Mozambique', 'st' => 'Sao Tome and Principe', 'sn' => 'Senegal', 'sc' => 'Seychelles', 'mg' => 'Madagascar', 'sb' => 'Solomon Islands', 'so' => 'Somalia', 'sl' => 'Sierra Leone'],
-                    'href' => route('bundle.index')
-                ]
-            ]"></x-stack-cards>
+            <x-stack-cards class="bundle left" :cards="$bundles"></x-stack-cards>
             <div class="stack-description">
                 <span class="tag yellow">MTN</span>
-                <h3>Bundles</h3>
-                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sint quas maxime inventore aspernatur dolorum, obcaecati iure rem totam accusantium provident tempora corrupti consequatur adipisci voluptatum quae modi facilis doloremque deleniti?</p>
+                <h3>{!! $content['bundles'][0]['title'] ?? 'Content needed' !!}</h3>
+                {!! $content['bundles'][0]['body'] ?? 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Officiis commodi ipsum, ut ipsam, debitis incidunt dignissimos suscipit vitae reiciendis non, fugiat similique, deleniti nostrum aliquid voluptates enim mollitia sint ad.' !!}
                 <a href="{{ route('bundle.index') }}">View all bundles @svg('arrow-forward')</a>
             </div>
         </div>
+        @endif
+        @if(!empty($products))
         <div class="stack-product">
             <div class="stack-description">
                 <span class="tag yellow">MTN</span>
-                <h3>Products</h3>
-                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sint quas maxime inventore aspernatur dolorum, obcaecati iure rem totam accusantium provident tempora corrupti consequatur adipisci voluptatum quae modi facilis doloremque deleniti?</p>
+                <h3>{!! $content['products'][0]['title'] ?? 'Content needed' !!}</h3>
+                {!! $content['products'][0]['body'] ?? 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Officiis commodi ipsum, ut ipsam, debitis incidunt dignissimos suscipit vitae reiciendis non, fugiat similique, deleniti nostrum aliquid voluptates enim mollitia sint ad.' !!}
                 <a href="{{ route('product.index', ['category' => $category]) }}">View all products @svg('arrow-forward')</a>
             </div>
-            <x-stack-cards class="product right" :cards="[
-                [
-                    'name' => 'SMS',
-                    'group' => 'MTN',
-                    'description' => 'The SMS product allows you to communcate with those who need to keep up to date with what is going on.',
-                    'countries' => ['lr' => 'Liberia', 'ly' => 'Libya', 'mg' => 'Madagascar', 'mw' => 'Malawi', 'my' => 'Malaysia', 'mu' => 'Mauritius', 'ma' => 'Morocco', 'mz' => 'Mozambique', 'na' => 'Namibia', 'ne' => 'Niger(the)', 'ng' => 'Nigeria', 'rw' => 'Rwanda', 'st' => 'Sao Tome and Principe', 'sn' => 'Senegal', 'sc' => 'Seychelles', 'sl' => 'Sierra Leone', 'sb' => 'Solomon Islands', 'so' => 'Somalia', 'za' => 'South Africa'],
-                    'href' => route('product.show', 'test-product-1')
-                ],
-                [
-                    'name' => 'SMS',
-                    'group' => 'MTN',
-                    'description' => 'The SMS product allows you to communcate with those who need to keep up to date with what is going on.',
-                    'countries' => ['lr' => 'Liberia', 'ly' => 'Libya', 'mg' => 'Madagascar', 'mw' => 'Malawi', 'my' => 'Malaysia', 'mu' => 'Mauritius', 'ma' => 'Morocco', 'mz' => 'Mozambique', 'na' => 'Namibia', 'ne' => 'Niger(the)', 'ng' => 'Nigeria', 'rw' => 'Rwanda', 'st' => 'Sao Tome and Principe', 'sn' => 'Senegal', 'sc' => 'Seychelles', 'sl' => 'Sierra Leone', 'sb' => 'Solomon Islands', 'so' => 'Somalia', 'za' => 'South Africa'],
-                    'href' => route('product.show', 'test-product-1')
-                ],
-                [
-                    'name' => 'SMS',
-                    'group' => 'MTN',
-                    'description' => 'The SMS product allows you to communcate with those who need to keep up to date with what is going on.',
-                    'countries' => ['lr' => 'Liberia', 'ly' => 'Libya', 'mg' => 'Madagascar', 'mw' => 'Malawi', 'my' => 'Malaysia', 'mu' => 'Mauritius', 'ma' => 'Morocco', 'mz' => 'Mozambique', 'na' => 'Namibia', 'ne' => 'Niger(the)', 'ng' => 'Nigeria', 'rw' => 'Rwanda', 'st' => 'Sao Tome and Principe', 'sn' => 'Senegal', 'sc' => 'Seychelles', 'sl' => 'Sierra Leone', 'sb' => 'Solomon Islands', 'so' => 'Somalia', 'za' => 'South Africa'],
-                    'href' => route('product.show', 'test-product-1')
-                ]
-            ]"
-            ></x-stack-cards>
+            <x-stack-cards class="product right" :cards="$products"></x-stack-cards>
         </div>
+        @endif
     </section>
 
     {{-- <section class="container pricing">
