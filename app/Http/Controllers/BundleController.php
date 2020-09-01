@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Bundle;
+use App\Content;
 use App\Services\ProductLocationService;
 
 class BundleController extends Controller
@@ -14,7 +15,7 @@ class BundleController extends Controller
     public function index(ProductLocationService $productLocationService)
     {
         $bundles = Bundle::with(['products', 'category'])->get();
-
+        $content = Content::where('contentable_type', 'Bundles')->get();
         $products = $bundles->reduce(function($carry, $bundle){
             $carry = array_merge($bundle->products->pluck('pid')->toArray(), $carry);
             return $carry;
@@ -22,6 +23,7 @@ class BundleController extends Controller
 
         return view('templates.bundles.index', [
             'bundles' => $bundles,
+            'content' => $content,
             'categories' => $bundles->pluck('category.title', 'category.cid'),
             'countries' => $productLocationService->fetch($products, 'countries')
         ]);

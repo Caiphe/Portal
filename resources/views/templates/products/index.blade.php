@@ -40,8 +40,8 @@ $filters = array('Categories'=> $productCategories);
 
 @section('content')
     <div class="header-block">
-        <h1>Products</h1>
-        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.</p>
+        <h1>{{ $content[0]['title']}}</h1>
+        {!! $content[0]['body'] !!}
         @svg('people', null, 'images/illustrations')
     </div>
 

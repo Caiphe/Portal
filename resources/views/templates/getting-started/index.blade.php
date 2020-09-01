@@ -24,12 +24,10 @@
 
         <div class="product-usage">
             <h2 id="products-use">What you can do with our products <a href="/getting-started#products-use">@svg('link', '#000000')</a></h2>
-            <x-card-link icon="apps-box" title="My Apps" href="/apps">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo.</x-card-link>
-            <x-card-link icon="card-search" title="Browse products" href="/products">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo.</x-card-link>
-            <x-card-link icon="plus-circle-outline" title="Create an application" href="/apps/create">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo.</x-card-link>
-            <x-card-link icon="check-all" title="Request approval" href="/request-approval">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo.</x-card-link>
-            <x-card-link icon="help-network" title="FAQ" href="/faq">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo.</x-card-link>
-            <x-card-link icon="lightbulb" title="Developer tips" href="/developer-tips">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo.</x-card-link>
+            <x-card-link icon="apps-box" title="My Apps" href="/apps">Under My Apps, you can manage all your applications, keys, and associated APIs. You can edit an existing app to access additional APIs, see the list of all your approved apps and any revoked ones.</x-card-link>
+            <x-card-link icon="card-search" title="Browse products" href="/products">Checkout all the APIs available from MTN on one single easy-to-access page. Filter through categories and read API specific documentation including specifications, overviews, and much more.</x-card-link>
+            <x-card-link icon="plus-circle-outline" title="Create an application" href="/apps/create">Ready to integrate? Register an app from your profile page and select the APIs that meet your requirements.</x-card-link>
+            <x-card-link icon="help-network" title="FAQ" href="/faq">View our FAQ section to access information on enquiries that come up the most. Be sure to reach via the Contact Us section if you have any questions and our team of engineers will be in touch.</x-card-link>
 
             @foreach($content as $cardContent)
                 @php

@@ -22,7 +22,7 @@
         {!! $content['heading'][0]['body'] ?? 'Content needed' !!}
         <div class="row mt-3">
             <a href="{{ route('product.index', ['category' => $category]) }}" class="button mr-1 view-products">View products @svg('arrow-forward')</a>
-            <button class="dark after arrow-right">Button</button>
+            <a href="{{ route('bundle.index') }}" class="button dark">View bundles @svg('arrow-forward', '#FFF')</a>
         </div>
         <img class="squiggle" src="/images/category/themes/{{ $theme }}/squiggle-hero.svg" alt="background squiggle">
         <div class="phone">
