@@ -28,6 +28,8 @@
             flex-grow: 1;
             padding: 0;
             margin-left: 84px;
+            display: flex;
+            flex-wrap: nowrap;
 
             &>li {
                 display: inline-block;
@@ -175,6 +177,7 @@
                 width: 32px;
                 background-color: #ffdd59;
                 position: absolute;
+                line-height: 1.4;
             }
 
             svg {
