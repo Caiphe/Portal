@@ -15,10 +15,8 @@ class HomeController extends Controller
      */
     public function __invoke(Request $request)
     {
-        return Product::basedOnUser($request->user())->get();
-            
         return view('templates.admin.home', [
-            'products' => Product::basedOnUser($request->user())->get()
+            'products' => Product::with('category')->basedOnUser($request->user())->orderBy('display_name')->paginate()
         ]);
     }
 }
