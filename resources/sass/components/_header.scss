@@ -13,14 +13,21 @@
         justify-content: flex-start;
 
         .site-name {
-            margin-left: $gutterSmall;
             font-size: 1.8rem;
-            flex-grow: 1;
+            display: flex;
+            align-items: center;
+
+            img {
+                margin-right: $gutterSmall;
+            }
         }
 
         .main-menu {
             list-style: none;
             height: 80px;
+            flex-grow: 1;
+            padding: 0;
+            margin-left: 84px;
 
             &>li {
                 display: inline-block;
@@ -141,10 +148,44 @@
                 }
             }
         }
-    }
 
-    input {
-        margin: 0 20px 0 10px;
+        >form {
+            display: flex;
+            width: 32px;
+            height: 32px;
+            margin-right: 12px;
+
+            &:hover input,
+            & input:focus {
+                opacity: 1;
+                pointer-events: auto;
+                width: 215px;
+                transform: translate(-194px, 0);
+
+                &+svg {
+                    opacity: 0;
+                    pointer-events: none;
+                }
+            }
+
+            input {
+                opacity: 0;
+                pointer-events: none;
+                transition: all 0.256s;
+                width: 32px;
+                background-color: #ffdd59;
+                position: absolute;
+            }
+
+            svg {
+                opacity: 1;
+                cursor: pointer;
+                transition: opacity 0.256s;
+                position: absolute;
+                top: 4px;
+                left: 4px;
+            }
+        }
     }
 }
 
