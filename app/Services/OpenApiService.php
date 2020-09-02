@@ -276,11 +276,6 @@ class OpenApiService {
 					"value" => $details['name'],
 					"type" => "string",
 				],
-				[
-					"key" => "value",
-					"value" => "",
-					"type" => "string",
-				],
 			],
 		];
 	}
@@ -291,7 +286,7 @@ class OpenApiService {
 			"oauth2" => [
 				[
 					"key" => "addTokenTo",
-					"value" => "header",
+					"value" => "Authorization",
 					"type" => "string",
 				],
 			],
@@ -346,6 +341,9 @@ class OpenApiService {
 	protected function buildResponsesBody($schema, $extraData = []) {
 		if (isset($schema['$ref'])) {
 			$definition = explode('/', $schema['$ref']);
+			$definition = $this->openApi[$definition[1]][$definition[2]];
+		} else if (isset($schema['items']) && isset($schema['items']['$ref'])) {
+			$definition = explode('/', $schema['items']['$ref']);
 			$definition = $this->openApi[$definition[1]][$definition[2]];
 		} else {
 			$definition = $schema;
