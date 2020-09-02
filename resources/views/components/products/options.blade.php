@@ -13,6 +13,13 @@
     </div>
     @endif
     
+    @if(isset($request['auth']) && !empty($request['auth']))
+    <h4 class="collapseable" onclick="toggleParameters(this)">@svg('chevron-right') Auth parameters</h4>
+    <div class="parameters">
+        <x-products.parameter :title="$request['auth']['type']" :type="$request['auth'][$request['auth']['type']][0]['value']" :required="0"></x-products.parameter>
+    </div>
+    @endif
+    
     @if(isset($request['url']['query']))
     <h4 class="collapseable" onclick="toggleParameters(this)">@svg('chevron-right') Query parameters</h4>
     <div class="parameters">
