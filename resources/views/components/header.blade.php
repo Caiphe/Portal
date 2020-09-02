@@ -1,7 +1,6 @@
 <header id="header">
     <nav class="header-inner container">
-        <a href="/"><img src="/images/mtn-logo.svg" alt="MTN logo"></a>
-        <a href="/" class="site-name">Developer Portal</a>
+        <a class="site-name" href="/"><img src="/images/mtn-logo.svg" alt="MTN logo"> Developer Portal</a>
         <ul class="main-menu" role="navigation" aria-label="Main">
             <li class="has-children">
                 <a href="/products">Products @svg("chevron-down")</a>
@@ -31,6 +30,7 @@
         </ul>
         <form action="{{route('search')}}">
             <input type="search" name="q" id="search" class="thin see-through" placeholder="Search">
+            @svg('search')
         </form>
         @if(\Auth::check())
             <a href="/apps/create" class="button dark" role="button">Build app</a>
