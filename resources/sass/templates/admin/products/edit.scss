@@ -1,0 +1,12 @@
+#edit-form {
+    input[type=text],
+    h2 {
+        margin: 0 0 10px 0;
+    }
+
+    input[type=file],
+    textarea {
+        margin: 0 0 20px 0;
+        display: block;
+    }
+}

@@ -41,6 +41,11 @@ Route::middleware(['verified', '2fa'])->group(function () {
 
 Route::namespace('Admin')->prefix('admin')->middleware('can:view-admin')->group(function () {
 	Route::get('/', 'HomeController')->name('home');
+
+	// Products
+	Route::get('/products', 'ProductController@index')->name('product.index');
+	Route::get('/products/{product:slug}/edit', 'ProductController@edit')->name('product.edit');
+	Route::put('/products/{product:slug}/store', 'ProductController@store')->name('product.store');
 });
 
 Route::post('profile/2fa/verify', 'UserController@verify2fa')->middleware('2fa')->name('user.2fa.verify');

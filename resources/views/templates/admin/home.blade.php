@@ -20,8 +20,8 @@
                 <td>{{ $product->access  }}</td>
                 <td>{{ $product->environments }}</td>
                 <td>{{ $product->category->title }}</td>
-                <td>
-                    @svg('edit')
+                <td align="center">
+                    <a href="{{ route('product.edit', $product->slug) }}">@svg('edit')</a>
                 </td>
             </tr>
             @endforeach
