@@ -50,22 +50,24 @@ class ProductController extends Controller
 
 		$openApiClass = new OpenApiService($product->swagger);
 		$productList = Product::with('category')->basedOnUser($request->user())->get()->sortBy('category.title')->groupBy('category.title');
-		$content = ['tab' => []];
+		$content = [
+			'all' => [],
+			'lhs' => [],
+			'rhs' => [],
+		];
 		$sidebarAccordion = [];
 		$startingPoint = "product-specification";
 
 		foreach ($product->content as $c) {
-			if ($c->type === "tab") {
-				$content[$c->type][] = $c;
-				continue;
-			}
-			$content[$c->type] = $c;
+			$key = in_array($c->title, ['Overview', 'Docs']) ? 'lhs' : 'rhs';
+			$content['all'][$c->title] = $c;
+			$content[$key][$c->title] = $c;
 		}
 
-		if (isset($content['overview'])) {
-			$startingPoint = 'product-overview';
-		} else if (isset($content['docs'])) {
-			$startingPoint = 'product-docs';
+		if (isset($content['lhs']['Overview'])) {
+			$startingPoint = 'product-' . $content['lhs']['Overview']->slug;
+		} else if (isset($content['lhs']['Docs'])) {
+			$startingPoint = 'product-' . $content['lhs']['Docs']->slug;
 		}
 
 		foreach ($productList as $category => $products) {

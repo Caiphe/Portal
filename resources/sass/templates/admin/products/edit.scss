@@ -1,12 +1,74 @@
+@import '../../../variables';
+
 #edit-form {
+
     input[type=text],
     h2 {
         margin: 0 0 10px 0;
     }
 
-    input[type=file],
-    textarea {
+    label {
         margin: 0 0 20px 0;
+    }
+
+    label,
+    textarea {
         display: block;
+    }
+}
+
+main #uploader {
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 30px;
+    border: 2px dashed $yellow;
+    font-size: 15px;
+    color: $yellow;
+    cursor: pointer;
+    margin-bottom: 20px;
+
+    &:hover {
+        background-color: $yellow500;
+    }
+
+    svg,
+    span {
+        pointer-events: none;
+    }
+
+    svg {
+        fill: $yellow;
+        margin-bottom: 10px;
+    }
+
+    svg+svg {
+        width: 24px;
+        height: 24px;
+        display: none;
+    }
+
+    input {
+        display: none;
+    }
+
+    &.uploading svg {
+        display: none;
+
+        &+svg {
+            display: block;
+        }
+    }
+
+    &.highlight {
+        background-color: $yellow800;
+        border: 2px dashed #FFF;
+        color: #FFF;
+
+        svg {
+            fill: #FFF;
+        }
     }
 }

@@ -15,8 +15,10 @@
     tags: A comma seperated list of tags.
     fab: The classes that will style the fab button
  --}}
-@props(['heading', 'tags', 'fab'])
-@php $tags = isset($tags) ? preg_split('/,\s?/', $tags) : [] @endphp
+@props(['heading', 'tags', 'fab', 'edit', 'can' => 'view-admin'])
+@php 
+    $tags = isset($tags) ? preg_split('/,\s?/', $tags) : [] 
+@endphp
 
 @allowonce('heading')
 <link rel="stylesheet" href="{{ mix('/css/components/heading.css') }}">
@@ -24,16 +26,18 @@
 
 <div id="heading">
     <h1>
-        {{$heading}}
+        {{ $heading }}
         @foreach($tags as $tag)
-        <span class="tag outline grey">{{$tag}}</span>
+        <span class="tag outline grey">{{ $tag }}</span>
         @endforeach
     </h1>
-
-
-    @if(isset($fab))
-    <button id="heading-fab" class="fab {{$fab}}"></button>
+    @if(isset($edit) && \Auth::check() && \Auth::user()->can($can))
+    <a href="{{ $edit }}" class="edit button small dark outline">EDIT</a>
     @endif
 
-    <div class="right-side">{{$slot}}</div>
+    @if(isset($fab))
+    <button id="heading-fab" class="fab {{ $fab }}"></button>
+    @endif
+
+    <div class="right-side">{{ $slot }}</div>
 </div>

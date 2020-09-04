@@ -22,7 +22,7 @@
                     <ul>
                         <li><a href="#">Pages</a></li>
                         <li><a href="#">Bundles</a></li>
-                        <li><a href="#">Products</a></li>
+                        <li><a href="{{ route('admin.product.index') }}">Products</a></li>
                         <li><a href="#">Categories</a></li>
                         <li><a href="#">Documentation</a></li>
                     </ul>

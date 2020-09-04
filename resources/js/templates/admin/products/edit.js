@@ -1,7 +1,178 @@
-(function(){
+(function() {
+    var uploader = document.getElementById('uploader');
+
     document.getElementById('new-tab').addEventListener('click', newTab);
 
+    ["dragenter", "dragover", "dragleave", "drop"].forEach(preventDefaultsListeners);
+    ["dragenter", "dragover"].forEach(highlightListeners);
+
+    uploader.addEventListener("dragleave", unhighlight, false);
+    uploader.addEventListener("drop", verifyOpenApi, false);
+
+    function preventDefaultsListeners(eventName) {
+        uploader.addEventListener(eventName, preventDefaults, false);
+    }
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    function highlightListeners(eventName) {
+        uploader.addEventListener(eventName, highlight, false);
+    }
+
+    function highlight(e) {
+        uploader.classList.add("highlight");
+    }
+
+    function unhighlight(e) {
+        uploader.classList.remove("highlight");
+    }
+
+    function preventDefaultListeners(eventName) {
+        uploader.addEventListener(eventName, preventDefaults, false);
+    }
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    function verifyOpenApi(e) {
+        var files = e.dataTransfer.files;
+        var input = uploader.querySelector("input");
+        var errors = [];
+
+        unhighlight();
+
+        if (files.length > 1) {
+            errors.push("You can only add one file.");
+        }
+
+        if (!/yaml/.test(files[0].type)) {
+            errors.push("The file isn't the correct type.");
+        }
+
+        if (errors.length > 0) {
+            uploader.querySelector('.errors').innerHTML = errors.join('<br>');
+            return;
+        }
+
+        upload(files[0], markAsUploaded);
+    }
+
     function newTab() {
-        document.getElementById('hr').insertAdjacentHTML('beforebegin', '<div class="new-tab"><input type="text" name="tab[title][]" placeholder="Title"><textarea name="tab[body][]" placeholder="Body"></textarea></div>');
+        var randId = rand();
+        document.getElementById('hr').insertAdjacentHTML('beforebegin', '<div class="new-tab"><input type="text" name="tab[title][]" placeholder="Title"><input id="' + randId + '" type="hidden" name="tab[body][]"><trix-editor input="' + randId + '"></trix-editor><button class="dark small mt-1" onclick="removeTab(this)">Remove</button></div>');
+    }
+
+    function rand() {
+        return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    }
+
+    function upload(openApi, cb) {
+        var xhr = new XMLHttpRequest();
+        var formData = new FormData();
+
+        uploader.classList.add('uploading');
+
+        xhr.open('POST', bladeLookup('openApiUrl'));
+        xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+
+        formData.append("openApi", openApi);
+        formData.append(
+            "csrf",
+            document.querySelector('[name="csrf-token"]').getAttribute("content")
+        );
+
+        xhr.send(formData);
+
+        xhr.onload = function() {
+            if (/^2/.test(xhr.status)) {
+                result = xhr.responseText ? JSON.parse(xhr.responseText) : { message: "Success" };
+
+                cb && cb(result);
+            } else if (/^3/.test(xhr.status)) {
+                result = xhr.responseText ? JSON.parse(xhr.responseText) : { message: "Request tried to redirect" };
+
+                cb && cb(result);
+            } else {
+                result = xhr.responseText ? JSON.parse(xhr.responseText) : { message: "Unknown error" };
+
+                cb && cb(result);
+            }
+        };
+    }
+
+    function markAsUploaded(response) {
+        uploader.classList.remove('uploading');
     }
 }());
+
+function removeTab(el) {
+    el.parentNode.remove();
+}
+
+addEventListener("trix-attachment-add", verifyUpload);
+
+function verifyUpload(e) {
+    if (!event.attachment.file) return;
+
+    uploadFileAttachment(event.attachment);
+}
+
+function uploadFileAttachment(attachment) {
+    uploadFile(attachment.file, setProgress, setAttributes);
+
+    function setProgress(progress) {
+        attachment.setUploadProgress(progress);
+    }
+
+    function setAttributes(attributes) {
+        attachment.setAttributes(attributes);
+    }
+}
+
+function uploadFile(file, progressCallback, successCallback) {
+    var key = createStorageKey(file);
+    var formData = createFormData(key, file);
+    var xhr = new XMLHttpRequest();
+    var host = bladeLookup('uploadImageUrl');
+
+    xhr.open("POST", host, true);
+
+    xhr.upload.addEventListener("progress", function(event) {
+        var progress = event.loaded / event.total * 100;
+        progressCallback(progress);
+    })
+
+    xhr.addEventListener("load", function(event) {
+        if (xhr.status === 201) {
+            result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+            var attributes = {
+                url: result.body,
+                href: result.body + "?content-disposition=attachment"
+            };
+            successCallback(attributes);
+        }
+    })
+
+    xhr.send(formData);
+}
+
+function createStorageKey(file) {
+    var date = new Date();
+    var day = date.toISOString().slice(0, 10);
+    var name = date.getTime() + "-" + file.name;
+    return [day, name].join("/");
+}
+
+function createFormData(key, file) {
+    var data = new FormData();
+    data.append("key", key);
+    data.append("Content-Type", file.type);
+    data.append("file", file);
+    return data;
+}

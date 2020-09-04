@@ -25,7 +25,8 @@ mix.scripts(
     .scripts("resources/js/templates/bundles/index.js", "public/js/templates/bundles/index.js")
     .scripts("resources/js/templates/auth/register.js", "public/js/templates/auth/register.js")
     .scripts("resources/js/templates/auth/forgot-password.js", "public/js/templates/auth/forgot-password.js")
-    .scripts("resources/js/templates/admin/products/edit.js", "public//js/templates/admin/products/edit.js")
+    .scripts("resources/js/templates/admin/products/edit.js", "public/js/templates/admin/products/edit.js")
+    .scripts("resources/js/vendor/trix.js", "public/js/vendor/trix.js")
     .sass("resources/sass/auth/login.scss", "public/css/auth")
     .sass("resources/sass/auth/register.scss", "public/css/auth")
     .sass("resources/sass/auth/verify.scss", "public/css/auth")
@@ -62,4 +63,5 @@ mix.scripts(
     .sass("resources/sass/components/_accordion.scss", "public/css/components")
     .sass("resources/sass/components/_select.scss", "public/css/components")
     .sass("resources/sass/styles.scss", "public/css")
+    .styles("resources/sass/vendor/trix.css", "public/css/vendor/trix.css")
     .version();

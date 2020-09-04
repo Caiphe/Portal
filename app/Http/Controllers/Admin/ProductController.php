@@ -44,6 +44,8 @@ class ProductController extends Controller
         if ($request->has('tab')) {
             $tabs = $request->get('tab', []);
             for ($i = 0; $i < count($tabs['title']); $i++) {
+                if($tabs['title'][$i] === null || $tabs['body'][$i] === null) continue;
+
                 $contents[] = [
                     'title' => $tabs['title'][$i],
                     'body' => $tabs['body'][$i],
