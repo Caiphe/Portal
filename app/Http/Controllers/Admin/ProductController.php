@@ -32,6 +32,7 @@ class ProductController extends Controller
         $contents = [];
 
         foreach ($request->get('content', []) as $slug => $content) {
+            if ($content['body'] === null) continue;
             $contents[] = [
                 'title' => $content['title'],
                 'body' => $content['body'],
