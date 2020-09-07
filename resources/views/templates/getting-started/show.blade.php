@@ -8,7 +8,7 @@
 @endsection
 
 @section("content")
-    <x-heading :heading="$content['title']" tags="Working with our products">
+    <x-heading :heading="$content['title']" tags="Working with our products"  :edit="route('admin.doc.edit', $content->slug)">
     </x-heading>
     <div class="content-body">
         {!! $content['body'] !!}

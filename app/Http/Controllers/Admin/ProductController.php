@@ -26,7 +26,7 @@ class ProductController extends Controller
         ]);
     }
 
-    public function store(Product $product, Request $request)
+    public function update(Product $product, Request $request)
     {
         $now = date('Y-m-d H:i:s');
         $contents = [];

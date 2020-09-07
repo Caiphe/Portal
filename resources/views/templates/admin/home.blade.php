@@ -1,33 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Home')
+@section('title', 'Products')
 
 @section('content')
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Access</th>
-                <th>Environments</th>
-                <th>Category</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($products as $product)
-            <tr>
-                <td>
-                    <a href="{{ route('admin.product.edit', $product->slug) }}">{{ $product->display_name  }}</a>
-                </td>
-                <td>{{ $product->access  }}</td>
-                <td>{{ $product->environments }}</td>
-                <td>{{ $product->category->title }}</td>
-                <td align="center">
-                    <a href="{{ route('admin.product.edit', $product->slug) }}">@svg('edit')</a>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-    {{ $products->links() }}
+    <x-admin.table :collection="$products" model-name="product" :fields="['display_name', 'access', 'environments', 'category.title']"></x-admin-table>
 @endsection

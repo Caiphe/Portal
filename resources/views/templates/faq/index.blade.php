@@ -41,6 +41,9 @@
                                 <header>
                                     <p>
                                         {!! $faq->question !!}
+                                        @if(\Auth::check() && \Auth::user()->can('view-admin'))
+                                        <a href="{{ route('admin.faq.edit', $faq->slug) }}" class="edit button small dark outline ml-1">EDIT</a>
+                                        @endif
                                     </p>
                                     <button class="button fab plus"></button>
                                 </header>

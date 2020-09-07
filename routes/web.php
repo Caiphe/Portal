@@ -45,7 +45,34 @@ Route::namespace('Admin')->prefix('admin')->middleware('can:view-admin')->group(
 	// Products
 	Route::get('/products', 'ProductController@index')->name('admin.product.index');
 	Route::get('/products/{product:slug}/edit', 'ProductController@edit')->name('admin.product.edit');
-	Route::put('/products/{product:slug}/store', 'ProductController@store')->name('admin.product.store');
+	Route::put('/products/{product:slug}/update', 'ProductController@update')->name('admin.product.update');
+
+	// Bundles
+	Route::get('/bundles', 'BundleController@index')->name('admin.bundle.index');
+	Route::get('/bundles/{bundle:slug}/edit', 'BundleController@edit')->name('admin.bundle.edit');
+	Route::put('/bundles/{bundle:slug}/update', 'BundleController@update')->name('admin.bundle.update');
+
+	// Page
+	Route::get('/pages', 'ContentController@indexPage')->name('admin.page.index');
+	Route::get('/pages/{content:slug}/edit', 'ContentController@editPage')->name('admin.page.edit');
+	Route::put('/pages/{content:slug}/update', 'ContentController@updatePage')->name('admin.page.update');
+
+	// Documentation
+	Route::get('/docs', 'ContentController@indexDoc')->name('admin.doc.index');
+	Route::get('/docs/{content:slug}/edit', 'ContentController@editDoc')->name('admin.doc.edit');
+	Route::put('/docs/{content:slug}/update', 'ContentController@updateDoc')->name('admin.doc.update');
+
+	// FAQ
+	Route::get('/faqs', 'FaqController@index')->name('admin.faq.index');
+	Route::get('/faqs/{faq:slug}/edit', 'FaqController@edit')->name('admin.faq.edit');
+	Route::put('/faqs/{faq:slug}/update', 'FaqController@update')->name('admin.faq.update');
+	Route::get('/faqs/create', 'FaqController@create')->name('admin.faq.create');
+	Route::post('/faqs', 'FaqController@store')->name('admin.faq.store');
+
+	// Categories
+	// Route::get('/categories', 'FaqController@index')->name('admin.faq.index');
+	// Route::get('/categories/{faq:slug}/edit', 'FaqController@edit')->name('admin.faq.edit');
+	// Route::put('/categories/{faq:slug}/store', 'FaqController@store')->name('admin.faq.store');
 });
 
 Route::post('profile/2fa/verify', 'UserController@verify2fa')->middleware('2fa')->name('user.2fa.verify');
@@ -62,10 +89,11 @@ Route::get('categories/{category:slug}', 'CategoryController@show')->name('categ
 Route::get('bundles', 'BundleController@index')->name('bundle.index');
 Route::get('bundles/{bundle:slug}', 'BundleController@show')->name('bundle.show');
 
-Route::get('getting-started', 'GettingStartedController@index')->name('getting-started');
-Route::get('getting-started/{content:slug}', 'GettingStartedController@show');
+Route::get('getting-started', 'GettingStartedController@index')->name('doc.index');
+Route::get('getting-started/{content:slug}', 'GettingStartedController@show')->name('doc.show');
 
 Route::get('faq', 'FaqController@index')->name('faq.index');
+Route::get('faq', 'FaqController@index')->name('faq.show');
 
 Route::get('contact', 'ContactController@index')->name('contact.index');
 Route::post('contact', 'ContactController@send')->name('contact.send');

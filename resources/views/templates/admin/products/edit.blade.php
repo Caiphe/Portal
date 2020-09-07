@@ -18,7 +18,7 @@
    <div class="errors"></div>
 </div>
 
-<form id="edit-form" action="{{ route('admin.product.store', $product->slug) }}" method="POST" enctype="multipart/form-data">
+<form id="edit-form" action="{{ route('admin.product.update', $product->slug) }}" method="POST">
 
     @method('PUT')
     @csrf
