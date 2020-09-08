@@ -32,7 +32,11 @@
                 width: 3rem;
             }
 
-            @media #{$medium} {
+            @media #{$medium-portrait} {
+                display: block;
+            }
+
+            @media #{$large} {
                 display: none;
             }
         }
@@ -261,6 +265,10 @@
 
 .hidden {
     @media #{$small} {
+        display: none !important;
+    }
+
+    @media #{$medium-portrait} {
         display: none !important;
     }
 }
