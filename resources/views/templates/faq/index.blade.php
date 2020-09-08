@@ -107,6 +107,7 @@
                     </select>
                 </x-panel>
 
+                <input type="text" name="username" placeholder="Enter a username" autocomplete="off">
                 <input type="text" name="first_name" placeholder="Enter first name" autocomplete="first_name">
                 <input type="text" name="last_name" placeholder="Enter last name" autocomplete="last_name">
                 <input type="email" name="email" placeholder="Enter email address" autocomplete="email">
