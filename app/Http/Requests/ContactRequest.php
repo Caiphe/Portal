@@ -26,6 +26,7 @@ class ContactRequest extends FormRequest {
 			'email' => 'required|email',
 			'message' => 'required|max:255',
 			'categories' => 'sometimes',
+			'username' => 'sometimes', // used for honeypot
 		];
 	}
 }
