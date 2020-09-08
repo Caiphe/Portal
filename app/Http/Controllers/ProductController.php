@@ -22,7 +22,7 @@ class ProductController extends Controller
 		$productLocations = $products->pluck('locations')->implode(',');
 		$locations = array_unique(explode(',', $productLocations));
 		$countries = Country::whereIn('code', $locations)->pluck('name', 'code');
-		$content = Content::where('contentable_type', 'Products')->get();
+        $content = Content::where('contentable_type', 'Products')->get();
 
 		return view('templates.products.index', [
 			'productsCollection' => $productsCollection,

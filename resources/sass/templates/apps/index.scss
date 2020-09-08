@@ -1,5 +1,17 @@
 @import '../../variables';
 
+#sidebar {
+    @media #{$small} {
+        display: none;
+    }
+}
+
+#main {
+    @media #{$small} {
+        padding-left: 0 !important;
+    }
+}
+
 // NO APPS
 #app-empty {
     height: 100%;
