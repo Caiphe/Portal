@@ -57,6 +57,10 @@ body > #main {
                 .button {
                     width: 110px;
                 }
+
+                @media #{$small} {
+                    max-width: 100%;
+                }
             }
         }
     }

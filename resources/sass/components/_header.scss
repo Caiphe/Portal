@@ -20,9 +20,22 @@
             img {
                 margin-right: $gutterSmall;
             }
+
+            @media #{$small} {
+                text-indent: -999px;
+            }
         }
 
         .menu-button {
+            display: block;
+            margin-left: auto;
+            padding: 0;
+
+            svg {
+                height: 3rem;
+                width: 3rem;
+            }
+
             @media #{$medium} {
                 display: none;
             }
