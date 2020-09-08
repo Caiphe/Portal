@@ -98,7 +98,7 @@ Route::get('faq', 'FaqController@index')->name('faq.index');
 Route::get('faq/{faq:slug}', 'FaqController@show')->name('faq.show');
 
 Route::get('contact', 'ContactController@index')->name('contact.index');
-Route::post('contact', 'ContactController@send')->name('contact.send');
+Route::post('contact', 'ContactController@send')->middleware('throttle:1,1')->name('contact.send');
 
 Auth::routes(['verify' => true]);
 
