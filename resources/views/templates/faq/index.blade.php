@@ -217,23 +217,6 @@
             };
         }
     }
-
-    function sentenceCase(str) {
-        return str.replace(/[a-z]/i, function (letter) {
-            return letter.toUpperCase();
-        }).trim();
-    }
-
-    function inArray(haystack, needle) {
-        var found = false;
-        for (var i = 0; i < haystack.length; i++) {
-            if(haystack[i].indexOf(needle) !== -1) {
-                found = true;
-                break;
-            }
-        }
-        return found;
-    }
 }());
 </script>
 @endpushscript
