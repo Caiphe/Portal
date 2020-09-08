@@ -18,15 +18,29 @@
         padding: 4% 8%;
         position: relative;
         font-size: 1rem;
+
+        @media #{$small} {
+            display: flex;
+            flex-direction: column;
+        }
     }
 
     p {
         margin-right: 120px;
+
+        @media #{$small} {
+            order: 3;
+            margin-right: 0;
+        }
     }
 
     .link-to {
         color: #FFF;
         margin-right: 14px;
+
+        @media #{$small} {
+            order: 4;
+        }
     }
 
     .logo,
@@ -35,10 +49,20 @@
         margin-right: 8%;
         right: 0;
         top: 0;
+
+        @media #{$small} {
+            position: relative;
+            margin: 0;
+        }
     }
 
     .logo {
         margin-top: 4%;
+
+        @media #{$small} {
+            order: 1;
+            margin-bottom: 2rem;
+        }
     }
 
     .social {
@@ -46,6 +70,17 @@
 
         a {
             margin-left: 10px;
+
+            &:first-of-type {
+                @media #{$small} {
+                    margin-left: 0;
+                }
+            }
+        }
+
+        @media #{$small} {
+            order: 2;
+            margin-top: 0;
         }
     }
 }

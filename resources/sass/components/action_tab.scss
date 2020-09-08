@@ -25,9 +25,17 @@
 
     &.green {
         background-color: $green;
+
+        @media #{$small} {
+            margin-top: 2rem;
+        }
     }
 
     &:not(:last-of-type) {
         margin-right: 15px;
+    }
+
+    @media #{$small} {
+        margin-right: 0 !important;
     }
 }

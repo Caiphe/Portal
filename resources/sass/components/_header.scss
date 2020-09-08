@@ -22,6 +22,12 @@
             }
         }
 
+        .menu-button {
+            @media #{$medium} {
+                display: none;
+            }
+        }
+
         .main-menu {
             list-style: none;
             height: 80px;
@@ -30,6 +36,10 @@
             margin-left: 84px;
             display: flex;
             flex-wrap: nowrap;
+
+            @media #{$small} {
+                margin-left: 0;
+            }
 
             &>li {
                 display: inline-block;
@@ -233,4 +243,10 @@
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.356s, transform 0.356s;
+}
+
+.hidden {
+    @media #{$small} {
+        display: none !important;
+    }
 }

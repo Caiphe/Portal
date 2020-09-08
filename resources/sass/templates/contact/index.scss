@@ -14,15 +14,27 @@ section {
     .container {
         display: flex;
 
+        @media #{$small} {
+            flex-direction: column;
+        }
+
         .column {
             flex: 1;
 
             &:not(:first-of-type) {
                 padding-left: 40px;
+
+                @media #{$small} {
+                    padding-left: 0;
+                }
             }
 
             &:not(:last-of-type) {
                 padding-right: 40px;
+
+                @media #{$small} {
+                    padding-right: 0;
+                }
             }
 
             address {
