@@ -215,6 +215,32 @@ section {
             }
         }
     }
+
+    .content-left {
+        @media #{$small} {
+            padding-right: 0;
+        }
+    }
+
+    .image-right {
+        @media #{$small} {
+            padding-left: 0;
+        }
+    }
+
+    ol {
+        @media #{$small} {
+            width: 100%;
+        }
+    }
+
+    img {
+        @media #{$small} {
+            display: block;
+            height: auto;
+            width: 100%;
+        }
+    }
 }
 
 #section-browse-our-products {
@@ -236,6 +262,14 @@ section {
             }
         }
     }
+
+    img {
+        @media #{$small} {
+            display: block;
+            height: auto;
+            width: 100%;
+        }
+    }
 }
 
 #section-register-an-app {
@@ -251,6 +285,14 @@ section {
             }
         }
     }
+
+    img {
+        @media #{$small} {
+            display: block;
+            height: auto;
+            width: 100%;
+        }
+    }
 }
 
 #section-access-the-keys {
@@ -264,6 +306,14 @@ section {
                 flex: 1 auto !important;
                 max-width: 100% !important;
             }
+        }
+    }
+
+    img {
+        @media #{$small} {
+            display: block;
+            height: auto;
+            width: 100%;
         }
     }
 }
