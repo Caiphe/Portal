@@ -95,7 +95,7 @@ Route::get('getting-started', 'GettingStartedController@index')->name('doc.index
 Route::get('getting-started/{content:slug}', 'GettingStartedController@show')->name('doc.show');
 
 Route::get('faq', 'FaqController@index')->name('faq.index');
-Route::get('faq/show', 'FaqController@index')->name('faq.show');
+Route::get('faq/{faq:slug}', 'FaqController@show')->name('faq.show');
 
 Route::get('contact', 'ContactController@index')->name('contact.index');
 Route::post('contact', 'ContactController@send')->name('contact.send');

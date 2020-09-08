@@ -36,19 +36,22 @@
 
                 @foreach($categories as $category)
                     <x-accordion :id="$category->slug" :title="$category->title" :link="$category->slug" icon="link">
-                        @foreach($category->faqs as $faq)
-                            <article id="faq-{{$faq->id}}" class="faq">
+                        @foreach($category->faqs as $catFaq)
+                            @php
+                                $expand = isset($faq) && $catFaq->id === $faq->id;
+                            @endphp
+                            <article id="faq-{{$catFaq->id}}" class="faq @if($expand) active expand  @endif">
                                 <header>
                                     <p>
-                                        {!! $faq->question !!}
+                                        {!! $catFaq->question !!}
                                         @if(\Auth::check() && \Auth::user()->can('view-admin'))
-                                        <a href="{{ route('admin.faq.edit', $faq->slug) }}" class="edit button small dark outline ml-1">EDIT</a>
+                                        <a href="{{ route('admin.faq.edit', $catFaq->slug) }}" class="edit button small dark outline ml-1">EDIT</a>
                                         @endif
                                     </p>
                                     <button class="button fab plus"></button>
                                 </header>
-                                <ul class="content">
-                                    <li>{!! $faq->answer  !!}</li>
+                                <ul class="content @if($expand) active expand  @endif">
+                                    <li>{!! $catFaq->answer  !!}</li>
                                 </ul>
                             </article>
                         @endforeach
@@ -123,7 +126,6 @@
     var search = document.getElementById('filter-categories');
     var accordionTitles = document.querySelectorAll('.accordion .title');
     var faqDict = @json($faqs);
-    var categoryLookup = @json($categoryLookup);
     var accordionContents = document.querySelectorAll('article header');
     var timeOut = null;
 
@@ -178,14 +180,13 @@
         var i = 0;
 
         for (var i = faqDict.length - 1; i >= 0; i--) {
-            faqDict[i]['category'] = categoryLookup[faqDict[i].category_id];
             for(var column in faqDict[i]){
                 if(!reg.test(faqDict[i][column])) continue;
 
                 found.push('faq-' + faqDict[i].id);
 
-                if(categories.indexOf(faqDict[i]['category']) === -1){
-                    categories.push(faqDict[i]['category']);
+                if(categories.indexOf(faqDict[i]['category_cid']) === -1){
+                    categories.push(faqDict[i]['category_cid']);
                 }
 
                 break;
