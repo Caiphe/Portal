@@ -25,15 +25,15 @@
 
     <label>
         <h2>Overview</h2>
-        <input type="hidden" name="content[{{ $product->slug }}-overview][title]" value="Overview">
-        <input id="{{ $product->slug }}-overview-body" type="hidden" name="content[{{ $product->slug }}-overview][body]" value="{{ $content['Overview'][0]['body'] ?? '' }}">
+        <input type="hidden" name="tab[title][]" value="Overview">
+        <input id="{{ $product->slug }}-overview-body" type="hidden" name="tab[body][]" value="{{ $content['Overview'][0]['body'] ?? '' }}">
         <trix-editor input="{{ $product->slug }}-overview-body"></trix-editor>
     </label>
 
     <label>
         <h2>Docs</h2>
-        <input type="hidden" name="content[{{ $product->slug }}-docs][title]" value="Docs">
-        <input id="{{ $product->slug }}-docs-body" type="hidden" name="content[{{ $product->slug }}-docs][body]" value="{{ $content['Docs'][0]['body'] ?? '' }}">
+        <input type="hidden" name="tab[title][]" value="Docs">
+        <input id="{{ $product->slug }}-docs-body" type="hidden" name="tab[body][]" value="{{ $content['Docs'][0]['body'] ?? '' }}">
         <trix-editor input="{{ $product->slug }}-docs-body"></trix-editor>
     </label>
 

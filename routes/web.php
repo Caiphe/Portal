@@ -70,9 +70,11 @@ Route::namespace('Admin')->prefix('admin')->middleware('can:view-admin')->group(
 	Route::post('/faqs', 'FaqController@store')->name('admin.faq.store');
 
 	// Categories
-	// Route::get('/categories', 'FaqController@index')->name('admin.faq.index');
-	// Route::get('/categories/{faq:slug}/edit', 'FaqController@edit')->name('admin.faq.edit');
-	// Route::put('/categories/{faq:slug}/store', 'FaqController@store')->name('admin.faq.store');
+	Route::get('/categories', 'CategoryController@index')->name('admin.category.index');
+	Route::get('/categories/{category:slug}/edit', 'CategoryController@edit')->name('admin.category.edit');
+	Route::put('/categories/{category:slug}/update', 'CategoryController@update')->name('admin.category.update');
+	Route::get('/categories/create', 'CategoryController@create')->name('admin.category.create');
+	Route::post('/categories', 'CategoryController@store')->name('admin.category.store');
 });
 
 Route::post('profile/2fa/verify', 'UserController@verify2fa')->middleware('2fa')->name('user.2fa.verify');

@@ -24,7 +24,7 @@
                         <li><a href="{{ route('admin.page.index') }}">Pages</a></li>
                         <li><a href="{{ route('admin.bundle.index') }}">Bundles</a></li>
                         <li><a href="{{ route('admin.product.index') }}">Products</a></li>
-                        <li><a href="#">Categories</a></li>
+                        <li><a href="{{ route('admin.category.index') }}">Categories</a></li>
                         <li><a href="{{ route('admin.doc.index') }}">Documentation</a></li>
                     </ul>
                 </li>

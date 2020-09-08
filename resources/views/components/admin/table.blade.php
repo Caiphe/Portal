@@ -1,5 +1,6 @@
 @props(['collection', 'fields', 'modelName' => (Str::singular($collection[0]->getTable()))])
 
+{{ $collection->links() }}
 <table>
     <thead>
         <tr>

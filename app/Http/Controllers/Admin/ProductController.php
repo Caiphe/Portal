@@ -30,31 +30,18 @@ class ProductController extends Controller
     {
         $now = date('Y-m-d H:i:s');
         $contents = [];
+        $tabs = $request->get('tab', []);
+        
+        for ($i = 0; $i < count($tabs['title']); $i++) {
+            if ($tabs['title'][$i] === null || $tabs['body'][$i] === null) continue;
 
-        foreach ($request->get('content', []) as $slug => $content) {
-            if ($content['body'] === null) continue;
             $contents[] = [
-                'title' => $content['title'],
-                'body' => $content['body'],
-                'slug' => $product->slug . '-' . Str::slug($content['title']),
+                'title' => $tabs['title'][$i],
+                'body' => $tabs['body'][$i],
+                'slug' => $product->slug . '-' . Str::slug($tabs['title'][$i]),
                 'type' => 'tab',
                 'published_at' => $now,
             ];
-        }
-
-        if ($request->has('tab')) {
-            $tabs = $request->get('tab', []);
-            for ($i = 0; $i < count($tabs['title']); $i++) {
-                if($tabs['title'][$i] === null || $tabs['body'][$i] === null) continue;
-
-                $contents[] = [
-                    'title' => $tabs['title'][$i],
-                    'body' => $tabs['body'][$i],
-                    'slug' => $product->slug . '-' . Str::slug($tabs['title'][$i]),
-                    'type' => 'tab',
-                    'published_at' => $now,
-                ];
-            }
         }
 
         $product->content()->delete();

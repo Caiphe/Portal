@@ -10,9 +10,13 @@
 
 @section('content')
     <section class="container">
-        <h1>{{ $category }}</h1>
+        <h1>
+            {{ $category }}
+            @if(\Auth::check() && \Auth::user()->can('view-admin'))
+            <a href="{{ route('admin.category.edit', $slug) }}" class="edit button small dark outline">EDIT</a>
+            @endif
+        </h1>
         <div class="breadcrumb">
-            <a href="#overview">Overview</a>
             <a href="{{ route('product.index', ['category' => $category]) }}">Products @svg('arrow-forward')</a>
         </div>
     </section>
