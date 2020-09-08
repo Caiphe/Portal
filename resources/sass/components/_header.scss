@@ -20,10 +20,6 @@
             img {
                 margin-right: $gutterSmall;
             }
-
-            @media #{$small} {
-                text-indent: -999px;
-            }
         }
 
         .menu-button {
@@ -212,6 +208,11 @@
                 left: 4px;
             }
         }
+    }
+
+    @media #{$small} {
+        position: fixed;
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.05);
     }
 }
 

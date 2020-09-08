@@ -11,6 +11,7 @@ body > #main {
 
 .banner-carousel {
     padding: 0;
+
     .carousel {
         width: 100vw;
         height: 500px;
@@ -63,6 +64,10 @@ body > #main {
                 }
             }
         }
+    }
+
+    @media #{$small} {
+        margin-top: 80px;
     }
 }
 
