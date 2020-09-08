@@ -309,11 +309,24 @@ section {
         }
     }
 
+    .content-right {
+        @media #{$small} {
+            padding-left: 0;
+        }
+    }
+
+    .image-left {
+        @media #{$small} {
+            padding-right: 0;
+        }
+    }
+
     img {
         @media #{$small} {
             display: block;
             height: auto;
             width: 100%;
+            margin-bottom: 2rem;
         }
     }
 }
