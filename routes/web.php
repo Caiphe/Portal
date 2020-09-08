@@ -28,9 +28,6 @@ Route::middleware(['verified', '2fa'])->group(function () {
 
 	Route::get('apps/{app:aid}/credentials/{type}', 'AppController@getCredentials')->name('app.credentials');
 
-	Route::post('apps/{product}/approve', 'DashboardController@update')->name('app.product.approve');
-	Route::post('apps/{product}/revoke', 'DashboardController@update')->name('app.product.revoke');
-
 	Route::get('profile', 'UserController@show')->name('user.profile');
 	Route::put('profile/{user}/update', 'UserController@update')->name('user.profile.update');
 	Route::post('profile/update/picture', 'UserController@updateProfilePicture')->name('user.profile.update.picture');
@@ -40,7 +37,7 @@ Route::middleware(['verified', '2fa'])->group(function () {
 });
 
 Route::namespace('Admin')->prefix('admin')->middleware('can:view-admin')->group(function () {
-	Route::get('/', 'HomeController')->name('home');
+	Route::redirect('/admin', '/admin/products')->name('admin.home');
 
 	// Products
 	Route::get('/products', 'ProductController@index')->name('admin.product.index');
@@ -75,11 +72,14 @@ Route::namespace('Admin')->prefix('admin')->middleware('can:view-admin')->group(
 	Route::put('/categories/{category:slug}/update', 'CategoryController@update')->name('admin.category.update');
 	Route::get('/categories/create', 'CategoryController@create')->name('admin.category.create');
 	Route::post('/categories', 'CategoryController@store')->name('admin.category.store');
+
+	// Dashboard
+	Route::get('/dashboard', 'DashboardController@index')->name('admin.dashboard.index');
+	Route::post('apps/{product}/approve', 'DashboardController@update')->name('app.product.approve');
+	Route::post('apps/{product}/revoke', 'DashboardController@update')->name('app.product.revoke');
 });
 
 Route::post('profile/2fa/verify', 'UserController@verify2fa')->middleware('2fa')->name('user.2fa.verify');
-
-Route::get('dashboard', 'DashboardController@index')->middleware('can:view-dashboard')->name('dashboard');
 
 Route::get('products', 'ProductController@index')->name('product.index');
 Route::get('products/{product:slug}', 'ProductController@show')->name('product.show');
@@ -95,7 +95,7 @@ Route::get('getting-started', 'GettingStartedController@index')->name('doc.index
 Route::get('getting-started/{content:slug}', 'GettingStartedController@show')->name('doc.show');
 
 Route::get('faq', 'FaqController@index')->name('faq.index');
-Route::get('faq', 'FaqController@index')->name('faq.show');
+Route::get('faq/show', 'FaqController@index')->name('faq.show');
 
 Route::get('contact', 'ContactController@index')->name('contact.index');
 Route::post('contact', 'ContactController@send')->name('contact.send');

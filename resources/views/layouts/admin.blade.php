@@ -28,7 +28,7 @@
                         <li><a href="{{ route('admin.doc.index') }}">Documentation</a></li>
                     </ul>
                 </li>
-                <li><a href="{{ route('dashboard') }}">Applications</a></li>
+                <li><a href="{{ route('admin.dashboard.index') }}">Applications</a></li>
                 <li><a href="#">Users</a></li>
             </ul>
         </nav>

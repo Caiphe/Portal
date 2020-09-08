@@ -11,7 +11,7 @@
     >
         <span class="status-bar status-{{ $product['pivot']['status'] }}"></span>
         <span class="name">{{ $product['display_name'] }}</span>
-        @if(Request::is('dashboard'))
+        @if(Request::is('admin/*'))
             <button class="product-approve" data-action="approve" data-aid="{{ $app['name'] }}" data-pid="{{ $product['pivot']['product_pid'] }}" data-product-display-name="{{ $product['display_name'] }}">
                 @svg('thumbs-up', '#000000')
             </button>

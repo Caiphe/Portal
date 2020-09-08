@@ -28,7 +28,7 @@
         <div class="column"></div>
     @endif
     <div class="column">
-        @if(Request::is('dashboard'))
+        @if(Request::is('admin/*'))
             {{ $details['email'] ?? '' }}
         @else
             @subStr($app['callback_url'], 30)
@@ -41,7 +41,7 @@
         <button class="actions"></button>
     </div>
     <div class="detail">
-        @if(Request::is('dashboard'))
+        @if(Request::is('admin/*'))
             <div>
                 <div>
                     <p><strong>Developer name:</strong> </p>
@@ -121,7 +121,7 @@
         </div>
     </div>
     <nav class="menu">
-        @if(Request::is('dashboard'))
+        @if(Request::is('admin/*'))
             @can('administer-dashboard')
             <button class="product-all" data-action="approve">Approve all</button>
             <button class="product-all" data-action="revoke">Revoke all</button>

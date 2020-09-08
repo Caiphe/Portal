@@ -25,7 +25,7 @@
             <li><a href="/faq">FAQ</a></li>
             <li><a href="/contact">Contact us</a></li>
             @can('view-admin')
-            <li><a href="/admin">Admin</a></li>
+            <li><a href="{{ route('admin.home') }}">Admin</a></li>
             @endcan
         </ul>
         <form action="{{route('search')}}">
