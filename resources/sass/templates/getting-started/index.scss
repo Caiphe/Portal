@@ -1,5 +1,11 @@
 @import "../../variables";
 
+#sidebar {
+    @media #{$small} {
+        display: none;
+    }
+}
+
 #main {
     padding: 0 !important;
     margin-bottom: 60px;
@@ -42,8 +48,16 @@
                 .card__body {
                     font-size: 12px;
                 }
+
+                @media #{$small} {
+                    height: auto;
+                    width: 100%;
+                }
             }
         }
 
+        @media #{$small} {
+            margin-left: 0;
+        }
     }
 }

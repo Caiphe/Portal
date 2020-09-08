@@ -10,6 +10,10 @@
         top: 80px;
         right: 0;
         left: 0;
+
+        @media #{$small} {
+            display: none;
+        }
     }
 }
 
@@ -22,6 +26,10 @@
         position: absolute;
         top: 80px;
         right: 0;
+
+        @media #{$small} {
+            display: none;
+        }
     }
 }
 
