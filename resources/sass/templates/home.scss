@@ -68,6 +68,10 @@ body > #main {
 
     p {
         padding: 0 15em;
+
+        @media #{$small} {
+            padding: 0;
+        }
     }
 
     .key-feature {
@@ -187,4 +191,94 @@ section {
     display: flex;
     justify-content: center;
     margin-top: $gutter;
+}
+
+.steps {
+    @media #{$small} {
+        .col {
+            flex: 1 auto !important;
+            max-width: 100% !important;
+        }
+    }
+}
+
+#section-sign-up {
+    .cols {
+        @media #{$small} {
+            flex-direction: column;
+        }
+
+        .col-6 {
+            @media #{$small} {
+                flex: 1 auto !important;
+                max-width: 100% !important;
+            }
+        }
+    }
+}
+
+#section-browse-our-products {
+    .cols {
+        @media #{$small} {
+            flex-direction: column;
+        }
+
+        .col-6 {
+            @media #{$small} {
+                flex: 1 auto !important;
+                max-width: 100% !important;
+            }
+
+            .content-right {
+                @media #{$small} {
+                    padding: 0;
+                }
+            }
+        }
+    }
+}
+
+#section-register-an-app {
+    .cols {
+        @media #{$small} {
+            flex-direction: column;
+        }
+
+        .col-6 {
+            @media #{$small} {
+                flex: 1 auto !important;
+                max-width: 100% !important;
+            }
+        }
+    }
+}
+
+#section-access-the-keys {
+    .cols {
+        @media #{$small} {
+            flex-direction: column;
+        }
+
+        .col-6 {
+            @media #{$small} {
+                flex: 1 auto !important;
+                max-width: 100% !important;
+            }
+        }
+    }
+}
+
+#section-product-categories {
+    .products-cards {
+        @media #{$small} {
+            flex-direction: column;
+        }
+
+        a {
+            @media #{$small} {
+                margin-right: 0;
+                width: 100%;
+            }
+        }
+    }
 }

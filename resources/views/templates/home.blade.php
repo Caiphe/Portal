@@ -194,7 +194,7 @@
         </div>
     </section>
 
-    <section class="blue-bg">
+    <section id="section-product-categories" class="blue-bg">
         <div class="container-flex">
             <div class="container">
                 <h2 class="t-light">Product categories</h2>
