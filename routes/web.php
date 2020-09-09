@@ -53,11 +53,15 @@ Route::namespace('Admin')->prefix('admin')->middleware('can:view-admin')->group(
 	Route::get('/pages', 'ContentController@indexPage')->name('admin.page.index');
 	Route::get('/pages/{content:slug}/edit', 'ContentController@editPage')->name('admin.page.edit');
 	Route::put('/pages/{content:slug}/update', 'ContentController@updatePage')->name('admin.page.update');
+	Route::get('/pages/create', 'ContentController@createPage')->name('admin.page.create');
+	Route::post('/pages', 'ContentController@storePage')->name('admin.page.store');
 
 	// Documentation
 	Route::get('/docs', 'ContentController@indexDoc')->name('admin.doc.index');
 	Route::get('/docs/{content:slug}/edit', 'ContentController@editDoc')->name('admin.doc.edit');
 	Route::put('/docs/{content:slug}/update', 'ContentController@updateDoc')->name('admin.doc.update');
+	Route::get('/docs/create', 'ContentController@createDoc')->name('admin.doc.create');
+	Route::post('/docs', 'ContentController@storeDoc')->name('admin.doc.store');
 
 	// FAQ
 	Route::get('/faqs', 'FaqController@index')->name('admin.faq.index');

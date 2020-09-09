@@ -14,11 +14,8 @@
 <form id="edit-form" action="{{ route('admin.page.update', $page->slug) }}" method="POST">
 
     @method('PUT')
-    @csrf
-
-    <input type="text" name="title" placeholder="Title" value="{{ $page['title'] }}">
-    <input id="body" type="hidden" name="body" value="{{ $page['body'] }}">
-    <trix-editor input="body"></trix-editor>
+    
+    @include('templates.admin.pages.form', compact('page'))
 
     <hr id="hr">
     <button>Update</button>

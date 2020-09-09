@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Create FAQ')
+@section('title', 'Create documentation')
 
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/admin/products/edit.css') }}">
@@ -9,9 +9,9 @@
 @endpush
 
 @section('content')
-<form id="edit-form" action="{{ route('admin.faq.store') }}" method="POST">
+<form id="edit-form" action="{{ route('admin.doc.store') }}" method="POST">
 
-    @include('templates.admin.faqs.form')
+    @include('templates.admin.docs.form')
 
     <hr id="hr">
     <button>Create</button>

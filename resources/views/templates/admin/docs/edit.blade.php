@@ -14,11 +14,8 @@
 <form id="edit-form" action="{{ route('admin.doc.update', $doc->slug) }}" method="POST">
 
     @method('PUT')
-    @csrf
-
-    <input type="text" name="title" placeholder="Title" value="{{ $doc['title'] }}">
-    <input id="body" type="hidden" name="body" value="{{ $doc['body'] }}">
-    <trix-editor input="body"></trix-editor>
+    
+    @include('templates.admin.docs.form', compact('doc'))
 
     <hr id="hr">
     <button>Update</button>

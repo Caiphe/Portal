@@ -32,8 +32,22 @@ class ContentController extends Controller
         return redirect()->route('admin.page.edit', $content->slug)->with('alert', 'success:The content has been updated.');
     }
 
-    // Administer documentation content type
+    public function createPage() {
+        return view('templates.admin.pages.create');
+    }
 
+    public function storePage(Request $request) {
+        $content = Content::create([
+            'title' => $request->title,
+            'body' => $request->body,
+            'type' => 'page',
+            'published_at' => date('Y-m-d H:i:s')
+        ]);
+
+        return redirect()->route('admin.page.edit', $content->slug)->with('alert', 'success:The content has been updated.');
+    }
+
+    // Administer documentation content type
     public function indexDoc()
     {
         return view('templates.admin.docs.index', [
@@ -53,6 +67,21 @@ class ContentController extends Controller
         $content->update($request->only(['title', 'body']));
         $content->fresh();
 
-        return redirect()->route('admin.doc.edit', $content->slug)->with('alert', 'success:The content has been updated.');
+        return redirect()->route('admin.doc.edit', $content->slug)->with('alert', 'success:The content has been created.');
+    }
+
+    public function createDoc() {
+        return view('templates.admin.docs.create');
+    }
+
+    public function storeDoc(Request $request) {
+        $content = Content::create([
+            'title' => $request->title,
+            'body' => $request->body,
+            'type' => 'general_docs',
+            'published_at' => date('Y-m-d H:i:s')
+        ]);
+
+        return redirect()->route('admin.doc.edit', $content->slug)->with('alert', 'success:The content has been created.');
     }
 }
