@@ -37,9 +37,8 @@ class FaqController extends Controller
     public function update(Faq $faq, Request $request)
     {
         $faq->update($request->only(['question', 'answer', 'category_cid']));
-        $faq->fresh();
 
-        return redirect()->route('admin.faq.edit', $faq->slug)->with('alert', 'success:The faq has been updated.');
+        return redirect()->route('admin.faq.index')->with('alert', 'success:The faq has been updated.');
     }
 
     public function create()
@@ -51,8 +50,15 @@ class FaqController extends Controller
 
     public function store(Request $request)
     {
-        $faq = Faq::create($request->only(['question', 'answer', 'category_cid']));
+        Faq::create($request->only(['question', 'answer', 'category_cid']));
 
-        return redirect()->route('admin.faq.edit', $faq->slug)->with('alert', 'success:The faq has been created.');
+        return redirect()->route('admin.faq.index')->with('alert', 'success:The faq has been created.');
+    }
+
+    public function destroy(Faq $faq)
+    {
+        $faq->delete();
+
+        return redirect()->route('admin.faq.index')->with('alert', 'success:The faq has been deleted.');
     }
 }

@@ -55,6 +55,7 @@ Route::namespace('Admin')->prefix('admin')->middleware('can:view-admin')->group(
 	Route::put('/pages/{content:slug}/update', 'ContentController@updatePage')->name('admin.page.update');
 	Route::get('/pages/create', 'ContentController@createPage')->name('admin.page.create');
 	Route::post('/pages', 'ContentController@storePage')->name('admin.page.store');
+	Route::delete('/pages{content:slug}/delete', 'ContentController@destroyPage')->name('admin.page.delete');
 
 	// Documentation
 	Route::get('/docs', 'ContentController@indexDoc')->name('admin.doc.index');
@@ -62,6 +63,7 @@ Route::namespace('Admin')->prefix('admin')->middleware('can:view-admin')->group(
 	Route::put('/docs/{content:slug}/update', 'ContentController@updateDoc')->name('admin.doc.update');
 	Route::get('/docs/create', 'ContentController@createDoc')->name('admin.doc.create');
 	Route::post('/docs', 'ContentController@storeDoc')->name('admin.doc.store');
+	Route::delete('/docs{content:slug}/delete', 'ContentController@destroyDoc')->name('admin.doc.delete');
 
 	// FAQ
 	Route::get('/faqs', 'FaqController@index')->name('admin.faq.index');
@@ -69,6 +71,7 @@ Route::namespace('Admin')->prefix('admin')->middleware('can:view-admin')->group(
 	Route::put('/faqs/{faq:slug}/update', 'FaqController@update')->name('admin.faq.update');
 	Route::get('/faqs/create', 'FaqController@create')->name('admin.faq.create');
 	Route::post('/faqs', 'FaqController@store')->name('admin.faq.store');
+	Route::delete('/faqs{faq:slug}/delete', 'FaqController@destroy')->name('admin.faq.delete');
 
 	// Categories
 	Route::get('/categories', 'CategoryController@index')->name('admin.category.index');
@@ -76,6 +79,7 @@ Route::namespace('Admin')->prefix('admin')->middleware('can:view-admin')->group(
 	Route::put('/categories/{category:slug}/update', 'CategoryController@update')->name('admin.category.update');
 	Route::get('/categories/create', 'CategoryController@create')->name('admin.category.create');
 	Route::post('/categories', 'CategoryController@store')->name('admin.category.store');
+	Route::delete('/categories{category:slug}/delete', 'CategoryController@destroy')->name('admin.category.delete');
 
 	// Dashboard
 	Route::get('/dashboard', 'DashboardController@index')->name('admin.dashboard.index');

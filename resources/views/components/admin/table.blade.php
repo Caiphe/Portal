@@ -30,7 +30,14 @@
             @endforeach
             <td align="center">
                 <a href="{{ route("admin.{$modelName}.edit", $model->slug) }}">@svg('edit')</a>
-                <a href="{{ route("{$modelName}.show", $model->slug) }}" target="_blank" rel=”noreferrer”>@svg('visible')</a>
+                <a href="{{ route("{$modelName}.show", $model->slug) }}" target="_blank" rel="noreferrer">@svg('eye')</a>
+                @if(Route::has("admin.{$modelName}.delete"))
+                <form class="delete-form" action="{{ route("admin.{$modelName}.delete", $model->slug) }}" method="POST" onsubmit="if(!confirm('Are you sure you want to delete this row?')){return false;}">
+                    @method('DELETE')
+                    @csrf
+                    <button>@svg('delete')</button>
+                </form>
+                @endif
             </td>
         </tr>
         @endforeach

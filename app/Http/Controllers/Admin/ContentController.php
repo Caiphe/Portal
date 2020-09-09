@@ -59,6 +59,13 @@ class ContentController extends Controller
         return redirect()->route('admin.page.edit', $content->slug)->with('alert', 'success:The content has been updated.');
     }
 
+    public function destroyPage(Content $content)
+    {
+        $content->delete();
+
+        return redirect()->route('admin.page.index')->with('alert', 'success:The page has been deleted.');
+    }
+
     // Administer documentation content type
     public function indexDoc(Request $request)
     {
@@ -107,5 +114,12 @@ class ContentController extends Controller
         ]);
 
         return redirect()->route('admin.doc.edit', $content->slug)->with('alert', 'success:The content has been created.');
+    }
+
+    public function destroyDoc(Content $content)
+    {
+        $content->delete();
+
+        return redirect()->route('admin.doc.index')->with('alert', 'success:The documentation has been deleted.');
     }
 }

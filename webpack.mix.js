@@ -58,6 +58,7 @@ mix.scripts(
     .sass("resources/sass/templates/getting-started/index.scss", "public/css/templates/getting-started")
     .sass("resources/sass/templates/home.scss", "public/css/templates")
     .sass("resources/sass/templates/admin/products/edit.scss", "public/css/templates/admin/products/edit.css")
+    .sass("resources/sass/templates/admin/index.scss", "public/css/templates/admin/index.css")
     .sass("resources/sass/components/_app.scss", "public/css/components")
     .sass("resources/sass/components/_panel.scss", "public/css/components")
     .sass("resources/sass/components/_accordion.scss", "public/css/components")
