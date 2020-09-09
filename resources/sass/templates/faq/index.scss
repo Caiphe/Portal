@@ -10,6 +10,10 @@ section:first-of-type {
 
     .container {
         display: flex;
+
+        @media #{$small} {
+            flex-direction: column;
+        }
     }
 }
 
@@ -102,12 +106,17 @@ section:last-of-type {
                 }
             }
         }
+
+        @media #{$small} {
+            display: none;
+        }
     }
 }
 
 .contact {
     text-align: center;
-    width: 600px;
+    width: 100%;
+    max-width: 600px;
     margin: auto;
 
     .panel {
@@ -173,5 +182,9 @@ section:last-of-type {
         &.show {
             display: block;
         }
+    }
+
+    @media #{$small} {
+        width: 100%;
     }
 }
