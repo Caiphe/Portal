@@ -9,16 +9,30 @@ h3 {
     color: $grey300;
 }
 
+#sidebar {
+    @media #{$small} {
+        display: none;
+    }
+}
+
 #banner {
     height: 300px;
     width: 100%;
     background: url('/images/banners/products.png') no-repeat center center / cover;
     flex: 1 0 auto;
+
+    @media #{$small} {
+        display: none;
+    }
 }
 
 #main {
     padding: 0 !important;
     margin-bottom: 40px;
+
+    @media #{$small} {
+        margin-top: 80px;
+    }
 
     .header-block {
         background-color: #000;
@@ -28,6 +42,12 @@ h3 {
         padding: 40px;
         margin: -50px 0 0 40px;
         width: calc(100% - 80px);
+
+        @media #{$small} {
+            height: auto;
+            margin: 0;
+            width: 100%;
+        }
 
         h1 {
             color: #FFF;
@@ -39,12 +59,20 @@ h3 {
             font-size: 18px;
             color: #FFF;
             padding-right: 250px;
+
+            @media #{$small} {
+                padding-right: 0;
+            }
         }
 
         svg {
             position: absolute;
             right: 30px;
             bottom: 20px;
+
+            @media #{$small} {
+                display: none;
+            }
         }
     }
 
@@ -53,6 +81,11 @@ h3 {
         margin-top: 40px;
         height: 100%;
         background-color: #ffffff;
+
+        @media #{$small} {
+            padding: 0;
+            margin: 0;
+        }
 
         .category-title:first-of-type {
             margin-top: 0;
@@ -80,6 +113,10 @@ h3 {
 
                     .card__header {
                         margin-bottom: 10px;
+                    }
+
+                    @media #{$small} {
+                        flex: 1 auto;
                     }
                 }
             }
