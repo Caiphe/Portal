@@ -23,7 +23,7 @@
             <div class="heading-app">
                 @svg('chevron-down', '#000000')
 
-                <h3>Approved Apps</h3>
+                <h3>Apps</h3>
             </div>
 
             <div class="my-apps">
@@ -49,19 +49,20 @@
                     </div>
                 </div>
                 <div class="body">
-                    @forelse($approvedApps as $app)
+                    @forelse($apps as $app)
                         @if(!empty($app['attributes']))
                         <x-app
                             :app="$app"
-                            :attr="$app['attributes']"
-                            :details="$app['developer']"
-                            :countries="$app['countries']"
-                            :type="$type = 'approved'">
+                            :attr="$app->attributes"
+                            :details="$app->developer"
+                            :countries="['za' => 'South Africa']"
+                            type="approved">
                         </x-app>
                         @endif
                     @empty
-                        <p>No approved apps.</p>
+                        <p>No apps.</p>
                     @endforelse
+                    {{ $apps->links() }}
                 </div>
             </div>
         </div>

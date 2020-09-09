@@ -10,7 +10,7 @@
     </form>
     <a href="{{ route("admin.{$modelName}.index") }}" class="button outline dark small ml-1">reset</a>
 </div>
-{{ $collection->links() }}
+{{ $collection->withQueryString()->links() }}
 <table>
     <thead>
         <tr>

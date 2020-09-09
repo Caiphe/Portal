@@ -48,7 +48,7 @@
                     <p><strong>Developer email:</strong> </p>
                 </div>
                 <div>
-                    <p id="developer-name">{{ $details['first_name']  . ' ' . $details['last_name'] }}</p>
+                    <p id="developer-name">{{ ($details['first_name'] ?? 'Not registered')  . ' ' . ($details['last_name'] ?? '') }}</p>
                     <p id="developer-email">{{ $details['email'] ?? '' }}</p>
                 </div>
                 <div class="copy-column"><!--This is a placeholder--></div>

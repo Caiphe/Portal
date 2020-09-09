@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Services\ProductLocationService;
 use App\Http\Requests\UpdateStatusRequest;
 use App\Services\ApigeeService;
 use App\App;
+use App\Country;
 
 class DashboardController extends Controller
 {
-    public function index(ProductLocationService $productLocationService)
+    public function index()
     {
         $user = auth()->user();
         $user->load('responsibleCountries');
@@ -18,45 +18,19 @@ class DashboardController extends Controller
 
         $apps = App::with(['developer', 'products', 'country'])
             ->whereHas('products', function ($query) use ($user, $isAdmin) {
-                $q = $query
-                    ->whereNotNull('swagger')
-                    ->where('status', 'pending');
+                $query->where('status', 'pending');
                 if (!$isAdmin) {
                     $responsibleCountriesCode = $user->responsibleCountries->pluck('code')->implode('|');
-                    $q->whereRaw("CONCAT(\",\", `locations`, \",\") REGEXP \",(" . $responsibleCountriesCode . "),\"");
+                    $query->whereRaw("CONCAT(\",\", `locations`, \",\") REGEXP \",(" . $responsibleCountriesCode . "),\"");
                 }
             })
-            ->whereHas('developer')
             ->byStatus('approved')
             ->orderBy('updated_at', 'desc')
-            ->get()
-            ->toArray();
-
-        $approvedApps = [];
-        $responsibleCountries = $user->responsibleCountries->pluck('code')->toArray();
-        foreach ($apps as $app) {
-            $appCountries = ApigeeService::getAppCountries(array_column($app['products'], 'name'));
-            if (!$isAdmin) {
-                $appCountriesCodes = array_keys($appCountries);
-                if (count(array_intersect($responsibleCountries, $appCountriesCodes)) > 0) {
-                    $app['countries'] = $appCountries;
-                    $approvedApps[] = $app;
-                };
-
-                continue;
-            }
-
-            $app['countries'] = $appCountries;
-            $approvedApps[] = $app;
-        }
-
-        $countries = $productLocationService->fetch([], 'countries');
-        $countries['all'] = "Global";
-        $countries['mix'] = "Mixed";
+            ->paginate();
 
         return view('templates.admin.dashboard.index', [
-            'approvedApps' => $approvedApps,
-            'countries' => $countries,
+            'apps' => $apps,
+            'countries' => Country::pluck('name', 'code'),
         ]);
     }
 
