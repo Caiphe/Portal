@@ -18,9 +18,9 @@ function addAlert(type, messages, cb) {
         }
     }
 
-    alert = '<div id="alert" class="' + type + '"><div class="container"><ul>' + messageList + '</ul><button class="fab blue close" onclick="closeAlert()"></button></div></div>';
+    alert = '<div id="alert" class="' + type + '"><ul>' + messageList + '</ul><button onclick="closeAlert()">&times;</button></div>';
 
-    document.getElementById('header').insertAdjacentHTML('afterend', alert);
+    document.body.insertAdjacentHTML('beforeend', alert);
 
     setTimeout(function() {
         document.getElementById('alert').classList.add('open');
