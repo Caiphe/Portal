@@ -1,5 +1,15 @@
-@props(['collection', 'fields', 'modelName' => (Str::singular($collection[0]->getTable()))])
+@props(['collection', 'fields', 'modelName'])
 
+@php
+    $modelName ??= explode('.', Route::currentRouteName())[1];
+@endphp
+
+<div class="cols centre-align mb-2">
+    <form action="{{ route("admin.{$modelName}.index") }}" method="GET">
+        <input type="text" name="q" placeholder="Search" autofocus autocomplete="off">
+    </form>
+    <a href="{{ route("admin.{$modelName}.index") }}" class="button outline dark small ml-1">reset</a>
+</div>
 {{ $collection->links() }}
 <table>
     <thead>
@@ -26,4 +36,4 @@
         @endforeach
     </tbody>
 </table>
-{{ $collection->links() }}
+{{ $collection->withQueryString()->links() }}

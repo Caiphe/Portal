@@ -8,10 +8,23 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $categories = Category::query();
+
+        if ($request->has('q')) {
+            $query = "%" . $request->q . "%";
+            $categories->where(function ($q) use ($query) {
+                $q->where('title', 'like', $query)
+                    ->orWhereHas('content', function ($q) use ($query) {
+                        $q->where('title', 'like', $query)
+                            ->orWhere('body', 'like', $query);
+                    });
+            });
+        }
+
         return view('templates.admin.categories.index', [
-            'categories' => Category::paginate()
+            'categories' => $categories->paginate()
         ]);
     }
 

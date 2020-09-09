@@ -11,8 +11,21 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
+        $products = Product::with('category')->basedOnUser($request->user());
+
+        if ($request->has('q')) {
+            $query = "%" . $request->q . "%";
+            $products->where(function ($q) use ($query) {
+                $q->where('display_name', 'like', $query)
+                    ->orWhereHas('content', function ($q) use ($query) {
+                        $q->where('title', 'like', $query)
+                            ->orWhere('body', 'like', $query);
+                    });
+            });
+        }
+
         return view('templates.admin.home', [
-            'products' => Product::with('category')->basedOnUser($request->user())->orderBy('display_name')->paginate()
+            'products' => $products->orderBy('display_name')->paginate()
         ]);
     }
 

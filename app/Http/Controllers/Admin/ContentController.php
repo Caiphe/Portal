@@ -10,10 +10,20 @@ class ContentController extends Controller
 {
     // Admininster page content type
 
-    public function indexPage()
+    public function indexPage(Request $request)
     {
+        $pages = Content::whereType('page');
+
+        if ($request->has('q')) {
+            $query = "%" . $request->q . "%";
+            $pages->where(function ($q) use ($query) {
+                $q->where('title', 'like', $query)
+                    ->orWhere('body', 'like', $query);
+            });
+        }
+
         return view('templates.admin.pages.index', [
-            'pages' => Content::whereType('page')->paginate()
+            'pages' => $pages->paginate()
         ]);
     }
 
@@ -32,11 +42,13 @@ class ContentController extends Controller
         return redirect()->route('admin.page.edit', $content->slug)->with('alert', 'success:The content has been updated.');
     }
 
-    public function createPage() {
+    public function createPage()
+    {
         return view('templates.admin.pages.create');
     }
 
-    public function storePage(Request $request) {
+    public function storePage(Request $request)
+    {
         $content = Content::create([
             'title' => $request->title,
             'body' => $request->body,
@@ -48,10 +60,20 @@ class ContentController extends Controller
     }
 
     // Administer documentation content type
-    public function indexDoc()
+    public function indexDoc(Request $request)
     {
+        $docs = Content::whereType('general_docs');
+
+        if ($request->has('q')) {
+            $query = "%" . $request->q . "%";
+            $docs->where(function ($q) use ($query) {
+                $q->where('title', 'like', $query)
+                    ->orWhere('body', 'like', $query);
+            });
+        }
+
         return view('templates.admin.docs.index', [
-            'docs' => Content::whereType('general_docs')->paginate()
+            'docs' => $docs->paginate()
         ]);
     }
 
@@ -70,11 +92,13 @@ class ContentController extends Controller
         return redirect()->route('admin.doc.edit', $content->slug)->with('alert', 'success:The content has been created.');
     }
 
-    public function createDoc() {
+    public function createDoc()
+    {
         return view('templates.admin.docs.create');
     }
 
-    public function storeDoc(Request $request) {
+    public function storeDoc(Request $request)
+    {
         $content = Content::create([
             'title' => $request->title,
             'body' => $request->body,

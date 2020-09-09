@@ -10,8 +10,21 @@ class BundleController extends Controller
 {
     public function index(Request $request)
     {
+        $bundles = Bundle::with('category');
+
+        if ($request->has('q')) {
+            $query = "%" . $request->q . "%";
+            $bundles->where(function ($q) use ($query) {
+                $q->where('display_name', 'like', $query)
+                    ->orWhereHas('content', function ($q) use ($query) {
+                        $q->where('title', 'like', $query)
+                            ->orWhere('body', 'like', $query);
+                    });
+            });
+        }
+
         return view('templates.admin.bundles.index', [
-            'bundles' => Bundle::with('category')->orderBy('display_name')->paginate()
+            'bundles' => $bundles->orderBy('display_name')->paginate()
         ]);
     }
 

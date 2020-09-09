@@ -9,10 +9,20 @@ use Illuminate\Http\Request;
 
 class FaqController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $faq = Faq::with('category');
+
+        if ($request->has('q')) {
+            $query = "%" . $request->q . "%";
+            $faq->where(function ($q) use ($query) {
+                $q->where('question', 'like', $query)
+                    ->orWhere('answer', 'like', $query);
+            });
+        }
+
         return view('templates.admin.faqs.index', [
-            'faqs' => Faq::with('category')->paginate()
+            'faqs' => $faq->paginate()
         ]);
     }
 
