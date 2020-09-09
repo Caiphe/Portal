@@ -154,6 +154,10 @@ section:last-of-type {
             display: block;
             position: relative;
         }
+
+        input[name='username'] {
+            display: none;
+        }
     }
 
     .contact-form {
