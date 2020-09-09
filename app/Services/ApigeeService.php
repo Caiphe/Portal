@@ -164,7 +164,7 @@ class ApigeeService
 
 	public static function updateProductStatus(string $id, string $app, string $key, string $product, string $action)
 	{
-		return self::post("developers/{$id}/apps/{$app}/keys/{$key}/apiproducts/{$product}", ['action' => $action], ['Content-Type' => 'application/octet-stream']);
+		return self::post("developers/{$id}/apps/{$app}/keys/{$key}/apiproducts/{$product}?action={$action}", [], ['Content-Type' => 'application/octet-stream']);
 	}
 
 	/**

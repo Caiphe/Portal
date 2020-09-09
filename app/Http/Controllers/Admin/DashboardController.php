@@ -75,7 +75,7 @@ class DashboardController extends Controller
 
         $response = ApigeeService::updateProductStatus($app->developer->email, $validated['app'], $credentials['consumerKey'], $validated['product'], $validated['action']);
         $responseStatus = $response->status();
-        if ($responseStatus === 200) {
+        if (preg_match('/^2/', $responseStatus)) {
             $app->products()->updateExistingPivot($validated['product'], ['status' => $status, 'actioned_by' => $request->user()->id]);
         } else if ($request->ajax()) {
             return response()->json(['success' => false, 'body' => json_decode($response->body())], $responseStatus);
