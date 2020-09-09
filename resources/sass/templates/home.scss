@@ -223,6 +223,12 @@ section {
                 max-width: 100% !important;
             }
         }
+
+        .col-image {
+            @media #{$small} {
+                display: none;
+            }
+        }
     }
 
     .content-left {
@@ -270,6 +276,12 @@ section {
                 }
             }
         }
+
+        .col-image {
+            @media #{$small} {
+                display: none;
+            }
+        }
     }
 
     img {
@@ -293,6 +305,12 @@ section {
                 max-width: 100% !important;
             }
         }
+
+        .col-image {
+            @media #{$small} {
+                display: none;
+            }
+        }
     }
 
     img {
@@ -314,6 +332,12 @@ section {
             @media #{$small} {
                 flex: 1 auto !important;
                 max-width: 100% !important;
+            }
+        }
+
+        .col-image {
+            @media #{$small} {
+                display: none;
             }
         }
     }

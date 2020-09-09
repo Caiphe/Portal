@@ -1,0 +1,7 @@
+@import '../../variables';
+
+#sidebar {
+    @media #{$small} {
+        display: none;
+    }
+}

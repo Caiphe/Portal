@@ -54,6 +54,7 @@ mix.scripts(
     .sass("resources/sass/templates/bundles/show.scss", "public/css/templates/bundles")
     .sass("resources/sass/templates/contact/index.scss", "public/css/templates/contact")
     .sass("resources/sass/templates/getting-started/index.scss", "public/css/templates/getting-started")
+    .sass("resources/sass/templates/getting-started/show.scss", "public/css/templates/getting-started")
     .sass("resources/sass/templates/home.scss", "public/css/templates")
     .sass("resources/sass/components/_app.scss", "public/css/components")
     .sass("resources/sass/components/_panel.scss", "public/css/components")
