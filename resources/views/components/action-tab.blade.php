@@ -4,7 +4,7 @@
 
 @props(['link' => '', 'title' => '', 'text', 'logo', 'status' => ''])
 <a class="action-tab {{ $status }}" href="{{ $link }}" target="_blank" rel="noopener noreferrer">
-    @isset($title)
+    @not($title)
         <strong>
             {{ $title }}
         </strong>
