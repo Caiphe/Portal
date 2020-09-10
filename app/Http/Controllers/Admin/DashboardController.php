@@ -47,7 +47,9 @@ class DashboardController extends Controller
         $credentials = ApigeeService::get('apps/' . $app->aid)['credentials'];
         $credentials = ApigeeService::getLatestCredentials($credentials);
 
-        $response = ApigeeService::updateProductStatus($app->developer->email, $validated['app'], $credentials['consumerKey'], $validated['product'], $validated['action']);
+        $developerId = $app->developer->email ?? $app->developer_id;
+
+        $response = ApigeeService::updateProductStatus($developerId, $validated['app'], $credentials['consumerKey'], $validated['product'], $validated['action']);
         $responseStatus = $response->status();
         if (preg_match('/^2/', $responseStatus)) {
             $app->products()->updateExistingPivot($validated['product'], ['status' => $status, 'actioned_by' => $request->user()->id]);
