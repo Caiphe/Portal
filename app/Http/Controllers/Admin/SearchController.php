@@ -58,7 +58,7 @@ class SearchController extends Controller
             })
             ->get()
             ->map(function ($detail) {
-                return ['title' => 'Bundle: ' . $detail['display_name'], 'description' => 'Edit the bundle', 'link' => "/admin/products/{$detail['slug']}/edit"];
+                return ['title' => 'Bundle: ' . $detail['display_name'], 'description' => 'Edit the bundle', 'link' => "/admin/bundles/{$detail['slug']}/edit"];
             })->toArray();
 
         $faqs = Faq::where('question', 'like', $query)->orWhere('answer', 'like', $query)->get()->map(function ($detail) use ($searchTerm) {
