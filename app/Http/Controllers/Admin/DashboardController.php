@@ -16,7 +16,7 @@ class DashboardController extends Controller
         $user->load('responsibleCountries');
         $isAdmin = $user->hasRole('admin');
 
-        $apps = App::with(['developer', 'products', 'country'])
+        $apps = App::with(['developer', 'country', 'products'])
             ->whereHas('products', function ($query) use ($user, $isAdmin) {
                 $query->where('status', 'pending');
                 if (!$isAdmin) {

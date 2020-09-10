@@ -361,14 +361,7 @@
         xhr.send(JSON.stringify(app));
 
         xhr.onload = function() {
-            window.scrollTo({
-                top: 0,
-                left: 0,
-                behavior: 'smooth'
-            });
-
             if (xhr.status === 200) {
-
                 addAlert('success', 'Application created successfully', function(){
                     window.location.href = "{{ route('app.index') }}";
                 });

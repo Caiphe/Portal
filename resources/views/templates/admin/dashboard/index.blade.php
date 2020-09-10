@@ -20,12 +20,6 @@
         </div>
 
         <div class="row">
-            <div class="heading-app">
-                @svg('chevron-down', '#000000')
-
-                <h3>Apps</h3>
-            </div>
-
             <div class="my-apps">
                 <div class="head">
                     <div class="column">
@@ -51,11 +45,18 @@
                 <div class="body">
                     @forelse($apps as $app)
                         @if(!empty($app['attributes']))
+                        @php
+                            $productCountries = $app->products->reduce(function($carry, $product) use($countries) {
+                                $locationArray = explode(',', $product->locations);
+                                $carry = array_merge($carry, array_intersect_key($countries->toArray(), array_combine($locationArray, $locationArray)));
+                                return $carry;
+                            }, []);
+                        @endphp
                         <x-app
                             :app="$app"
                             :attr="$app->attributes"
                             :details="$app->developer"
-                            :countries="['za' => 'South Africa']"
+                            :countries="$productCountries ?: ['all' => 'Global']"
                             type="approved">
                         </x-app>
                         @endif
@@ -72,15 +73,9 @@
 
 @push('scripts')
     <script>
-        var headings = document.querySelectorAll('.heading-app');
-
         document.getElementById('filter-text').addEventListener('keyup', filterApps);
         document.getElementById("filter-country").addEventListener('change', filterApps);
         document.getElementById("filter-country-tags").addEventListener('click', filterApps);
-
-        for (var i = 0; i < headings.length; i++) {
-            headings[i].addEventListener('click', handleHeadingClick)
-        }
 
         function handleHeadingClick(event) {
             var heading = event.currentTarget;
@@ -258,14 +253,8 @@
                 if (xhr.status === 200) {
                     statusBar.className = 'status-bar status-' + lookup[data.action];
                 } else {
-                    window.scrollTo({
-                        top: 0,
-                        left: 0,
-                        behavior: 'smooth'
-                    });
-                        
                     statusBar.classList.remove('loading');
-                    addAlert('error', result.body.message);
+                    addAlert('error', result.message || 'There was an error updating the product.');
                 }
             };
         }

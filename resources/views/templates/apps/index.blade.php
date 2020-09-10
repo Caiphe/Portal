@@ -259,7 +259,6 @@
 
             xhr.onload = function() {
                 if(xhr.status === 302 || /login/.test(xhr.responseURL)){
-                     window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
                      addAlert('info', ['You are currently logged out.', 'Refresh the page to login again.']);
                     btn.className = 'copy';
                 } else if (xhr.status === 200) {
