@@ -30,7 +30,7 @@ class DashboardController extends Controller
 
         return view('templates.admin.dashboard.index', [
             'apps' => $apps,
-            'countries' => Country::pluck('name', 'code'),
+            'countries' => Country::all(),
         ]);
     }
 

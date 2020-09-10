@@ -14,7 +14,7 @@
             <input type="text" name="search" id="filter-text" class="filter-text ml-1" placeholder="App or developer name">
 
             <h3 class="ml-2">Country</h3>
-            <x-multiselect id="filter-country" name="filter-country" class="ml-1" label="Select country" :options="$countries" />
+            <x-multiselect id="filter-country" name="filter-country" class="ml-1" label="Select country" :options="$countries->pluck('name', 'code')" />
 
             <button id="clearFilter" class="dark outline ml-2" onclick="clearFilter()">Clear filters</button>
         </div>
@@ -46,11 +46,17 @@
                     @forelse($apps as $app)
                         @if(!empty($app['attributes']))
                         @php
-                            $productCountries = $app->products->reduce(function($carry, $product) use($countries) {
-                                $locationArray = explode(',', $product->locations);
-                                $carry = array_merge($carry, array_intersect_key($countries->toArray(), array_combine($locationArray, $locationArray)));
-                                return $carry;
-                            }, []);
+                            $countryList = $countries->pluck('name', 'code')->toArray();
+                            $productCountries = [];
+                            if(!is_null($app->country_id)){
+                                $productCountries = $countries->where('id', $app->country_id)->pluck('name', 'code')->toArray();
+                            } else {
+                                $productCountries = $app->products->reduce(function($carry, $product) use ($countryList) {
+                                    $locationArray = explode(',', $product->locations);
+                                    $carry = array_merge($carry, array_intersect_key($countryList, array_combine($locationArray, $locationArray)));
+                                    return $carry;
+                                }, []);
+                            }
                         @endphp
                         <x-app
                             :app="$app"
