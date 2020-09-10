@@ -32,6 +32,7 @@ h3 {
 
     @media #{$small} {
         margin-top: 80px;
+        margin-bottom: 0;
     }
 
     .header-block {
@@ -47,12 +48,23 @@ h3 {
             height: auto;
             margin: 0;
             width: 100%;
+            background-color: $white;
+            color: $black;
+            box-shadow: none;
+            border: transparent;
+            padding: 0;
+            margin-top: 4rem;
+            margin-bottom: 4rem;
         }
 
         h1 {
             color: #FFF;
             font-size: 40px;
             margin: 0;
+
+            @media #{$small} {
+                color: $black;
+            }
         }
 
         p {
@@ -62,6 +74,7 @@ h3 {
 
             @media #{$small} {
                 padding-right: 0;
+                color: $black;
             }
         }
 
@@ -122,6 +135,12 @@ h3 {
                 }
             }
         }
+    }
+}
+
+#footer {
+    @media #{$small} {
+        margin-top: 5rem;
     }
 }
 
