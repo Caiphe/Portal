@@ -28,6 +28,10 @@
 
         .flags {
             text-align: right;
+
+            @media #{$small} {
+                text-align: initial;
+            }
         }
 
         .flag {
