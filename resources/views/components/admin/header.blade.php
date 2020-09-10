@@ -4,7 +4,7 @@
     <nav class="header-inner container">
         <h1>@yield('title')</h1>
         <div class="spacer"></div>
-        <form action="{{route('search')}}">
+        <form action="{{route('admin.search')}}">
             <input type="search" name="q" id="search" class="thin see-through" placeholder="Search">
         </form>
         <div id="profile-menu">

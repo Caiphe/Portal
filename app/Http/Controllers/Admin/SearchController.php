@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Content;
 use App\Faq;
 use App\Product;
@@ -45,7 +46,7 @@ class SearchController extends Controller
             })
             ->get()
             ->map(function ($detail) {
-                return ['title' => 'Product: ' . $detail['display_name'], 'description' => 'View the product', 'link' => "/products/{$detail['slug']}"];
+                return ['title' => 'Product: ' . $detail['display_name'], 'description' => 'Edit the product', 'link' => "/admin/products/{$detail['slug']}/edit"];
             })
             ->toArray();
 
@@ -57,11 +58,11 @@ class SearchController extends Controller
             })
             ->get()
             ->map(function ($detail) {
-                return ['title' => 'Bundle: ' . $detail['display_name'], 'description' => 'View the bundle', 'link' => "/products/{$detail['slug']}"];
+                return ['title' => 'Bundle: ' . $detail['display_name'], 'description' => 'Edit the bundle', 'link' => "/admin/products/{$detail['slug']}/edit"];
             })->toArray();
 
         $faqs = Faq::where('question', 'like', $query)->orWhere('answer', 'like', $query)->get()->map(function ($detail) use ($searchTerm) {
-            return ['title' => 'FAQ: ' . substr($detail['question'], 0, 80), 'description' => $this->findSearchTerm($detail['answer'], $searchTerm), 'link' => "/faq/#{$detail['slug']}"];
+            return ['title' => 'FAQ: ' . substr($detail['question'], 0, 80), 'description' => $this->findSearchTerm($detail['answer'], $searchTerm), 'link' => "/admin/faqs/{$detail['slug']}/edit"];
         })->toArray();
 
         $content = Content::where(function ($q) {
@@ -74,9 +75,10 @@ class SearchController extends Controller
             ->get()
             ->map(function ($detail) use ($searchTerm) {
                 $linkPrefix = [
-                    'general_docs' => '/getting-started/',
-                    'general_doc' => '/getting-started/',
-                ][$detail['type']] ?? '/';
+                    'general_docs' => 'docs',
+                    'general_doc' => 'docs',
+                    'page' => 'page',
+                ][$detail['type']] ?? '';
 
                 $linkSlug = $detail['slug'];
 
@@ -85,7 +87,7 @@ class SearchController extends Controller
                 return [
                     'title' => $contentType . ': ' . substr($detail['title'], 0, 80),
                     'description' => $this->findSearchTerm($detail['body'], $searchTerm),
-                    'link' => $linkPrefix . $linkSlug
+                    'link' => "/admin/$linkPrefix/$linkSlug/edit"
                 ];
             })->reject(function ($value) {
                 return count($value) === 0;
@@ -94,7 +96,7 @@ class SearchController extends Controller
         $results = array_merge($products, $faqs, $content, $bundles);
         $total = count($results);
 
-        return view('templates.search', [
+        return view('templates.admin.search.index', [
             'results' => array_slice($results, ($page * $length), $length),
             'searchTerm' => $searchTerm,
             'total' => $total,

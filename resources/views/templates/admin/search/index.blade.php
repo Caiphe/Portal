@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.admin')
 
 @section('title', 'Searching for "' . Request::get('q', '') . '"')
 
@@ -7,8 +7,7 @@
 @endpush
 
 @section('content')
-    <h1>Search results</h1>
-    <form action="{{route('search')}}">
+    <form action="{{route('admin.search')}}">
         <input class="search" name="q" placeholder="Search term" autofocus>
     </form>
     @if(!empty($results))
@@ -32,4 +31,4 @@
         @endif
     </ul>
     @endif
-@endsection 
+@endsection
