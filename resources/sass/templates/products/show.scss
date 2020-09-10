@@ -13,6 +13,7 @@
 
     @media #{$small} {
         margin-top: 80px;
+        padding-top: 3rem !important;
     }
 
     #heading {
@@ -34,6 +35,33 @@
             height: 15px;
             margin-left: 6px;
         }
+
+        h1 {
+            @media #{$small} {
+                display: flex;
+                width: 100%;
+            }
+        }
+
+        .right-side {
+            @media #{$small} {
+                position: initial;
+                display: flex;
+                padding-top: 2rem;
+                height: 100%;
+                width: 100%;
+            }
+        }
+
+        @media #{$small} {
+            background-color: transparent;
+            height: auto;
+            padding: 0 !important;
+            position: initial !important;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
     }
 
     .content {
@@ -42,6 +70,7 @@
 
         @media #{$small} {
             margin-left: 0;
+            margin-top: 0;
         }
     }
 }
