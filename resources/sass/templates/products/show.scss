@@ -82,8 +82,35 @@
 
 #product-sections {
 
+    #button-specification {
+        @media #{$small} {
+            display: none;
+        }
+    }
+
     .product-section {
         display: none;
+
+        h2:first-of-type  {
+            @media #{$small} {
+                display: none;
+            }
+        }
+
+        a {
+            &:first-of-type {
+                @media #{$small} {
+                    display: none;
+                }
+            }
+
+            &:nth-of-type(2) {
+                @media #{$small} {
+                    display: none;
+                }
+            }
+        }
+
     }
 
     &.product-docs #button-docs,
