@@ -47,6 +47,10 @@ section:last-of-type {
 
                 h2 {
                     margin-bottom: 5px;
+
+                    @media #{$small} {
+                        text-align: center;
+                    }
                 }
 
                 input {
