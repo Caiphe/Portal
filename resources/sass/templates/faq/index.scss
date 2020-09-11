@@ -14,6 +14,10 @@ section:first-of-type {
         @media #{$small} {
             flex-direction: column;
         }
+
+        @media #{$medium-portrait} {
+            flex-direction: column;
+        }
     }
 }
 
@@ -114,6 +118,10 @@ section:last-of-type {
         @media #{$small} {
             display: none;
         }
+
+        @media #{$medium-portrait} {
+            display: none;
+        }
     }
 }
 
@@ -189,6 +197,10 @@ section:last-of-type {
     }
 
     @media #{$small} {
+        width: 100%;
+    }
+
+    @media #{$medium-portrait} {
         width: 100%;
     }
 }

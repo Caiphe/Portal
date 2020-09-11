@@ -4,6 +4,10 @@
     @media #{$small} {
         display: none;
     }
+
+    @media #{$medium-portrait} {
+        display: none;
+    }
 }
 
 #main {
@@ -50,6 +54,11 @@
                 }
 
                 @media #{$small} {
+                    height: auto;
+                    width: 100%;
+                }
+
+                @media #{$medium-portrait} {
                     height: auto;
                     width: 100%;
                 }

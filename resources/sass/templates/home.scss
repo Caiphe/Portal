@@ -73,6 +73,10 @@ body > #main {
     @media #{$small} {
         margin-top: 80px;
     }
+
+    @media #{$medium-portrait} {
+        margin-top: 80px;
+    }
 }
 
 .introduction {
