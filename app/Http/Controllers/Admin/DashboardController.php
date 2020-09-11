@@ -7,6 +7,8 @@ use App\Http\Requests\UpdateStatusRequest;
 use App\Services\ApigeeService;
 use App\App;
 use App\Country;
+use App\Mail\ProductAction;
+use Illuminate\Support\Facades\Mail;
 
 class DashboardController extends Controller
 {
@@ -52,6 +54,7 @@ class DashboardController extends Controller
     {
         $validated = $request->validated();
         $app = App::with('developer')->where('name', $validated['app'])->first();
+        $currentUser = $request->user();
         $status = [
             'approve' => 'approved',
             'revoke' => 'revoked',
@@ -66,10 +69,12 @@ class DashboardController extends Controller
         $response = ApigeeService::updateProductStatus($developerId, $validated['app'], $credentials['consumerKey'], $validated['product'], $validated['action']);
         $responseStatus = $response->status();
         if (preg_match('/^2/', $responseStatus)) {
-            $app->products()->updateExistingPivot($validated['product'], ['status' => $status, 'actioned_by' => $request->user()->id]);
+            $app->products()->updateExistingPivot($validated['product'], ['status' => $status, 'actioned_by' => $currentUser->id]);
         } else if ($request->ajax()) {
             return response()->json(['success' => false, 'body' => json_decode($response->body())], $responseStatus);
         }
+
+        Mail::to(env('MAIL_TO_ADDRESS'))->send(new ProductAction($app, $validated, $currentUser));
 
         if ($request->ajax()) {
             return response()->json(['success' => true]);
