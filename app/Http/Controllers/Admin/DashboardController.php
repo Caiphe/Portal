@@ -15,16 +15,30 @@ class DashboardController extends Controller
         $user = auth()->user();
         $user->load('responsibleCountries');
         $isAdmin = $user->hasRole('admin');
+        $responsibleCountriesIds = $user->responsibleCountries->pluck('id')->toArray();
+        $responsibleCountriesCodes = $user->responsibleCountries->pluck('code')->implode('|');
+
+        $appsByProductLocation = App::with(['developer', 'country', 'products'])
+            ->whereNull('country_id')
+            ->whereHas('products', function ($query) use ($isAdmin, $responsibleCountriesCodes) {
+                $query
+                    ->where('status', 'pending')
+                    ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes) {
+                        $query->whereRaw("`locations` REGEXP \"(" . $responsibleCountriesCodes . ")\"");
+                    });
+            })
+            ->byStatus('approved');
 
         $apps = App::with(['developer', 'country', 'products'])
-            ->whereHas('products', function ($query) use ($user, $isAdmin) {
+            ->whereNotNull('country_id')
+            ->when(!$isAdmin, function ($query) use ($responsibleCountriesIds) {
+                $query->whereIn('country_id', $responsibleCountriesIds);
+            })
+            ->whereHas('products', function ($query) {
                 $query->where('status', 'pending');
-                if (!$isAdmin) {
-                    $responsibleCountriesCode = $user->responsibleCountries->pluck('code')->implode('|');
-                    $query->whereRaw("CONCAT(\",\", `locations`, \",\") REGEXP \",(" . $responsibleCountriesCode . "),\"");
-                }
             })
             ->byStatus('approved')
+            ->union($appsByProductLocation)
             ->orderBy('updated_at', 'desc')
             ->paginate();
 
