@@ -62,6 +62,10 @@ body > #main {
                 @media #{$small} {
                     max-width: 100%;
                 }
+
+                @media #{$medium} {
+                    max-width: 100%;
+                }
             }
         }
     }
@@ -80,6 +84,10 @@ body > #main {
 
         @media #{$small} {
             padding: 0;
+        }
+
+        @media #{$medium} {
+            padding: initial;
         }
     }
 
@@ -192,6 +200,10 @@ section {
         &:last-of-type {
             margin-right: 0;
         }
+    }
+
+    @media #{$medium} {
+        flex-wrap: wrap;
     }
 }
 
