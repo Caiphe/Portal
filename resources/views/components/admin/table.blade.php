@@ -22,7 +22,7 @@
     </thead>
     <tbody>
         @foreach($collection as $model)
-        <tr>
+        <tr class="{{ $model->slug }}">
             @foreach($fields as $field)
             <td>
                 <a href="{{ route("admin.{$modelName}.edit", $model->slug) }}">{{ Arr::get($model, $field) }}</a>
@@ -32,7 +32,7 @@
                 <a href="{{ route("admin.{$modelName}.edit", $model->slug) }}">@svg('edit')</a>
                 <a href="{{ route("{$modelName}.show", $model->slug) }}" target="_blank" rel="noreferrer">@svg('eye')</a>
                 @if(Route::has("admin.{$modelName}.delete"))
-                <form class="delete-form" action="{{ route("admin.{$modelName}.delete", $model->slug) }}" method="POST" onsubmit="if(!confirm('Are you sure you want to delete this row?')){return false;}">
+                <form class="delete-form ajaxify" action="{{ route("admin.{$modelName}.delete", $model->slug) }}" method="POST" data-func="removeRow({{ $model->slug }})" data-confirm="Are you sure you want to delete this?">
                     @method('DELETE')
                     @csrf
                     <button>@svg('delete')</button>
@@ -44,3 +44,13 @@
     </tbody>
 </table>
 {{ $collection->withQueryString()->links() }}
+
+@push('scripts')
+<script>
+    function removeRow(id) {
+        var row = document.querySelector('.' + id);
+
+        row.parentNode.removeChild(row);
+    }
+</script>
+@endpush

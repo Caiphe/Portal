@@ -15,7 +15,7 @@ mix.scripts(
     ["resources/js/scripts.js", "resources/js/components/alert.js"],
     "public/js/scripts.js"
 ).scripts(
-    ["resources/js/scripts.js", "resources/js/components/alert.js", "resources/js/templates/admin/scripts.js"],
+    ["resources/js/scripts.js", "resources/js/components/alert.js", "resources/js/components/ajaxify.js", "resources/js/templates/admin/scripts.js"],
     "public/js/templates/admin/scripts.js"
 )
     .scripts("resources/js/templates/user/show.js", "public/js/templates/user/show.js")

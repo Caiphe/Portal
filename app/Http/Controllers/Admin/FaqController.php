@@ -55,9 +55,13 @@ class FaqController extends Controller
         return redirect()->route('admin.faq.index')->with('alert', 'success:The faq has been created.');
     }
 
-    public function destroy(Faq $faq)
+    public function destroy(Request $request, Faq $faq)
     {
         $faq->delete();
+
+        if ($request->ajax()) {
+            return response()->json(['success' => true, 'body' => 'The faq has been deleted.']);
+        }
 
         return redirect()->route('admin.faq.index')->with('alert', 'success:The faq has been deleted.');
     }
