@@ -14,6 +14,9 @@ const mix = require("laravel-mix");
 mix.scripts(
     ["resources/js/scripts.js", "resources/js/components/alert.js"],
     "public/js/scripts.js"
+).scripts(
+    ["resources/js/scripts.js", "resources/js/components/alert.js", "resources/js/templates/admin/scripts.js"],
+    "public/js/templates/admin/scripts.js"
 )
     .scripts("resources/js/templates/user/show.js", "public/js/templates/user/show.js")
     .scripts("resources/js/components/carousel.js", "public/js/components/carousel.js")

@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,4 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::namespace('Api\Admin')->prefix('admin')->group(function () {
     Route::post('/products/{product:slug}/openapi', 'ProductController@openapiUpload')->name('api.product.openapi.upload');
     Route::post('/products/{product:slug}/image', 'ProductController@imageUpload')->name('api.product.image.upload');
+
+    Route::post('sync', 'SyncController@sync')->name('api.sync');
 });

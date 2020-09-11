@@ -1,3 +1,12 @@
+@keyframes roll {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .layout-sidebar {
     &::before {
         content: '';
@@ -58,6 +67,26 @@
 
             >ul {
                 margin-top: 60px;
+            }
+        }
+
+        #sync {
+            position: fixed;
+            bottom: 20px;
+            width: 180px;
+            left: 20px;
+
+            svg {
+                margin-left: 6px;
+                width: 12px;
+            }
+
+            &:hover svg {
+                fill: $grey900;
+            }
+
+            &.syncing svg {
+                animation: roll 2s linear infinite;
             }
         }
 

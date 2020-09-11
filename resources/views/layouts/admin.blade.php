@@ -30,6 +30,8 @@
                 <li><a href="{{ route('admin.dashboard.index') }}">Applications</a></li>
                 <li><a href="#">Users</a></li>
             </ul>
+
+            <button id="sync" class="button yellow outline" onclick="sync(this)">Sync @svg('sync', '#FC0')</button>
         </nav>
         <main id="main">
             <x-admin.header heading="Title"/>
@@ -38,7 +40,14 @@
     </div>
     <x-alert/>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
-    <script src="{{ mix('/js/scripts.js') }}"></script>
+    <script>
+        function bladeLookup(key) {
+            return {
+                syncApiUrl: "{{ route('api.sync') }}",
+            }[key] || null;
+        }
+    </script>
+    <script src="{{ mix('/js/templates/admin/scripts.js') }}"></script>
     @stack("scripts")
 </body>
 </html>
