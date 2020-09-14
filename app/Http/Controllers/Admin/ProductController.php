@@ -24,6 +24,16 @@ class ProductController extends Controller
             });
         }
 
+        if ($request->ajax()) {
+            return response()
+                ->view('components.admin.table-data', [
+                    'collection' => $products->orderBy('display_name')->paginate(),
+                    'fields' => ['display_name', 'access', 'environments', 'category.title'],
+                    'modelName' => 'product'
+                ], 200)
+                ->header('Content-Type', 'text/html');
+        }
+
         return view('templates.admin.home', [
             'products' => $products->orderBy('display_name')->paginate()
         ]);
@@ -44,7 +54,7 @@ class ProductController extends Controller
         $now = date('Y-m-d H:i:s');
         $contents = [];
         $tabs = $request->get('tab', []);
-        
+
         for ($i = 0; $i < count($tabs['title']); $i++) {
             if ($tabs['title'][$i] === null || $tabs['body'][$i] === null) continue;
 

@@ -23,6 +23,16 @@ class BundleController extends Controller
             });
         }
 
+        if ($request->ajax()) {
+            return response()
+                ->view('components.admin.table-data', [
+                    'collection' => $bundles->orderBy('display_name')->paginate(),
+                    'fields' => ['display_name', 'category.title'],
+                    'modelName' => 'bundle'
+                ], 200)
+                ->header('Content-Type', 'text/html');
+        }
+
         return view('templates.admin.bundles.index', [
             'bundles' => $bundles->orderBy('display_name')->paginate()
         ]);

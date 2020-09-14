@@ -23,6 +23,16 @@ class CategoryController extends Controller
             });
         }
 
+        if ($request->ajax()) {
+            return response()
+                ->view('components.admin.table-data', [
+                    'collection' => $categories->paginate(),
+                    'fields' => ['title', 'theme'],
+                    'modelName' => 'category'
+                ], 200)
+                ->header('Content-Type', 'text/html');
+        }
+
         return view('templates.admin.categories.index', [
             'categories' => $categories->paginate()
         ]);

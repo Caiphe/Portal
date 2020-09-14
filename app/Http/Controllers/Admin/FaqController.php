@@ -21,6 +21,16 @@ class FaqController extends Controller
             });
         }
 
+        if ($request->ajax()) {
+            return response()
+                ->view('components.admin.table-data', [
+                    'collection' => $faq->paginate(),
+                    'fields' => ['question', 'category.title'],
+                    'modelName' => 'faq'
+                ], 200)
+                ->header('Content-Type', 'text/html');
+        }
+
         return view('templates.admin.faqs.index', [
             'faqs' => $faq->paginate()
         ]);

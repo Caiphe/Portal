@@ -22,6 +22,16 @@ class ContentController extends Controller
             });
         }
 
+        if ($request->ajax()) {
+            return response()
+                ->view('components.admin.table-data', [
+                    'collection' => $pages->paginate(),
+                    'fields' => ['title'],
+                    'modelName' => 'page'
+                ], 200)
+                ->header('Content-Type', 'text/html');
+        }
+
         return view('templates.admin.pages.index', [
             'pages' => $pages->paginate()
         ]);
@@ -77,6 +87,16 @@ class ContentController extends Controller
                 $q->where('title', 'like', $query)
                     ->orWhere('body', 'like', $query);
             });
+        }
+
+        if ($request->ajax()) {
+            return response()
+                ->view('components.admin.table-data', [
+                    'collection' => $docs->paginate(),
+                    'fields' => ['title'],
+                    'modelName' => 'doc'
+                ], 200)
+                ->header('Content-Type', 'text/html');
         }
 
         return view('templates.admin.docs.index', [
