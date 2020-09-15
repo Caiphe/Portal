@@ -43,9 +43,11 @@
                     if (el.dataset.replace !== undefined || isPager) {
                         document.querySelector((el.dataset.replace || '#table-data')).innerHTML = result;
                         resetAjaxify();
+                        updateUrl(url);
+                    } else {
+                        addAlert('success', result.body || "Success");
                     }
 
-                    addAlert('success', result.body || "Success");
                 } else {
                     addAlert('error', result.body || "Sorry there was an unexpected error.");
                 }
@@ -85,5 +87,9 @@
         for (var i = els.length - 1; i >= 0; i--) {
             els[i].addEventListener('click', handleForm);
         }
+    }
+
+    function updateUrl(url) {
+        history.pushState(null, null, url.replace(/.*\/|true=1\&/g, ''));
     }
 }());

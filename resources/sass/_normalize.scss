@@ -84,7 +84,9 @@ table {
         box-sizing: border-box;
     }
 
-    .active .page-link {
+    .active .page-link,
+    .page-link:active,
+    .page-link:focus {
         background-color: $yellow;
     }
 }
