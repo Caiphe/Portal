@@ -34,7 +34,6 @@
         </nav>
         <main id="main">
             <x-admin.header heading="Title"/>
-            <h1>@yield('title')</h1>
             <section>@yield("content")</section>
         </main>
     </div>

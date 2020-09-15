@@ -195,22 +195,11 @@
             background-color: #FFF;
             padding: 0;
 
-            .logo {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 20px;
-
-                img {
-                    margin-right: 10px;
-                }
-            }
-
             section {
                 padding: 40px;
             }
 
-            a {
+            a:not(.button) {
                 color: $grey900;
             }
         }

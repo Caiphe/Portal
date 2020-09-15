@@ -8,12 +8,19 @@
 <script src="{{ mix('/js/vendor/trix.js') }}"></script>
 @endpush
 
+@section('page-info')
+    <a href="#overview" class="button outline dark ml-1">OVERVIEW</a>
+    <a href="#docs" class="button outline dark ml-1">DOCS</a>
+    <a href="#custom-tabs" class="button outline dark ml-1">CUSTOM TABS</a>
+    <a href="{{ route('product.show', $product->slug) }}" target="_blank" rel="noreferrer" class="button outline dark ml-1">VIEW</a>
+    <button class="outline dark ml-1" onclick="function(){document.getElementById('edit-form').submit()}">SAVE</button>
+@endsection
+
 @section('content')
-<a class="button mb-2" href="{{ route('product.show', $product->slug) }}" target="_blank" rel="noreferrer">View Product</a>
 
 <div id="uploader">
-   @svg('upload')
-   @svg('loading')
+   @svg('plus-circle-filled')
+   @svg('loading-blue')
    <span>Upload Swagger</span>
    <div class="errors"></div>
 </div>
@@ -23,21 +30,21 @@
     @method('PUT')
     @csrf
 
-    <label>
+    <label id="overview">
         <h2>Overview</h2>
         <input type="hidden" name="tab[title][]" value="Overview">
         <input id="{{ $product->slug }}-overview-body" type="hidden" name="tab[body][]" value="{{ $content['Overview'][0]['body'] ?? '' }}">
         <trix-editor input="{{ $product->slug }}-overview-body"></trix-editor>
     </label>
 
-    <label>
+    <label id="docs">
         <h2>Docs</h2>
         <input type="hidden" name="tab[title][]" value="Docs">
         <input id="{{ $product->slug }}-docs-body" type="hidden" name="tab[body][]" value="{{ $content['Docs'][0]['body'] ?? '' }}">
         <trix-editor input="{{ $product->slug }}-docs-body"></trix-editor>
     </label>
 
-    <h2>Custom Tabs</h2>
+    <h2 id="custom-tabs">Custom Tabs</h2>
     <p>Add custom tabs to the product.</p>
 
     @foreach($content as $title => $c)
@@ -63,7 +70,6 @@
 
     <hr id="hr">
     <button id="new-tab" type="button">New Tab</button>
-    <button>Update</button>
 
 </form>
 @endsection

@@ -17,3 +17,8 @@
         </div>
     </nav>
 </header>
+<div class="header-page-info cols centre-align">
+    <h1>@yield('title')</h1>
+    <div class="spacer-flex"></div>
+    <div class="page-info">@yield('page-info')</div>
+</div>
