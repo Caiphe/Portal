@@ -94,7 +94,7 @@ class AppController extends Controller {
 	public function edit(ProductLocationService $productLocationService, App $app, Request $request) {
 		[$products, $countries] = $productLocationService->fetch();
 
-		$app->load('products');
+		$app->load('products', 'country');
 
 		return view('templates.apps.edit', [
 			'products' => $products,
