@@ -14,20 +14,19 @@
     @yield('banner')
     <div class="wrapper">
         <nav id="sidebar">
-            <a class="logo" href="/"><img src="/images/mtn-logo.svg" alt="MTN logo"> Developer<br>Portal</a>
             <ul>
-                <li>
-                    Content
+                <li class="has-children  @if(!Request::is('admin/dashboard')) active @endif">
+                    Manage
                     <ul>
-                        <li><a href="{{ route('admin.faq.index') }}">FAQ</a></li>
-                        <li><a href="{{ route('admin.page.index') }}">Pages</a></li>
-                        <li><a href="{{ route('admin.bundle.index') }}">Bundles</a></li>
-                        <li><a href="{{ route('admin.product.index') }}">Products</a></li>
-                        <li><a href="{{ route('admin.category.index') }}">Categories</a></li>
-                        <li><a href="{{ route('admin.doc.index') }}">Documentation</a></li>
+                        <li @if(Request::is('admin/faq') || Request::is('admin/faq/*')) class="active" @endif><a href="{{ route('admin.faq.index') }}">FAQ</a></li>
+                        <li @if(Request::is('admin/pages') || Request::is('admin/pages/*')) class="active" @endif><a href="{{ route('admin.page.index') }}">Pages</a></li>
+                        <li @if(Request::is('admin/bundles') || Request::is('admin/bundles/*')) class="active" @endif><a href="{{ route('admin.bundle.index') }}">Bundles</a></li>
+                        <li @if(Request::is('admin/products') || Request::is('admin/products/*')) class="active" @endif><a href="{{ route('admin.product.index') }}">Products</a></li>
+                        <li @if(Request::is('admin/categories') || Request::is('admin/categories/*')) class="active" @endif><a href="{{ route('admin.category.index') }}">Categories</a></li>
+                        <li @if(Request::is('admin/docs') || Request::is('admin/docs/*')) class="active" @endif><a href="{{ route('admin.doc.index') }}">Documentation</a></li>
                     </ul>
                 </li>
-                <li><a href="{{ route('admin.dashboard.index') }}">Applications</a></li>
+                <li @if(Request::is('admin/dashboard')) class="active" @endif><a href="{{ route('admin.dashboard.index') }}">Applications</a></li>
                 <li><a href="#">Users</a></li>
             </ul>
 
@@ -35,6 +34,7 @@
         </nav>
         <main id="main">
             <x-admin.header heading="Title"/>
+            <h1>@yield('title')</h1>
             <section>@yield("content")</section>
         </main>
     </div>

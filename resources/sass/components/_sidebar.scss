@@ -1,10 +1,11 @@
 @keyframes roll {
-  0% {
-    transform: rotate(0);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+    0% {
+        transform: rotate(0);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .layout-sidebar {
@@ -44,37 +45,110 @@
         flex: 1 0 auto;
 
         #sidebar {
-            flex: 1 0 220px;
+            flex: 1 0 300px;
             padding: 20px 0;
 
             background-color: $grey900;
             color: #FFF;
 
-            a {
-                color: #FFF;
-            }
+            ul {
+                list-style: none;
 
-            .logo {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 20px;
-
-                img {
-                    margin-right: 10px;
+                li {
+                    position: relative;
                 }
             }
 
             >ul {
                 margin-top: 60px;
+                padding: 0 40px;
+                position: fixed;
+                width: 220px;
+
+                >li {
+                    padding: 8px 0;
+                    border-bottom: 1px solid $grey750;
+
+                    &:before {
+                        content: '';
+                        background: url('/images/icons/chevron-right.svg') no-repeat center / 20px;
+                        filter: invert(35%);
+                        display: inline-block;
+                        width: 20px;
+                        height: 20px;
+                        position: absolute;
+                        right: 10px;
+                        top: 10px;
+                    }
+
+                    &.active {
+                        color: $yellow;
+
+                        >a {
+                            color: $yellow;
+                        }
+
+                        &:before {
+                            filter: invert(100%) sepia(51%) saturate(2878%) hue-rotate(310deg) brightness(90%) contrast(119%);
+                        }
+
+                        ul {
+                            border-top: 1px solid $yellow;
+                        }
+                    }
+                }
+
+                >li.has-children {
+                    &:before {
+                        background: url('/images/icons/chevron-down.svg') no-repeat center / 20px;
+                    }
+                }
+
+                & ul {
+                    padding: 6px 0 0 0;
+                    margin: 6px 0 0 0;
+                    border-top: 1px solid $grey750;
+
+                    li {
+                        padding: 2px 0 2px 30px;
+
+                        &:before {
+                            content: '';
+                            background: url('/images/icons/chevron-right.svg') no-repeat center / 16px;
+                            filter: invert(100%);
+                            display: inline-block;
+                            width: 16px;
+                            height: 16px;
+                            position: absolute;
+                            left: 10px;
+                            top: 4px;
+                        }
+
+                        &.active {
+
+                            a {
+                                color: $yellow;
+                            }
+
+                            &:before {
+                                filter: invert(100%) sepia(51%) saturate(2878%) hue-rotate(310deg) brightness(90%) contrast(119%);
+                            }
+                        }
+                    }
+                }
+            }
+
+            a {
+                color: #FFF;
+                display: block;
             }
         }
 
         #sync {
             position: fixed;
             bottom: 20px;
-            width: 180px;
-            left: 20px;
+            width: 220px;
+            left: 40px;
 
             svg {
                 margin-left: 6px;
@@ -90,9 +164,47 @@
             }
         }
 
+        #search {
+            border-radius: 50px;
+            border: none;
+            padding: 0 20px;
+            background-color: $yellowDark;
+            background-image: url('/images/icons/search.svg');
+            background-repeat: no-repeat;
+            background-position: calc(100% - 10px) center;
+            background-size: 22px;
+
+            ::-webkit-input-placeholder {
+                color: $grey900;
+            }
+
+            ::-moz-placeholder {
+                color: $grey900;
+            }
+
+            :-ms-input-placeholder {
+                color: $grey900;
+            }
+
+            :-moz-placeholder {
+                color: $grey900;
+            }
+        }
+
         #main {
             background-color: #FFF;
             padding: 0;
+
+            .logo {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 20px;
+
+                img {
+                    margin-right: 10px;
+                }
+            }
 
             section {
                 padding: 40px;
