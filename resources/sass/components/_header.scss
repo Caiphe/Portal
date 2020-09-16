@@ -272,5 +272,11 @@
         padding: 6px 40px;
         top: 0;
         z-index: 2;
+
+        button:hover,
+        .button:hover {
+            border: 2px solid $blue;
+            background-color: $blue;
+        }
     }
 }

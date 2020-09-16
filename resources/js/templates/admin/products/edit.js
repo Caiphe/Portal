@@ -64,7 +64,7 @@
 
     function newTab() {
         var randId = rand();
-        document.getElementById('hr').insertAdjacentHTML('beforebegin', '<div class="new-tab"><input type="text" name="tab[title][]" placeholder="Title"><input id="' + randId + '" type="hidden" name="tab[body][]"><trix-editor input="' + randId + '"></trix-editor><button class="dark small mt-1" onclick="removeTab(this)">Remove</button></div>');
+        document.getElementById('custom-tabs').insertAdjacentHTML('beforeend', '<div class="new-tab mt-3"><button class="dark outline" onclick="removeTab(this)">Remove</button><input type="text" name="tab[title][]" placeholder="Title"><input id="' + randId + '" type="hidden" name="tab[body][]"><trix-editor input="' + randId + '"></trix-editor></div>');
     }
 
     function rand() {
