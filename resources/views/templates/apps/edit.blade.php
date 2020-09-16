@@ -74,7 +74,7 @@
                         @foreach($countries as $key => $country)
                             <label class="country" for="country-{{ $loop->index + 1 }}" data-location="{{ $key }}">
                                 @svg('$key', '#000000', 'images/locations')
-                                <input type="radio" id="country-{{ $loop->index + 1 }}" class="country-checkbox" name="country-checkbox" value="{{ $key }}" data-location="{{ $key }}">
+                                <input type="radio" id="country-{{ $loop->index + 1 }}" class="country-checkbox" name="country-checkbox" value="{{ $key }}" @if($key === $data->country->code) checked @endif data-location="{{ $key }}" autocomplete="off">
                                 <div class="country-checked"></div>
                                 {{ $country }}
                             </label>
@@ -157,7 +157,6 @@
         function init() {
             handleButtonClick();
             handleBackButtonClick();
-            clearCheckBoxes();
         }
 
         function handleButtonClick() {
@@ -256,6 +255,11 @@
             document.getElementById('select-products-button').click();
         }
 
+        @if(!is_null($data->country_id))
+            filterLocations(['{{ $data->country->code }}']);
+            filterProducts(['{{ $data->country->code }}']);
+        @endif
+
         function filterLocations(selected) {
 
             var locations = document.querySelectorAll('.filtered-countries img');
@@ -301,15 +305,6 @@
                         return false;
                     }
                 }
-            }
-        }
-
-        /**
-         *  Clear checkboxes on page load, otherwise some checkboxes persist checked state.
-         */
-        function clearCheckBoxes() {
-            for (var n = 0; n < checkedBoxes.length; ++n) {
-                checkedBoxes[n].checked = false;
             }
         }
 
