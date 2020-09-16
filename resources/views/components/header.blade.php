@@ -57,31 +57,21 @@
     </nav>
     <!-- Mobile Menu -->
     <ul class="mobile-menu container">
-        <li class="has-children">
+        <li>
             <a href="/products">Products @svg("chevron-down")</a>
-            <div class="product-nav shadow">
-                <div class="nav-categories">
-                    <h3>BROWSE BY CATEGORY</h3>
-                    @foreach($globalCategories as $category)
-                        <a href="{{ route('category.show', $category->slug) }}">
-                            @svg($category->slug) {{$category->title}}
-                            <span>{{ $category->description }}</span>
-                        </a>
-                    @endforeach
-                </div>
-                <div class="nav-pages">
-                    <a href="/products">Browse all our products</a>
-                    <a href="/bundles">Browse all our bundles</a>
-                    <a href="/getting-started">Working with our products</a>
-                </div>
-            </div>
         </li>
-        <li><a href="/getting-started">Docs</a></li>
-        <li><a href="/faq">FAQ</a></li>
-        <li><a href="/contact">Contact us</a></li>
-        @can('view-dashboard')
-        <li><a href="/dashboard">Dashboard</a></li>
-        @endcan
+        <li>
+            <a href="/bundles">Bundles</a>
+        </li>
+        <li>
+            <a href="/getting-started">Docs</a>
+        </li>
+        <li>
+            <a href="/faq">FAQ</a>
+        </li>
+        <li>
+            <a href="/contact">Contact us</a>
+        </li>
     </ul>
 </header>
 

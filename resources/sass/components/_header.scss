@@ -275,10 +275,14 @@
     color: $white;
     list-style: none;
     margin-top: 0;
-    padding: 0;
+    padding: 1rem 8% !important;
     font-size: 1.5rem;
     opacity: 0;
     pointer-events: none;
+
+    li {
+        margin-bottom: 1rem;
+    }
 
     &.active {
         opacity: 1;

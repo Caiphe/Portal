@@ -228,6 +228,10 @@ section {
 }
 
 #section-sign-up {
+    @media #{$small} {
+        padding-bottom: 40px;
+    }
+
     .cols {
         @media #{$small} {
             flex-direction: column;
@@ -242,7 +246,7 @@ section {
 
         .col-image {
             @media #{$small} {
-                display: none;
+                margin-top: 80px;
             }
         }
     }
@@ -295,7 +299,7 @@ section {
 
         .col-image {
             @media #{$small} {
-                display: none;
+                padding-bottom: 40px;
             }
         }
     }
@@ -310,6 +314,10 @@ section {
 }
 
 #section-register-an-app {
+    @media #{$small} {
+        padding-bottom: 40px;
+    }
+
     .cols {
         @media #{$small} {
             flex-direction: column;
@@ -324,7 +332,13 @@ section {
 
         .col-image {
             @media #{$small} {
-                display: none;
+                margin-top: 80px;
+            }
+
+            .image-right {
+                @media #{$small} {
+                    padding: 0;
+                }
             }
         }
     }
@@ -353,7 +367,7 @@ section {
 
         .col-image {
             @media #{$small} {
-                display: none;
+                padding-bottom: 20px;
             }
         }
     }
