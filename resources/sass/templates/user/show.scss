@@ -1,13 +1,31 @@
 @import "../../variables";
 @import "../../functions";
 
+#sidebar {
+    @media #{$small} {
+        display: none;
+    }
+}
+
 #main {
     padding: 0 !important;
     margin-bottom: 60px;
     height: 100%;
 
+    @media #{$small} {
+        padding: 90px 40px 40px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
     #heading {
         margin-bottom: 40px;
+
+        @media #{$small} {
+            background-color: transparent;
+            padding-left: 0 !important;
+            position: static !important;
+        }
     }
 
     .content {
@@ -16,6 +34,11 @@
         border: 2px solid $grey300;
         border-radius: 8px;
         padding: $gutter;
+
+        @media #{$small} {
+            margin-left: 0;
+            margin-top: 40px;
+        }
 
         .locations {
             width: 100%;
@@ -83,6 +106,10 @@
         width: 478px;
         position: relative;
         margin: 0 auto;
+
+        @media #{$small} {
+            width: 100%;
+        }
 
         h2 {
             font-size: 1.8rem;
