@@ -2,6 +2,9 @@
     var uploader = document.getElementById('uploader');
 
     document.getElementById('new-tab').addEventListener('click', newTab);
+    document.getElementById('save').addEventListener('click', function(){
+        document.getElementById('edit-form').submit();
+    });
 
     ["dragenter", "dragover", "dragleave", "drop"].forEach(preventDefaultsListeners);
     ["dragenter", "dragover"].forEach(highlightListeners);
@@ -45,6 +48,7 @@
         var errors = [];
 
         unhighlight();
+        uploader.querySelector('.errors').innerHTML = "";
 
         if (files.length > 1) {
             errors.push("You can only add one file.");

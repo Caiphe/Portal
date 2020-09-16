@@ -22,16 +22,11 @@
         border-radius: 10px;
         margin-bottom: 30px;
     }
-
-    .new-tab button.dark.outline {
-        position: absolute;
-        top: 30px;
-        right: 30px;
-    }
 }
 
 #custom-tabs {
-    .new-tab button.dark.outline {
+    .new-tab button.dark.outline,
+    .old-tab button.dark.outline {
         position: absolute;
         top: 0;
         right: 0;

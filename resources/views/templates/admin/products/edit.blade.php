@@ -53,10 +53,10 @@
             @continue
         @endif
         <div class="old-tab mt-3">
+            <button class="dark outline mt-1" onclick="removeTab(this)">Remove</button>
             <input type="text" name="content[{{ $c[0]['slug'] }}][title]" value="{{ $c[0]['title'] }}">
             <input id="{{ $c[0]['slug'] }}" type="hidden" name="content[{{ $c[0]['slug'] }}][body]" value="{{ $c[0]['body'] ?? '' }}">
             <trix-editor input="{{ $c[0]['slug'] }}"></trix-editor>
-            <button class="dark small mt-1" onclick="removeTab(this)">Remove</button>
         </div>
         @endforeach
         @php
@@ -83,10 +83,6 @@
             uploadImageUrl: "{{ route('api.product.image.upload', $product->slug) }}"
         }[key] || null;
     }
-
-    document.getElementById('save').addEventListener('click', function(){
-        document.getElementById('edit-form').submit();
-    });
 </script>
 <script src="{{ mix('/js/templates/admin/products/edit.js') }}" defer></script>
 @endpush
