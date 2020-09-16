@@ -65,6 +65,10 @@ body > #main {
                     @media #{$medium} {
                         width: 100%;
                     }
+
+                    @media #{$medium-portrait} {
+                        width: 110px;
+                    }
                 }
 
                 @media #{$small} {

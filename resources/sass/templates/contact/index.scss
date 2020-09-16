@@ -22,6 +22,10 @@ section {
             flex-direction: column;
         }
 
+        @media #{$medium} {
+            flex-direction: column;
+        }
+
         .column {
             flex: 1;
 
@@ -31,12 +35,20 @@ section {
                 @media #{$small} {
                     padding-left: 0;
                 }
+
+                @media #{$medium-portrait} {
+                    padding-left: 0;
+                }
             }
 
             &:not(:last-of-type) {
                 padding-right: 40px;
 
                 @media #{$small} {
+                    padding-right: 0;
+                }
+
+                @media #{$medium-portrait} {
                     padding-right: 0;
                 }
             }
@@ -102,16 +114,30 @@ section:last-of-type {
             order: 2;
             padding-bottom: 30px;
         }
+
+        @media #{$medium} {
+            order: 2;
+            padding-bottom: 30px;
+        }
     }
 
     .contact {
         @media #{$small} {
             order: 3;
         }
+
+        @media #{$medium} {
+            order: 3;
+        }
     }
 
     .details {
         @media #{$small} {
+            order: 1;
+            padding-bottom: 30px;
+        }
+
+        @media #{$medium} {
             order: 1;
             padding-bottom: 30px;
         }

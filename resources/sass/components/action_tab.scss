@@ -29,6 +29,10 @@
         @media #{$small} {
             margin-top: 2rem;
         }
+
+        @media #{$medium} {
+            margin-top: 2rem;
+        }
     }
 
     &:not(:last-of-type) {
@@ -36,6 +40,10 @@
     }
 
     @media #{$small} {
+        margin-right: 0 !important;
+    }
+
+    @media #{$medium} {
         margin-right: 0 !important;
     }
 }

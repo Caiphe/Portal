@@ -49,6 +49,10 @@
         @media #{$small} {
             width: 100%;
         }
+
+        @media #{$medium} {
+            width: 100%;
+        }
     }
 
     .invalid {
@@ -72,6 +76,10 @@
         right: 0;
 
         @media #{$small} {
+            display: none;
+        }
+
+        @media #{$medium} {
             display: none;
         }
     }
