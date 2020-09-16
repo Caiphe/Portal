@@ -30,8 +30,14 @@
             svg {
                 height: 3rem;
                 width: 3rem;
+            }
 
+            #close {
+                display: none;
 
+                &.block {
+                    display: block;
+                }
             }
 
             @media #{$medium-portrait} {

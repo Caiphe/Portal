@@ -5,9 +5,9 @@
             <svg id="open" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
             </svg>
-            <!-- <svg id="close" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg id="close" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg> -->
+            </svg>
           </button>
         <ul class="main-menu hidden" role="navigation" aria-label="Main">
             <li class="has-children">
@@ -98,5 +98,7 @@
 <script>
 document.querySelector('.menu-button').addEventListener('click', function(e) {
     document.querySelector('.mobile-menu').classList.toggle('active');
+    document.getElementById('close').classList.toggle('block');
+    document.getElementById('open').classList.toggle('hidden');
 });
 </script>
