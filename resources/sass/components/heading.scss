@@ -30,6 +30,10 @@
         @media #{$small} {
             display: none;
         }
+
+        @media #{$medium-portrait} {
+            display: none;
+        }
     }
 }
 
