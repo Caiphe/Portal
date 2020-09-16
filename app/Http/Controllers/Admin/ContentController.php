@@ -47,9 +47,8 @@ class ContentController extends Controller
     public function updatePage(Content $content, Request $request)
     {
         $content->update($request->only(['title', 'body']));
-        $content->fresh();
 
-        return redirect()->route('admin.page.edit', $content->slug)->with('alert', 'success:The content has been updated.');
+        return redirect()->route('admin.page.index')->with('alert', 'success:The content has been updated.');
     }
 
     public function createPage()
@@ -59,14 +58,14 @@ class ContentController extends Controller
 
     public function storePage(Request $request)
     {
-        $content = Content::create([
+        Content::create([
             'title' => $request->title,
             'body' => $request->body,
             'type' => 'page',
             'published_at' => date('Y-m-d H:i:s')
         ]);
 
-        return redirect()->route('admin.page.edit', $content->slug)->with('alert', 'success:The content has been updated.');
+        return redirect()->route('admin.page.index')->with('alert', 'success:The content has been updated.');
     }
 
     public function destroyPage(Content $content)
@@ -114,9 +113,8 @@ class ContentController extends Controller
     public function updateDoc(Content $content, Request $request)
     {
         $content->update($request->only(['title', 'body']));
-        $content->fresh();
 
-        return redirect()->route('admin.doc.edit', $content->slug)->with('alert', 'success:The content has been created.');
+        return redirect()->route('admin.doc.index')->with('alert', 'success:The content has been created.');
     }
 
     public function createDoc()
@@ -126,14 +124,14 @@ class ContentController extends Controller
 
     public function storeDoc(Request $request)
     {
-        $content = Content::create([
+        Content::create([
             'title' => $request->title,
             'body' => $request->body,
             'type' => 'general_docs',
             'published_at' => date('Y-m-d H:i:s')
         ]);
 
-        return redirect()->route('admin.doc.edit', $content->slug)->with('alert', 'success:The content has been created.');
+        return redirect()->route('admin.doc.index')->with('alert', 'success:The content has been created.');
     }
 
     public function destroyDoc(Content $content)

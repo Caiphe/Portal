@@ -8,16 +8,20 @@
 <script src="{{ mix('/js/vendor/trix.js') }}"></script>
 @endpush
 
-@section('content')
-<a class="button mb-2" href="{{ route('category.show', $category->slug) }}" target="_blank" rel="noreferrer">View category</a>
+@section('page-info')
+    <a class="button outline dark" href="{{ route('category.show', $category->slug) }}" target="_blank" rel="noreferrer">View</a>
+    <button id="save" class="outline dark ml-1">Save</button>
+@endsection
 
+@section('content')
 <form id="edit-form" action="{{ route('admin.category.update', $category->slug) }}" method="POST">
 
     @method('PUT')
     @include('templates.admin.categories.form', compact('category', 'content'))
 
-    <hr id="hr">
-    <button>Update</button>
-
 </form>
 @endsection
+
+@push('scripts')
+    <script src="{{ mix('/js/templates/admin/edit.js') }}"></script>
+@endpush

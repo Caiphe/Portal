@@ -6,7 +6,10 @@
 
 @section('title', 'Documentation')
 
+@section('page-info')
+    <a href="{{ route('admin.doc.create') }}" class="button dark outline">Create</a>
+@endsection
+
 @section('content')
-    <a href="{{ route('admin.doc.create') }}" class="button mb-2">Create documentation</a>
     <x-admin.table :collection="$docs" model-name="doc" :fields="['title']"></x-admin.table>
 @endsection

@@ -62,6 +62,6 @@ class BundleController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('alert', 'success:The content has been updated.');
+        return redirect()->route('admin.bundle.index')->with('alert', 'success:The content has been updated.');
     }
 }

@@ -113,7 +113,7 @@ class CategoryController extends Controller
             }
         }
 
-        return redirect()->route('admin.category.edit', $category->slug)->with('alert', 'success:The category has been updated.');
+        return redirect()->route('admin.category.index')->with('alert', 'success:The category has been updated.');
     }
 
     public function create()
@@ -166,7 +166,7 @@ class CategoryController extends Controller
             ],
         ]);
 
-        return redirect()->route('admin.category.edit', $category->slug)->with('alert', 'success:The category has been created.');
+        return redirect()->route('admin.category.index')->with('alert', 'success:The category has been created.');
     }
 
     public function destroy(Category $category)
