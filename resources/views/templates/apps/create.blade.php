@@ -161,6 +161,9 @@
             buttons[i].addEventListener('click', function (event) {
                 event.preventDefault();
                 if(form.firstElementChild.classList.contains('active')) {
+                    if(document.getElementById('name').value === '') {
+                        return void alert('Please add a name for your app');
+                    }
 
                     nav.querySelector('a').nextElementSibling.classList.add('active');
 
@@ -169,6 +172,10 @@
                     form.firstElementChild.nextElementSibling.classList.add('active');
 
                 } else if (form.firstElementChild.nextElementSibling.classList.contains('active')) {
+                    if(document.querySelectorAll('.country-checkbox:checked').length === 0) {
+                        return void alert('Please select a country');
+                    }
+
                     nav.querySelector('a').nextElementSibling.nextElementSibling.classList.add('active');
 
                     form.firstElementChild.nextElementSibling.classList.remove('active');
