@@ -4,6 +4,10 @@
     @media #{$small} {
         display: none;
     }
+
+    @media #{$medium} {
+        display: none;
+    }
 }
 
 #main {
@@ -12,6 +16,11 @@
     height: 100%;
 
     @media #{$small} {
+        margin-top: 80px;
+        padding-top: 3rem !important;
+    }
+
+    @media #{$medium} {
         margin-top: 80px;
         padding-top: 3rem !important;
     }
@@ -32,6 +41,10 @@
             @media #{$small} {
                 text-align: initial;
             }
+
+            @media #{$medium} {
+                text-align: initial;
+            }
         }
 
         .flag {
@@ -45,6 +58,11 @@
                 display: flex;
                 width: 100%;
             }
+
+            @media #{$medium} {
+                display: flex;
+                width: 100%;
+            }
         }
 
         .right-side {
@@ -55,9 +73,27 @@
                 height: 100%;
                 width: 100%;
             }
+
+            @media #{$medium} {
+                position: initial;
+                display: flex;
+                padding-top: 2rem;
+                height: 100%;
+                width: 100%;
+            }
         }
 
         @media #{$small} {
+            background-color: transparent;
+            height: auto;
+            padding: 0 !important;
+            position: initial !important;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        @media #{$medium} {
             background-color: transparent;
             height: auto;
             padding: 0 !important;
@@ -76,6 +112,11 @@
             margin-left: 0;
             margin-top: 0;
         }
+
+        @media #{$medium} {
+            margin-left: 0;
+            margin-top: 0;
+        }
     }
 }
 
@@ -90,6 +131,10 @@
         @media #{$small} {
             display: none;
         }
+
+        @media #{$medium} {
+            display: none;
+        }
     }
 
     .product-section {
@@ -99,6 +144,10 @@
             @media #{$small} {
                 display: none;
             }
+
+            @media #{$medium} {
+                display: none;
+            }
         }
 
         a {
@@ -106,10 +155,18 @@
                 @media #{$small} {
                     display: none;
                 }
+
+                @media #{$medium} {
+                    display: none;
+                }
             }
 
             &:nth-of-type(2) {
                 @media #{$small} {
+                    display: none;
+                }
+
+                @media #{$medium} {
                     display: none;
                 }
             }
@@ -155,6 +212,10 @@
         height: 66px;
         overflow: hidden;
         display: flex;
+
+        @media #{$small} {
+            flex-direction: column;
+        }
 
         &.open {
             height: auto;
