@@ -9,10 +9,11 @@ use App\App;
 use App\Country;
 use App\Mail\ProductAction;
 use Illuminate\Support\Facades\Mail;
+use Symfony\Component\HttpFoundation\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = auth()->user();
         $user->load('responsibleCountries');
@@ -43,6 +44,15 @@ class DashboardController extends Controller
             ->union($appsByProductLocation)
             ->orderBy('updated_at', 'desc')
             ->paginate();
+
+        if ($request->ajax()) {
+            return response()
+                ->view('templates.admin.dashboard.data', [
+                    'apps' => $apps,
+                    'countries' => Country::all(),
+                ], 200)
+                ->header('Content-Type', 'text/html');
+        }
 
         return view('templates.admin.dashboard.index', [
             'apps' => $apps,
