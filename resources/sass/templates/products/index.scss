@@ -45,7 +45,7 @@ h3 {
 
     @media #{$medium} {
         margin-top: 80px;
-        margin-bottom: 0;
+        margin-bottom: 80px;
     }
 
     .header-block {
@@ -174,11 +174,6 @@ h3 {
 
                     @media #{$small} {
                         flex: 1 auto;
-                        margin-right: 0;
-                    }
-
-                    @media #{$medium-portrait} {
-                        flex: 1 1 1;
                         margin-right: 0;
                     }
                 }
