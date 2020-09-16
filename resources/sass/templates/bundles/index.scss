@@ -9,16 +9,42 @@ h3 {
     color: $grey300;
 }
 
+#sidebar {
+    @media #{$small} {
+        display: none;
+    }
+
+    @media #{$medium-portrait} {
+        display: none;
+    }
+}
+
 #banner {
     height: 300px;
     width: 100%;
     background: url('/images/banners/bundle.png') no-repeat center center / cover;
     flex: 1 0 auto;
+
+    @media #{$small} {
+        display: none;
+    }
+
+    @media #{$medium-portrait} {
+        display: none;
+    }
 }
 
 #main {
     padding: 0 !important;
     margin-bottom: 40px;
+
+    @media #{$small} {
+        margin-top: 80px;
+    }
+
+    @media #{$medium-portrait} {
+        margin-top: 80px;
+    }
 
     .header-block {
         background-color: #000;
@@ -29,22 +55,78 @@ h3 {
         margin: -50px 0 0 40px;
         width: calc(100% - 80px);
 
+        @media #{$small} {
+            height: auto;
+            margin: 0;
+            margin-top: 0px;
+            margin-bottom: 0px;
+            width: 100%;
+            background-color: #ffffff;
+            color: #000000;
+            box-shadow: none;
+            border: transparent;
+            padding: 0;
+            margin-top: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        @media #{$medium-portrait} {
+            height: auto;
+            margin: 0;
+            margin-top: 0px;
+            margin-bottom: 0px;
+            width: 100%;
+            background-color: #ffffff;
+            color: #000000;
+            box-shadow: none;
+            border: transparent;
+            padding: 0;
+            margin-top: 4rem;
+            margin-bottom: 4rem;
+        }
+
         h1 {
             color: #FFF;
             font-size: 40px;
             margin: 0;
+
+            @media #{$small} {
+                color: $black;
+            }
+
+            @media #{$medium} {
+                color: $black;
+            }
         }
 
         p {
             font-size: 18px;
             color: #FFF;
             padding-right: 250px;
+
+            @media #{$small} {
+                color: $black;
+                padding-right: 0;
+            }
+
+            @media #{$medium} {
+                color: $black;
+                padding-right: 0;
+            }
         }
 
         svg {
             position: absolute;
             right: 30px;
             bottom: 20px;
+
+            @media #{$small} {
+                display: none;
+            }
+
+            @media #{$medium-portrait} {
+                display: none;
+            }
         }
     }
 
