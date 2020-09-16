@@ -56,7 +56,7 @@ body > #main {
                 }
 
                 .button {
-                    width: 110px;
+                    width: 100%;
                 }
 
                 @media #{$small} {
@@ -97,8 +97,6 @@ body > #main {
 
     .key-feature {
         margin: 0 10px;
-        // width: calc(100% / 4);
-        // max-width: 150px;
 
         .content {
             padding: 0;
@@ -189,6 +187,10 @@ section {
 
     a {
         margin-top: 15px;
+
+        @media #{$small} {
+            width: 100%;
+        }
     }
 }
 
