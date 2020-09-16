@@ -8,17 +8,21 @@
 <script src="{{ mix('/js/vendor/trix.js') }}"></script>
 @endpush
 
+@section('page-info')
+    <a class="button outline dark" href="{{ route('faq.show', $faq->slug) }}" target="_blank" rel="noreferrer">View</a>
+    <button id="save" class="outline dark ml-1">Save</button>
+@endsection
+
 @section('content')
-<a class="button mb-2" href="{{ route('faq.show', $faq->slug) }}" target="_blank" rel="noreferrer">View faq</a>
 
 <form id="edit-form" action="{{ route('admin.faq.update', $faq->slug) }}" method="POST">
 
     @method('PUT')
     
     @include('templates.admin.faqs.form', compact('faq'))
-
-    <hr id="hr">
-    <button>Update</button>
-
 </form>
 @endsection
+
+@push('scripts')
+    <script src="{{ mix('/js/templates/admin/edit.js') }}"></script>
+@endpush

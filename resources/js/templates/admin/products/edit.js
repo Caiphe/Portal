@@ -2,9 +2,6 @@
     var uploader = document.getElementById('uploader');
 
     document.getElementById('new-tab').addEventListener('click', newTab);
-    document.getElementById('save').addEventListener('click', function(){
-        document.getElementById('edit-form').submit();
-    });
 
     ["dragenter", "dragover", "dragleave", "drop"].forEach(preventDefaultsListeners);
     ["dragenter", "dragover"].forEach(highlightListeners);

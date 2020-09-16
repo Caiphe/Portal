@@ -8,6 +8,10 @@
 <script src="{{ mix('/js/vendor/trix.js') }}"></script>
 @endpush
 
+@section('page-info')
+    <button class="outline dark">Save</button>
+@endsection
+
 @section('content')
 <form id="edit-form" action="{{ route('admin.faq.store') }}" method="POST">
 
@@ -18,3 +22,11 @@
 
 </form>
 @endsection
+
+@push('scripts')
+    <script>
+        document.getElementById('save').addEventListener('click', function(){
+            document.getElementById('edit-form').submit();
+        });
+    </script>
+@endpush

@@ -70,6 +70,6 @@ class ProductController extends Controller
         $product->content()->delete();
         $product->content()->createMany($contents);
 
-        return redirect()->back()->with('alert', 'success:The content has been updated.');
+        return redirect()->route('admin.product.index')->with('alert', 'success:The content has been updated.');
     }
 }
