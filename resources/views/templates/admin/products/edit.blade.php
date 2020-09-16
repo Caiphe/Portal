@@ -3,7 +3,7 @@
 @section('title', $product->display_name)
 
 @push('styles')
-<link rel="stylesheet" href="{{ mix('/css/templates/admin/products/edit.css') }}">
+<link rel="stylesheet" href="{{ mix('/css/templates/admin/edit.css') }}">
 <link rel="stylesheet" href="{{ mix('/css/vendor/trix.css') }}">
 <script src="{{ mix('/js/vendor/trix.js') }}"></script>
 @endpush
@@ -70,7 +70,7 @@
         </div>
     </div>
 
-    <button id="new-tab" type="button">@svg('plus-circle-filled')<br>NEW CUSTOME TAB</button>
+    <button id="new-tab" type="button">@svg('plus-circle-filled')<br>NEW CUSTOM TAB</button>
 
 </form>
 @endsection

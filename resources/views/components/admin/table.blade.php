@@ -6,10 +6,10 @@
 
 <div class="cols centre-align mb-2">
     <form action="{{ route("admin.{$modelName}.index") }}" method="GET" class="ajaxify" data-replace="#table-data">
-        <input type="text" name="q" placeholder="Search" autofocus autocomplete="off">
+        <input id="search-page" type="text" name="q" placeholder="Search" autofocus autocomplete="off">
     </form>
-    <form action="{{ route("admin.{$modelName}.index") }}" method="GET" class="ajaxify" data-replace="#table-data">
-        <button class="button outline dark small ml-1">reset</button>
+    <form id="reset-search" action="{{ route("admin.{$modelName}.index") }}" method="GET" class="ajaxify" data-replace="#table-data" data-func="clearSearch()">
+        <button class="button dark kinda fab">@svg('close', '#FFFFFF')</button>
     </form>
 </div>
 
@@ -23,6 +23,12 @@
         var row = document.querySelector('.' + id);
 
         row.parentNode.removeChild(row);
+    }
+
+    function clearSearch() {
+        var searchPage = document.getElementById('search-page');
+        searchPage.value = "";
+        searchPage.focus();
     }
 </script>
 @endpush

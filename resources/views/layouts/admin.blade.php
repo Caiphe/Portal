@@ -18,7 +18,7 @@
                 <li class="has-children  @if(!Request::is('admin/dashboard')) active @endif">
                     Manage
                     <ul>
-                        <li @if(Request::is('admin/faq') || Request::is('admin/faq/*')) class="active" @endif><a href="{{ route('admin.faq.index') }}">FAQ</a></li>
+                        <li @if(Request::is('admin/faqs') || Request::is('admin/faqs/*')) class="active" @endif><a href="{{ route('admin.faq.index') }}">FAQ</a></li>
                         <li @if(Request::is('admin/pages') || Request::is('admin/pages/*')) class="active" @endif><a href="{{ route('admin.page.index') }}">Pages</a></li>
                         <li @if(Request::is('admin/bundles') || Request::is('admin/bundles/*')) class="active" @endif><a href="{{ route('admin.bundle.index') }}">Bundles</a></li>
                         <li @if(Request::is('admin/products') || Request::is('admin/products/*')) class="active" @endif><a href="{{ route('admin.product.index') }}">Products</a></li>

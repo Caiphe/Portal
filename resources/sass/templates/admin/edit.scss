@@ -1,4 +1,4 @@
-@import '../../../variables';
+@import '../../variables';
 
 #edit-form {
 
@@ -65,7 +65,7 @@ main #uploader {
     font-size: 15px;
     color: $blue;
     cursor: pointer;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 
     &:hover {
         background-color: $blue600;

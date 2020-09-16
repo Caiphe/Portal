@@ -37,10 +37,10 @@ table {
     thead {
         background-color: $grey600;
         color: $grey800;
-    }
 
-    th {
-        text-transform: capitalize;
+        input {
+            display: block;
+        }
     }
 
     tr {
@@ -52,8 +52,15 @@ table {
     td,
     th {
         padding: 1rem;
-        vertical-align: top;
         border: none;
+    }
+
+    th {
+        text-transform: capitalize;
+    }
+
+    td {
+        vertical-align: top;
     }
 }
 
@@ -73,8 +80,6 @@ table {
     .page-link {
         width: 30px;
         height: 30px;
-        background-color: #FFF;
-        border: 2px solid $yellow;
         padding: 0;
         display: flex;
         align-items: center;
@@ -82,11 +87,16 @@ table {
         margin: 0 2px;
         color: $grey900;
         box-sizing: border-box;
+        background-color: #FFF;
+        border: 1px solid $grey900;
+        border-radius: 6px;
+        font-family: 'mtn-bold';
     }
 
     .active .page-link,
     .page-link:active,
     .page-link:focus {
         background-color: $yellow;
+        border: 1px solid $yellow;
     }
 }

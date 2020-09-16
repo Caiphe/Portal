@@ -34,7 +34,7 @@ class ProductController extends Controller
                 ->header('Content-Type', 'text/html');
         }
 
-        return view('templates.admin.home', [
+        return view('templates.admin.products.index', [
             'products' => $products->orderBy('display_name')->paginate()
         ]);
     }

@@ -3,7 +3,7 @@
 @section('title', $bundle->display_name)
 
 @push('styles')
-<link rel="stylesheet" href="{{ mix('/css/templates/admin/products/edit.css') }}">
+<link rel="stylesheet" href="{{ mix('/css/templates/admin/edit.css') }}">
 <link rel="stylesheet" href="{{ mix('/css/vendor/trix.css') }}">
 <script src="{{ mix('/js/vendor/trix.js') }}"></script>
 @endpush
