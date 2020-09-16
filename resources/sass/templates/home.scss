@@ -56,7 +56,15 @@ body > #main {
                 }
 
                 .button {
-                    width: 100%;
+                    width: 110px;
+
+                    @media #{$small} {
+                        width: 100%;
+                    }
+
+                    @media #{$medium} {
+                        width: 100%;
+                    }
                 }
 
                 @media #{$small} {

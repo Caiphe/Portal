@@ -89,7 +89,7 @@ $icons: (
 // breakpoints
 $small: '(max-width: 767px)';
 $phone-landscape: '(min-width: 320px) and (max-width: 767px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: landscape)';
-$medium: '(min-width: 768px)';
+$medium: '(min-width: 768px) and (max-width: 1023px)';
 $medium-portrait: '(min-width: 768px) and (orientation: portrait)';
 $large: '(min-width: 1024px)';
 $large-portrait: '(min-width: 1024px) and (orientation: portrait)';
