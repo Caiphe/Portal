@@ -72,6 +72,26 @@
         <li>
             <a href="/contact">Contact us</a>
         </li>
+        @if(\Auth::check())
+        <li>
+            <a href="/apps/create">Build app</a>
+        </li>
+        <li>
+            <a href="/profile">Profile</a></li>
+        <li>
+            <a href="/apps">Apps</a>
+        </li>
+        <li>
+            <form action="{{route('logout')}}" method="post">@csrf<button>Sign out</button></form>
+        </li>
+        @else
+        <li>
+            <a href="{{route('login')}}" role="button">Login</a>
+        </li>
+        <li>
+            <a href="{{route('register')}}" role="button">Register</a>
+        </li>
+        @endif
     </ul>
 </header>
 
