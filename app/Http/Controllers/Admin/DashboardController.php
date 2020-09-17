@@ -20,15 +20,25 @@ class DashboardController extends Controller
         $isAdmin = $user->hasRole('admin');
         $responsibleCountriesIds = $user->responsibleCountries->pluck('id')->toArray();
         $responsibleCountriesCodes = $user->responsibleCountries->pluck('code')->implode('|');
+        $hasSearchTerm = $request->has('q');
+        $searchTerm = "%" . $request->get('q', '') . "%";
+        $hasCountries = $request->has('countries');
+        $searchCountries = $request->get('countries');
 
         $appsByProductLocation = App::with(['developer', 'country', 'products'])
             ->whereNull('country_id')
-            ->whereHas('products', function ($query) use ($isAdmin, $responsibleCountriesCodes) {
+            ->whereHas('products', function ($query) use ($isAdmin, $responsibleCountriesCodes, $hasCountries, $searchCountries) {
                 $query
                     ->where('status', 'pending')
                     ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes) {
                         $query->whereRaw("`locations` REGEXP \"(" . $responsibleCountriesCodes . ")\"");
+                    })
+                    ->when($hasCountries, function ($q) use ($searchCountries) {
+                        $q->whereRaw("`locations` REGEXP \"(" . implode(',', $searchCountries) . ")\"");
                     });
+            })
+            ->when($hasSearchTerm, function ($q) use ($searchTerm) {
+                $q->where('display_name', 'like', $searchTerm);
             })
             ->byStatus('approved');
 
@@ -39,6 +49,14 @@ class DashboardController extends Controller
             })
             ->whereHas('products', function ($query) {
                 $query->where('status', 'pending');
+            })
+            ->when($hasSearchTerm, function ($q) use ($searchTerm) {
+                $q->where('display_name', 'like', $searchTerm);
+            })
+            ->when($hasCountries, function ($q) use ($searchCountries) {
+                $q->whereHas('country', function ($q) use ($searchCountries) {
+                    $q->whereIn('code', $searchCountries);
+                });
             })
             ->byStatus('approved')
             ->union($appsByProductLocation)
@@ -81,7 +99,8 @@ class DashboardController extends Controller
         if (preg_match('/^2/', $responseStatus)) {
             $app->products()->updateExistingPivot($validated['product'], ['status' => $status, 'actioned_by' => $currentUser->id]);
         } else if ($request->ajax()) {
-            return response()->json(['success' => false, 'body' => json_decode($response->body())], $responseStatus);
+            $body = json_decode($response->body());
+            return response()->json(['success' => false, 'body' => $body->message], $responseStatus);
         }
 
         Mail::to(env('MAIL_TO_ADDRESS'))->send(new ProductAction($app, $validated, $currentUser));

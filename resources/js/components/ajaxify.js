@@ -48,6 +48,8 @@
                         addAlert('success', result.body || "Success");
                     }
 
+                    if(typeof ajaxifyComplete !== 'undefined') ajaxifyComplete();
+
                 } else {
                     addAlert('error', result.body || "Sorry there was an unexpected error.");
                 }

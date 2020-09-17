@@ -10,13 +10,17 @@
     
     <div class="container" id="app-index">
         <div class="cols centre-align">
-            <h3>Search</h3>
-            <input type="text" name="search" id="filter-text" class="filter-text ml-1" placeholder="App or developer name">
+            <form id="filter-form" class="cols centre-align ajaxify" action="{{ route('admin.dashboard.index') }}" method="GET" data-replace="#table-data">
+                <h3>Search</h3>
+                <input type="text" name="q" id="filter-text" class="filter-text ml-1" placeholder="App or developer name">
 
-            <h3 class="ml-2">Country</h3>
-            <x-multiselect id="filter-country" name="filter-country" class="ml-1" label="Select country" :options="$countries->pluck('name', 'code')" />
-
-            <button id="clearFilter" class="dark outline ml-2" onclick="clearFilter()">Clear filters</button>
+                <h3 class="ml-2">Country</h3>
+                <x-multiselect id="filter-country" name="countries" class="ml-1" label="Select country" :options="$countries->pluck('name', 'code')" />
+            </form>
+            
+            <form class="ajaxify" data-replace="#table-data" data-func="clearFilter()" action="{{ route('admin.dashboard.index') }}" method="GET">
+                <button id="clearFilter" class="dark outline ml-2">Clear filters</button>
+            </form>
         </div>
 
         <div id="table-data" class="row">
@@ -28,21 +32,36 @@
 
 @push('scripts')
     <script>
+        var timeout = null;
+
         document.getElementById('filter-text').addEventListener('keyup', filterApps);
-        document.getElementById("filter-country").addEventListener('change', filterApps);
-        document.getElementById("filter-country-tags").addEventListener('click', filterApps);
+        document.getElementById("filter-country").addEventListener('change', submitFilter);
 
-        function handleHeadingClick(event) {
-            var heading = event.currentTarget;
+        window.onload = init;
+        ajaxifyComplete = init;
+        
+        function init() {
+            var buttons = document.querySelectorAll('p.name');
+            var actions = document.querySelectorAll('.actions');
+            var modals = document.querySelectorAll('.modal');
+            var productStatusButtons = document.querySelectorAll('button[class*="product-"]');
 
-            heading.nextElementSibling.classList.toggle('collapse');
-            heading.querySelector('svg').classList.toggle('active');
-        }
+            for (var j = 0; j < buttons.length; j ++) {
+                buttons[j].addEventListener('click', handleButtonClick);
+            }
 
-        var buttons = document.querySelectorAll('.name');
 
-        for (var j = 0; j < buttons.length; j ++) {
-            buttons[j].addEventListener('click', handleButtonClick);
+            for (var k = 0; k < actions.length; k ++) {
+                actions[k].addEventListener('click', handleMenuClick);
+            }
+
+            for (var l = 0; l < modals.length; l ++) {
+                modals[l].addEventListener('click', hideMenu)
+            }
+
+            for(var m = 0; m < productStatusButtons.length; m++) {
+                productStatusButtons[m].addEventListener('click', getProductStatus)
+            }
         }
 
         function handleButtonClick(event) {
@@ -55,22 +74,11 @@
             }
         }
 
-        var actions = document.querySelectorAll('.actions');
-
-        for (var k = 0; k < actions.length; k ++) {
-            actions[k].addEventListener('click', handleMenuClick);
-        }
-
         function handleMenuClick() {
             var parent = this.parentNode.parentNode;
 
             parent.querySelector('.menu').classList.toggle('show');
             parent.querySelector('.modal').classList.toggle('show');
-        }
-
-        var modals = document.querySelectorAll('.modal');
-        for (var l = 0; l < modals.length; l ++) {
-            modals[l].addEventListener('click', hideMenu)
         }
 
         function hideMenu() {
@@ -79,52 +87,16 @@
         }
 
         function filterApps() {
-            var apps = document.querySelectorAll('.app');
-            var filterText = document.getElementById('filter-text').value;
-            var match = new RegExp(filterText, "gi");
-            var locations = [];
-            var countrySelect = getSelected(
-                document.getElementById("filter-country")
-            );
-
-            for (var i = apps.length - 1; i >= 0; i--) {
-                apps[i].style.display = 'none';
-
-                textValid =
-                    filterText === "" || apps[i].dataset.name.match(match) || apps[i].dataset.developer.match(match);
-
-                locations =
-                    apps[i].dataset.locations !== undefined
-                        ? apps[i].dataset.locations.split(",")
-                        : ["all"];
-
-                countriesValid =
-                    countrySelect.length === 0 ||
-                    locations[0] === "all" ||
-                    arrayCompare(locations, countrySelect);
-
-                if (textValid && countriesValid) {
-                    apps[i].style.display = 'flex';
-                }
+            if(timeout !== null){
+                clearTimeout(timeout);
+                timeout = null;
             }
 
-            toggleFilter();
+            timeout = setTimeout(submitFilter, 1000);
         }
 
-        function toggleFilter() {
-            var countrySelect = getSelected(document.getElementById("filter-country"));
-
-            var filterText = document.getElementById("filter-text").value;
-            if (
-                countrySelect.length !== 0 ||
-                filterText.length !== 0
-            )
-                document.getElementById("clearFilter").style.display = "block";
-            else if (
-                countrySelect.length === 0 ||
-                filterText.length === 0
-            )
-                document.getElementById("clearFilter").style.display = "none";
+        function submitFilter() {
+            document.getElementById('filter-form').requestSubmit();
         }
 
         function clearFilter() {
@@ -136,15 +108,6 @@
             }
 
             document.getElementById("filter-text").value = "";
-
-            filterApps();
-
-            document.getElementById("clearFilter").style.display = "none";
-        }
-
-        var productStatusButtons = document.querySelectorAll('button[class*="product-"]');
-        for(var m = 0; m < productStatusButtons.length; m++) {
-            productStatusButtons[m].addEventListener('click', getProductStatus)
         }
 
         function getProductStatus(event) {
@@ -209,36 +172,9 @@
                     statusBar.className = 'status-bar status-' + lookup[data.action];
                 } else {
                     statusBar.classList.remove('loading');
-                    addAlert('error', result.message || 'There was an error updating the product.');
+                    addAlert('error', result.body || 'There was an error updating the product.');
                 }
             };
-        }
-
-        function arrayCompare(a, b) {
-            var matches = [];
-            for (var i = 0; i < a.length; i++) {
-                for (var e = 0; e < b.length; e++) {
-                    if (a[i] === b[e]) matches.push(a[i]);
-                }
-            }
-            return matches.length > 0;
-        }
-
-        function getSelected(multiSelect) {
-            var selected = [];
-            for (var option of multiSelect.options) {
-                if (option.selected) {
-                    selected.push(option.value);
-                }
-            }
-            return selected;
-        }
-
-        function clearSelected(multiselect) {
-            var elements = multiselect.options;
-            for (var i = 0; i < elements.length; i++) {
-                elements[i].selected = false;
-            }
         }
     </script>
 @endpush
