@@ -88,6 +88,13 @@ Route::namespace('Admin')->prefix('admin')->middleware('can:view-admin')->group(
 
 	// Global search
 	Route::get('search', 'SearchController')->name('admin.search');
+
+	// User management
+	Route::get('users', 'UserController@index')->name('admin.user.index');
+	Route::get('users/{user}/edit', 'UserController@edit')->name('admin.user.edit');
+	Route::put('users/{user}/update', 'UserController@update')->name('admin.user.update');
+	Route::get('users/create', 'UserController@create')->name('admin.user.create');
+	Route::post('users/store', 'UserController@store')->name('admin.user.store');
 });
 
 Route::post('profile/2fa/verify', 'UserController@verify2fa')->middleware('2fa')->name('user.2fa.verify');

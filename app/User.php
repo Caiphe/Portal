@@ -111,4 +111,19 @@ class User extends Authenticatable implements MustVerifyEmail
 	{
 		return "{$this->first_name} {$this->last_name}";
 	}
+
+	/**
+	 * Get the user slug which is the id.
+	 *
+	 * @return string
+	 */
+	public function getSlugAttribute()
+	{
+		return $this->id;
+	}
+
+	public function getRolesListAttribute()
+	{
+		return $this->roles->pluck('label')->implode(',');
+	}
 }

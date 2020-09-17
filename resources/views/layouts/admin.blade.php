@@ -15,7 +15,7 @@
     <div class="wrapper">
         <nav id="sidebar">
             <ul>
-                <li class="has-children  @if(!Request::is('admin/dashboard')) active @endif">
+                <li class="has-children  @if(!Request::is('admin/dashboard') && !Request::is('admin/users') && !Request::is('admin/users/*')) active @endif">
                     Manage
                     <ul>
                         <li @if(Request::is('admin/faqs') || Request::is('admin/faqs/*')) class="active" @endif><a href="{{ route('admin.faq.index') }}">FAQ</a></li>
@@ -27,7 +27,7 @@
                     </ul>
                 </li>
                 <li @if(Request::is('admin/dashboard')) class="active" @endif><a href="{{ route('admin.dashboard.index') }}">Applications</a></li>
-                <li><a href="#">Users</a></li>
+                <li @if(Request::is('admin/users') || Request::is('admin/users/*')) class="active" @endif><a href="{{ route('admin.user.index') }}">Users</a></li>
             </ul>
 
             <button id="sync" class="button yellow outline" onclick="sync(this)">Sync @svg('sync', '#FC0')</button>
