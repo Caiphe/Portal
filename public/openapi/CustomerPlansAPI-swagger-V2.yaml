@@ -50,10 +50,11 @@ paths:
             $ref: "#/definitions/CustomerPlans"
 
         207:
-          description: "If there was an error retrieving some part of the request,
+          description: >
+                    "If there was an error retrieving some part of the request,
                     then the successful request will be shown, and the remaining failed objects will be be excluded.
                     E.g. if there was an error retrieving Balance information, then the balance object will be empty"
-          examples:
+          examples: >
             Partially Successfuls Response, showing valid plan data, but balance object is null:
 
               "data": {
@@ -79,7 +80,7 @@ paths:
             $ref: "#/definitions/Error"
         404:
           description: "Customer not found"
-          examples:
+          examples: >
             The data object/envelope will be null:
               {
                 "data": null
