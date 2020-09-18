@@ -28,6 +28,8 @@
 
     <x-heading heading="Apps" tags="CREATE NEW"></x-heading>
 
+    <x-twofa-warning class="tall"></x-twofa-warning>
+
     <div class="content">
 
         <nav>

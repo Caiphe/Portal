@@ -30,6 +30,8 @@ Update profile
 @section("content")
     <x-heading heading="Profile"/>
 
+    <x-twofa-warning class="tall"></x-twofa-warning>
+
     <div class="content" id="profile">
         @if ($errors->any())
             <div class="alert alert-danger">

@@ -30,6 +30,8 @@
         <a href="{{route('app.create')}}" class="button outline dark" id="create">Create new</a>
     </x-heading>
 
+    <x-twofa-warning></x-twofa-warning>
+
     @if(empty($approvedApps) && empty($revokedApps))
         <div class="container" id="app-empty">
             <div class="row">
