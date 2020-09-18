@@ -1,0 +1,383 @@
+---
+swagger: "2.0"
+info:
+  description: The Data Share API facilitates data share between Data Share Agent(Data Sender) and Customer(Data Receiver).
+  version: "1.0"
+  title: Customer Data Share API
+host: api.mtn.com
+basePath: "/v1/datashare"
+schemes:
+- https
+consumes:
+- application/json
+produces:
+- application/json
+securityDefinitions:
+  ApiKeyAuth:
+    type: "apiKey"
+    name: "X-API-Key"
+    in: "header"
+security:
+  - ApiKeyAuth: []
+
+paths:
+
+  /customers/{senderMsisdn}/dataShare:
+    post:
+      tags:
+      - Customer
+      summary: Share Data
+      description: Provides the ability to share data with customer.
+      parameters:
+      - name: "senderMsisdn"
+        in: path
+        description: Source Msisdn. The format must be E.123
+        required: true
+        type: string
+      - name: productcode
+        type: string
+        in: query
+        required: true
+        description: The product code e.g NACT_NG_others_1
+      - in: body
+        name: body
+        description: Request body
+        required: true
+        schema:
+          $ref: '#/definitions/ReceiverInformation'
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/DataShareResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        "405":
+          description: Method No Allowed
+          schema:
+            $ref: '#/definitions/Error'
+        "406":
+          description: Not acceptable
+          schema:
+            $ref: '#/definitions/Error'
+        "415":
+          description: Unsupported media Type
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+            
+            
+    get:
+      deprecated: true
+      tags:
+      - Customer
+      summary: Retrieve Receivers' MSISDN
+      description: Provides the ability to retrieve all registered receiver's msisdn.
+      parameters:
+      - name: "senderMsisdn"
+        in: path
+        description: Source Msisdn. The format must be E.123
+        required: true
+        type: string
+      
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/DataShareListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        "405":
+          description: Method No Allowed
+          schema:
+            $ref: '#/definitions/Error'
+        "406":
+          description: Not acceptable
+          schema:
+            $ref: '#/definitions/Error'
+        "415":
+          description: Unsupported media Type
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+            
+                
+    patch:
+      deprecated: true
+      tags:
+      - Customer
+      summary: Update Receiver's information
+      description: Provides the ability to update the receiver's msisdn and sharable data amount.
+      parameters:
+      - name: "senderMsisdn"
+        in: path
+        description: Source Msisdn. The format must be E.123
+        required: true
+        type: string
+      - in: body
+        name: body
+        description: Request body
+        required: true
+        schema:
+          $ref: '#/definitions/ReceiverInformation'
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/SuccessResponse' 
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        "405":
+          description: Method No Allowed
+          schema:
+            $ref: '#/definitions/Error'
+        "406":
+          description: Not acceptable
+          schema:
+            $ref: '#/definitions/Error'
+        "415":
+          description: Unsupported media Type
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+            
+    delete:
+      deprecated: true
+      tags:
+      - Customer
+      summary: Remove Receiver's Msisdn
+      description: Provides the ability for removing receiver's msisdn.
+      parameters:
+      - name: "senderMsisdn"
+        in: path
+        description: Source Msisdn. The format must be E.123
+        required: true
+        type: string
+      - name: receiverMsisdn
+        in: query
+        type: string
+        description: The beneficiary msisdn. The format must be E.123
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/SuccessResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        "405":
+          description: Method No Allowed
+          schema:
+            $ref: '#/definitions/Error'
+        "406":
+          description: Not acceptable
+          schema:
+            $ref: '#/definitions/Error'
+        "415":
+          description: Unsupported media Type
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+          
+
+            
+definitions:
+  
+  SuccessResponse:
+    type: object
+    properties:
+      statusCode:
+        type: string
+        description: HTTP Error code extension
+        example: "0000"
+      statusMessage:
+        type: string
+        example: "Action Successful"
+      _link:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+                example: "https://api.mtn.com/v1/customers/2348064816493/dataShare"
+
+
+  ReceiverInformation:
+    type: object
+    required:
+      - receiverMsisdn
+      - requestedDataAmount
+    properties:
+      receiverMsisdn:
+        type: string
+        example: "2345957585859"
+        description: The beneficiary msisdn. The format must be E.123
+      requestedDataAmount:
+        type: string
+        example: "100"
+        description: Total amount of data to be shared with the customer in MBs
+      
+     
+  DataShareResponseData:
+    type: object
+    description: "The impacted system success response"
+    required: 
+      - productName
+    properties:
+      productName:
+        type: string
+        example: "Share 100MB"
+      notification:
+        type: string
+        example: "You have successfully transferred 100MB Data to 2349062058463."
+      
+
+  DataShareResponse:
+    type: object
+    properties:
+      statusCode:
+        type: string
+        description: HTTP Error code extension
+        example: "0000"
+      statusMessage:
+        type: string
+        example: "Success"
+      transactionId:
+        type: string
+        description: "Client generated Id to include for tracing requests."
+      data:
+        $ref: '#/definitions/DataShareResponseData'
+      _link:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+                example: "https://api.mtn.com/v1/customers/2348064816493/dataShare"
+
+
+  DataShareListResponse:
+    type: object
+    properties:
+      statusCode:
+        type: string
+        description: HTTP Error code extension
+      statusMessage:
+        type: string
+        example: "Data Successfully Retrieved"
+      transactionId:
+        type: string
+        description: "Client generated Id to include for tracing requests."
+      data:
+        type: array
+        description: List of all receiver's msisdn and intended sharable amount 
+        items:
+          $ref: '#/definitions/ReceiverInformation'
+      _link:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+                example: "https://api.mtn.com/v1/customers/2348064816493/dataShare"
+
+                  
+  Error:
+    properties:
+      transactionId:
+        type: string
+        description: "Client generated Id to include for tracing requests."
+      timestamp:
+        type: string
+        format: date-time
+        description: "Timestamps of Error"
+        example: "2020-04-02T07:29:25.593+0000"
+      statusCode:
+        type: string
+        description: "Error Code"
+        example: "1000"
+      Error:
+        type: "string"
+        description: "Short Description"
+        example: "NOT_FOUND"
+      message:
+        type: string
+        description: "More Error details and corrective measures"
+        example: ""
+      path:
+        type: string
+        description: "The path to the request"
+        example: "https://api.mtn.com/v1/"
