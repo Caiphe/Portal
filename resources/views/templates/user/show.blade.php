@@ -16,6 +16,7 @@ Update profile
             [
                 [ 'label' => 'Profile', 'link' => '/profile'],
                 [ 'label' => 'My apps', 'link' => '/apps'],
+                [ 'label' => '2FA', 'link' => '#twofa'],
             ],
             'DISCOVER' =>
             [
@@ -72,8 +73,9 @@ Update profile
         </form>
 
         @if(empty($user['2fa']))
-        <form class="enable-2fa" action="{{ route('user.2fa.verify') }}" method="POST">
-            <h2>Add to authenticator app</h2>
+        <form id="twofa" class="enable-2fa" action="{{ route('user.2fa.verify') }}" method="POST">
+            <h2>Enable 2FA</h2>
+            <h3>Add to authenticator app</h3>
 
             <h4>Key: {{ $key }}</h4>
 
@@ -83,9 +85,8 @@ Update profile
             <input id="authenticator-code" type="text" name="one_time_password" placeholder="Authenticator code" required autocomplete="off">
             <button>Authenticate</button>
         </form>
-        <button class="button outline dark twofa-button enable-2fa-button" data-key="{{ $key }}">Enable 2FA</button>
         @else
-        <form action="{{ route('user.2fa.disable') }}" method="POST">
+        <form id="twofa" action="{{ route('user.2fa.disable') }}" method="POST">
             @csrf
             <button class="button outline dark twofa-button">Disable 2FA</button>
         </form>

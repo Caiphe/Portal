@@ -36,7 +36,7 @@ Route::middleware(['verified', '2fa'])->group(function () {
 	Route::post('profile/2fa/disable', 'UserController@disable2fa')->name('user.2fa.disable');
 });
 
-Route::namespace('Admin')->prefix('admin')->middleware('can:view-admin')->group(function () {
+Route::namespace('Admin')->prefix('admin')->middleware(['can:view-admin', '2fa'])->group(function () {
 	Route::redirect('home', '/admin/products')->name('admin.home');
 
 	// Products

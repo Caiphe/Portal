@@ -86,10 +86,10 @@ class User extends Authenticatable implements MustVerifyEmail
 			->toArray();
 
 		if (is_array($permission)) {
-			return count(array_intersect($permission, $userPermissions)) > 0;
+			return !is_null($this['2fa']) && count(array_intersect($permission, $userPermissions)) > 0;
 		}
 
-		return in_array($permission, $userPermissions);
+		return !is_null($this['2fa']) && in_array($permission, $userPermissions);
 	}
 
 	public function countries()
