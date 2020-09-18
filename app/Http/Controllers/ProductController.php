@@ -42,13 +42,8 @@ class ProductController extends Controller
 	 */
 	public function show(Request $request, Product $product)
 	{
-		$product->load(['content', 'keyFeatures']);
+		$product->load(['content', 'keyFeatures', 'category']);
 
-		if ($product->swagger === null || !\Storage::disk('app')->exists("openapi/{$product->swagger}")) {
-			return redirect()->route('product.index');
-		}
-
-		$openApiClass = new OpenApiService($product->swagger);
 		$productList = Product::with('category')->basedOnUser($request->user())->get()->sortBy('category.title')->groupBy('category.title');
 		$content = [
 			'all' => [],
@@ -56,6 +51,7 @@ class ProductController extends Controller
 			'rhs' => [],
 		];
 		$sidebarAccordion = [];
+		$alternatives = [];
 		$startingPoint = "product-specification";
 
 		foreach ($product->content as $c) {
@@ -77,10 +73,38 @@ class ProductController extends Controller
 
 			foreach ($products as $sidebarProduct) {
 				$sidebarAccordion[$category][] = ["label" => $sidebarProduct['display_name'], "link" => '/products/' . $sidebarProduct['slug']];
+				$alternatives[$category][] = $sidebarProduct;
 			}
 
 			asort($sidebarAccordion[$category]);
 		}
+
+		if (!empty($alternatives[$product->category->title]) && count($alternatives[$product->category->title]) > 1) {
+			$alternatives = array_intersect_key(
+				$alternatives[$product->category->title],
+				array_flip(
+					array_rand(
+						$alternatives[$product->category->title],
+						min(count($alternatives[$product->category->title]), 3)
+					)
+				)
+			);
+		} else {
+			$alternatives = [];
+		}
+
+		if ($product->swagger === null || !\Storage::disk('app')->exists("openapi/{$product->swagger}")) {
+			return view('templates.products.show', [
+				"product" => $product,
+				"sidebarAccordion" => $sidebarAccordion,
+				"content" => $content,
+				"startingPoint" => $startingPoint,
+				"specification" => null,
+				"alternatives" => $alternatives,
+			]);
+		}
+
+		$openApiClass = new OpenApiService($product->swagger);
 
 		return view('templates.products.show', [
 			"product" => $product,
@@ -88,6 +112,7 @@ class ProductController extends Controller
 			"content" => $content,
 			"startingPoint" => $startingPoint,
 			"specification" => $openApiClass->buildOpenApiJson(),
+			"alternatives" => $alternatives,
 		]);
 	}
 

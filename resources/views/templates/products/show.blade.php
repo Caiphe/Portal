@@ -53,6 +53,7 @@
             @endforeach
 
             <div id="product-specification" class="product-section">
+                @if(!is_null($specification))
                 <h2 class="mt-0">Download</h2>
                 <a href="{{ route('product.download.postman', [$product->slug]) }}" class="button">Download Postman collection</a>
                 <a href="{{ route('product.download.swagger', [$product->slug]) }}" class="button">Download Swagger</a>
@@ -69,6 +70,13 @@
                         <x-products.breakdown :responses="$spec['response']"/>
                     </div>
                 @endforeach
+                @else
+                <div class="no-specification">
+                    <p>NO CONTENT FOUND</p>
+                    <h2>COMING SOON</h2>
+                    <a href="{{ route('product.index') }}" class="button outline white">BROWSE OUR PRODUCTS</a>
+                </div>
+                @endif
             </div>
 
             @foreach($content['all'] as $tab)
@@ -85,6 +93,30 @@
                 </div>
                 @endif
             @endforeach
+
+            @if(!empty($alternatives))
+            <div class="alternatives">
+                @if(is_null($specification))
+                <h3>We don't have anything at the moment, but we do have similar products below!</h3>
+                @else
+                <h3>Check out some of out other products.</h3>
+                @endif
+                <div class="alternative-cards">
+                    @foreach($alternatives as $product)
+                    <x-card-product :title="$product->display_name"
+                                    :href="route('product.show', $product->slug)"
+                                    :countries="explode(',', $product->locations)"
+                                    :tags="[$product->group]"
+                                    :data-title="$product->display_name"
+                                    :data-group="$product->group"
+                                    :data-locations="$product->locations"
+                    >
+                        {{ !empty($product->description)?$product->description:'View the product' }}
+                    </x-card-product>
+                    @endforeach
+                </div>
+            </div>
+            @endif
         </div>
     </div>
 @endsection

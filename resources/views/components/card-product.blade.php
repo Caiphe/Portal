@@ -11,10 +11,12 @@
     The card description is passed through the $slot and link attributes can be added to the card to be applied to the a tag
 --}}
 
-@allowonce('card_product')
+@once
+@push('styles')
 <link href="{{ mix('/css/components/card-product.css') }}" rel="stylesheet"/>
 <link href="{{ mix('/css/components/card.css') }}" rel="stylesheet"/>
-@endallowonce
+@endpush
+@endonce
 
 @props(['title','countries','tags', 'href', 'addButtonId', 'addUrl'])
 <div {{ $attributes->merge(['class' => 'card card--product']) }} >
