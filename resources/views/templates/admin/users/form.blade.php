@@ -8,17 +8,25 @@
 
 <div class="editor-field">
     <h2>First name</h2>
-    <input type="text" class="long" name="first_name" placeholder="First name" value="{{ $user->first_name ?? '' }}" autocomplete="off">
+    <input type="text" class="long" name="first_name" placeholder="First name" value="{{ $user->first_name ?? old('first_name') }}" autocomplete="off">
 </div>
 
 <div class="editor-field">
     <h2>Last name</h2>
-    <input type="text" class="long" name="last_name" placeholder="Last name" value="{{ $user->last_name ?? '' }}" autocomplete="off">
+    <input type="text" class="long" name="last_name" placeholder="Last name" value="{{ $user->last_name ?? old('last_name') }}" autocomplete="off">
 </div>
 
 <div class="editor-field">
     <h2>Email</h2>
-    <input type="text" class="long" name="email" placeholder="Email" value="{{ $user->email ?? '' }}" autocomplete="off">
+    <input type="text" class="long" name="email" placeholder="Email" value="{{ $user->email ?? old('email') }}" autocomplete="off">
+</div>
+
+<div class="editor-field">
+    <h2>Password</h2>
+    <input type="password" class="long" name="password" placeholder="Password" autocomplete="off">
+    <br><br>
+    <h2>Confirm password</h2>
+    <input type="password" class="long" name="password_confirmation" placeholder="Confirm password" autocomplete="off">
 </div>
 
 <div class="editor-field">

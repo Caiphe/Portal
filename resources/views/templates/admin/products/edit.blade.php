@@ -13,7 +13,7 @@
     <a href="#docs" class="button outline dark ml-1">DOCS</a>
     <a href="#custom-tabs" class="button outline dark ml-1">CUSTOM TABS</a>
     <a href="{{ route('product.show', $product->slug) }}" target="_blank" rel="noreferrer" class="button outline dark ml-1">VIEW</a>
-    <button id="save" class="outline dark ml-1">SAVE</button>
+    <button id="save" class="outline dark ml-1" form="admin-form">SAVE</button>
 @endsection
 
 @section('content')
@@ -25,7 +25,7 @@
    <div class="errors"></div>
 </div>
 
-<form id="edit-form" action="{{ route('admin.product.update', $product->slug) }}" method="POST">
+<form id="admin-form" action="{{ route('admin.product.update', $product->slug) }}" method="POST">
 
     @method('PUT')
     @csrf

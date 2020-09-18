@@ -50,6 +50,10 @@ class CategoryController extends Controller
 
     public function update(Category $category, Request $request)
     {
+        $request->validate([
+            'title' => 'required|unique:categories'
+        ]);
+        
         $now = date('Y-m-d H:i:s');
         $categoryData = $request->only(['title', 'theme']);
         $categoryData['description'] = $request->input('heading-title', '');
@@ -123,6 +127,10 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'title' => 'required|unique:categories'
+        ]);
+
         $now = date('Y-m-d H:i:s');
         $categoryData = $request->only(['title', 'theme']);
         $categoryData['description'] = $request->input('heading-title', '');

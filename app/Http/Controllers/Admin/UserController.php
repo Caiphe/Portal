@@ -32,7 +32,7 @@ class UserController extends Controller
         }
 
         return view('templates.admin.users.index', [
-            'users' => $users->paginate()
+            'users' => $users->orderBy('first_name')->paginate()
         ]);
     }
 
@@ -56,10 +56,17 @@ class UserController extends Controller
                 'email:rfc,dns',
                 Rule::unique('users')->ignore($user->id),
             ],
+            'password' => 'sometimes|confirmed',
             'roles' => 'required',
             'country' => 'nullable',
             'responsible_countries' => 'nullable',
         ]);
+
+        if(is_null($data['password'])){
+            unset($data['password']);
+        } else {
+            $data['password'] = bcrypt($data['password']);
+        }
 
         $user->update($data);
         $user->roles()->sync([$data['roles']]);
@@ -72,7 +79,7 @@ class UserController extends Controller
             $user->responsibleCountries()->sync($data['responsible_countries']);
         }
 
-        return redirect()->route('admin.user.index')->with('success', 'The user has been updated');
+        return redirect()->route('admin.user.index')->with('alert', 'success:The user has been updated');
     }
 
     public function create()
@@ -92,10 +99,17 @@ class UserController extends Controller
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'email:rfc,dns|unique:users,email',
+            'password' => 'required|confirmed',
             'roles' => 'required',
             'country' => 'nullable',
             'responsible_countries' => 'nullable',
         ]);
+        $randNum = rand(1, 24);
+        $imageName = base64_encode(date('iYHs') . $randNum) . '.svg';
+        $imagePath = 'public/profile/' . $imageName;
+        \Storage::copy('public/profile/profile-' . $randNum . '.svg', $imagePath);
+
+        $data['profile_picture'] = '/storage/profile/' . $imageName;
 
         $user = User::create($data);
         $user->roles()->sync([$data['roles']]);
@@ -108,7 +122,7 @@ class UserController extends Controller
             $user->responsibleCountries()->sync($data['responsible_countries']);
         }
 
-        return redirect()->route('admin.user.index')->with('success', 'The user has been created');
+        return redirect()->route('admin.user.index')->with('alert', 'success:The user has been created');
     }
 
     public function destroy(User $user)

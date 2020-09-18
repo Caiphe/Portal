@@ -10,11 +10,11 @@
 
 @section('page-info')
     <a class="button outline dark" href="{{ route('bundle.show', $bundle->slug) }}" target="_blank" rel="noreferrer">View</a>
-    <button id="save" class="outline dark ml-1">Save</button>
+    <button id="save" class="outline dark ml-1" form="admin-form">Save</button>
 @endsection
 
 @section('content')
-<form id="edit-form" action="{{ route('admin.bundle.update', $bundle->slug) }}" method="POST">
+<form id="admin-form" action="{{ route('admin.bundle.update', $bundle->slug) }}" method="POST">
 
     @method('PUT')
     @csrf
@@ -27,7 +27,3 @@
 
 </form>
 @endsection
-
-@push('scripts')
-    <script src="{{ mix('/js/templates/admin/edit.js') }}"></script>
-@endpush

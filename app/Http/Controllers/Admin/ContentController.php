@@ -46,6 +46,10 @@ class ContentController extends Controller
 
     public function updatePage(Content $content, Request $request)
     {
+        $request->validate([
+            'title' => 'required|unique:contents'
+        ]);
+
         $content->update($request->only(['title', 'body']));
 
         return redirect()->route('admin.page.index')->with('alert', 'success:The content has been updated.');
@@ -58,6 +62,10 @@ class ContentController extends Controller
 
     public function storePage(Request $request)
     {
+        $request->validate([
+            'title' => 'required|unique:contents'
+        ]);
+
         Content::create([
             'title' => $request->title,
             'body' => $request->body,
@@ -112,6 +120,10 @@ class ContentController extends Controller
 
     public function updateDoc(Content $content, Request $request)
     {
+        $request->validate([
+            'title' => 'required|unique:contents'
+        ]);
+
         $content->update($request->only(['title', 'body']));
 
         return redirect()->route('admin.doc.index')->with('alert', 'success:The content has been created.');
@@ -124,6 +136,10 @@ class ContentController extends Controller
 
     public function storeDoc(Request $request)
     {
+        $request->validate([
+            'title' => 'required|unique:contents'
+        ]);
+        
         Content::create([
             'title' => $request->title,
             'body' => $request->body,
