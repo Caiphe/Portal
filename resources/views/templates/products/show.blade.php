@@ -99,7 +99,7 @@
                 @if(is_null($specification))
                 <h3>We don't have anything at the moment, but we do have similar products below!</h3>
                 @else
-                <h3>Check out some of out other products.</h3>
+                <h3>Check out some of our other products.</h3>
                 @endif
                 <div class="alternative-cards">
                     @foreach($alternatives as $product)
