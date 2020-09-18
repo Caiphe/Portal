@@ -8,9 +8,14 @@
     max-width: 256px;
     right: 0;
     pointer-events: none;
-    padding-left: 20px;
+    padding-left: 76px;
     padding-right: 30px;
     opacity: 0;
+    border-radius: 10px;
+    background-position: 20px 22px;
+    background-size: 40px;
+    background-repeat: no-repeat;
+    min-height: 80px;
 
     &.open {
         transform: translateX(-40px);
@@ -37,18 +42,22 @@
 
     &.success {
         background-color: $success;
+        background-image: url('/images/icons/success.svg');
     }
 
     &.warning {
         background-color: $warning;
+        background-image: url('/images/icons/warning.svg');
     }
 
     &.error {
         background-color: $error;
+        background-image: url('/images/icons/error.svg');
     }
 
     &.info {
         background-color: $info;
+        background-image: url('/images/icons/info.svg');
     }
 
     ul {
@@ -69,6 +78,7 @@
     padding: 0 20px;
     display: flex;
     align-items: center;
+    min-height: auto;
 
     svg {
         margin-left: 10px;
