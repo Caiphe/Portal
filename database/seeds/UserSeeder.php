@@ -106,7 +106,7 @@ class UserSeeder extends Seeder {
 			'label' => "Opco",
 		]);
 
-		$opcoRole->allowTo(['create_app', 'view_dashboard_products', 'administer_dashboard_products']);
+		$opcoRole->allowTo(['create_app', 'view_dashboard_products', 'administer_dashboard_products', 'view_admin_backend']);
 
 		$internalRole = Role::create([
 			'name' => "internal",
