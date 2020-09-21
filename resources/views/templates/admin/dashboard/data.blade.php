@@ -1,3 +1,7 @@
+@php
+    $countryList = $countries->pluck('name', 'code')->toArray();
+@endphp
+
 <div class="my-apps">
     <div class="head">
         <div class="column">
@@ -24,10 +28,9 @@
         @forelse($apps as $app)
             @if(!empty($app['attributes']))
             @php
-                $countryList = $countries->pluck('name', 'code')->toArray();
                 $productCountries = [];
-                if(!is_null($app->country_id)){
-                    $productCountries = $countries->where('id', $app->country_id)->pluck('name', 'code')->toArray();
+                if(!is_null($app->country_code)){
+                    $productCountries = $app->country()->pluck('name', 'code')->toArray();
                 } else {
                     $productCountries = $app->products->reduce(function($carry, $product) use ($countryList) {
                         $locationArray = explode(',', $product->locations);

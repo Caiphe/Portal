@@ -15,9 +15,10 @@
     @if($type === 'approved')
     <div class="column countries">
         @foreach($countries as $key => $country)
-            @if($loop->first)
-                <span title="{{$country}}">@svg($key, '#000000', 'images/locations')</span>
+            @if($loop->index > 0)
+                @break
             @endif
+            <span title="{{$country}}">@svg($key, '#000000', 'images/locations')</span>
         @endforeach
 
         @if(count($countries) > 1)
@@ -35,7 +36,7 @@
         @endif
     </div>
     <div class="column">
-        {{ date('Y-m-d', strtotime($app['created_at'])) }}
+        {{ date('Y-m-d', strtotime($app['updated_at'])) }}
     </div>
     <div class="column">
         <button class="actions"></button>
@@ -99,7 +100,7 @@
                     <p>Never</p>
                     <div class="country-flags">
                         @foreach($countries as $key => $country)
-                            @svg($key, '#000000', 'images/locations')
+                            <span title="{{$country}}">@svg($key, '#000000', 'images/locations')</span>
                         @endforeach
                     </div>
                 </div>

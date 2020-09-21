@@ -71,10 +71,10 @@ class User extends Authenticatable implements MustVerifyEmail
 			->toArray();
 
 		if (is_array($permission)) {
-			return !array_diff($permission, $userPermissions);
+			return !is_null($this['2fa']) && !array_diff($permission, $userPermissions);
 		}
 
-		return in_array($permission, $userPermissions);
+		return !is_null($this['2fa']) && in_array($permission, $userPermissions);
 	}
 
 	public function hasAnyPermissionTo($permission)

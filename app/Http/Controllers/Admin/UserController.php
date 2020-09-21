@@ -69,7 +69,7 @@ class UserController extends Controller
         }
 
         $user->update($data);
-        $user->roles()->sync([$data['roles']]);
+        $user->roles()->sync($data['roles']);
 
         if (!is_null($request->country)) {
             $user->countries()->sync([$data['country']]);

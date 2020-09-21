@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Category;
+use App\Country;
 use App\Http\Controllers\Controller;
 use App\Product;
 use Illuminate\Http\Request;
@@ -35,17 +37,19 @@ class ProductController extends Controller
         }
 
         return view('templates.admin.products.index', [
-            'products' => $products->orderBy('display_name')->paginate()
+            'products' => $products->orderBy('display_name')->paginate(),
         ]);
     }
 
     public function edit(Product $product)
     {
-        $product->load('content');
+        $product->load('content', 'countries');
 
         return view('templates.admin.products.edit', [
             'product' => $product,
-            'content' => $product->content->groupBy('title')
+            'content' => $product->content->groupBy('title'),
+            'countries' => Country::get(),
+            'categories' => Category::pluck('title', 'cid'),
         ]);
     }
 
@@ -54,6 +58,14 @@ class ProductController extends Controller
         $now = date('Y-m-d H:i:s');
         $contents = [];
         $tabs = $request->get('tab', []);
+
+        $product->update([
+            'locations' => implode(',', $request->get('locations', ['all'])),
+            'group' => $request->get('group', 'MTN'),
+            'category_cid' => $request->get('category_cid', 'misc'),
+        ]);
+
+        $product->countries()->sync($request->get('locations', Country::all()));
 
         for ($i = 0; $i < count($tabs['title']); $i++) {
             if ($tabs['title'][$i] === null || $tabs['body'][$i] === null) continue;

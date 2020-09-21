@@ -22,7 +22,7 @@ class CategoryController extends Controller
                 'name' => $product['name'],
                 'group' => $product['group'],
                 'description' => $product['description'] ?: 'View the product',
-                'locations' => explode(',', $product['locations'] ?? 'all'),
+                'locations' => $product['locations'] === 'all' ? ['All' => 'all'] : $product->countries()->pluck('code', 'name')->toArray(),
                 'href' => route('product.show', $product['slug']),
             ];
         })->pad(-3, [

@@ -1,7 +1,7 @@
 @php
-    $userRoleId = $user->roles[0]->pivot->role_id ?? 0;
-    $userCountryId = $user->countries[0]->pivot->country_id ?? 0;
-    $userResponsableCountries = isset($user) ? $user->responsibleCountries()->pluck('id')->toArray() : [];
+    $userRoleIds = isset($user) ? $user->roles->pluck('id')->toArray() : [];
+    $userCountryCode = $user->countries[0]->pivot->country_code ?? 0;
+    $userResponsableCountries = isset($user) ? $user->responsibleCountries()->pluck('code')->toArray() : [];
 @endphp
 
 @csrf
@@ -23,19 +23,19 @@
 
 <div class="editor-field">
     <h2>Password</h2>
-    <input type="password" class="long" name="password" placeholder="Password" autocomplete="off">
+    <input id="password" type="password" class="long" name="password" placeholder="Password" autocomplete="new-password">
+    <button type="button" class="fab show-password" onclick="togglePasswordVisibility(this)"></button>
     <br><br>
     <h2>Confirm password</h2>
-    <input type="password" class="long" name="password_confirmation" placeholder="Confirm password" autocomplete="off">
+    <input id="password-confirm" type="password" class="long" name="password_confirmation" placeholder="Confirm password" autocomplete="new-password">
+    <button type="button" class="fab show-password" onclick="togglePasswordVisibility(this)"></button>
+    <div id="password-strength">Password strength</div>
+    <div id="password-still-needs" class="invalid-feedback" role="alert"></div>
 </div>
 
 <div class="editor-field">
     <h2>Roles</h2>
-    <select name="roles" autocomplete="off">
-        @foreach($roles as $role)
-        <option @if($userRoleId === $role->id || ($userRoleId === 0 && $role->name === 'developer')) selected @endif value="{{ $role->id }}">{{ $role->label }}</option>
-        @endforeach
-    </select>
+    <x-multiselect id="roles" name="roles" label="Select role" :options="$roles->pluck('label', 'id')->toArray()" :selected="$userRoleIds"/>
 </div>
 
 <div class="editor-field">
@@ -43,12 +43,16 @@
     <select name="country" autocomplete="off">
         <option value="">Select country</option>
         @foreach($countries as $country)
-        <option @if($userCountryId === $country->id) selected @endif value="{{ $country->id }}">{{ $country->name }}</option>
+        <option @if($userCountryCode === $country->code) selected @endif value="{{ $country->code }}">{{ $country->name }}</option>
         @endforeach
     </select>
 </div>
 
 <div class="editor-field">
     <h2>Countries the user is responsable for</h2>
-    <x-multiselect id="responsible_countries" name="responsible_countries" label="None" :options="$countries->pluck('name', 'id')->toArray()" :selected="$userResponsableCountries"/>
+    <x-multiselect id="responsible_countries" name="responsible_countries" label="Select country" :options="$countries->pluck('name', 'code')->toArray()" :selected="$userResponsableCountries"/>
 </div>
+
+@push('scripts')
+<script src="{{ mix('/js/templates/admin/users/scripts.js') }}"></script>
+@endpush

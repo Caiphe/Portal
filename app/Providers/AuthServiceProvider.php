@@ -30,13 +30,7 @@ class AuthServiceProvider extends ServiceProvider
 		});
 
 		Gate::define('view-admin', function ($user) {
-			return $user->hasAnyPermissionTo([
-				'administer_products',
-				'view_dashboard_products',
-				'administer_users',
-				'administer_content',
-				'administer_dashboard_products',
-			]);
+			return $user->hasPermissionTo('view_admin_backend');
 		});
 
 		Gate::define('administer-products', function ($user) {

@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Product;
 use App\Category;
+use App\Country;
 use App\Services\ApigeeService;
 use Illuminate\Console\Command;
 
@@ -48,6 +49,7 @@ class SyncProducts extends Command
 		$products = ApigeeService::get('apiproducts?expand=true')['apiProduct'];
 
 		$attributes = [];
+		$allCountries = Country::all();
 
 		$this->info("Start syncing products");
 		foreach ($products as $product) {
@@ -56,13 +58,26 @@ class SyncProducts extends Command
 
 			$this->info("Syncing {$product['displayName']}");
 
+			$prod = Product::withTrashed()->find($product['name']);
+			
 			$attributes = ApigeeService::getAppAttributes($product['attributes']);
+
+			if($prod->exists()){
+				$prod->update([
+					'pid' => $product['name'],
+					'name' => $product['name'],
+					'environments' => implode(',', $product['environments']),
+					'access' => $attributes['Access'] ?? null,
+				]);
+
+				continue;
+			}
+
 			$category = Category::firstOrCreate([
 				'title' => ucfirst(strtolower(trim($attributes['Category'] ?? "Misc")))
 			]);
 
-			Product::withTrashed()->updateOrCreate(
-				['pid' => $product['name']],
+			$prod = Product::create(
 				[
 					'pid' => $product['name'],
 					'name' => $product['name'],
@@ -77,6 +92,11 @@ class SyncProducts extends Command
 					'attributes' => json_encode($attributes),
 				]
 			);
+
+			if (isset($attributes['Locations'])) {
+				$locations = $attributes['Locations'] !== 'all' ? explode(',', $attributes['Locations']) : $allCountries;
+				$prod->countries()->sync($locations);
+			}
 		}
 	}
 }

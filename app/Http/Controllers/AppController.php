@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\App;
-use App\Country;
 use App\Http\Requests\CreateAppRequest;
 use App\Http\Requests\DeleteAppRequest;
 use App\Services\ApigeeService;
@@ -13,7 +12,7 @@ use Illuminate\Support\Str;
 
 class AppController extends Controller {
 	public function index() {
-		$apps = App::with(['products', 'country'])
+		$apps = App::with(['products.countries', 'country'])
 			->byUserEmail(\Auth::user()->email)
 			->orderBy('updated_at', 'desc')
 			->get()
@@ -38,7 +37,6 @@ class AppController extends Controller {
 
 	public function store(CreateAppRequest $request) {
 		$validated = $request->validated();
-		$countries = Country::pluck('id', 'code');
 
 		$data = [
 			'name' => Str::slug($validated['name']),
@@ -52,6 +50,10 @@ class AppController extends Controller {
 				[
 					'name' => 'Description',
 					'value' => preg_replace('/[<>"]*/', '', strip_tags($validated['description'])),
+				],
+				[
+					'name' => 'Country',
+					'value' => $validated['country'],
 				],
 			],
 			'callbackUrl' => preg_replace('/[<>"]*/', '', strip_tags($validated['url'])) ?? '',
@@ -77,7 +79,7 @@ class AppController extends Controller {
 			"developer_id" => $createdResponse['developerId'],
 			"status" => $createdResponse['status'],
 			"description" => $attributes['Description'] ?? '',
-			"country_id" => $countries[$validated['country']],
+			"country_code" => $validated['country'],
 			"updated_at" => date('Y-m-d H:i:s', $createdResponse['lastModifiedAt'] / 1000),
 			"created_at" => date('Y-m-d H:i:s', $createdResponse['createdAt'] / 1000),
 		]);
@@ -106,7 +108,6 @@ class AppController extends Controller {
 
 	public function update(App $app, CreateAppRequest $request) {
 		$validated = $request->validated();
-		$countries = Country::pluck('id', 'code');
 
 		$data = [
 			'name' => $validated['name'],
@@ -138,7 +139,7 @@ class AppController extends Controller {
 			'attributes' => $data['attributes'],
 			'callback_url' => $data['callbackUrl'],
 			'description' => $data['attributes'][1]['value'],
-			'country_id' => $countries[$validated['country']],
+			'country_code' => $validated['country'],
 		]);
 
 		$app->products()->sync($data['apiProducts']);

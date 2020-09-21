@@ -87,11 +87,8 @@ class Product extends Model {
 		return $this->belongsTo(Category::class);
 	}
 
-	public function countries($countryList = null)
+	public function countries()
 	{
-		$countryList ??= Country::pluck('name', 'code');
-		$locationArray = explode(',', $this->locations);
-
-		return array_intersect_key($countryList->toArray(), array_combine($locationArray, $locationArray));
+		return $this->belongsToMany(Country::class);
 	}
 }

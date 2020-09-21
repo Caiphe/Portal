@@ -30,6 +30,26 @@
     @method('PUT')
     @csrf
 
+    <div class="editor-field">
+        <h2>Category</h2>
+        <select name="category_cid" id="category_cid" class="mb-1" autocomplete="off">
+            <option value="" selected disabled="">Select category</option>
+            @foreach($categories as $cid => $category)
+            <option value="{{ $cid }}" @if($cid === $product->category_cid) selected @endif>{{ $category }}</option>
+            @endforeach
+        </select>
+    </div>
+
+    <div class="editor-field">
+        <h2>Group</h2>
+        <input type="text" name="group" value="{{ $product->group ?? 'MTN' }}">
+    </div>
+
+    <div class="editor-field">
+        <h2>Locations</h2>
+        <x-multiselect id="locations" name="locations" label="Select location" :options="$countries->pluck('name', 'code')->toArray()" :selected="$product->locations === 'all' ? [] : $product->countries()->pluck('code')->toArray()"/>
+    </div>
+
     <div id="overview" class="editor-field">
         <h2>Overview</h2>
         <input type="hidden" name="tab[title][]" value="Overview">

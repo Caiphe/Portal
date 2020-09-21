@@ -133,17 +133,17 @@ class ApigeeService
 		return $apps;
 	}
 
-	public static function getAppCountries(array $products)
+	public static function getAppCountries(object $products): array
 	{
-		$countryCodes = Product::whereIn('name', $products)
-			->pluck('locations')->all();
+		$productLocations = $products->pluck('locations');
+		if($productLocations->contains('all') || $productLocations->contains(null)){
+			return ['all' => 'All'];
+		}
+
+		$countryCodes = $productLocations->all();
 
 		$countryCodesArr = [];
 		foreach ($countryCodes as $codes) {
-			if (empty($codes) || $codes === 'all') {
-				continue;
-			}
-
 			$countryCodesArr[] = explode(',', $codes);
 		}
 

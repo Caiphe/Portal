@@ -38,8 +38,8 @@
             @isset($countries)
             <div class="country-selector">
                 <div class="countries">
-                    @foreach ($countries as $country)
-                        <img src="/images/locations/{{$country}}.svg" title="{{$country}} flag" alt="{{$country}} flag">
+                    @foreach ($countries as $name => $country)
+                        <img src="/images/locations/{{$country}}.svg" title="{{ gettype($name) === 'string' ? $name : $country }} flag" alt="{{$country}} flag">
                     @endforeach
                 </div>
                 @if (count($countries ) > 1)

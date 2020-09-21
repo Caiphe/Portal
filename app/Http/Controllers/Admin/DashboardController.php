@@ -18,20 +18,36 @@ class DashboardController extends Controller
         $user = auth()->user();
         $user->load('responsibleCountries');
         $isAdmin = $user->hasRole('admin');
-        $responsibleCountriesIds = $user->responsibleCountries->pluck('id')->toArray();
-        $responsibleCountriesCodes = $user->responsibleCountries->pluck('code')->implode('|');
+        $responsibleCountriesCodes = $user->responsibleCountries->pluck('code')->toArray();
         $hasSearchTerm = $request->has('q');
         $searchTerm = "%" . $request->get('q', '') . "%";
         $hasCountries = $request->has('countries');
         $searchCountries = $request->get('countries');
+        $notAdminNoResponsibleCountries = !$isAdmin && $user->responsibleCountries()->get()->isEmpty();
 
-        $appsByProductLocation = App::with(['developer', 'country', 'products'])
-            ->whereNull('country_id')
+        if ($notAdminNoResponsibleCountries && $request->ajax()) {
+            return response()
+                ->view('templates.admin.dashboard.data', [
+                    'apps' => App::where('country_code', 'none')->paginate(),
+                    'countries' => Country::all(),
+                ], 200)
+                ->header('Content-Type', 'text/html');
+        } else if ($notAdminNoResponsibleCountries) {
+            return view('templates.admin.dashboard.index', [
+                'apps' => App::where('country_code', 'none')->paginate(),
+                'countries' => Country::all(),
+            ]);
+        }
+
+        $appsByProductLocation = App::with(['developer', 'country', 'products.countries'])
+            ->whereNull('country_code')
             ->whereHas('products', function ($query) use ($isAdmin, $responsibleCountriesCodes, $hasCountries, $searchCountries) {
                 $query
                     ->where('status', 'pending')
                     ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes) {
-                        $query->whereRaw("`locations` REGEXP \"(" . $responsibleCountriesCodes . ")\"");
+                        $query->whereHas('countries', function($q) use ($responsibleCountriesCodes){
+                            $q->whereIn('code', $responsibleCountriesCodes);
+                        });
                     })
                     ->when($hasCountries, function ($q) use ($searchCountries) {
                         $q->whereRaw("`locations` REGEXP \"(" . implode(',', $searchCountries) . ")\"");
@@ -43,9 +59,9 @@ class DashboardController extends Controller
             ->byStatus('approved');
 
         $apps = App::with(['developer', 'country', 'products'])
-            ->whereNotNull('country_id')
-            ->when(!$isAdmin, function ($query) use ($responsibleCountriesIds) {
-                $query->whereIn('country_id', $responsibleCountriesIds);
+            ->whereNotNull('country_code')
+            ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes) {
+                $query->whereIn('country_code', $responsibleCountriesCodes);
             })
             ->whereHas('products', function ($query) {
                 $query->where('status', 'pending');

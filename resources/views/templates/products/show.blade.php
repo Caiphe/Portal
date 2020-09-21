@@ -35,8 +35,8 @@
         <div class="available-in">
             <h4>AVAILABLE IN</h4>
             <div class="flags">
-                @foreach(preg_split('/,\s?/', $product['locations']) as $location)
-                <img class="flag" src="/images/locations/{{$location}}.svg" alt="{{$location}}" title="{{$location}}">
+                @foreach($product->countries->pluck('code', 'name') as $name => $code)
+                <img class="flag" src="/images/locations/{{ $code }}.svg" alt="{{ $name }}" title="{{ $name }}">
                 @endforeach
             </div>
         </div>
