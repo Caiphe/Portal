@@ -116,5 +116,12 @@ class UserSeeder extends Seeder {
 		]);
 
 		$internalRole->allowTo(['create_app', 'view_internal_products']);
+
+		$contentCreatorRole = Role::create([
+			'name' => "content_creator",
+			'label' => "Content creator",
+		]);
+
+		$contentCreatorRole->allowTo(['create_app', 'administer_content']);
 	}
 }

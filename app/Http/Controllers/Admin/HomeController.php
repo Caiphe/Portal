@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Product;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class HomeController extends Controller
 {
@@ -13,10 +12,22 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Request $request)
+    public function __invoke()
     {
-        return view('templates.admin.home', [
-            'products' => Product::with('category')->basedOnUser($request->user())->orderBy('display_name')->paginate()
-        ]);
+        if(Gate::allows('administer-products')){
+            return redirect()->route('admin.product.index');
+        }
+
+        if(Gate::allows('administer-users')){
+            return redirect()->route('admin.user.index');
+        }
+        
+        if(Gate::allows('administer-dashboard')){
+            return redirect()->route('admin.dashboard.index');
+        }
+
+        if(Gate::allows('administer-content')){
+            return redirect()->route('admin.content.index');
+        }
     }
 }

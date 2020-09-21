@@ -37,64 +37,64 @@ Route::middleware(['verified', '2fa'])->group(function () {
 });
 
 Route::namespace('Admin')->prefix('admin')->middleware(['can:view-admin', '2fa'])->group(function () {
-	Route::redirect('home', '/admin/products')->name('admin.home');
+	Route::get('/', 'HomeController')->name('admin.home');
 
 	// Products
-	Route::get('products', 'ProductController@index')->name('admin.product.index');
-	Route::get('products/{product:slug}/edit', 'ProductController@edit')->name('admin.product.edit');
-	Route::put('products/{product:slug}/update', 'ProductController@update')->name('admin.product.update');
+	Route::get('products', 'ProductController@index')->middleware('can:administer-products')->name('admin.product.index');
+	Route::get('products/{product:slug}/edit', 'ProductController@edit')->middleware('can:administer-products')->name('admin.product.edit');
+	Route::put('products/{product:slug}/update', 'ProductController@update')->middleware('can:administer-products')->name('admin.product.update');
 
 	// Bundles
-	Route::get('bundles', 'BundleController@index')->name('admin.bundle.index');
-	Route::get('bundles/{bundle:slug}/edit', 'BundleController@edit')->name('admin.bundle.edit');
-	Route::put('bundles/{bundle:slug}/update', 'BundleController@update')->name('admin.bundle.update');
+	Route::get('bundles', 'BundleController@index')->middleware('can:administer-products')->name('admin.bundle.index');
+	Route::get('bundles/{bundle:slug}/edit', 'BundleController@edit')->middleware('can:administer-products')->name('admin.bundle.edit');
+	Route::put('bundles/{bundle:slug}/update', 'BundleController@update')->middleware('can:administer-products')->name('admin.bundle.update');
 
 	// Page
-	Route::get('pages', 'ContentController@indexPage')->name('admin.page.index');
-	Route::get('pages/{content:slug}/edit', 'ContentController@editPage')->name('admin.page.edit');
-	Route::put('pages/{content:slug}/update', 'ContentController@updatePage')->name('admin.page.update');
-	Route::get('pages/create', 'ContentController@createPage')->name('admin.page.create');
-	Route::post('pages', 'ContentController@storePage')->name('admin.page.store');
-	Route::delete('pages{content:slug}/delete', 'ContentController@destroyPage')->name('admin.page.delete');
+	Route::get('pages', 'ContentController@indexPage')->middleware('can:administer-content')->name('admin.page.index');
+	Route::get('pages/{content:slug}/edit', 'ContentController@editPage')->middleware('can:administer-content')->name('admin.page.edit');
+	Route::put('pages/{content:slug}/update', 'ContentController@updatePage')->middleware('can:administer-content')->name('admin.page.update');
+	Route::get('pages/create', 'ContentController@createPage')->middleware('can:administer-content')->name('admin.page.create');
+	Route::post('pages', 'ContentController@storePage')->middleware('can:administer-content')->name('admin.page.store');
+	Route::delete('pages{content:slug}/delete', 'ContentController@destroyPage')->middleware('can:administer-content')->name('admin.page.delete');
 
 	// Documentation
-	Route::get('docs', 'ContentController@indexDoc')->name('admin.doc.index');
-	Route::get('docs/{content:slug}/edit', 'ContentController@editDoc')->name('admin.doc.edit');
-	Route::put('docs/{content:slug}/update', 'ContentController@updateDoc')->name('admin.doc.update');
-	Route::get('docs/create', 'ContentController@createDoc')->name('admin.doc.create');
-	Route::post('docs', 'ContentController@storeDoc')->name('admin.doc.store');
-	Route::delete('docs{content:slug}/delete', 'ContentController@destroyDoc')->name('admin.doc.delete');
+	Route::get('docs', 'ContentController@indexDoc')->middleware('can:administer-content')->name('admin.doc.index');
+	Route::get('docs/{content:slug}/edit', 'ContentController@editDoc')->middleware('can:administer-content')->name('admin.doc.edit');
+	Route::put('docs/{content:slug}/update', 'ContentController@updateDoc')->middleware('can:administer-content')->name('admin.doc.update');
+	Route::get('docs/create', 'ContentController@createDoc')->middleware('can:administer-content')->name('admin.doc.create');
+	Route::post('docs', 'ContentController@storeDoc')->middleware('can:administer-content')->name('admin.doc.store');
+	Route::delete('docs{content:slug}/delete', 'ContentController@destroyDoc')->middleware('can:administer-content')->name('admin.doc.delete');
 
 	// FAQ
-	Route::get('faqs', 'FaqController@index')->name('admin.faq.index');
-	Route::get('faqs/{faq:slug}/edit', 'FaqController@edit')->name('admin.faq.edit');
-	Route::put('faqs/{faq:slug}/update', 'FaqController@update')->name('admin.faq.update');
-	Route::get('faqs/create', 'FaqController@create')->name('admin.faq.create');
-	Route::post('faqs', 'FaqController@store')->name('admin.faq.store');
-	Route::delete('faqs{faq:slug}/delete', 'FaqController@destroy')->name('admin.faq.delete');
+	Route::get('faqs', 'FaqController@index')->middleware('can:administer-content')->name('admin.faq.index');
+	Route::get('faqs/{faq:slug}/edit', 'FaqController@edit')->middleware('can:administer-content')->name('admin.faq.edit');
+	Route::put('faqs/{faq:slug}/update', 'FaqController@update')->middleware('can:administer-content')->name('admin.faq.update');
+	Route::get('faqs/create', 'FaqController@create')->middleware('can:administer-content')->name('admin.faq.create');
+	Route::post('faqs', 'FaqController@store')->middleware('can:administer-content')->name('admin.faq.store');
+	Route::delete('faqs{faq:slug}/delete', 'FaqController@destroy')->middleware('can:administer-content')->name('admin.faq.delete');
 
 	// Categories
-	Route::get('categories', 'CategoryController@index')->name('admin.category.index');
-	Route::get('categories/{category:slug}/edit', 'CategoryController@edit')->name('admin.category.edit');
-	Route::put('categories/{category:slug}/update', 'CategoryController@update')->name('admin.category.update');
-	Route::get('categories/create', 'CategoryController@create')->name('admin.category.create');
-	Route::post('categories', 'CategoryController@store')->name('admin.category.store');
-	Route::delete('categories{category:slug}/delete', 'CategoryController@destroy')->name('admin.category.delete');
+	Route::get('categories', 'CategoryController@index')->middleware('can:administer-content')->name('admin.category.index');
+	Route::get('categories/{category:slug}/edit', 'CategoryController@edit')->middleware('can:administer-content')->name('admin.category.edit');
+	Route::put('categories/{category:slug}/update', 'CategoryController@update')->middleware('can:administer-content')->name('admin.category.update');
+	Route::get('categories/create', 'CategoryController@create')->middleware('can:administer-content')->name('admin.category.create');
+	Route::post('categories', 'CategoryController@store')->middleware('can:administer-content')->name('admin.category.store');
+	Route::delete('categories{category:slug}/delete', 'CategoryController@destroy')->middleware('can:administer-content')->name('admin.category.delete');
 
 	// Dashboard
-	Route::get('dashboard', 'DashboardController@index')->name('admin.dashboard.index');
-	Route::post('apps/{product}/approve', 'DashboardController@update')->name('app.product.approve');
-	Route::post('apps/{product}/revoke', 'DashboardController@update')->name('app.product.revoke');
+	Route::get('dashboard', 'DashboardController@index')->middleware('can:administer-dashboard')->name('admin.dashboard.index');
+	Route::post('apps/{product}/approve', 'DashboardController@update')->middleware('can:administer-dashboard')->name('app.product.approve');
+	Route::post('apps/{product}/revoke', 'DashboardController@update')->middleware('can:administer-dashboard')->name('app.product.revoke');
 
 	// Global search
 	Route::get('search', 'SearchController')->name('admin.search');
 
 	// User management
-	Route::get('users', 'UserController@index')->name('admin.user.index');
-	Route::get('users/{user}/edit', 'UserController@edit')->name('admin.user.edit');
-	Route::put('users/{user}/update', 'UserController@update')->name('admin.user.update');
-	Route::get('users/create', 'UserController@create')->name('admin.user.create');
-	Route::post('users/store', 'UserController@store')->name('admin.user.store');
+	Route::get('users', 'UserController@index')->middleware('can:administer-users')->name('admin.user.index');
+	Route::get('users/{user}/edit', 'UserController@edit')->middleware('can:administer-users')->name('admin.user.edit');
+	Route::put('users/{user}/update', 'UserController@update')->middleware('can:administer-users')->name('admin.user.update');
+	Route::get('users/create', 'UserController@create')->middleware('can:administer-users')->name('admin.user.create');
+	Route::post('users/store', 'UserController@store')->middleware('can:administer-users')->name('admin.user.store');
 });
 
 Route::post('profile/2fa/verify', 'UserController@verify2fa')->middleware('2fa')->name('user.2fa.verify');
