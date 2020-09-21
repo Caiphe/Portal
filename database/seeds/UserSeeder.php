@@ -79,6 +79,11 @@ class UserSeeder extends Seeder {
 			'label' => "View internal products",
 		]);
 
+		Permission::create([
+			'name' => "view_admin_backend",
+			'label' => "View admin backend",
+		]);
+
 		$adminRole = Role::create([
 			'name' => "admin",
 			'label' => "Admin",
@@ -96,19 +101,12 @@ class UserSeeder extends Seeder {
 
 		$developerRole->allowTo('create_app');
 
-		$opcoAdminRole = Role::create([
-			'name' => "opco_admin",
-			'label' => "Opco Admin",
-		]);
-
-		$opcoAdminRole->allowTo(['create_app', 'view_dashboard_products', 'administer_dashboard_products']);
-
 		$opcoRole = Role::create([
 			'name' => "opco",
 			'label' => "Opco",
 		]);
 
-		$opcoRole->allowTo(['create_app', 'view_dashboard_products']);
+		$opcoRole->allowTo(['create_app', 'view_dashboard_products', 'administer_dashboard_products', 'view_admin_backend']);
 
 		$internalRole = Role::create([
 			'name' => "internal",
@@ -116,5 +114,12 @@ class UserSeeder extends Seeder {
 		]);
 
 		$internalRole->allowTo(['create_app', 'view_internal_products']);
+
+		$contentCreatorRole = Role::create([
+			'name' => "content_creator",
+			'label' => "Content creator",
+		]);
+
+		$contentCreatorRole->allowTo(['create_app', 'administer_content', 'view_admin_backend']);
 	}
 }

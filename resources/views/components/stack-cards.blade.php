@@ -9,8 +9,8 @@
         <h3>{{ $card['name'] }}</h3>
         <p>{{ $card['description'] }}</p>
         <div class="flags">
-            @foreach($card['locations'] as $code)
-            <span title="{{ $code }}">@svg($code, null, 'images/locations')</span>
+            @foreach($card['locations'] as $name => $code)
+            <span title="{{ $name }}">@svg($code, null, 'images/locations')</span>
             @endforeach
         </div>
         <a href="{{ $card['href'] }}" class="button">View</a>

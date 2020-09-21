@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Country extends Model
@@ -13,6 +12,8 @@ class Country extends Model
      * @var array
      */
     protected $guarded = [];
+    protected $primaryKey = "code";
+    public $incrementing = false;
 
     /**
      * Indicates if the model should be timestamped.
@@ -24,5 +25,10 @@ class Country extends Model
     public function users()
     {
         return $this->belongsToMany(User::class);
+    }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class);
     }
 }

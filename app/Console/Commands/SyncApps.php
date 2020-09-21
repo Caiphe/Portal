@@ -42,10 +42,9 @@ class SyncApps extends Command
 	public function handle()
 	{
 		$this->info("Getting apps from Apigee");
+		$countries = Country::get();
+		$countryArray = Country::get()->toArray();
 		$apps = ApigeeService::getOrgApps('all', 0);
-		$countries = Country::all();
-		$countriesByCode = $countries->pluck('id', 'code');
-		$countriesByName = $countries->pluck('id', 'name');
 		$products = Product::pluck('name')->toArray();
 
 		$this->info("Start syncing apps");
@@ -69,11 +68,13 @@ class SyncApps extends Command
 				$displayName = $app['name'];
 			}
 
-			$countryId = null;
-			if (isset($attributes['Country']) && strlen($attributes['Country']) === 2) {
-				$countryId = $countriesByCode[$attributes['Country']];
-			} else if (isset($attributes['Country']) && isset($countriesByName[$attributes['Country']])) {
-				$countryId = $countriesByName[$attributes['Country']];
+			$countryCode = null;
+			if (isset($attributes['Country']) && is_numeric($attributes['Country'])) {
+				$countryCode = $countryArray[$attributes['Country']]['code'];
+			} else if (isset($attributes['Country']) && strlen($attributes['Country']) > 2) {
+				$countryCode = $countries->first(fn($country) => $country->name === $attributes['Country'])->code;
+			} else if (isset($attributes['Country'])) {
+				$countryCode = $attributes['Country'];
 			}
 
 			$a = App::updateOrCreate(
@@ -85,10 +86,10 @@ class SyncApps extends Command
 					"callback_url" => $app['callbackUrl'],
 					"attributes" => $attributes,
 					"credentials" => $app['credentials'],
-					"developer_id" => $app['developerId'],
+					"developer_id" => $app['developerId'] ?? $app['createdBy'],
 					"status" => $app['status'],
 					"description" => $attributes['Description'] ?? '',
-					"country_id" => $countryId,
+					"country_code" => $countryCode,
 					"updated_at" => date('Y-m-d H:i:s', $app['lastModifiedAt'] / 1000),
 					"created_at" => date('Y-m-d H:i:s', $app['createdAt'] / 1000),
 				]

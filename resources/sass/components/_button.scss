@@ -60,6 +60,11 @@ button,
             background-color: mix(#ffffff, #000, 20%);
             border-color: mix(#ffffff, #000, 20%);
         }
+
+        &.kinda {
+            background-color: $grey900;
+            border: 2px solid $grey900;
+        }
     }
 
     &.medium {
@@ -134,7 +139,9 @@ button,
         margin-left: 5px;
     }
 
-    @each $icon, $svg in $icons {
+    @each $icon,
+    $svg in $icons {
+
         &.before.#{$icon}::before,
         &.after.#{$icon}::after {
             background-image: get-icon("#{$icon}", #000000);

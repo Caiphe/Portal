@@ -125,8 +125,7 @@ class RegisterController extends Controller {
 		]);
 
 		if (isset($data['locations'])) {
-			$countryIds = Country::whereIn('code', $data['locations'])->pluck('id');
-			$user->countries()->sync($countryIds);
+			$user->countries()->sync($data['locations']);
 		}
 
 		$imagePath = 'public/profile/' . $imageName;

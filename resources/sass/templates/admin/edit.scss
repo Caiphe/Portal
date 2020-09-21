@@ -1,0 +1,172 @@
+@import '../../variables';
+
+#admin-form {
+
+    input[type=text],
+    input[type=password],
+    h2 {
+        margin: 0 0 10px 0;
+    }
+
+    label {
+        margin: 0 0 20px 0;
+    }
+
+    label,
+    textarea {
+        display: block;
+    }
+
+    .long {
+        width: 100%;
+    }
+
+    .editor-field {
+        padding: 30px;
+        border: 2px solid $grey500;
+        border-radius: 10px;
+        margin-bottom: 30px;
+    }
+
+    .show-password {
+        margin: -46px 36px 0 0;
+        position: absolute;
+        right: 0;
+        background-image: url("/images/icons/visible.svg");
+        background-size: 20px;
+        background-color: #FFF;
+        background-repeat: no-repeat;
+        background-position: center;
+        border: none;
+        width: 30px;
+        height: 30px;
+        z-index: 1;
+        display: block;
+
+        &:hover {
+            background-color: $yellow700;
+        }
+    }
+
+    .password-visible {
+        background-image: url('/images/icons/hidden.svg');
+    }
+
+    #password-strength {
+        margin-top: 10px;
+        height: 34px;
+        line-height: 1;
+        background-color: $grey500;
+        border-radius: 5px;
+        padding: 0 20px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        color: $grey600;
+        transition: background-color 0.356s;
+
+        &.password-score-0,
+        &.password-score-1,
+        &.password-score-2 {
+            background-color: $error;
+            color: #FFF;
+        }
+
+        &.password-score-3,
+        &.password-score-4,
+        &.password-score-5 {
+            background-color: $warning;
+            color: #FFF;
+        }
+
+        &.password-score-6 {
+            background-color: $success;
+            color: #FFF;
+        }
+    }
+}
+
+#custom-tabs {
+    .new-tab button.dark.outline,
+    .old-tab button.dark.outline {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+}
+
+#new-tab {
+    background: none;
+    position: relative;
+    display: block;
+    margin: 0 auto 40px;
+    border: none;
+    color: $blue;
+    font-size: 12px;
+
+    svg {
+        fill: $blue;
+        margin-bottom: 4px;
+        width: 50px;
+        height: 50px;
+    }
+}
+
+main #uploader {
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 30px;
+    border: 2px dashed $blue;
+    font-size: 15px;
+    color: $blue;
+    cursor: pointer;
+    margin-bottom: 30px;
+
+    &:hover {
+        background-color: $blue600;
+    }
+
+    svg,
+    span {
+        pointer-events: none;
+    }
+
+    svg {
+        fill: $blue;
+        margin-bottom: 4px;
+        width: 50px;
+        height: 50px;
+    }
+
+    svg+svg {
+        width: 44px;
+        height: 44px;
+        margin-bottom: 10px;
+        display: none;
+    }
+
+    input {
+        display: none;
+    }
+
+    &.uploading svg {
+        display: none;
+
+        &+svg {
+            display: block;
+        }
+    }
+
+    &.highlight {
+        background-color: $blue800;
+        border: 2px dashed #FFF;
+        color: #FFF;
+
+        svg {
+            fill: #FFF;
+        }
+    }
+}

@@ -15,9 +15,10 @@
     @if($type === 'approved')
     <div class="column countries">
         @foreach($countries as $key => $country)
-            @if($loop->first)
-                <span title="{{$country}}">@svg($key, '#000000', 'images/locations')</span>
+            @if($loop->index > 0)
+                @break
             @endif
+            <span title="{{$country}}">@svg($key, '#000000', 'images/locations')</span>
         @endforeach
 
         @if(count($countries) > 1)
@@ -28,27 +29,27 @@
         <div class="column"></div>
     @endif
     <div class="column">
-        @if(Request::is('dashboard'))
+        @if(Request::is('admin/*'))
             {{ $details['email'] ?? '' }}
         @else
             @subStr($app['callback_url'], 30)
         @endif
     </div>
     <div class="column">
-        {{ date('Y-m-d', strtotime($app['created_at'])) }}
+        {{ date('Y-m-d', strtotime($app['updated_at'])) }}
     </div>
     <div class="column">
         <button class="actions"></button>
     </div>
     <div class="detail">
-        @if(Request::is('dashboard'))
+        @if(Request::is('admin/*'))
             <div>
                 <div>
                     <p><strong>Developer name:</strong> </p>
                     <p><strong>Developer email:</strong> </p>
                 </div>
                 <div>
-                    <p id="developer-name">{{ $details['first_name']  . ' ' . $details['last_name'] }}</p>
+                    <p id="developer-name">{{ ($details['first_name'] ?? 'Not registered')  . ' ' . ($details['last_name'] ?? '') }}</p>
                     <p id="developer-email">{{ $details['email'] ?? '' }}</p>
                 </div>
                 <div class="copy-column"><!--This is a placeholder--></div>
@@ -99,7 +100,7 @@
                     <p>Never</p>
                     <div class="country-flags">
                         @foreach($countries as $key => $country)
-                            @svg($key, '#000000', 'images/locations')
+                            <span title="{{$country}}">@svg($key, '#000000', 'images/locations')</span>
                         @endforeach
                     </div>
                 </div>
@@ -121,7 +122,7 @@
         </div>
     </div>
     <nav class="menu">
-        @if(Request::is('dashboard'))
+        @if(Request::is('admin/*'))
             @can('administer-dashboard')
             <button class="product-all" data-action="approve">Approve all</button>
             <button class="product-all" data-action="revoke">Revoke all</button>

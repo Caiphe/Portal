@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Country;
 use App\Product;
 use App\User;
 use Illuminate\Http\Request;
@@ -12,37 +11,6 @@ use Google2FA;
 
 class UserController extends Controller
 {
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function index()
-	{
-		//
-	}
-
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return \Illuminate\Http\Response
-	 */
-	public function create()
-	{
-		//
-	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function store(Request $request)
-	{
-		//
-	}
-
 	/**
 	 * Display the specified resource.
 	 *
@@ -70,17 +38,6 @@ class UserController extends Controller
 			'key' => $key,
 			'inlineUrl' => $inlineUrl,
 		]);
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function edit($id)
-	{
-		//
 	}
 
 	/**
@@ -114,24 +71,12 @@ class UserController extends Controller
 		$user->update($validatedData);
 
 		if ($request->has('locations')) {
-			$countryIds = Country::whereIn('code', $request->locations)->pluck('id');
-			$user->countries()->sync($countryIds);
+			$user->countries()->sync($request->locations);
 		}
 
 		\Session::flash('alert', 'Success:Your profile has been updated.');
 
 		return redirect()->back();
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return \Illuminate\Http\Response
-	 */
-	public function destroy($id)
-	{
-		//
 	}
 
 	public function updateProfilePicture(Request $request)

@@ -157,6 +157,7 @@
     position: relative;
 
     @media screen and (min-width: 1440px) {
+
         &:before,
         &:after {
             content: "";
@@ -187,4 +188,41 @@
 
 .centre-flex {
     justify-content: center;
+}
+
+.centre-align {
+    align-items: center;
+}
+
+.spacer-flex {
+    flex: 2;
+}
+
+#main .twofa-warning {
+    background-color: $redDark;
+    border-radius: 10px;
+    color: #FFF;
+    margin: 10px 0 0 0;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+
+    &.tall {
+        margin: 100px 0 0 40px;
+
+        &+.content {
+            margin-top: 40px;
+        }
+    }
+
+    a {
+        margin-left: auto;
+        color: #FFF;
+        font-size: 14px;
+
+        &:hover {
+            color: $redDark;
+        }
+    }
 }

@@ -1,80 +1,87 @@
-#alert {
+#alert,
+#alert-loading {
     color: #FFF;
-    text-align: center;
-    transition: max-height 0.512s;
-    max-height: 0;
-    overflow: hidden;
-	flex: 1 0 auto;
+    transition: transform 512ms, opacity 512ms;
     z-index: 2;
-    position: absolute;
-    top: 80px;
-    width: 100%;
+    position: fixed;
+    bottom: 40px;
+    max-width: 256px;
+    right: 0;
+    pointer-events: none;
+    padding-left: 76px;
+    padding-right: 30px;
+    opacity: 0;
+    border-radius: 10px;
+    background-position: 20px 22px;
+    background-size: 40px;
+    background-repeat: no-repeat;
+    min-height: 80px;
 
     &.open {
-        max-height: 180px;
+        transform: translateX(-40px);
+        opacity: 1;
+        pointer-events: auto;
     }
+}
 
-    .fab {
+#alert {
+    button {
+        background: none;
+        border: none;
         position: absolute;
-        top: 12px;
-        right: 8%;
+        top: 4px;
+        right: 4px;
+        padding: 0;
+        width: 24px;
+        height: 24px;
+        font-size: 22px;
+        color: #FFF;
+        font-family: 'sans-serif';
+        border-radius: 0;
     }
 
     &.success {
         background-color: $success;
-
-        .fab {
-            background-color: $success;
-            border-color: $success;
-
-            &:hover {
-                background-color: $success900;
-            }
-        }
+        background-image: url('/images/icons/success.svg');
     }
 
     &.warning {
         background-color: $warning;
-
-        .fab {
-            background-color: $warning;
-            border-color: $warning;
-
-            &:hover {
-                background-color: $warning900;
-            }
-        }
+        background-image: url('/images/icons/warning.svg');
     }
 
     &.error {
         background-color: $error;
-
-        .fab {
-            background-color: $error;
-            border-color: $error;
-
-            &:hover {
-                background-color: $error900;
-            }
-        }
+        background-image: url('/images/icons/error.svg');
     }
 
     &.info {
         background-color: $info;
-
-        .fab {
-            background-color: $info;
-            border-color: $info;
-
-            &:hover {
-                background-color: $info900;
-            }
-        }
+        background-image: url('/images/icons/info.svg');
     }
 
     ul {
         list-style: none;
-        padding: $gutterSmall 0;
+        padding: 20px 0 10px;
         margin: 0;
+
+        li {
+            padding: 0 0 10px;
+            word-break: break-word;
+        }
+    }
+}
+
+#alert-loading {
+    color: $grey900;
+    background-color: $yellow;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    min-height: auto;
+
+    svg {
+        margin-left: 10px;
+        width: 18px;
     }
 }
