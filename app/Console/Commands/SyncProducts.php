@@ -62,7 +62,7 @@ class SyncProducts extends Command
 			
 			$attributes = ApigeeService::getAppAttributes($product['attributes']);
 
-			if($prod->exists()){
+			if(!is_null($prod)){
 				$prod->update([
 					'pid' => $product['name'],
 					'name' => $product['name'],
