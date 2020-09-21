@@ -1,5 +1,4 @@
 document.getElementById('profile-picture').addEventListener('change', chooseProfilePicture);
-document.querySelector('.enable-2fa-button').addEventListener('click', enable2FA);
 
 function chooseProfilePicture(ev) {
     var files = this.files;
@@ -63,9 +62,4 @@ function uploadProfilePicture(file) {
 function togglePasswordVisibility(that) {
     that.parentNode.classList.toggle('password-visible');
     that.previousElementSibling.setAttribute('type',that.parentNode.classList.contains('password-visible') ? "text" : "password");
-}
-
-function enable2FA() {
-    document.querySelector('.enable-2fa').classList.add('show');
-    document.getElementById('authenticator-code').focus();
 }

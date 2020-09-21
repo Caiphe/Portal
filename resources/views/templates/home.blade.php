@@ -199,31 +199,13 @@
             <div class="container">
                 <h2 class="t-light">Product categories</h2>
                 <div class="products-cards">
-                    @foreach ($productsCollection as $product)
-                        <x-card-icon :icon="\Illuminate\Support\Str::slug($product)" :title="$product" :href="'/products?category=' . $product"></x-card-icon>
+                    @foreach($globalCategories->shuffle()->take(6) as $category)
+                        <x-card-icon :icon="$category->slug" :title="$category->title" :href="route('category.show', $category->slug)"></x-card-icon>
                     @endforeach
                 </div>
             </div>
         </div>
     </section>
-
-    {{-- <section>
-        <div class="container">
-            <h2>Bundles</h2>
-            <div class="bundle-cards">
-                @foreach ($bundleCollection as $bundle)
-                    @php //setting variables
-                        $description = $bundle->description ?: 'View bundle';
-                    @endphp
-                        <x-card-product :title="$bundle->display_name" :href="route('bundle.show',$bundle->slug)"
-                        :data-title="$bundle->display_name">@subStr($description)</x-card-product>
-                    @endforeach
-            </div>
-            <div class="view-products">
-                <a href="/bundles" class="button" role="button">View all bundles</a>
-            </div>
-        </div>
-    </section> --}}
 
     <x-footer/>
     @stack("scripts")

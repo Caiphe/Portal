@@ -27,6 +27,9 @@
     <div class="heading-box">
         <h1>{{$bundle->display_name}}</h1>
         <p class="t-pxl">{{$bundle->description}}</p>
+        @if(\Auth::check() && \Auth::user()->can('view-admin'))
+        <a href="{{ route('admin.bundle.edit', $bundle->slug) }}" class="button">EDIT</a>
+        @endif
         <a href="/" class="button yellow outline">Subscribe</a>
     </div>
 
@@ -57,7 +60,7 @@
 
     @if(isset($content['overview']))
     <h2>Overview</h2>
-    {{$content['overview'][0]['body']}}
+    {!! $content['overview'][0]['body'] !!}
     @endif
 
     @if(!$bundle->keyFeatures->isEmpty())
@@ -70,9 +73,6 @@
     @endforeach
     </div>
     @endif
-
-    <h2>Prerequires</h2>
-    <p>oAuth 2</p>
 
     <h2>Products included</h2>
     <div class="products">

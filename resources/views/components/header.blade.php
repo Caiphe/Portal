@@ -24,8 +24,8 @@
             <li><a href="/getting-started">Docs</a></li>
             <li><a href="/faq">FAQ</a></li>
             <li><a href="/contact">Contact us</a></li>
-            @can('view-dashboard')
-            <li><a href="/dashboard">Dashboard</a></li>
+            @can('view-admin')
+            <li><a href="{{ route('admin.home') }}">Admin</a></li>
             @endcan
         </ul>
         <form action="{{route('search')}}">

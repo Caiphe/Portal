@@ -17,7 +17,6 @@
 </head>
 <body class="layout-sidebar">
     <x-header/>
-    <x-alert/>
     @yield('banner')
     <div class="wrapper container">
         <nav id="sidebar">
@@ -28,6 +27,7 @@
 		</main>
     </div>
     <x-footer/>
+    <x-alert/>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
     <script src="{{ mix('/js/scripts.js') }}"></script>
     @stack("scripts")

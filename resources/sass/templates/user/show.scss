@@ -6,10 +6,6 @@
     margin-bottom: 60px;
     height: 100%;
 
-    #heading {
-        margin-bottom: 40px;
-    }
-
     .content {
         margin-left: 40px;
         margin-top: 110px;
@@ -135,8 +131,6 @@
         }
 
         &.enable-2fa {
-            display: none;
-
             svg {
                 display: block;
                 margin: 0 auto;
@@ -151,10 +145,5 @@
                 display: none;
             }
         }
-    }
-
-    .enable-2fa-button {
-        display: block;
-        margin: 20px auto 0;
     }
 }

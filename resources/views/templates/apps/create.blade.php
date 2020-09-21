@@ -28,6 +28,8 @@
 
     <x-heading heading="Apps" tags="CREATE NEW"></x-heading>
 
+    <x-twofa-warning class="tall"></x-twofa-warning>
+
     <div class="content">
 
         <nav>
@@ -368,22 +370,15 @@
         xhr.send(JSON.stringify(app));
 
         xhr.onload = function() {
-            window.scrollTo({
-                top: 0,
-                left: 0,
-                behavior: 'smooth'
-            });
-
             if (xhr.status === 200) {
-
-                addAlert('success', 'Application created successfully', function(){
+                addAlert('success', ['Application created successfully', 'You will be redirected to your app page shortly.'], function(){
                     window.location.href = "{{ route('app.index') }}";
                 });
             } else {
                 result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
                 addAlert('error', result.message || 'Sorry there was a problem creating your app. Please try again.');
 
-                button.removeAttributer('disabled');
+                button.removeAttribute('disabled');
                 button.textContent = 'Create';
             }
         };

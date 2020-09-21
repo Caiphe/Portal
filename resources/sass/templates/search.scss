@@ -32,25 +32,45 @@ input.search {
 
 #main .pagination {
     list-style: none;
-    padding: 0;
     display: flex;
+    padding: 0;
 
-    a {
-        width: 24px;
-        height: 24px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 4px;
-        color: $grey900;
-
-        &.current,
-        &:hover {
-            background-color: $yellow;
-        }
+    li {
+        padding: 0;
     }
 
-    svg {
-        height: 20px;
+    a {
+        width: 30px;
+        height: 30px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 2px;
+        color: $grey900;
+        box-sizing: border-box;
+        background-color: #FFF;
+        border: 1px solid $grey900;
+        border-radius: 6px;
+        font-family: 'mtn-bold';
+    }
+
+    .current,
+    a:active,
+    a:focus {
+        background-color: $yellow;
+        border: 1px solid $yellow;
+    }
+}
+
+.admin {
+    .search {
+        background-color: #FFF;
+        color: #000;
+        border-radius: 50px;
+        border: none;
+        padding: 10px 20px;
+        
+        filter: invert(90%);
     }
 }

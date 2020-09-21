@@ -1,0 +1,46 @@
+@import '../../variables';
+
+#search-page {
+    background-color: $grey900;
+    color: #FFF;
+    border-radius: 50px;
+    border: none;
+    padding: 0 20px;
+    height: 32px;
+    width: 256px;
+}
+
+#reset-search {
+    margin-left: -34px;
+
+    button {
+        width: 30px;
+        height: 30px;
+    }
+
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+.delete-form {
+    display: inline;
+
+    button {
+        background: none;
+        border: 0;
+        padding: 0;
+    }
+}
+
+#main {
+    table thead tr {
+        background-color: $blueDark;
+        color: #FFF;
+
+        input {
+            filter: invert(100%);
+        }
+    }
+}

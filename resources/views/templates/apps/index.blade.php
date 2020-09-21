@@ -30,6 +30,8 @@
         <a href="{{route('app.create')}}" class="button outline dark" id="create">Create new</a>
     </x-heading>
 
+    <x-twofa-warning></x-twofa-warning>
+
     @if(empty($approvedApps) && empty($revokedApps))
         <div class="container" id="app-empty">
             <div class="row">
@@ -66,7 +68,7 @@
                         </div>
 
                         <div class="column">
-                            <p>Date created</p>
+                            <p>Date updated</p>
                         </div>
 
                         <div class="column">
@@ -80,7 +82,7 @@
                                 :app="$app"
                                 :attr="$app['attributes']"
                                 :details="$app['developer']"
-                                :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products->pluck('name')->toArray())"
+                                :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products)"
                                 :type="$type = 'approved'">
                             </x-app>
                             @endif
@@ -113,7 +115,7 @@
                         </div>
 
                         <div class="column">
-                            <p>Date created</p>
+                            <p>Date updated</p>
                         </div>
 
                         <div class="column">
@@ -127,7 +129,7 @@
                                     :app="$app"
                                     :attr="$app['attributes']"
                                     :details="$app['developer']"
-                                    :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products->pluck('name')->toArray())"
+                                    :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products)"
                                     :type="$type = 'revoked'">
                                 </x-app>
                             @endif
@@ -259,7 +261,6 @@
 
             xhr.onload = function() {
                 if(xhr.status === 302 || /login/.test(xhr.responseURL)){
-                     window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
                      addAlert('info', ['You are currently logged out.', 'Refresh the page to login again.']);
                     btn.className = 'copy';
                 } else if (xhr.status === 200) {

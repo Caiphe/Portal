@@ -1,4 +1,4 @@
-@if ($errors->any() || Session::has('alert'))
+@if ((isset($errors) && $errors->any()) || Session::has('alert'))
 @php
 if($errors->any()){
     $type = 'error';
@@ -15,13 +15,11 @@ if($errors->any()){
 }
 @endphp
 <div id="alert" class="{{$type}} open">
-    <div class="container">
-        <ul>
-            @foreach ($messages as $message)
-                <li>{{ $message }}</li>
-            @endforeach
-        </ul>
-        <button class="fab blue close" onclick="closeAlert()"></button>
-    </div>
+    <ul>
+        @foreach ($messages as $message)
+            <li>{{ $message }}</li>
+        @endforeach
+    </ul>
+    <button class="fab blue close" onclick="closeAlert()">&times;</button>
 </div>
 @endif
