@@ -45,13 +45,13 @@
                         resetAjaxify();
                         updateUrl(url);
                     } else {
-                        addAlert('success', result.body || "Success");
+                        addAlert('success', (result.body || "Success"));
                     }
 
                     if(typeof ajaxifyComplete !== 'undefined') ajaxifyComplete();
 
                 } else {
-                    addAlert('error', result.body || "Sorry there was an unexpected error.");
+                    addAlert('error', (result.body || "Sorry there was an unexpected error."));
                 }
 
                 removeLoading();

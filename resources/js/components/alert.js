@@ -56,6 +56,6 @@ function removeLoading() {
     loading.classList.remove('open');
 
     setTimeout(function() {
-        document.body.removeChild(loading)
+        document.body.removeChild(loading);
     }, 600);
 }

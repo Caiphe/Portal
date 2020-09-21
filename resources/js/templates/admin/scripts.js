@@ -8,12 +8,10 @@ function sync(el) {
             el.classList.remove('syncing');
 
             if (xhr.status === 200) {
-                console.log(result);
-                addAlert('success', ['Syncing complete!', 'Refresh the page to see if there is anything new.'])
+                addAlert('success', ['Syncing complete!', 'Refresh the page to see if there is anything new.']);
             } else {
                 var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
-                console.log('Error');
-                addAlert('error', result ?? 'There was a problem syncing.')
+                addAlert('error', (result || 'There was a problem syncing.'));
             }
         }
     };
