@@ -35,9 +35,13 @@
         <div class="available-in">
             <h4>AVAILABLE IN</h4>
             <div class="flags">
+                @if($product->locations === 'all')
+                <img class="flag" src="/images/locations/globe.svg" alt="All countries" title="All countries">
+                @else
                 @foreach($product->countries->pluck('code', 'name') as $name => $code)
                 <img class="flag" src="/images/locations/{{ $code }}.svg" alt="{{ $name }}" title="{{ $name }}">
                 @endforeach
+                @endif
             </div>
         </div>
     </x-heading>

@@ -251,7 +251,7 @@
 
     function selectCountry(event) {
         var countryRadioBoxes = document.querySelectorAll('.country-checkbox:checked')[0];
-        var selected = [countryRadioBoxes.dataset.location];
+        var selected = countryRadioBoxes.dataset.location;
 
         filterLocations(selected);
         filterProducts(selected);
@@ -260,24 +260,19 @@
     }
 
     function filterLocations(selected) {
-
         var locations = document.querySelectorAll('.filtered-countries img');
 
         for(var i = 0; i < locations.length; i++) {
+            if (locations[i].dataset.location === selected) {
+                locations[i].style.opacity = "1";
+                continue;
+            }
 
             locations[i].style.opacity = "0.5";
-
-            for(var j = 0; j < selected.length; j++) {
-
-                if (locations[i].dataset.location === selected[j]) {
-                    locations[i].style.opacity = "1";
-                }
-            }
         }
     }
 
     function filterProducts(selectedCountry) {
-
         var products = document.querySelectorAll(".card--product");
 
         for (var i = products.length - 1; i >= 0; i--) {
@@ -288,21 +283,8 @@
                     ? products[i].dataset.locations.split(",")
                     : ["all"];
 
-            if(selectedCountry.length === 0 || inSelectedArray(selectedCountry, locations)) {
-
+            if(locations[0] === 'all' || locations.indexOf(selectedCountry) !== -1){
                 products[i].style.display = "flex";
-            }
-        }
-    }
-
-    function inSelectedArray(selectedCountry, locations) {
-        for (var j = 0; j < selectedCountry.length; j++) {
-            for (var k = 0; k < locations.length; k++) {
-                if(selectedCountry[j] === locations[k] || locations[k] === 'all') {
-                    return true;
-                } else {
-                    return false;
-                }
             }
         }
     }
