@@ -42,8 +42,8 @@
         </form>
         @if(\Auth::check())
             <a href="/apps/create" class="button dark hidden" role="button">Build app</a>
-            <div id="profile-menu hidden">
-                <div id="profile-menu-picture hidden" style="background-image: url({{\Auth::user()->profile_picture}})"></div>
+            <div id="profile-menu" class="hidden">
+                <div id="profile-menu-picture" class="hidden" style="background-image: url({{\Auth::user()->profile_picture}})"></div>
                 <ul class="profile-menu-options shadow">
                     <li><a href="/profile">Profile</a></li>
                     <li><a href="/apps">Apps</a></li>

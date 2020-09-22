@@ -54,6 +54,7 @@
         @media #{$small} {
             margin-left: 0;
             margin-top: 40px;
+            padding: 20px;
         }
 
         @media #{$medium-portrait} {
@@ -100,6 +101,10 @@
             height: 226px;
             margin: 0 auto;
             border-radius: 50%;
+
+            @media #{$small} {
+                max-width: 100%;
+            }
 
             &::after {
                 content: '';
@@ -199,6 +204,10 @@
 
             &.show+button {
                 display: none;
+            }
+
+            h4 {
+                word-break: break-word;
             }
         }
     }

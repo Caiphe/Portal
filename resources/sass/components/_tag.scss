@@ -11,6 +11,10 @@
     -moz-border-radius: 3px;
     border-radius: 3px;
 
+    @media #{$small} {
+        height: 20px;
+    }
+
     &.hoverable {
         text-decoration: none;
         cursor: pointer;

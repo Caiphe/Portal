@@ -190,7 +190,7 @@
     .product-section {
         display: none;
 
-        h2:first-of-type  {
+        h2:first-of-type {
             @media #{$small} {
                 display: none;
             }
@@ -415,10 +415,10 @@
         }
 
         svg {
+            top: 8px;
             position: absolute;
             right: 10px;
             width: 18px;
-            top: 8px;
         }
 
         .response-details {
@@ -502,6 +502,10 @@
             &>.schema,
             .schema.open>.schema {
                 display: block;
+            }
+
+            svg {
+                top: 0;
             }
         }
     }

@@ -83,7 +83,7 @@
                                     :app="$app"
                                     :attr="$app['attributes']"
                                     :details="$app['developer']"
-                                    :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products->pluck('name')->toArray())"
+                                    :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products)"
                                     :type="$type = 'approved'">
                                 </x-app>
                                 @endif
@@ -91,21 +91,6 @@
                                 <p>No approved apps.</p>
                             @endforelse
                         </div>
-                    </div>
-                    <div class="body">
-                        @forelse($approvedApps as $app)
-                            @if(!empty($app['attributes']))
-                            <x-app
-                                :app="$app"
-                                :attr="$app['attributes']"
-                                :details="$app['developer']"
-                                :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products)"
-                                :type="$type = 'approved'">
-                            </x-app>
-                            @endif
-                        @empty
-                            <p>No approved apps.</p>
-                        @endforelse
                     </div>
                 </div>
             </div>
@@ -155,21 +140,6 @@
                                 <p>No revoked apps.</p>
                             @endforelse
                         </div>
-                    </div>
-                    <div class="body">
-                        @forelse($revokedApps as $app)
-                            @if(!empty($app['attributes']))
-                                <x-app
-                                    :app="$app"
-                                    :attr="$app['attributes']"
-                                    :details="$app['developer']"
-                                    :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products)"
-                                    :type="$type = 'revoked'">
-                                </x-app>
-                            @endif
-                        @empty
-                            <p>No revoked apps.</p>
-                        @endforelse
                     </div>
                 </div>
             </div>

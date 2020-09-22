@@ -304,6 +304,10 @@
             display: none;
         }
     }
+
+    @media #{$medium-up} {
+        display: none !important;
+    }
 }
 
 .hidden {
