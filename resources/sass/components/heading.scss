@@ -67,17 +67,32 @@
     align-items: center;
     padding: $gutterSmall $gutter;
     background-color: $grey400;
-    height: 68px;
     overflow: hidden;
     z-index: 1;
 
+    @media #{$small} {
+        margin-top: 10px;
+    }
+
+    @media #{$medium-up} {
+        height: 68px;
+    }
+
     .edit {
         margin-left: 10px;
+
+        @media #{$small} {
+            display: none;
+        }
     }
 
     h1 {
         margin: 0;
         display: inline;
+
+        @media #{$small} {
+            line-height: 1;
+        }
     }
 
     .tag:first-child {

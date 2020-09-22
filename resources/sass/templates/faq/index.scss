@@ -2,6 +2,12 @@
 
 #main {
     padding: 0 !important;
+
+    .edit {
+        @media #{$small} {
+            display: none;
+        }
+    }
 }
 
 section:first-of-type {
