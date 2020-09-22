@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{"MTN":"Developer Portal"}</title>
+    <title>MTN Developer Portal</title>
     <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
     <link rel="icon" href="/images/favicon.png" type="image/png">
     <link rel="stylesheet" href="{{ mix('/css/styles.css') }}">
@@ -194,7 +194,7 @@
         </div>
     </section>
 
-    <section class="blue-bg">
+    <section id="section-product-categories" class="blue-bg">
         <div class="container-flex">
             <div class="container">
                 <h2 class="t-light">Product categories</h2>

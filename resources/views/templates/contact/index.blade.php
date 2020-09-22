@@ -28,7 +28,7 @@
 
     <section>
         <div class="container">
-            <div class="column">
+            <div class="column help">
                 <h2>Need more help?</h2>
 
                 <p>
@@ -37,12 +37,12 @@
 
                 <a class="button after arrow-right" href="{{route('faq.index')}}">View FAQ's</a>
             </div>
-            <div class="column">
+            <div class="column contact">
                 <h2>Get in touch</h2>
 
                 <x-contact-form></x-contact-form>
             </div>
-            <div class="column">
+            <div class="column details">
                 <h2>Contact details</h2>
                 <address>
                     <div class="left">

@@ -1,17 +1,62 @@
 @import "../../variables";
 
+#sidebar {
+    @media #{$small} {
+        display: none;
+    }
+
+    @media #{$medium-portrait} {
+        display: none;
+    }
+}
+
 #main {
     padding: 0 !important;
     margin-bottom: 60px;
     height: 100%;
 
+    @media #{$small} {
+        margin-top: 80px;
+    }
+
+    @media #{$medium-portrait} {
+        margin-top: 80px;
+    }
+
     #heading {
         margin-bottom: 40px;
+
+        span {
+            @media #{$small} {
+                display: none;
+            }
+        }
+
+        @media #{$small} {
+            background-color: transparent;
+            padding-left: 0 !important;
+            margin-bottom: 15px;
+            position: static !important;
+        }
+
+        @media #{$medium-portrait} {
+            background-color: transparent;
+            padding-left: 0 !important;
+            position: static !important;
+        }
     }
 
     .content {
         margin-left: 40px;
         margin-top: 100px;
+
+        @media #{$small} {
+            margin: 0;
+        }
+
+        @media #{$medium-portrait} {
+            margin: 0;
+        }
 
         h2 {
             display: flex;
@@ -42,8 +87,21 @@
                 .card__body {
                     font-size: 12px;
                 }
+
+                @media #{$small} {
+                    height: auto;
+                    width: 100%;
+                }
+
+                @media #{$medium-portrait} {
+                    height: auto;
+                    width: 100%;
+                }
             }
         }
 
+        @media #{$small} {
+            margin-left: 0;
+        }
     }
 }

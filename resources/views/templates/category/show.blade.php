@@ -133,10 +133,10 @@ grant_type=client_credentials -d 'client_id={consumer-key}&client_secret={consum
         rootMargin: '0px',
         threshold: 0.5
     });
-    observer.observe(document.querySelector('.bundle'));
     observer.observe(document.querySelector('.product'));
-    observer.observe(document.querySelector('.benefits'));
-    observer.observe(document.querySelector('.pricing'));
+    // observer.observe(document.querySelector('.bundle'));
+    // observer.observe(document.querySelector('.benefits'));
+    // observer.observe(document.querySelector('.pricing'));
 
     function showStack(entries, observer) {
         entries.forEach(activate);

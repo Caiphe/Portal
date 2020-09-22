@@ -9,7 +9,7 @@
             {{ $title }}
         </strong>
     @endisset
-    &nbsp;{{ $text }}
+    <div>&nbsp;{{ $text }}</div>
     @svg('arrow-forward', '#FFFFFF')
     @isset($logo)
       @svg($logo, '#FFFFFF')

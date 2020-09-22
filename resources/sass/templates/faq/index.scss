@@ -10,6 +10,14 @@ section:first-of-type {
 
     .container {
         display: flex;
+
+        @media #{$small} {
+            flex-direction: column;
+        }
+
+        @media #{$medium-portrait} {
+            flex-direction: column;
+        }
     }
 }
 
@@ -43,6 +51,10 @@ section:last-of-type {
 
                 h2 {
                     margin-bottom: 5px;
+
+                    @media #{$small} {
+                        text-align: center;
+                    }
                 }
 
                 input {
@@ -102,12 +114,21 @@ section:last-of-type {
                 }
             }
         }
+
+        @media #{$small} {
+            display: none;
+        }
+
+        @media #{$medium-portrait} {
+            display: none;
+        }
     }
 }
 
 .contact {
     text-align: center;
-    width: 600px;
+    width: 100%;
+    max-width: 600px;
     margin: auto;
 
     .panel {
@@ -153,6 +174,10 @@ section:last-of-type {
             margin: $gutter auto 0;
             display: block;
             position: relative;
+
+            @media #{$small} {
+                width: 100%;
+            }
         }
 
         input[name='username'] {
@@ -173,5 +198,13 @@ section:last-of-type {
         &.show {
             display: block;
         }
+    }
+
+    @media #{$small} {
+        width: 100%;
+    }
+
+    @media #{$medium-portrait} {
+        width: 100%;
     }
 }

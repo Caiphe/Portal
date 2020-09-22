@@ -1,5 +1,25 @@
 @import '../../variables';
 
+#sidebar {
+    @media #{$small} {
+        display: none;
+    }
+
+    @media #{$medium-portrait} {
+        display: none;
+    }
+}
+
+#main {
+    @media #{$small} {
+        padding-left: 0 !important;
+    }
+
+    @media #{$medium-portrait} {
+        padding-left: 0 !important;
+    }
+}
+
 // NO APPS
 #app-empty {
     height: 100%;
@@ -32,12 +52,24 @@
     .row {
         display: flex;
         flex-direction: column;
+        margin-top: 20px;
         border: 2px solid #F2F2F2;
         border-radius: 10px;
-        margin-top: 20px;
+
+        @media #{$small} {
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
 
         >div {
             padding: 10px 20px 10px;
+        }
+    }
+
+    .approved-apps,
+    .revoked-apps {
+        @media #{$small} {
+            width: 776px;
         }
     }
 
@@ -96,12 +128,24 @@
             display: flex;
             flex-wrap: wrap;
             padding: 0;
+
+            // @media #{$small} {
+            //     width: 500px;
+            //     overflow-y: auto;
+            //     overflow-x: hidden;
+            // }
         }
 
         .body {
             display: flex;
             flex-wrap: wrap;
             padding-top: 10px;
+
+            // @media #{$small} {
+            //     width: 500px;
+            //     overflow-y: auto;
+            //     overflow-x: hidden;
+            // }
         }
 
         &.collapse {
