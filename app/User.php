@@ -8,7 +8,8 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable implements MustVerifyEmail {
+class User extends Authenticatable implements MustVerifyEmail
+{
 	use Notifiable;
 
 	/**
@@ -34,15 +35,18 @@ class User extends Authenticatable implements MustVerifyEmail {
 		'email_verified_at' => 'datetime',
 	];
 
-	public function roles() {
+	public function roles()
+	{
 		return $this->belongsToMany(Role::class);
 	}
 
-	public function hasRole($role) {
+	public function hasRole($role)
+	{
 		return $this->roles->pluck('name')->contains($role);
 	}
 
-	public function assignRole($role) {
+	public function assignRole($role)
+	{
 		if (is_string($role)) {
 			$role = Role::whereName($role)->firstOrFail();
 		}
@@ -50,14 +54,16 @@ class User extends Authenticatable implements MustVerifyEmail {
 		$this->roles()->sync($role, false);
 	}
 
-	public function permissions() {
+	public function permissions()
+	{
 		return $this->roles->map->permissions
 			->flatten()
 			->pluck('name')
 			->unique();
 	}
 
-	public function hasPermissionTo($permission) {
+	public function hasPermissionTo($permission)
+	{
 		$userPermissions = $this->roles->map->permissions
 			->flatten()
 			->pluck('name')
@@ -65,17 +71,59 @@ class User extends Authenticatable implements MustVerifyEmail {
 			->toArray();
 
 		if (is_array($permission)) {
-			return !array_diff($permission, $userPermissions);
+			return !is_null($this['2fa']) && !array_diff($permission, $userPermissions);
 		}
 
-		return in_array($permission, $userPermissions);
+		return !is_null($this['2fa']) && in_array($permission, $userPermissions);
 	}
 
-	public function countries() {
+	public function hasAnyPermissionTo($permission)
+	{
+		$userPermissions = $this->roles->map->permissions
+			->flatten()
+			->pluck('name')
+			->unique()
+			->toArray();
+
+		if (is_array($permission)) {
+			return !is_null($this['2fa']) && count(array_intersect($permission, $userPermissions)) > 0;
+		}
+
+		return !is_null($this['2fa']) && in_array($permission, $userPermissions);
+	}
+
+	public function countries()
+	{
 		return $this->belongsToMany(Country::class);
 	}
 
-	public function responsibleCountries() {
+	public function responsibleCountries()
+	{
 		return $this->belongsToMany(Country::class, 'country_opco');
+	}
+
+	/**
+	 * Get the user's full name.
+	 *
+	 * @return string
+	 */
+	public function getFullNameAttribute()
+	{
+		return "{$this->first_name} {$this->last_name}";
+	}
+
+	/**
+	 * Get the user slug which is the id.
+	 *
+	 * @return string
+	 */
+	public function getSlugAttribute()
+	{
+		return $this->id;
+	}
+
+	public function getRolesListAttribute()
+	{
+		return $this->roles->pluck('label')->implode(',');
 	}
 }

@@ -46,6 +46,7 @@
 
     .layout-master & {
         padding: 90px 8vw $gutter;
+
         #heading {
             padding: $gutterSmall 8vw;
         }
@@ -64,12 +65,15 @@
     position: absolute;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: $gutterSmall $gutter;
     background-color: $grey400;
     height: 68px;
     overflow: hidden;
     z-index: 1;
+
+    .edit {
+        margin-left: 10px;
+    }
 
     h1 {
         margin: 0;
@@ -84,7 +88,7 @@
         vertical-align: top;
     }
 
-    .fab {
+    .fab:not(.edit) {
         margin-left: 1rem;
         display: inline;
         vertical-align: top;

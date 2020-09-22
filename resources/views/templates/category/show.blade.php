@@ -10,9 +10,13 @@
 
 @section('content')
     <section class="container">
-        <h1>{{ $category }}</h1>
+        <h1>
+            {{ $category }}
+            @if(\Auth::check() && \Auth::user()->can('view-admin'))
+            <a href="{{ route('admin.category.edit', $slug) }}" class="edit button small dark outline">EDIT</a>
+            @endif
+        </h1>
         <div class="breadcrumb">
-            <a href="#overview">Overview</a>
             <a href="{{ route('product.index', ['category' => $category]) }}">Products @svg('arrow-forward')</a>
         </div>
     </section>
@@ -84,7 +88,7 @@ grant_type=client_credentials -d 'client_id={consumer-key}&client_secret={consum
             <p>Register your account if you want to create an App.</p>
             <div class="cols">
                 <a href="{{ route('register') }}" class="button dark mr-4">Register @svg('arrow-forward')</a>
-                <a href="{{ route('getting-started') }}" class="button dark">Getting started @svg('arrow-forward')</a>
+                <a href="{{ route('doc.index') }}" class="button dark">Getting started @svg('arrow-forward')</a>
             </div>
         </div>
     </section>

@@ -59,16 +59,11 @@ $filters = array('Categories'=> $productCategories);
                 @endphp
                 @foreach ($products as $product)
                 @php //setting variables
-					if ($product->locations !== 'all' && $product->locations !== null) :
-						$countries = explode(',',$product->locations);
-					else :
-						$countries = array('globe');
-					endif;
 					$tags = [$product->group, $category];
                 @endphp
                 <x-card-product :title="$product->display_name"
                 				:href="route('product.show', $product->slug)"
-                				:countries="$countries"
+                				:countries="$product->countries->pluck('code', 'name')"
                 				:tags="$tags"
                                 :data-title="$product->display_name"
                                 :data-group="$product->group"

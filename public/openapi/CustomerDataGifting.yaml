@@ -1,0 +1,175 @@
+---
+swagger: "2.0"
+info:
+  description: The Data Gifting API facilitates purchase of data product for Beneficiary subscriber(Customer) and charging shall be done from Charging system using Requesting subscriber(Sponsor) msisdn and SMS will be sent to both subscriber’s.
+  version: "1.0"
+  title: Customer Data Gifting API
+host: "api.mtn.com"
+basePath: "/v1/datagifting"
+schemes:
+- https
+consumes:
+- application/json
+produces:
+- application/json
+securityDefinitions:
+  ApiKeyAuth:
+    type: "apiKey"
+    name: "X-API-Key"
+    in: "header"
+security:
+  - ApiKeyAuth: []
+
+
+paths:
+
+  /customers/{senderMsisdn}/dataGifting:
+    post:
+      tags:
+      - Customer
+      summary: Data Gifting
+      description: Requesting subscriber to purchase data on behalf of Beneficiary subscriber(customer).
+      parameters:
+      - name: "senderMsisdn"
+        in: path
+        description: Requesting subscriber Msisdn. Charging shall be done from Charging system using this. The format must be E.123 e.g 2349062058464
+        required: true
+        type: string
+      - name: "nodeid"
+        required: true
+        type: string
+        in: "query"
+        description: "Third parties unique identifier. Can also be called channelId."
+      - in: body
+        name: body
+        description: Request body
+        required: true
+        schema:
+          $ref: '#/definitions/RequestData'
+          
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/DataGiftingResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        "405":
+          description: Method No Allowed
+          schema:
+            $ref: '#/definitions/Error'
+        "406":
+          description: Not acceptable
+          schema:
+            $ref: '#/definitions/Error'
+        "415":
+          description: Unsupported media Type
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+            
+   
+definitions:
+        
+  RequestData:
+    type: object
+    required:
+      - receiverMsisdn
+      - productCode
+      - sendSms
+    properties:
+      receiverMsisdn:
+        type: string
+        example: "2349062058463"
+        description: The Beneficiary subscriber msisdn. The format must be E.123
+      productCode:
+        type: string
+        example: "NACT_NG_Data_4504"
+        description: The product code, which already has a predefined data volumn and chargable amount in the Charging system
+      sendSms:
+        type: boolean
+        example: true
+        description: SMS will be sent to both subscriber’s <msisdn=2349062058464, 2349062058463>
+        
+  DataGiftingResponseData:
+    type: object
+    description: "The impacted system success response"
+    properties:
+      productName:
+        type: string
+        example: "100 MB 3G PACK"
+      amtCharged:
+        type: integer
+        example: 90
+      notification:
+        type: string
+        example: "You have successfully bought 100MB Data for 2349062058463."
+      
+      
+  DataGiftingResponse:
+    type: object
+    properties:
+      statusCode:
+        type: string
+        description: HTTP error code extension
+        example: "0000"
+      statusMessage:
+        type: string
+        example: "Success"
+      transactionId:
+        type: string
+        example: "31849294974397393924"
+        description: Client generated Id to include for tracing requests, so that the API can easily trace the HTTP request all the way from a client to MTNs backend processes (via our proxies). Each time a request is made to an MTN API the client should include a unique request reference in the HTTP Header. The value must be between 5 and 20 characters, and consist of ASCII letters, digits, or the characters +, /, =, and -. Invalid or blank IDs will be ignored and replaced with generated ones. MTN may use this to detect duplicate transactions from the client, but this functionality is not always guaranteed, so clients must make their own efforts to prevent duplicate transactions. MTN will also log the transactionId in order to assist with debugging and to correlate transactions processed by the API to requests from the client.
+      data:
+        $ref: '#/definitions/DataGiftingResponseData'
+      _link:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+                example: "https://api.mtn.com/v1/customers/2348064816493/datagifting"
+
+
+  Error:
+    type: object
+    properties:
+      transactionId:
+        type: string
+        description: "Client generated Id to include for tracing requests."
+      timestamp:
+        type: "string"
+        format: "date-time"
+        description: "Timestamp when the error occurred, using date-time format"
+        example: "2019-08-23T07:29:25.593+0000"
+      statusCode:
+        type: "string"
+        description: "Canonical Status code"
+        example: "1000"
+      error:
+        type: "string"
+      message:
+        type: "string"
+        description: "More error details and corrective measures"
+      path:
+        type: "string"
+        description: ""

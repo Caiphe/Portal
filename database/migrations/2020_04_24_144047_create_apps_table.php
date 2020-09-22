@@ -23,7 +23,7 @@ class CreateAppsTable extends Migration {
 			$table->string('developer_id');
 			$table->string('status');
 			$table->text('description');
-			$table->string('country_id')->nullable();
+			$table->string('country_code')->nullable();
 			$table->timestamps();
 		});
 

@@ -11,10 +11,12 @@
     The card description is passed through the $slot and link attributes can be added to the card to be applied to the a tag
 --}}
 
-@allowonce('card_product')
+@once
+@push('styles')
 <link href="{{ mix('/css/components/card-product.css') }}" rel="stylesheet"/>
 <link href="{{ mix('/css/components/card.css') }}" rel="stylesheet"/>
-@endallowonce
+@endpush
+@endonce
 
 @props(['title','countries','tags', 'href', 'addButtonId', 'addUrl'])
 <div {{ $attributes->merge(['class' => 'card card--product']) }} >
@@ -36,8 +38,8 @@
             @isset($countries)
             <div class="country-selector">
                 <div class="countries">
-                    @foreach ($countries as $country)
-                        <img src="/images/locations/{{$country}}.svg" title="{{$country}} flag" alt="{{$country}} flag">
+                    @foreach ($countries as $name => $country)
+                        <img src="/images/locations/{{$country}}.svg" title="{{ gettype($name) === 'string' ? $name : $country }} flag" alt="{{$country}} flag">
                     @endforeach
                 </div>
                 @if (count($countries ) > 1)

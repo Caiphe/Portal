@@ -17,13 +17,13 @@
 </head>
 <body class="layout-master">
     <x-header/>
-    <x-alert/>
     <main id="main">
         @yield("content")
     </main>
     <x-footer/>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
     <script src="{{ mix('/js/scripts.js') }}"></script>
+    <x-alert/>
     @stack("scripts")
 </body>
 </html>

@@ -14,13 +14,13 @@ class CreateCountryUserTable extends Migration
     public function up()
     {
         Schema::create('country_user', function (Blueprint $table) {
-            $table->primary(['country_id', 'user_id']);
+            $table->primary(['country_code', 'user_id']);
 
-            $table->unsignedBigInteger('country_id');
+            $table->string('country_code');
             $table->unsignedBigInteger('user_id');
 
-            $table->foreign('country_id')
-                ->references('id')
+            $table->foreign('country_code')
+                ->references('code')
                 ->on('countries')
                 ->onDelete('cascade');
 
@@ -38,6 +38,11 @@ class CreateCountryUserTable extends Migration
      */
     public function down()
     {
+        Schema::table('country_user', function (Blueprint $table) {
+            $table->dropForeign('country_user_country_code_foreign');
+            $table->dropForeign('country_user_user_id_foreign');
+        });
+
         Schema::dropIfExists('country_user');
     }
 }

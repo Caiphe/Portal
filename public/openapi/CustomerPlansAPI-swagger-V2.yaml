@@ -1,0 +1,453 @@
+swagger: "2.0"
+
+info:
+  version: "v2.1"
+  title: MTN Customer Plans API
+  description: An API to retrieve the Plan details of an MTN customer. Please refer to the reference guides https://developers.mtn.com/API-Reference-Guides and Response and Error Codes documents https://developers.mtn.com/ResponseCodes
+
+schemes:
+  - https
+
+host: "api.mtn.com"
+basePath: "/v2"
+
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+
+securityDefinitions:
+  ApiKeyAuth:
+    type: "apiKey"
+    name: "X-API-Key"
+    in: "header"
+    
+
+paths:
+  /customers/{customerId}/plans:
+    get:
+      description: "Retrieves the Billing Plan and related details of an MTN customer."
+      summary: "View customer plans"
+      tags:
+        - "customers"
+      security:
+        - ApiKeyAuth : []
+      parameters:
+        - name: "customerId"
+          in: "path"
+          description: "ID of the customer. It could be MSISDN, email address, or any other customer identifier. if id is msisdn, format must be E.123"
+          required: true
+          type: "string"
+        - name: "fixedLine"
+          in: "query"
+          description: "fixed line whose balances is fetched"
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "Customer Plans object. For a successful request, the response will contain all the customers details. If the customer does not have any requested data, then those fields will be null. E.g. if the customer does not have a startDate set, then it will be null. If the customer does not have any Balance set, then the Balance array will be null."
+          schema:
+            $ref: "#/definitions/CustomerPlans"
+
+        207:
+          description: >
+                    "If there was an error retrieving some part of the request,
+                    then the successful request will be shown, and the remaining failed objects will be be excluded.
+                    E.g. if there was an error retrieving Balance information, then the balance object will be empty"
+          examples: >
+            Partially Successfuls Response, showing valid plan data, but balance object is null:
+
+              "data": {
+                "type": "Postpaid",
+                "status": "Active",
+                "startDate": "2019-04-12T14:31:21.810Z",
+                "endDate": "2021-04-12T14:31:21.810Z",
+                "language": "1",
+                "balance": null
+              }
+
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "Customer not found"
+          examples: >
+            The data object/envelope will be null:
+              {
+                "data": null
+              }
+        405:
+          description: "Method Not allowed"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"
+  
+  
+  /customers/{customerId}/plans/refill:
+   patch:
+    tags:
+    - "customers"
+    summary: "Airtime Refill"
+    description: "Will be used by 3rd-party partners (3PP) for airtime recharge of a prepaid subscriber"
+    operationId: "refillAccount"
+    security:
+      - ApiKeyAuth : []
+    parameters :
+      - name : "customerId"
+        in : "path"
+        description: "ID of the customer. It must be MSISDN and the format must be E.123"
+        type : "string"
+        required : true
+      - name : "transactionId"
+        in : "header"
+        description: "Client generated unique Id to include for tracing requests"
+        type: "string"
+        required : false
+      - name : "sourceSystemId"
+        in : "header"
+        description: "source system Id to include for tracing requests"
+        type: "string"
+        required : false
+      - name: "refillRequest"
+        in: "body"
+        required: true
+        schema:
+          type : "object"
+          required: 
+            - refillType
+          properties:
+            refillType:
+              type: string
+              example: voucher
+              description: "Specify the refill type"
+              enum:
+                - voucher
+                - voucherless
+            voucherActivationCode:
+              type: string
+              description: "Voucher Activation Code, Required if refillType is Voucher Base."
+            transactionAmount :
+              type : "integer"
+              description : "This is a mandatory parameter for voucherless refill"
+              example : 500
+    responses :
+        "200" :
+          description :  "OK"
+          schema :
+            type: object
+            properties:
+              statusCode:
+                type: string
+                description: HTTP error code extension
+                example: "0000"
+              statusMessage:
+                type: string
+                example: "Success"
+              data:
+                type : "object"
+                properties:
+                  amount:
+                    type: integer
+                    description: "The whole units of the amount. For example if currency is NGN, then 100 unit is #100."
+                    example: 100
+                  currencyCode:
+                    type: string
+                    description: "The 3-letter currency code defined in ISO 4217."
+                    example: "NGN"
+              _link:
+                type: object
+                properties:
+                  self:
+                    type: object
+                    properties:
+                      href:
+                        type: string
+                        example: "https://api.mtn.com/v1/customers/2348064816493/refill"
+        "400" :
+          description : "Bad Request"
+          schema :
+            $ref : "#/definitions/Error"
+        "401" :
+          description : "Unauthorized"
+          schema :
+            $ref : "#/definitions/Error"
+        "403" :
+          description : "Forbidden"
+          schema :
+            $ref : "#/definitions/Error"
+        "404" :
+          description : "Not Found"
+          schema :
+            $ref : "#/definitions/Error"
+        "500" :
+          description : "Internal Server Error"
+          schema :
+            $ref : "#/definitions/Error"
+        "503" :
+          description : "Service Unavailable"
+          schema :
+            $ref : "#/definitions/Error"
+        "999" :
+          description : "Unknown Error"
+          schema :
+            $ref : "#/definitions/Error"
+
+
+definitions:
+  Customer:
+    type: "object"
+    required:
+      - "customerId"
+      - "_links"
+    properties:
+      customerId:
+        type: "string"
+      plans:
+        type: "object"
+        description: "the customers billing plan"
+        $ref: "#/definitions/CustomerPlans"
+
+
+  CustomerLinks:
+    type: "object"
+    required:
+      - "self"
+    properties:
+      self:
+        type: "object"
+        required:
+          - "href"
+        description: ""
+        properties:
+          href:
+            type: "string"
+            description: ""
+
+
+  CustomerPlans:
+    type: "object"
+    required:
+      - "_link"
+    properties:
+      data:
+        type: "object"
+        $ref: "#/definitions/Plans"
+      _link:
+        type: "string"
+        description: "The link to retrieve the plans for a customer."
+        $ref: "#/definitions/CustomerLinks"
+        example: "https://api.mtn.com/v2/customers/27832000000/plan"
+
+  Plans:
+    type: "object"
+    required:
+      - "type"
+      - "status"
+      - "startDate"
+      - "endDate"
+      - "language"
+      - "tariffPlan"
+    description: "The plan details for the customer."
+    properties:
+      type:
+        description: "The billing type of the plan."
+        enum:
+          - "Prepaid"
+          - "Postpaid"
+          - "Hybrid"
+      status:
+        description: "The current status of the plan."
+        enum:
+          - "Active"
+          - "Suspended"
+          - "Inactive"
+          - "RICA Barred"
+          - "Blacklisted"
+      startDate:
+        type: "string"
+        description: "The date the customer was created/provisioned"
+        format: date-time
+      endDate:
+        type: "string"
+        description: "The date the plan will be deactivated."
+        format: date-time
+      language:
+        type: "string"
+        description: "The customers language."
+      tariffPlanId:
+        type: "integer"
+        description: "The id of customer's active tariff plan."
+      tariffPlan:
+        type: "string"
+        description: "The customer's active tariff plan."
+      balance:
+        type: "array"
+        description: "The list account balances of a customer"
+        items:
+          $ref: "#/definitions/CustomerBalance"
+
+  CustomerBalance:
+    type: "object"
+    required:
+      - "balanceType"
+      - "balanceDetail"
+      - "wallets"
+    description: "The plan balance details for the customer."
+    properties:
+      balanceType:
+        type: "string"
+        description: "Identifies the type of balance. A customer plan may have multiple types of balances for different usage, for example, voice, SMS, and game services."
+        example: "Airtime Bundle"
+      expiryDate:
+        type: "string"
+        format: date-time
+        description: "Expiry date of the wallet's value."
+        example: "2019-12-31T12:00:00"
+      category:
+        type: "string"
+        description: "Identifies the category of the balance type."
+        example: "Fastlink"
+      balanceDetail:
+        type: "object"
+        $ref: "#/definitions/BalanceDetail"
+      wallets:
+        type: "array"
+        description: "The different wallets used to compute the active and unused values of this balance."
+        items:
+          $ref: "#/definitions/Wallet"
+
+  BalanceDetail:
+    type: "object"
+    required:
+      - "type"
+      - "activeValue"
+      - "activeUnit"
+    description: "The details for a balance type."
+    properties:
+      type:
+        description: "This is the type of the value."
+        enum:
+          - "CURRENCY"
+          - "DATA"
+          - "MINUTES"
+          - "SMS"
+      activeValue:
+        type: "string"
+        description: "This is the aggregated formatted active value of a balance type."
+        example: "45.25"
+      activeUnit:
+        description: "This is the unit of the aggregated active value."
+        enum:
+          - "ZAR"
+          - "NGN"
+          - "GB"
+          - "MB"
+          - "MINUTES"
+          - "SMS"
+        example: "NGN"
+      unusedValue:
+        type: "string"
+        description: "This is the aggregated formatted unused value of a balance type."
+        example: "45.25"
+      unsedUnit:
+        description: "This is the unit of the aggregated unused value."
+        enum:
+          - "ZAR"
+          - "NGN"
+          - "GB"
+          - "MB"
+          - "MINUTES"
+          - "SMS"
+        example: "NGN"
+
+  Wallet:
+    type: "object"
+    required:
+      - "name"
+      - "status"
+      - "expiryDate"
+      - "amount"
+    description: "The details for a wallet account."
+    properties:
+      id:
+        type: "integer"
+        description: "The id of a wallet account."
+        example: 1574
+      name:
+        type: "string"
+        description: "The name of a wallet account."
+        example: "Postpaid Credit Limit"
+      status:
+        description: "The status of a wallet's value."
+        enum:
+          - "Active"
+          - "Unused"
+        example: "Active"
+      expiryDate:
+        type: "string"
+        format: date-time
+        description: "Expiry date of the wallet's value."
+        example: "2019-12-31T12:00:00"
+      amount:
+        type: "object"
+        $ref: "#/definitions/Amount"
+
+  Amount:
+    type: "object"
+    required:
+      - "value"
+      - "type"
+      - "unit"
+    description: "The amount details for a wallet."
+    properties:
+      type:
+        description: "This is the type of the wallet value."
+        enum:
+          - "CURRENCY"
+          - "DATA"
+          - "MINUTES"
+          - "SMS"
+      value:
+        type: "string"
+        description: "This is the value of a balance wallet."
+        example: "45.25"
+      unit:
+        description: "This is the unit of the wallet value."
+        enum:
+          - "ZAR"
+          - "NGN"
+          - "GB"
+          - "MB"
+          - "MINUTES"
+          - "SMS"
+        example: "NGN"
+
+  Error:
+    properties:
+      timestamp:
+        type: "string"
+        format: "date-time"
+        description: "Error response code"
+      status:
+        type: "string"
+        description: "Text explaining the reason for the error"
+      error:
+        type: "string"
+      message:
+        type: "string"
+        description: "More error details and corrective measures"
+      path:
+        type: "string"
+        description: ""

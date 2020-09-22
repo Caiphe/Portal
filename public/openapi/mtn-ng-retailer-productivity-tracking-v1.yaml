@@ -1,0 +1,786 @@
+swagger: "2.0"
+
+info:
+  version: 1.0.0
+  title: APN Management API Spec
+  description: APN Management Functions
+  
+schemes: 
+#   - http
+  - https
+  
+host: api.mtn
+basePath: /v1/networks/
+
+paths:
+  /apns:
+  
+    get: 
+      summary: get a list of APNs
+  
+      description: retrieve a list of all active APNs
+      tags: 
+        - Network
+      parameters: 
+        - name: transactionId
+          in: query
+          description: Transaction ID 
+          type: string
+          required: true
+        - name: sourceIdentifier
+          in: query
+          description: Source system
+          type: string
+          required: true
+        - name: thirdPartyId
+          in: query
+          description: Partner
+          type: string
+          required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/APNData"
+
+        401:
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
+        405:
+          description: "Method Not allowed"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"
+    
+  '/apn-bundles':
+    get:
+      summary: APN bundle products
+      description: Retrieve APN by ID
+      tags: 
+      - Network
+      parameters: 
+        - name: transactionId
+          in: query
+          description: Transaction ID 
+          type: string
+          required: true
+        - name: sourceIdentifier
+          in: query
+          description: Source system
+          type: string
+          required: true
+        - name: thirdPartyId
+          in: query
+          description: Partner
+          type: string
+          required: true
+      responses:
+        200:
+          description: An APN
+          schema:
+             $ref: "#/definitions/DataBundle"
+        404:
+          description: APN not found
+        400:
+          description: Bad Request
+        401: 
+          description: Unauthorized
+          
+        403:
+          description: Forbidden
+       
+        405:
+          description: "Method Not allowed"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      summary: To add product to an existing APN of the MTN partner .
+      description: This API is used to add product .
+      operationId: addProduct
+      tags: 
+      - Network
+      parameters:
+          
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/addBundleRequest'
+      responses:
+        102:
+          description: Request is received and is under processing
+          schema:
+            $ref: '#/definitions/addBundleResponse'
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/failureResponse'
+        401:
+          description: >-
+            Request has not been applied due to lack of valid authentication
+            credentials.
+        403:
+          description: Request recieved successfully but server refuses to authorize.
+          schema:
+            $ref: '#/definitions/failureResponse'
+        200:
+          description: Transaction Success
+          schema:
+            $ref: '#/definitions/Response'
+        500:
+          description: Other failure
+          schema:
+            $ref: '#/definitions/Response'
+    delete:
+      summary: To remove product from the existing APN of the MTN partner.
+      description: This API is used to remove product.
+      operationId: removeProduct
+      tags: 
+      - Network
+      parameters:
+        - name: transactionId
+          in: query
+          description:  Unique identifier of the transaction.Fixed length '15' characters
+          required: true
+          type: string
+          minLength: 15
+          maxLength: 15
+        - name: sourceIdentifier
+          in: query
+          description:  Identifies the source system which is initiating the request.
+          required: true
+          type: string
+        - name: apnId
+          in: query
+          description:  APN Id on which the given bundle is removed .
+          required: true
+          type: string
+        - name: thirdPartyId
+          in: query
+          required: true
+          description:  Unique Identifier of the third party system.
+          type: string
+        - name: productCode
+          in: query
+          type: string
+          required: true
+          description: Code of the product that is being removed .  
+        - name: productType
+          in: query
+          type: string
+          required: true
+          description: Type of the product e.g, 'Adhoc' or 'Recurring' 
+        - name: action
+          in: query
+          type: string
+          required: true
+          description: Action Code i.e,  'REMOVE'
+      responses:
+        102:
+          description: Request is received and is under processing
+          schema:
+            $ref: '#/definitions/addBundleResponse'
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/failureResponse'
+        401:
+          description: >-
+            Request has not been applied due to lack of valid authentication
+            credentials.
+        403:
+          description: Request recieved successfully but server refuses to authorize.
+          schema:
+            $ref: '#/definitions/failureResponse'
+        200:
+          description: Transaction Success
+          schema:
+            $ref: '#/definitions/Response'
+        500:
+          description: Other failure
+          schema:
+            $ref: '#/definitions/Response'
+          
+  '/apns/associate-apn':
+    post:
+      summary: MSISDN - APN Association
+      description: Associate MSISDN to APN
+      tags: 
+        - Network
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AssociateToApnRequest'
+      responses:
+        102:
+          description: Request is received and is under processing
+          schema:
+            $ref: '#/definitions/AssociateToApnResponse'
+        200:
+          description: OK  
+          
+        400:
+          description: Bad Request
+        401: 
+          description: Unauthorized
+          
+        403:
+          description: Forbidden
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
+        405:
+          description: "Method Not allowed"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"
+            
+  '/apns/dissociate-apn':
+    post:
+      summary: MSISDN - APN Dissociation
+      description: Dissociate MSISDN to APN
+      tags: 
+        - Network
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AssociateToApnRequest'
+      responses:
+        102:
+          description: Request is received and is under processing
+          schema:
+            $ref: '#/definitions/AssociateToApnResponse'
+        200:
+          description: OK 
+        400:
+          description: Bad Request
+        401: 
+          description: Unauthorized
+          
+        403:
+          description: Forbidden
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
+        405:
+          description: "Method Not allowed"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"  
+    
+  '/apns/validate-party':
+    post:
+      summary: Validate third party
+      description: Third party verificatiom
+      tags: 
+        - Network
+      parameters: 
+        - name: transactionId
+          in: query
+          description: Transaction ID 
+          type: string
+          required: true
+        - name: sourceIdentifier
+          in: query
+          description: Source system
+          type: string
+          required: true
+        - name: thirdPartyId
+          in: query
+          description: Partner
+          type: string
+          required: true
+      responses:
+        200:
+          description: ThirdParty APN Information
+          schema:
+            $ref: "#/definitions/ThirdPartyApnData"
+        404:
+          description: not found
+        400:
+          description: Bad Request
+        401: 
+          description: Unauthorized
+          
+        403:
+          description: Forbidden
+        405:
+          description: "Method Not allowed"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"  
+      
+    
+  '/apns/verify-apn':
+    post:
+      summary: Verify APN
+      description: remove msisdn from a given APN
+      tags: 
+        - Network
+      parameters:
+        - name: transactionId
+          in: query
+          description: Transaction ID 
+          type: string
+          required: true
+        - name: sourceIdentifier
+          in: query
+          description: Source system
+          type: string
+          required: true
+        - name: apnId
+          in: query
+          description: apn id
+          type: string
+          required: true
+        - name: thirdPartyId
+          in: query
+          description: Partner
+          type: string
+          required: true
+      responses:
+        200:
+          description: APN info for third party
+          schema:
+            $ref: "#/definitions/ThirdPartyApnData"
+            
+        400:
+          description: Bad Request
+        401: 
+          description: Unauthorized
+          
+        403:
+          description: Forbidden
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
+        405:
+          description: "Method Not allowed"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"
+            
+  /sims:
+    put:
+      summary: Sim swap
+      description: Sim swap
+      parameters: 
+        - name: requestBody
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/simSwapRequest'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/simSwapResponse'
+            
+        400:
+          description: Bad Request
+        401:
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/Error"
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/Error"
+        405:
+          description: "Method Not allowed"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/Error"
+        
+    
+definitions:
+  APNList:
+    properties:
+      apnList:
+        type: array
+        items:
+          $ref: "#/definitions/APN"
+  APNBundles:
+    properties:
+      productList:
+        type: array
+        items:
+          $ref: "#/definitions/APNProduct"
+  APNProduct:
+    type: object
+    properties:
+      productName:
+        type: string
+      denomination:
+        type: string
+        example: '500GB'
+      productCode:
+        type: string
+      productDescription:
+        type: string
+      productType:
+        type: string
+  DataBundle:
+    properties:
+      transactionId:
+        type: string
+      statusCode:
+        type: string
+      supportMessage:
+        type: string
+      statusMessage:
+        type: string
+      data:
+          $ref: "#/definitions/APNBundles"
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+              type:
+                type: string
+                example: POST
+  Error:
+    properties:
+      timestamp:
+        type: "string"
+        format: "date-time"
+        description: "Error response code"
+      status:
+        type: "string"
+        description: "Text explaining the reason for the error"
+      error:
+        type: "string"
+      message:
+        type: "string"
+        description: "More error details and corrective measures"
+      path:
+        type: "string"
+        description: ""
+  APNData:
+    properties:
+      transactionId:
+        type: string
+      statusCode:
+        type: string
+      supportMessage:
+        type: string
+      data:
+        $ref: "#/definitions/APNList"
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+              type:
+                type: string
+                example: POST
+  APNDetails:
+    properties:
+      apnDetails:
+        $ref: "#/definitions/APN"
+  APN:
+    type: object
+    properties:
+      apnId:
+        type: string
+      apnName:
+        type: string
+      thirdPartyId:
+        type: string
+      customerId:
+        type: string
+      debtorId:
+        type: string
+  ThirdPartyApnData:
+    properties:
+      transactionId:
+        type: string
+      statusCode:
+        type: string
+      supportMessage:
+        type: string
+      statusMessage:
+        type: string
+      data:
+        $ref: "#/definitions/APNDetails"
+      _links:
+        type: object
+        properties:
+          self:
+            type: object
+            properties:
+              href:
+                type: string
+              type:
+                type: string
+                example: POST
+  AssociateToApnRequest:
+        required:
+          - transactionId
+          - sourceIdentifier
+          - msisdn
+          - apnId
+          - thirdPartyId
+        properties:
+          transactionId:
+            type: string
+            description: Unique identifier of the transaction.Fixed length '15' characters.
+            minLength: 15
+            maxLength: 15
+          sourceIdentifier:
+            type: string
+            description: Identifies the source system which is initiating the request.
+          callBackUrl:
+            type: string
+            description: Partner URL to post associate response
+          msisdn:
+            type: string
+            description: Subscriber mobile number.
+          thirdPartyId:
+            type: string
+            description: Unique Identifier of the third party system.
+          apnList:
+            type: array
+            description: APN List to which given MSISDN is associated.
+            items:
+              type: object
+              properties:
+                apnId:
+                  type: string
+                  description: APN Id
+  AssociateToApnResponse:
+        required:
+          - statusCode
+          - statusMessage
+          - transactionId
+          - referenceNumber
+        properties:
+          transactionId:
+            type: string
+            description: Unique identifier of the transaction.Fixed length '15' characters
+          statusCode:
+            type: string
+            description: >-
+              Status of the transaction •  0- Success •  Any value other than 0-
+              Failure
+          supportMessage:
+            type: string
+            description: Support message for the transaction.
+          statusMessage:
+            type: string
+            description: Indicates status of transaction
+          referenceNumber:
+            type: string
+            description: Reference number of the transaction
+  simSwapRequest:
+    allOf:
+      required:
+        - transactionId
+        - sourceIdentifier
+        - thirdpartyId
+        - newSimNumber
+      properties:
+        transactionId:
+          type: string
+          description: Unique identifier of the transaction.
+        sourceIdentifier:
+          type: string
+          description: Identifies the source system which is initiating the request.
+        msisdn:
+          type: string
+          description: >-
+            Subscriber mobile number.Atleast oldSimNumber or msisdn need to be
+            provided in the request.
+        oldSimNumber:
+          type: string
+          description: >-
+            Subscriber Identity Module number of the subscriber.Atleast
+            oldSimNumber or msisdn need to be provided in the request.
+        newSimNumber:
+          type: string
+          description: Subscriber Identity Module number of the subscriber.
+        thirdpartyId:
+          type: string
+          description: Unique Identifier of the third party system.
+        requestedProcessingStartDate:
+          type: string
+          description: >-
+            Processing start date of the given request as wished by the third
+            party customer. E.g :- 2019-04-21T17:32:28Z
+  simSwapResponse:
+    allOf:
+      required:
+        - statusCode
+        - statusMessage
+        - transactionId
+        - supportmessage
+      properties:
+        transactionId:
+          type: string
+          description: >-
+            Unique identifier for every request to SOA. Mapped from input
+            request
+        statusCode:
+          type: string
+          description: >-
+            Status of the transaction •  0- Success •  Any value other than 0-
+            Failure
+        supportMessage:
+          type: string
+          description: Support message for the transaction.
+        statusMessage:
+          type: string
+          description: Indicates status of transaction
+  addBundleRequest:
+    allOf:
+      required:
+        - transactionId
+        - sourceIdentifier
+        - apnId
+        - productCode
+        - thirdPartyId
+        - productType
+        - action
+      properties:
+        transactionId:
+          type: string
+          description: Unique identifier of the transaction.Fixed length '15' characters.
+          minLength: 15
+          maxLength: 15
+        sourceIdentifier:
+          type: string
+          description: Identifies the source system which is initiating the request.
+        apnId:
+          type: string
+          description: APN Id to which product is being added.
+        thirdPartyId:
+          type: string
+          description: Unique Identifier of the third party system.
+        productCode:
+          type: string
+          description: Code of the product that is being added.
+        productType:
+          type: string
+          description: Ad hoc or Recurring type
+        action:
+          type: string
+          description: Action Code e.g, 'ADD'
+  addBundleResponse:
+    allOf:
+      required:
+        - statusCode
+        - statusMessage
+        - transactionId
+        - referenceNumber
+      properties:
+        transactionId:
+          type: string
+          description: Unique identifier of the transaction.Fixed length '15' characters
+        statusCode:
+          type: string
+          description: >-
+            Status of the transaction •  0- Success •  Any value other than 0-
+            Failure
+        supportMessage:
+          type: string
+          description: Support message for the transaction.
+        statusMessage:
+          type: string
+          description: Indicates status of transaction
+        referenceNumber:
+          type: string
+          description: Reference number of the transaction  
+  failureResponse:
+    allOf:
+      required:
+        - statusCode
+        - statusMessage
+        - transactionId
+        - supportmessage
+      properties:
+        transactionId:
+          type: string
+          description: Unique identifier of the transaction.Fixed length '15' characters
+        statusCode:
+          type: string
+          description: Status of the transaction
+        supportMessage:
+          type: string
+          description: Support message for the transaction.
+        statusMessage:
+          type: string
+          description: Indicates status of transaction
+  Response:
+    allOf:
+      required:
+        - statusCode
+        - statusMessage
+        - transactionId
+        - referenceNumber
+      properties:
+        transactionId:
+          type: string
+          description: Unique identifier of the transaction.Fixed length '15' characters
+        statusCode:
+          type: string
+          description: >-
+            Status of the transaction •  0- Success •  Any value other than 0-
+            Failure
+        supportMessage:
+          type: string
+          description: Support message for the transaction.
+        statusMessage:
+          type: string
+          description: Indicates status of transaction
+        referenceNumber:
+          type: string
+          description: Reference of the transaction.

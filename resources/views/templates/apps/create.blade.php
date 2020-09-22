@@ -28,6 +28,8 @@
 
     <x-heading heading="Apps" tags="CREATE NEW"></x-heading>
 
+    <x-twofa-warning class="tall"></x-twofa-warning>
+
     <div class="content">
 
         <nav>
@@ -249,7 +251,7 @@
 
     function selectCountry(event) {
         var countryRadioBoxes = document.querySelectorAll('.country-checkbox:checked')[0];
-        var selected = [countryRadioBoxes.dataset.location];
+        var selected = countryRadioBoxes.dataset.location;
 
         filterLocations(selected);
         filterProducts(selected);
@@ -258,24 +260,19 @@
     }
 
     function filterLocations(selected) {
-
         var locations = document.querySelectorAll('.filtered-countries img');
 
         for(var i = 0; i < locations.length; i++) {
+            if (locations[i].dataset.location === selected) {
+                locations[i].style.opacity = "1";
+                continue;
+            }
 
             locations[i].style.opacity = "0.5";
-
-            for(var j = 0; j < selected.length; j++) {
-
-                if (locations[i].dataset.location === selected[j]) {
-                    locations[i].style.opacity = "1";
-                }
-            }
         }
     }
 
     function filterProducts(selectedCountry) {
-
         var products = document.querySelectorAll(".card--product");
 
         for (var i = products.length - 1; i >= 0; i--) {
@@ -286,21 +283,8 @@
                     ? products[i].dataset.locations.split(",")
                     : ["all"];
 
-            if(selectedCountry.length === 0 || inSelectedArray(selectedCountry, locations)) {
-
+            if(locations[0] === 'all' || locations.indexOf(selectedCountry) !== -1){
                 products[i].style.display = "flex";
-            }
-        }
-    }
-
-    function inSelectedArray(selectedCountry, locations) {
-        for (var j = 0; j < selectedCountry.length; j++) {
-            for (var k = 0; k < locations.length; k++) {
-                if(selectedCountry[j] === locations[k] || locations[k] === 'all') {
-                    return true;
-                } else {
-                    return false;
-                }
             }
         }
     }
@@ -368,22 +352,15 @@
         xhr.send(JSON.stringify(app));
 
         xhr.onload = function() {
-            window.scrollTo({
-                top: 0,
-                left: 0,
-                behavior: 'smooth'
-            });
-
             if (xhr.status === 200) {
-
-                addAlert('success', 'Application created successfully', function(){
+                addAlert('success', ['Application created successfully', 'You will be redirected to your app page shortly.'], function(){
                     window.location.href = "{{ route('app.index') }}";
                 });
             } else {
                 result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
                 addAlert('error', result.message || 'Sorry there was a problem creating your app. Please try again.');
 
-                button.removeAttributer('disabled');
+                button.removeAttribute('disabled');
                 button.textContent = 'Create';
             }
         };

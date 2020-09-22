@@ -118,6 +118,56 @@
             margin-top: 0;
         }
     }
+
+    .no-specification {
+        background: url('/images/no-specification-bg.png') no-repeat center / cover;
+        color: #FFF;
+        border-radius: 20px;
+        display: inline-block;
+        padding: 30px;
+        width: 400px;
+
+        p {
+            margin-top: 0;
+            font-size: 12px;
+            font-family: "mtn-bold";
+        }
+
+        h2 {
+            color: #FFF;
+            font-size: 32px;
+            margin-top: 0;
+        }
+
+        a {
+            color: #FFF;
+
+            &:hover {
+                color: $grey900;
+            }
+        }
+    }
+
+    .alternatives {
+
+        .alternative-cards {
+            display: flex;
+        }
+
+        h3 {
+            font-family: 'mtn-regular';
+            margin-top: 40px;
+        }
+
+        .card {
+            flex: 0 0 33%;
+        }
+
+        .card:nth-child(2) {
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+    }
 }
 
 .product-section-button {

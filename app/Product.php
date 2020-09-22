@@ -5,6 +5,7 @@ namespace App;
 use App\App;
 use App\Content;
 use App\Category;
+use App\Country;
 use App\KeyFeature;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -84,5 +85,10 @@ class Product extends Model {
 	public function category()
 	{
 		return $this->belongsTo(Category::class);
+	}
+
+	public function countries()
+	{
+		return $this->belongsToMany(Country::class);
 	}
 }

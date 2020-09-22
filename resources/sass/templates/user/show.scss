@@ -187,8 +187,6 @@
         }
 
         &.enable-2fa {
-            display: none;
-
             svg {
                 display: block;
                 margin: 0 auto;
@@ -203,10 +201,5 @@
                 display: none;
             }
         }
-    }
-
-    .enable-2fa-button {
-        display: block;
-        margin: 20px auto 0;
     }
 }

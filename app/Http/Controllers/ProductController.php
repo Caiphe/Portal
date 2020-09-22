@@ -17,7 +17,7 @@ class ProductController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$products = Product::with('category')->where('category_cid', '!=', 'misc')->basedOnUser($request->user())->get();
+		$products = Product::with(['category', 'countries'])->where('category_cid', '!=', 'misc')->basedOnUser($request->user())->get();
 		$productsCollection = $products->sortBy('category.title')->groupBy('category.title');
 		$productLocations = $products->pluck('locations')->implode(',');
 		$locations = array_unique(explode(',', $productLocations));
@@ -42,30 +42,28 @@ class ProductController extends Controller
 	 */
 	public function show(Request $request, Product $product)
 	{
-		$product->load(['content', 'keyFeatures']);
+		$product->load(['content', 'keyFeatures', 'category', 'countries']);
 
-		if ($product->swagger === null || !\Storage::disk('app')->exists("openapi/{$product->swagger}")) {
-			return redirect()->route('product.index');
-		}
-
-		$openApiClass = new OpenApiService($product->swagger);
 		$productList = Product::with('category')->basedOnUser($request->user())->get()->sortBy('category.title')->groupBy('category.title');
-		$content = ['tab' => []];
+		$content = [
+			'all' => [],
+			'lhs' => [],
+			'rhs' => [],
+		];
 		$sidebarAccordion = [];
+		$alternatives = [];
 		$startingPoint = "product-specification";
 
 		foreach ($product->content as $c) {
-			if ($c->type === "tab") {
-				$content[$c->type][] = $c;
-				continue;
-			}
-			$content[$c->type] = $c;
+			$key = in_array($c->title, ['Overview', 'Docs']) ? 'lhs' : 'rhs';
+			$content['all'][$c->title] = $c;
+			$content[$key][$c->title] = $c;
 		}
 
-		if (isset($content['overview'])) {
-			$startingPoint = 'product-overview';
-		} else if (isset($content['docs'])) {
-			$startingPoint = 'product-docs';
+		if (isset($content['lhs']['Overview'])) {
+			$startingPoint = 'product-' . $content['lhs']['Overview']->slug;
+		} else if (isset($content['lhs']['Docs'])) {
+			$startingPoint = 'product-' . $content['lhs']['Docs']->slug;
 		}
 
 		foreach ($productList as $category => $products) {
@@ -75,10 +73,38 @@ class ProductController extends Controller
 
 			foreach ($products as $sidebarProduct) {
 				$sidebarAccordion[$category][] = ["label" => $sidebarProduct['display_name'], "link" => '/products/' . $sidebarProduct['slug']];
+				$alternatives[$category][] = $sidebarProduct;
 			}
 
 			asort($sidebarAccordion[$category]);
 		}
+
+		if (!empty($alternatives[$product->category->title]) && count($alternatives[$product->category->title]) > 1) {
+			$alternatives = array_intersect_key(
+				$alternatives[$product->category->title],
+				array_flip(
+					array_rand(
+						$alternatives[$product->category->title],
+						min(count($alternatives[$product->category->title]), 3)
+					)
+				)
+			);
+		} else {
+			$alternatives = [];
+		}
+
+		if ($product->swagger === null || !\Storage::disk('app')->exists("openapi/{$product->swagger}")) {
+			return view('templates.products.show', [
+				"product" => $product,
+				"sidebarAccordion" => $sidebarAccordion,
+				"content" => $content,
+				"startingPoint" => $startingPoint,
+				"specification" => null,
+				"alternatives" => $alternatives,
+			]);
+		}
+
+		$openApiClass = new OpenApiService($product->swagger);
 
 		return view('templates.products.show', [
 			"product" => $product,
@@ -86,6 +112,7 @@ class ProductController extends Controller
 			"content" => $content,
 			"startingPoint" => $startingPoint,
 			"specification" => $openApiClass->buildOpenApiJson(),
+			"alternatives" => $alternatives,
 		]);
 	}
 
