@@ -37,13 +37,24 @@ main {
 
 .banner {
 
-    h2,
-    p {
-        width: 490px;
+    @media #{$medium-up} {
+
+        h2,
+        p {
+            width: 490px;
+        }
+
+        h2 {
+            margin-top: 100px;
+        }
     }
 
-    h2 {
-        margin-top: 100px;
+    @media #{$small} {
+        h2 {
+            margin-top: 60px;
+            font-size: 40px;
+            line-height: 1;
+        }
     }
 
     .squiggle {
@@ -51,6 +62,10 @@ main {
         top: -90px;
         right: 4%;
         width: 667px;
+
+        @media #{$small} {
+            display: none;
+        }
     }
 
     .phone {
@@ -61,6 +76,10 @@ main {
         height: 489px;
         overflow: hidden;
         border-radius: 16px;
+
+        @media #{$small} {
+            display: none;
+        }
 
         .banner-image,
         svg {
@@ -81,13 +100,24 @@ main {
         width: 16px;
         margin-left: 5px;
     }
+
+    .button {
+        margin-bottom: 10px;
+    }
 }
 
 .businesses {
-    margin-top: 100px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+
+    @media #{$small} {
+        margin-top: 30px;
+    }
+
+    @media #{$medium-up} {
+        margin-top: 100px;
+    }
 
     h2 {
         width: 100%;
@@ -104,15 +134,21 @@ main {
         font-size: 30px;
     }
 
-    .benefits-copy {
-        width: 405px;
-        margin-bottom: 145px;
+    @media #{$medium-up} {
+        .benefits-copy {
+            width: 405px;
+            margin-bottom: 145px;
+        }
     }
 
     .stack-general.benefits {
         position: absolute;
         top: -50px;
         right: 0;
+
+        @media #{$small} {
+            display: none;
+        }
     }
 
     hr {
@@ -126,6 +162,11 @@ main {
             align-items: center;
             font-size: 14px;
 
+            @media #{$small} {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+
             >svg {
                 margin-right: 8px;
                 width: 11px;
@@ -133,12 +174,17 @@ main {
                 background-color: $yellow;
                 padding: 4px;
                 border-radius: 50%;
+                flex-shrink: 0;
             }
         }
 
         a {
             color: $blue;
             display: flex;
+
+            @media #{$small} {
+                margin-top: 4px;
+            }
 
             svg {
                 fill: $blue;
@@ -188,13 +234,22 @@ main {
     }
 
     .cols {
-        position: absolute;
-        right: 8%;
-        top: 30px;
+        @media #{$medium-up} {
+            position: absolute;
+            right: 8%;
+            top: 30px;
 
-        a {
-            height: 40px;
+            a {
+                height: 40px;
+            }
         }
+
+        @media #{$small} {
+            a {
+                margin-bottom: 10px;
+            }
+        }
+
     }
 }
 
@@ -229,15 +284,29 @@ main {
         }
 
         .stack-cards {
-            flex: 0 0 auto;
+            @media #{$small} {
+                display: none;
+            }
+
+            @media #{$medium-up} {
+                flex: 0 0 auto;
+            }
+        }
+    }
+
+    @media #{$small} {
+        .stack-product {
+            margin-bottom: 40px;
         }
     }
 }
 
 // Stack general
 .stack-general {
-    width: 630px;
-    height: 394px;
+    @media #{$medium-up} {
+        width: 630px;
+        height: 394px;
+    }
 
     background-size: contain;
     background-position: right top;

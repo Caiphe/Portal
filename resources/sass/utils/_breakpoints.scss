@@ -1,0 +1,150 @@
+@mixin break--landscape {
+    @media only screen and (orientation: landscape) {
+      @content;
+    }
+  }
+  @mixin break--portrait {
+    @media only screen and (orientation: portrait) {
+      @content;
+    }
+  }
+  @mixin break--1920 {
+    @media only screen and (min-width: 120rem) {
+      @content;
+    }
+  }
+  @mixin break-to--1920 {
+    @media only screen and (max-width: 120rem - 0.0625rem) {
+      @content;
+    }
+  }
+  @mixin break--1680 {
+    @media only screen and (min-width: 105rem) {
+      @content;
+    }
+  }
+  @mixin break-to--1680 {
+    @media only screen and (max-width: 105rem - 0.0625rem) {
+      @content;
+    }
+  }
+  @mixin break--1600 {
+    @media only screen and (min-width: 100rem) {
+      @content;
+    }
+  }
+  @mixin break-to--1600 {
+    @media only screen and (max-width: 100rem - 0.0625rem) {
+      @content;
+    }
+  }
+  @mixin break--1440 {
+    @media only screen and (min-width: 90rem) {
+      @content;
+    }
+  }
+  @mixin break-to--1440 {
+    @media only screen and (max-width: 90rem - 0.0625rem) {
+      @content;
+    }
+  }
+  @mixin break--1366 {
+    @media only screen and (min-width: 85.375rem) {
+      @content;
+    }
+  }
+  @mixin break-to--1366 {
+    @media only screen and (max-width: 85.375rem - 0.0625rem) {
+      @content;
+    }
+  }
+  @mixin break--1280 {
+    @media only screen and (min-width: 80rem) {
+      @content;
+    }
+  }
+  @mixin break-to--1280 {
+    @media only screen and (max-width: 80rem - 0.0625rem) {
+      @content;
+    }
+  }
+  @mixin break--1080 {
+    @media only screen and (min-width: 67.5rem) {
+      @content;
+    }
+  }
+  @mixin break-to--1080 {
+    @media only screen and (max-width: 67.5rem - 0.0625rem) {
+      @content;
+    }
+  }
+  @mixin break--1024 {
+    @media only screen and (min-width: 64rem) {
+      @content;
+    }
+  }
+  @mixin break-to--1024 {
+    @media only screen and (max-width: 64rem - 0.0625rem) {
+      @content;
+    }
+  }
+  @mixin break--960 {
+    @media only screen and (min-width: 60rem) {
+      @content;
+    }
+  }
+  @mixin break-to--960 {
+    @media only screen and (max-width: 60rem - 0.0625rem) {
+      @content;
+    }
+  }
+  @mixin break--768 {
+    @media only screen and (min-width: 48rem) {
+      @content;
+    }
+  }
+  @mixin break-to--768 {
+    @media only screen and (max-width: 48rem - 0.0625rem) {
+      @content;
+    }
+  }
+  @mixin break--640 {
+    @media only screen and (min-width: 40rem) {
+      @content;
+    }
+  }
+  @mixin break-to--640 {
+    @media only screen and (max-width: 40rem - 0.0625rem) {
+      @content;
+    }
+  }
+  @mixin break--568 {
+    @media only screen and (min-width: 35.5rem) {
+      @content;
+    }
+  }
+  @mixin break-to--568 {
+    @media only screen and (max-width: 35.5rem - 0.0625rem) {
+      @content;
+    }
+  }
+  @mixin break--480 {
+    @media only screen and (min-width: 30rem) {
+      @content;
+    }
+  }
+  @mixin break-to--480 {
+    @media only screen and (max-width: 30rem - 0.0625rem) {
+      @content;
+    }
+  }
+  @mixin break--320 {
+    @media only screen and (min-width: 20rem) {
+      @content;
+    }
+  }
+  @mixin break-to--320 {
+    @media only screen and (max-width: 20rem - 0.0625rem) {
+      @content;
+    }
+  }

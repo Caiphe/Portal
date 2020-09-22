@@ -41,6 +41,12 @@
         animation-name: slideOut;
         animation-timing-function: ease-out;
 
+        h2 {
+            @media #{$small} {
+                line-height: 0.9;
+            }
+        }
+
         &.active {
             animation-name: slideIn;
             animation-fill-mode: forwards;

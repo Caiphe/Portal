@@ -1,11 +1,28 @@
 @import '../../variables';
 
+#sidebar {
+    @media #{$small} {
+        display: none;
+    }
+}
+
 #main {
     padding: 0 !important;
     margin-bottom: 40px;
 
+    @media #{$small} {
+        margin-top: 80px;
+    }
+
     #heading {
         margin-bottom: 40px;
+
+        @media #{$small} {
+            background-color: transparent;
+            padding: 0 !important;
+            margin: 0;
+            position: static !important;
+        }
     }
 
     .content {
@@ -15,6 +32,11 @@
         width: 100%;
         padding: 0 40px 0 0;
 
+        @media #{$small}{
+            margin: 0;
+            padding: 0;
+        }
+
         nav {
             display: flex;
             justify-content: center;
@@ -22,10 +44,24 @@
             padding-top: 20px;
             padding-bottom: 20px;
 
+            @media #{$small} {
+                flex-direction: column;
+            }
+
             a {
                 display: flex;
                 align-items: center;
                 margin-right: 40px;
+
+                @media #{$small} {
+                    margin-right: 0;
+                }
+
+                &:not(:last-of-type) {
+                    @media #{$small} {
+                        margin-bottom: 20px;
+                    }
+                }
 
                 &.active {
                     color: $blue900;
@@ -63,11 +99,21 @@
             margin-top: 20px;
             padding: 40px;
 
+            @media #{$small} {
+                padding-left: 0;
+                padding-right: 0;
+            }
+
             >div {
                 width: 100%;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+
+                @media #{$small} {
+                    padding-left: 30px;
+                    padding-right: 30px;
+                }
 
                 >svg {
                     display: flex;
@@ -115,6 +161,10 @@
                 flex-direction: column;
                 margin-bottom: 3rem;
                 width: 50%;
+
+                @media #{$small} {
+                    width: 100%;
+                }
             }
 
             .countries {
@@ -139,6 +189,10 @@
                     text-align: center;
                     cursor: pointer;
                     position: relative;
+
+                    @media #{$small} {
+                        width: 28%;
+                    }
 
                     svg {
                         margin-bottom: 15px;
@@ -200,6 +254,10 @@
                     display: flex;
                     flex-flow: row wrap;
 
+                    @media #{$small} {
+                        flex-direction: column;
+                    }
+
                     .category {
                         display: flex;
                         flex-flow: row wrap;
@@ -214,6 +272,10 @@
                             margin-bottom: 30px;
                             margin-right: 20px;
                             width: 30%;
+
+                            @media #{$small} {
+                                width: 100%;
+                            }
 
                             &.selected {
                                 border-color: $grey900;
@@ -238,6 +300,10 @@
             border: transparent;
             font-size: 16px;
             margin: 40px auto 20px;
+
+            @media #{$small} {
+                width: 100%;
+            }
         }
     }
 }

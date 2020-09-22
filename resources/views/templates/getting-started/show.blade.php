@@ -1,10 +1,14 @@
 @extends('layouts.sidebar')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ mix('/css/templates/getting-started/show.css') }}">
+@endpush
+
 @section('title', $content['title'])
 
 @section('sidebar')
-    <x-sidebar-accordion id="sidebar-accordion" :active="'/' . request()->path()"  
-    :list="$list" />  
+    <x-sidebar-accordion id="sidebar-accordion" :active="'/' . request()->path()"
+    :list="$list" />
 @endsection
 
 @section("content")

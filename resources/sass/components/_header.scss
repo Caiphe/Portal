@@ -22,6 +22,33 @@
             }
         }
 
+        .menu-button {
+            display: block;
+            margin-left: auto;
+            padding: 0;
+
+            svg {
+                height: 3rem;
+                width: 3rem;
+            }
+
+            #close {
+                display: none;
+
+                &.block {
+                    display: block;
+                }
+            }
+
+            @media #{$medium-portrait} {
+                display: block;
+            }
+
+            @media #{$large} {
+                display: none;
+            }
+        }
+
         .main-menu {
             list-style: none;
             height: 80px;
@@ -30,6 +57,10 @@
             margin-left: 84px;
             display: flex;
             flex-wrap: nowrap;
+
+            @media #{$small} {
+                margin-left: 0;
+            }
 
             &>li {
                 display: inline-block;
@@ -190,6 +221,16 @@
             }
         }
     }
+
+    @media #{$small} {
+        position: fixed;
+        box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .05);
+    }
+
+    @media #{$medium-portrait} {
+        position: fixed;
+        box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .05);
+    }
 }
 
 #profile-menu {
@@ -235,6 +276,51 @@
     transition: opacity 0.356s, transform 0.356s;
 }
 
+.mobile-menu {
+    background-color: $black;
+    color: $white;
+    list-style: none;
+    margin-top: 0;
+    padding: 1rem 8% !important;
+    font-size: 1.5rem;
+    opacity: 0;
+    pointer-events: none;
+
+    li {
+        margin-bottom: 1.5rem;
+    }
+
+    &.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    a {
+        color: $white;
+    }
+
+    .has-children {
+        .product-nav {
+            display: none;
+        }
+    }
+
+    @media #{$medium-up} {
+        display: none !important;
+    }
+}
+
+.hidden {
+    @media #{$small} {
+        display: none !important;
+    }
+
+    @media #{$medium-portrait} {
+        display: none !important;
+
+    }
+}
+
 .admin {
     #header {
         .header-inner {
@@ -263,6 +349,10 @@
 
         .profile-menu-options {
             margin-left: -48px;
+
+            li {
+                padding: 0;
+            }
         }
     }
 

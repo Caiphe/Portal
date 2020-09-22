@@ -25,9 +25,56 @@
 
     &.green {
         background-color: $green;
+
+        @media #{$small} {
+            margin-top: 2rem;
+        }
+
+        @media #{$medium} {
+            margin-top: 2rem;
+        }
     }
 
     &:not(:last-of-type) {
         margin-right: 15px;
+    }
+
+    @media #{$small} {
+        margin-right: 0 !important;
+    }
+
+    @media #{$medium} {
+        margin-right: 0 !important;
+    }
+}
+
+.action-tab:first-of-type {
+
+    div {
+        @media #{$small} {
+            display: none;
+        }
+    }
+
+    svg:first-of-type {
+        @media #{$small} {
+            margin-left: auto;
+            order: 2;
+        }
+    }
+
+    svg:last-of-type {
+        @media #{$small} {
+            margin-left: initial;
+            order: 1;
+        }
+    }
+}
+
+.action-tab:last-of-type {
+    div {
+        @media #{$small} {
+            display: none;
+        }
     }
 }

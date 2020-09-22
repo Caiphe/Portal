@@ -33,8 +33,25 @@
 
         .inline {
             margin-top: 2rem;
-            display: flex;
             align-items: center;
+
+            @media #{$small} {
+                text-align: center;
+                width: 100%;
+
+                button,
+                a {
+                    width: 100%;
+                }
+
+                a {
+                    margin-top: 10px;
+                }
+            }
+
+            @media #{$medium-up} {
+                display: flex;
+            }
 
             a {
                 display: flex;
@@ -44,6 +61,14 @@
                     margin-left: 4px;
                 }
             }
+        }
+
+        @media #{$small} {
+            width: 100%;
+        }
+
+        @media #{$medium} {
+            width: 100%;
         }
     }
 
@@ -66,6 +91,14 @@
         width: 65%;
         top: 0;
         right: 0;
+
+        @media #{$small} {
+            display: none;
+        }
+
+        @media #{$medium} {
+            display: none;
+        }
     }
 
     p {

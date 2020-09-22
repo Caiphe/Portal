@@ -1,5 +1,17 @@
 @import "../variables";
 
+#main {
+    @media #{$small} {
+        margin-top: 80px !important;
+    }
+
+    h1 {
+        @media #{$small} {
+            margin-top: 0;
+        }
+    }
+}
+
 input.search {
     margin-top: 15px;
     padding: 15px;
@@ -28,6 +40,12 @@ input.search {
 
 .search-results {
     justify-content: space-between;
+}
+
+.search-card {
+    @media #{$small} {
+        width: 100% !important;
+    }
 }
 
 #main .pagination {

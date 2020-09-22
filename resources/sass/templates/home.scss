@@ -11,6 +11,7 @@ body > #main {
 
 .banner-carousel {
     padding: 0;
+
     .carousel {
         width: 100vw;
         height: 500px;
@@ -56,9 +57,37 @@ body > #main {
 
                 .button {
                     width: 110px;
+
+                    @media #{$small} {
+                        width: 100%;
+                    }
+
+                    @media #{$medium} {
+                        width: 100%;
+                    }
+
+                    @media #{$medium-portrait} {
+                        width: 110px;
+                    }
+                }
+
+                @media #{$small} {
+                    max-width: 100%;
+                }
+
+                @media #{$medium} {
+                    max-width: 100%;
                 }
             }
         }
+    }
+
+    @media #{$small} {
+        margin-top: 80px;
+    }
+
+    @media #{$medium-portrait} {
+        margin-top: 80px;
     }
 }
 
@@ -68,12 +97,18 @@ body > #main {
 
     p {
         padding: 0 15em;
+
+        @media #{$small} {
+            padding: 0;
+        }
+
+        @media #{$medium} {
+            padding: initial;
+        }
     }
 
     .key-feature {
         margin: 0 10px;
-        // width: calc(100% / 4);
-        // max-width: 150px;
 
         .content {
             padding: 0;
@@ -164,6 +199,10 @@ section {
 
     a {
         margin-top: 15px;
+
+        @media #{$small} {
+            width: 100%;
+        }
     }
 }
 
@@ -180,6 +219,10 @@ section {
             margin-right: 0;
         }
     }
+
+    @media #{$medium} {
+        flex-wrap: wrap;
+    }
 }
 
 .steps,
@@ -187,4 +230,195 @@ section {
     display: flex;
     justify-content: center;
     margin-top: $gutter;
+}
+
+.steps {
+    @media #{$small} {
+        .col {
+            flex: 1 auto !important;
+            max-width: 100% !important;
+        }
+    }
+}
+
+#section-sign-up {
+    @media #{$small} {
+        padding-bottom: 40px;
+    }
+
+    .cols {
+        @media #{$small} {
+            flex-direction: column;
+        }
+
+        .col-6 {
+            @media #{$small} {
+                flex: 1 auto !important;
+                max-width: 100% !important;
+            }
+        }
+
+        .col-image {
+            @media #{$small} {
+                margin-top: 80px;
+            }
+        }
+    }
+
+    .content-left {
+        @media #{$small} {
+            padding-right: 0;
+        }
+    }
+
+    .image-right {
+        @media #{$small} {
+            padding-left: 0;
+        }
+    }
+
+    ol {
+        @media #{$small} {
+            width: 100%;
+        }
+    }
+
+    img {
+        @media #{$small} {
+            display: block;
+            height: auto;
+            width: 100%;
+        }
+    }
+}
+
+#section-browse-our-products {
+    .cols {
+        @media #{$small} {
+            flex-direction: column;
+        }
+
+        .col-6 {
+            @media #{$small} {
+                flex: 1 auto !important;
+                max-width: 100% !important;
+            }
+
+            .content-right {
+                @media #{$small} {
+                    padding: 0;
+                }
+            }
+        }
+
+        .col-image {
+            @media #{$small} {
+                padding-bottom: 40px;
+            }
+        }
+    }
+
+    img {
+        @media #{$small} {
+            display: block;
+            height: auto;
+            width: 100%;
+        }
+    }
+}
+
+#section-register-an-app {
+    @media #{$small} {
+        padding-bottom: 40px;
+    }
+
+    .cols {
+        @media #{$small} {
+            flex-direction: column;
+        }
+
+        .col-6 {
+            @media #{$small} {
+                flex: 1 auto !important;
+                max-width: 100% !important;
+            }
+        }
+
+        .col-image {
+            @media #{$small} {
+                margin-top: 80px;
+            }
+
+            .image-right {
+                @media #{$small} {
+                    padding: 0;
+                }
+            }
+        }
+    }
+
+    img {
+        @media #{$small} {
+            display: block;
+            height: auto;
+            width: 100%;
+        }
+    }
+}
+
+#section-access-the-keys {
+    .cols {
+        @media #{$small} {
+            flex-direction: column;
+        }
+
+        .col-6 {
+            @media #{$small} {
+                flex: 1 auto !important;
+                max-width: 100% !important;
+            }
+        }
+
+        .col-image {
+            @media #{$small} {
+                padding-bottom: 20px;
+            }
+        }
+    }
+
+    .content-right {
+        @media #{$small} {
+            padding-left: 0;
+        }
+    }
+
+    .image-left {
+        @media #{$small} {
+            padding-right: 0;
+        }
+    }
+
+    img {
+        @media #{$small} {
+            display: block;
+            height: auto;
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+    }
+}
+
+#section-product-categories {
+    .products-cards {
+        @media #{$small} {
+            flex-direction: column;
+        }
+
+        a {
+            @media #{$small} {
+                margin-right: 0;
+                width: 100%;
+            }
+        }
+    }
 }
