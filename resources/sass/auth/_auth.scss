@@ -33,8 +33,25 @@
 
         .inline {
             margin-top: 2rem;
-            display: flex;
             align-items: center;
+
+            @media #{$small} {
+                text-align: center;
+                width: 100%;
+
+                button,
+                a {
+                    width: 100%;
+                }
+
+                a {
+                    margin-top: 10px;
+                }
+            }
+
+            @media #{$medium-up} {
+                display: flex;
+            }
 
             a {
                 display: flex;

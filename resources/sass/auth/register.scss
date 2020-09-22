@@ -284,4 +284,10 @@
             transform: translate(100%, 0);
         }
     }
+
+    @media #{$small} {
+        #register-form #enter {
+            display: none;
+        }
+    }
 }
