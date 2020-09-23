@@ -31,7 +31,7 @@
     }
 
     function validateForm(e) {
-        if((passwordEl.value !== "" || confirmEl !== "") && passwordScore !== 6){
+        if((passwordEl.value !== "" || confirmEl.value !== "") && passwordScore !== 6){
             addAlert('error', 'Please make sure your password is correct.');
             e.preventDefault();
         }
