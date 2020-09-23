@@ -43,7 +43,7 @@ class UserController extends Controller
         return view('templates.admin.users.edit', [
             'user' => $user,
             'roles' => Role::all(),
-            'countries' => Country::all(),
+            'countries' => Country::orderBy('name')->get(),
         ]);
     }
 
@@ -88,7 +88,7 @@ class UserController extends Controller
             'templates.admin.users.create',
             [
                 'roles' => Role::all(),
-                'countries' => Country::all(),
+                'countries' => Country::orderBy('name')->get(),
             ]
         );
     }
