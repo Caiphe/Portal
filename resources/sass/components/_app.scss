@@ -19,10 +19,13 @@
     }
 
     .actions {
-        background: url('../images/icons/more-vert.svg') no-repeat transparent right center / 24px;
-        border: transparent;
-        margin-left: auto;
-        display: flex;
+        background: url('../images/icons/more-vert.svg') no-repeat transparent center / 24px;
+        border: none;
+        display: inline-block;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        padding: 0;
     }
 
     .name {
