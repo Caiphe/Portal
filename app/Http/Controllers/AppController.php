@@ -111,7 +111,7 @@ class AppController extends Controller {
 
 		$data = [
 			'name' => $validated['name'],
-			'key' => $validated['key'],
+			'key' => $this->getCredentials($app, 'consumerKey'),
 			'apiProducts' => $request->products,
 			'originalProducts' => $validated['original_products'],
 			'keyExpiresIn' => -1,

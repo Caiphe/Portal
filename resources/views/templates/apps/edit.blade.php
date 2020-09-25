@@ -30,13 +30,13 @@
 
     <div class="content">
         <nav>
-            <a href="#" class="active">
+            <a href="#" class="nav-item app-details-nav active">
                 <span>1</span> App details
             </a>
-            <a href="#">
+            <a href="#" class="nav-item select-countries-nav">
                 <span>2</span> Select countries
             </a>
-            <a href="#">
+            <a href="#" class="nav-item select-products-nav">
                 <span>3</span> Select products
             </a>
         </nav>
@@ -44,7 +44,7 @@
         <div class="row">
 
             <form id="form-edit-app">
-                <div class="active">
+                <div class="app-details active">
                     @svg('app-avatar', '#ffffff')
                     <div class="group">
                         <label for="name">Name your app *</label>
@@ -61,10 +61,12 @@
                         <textarea name="description" id="description" rows="5" placeholder="Enter description">{{ $data['description'] }}</textarea>
                     </div>
 
-                    <button class="dark next">
-                        Select countries
-                        @svg('arrow-forward', '#ffffff')
-                    </button>
+                    <div class="form-actions">
+                        <button class="dark next">
+                            Next
+                            @svg('arrow-forward', '#ffffff')
+                        </button>
+                    </div>
                 </div>
 
                 <div class="select-countries">
@@ -74,7 +76,7 @@
                         @foreach($countries as $key => $country)
                             <label class="country" for="country-{{ $loop->index + 1 }}" data-location="{{ $key }}">
                                 @svg('$key', '#000000', 'images/locations')
-                                <input type="radio" id="country-{{ $loop->index + 1 }}" class="country-checkbox" name="country-checkbox" value="{{ $key }}" @if($key === $data->country->code) checked @endif data-location="{{ $key }}" autocomplete="off">
+                                <input type="radio" id="country-{{ $loop->index + 1 }}" class="country-checkbox" name="country-checkbox" value="{{ $key }}" @if(isset($data->country->code) && $key === $data->country->code) checked @endif data-location="{{ $key }}" autocomplete="off">
                                 <div class="country-checked"></div>
                                 {{ $country }}
                             </label>
@@ -140,9 +142,7 @@
 
         <button type="reset">Cancel</button>
     </div>
-
 @endsection
-
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', init);
@@ -153,6 +153,7 @@
         var backButtons = document.querySelectorAll('.back');
         var checkedBoxes = document.querySelectorAll('input[name=country-checkbox]:checked');
         var appProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
+        var hasCountry = {{ +!is_null($data->country_code) }};
 
         function init() {
             handleButtonClick();
@@ -161,83 +162,56 @@
 
         function handleButtonClick() {
             for (var i = 0; i < buttons.length; i++) {
-
-                buttons[i].addEventListener('click', function (event) {
-                    event.preventDefault();
-
-                    if(form.firstElementChild.classList.contains('active')) {
-
-                        nav.querySelector('a').nextElementSibling.classList.add('active');
-
-                        form.firstElementChild.classList.remove('active');
-                        form.firstElementChild.style.display = 'none';
-                        form.firstElementChild.nextElementSibling.classList.add('active');
-
-                    } else if (form.firstElementChild.nextElementSibling.classList.contains('active')) {
-                        nav.querySelector('a').nextElementSibling.nextElementSibling.classList.add('active');
-
-                        form.firstElementChild.nextElementSibling.classList.remove('active');
-                        form.firstElementChild.nextElementSibling.nextElementSibling.classList.add('active');
-                    }
-                });
+                buttons[i].addEventListener('click', nextButtonHandler);
             }
         }
 
         function handleBackButtonClick() {
             for (var j = 0; j < backButtons.length; j++) {
-
-                backButtons[j].addEventListener('click', function (event) {
-                    event.preventDefault();
-
-                    if(form.firstElementChild.nextElementSibling.classList.contains('active')) {
-                        form.firstElementChild.nextElementSibling.classList.remove('active');
-                        form.firstElementChild.classList.add('active');
-                        form.firstElementChild.style.display = 'flex';
-
-                        nav.firstElementChild.nextElementSibling.classList.remove('active');
-
-                    } else if(form.firstElementChild.nextElementSibling.nextElementSibling.classList.contains('active')) {
-                        form.firstElementChild.nextElementSibling.nextElementSibling.classList.remove('active');
-                        form.firstElementChild.nextElementSibling.classList.add('active');
-
-                        nav.firstElementChild.nextElementSibling.nextElementSibling.classList.remove('active');
-                    }
-                });
+                backButtons[j].addEventListener('click', backButtonHandler);
             }
         }
 
+        function nextButtonHandler(ev) {
+            var activeDiv = this.parentNode.parentNode;
+            var nextDiv = activeDiv.nextElementSibling;
+
+            ev.preventDefault();
+
+            if(hasCountry) nextDiv = nextDiv.nextElementSibling;
+
+            if(activeDiv.classList.contains('app-details') && form.elements['name'].value === ''){
+                return void addAlert('error', 'Please choose a name for your app.');
+            }
+
+            if(activeDiv.classList.contains('select-countries') && document.querySelectorAll('.country-checkbox:checked').length === 0){
+                return void addAlert('error', 'Please select a country.');
+            }
+
+            activeDiv.classList.remove('active');
+            document.querySelector('.nav-item.active').classList.remove('active');
+            document.querySelector('.' + nextDiv.className + '-nav').classList.add('active');
+
+            nextDiv.classList.add('active');
+        }
+
+        function backButtonHandler(ev) {
+            var activeDiv = this.parentNode.parentNode;
+            var previousDiv = activeDiv.previousElementSibling;
+
+            ev.preventDefault();
+
+            if(hasCountry) previousDiv = previousDiv.previousElementSibling;
+
+            activeDiv.classList.remove('active');
+            document.querySelector('.nav-item.active').classList.remove('active');
+            document.querySelector('.' + previousDiv.className + '-nav').classList.add('active');
+
+            previousDiv.classList.add('active');
+        }
+
         document.querySelector('[type="reset"]').addEventListener('click', function () {
-            if(form.querySelector('.active') !== form.firstElementChild) {
-                form.querySelector('.active').classList.remove('active');
-                form.firstElementChild.classList.add('active');
-                form.firstElementChild.style.display = 'flex';
-            }
-
-            var els = document.querySelectorAll('#app-create nav a.active');
-            var countries = document.querySelectorAll('.countries .selected');
-            var products = document.querySelectorAll('.products .selected');
-            var buttons = document.querySelectorAll('.products .selected .done');
-
-            for (var k = 0; k < els.length; k++) {
-                els[k].classList.remove('active');
-            }
-
-            for(var x = 0; x < countries.length; x++) {
-                countries[x].classList.remove('selected');
-            }
-
-            for(var z = 0; z < products.length; z++) {
-                products[z].classList.remove('selected');
-            }
-
-            for(var w = 0; w < buttons.length; w++) {
-                buttons[w].classList.remove('done');
-                buttons[w].classList.add('plus');
-            }
-
-            nav.querySelector('a').classList.add('active');
-
-            form.reset();
+            document.location.href = '/apps';
         });
 
         var countries = document.querySelectorAll('.country');
@@ -255,7 +229,7 @@
             document.getElementById('select-products-button').click();
         }
 
-        @if(!is_null($data->country_id))
+        @if(!is_null($data->country_code))
             filterLocations(['{{ $data->country->code }}']);
             filterProducts(['{{ $data->country->code }}']);
         @endif
@@ -372,9 +346,7 @@
 
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    addAlert('success', 'Application updated successfully', function(){
-                        window.location.href = "{{ route('app.index') }}";
-                    });
+                    addAlert('success', 'Application updated successfully');
                 } else {
                     result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
                     addAlert('error', result.message || 'Sorry there was a problem updating your app. Please try again.');

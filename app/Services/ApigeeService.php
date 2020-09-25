@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Product;
 use App\Country;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
