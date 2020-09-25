@@ -346,7 +346,9 @@
 
             xhr.onload = function() {
                 if (xhr.status === 200) {
-                    addAlert('success', 'Application updated successfully');
+                    addAlert('success', 'Application updated successfully', function(){
+                        window.location.href = "{{ route('app.index') }}";
+                    });
                 } else {
                     result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
                     addAlert('error', result.message || 'Sorry there was a problem updating your app. Please try again.');
