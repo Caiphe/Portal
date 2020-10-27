@@ -268,7 +268,7 @@
                 continue;
             }
 
-            locations[i].style.opacity = "0.5";
+            locations[i].style.opacity = "0.15";
         }
     }
 

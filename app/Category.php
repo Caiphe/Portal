@@ -15,6 +15,16 @@ class Category extends Model
     protected $guarded = [];
     protected $primaryKey = "cid";
     public $incrementing = false;
+    protected $keyType = 'string';
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'cid' => 'string',
+    ];
 
     /**
      * Indicates if the model should be timestamped.

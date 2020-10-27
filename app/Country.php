@@ -14,6 +14,16 @@ class Country extends Model
     protected $guarded = [];
     protected $primaryKey = "code";
     public $incrementing = false;
+    protected $keyType = 'string';
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'code' => 'string',
+    ];
 
     /**
      * Indicates if the model should be timestamped.

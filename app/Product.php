@@ -22,6 +22,16 @@ class Product extends Model {
 	protected $guarded = [];
 	protected $primaryKey = "pid";
 	public $incrementing = false;
+	protected $keyType = 'string';
+
+	/**
+	 * The attributes that should be cast.
+	 *
+	 * @var array
+	 */
+	protected $casts = [
+		'pid' => 'string',
+	];
 
 	public function setNameAttribute($value) {
 		$this->attributes['name'] = $value;
