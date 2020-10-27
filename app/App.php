@@ -16,6 +16,7 @@ class App extends Model
 	protected $guarded = [];
 	protected $primaryKey = "aid";
 	public $incrementing = false;
+	protected $keyType = 'string';
 
 	/**
 	 * The attributes that should be cast.
@@ -23,6 +24,7 @@ class App extends Model
 	 * @var array
 	 */
 	protected $casts = [
+		'aid' => 'string',
 		'attributes' => 'array',
 		'credentials' => 'array',
 	];

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Bundle extends Model
 {
     use SoftDeletes;
-    
+
     /**
      * The attributes that aren't mass assignable.
      *
@@ -20,13 +20,25 @@ class Bundle extends Model
     protected $guarded = [];
     protected $primaryKey = "bid";
     public $incrementing = false;
+    protected $keyType = 'string';
 
-    public function setDisplayNameAttribute($value) {
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'bid' => 'string'
+    ];
+
+    public function setDisplayNameAttribute($value)
+    {
         $this->attributes['display_name'] = $value;
         $this->attributes['slug'] = Str::slug($value);
     }
 
-    public function products() {
+    public function products()
+    {
         return $this->belongsToMany(Product::class, "bundle_product", "bundle_bid", "product_pid");
     }
 
@@ -38,7 +50,8 @@ class Bundle extends Model
         return $this->morphMany(Content::class, 'contentable');
     }
 
-    public function keyFeatures() {
+    public function keyFeatures()
+    {
         return $this->belongsToMany(KeyFeature::class, "bundle_key_feature", "bundle_bid", "key_feature_id");
     }
 

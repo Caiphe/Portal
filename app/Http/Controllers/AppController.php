@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\App;
+use App\Country;
 use App\Http\Requests\CreateAppRequest;
 use App\Http\Requests\DeleteAppRequest;
 use App\Services\ApigeeService;
@@ -37,6 +38,7 @@ class AppController extends Controller {
 
 	public function store(CreateAppRequest $request) {
 		$validated = $request->validated();
+		$countriesByCode = Country::pluck('iso', 'code');
 
 		$data = [
 			'name' => Str::slug($validated['name']),
@@ -54,6 +56,10 @@ class AppController extends Controller {
 				[
 					'name' => 'Country',
 					'value' => $validated['country'],
+				],
+				[
+					'name' => 'location',
+					'value' => $countriesByCode[$validated['country']] ?? "",
 				],
 			],
 			'callbackUrl' => preg_replace('/[<>"]*/', '', strip_tags($validated['url'])) ?? '',

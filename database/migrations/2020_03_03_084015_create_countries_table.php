@@ -17,6 +17,7 @@ class CreateCountriesTable extends Migration
             $table->primary('code');
             $table->string('code')->index();
             $table->string('name');
+            $table->string('iso');
         });
     }
 
