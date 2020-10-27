@@ -240,7 +240,7 @@
 
             for(var i = 0; i < locations.length; i++) {
 
-                locations[i].style.opacity = "0.5";
+                locations[i].style.opacity = "0.15";
 
                 for(var j = 0; j < selected.length; j++) {
 
