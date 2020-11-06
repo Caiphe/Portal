@@ -130,11 +130,12 @@
             <x-apps.products :app="$app" />
         </div>
 
-        @if(!$isAdminPage)
-        <div class="go-live cols centre-align">
+        @if(!$isAdminPage && is_null($app->live_at))
+        <form class="go-live cols centre-align" method="POST" action="{{ route('app.go-live', $app->aid) }}">
+            @csrf
             <p class="spacer-flex"><strong class="mr-1">Ready to launch?</strong>You're just a few clicks away</p>
             <button class="button dark">GO LIVE @svg('rocket', '#FFF')</button>
-        </div>
+        </form>
         @endif
     </div>
     <nav class="menu">

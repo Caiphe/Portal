@@ -1,0 +1,91 @@
+@import "../../variables";
+@import "../../functions";
+
+#main {
+    padding: 0 !important;
+    margin-bottom: 60px;
+    height: 100%;
+
+    @media #{$small} {
+        padding: 90px 40px 40px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    @media #{$medium-portrait} {
+        padding: 90px 40px 40px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    #heading {
+        margin-bottom: 40px;
+
+        @media #{$small} {
+            background-color: transparent;
+            padding-left: 0 !important;
+            position: static !important;
+        }
+
+        @media #{$medium-portrait} {
+            background-color: transparent;
+            padding-left: 0 !important;
+            position: static !important;
+        }
+    }
+
+    .content {
+        margin-left: 40px;
+        margin-top: 110px;
+        border: 2px solid $grey300;
+        border-radius: 8px;
+        padding: $gutter;
+
+        @media #{$small} {
+            margin-left: 0;
+            margin-top: 40px;
+            padding: 20px;
+        }
+
+        @media #{$medium-portrait} {
+            margin-left: 0;
+            margin-top: 40px;
+        }
+
+        form {
+            width: 478px;
+            position: relative;
+            margin: 0 auto;
+
+            @media #{$small} {
+                width: 100%;
+            }
+
+            @media #{$medium-portrait} {
+                width: 100%;
+            }
+
+            h2 {
+                font-size: 1.8rem;
+                text-align: left;
+                margin: $gutter 0 $gutterSmall;
+            }
+
+            input {
+                display: block;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            label {
+                position: relative;
+            }
+
+            button {
+                margin: $gutter auto 0;
+                display: block;
+                position: relative;
+            }
+        }
+    }
+}

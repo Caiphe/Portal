@@ -52,6 +52,7 @@ mix.scripts(
     .sass("resources/sass/templates/search.scss", "public/css/templates")
     .sass("resources/sass/templates/apps/index.scss", "public/css/templates/apps")
     .sass("resources/sass/templates/apps/create.scss", "public/css/templates/apps")
+    .sass("resources/sass/templates/apps/kyc.scss", "public/css/templates/apps")
     .sass("resources/sass/templates/faq/index.scss", "public/css/templates/faq")
     .sass("resources/sass/templates/user/show.scss", "public/css/templates/user")
     .sass("resources/sass/templates/products/index.scss", "public/css/templates/products")

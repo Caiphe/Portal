@@ -28,6 +28,9 @@ Route::middleware(['verified', '2fa'])->group(function () {
 
 	Route::get('apps/{app:aid}/credentials/{type}', 'AppController@getCredentials')->name('app.credentials');
 
+	Route::post('apps/{app:aid}/go-live', 'AppController@goLive')->name('app.go-live');
+	Route::get('apps/{app:aid}/kyc/{group}', 'AppController@kyc')->name('app.kyc');
+
 	Route::get('profile', 'UserController@show')->name('user.profile');
 	Route::put('profile/{user}/update', 'UserController@update')->name('user.profile.update');
 	Route::post('profile/update/picture', 'UserController@updateProfilePicture')->name('user.profile.update.picture');

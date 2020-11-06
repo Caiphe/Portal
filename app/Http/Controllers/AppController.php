@@ -7,12 +7,15 @@ use App\Country;
 use App\Http\Requests\CreateAppRequest;
 use App\Http\Requests\DeleteAppRequest;
 use App\Services\ApigeeService;
+use App\Services\KycService;
 use App\Services\ProductLocationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class AppController extends Controller {
-	public function index() {
+class AppController extends Controller
+{
+	public function index()
+	{
 		$apps = App::with(['products.countries', 'country'])
 			->byUserEmail(\Auth::user()->email)
 			->orderBy('updated_at', 'desc')
@@ -25,18 +28,19 @@ class AppController extends Controller {
 		]);
 	}
 
-	public function create(ProductLocationService $productLocationService) {
+	public function create(ProductLocationService $productLocationService)
+	{
 		[$products, $countries] = $productLocationService->fetch();
 
 		return view('templates.apps.create', [
 			'products' => $products,
 			'productCategories' => array_keys($products->toArray()),
 			'countries' => $countries ?? '',
-		]
-		);
+		]);
 	}
 
-	public function store(CreateAppRequest $request) {
+	public function store(CreateAppRequest $request)
+	{
 		$validated = $request->validated();
 		$countriesByCode = Country::pluck('iso', 'code');
 
@@ -99,7 +103,8 @@ class AppController extends Controller {
 		return redirect(route('app.index'));
 	}
 
-	public function edit(ProductLocationService $productLocationService, App $app, Request $request) {
+	public function edit(ProductLocationService $productLocationService, App $app, Request $request)
+	{
 		[$products, $countries] = $productLocationService->fetch();
 
 		$app->load('products', 'country');
@@ -112,7 +117,8 @@ class AppController extends Controller {
 		]);
 	}
 
-	public function update(App $app, CreateAppRequest $request) {
+	public function update(App $app, CreateAppRequest $request)
+	{
 		$validated = $request->validated();
 
 		$data = [
@@ -157,7 +163,8 @@ class AppController extends Controller {
 		return redirect(route('app.index'));
 	}
 
-	public function destroy(App $app, DeleteAppRequest $request) {
+	public function destroy(App $app, DeleteAppRequest $request)
+	{
 		$validated = $request->validated();
 
 		$user = \Auth::user();
@@ -170,15 +177,41 @@ class AppController extends Controller {
 
 	public function getCredentials(App $app, $type)
 	{
-		if(auth()->user()->developer_id !== $app->developer_id) return "You can't access app keys that don't belong to you.";
+		if (auth()->user()->developer_id !== $app->developer_id) return "You can't access app keys that don't belong to you.";
 
 		$credentials = ApigeeService::get('apps/' . $app->aid)['credentials'];
 		$credentials = ApigeeService::getLatestCredentials($credentials);
 
-		if($type === 'all'){
+		if ($type === 'all') {
 			return $credentials;
 		}
 
 		return $credentials[$type];
+	}
+
+	public function goLive(App $app, KycService $kycService)
+	{
+		// $app->update([
+		// 	'live_at' => date('Y-m-d H:i:s')
+		// ]);
+
+		$app->load('products');
+		$groups = $app->products->pluck('group')->toArray();
+		$firstKycMethod = $kycService->getFirstKyc($groups);
+
+		if ($firstKycMethod === "") {
+			return redirect()->back()->with('alert', "success:{$app->display_name} is now live.");
+		}
+
+		$firstKycProcess = $kycService->$firstKycMethod($app);
+
+		return redirect($firstKycProcess['route']);
+	}
+
+	public function kyc(App $app, $group, KycService $kycService)
+	{
+		$kyc = $kycService->$group($app);
+
+		return view($kyc['view'])->with($kyc['with']);
 	}
 }
