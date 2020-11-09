@@ -34,9 +34,16 @@
         }
     }
 
+    .app-details {
+        margin-top: 110px;
+        text-align: center;
+        color: $blue;
+        font-size: 16px;
+    }
+
     .content {
         margin-left: 40px;
-        margin-top: 110px;
+        margin-top: 20px;
         border: 2px solid $grey300;
         border-radius: 8px;
         padding: $gutter;
@@ -53,7 +60,7 @@
         }
 
         form {
-            width: 478px;
+            width: 485px;
             position: relative;
             margin: 0 auto;
 
@@ -69,22 +76,61 @@
                 font-size: 1.8rem;
                 text-align: left;
                 margin: $gutter 0 $gutterSmall;
+                font-family: "Montserrat";
+
+                &:first-of-type {
+                    margin: 0 0 $gutterSmall;
+                }
             }
 
-            input {
+            input,
+            select,
+            textarea {
                 display: block;
-                width: 100%;
                 margin-bottom: 10px;
+            }
+
+            .cols.column input {
+                flex: 1;
             }
 
             label {
                 position: relative;
             }
 
-            button {
-                margin: $gutter auto 0;
+            p.bold,
+                {
+                margin-bottom: 0;
+            }
+
+            p.bold+p {
+                margin-top: 0;
+            }
+
+            .file-upload {
+                input {
+                    display: none;
+                }
+            }
+
+            .accept {
+                padding-left: 40px;
                 display: block;
-                position: relative;
+
+                input {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                }
+            }
+
+            button.dark {
+                height: 40px;
+
+                svg {
+                    margin-left: 6px;
+                    width: 16px;
+                }
             }
         }
     }

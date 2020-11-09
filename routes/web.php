@@ -30,6 +30,7 @@ Route::middleware(['verified', '2fa'])->group(function () {
 
 	Route::post('apps/{app:aid}/go-live', 'AppController@goLive')->name('app.go-live');
 	Route::get('apps/{app:aid}/kyc/{group}', 'AppController@kyc')->name('app.kyc');
+	Route::post('apps/{app:aid}/kyc/{group}', 'AppController@kycStore')->name('app.kyc.store');
 
 	Route::get('profile', 'UserController@show')->name('user.profile');
 	Route::put('profile/{user}/update', 'UserController@update')->name('user.profile.update');

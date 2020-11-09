@@ -40,8 +40,9 @@ class KycService
 			'route' => route('app.kyc', [$app->aid, 'momo']),
 			'view' => 'templates.apps.kyc',
 			'with' => [
-				'pdf' => '/kyc/momo/kyc.pdf',
-				'for' => 'momo'
+				'pdf' => "/kyc/momo/kyc-{$app->country_code}.pdf",
+				'for' => 'momo',
+				'app' => $app
 			]
 		];
 	}

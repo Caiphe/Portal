@@ -12,6 +12,10 @@ textarea {
 
 textarea {
     padding: 10px;
+
+    &.long {
+        width: 100%;
+    }
 }
 
 select {
@@ -33,6 +37,10 @@ select {
         border: 1px solid #000;
         background-image: get-icon("arrow-down", #FFFFFF);
         color: #FFF;
+    }
+
+    &.long {
+        width: 100%;
     }
 }
 

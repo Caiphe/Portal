@@ -210,8 +210,14 @@ class AppController extends Controller
 
 	public function kyc(App $app, $group, KycService $kycService)
 	{
+		$app->load('country');
 		$kyc = $kycService->$group($app);
 
 		return view($kyc['view'])->with($kyc['with']);
+	}
+
+	public function kycStore(App $app, $group, Request $request)
+	{
+		return $request->all();
 	}
 }
