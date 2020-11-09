@@ -132,6 +132,14 @@
                     width: 16px;
                 }
             }
+
+            .business-type {
+                display: none;
+
+                &.show {
+                    display: block;
+                }
+            }
         }
     }
 }

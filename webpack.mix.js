@@ -31,6 +31,7 @@ mix.scripts(
     .scripts("resources/js/templates/auth/register.js", "public/js/templates/auth/register.js")
     .scripts("resources/js/templates/auth/forgot-password.js", "public/js/templates/auth/forgot-password.js")
     .scripts("resources/js/templates/admin/edit.js", "public/js/templates/admin/edit.js")
+    .scripts("resources/js/templates/apps/kyc.js", "public/js/templates/apps/kyc.js")
     .scripts("resources/js/vendor/trix.js", "public/js/vendor/trix.js")
     .sass("resources/sass/auth/login.scss", "public/css/auth")
     .sass("resources/sass/auth/register.scss", "public/css/auth")
