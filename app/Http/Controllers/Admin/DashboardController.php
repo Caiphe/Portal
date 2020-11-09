@@ -21,8 +21,8 @@ class DashboardController extends Controller
         $responsibleCountriesCodes = $user->responsibleCountries->pluck('code')->toArray();
         $hasSearchTerm = $request->has('q');
         $searchTerm = "%" . $request->get('q', '') . "%";
-        $hasCountries = $request->has('countries');
         $searchCountries = $request->get('countries');
+        $hasCountries = $request->has('countries') && !is_null($searchCountries[0]);
         $notAdminNoResponsibleCountries = !$isAdmin && $user->responsibleCountries()->get()->isEmpty();
 
         if ($notAdminNoResponsibleCountries && $request->ajax()) {
