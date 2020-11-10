@@ -268,7 +268,7 @@ class KycService
 								"value" => "Proof of Address of the business name entity. Any of the following below can be obtained; Recent Utility bills not older than three months, Introduction from existing financial institution, OR Advocate, Copy of Tenancy Agreement"
 							],
 							[
-								"label" => "<h3>Tax Identification Number (TIN)</h3><p>, or Tax Exemption Certificate</strong>/ <strong>any oer evidence of exemption</p>",
+								"label" => "<h3>Tax Identification Number (TIN)</h3><p>Or <strong>Tax Exemption Certificate</strong>/ <strong>any oer evidence of exemption</strong></p>",
 								"value" => "Tax Identification Number (TIN), or Tax Exemption Certificate any other evidence of exemption"
 							]
 						]

@@ -29,26 +29,26 @@
     <strong>Go live</strong> - Add KYC information
 </div>
 <div class="content">
-    <form action="{{ route('app.kyc.store', ['app' => $app->aid, 'group' => $group]) }}" method="POST">
+    <form action="{{ route('app.kyc.store', ['app' => $app->aid, 'group' => $group]) }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <h2>About business owner</h2>
-        <input class="long" type="text" name="name" placeholder="Full name" autocomplete="off">
-        <input class="long" type="text" name="name" placeholder="National ID, Passport number" autocomplete="off">
+        <input class="long" type="text" name="name" value="{{ old('name') ?? '' }}" placeholder="Full name" autocomplete="off" required>
+        <input class="long" type="text" name="national_id" value="{{ old('national_id') ?? '' }}" placeholder="National ID, Passport number" autocomplete="off" required>
         <div class="cols column">
-            <input class="mr-1" type="text" name="number" placeholder="Phone number" autocomplete="off">
-            <input type="text" name="email" placeholder="Email" autocomplete="off">
+            <input class="mr-1" type="text" name="number" value="{{ old('number') ?? '' }}" placeholder="Phone number" autocomplete="off" required>
+            <input type="email" name="email" value="{{ old('email') ?? '' }}" placeholder="Email" autocomplete="off" required>
         </div>
 
         <h2>About the business</h2>
-        <input class="long" type="text" name="business_name" placeholder="Business name" autocomplete="off">
-        <select id="business-type" class="long" name="business_type" autocomplete="off">
+        <input class="long" type="text" name="business_name" value="{{ old('business_name') ?? '' }}" placeholder="Business name" autocomplete="off" required>
+        <select id="business-type" class="long" name="business_type" autocomplete="off" required>
             <option value="" selected disabled>Business type</option>
             @foreach($options['businessTypes'] as $option)
-            <option value="{{ Str::slug($option['label']) }}">{{ $option['label'] }}</option>
+            <option @if(null !== old('business_type') && old('business_type') === $option['label']) selected @endif value="{{ $option['label'] }}">{{ $option['label'] }}</option>
             @endforeach
         </select>
-        <textarea class="long" name="business_description" rows="10" placeholder="Description of your business" autocomplete="off"></textarea>
+        <textarea class="long" name="business_description" rows="10" placeholder="Description of your business" autocomplete="off" required>{{ old('business_description') ?? '' }}</textarea>
 
         <h2>KYC contracting and file management</h2>
         <p class="bold">Download Contracting Requirements</p>
@@ -59,18 +59,17 @@
         <p>Upload all documents as a pdf file only</p>
         <label class="file-upload button" for="signed-contracting-requirements">
             @svg("upload") Upload Signed Application Forms
-            <input type="file" name="signed_contracting_requirements" id="signed-contracting-requirements" accept=".pdf">
+            <input class="file-upload-input" type="file" name="files[Signed Contracting Requirements]" id="signed-contracting-requirements" accept=".pdf">
         </label>
 
         @foreach($options['businessTypes'] as $businessType)
-        <div id="{{ Str::slug($businessType['label']) }}" class="business-type">
+        <div id="{{ Str::slug($businessType['label']) }}" class="business-type @if(null !== old('business_type') && old('business_type') === $businessType['label']) show @endif">
             @foreach($businessType['kycChecklist'] as $kycChecklistItem)
             <div class="kyc-checklist-item mt-3">
                 {!! $kycChecklistItem['label'] !!}
-                <input type="hidden" name="{{ Str::slug($kycChecklistItem['value']) }}_value" value="{{ $kycChecklistItem['value'] }}">
                 <label class="button file-upload">
                     @svg('upload') Upload
-                    <input type="file" name="{{ Str::slug($kycChecklistItem['value']) }}" accept=".pdf">
+                    <input class="file-upload-input" type="file" name="files[{{ $businessType['label'] }}][{{ $kycChecklistItem['value'] }}]" accept=".pdf">
                 </label>
             </div>
             @endforeach

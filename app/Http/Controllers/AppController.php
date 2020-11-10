@@ -191,15 +191,15 @@ class AppController extends Controller
 
 	public function goLive(App $app, KycService $kycService)
 	{
-		// $app->update([
-		// 	'live_at' => date('Y-m-d H:i:s')
-		// ]);
-
 		$app->load('products');
 		$groups = $app->products->pluck('group')->toArray();
 		$firstKycMethod = $kycService->getFirstKyc($groups);
 
 		if ($firstKycMethod === "") {
+			$app->update([
+				'live_at' => date('Y-m-d H:i:s')
+			]);
+
 			return redirect()->back()->with('alert', "success:{$app->display_name} is now live.");
 		}
 
@@ -218,6 +218,36 @@ class AppController extends Controller
 
 	public function kycStore(App $app, $group, Request $request)
 	{
-		return $request->all();
+		$data = $request->validate([
+			'name' => 'required',
+			'national_id' => 'required',
+			'number' => 'required',
+			'email' => 'required',
+			'business_name' => 'required',
+			'business_type' => 'required',
+			'business_description' => 'required',
+			'files' => 'required',
+			'accept' => 'required',
+		]);
+		$files = $request->file('files');
+		$filesArray = [];
+		$fileName = "";
+
+		if (!isset($files[$data['business_type']])) {
+			return back()->withErrors('Please add all the files requested.')->withInput();
+		}
+
+		foreach ($files[$data['business_type']] as $name => $file) {
+			if (!$file) {
+				return back()->withErrors('Please add all the files requested.')->withInput();
+			}
+
+			$fileName = Str::slug(substr($name, 0, 32)) . '.pdf';
+			$file->storeAs("kyc/{$app->aid}", $fileName,'local');
+			$filesArray[$fileName] = $name;
+		}
+
+		return "done yo";
+		// return redirect()->route('app.index')->with('alert', 'success:Your app is now live');
 	}
 }

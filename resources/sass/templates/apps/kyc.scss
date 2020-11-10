@@ -111,6 +111,16 @@
                 input {
                     display: none;
                 }
+
+                &.has-file {
+                    background-color: $green;
+                    border: 2px solid $green;
+                    color: #FFF;
+
+                    svg {
+                        fill: #FFF;
+                    }
+                }
             }
 
             .accept {
