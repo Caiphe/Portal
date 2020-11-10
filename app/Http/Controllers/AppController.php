@@ -6,11 +6,13 @@ use App\App;
 use App\Country;
 use App\Http\Requests\CreateAppRequest;
 use App\Http\Requests\DeleteAppRequest;
+use App\Mail\GoLiveMail;
 use App\Services\ApigeeService;
 use App\Services\KycService;
 use App\Services\ProductLocationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
 
 class AppController extends Controller
 {
@@ -229,8 +231,13 @@ class AppController extends Controller
 			'files' => 'required',
 			'accept' => 'required',
 		]);
+		$app->load(['products' => function($query) use($group) {
+			$query->where('group', $group);
+		}]);
 		$files = $request->file('files');
-		$filesArray = [];
+		$data['files'] = [];
+		$data['app'] = $app;
+		$data['group'] = $group;
 		$fileName = "";
 
 		if (!isset($files[$data['business_type']])) {
@@ -244,8 +251,10 @@ class AppController extends Controller
 
 			$fileName = Str::slug(substr($name, 0, 32)) . '.pdf';
 			$file->storeAs("kyc/{$app->aid}", $fileName,'local');
-			$filesArray[$fileName] = $name;
+			$data['files'][$fileName] = $name;
 		}
+
+		Mail::to('wes@plusnarrative.com')->send(new GoLiveMail($data));
 
 		return "done yo";
 		// return redirect()->route('app.index')->with('alert', 'success:Your app is now live');
