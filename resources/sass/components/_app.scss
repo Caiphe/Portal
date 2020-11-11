@@ -251,6 +251,10 @@
                     background-color: $error;
                 }
 
+                .app-status-pending {
+                    background-color: $info;
+                }
+
                 .name {
                     margin-right: 40px;
                     max-width: 120px;

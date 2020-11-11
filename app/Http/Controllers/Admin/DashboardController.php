@@ -67,7 +67,8 @@ class DashboardController extends Controller
                 $query->where('status', 'pending');
             })
             ->when($hasSearchTerm, function ($q) use ($searchTerm) {
-                $q->where('display_name', 'like', $searchTerm);
+                $q->where('display_name', 'like', $searchTerm)
+                    ->orWhere('aid', 'like', $searchTerm);
             })
             ->when($hasCountries, function ($q) use ($searchCountries) {
                 $q->whereHas('country', function ($q) use ($searchCountries) {

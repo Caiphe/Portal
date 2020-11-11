@@ -9,7 +9,7 @@
         data-status="{{ $product['pivot']['status'] }}"
         data-product-display-name="{{ $product['display_name'] }}"
     >
-        <span class="status-bar status-{{ $product['pivot']['status'] }}"></span>
+        <span class="status-bar status-{{ $product['pivot']['status'] }} @if(!is_null($app->live_at)) app-status-pending @endif"></span>
         <span class="name">{{ $product['display_name'] }}</span>
         @if(Request::is('admin/*'))
             <button class="product-approve" data-action="approve" data-aid="{{ $app['name'] }}" data-pid="{{ $product['pivot']['product_pid'] }}" data-product-display-name="{{ $product['display_name'] }}">

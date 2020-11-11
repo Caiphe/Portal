@@ -220,6 +220,12 @@ class AppController extends Controller
 
 	public function kycStore(App $app, $group, Request $request)
 	{
+		$kycStoreMethod = "{$group}KycStore";
+		return $this->$kycStoreMethod($app, $group, $request);
+	}
+
+	protected function momoKycStore($app, $group, Request $request)
+	{
 		$data = $request->validate([
 			'name' => 'required',
 			'national_id' => 'required',
@@ -231,18 +237,24 @@ class AppController extends Controller
 			'files' => 'required',
 			'accept' => 'required',
 		]);
-		$app->load(['products' => function($query) use($group) {
-			$query->where('group', $group);
-		}]);
+
+		$app->load([
+			'products' => fn ($query) => $query->where('group', $group),
+			'country' => fn ($query) => $query->with('opcoUser')
+		]);
+
 		$files = $request->file('files');
 		$data['files'] = [];
 		$data['app'] = $app;
 		$data['group'] = $group;
-		$fileName = "";
 
 		if (!isset($files[$data['business_type']])) {
 			return back()->withErrors('Please add all the files requested.')->withInput();
 		}
+
+		$fileName = 'signed-contracting-requirements.pdf';
+		$files['Signed Contracting Requirements']->storeAs("kyc/{$app->aid}", $fileName, 'local');
+		$data['files'][] = "kyc/{$app->aid}/$fileName";
 
 		foreach ($files[$data['business_type']] as $name => $file) {
 			if (!$file) {
@@ -250,13 +262,20 @@ class AppController extends Controller
 			}
 
 			$fileName = Str::slug(substr($name, 0, 32)) . '.pdf';
-			$file->storeAs("kyc/{$app->aid}", $fileName,'local');
-			$data['files'][$fileName] = $name;
+			$file->storeAs("kyc/{$app->aid}", $fileName, 'local');
+			$data['files'][] = "kyc/{$app->aid}/$fileName";
 		}
 
-		Mail::to('wes@plusnarrative.com')->send(new GoLiveMail($data));
+		$opcoUserEmails = $app->country->opcoUser->pluck('email');
+		if (empty($opcoUserEmails)) {
+			$opcoUserEmails = env('MAIL_TO_ADDRESS');
+		}
+		Mail::to($opcoUserEmails)->send(new GoLiveMail($data));
 
-		return "done yo";
-		// return redirect()->route('app.index')->with('alert', 'success:Your app is now live');
+		$app->update([
+			'live_at' => date('Y-m-d H:i:s')
+		]);
+
+		return redirect()->route('app.index')->with('alert', 'info:Your app is in review;You will get an email about the progress.');
 	}
 }

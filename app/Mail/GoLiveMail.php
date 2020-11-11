@@ -33,6 +33,16 @@ class GoLiveMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.go-live');
+        $markdownTemplate = "emails.kyc.{$this->data['group']}";
+        if(!isset($this->data['files']) || empty($this->data['files'])){
+            return $this->markdown($markdownTemplate);
+        }
+
+        $m = $this->markdown($markdownTemplate);
+        foreach($this->data['files'] as $file) {
+            $m->attachFromStorageDisk('local', $file);
+        }   
+
+        return $m;
     }
 }

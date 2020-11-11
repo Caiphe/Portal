@@ -1,8 +1,7 @@
 @component('mail::message')
-# New go live for **{{ strtoupper($data['group']) }}**
+# New go live for **MoMo**
 
-## App
-**{{ $data['app']->display_name }}**
+App: [{{ $data['app']->display_name }}]({{ env('APP_URL') }}/admin/dashboard?q={{ $data['app']->aid }})
 
 ## User details
 
@@ -14,8 +13,12 @@
 @endforeach
 
 <br>
+
 ## Products
-{{ $data['app']->products->pluck('display_name')->implode(', ') }}
+
+@foreach($data['app']->products as $product)
+[{{ $product->display_name }}]({{ env('APP_URL') }}/products/{{ $product->slug }})<br>
+@endforeach
 
 Thanks,<br>
 {{ config('app.name') }}
