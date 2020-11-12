@@ -50,11 +50,10 @@ paths:
             $ref: "#/definitions/CustomerPlans"
 
         207:
-          description: >
-                    "If there was an error retrieving some part of the request,
+          description: "If there was an error retrieving some part of the request,
                     then the successful request will be shown, and the remaining failed objects will be be excluded.
                     E.g. if there was an error retrieving Balance information, then the balance object will be empty"
-          examples: >
+          examples:
             Partially Successfuls Response, showing valid plan data, but balance object is null:
 
               "data": {
@@ -80,7 +79,7 @@ paths:
             $ref: "#/definitions/Error"
         404:
           description: "Customer not found"
-          examples: >
+          examples:
             The data object/envelope will be null:
               {
                 "data": null
@@ -119,7 +118,7 @@ paths:
         in : "header"
         description: "source system Id to include for tracing requests"
         type: "string"
-        required : false
+        required : true
       - name: "refillRequest"
         in: "body"
         required: true
@@ -135,13 +134,24 @@ paths:
               enum:
                 - voucher
                 - voucherless
+            refillProfileId:
+              type: string
+              default: S6
+              description: "The refill Profile Id of the 3PP.
+              if refillType is Voucherless, the default refillProfileId will be S6"
+              enum:
+                - S6
+                - M10
+                - M7
+                - A9
+                - 3M
             voucherActivationCode:
               type: string
               description: "Voucher Activation Code, Required if refillType is Voucher Base."
             transactionAmount :
-              type : "integer"
+              type : "string"
               description : "This is a mandatory parameter for voucherless refill"
-              example : 500
+              example : "500.00"
     responses :
         "200" :
           description :  "OK"
@@ -155,13 +165,16 @@ paths:
               statusMessage:
                 type: string
                 example: "Success"
+              transactionId:
+                type: string
+                description: "Client or API generated Id to include for tracing requests"
               data:
                 type : "object"
                 properties:
                   amount:
-                    type: integer
+                    type: string
                     description: "The whole units of the amount. For example if currency is NGN, then 100 unit is #100."
-                    example: 100
+                    example: "100.00"
                   currencyCode:
                     type: string
                     description: "The 3-letter currency code defined in ISO 4217."
@@ -174,7 +187,7 @@ paths:
                     properties:
                       href:
                         type: string
-                        example: "https://api.mtn.com/v1/customers/2348064816493/refill"
+                        example: "https://api.mtn.com/v1/customers/2348064816493/plan/refill"
         "400" :
           description : "Bad Request"
           schema :
