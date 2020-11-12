@@ -80,6 +80,30 @@ class DashboardController extends Controller
             ->orderBy('updated_at', 'desc')
             ->paginate();
 
+        $app = App::with(['developer', 'country', 'products'])
+            ->whereNotNull('country_code')
+            ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes) {
+                $query->whereIn('country_code', $responsibleCountriesCodes);
+            })
+            ->whereHas('products', function ($query) {
+                $query->where('status', 'pending');
+            })
+            ->when($hasSearchTerm, function ($q) use ($searchTerm) {
+                $q->where('display_name', 'like', $searchTerm)
+                    ->orWhere('aid', 'like', $searchTerm);
+            })
+            ->when($hasCountries, function ($q) use ($searchCountries) {
+                $q->whereHas('country', function ($q) use ($searchCountries) {
+                    $q->whereIn('code', $searchCountries);
+                });
+            })
+            ->byStatus('approved')
+            ->union($appsByProductLocation)
+            ->orderBy('updated_at', 'desc')
+            ->first();
+
+        return +isset($app->credentials[0]['status']);
+
         if ($request->ajax()) {
             return response()
                 ->view('templates.admin.dashboard.data', [

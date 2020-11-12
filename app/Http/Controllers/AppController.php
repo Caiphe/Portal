@@ -191,6 +191,11 @@ class AppController extends Controller
 		return $credentials[$type];
 	}
 
+	public function approve(App $app)
+	{
+		return $app;
+	}
+
 	public function goLive(App $app, KycService $kycService)
 	{
 		$app->load('products');

@@ -51,6 +51,7 @@ class SyncApps extends Command
 
 		foreach ($apps['app'] as $app) {
 			$apiProducts = [];
+			dd($app);
 			foreach ($app['credentials']['apiProducts'] as $product) {
 				if (!in_array($product['apiproduct'], $products)) continue 2;
 				$apiProducts[$product['apiproduct']] = ['status' => $product['status']];

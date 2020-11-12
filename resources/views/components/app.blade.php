@@ -136,6 +136,12 @@
             <p class="spacer-flex"><strong class="mr-1">Ready to launch?</strong>You're just a few clicks away</p>
             <button class="button dark">GO LIVE @svg('rocket', '#FFF')</button>
         </form>
+        @elseif($isAdminPage)
+        <form class="go-live cols centre-align" method="POST" action="{{ route('app.approve', $app->aid) }}">
+            @csrf
+            <p class="spacer-flex"><strong class="mr-1">Ready to approve?</strong>You're just a few clicks away</p>
+            <button class="button dark">APPROVE @svg('check-all', '#FFF')</button>
+        </form>
         @endif
     </div>
     <nav class="menu">

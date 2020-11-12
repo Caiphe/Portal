@@ -29,6 +29,7 @@ Route::middleware(['verified', '2fa'])->group(function () {
 	Route::get('apps/{app:aid}/credentials/{type}', 'AppController@getCredentials')->name('app.credentials');
 
 	Route::post('apps/{app:aid}/go-live', 'AppController@goLive')->name('app.go-live');
+	Route::post('apps/{app:aid}/approve', 'AppController@goLive')->name('app.approve');
 	Route::get('apps/{app:aid}/kyc/{group}', 'AppController@kyc')->name('app.kyc');
 	Route::post('apps/{app:aid}/kyc/{group}', 'AppController@kycStore')->name('app.kyc.store');
 
