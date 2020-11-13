@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Country;
+use App\Services\ApigeeService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -35,11 +36,15 @@ class App extends Model
 		$this->attributes['slug'] = Str::slug($value);
 	}
 
-	public function setCredentialsAttribute($value)
+	public function setCredentialsAttribute($credentials)
 	{
-		$value['consumerKey'] = $this->redact($value['consumerKey']);
-		$value['consumerSecret'] = $this->redact($value['consumerSecret']);
-		$cred = json_encode($value);
+		$credentials = ApigeeService::sortCredentials($credentials);
+		for ($i = 0; $i < count($credentials); $i++) {
+			$credentials[$i]['apiProducts'] = array_map(fn ($apiProduct) => $apiProduct['apiproduct'], $credentials[$i]['apiProducts']);
+			$credentials[$i]['consumerKey'] = $this->redact($credentials[$i]['consumerKey']);
+			$credentials[$i]['consumerSecret'] = $this->redact($credentials[$i]['consumerSecret']);
+		}
+		$cred = json_encode($credentials);
 		$this->attributes['credentials'] = $cred;
 	}
 

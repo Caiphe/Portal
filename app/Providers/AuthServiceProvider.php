@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\App;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -47,6 +48,10 @@ class AuthServiceProvider extends ServiceProvider
 
 		Gate::define('administer-dashboard', function ($user) {
 			return $user->hasPermissionTo('administer_dashboard_products');
+		});
+
+		Gate::define('access-own-app', function ($user, App $app) {
+			return $app->developer_id === $user->developer_id;
 		});
 	}
 }

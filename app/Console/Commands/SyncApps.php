@@ -51,8 +51,8 @@ class SyncApps extends Command
 
 		foreach ($apps['app'] as $app) {
 			$apiProducts = [];
-			dd($app);
-			foreach ($app['credentials']['apiProducts'] as $product) {
+
+			foreach (end($app['credentials'])['apiProducts'] as $product) {
 				if (!in_array($product['apiproduct'], $products)) continue 2;
 				$apiProducts[$product['apiproduct']] = ['status' => $product['status']];
 			}
@@ -60,8 +60,6 @@ class SyncApps extends Command
 			$this->info("Syncing {$app['name']}");
 
 			$attributes = ApigeeService::getAppAttributes($app['attributes']);
-
-			unset($app['credentials']['apiProducts']);
 
 			if (isset($attributes['DisplayName']) && !empty($attributes['DisplayName'])) {
 				$displayName = $attributes['DisplayName'];
@@ -73,7 +71,7 @@ class SyncApps extends Command
 			if (isset($attributes['Country']) && is_numeric($attributes['Country'])) {
 				$countryCode = $countryArray[$attributes['Country']]['code'];
 			} else if (isset($attributes['Country']) && strlen($attributes['Country']) > 2) {
-				$countryCode = $countries->first(fn($country) => $country->name === $attributes['Country'])->code;
+				$countryCode = $countries->first(fn ($country) => $country->name === $attributes['Country'])->code;
 			} else if (isset($attributes['Country'])) {
 				$countryCode = $attributes['Country'];
 			}

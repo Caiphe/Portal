@@ -1,12 +1,13 @@
+@props(['app', 'details', 'type', 'attr', 'countries'])
+
 @php
     $isAdminPage = Request::is('admin/*');
+    $credentials = $app['credentials'];
 @endphp
 
 @allowonce('card_link')
 <link href="{{ mix('/css/components/_app.css') }}" rel="stylesheet"/>
 @endallowonce
-
-@props(['app', 'details', 'type', 'attr', 'countries'])
 
 <div class="app" data-name="{{ $app['name'] }}" data-id="{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
      data-locations="{{ implode(',', array_keys($countries)) }}">
@@ -40,7 +41,11 @@
         @endif
     </div>
     <div class="column">
-        {{ date('Y-m-d', strtotime($app['updated_at'])) }}
+        @if($isAdminPage)
+            {{ date('Y-m-d', strtotime($app['live_at'])) }}
+        @else
+            {{ date('Y-m-d', strtotime($app['updated_at'])) }}
+        @endif
     </div>
     <div class="column">
         <button class="actions"></button>
@@ -82,8 +87,8 @@
                     </div>
                     <div class="detail-row cols">
                         <div class="detail-item"><strong>Sandbox key</strong></div>
-                        <div class="detail-item key">{{ $app['credentials']['consumerKey'] }}</div>
-                        <button class="copy" data-reference="{{$app['aid']}}" data-type="consumerKey">
+                        <div class="detail-item key">{{ $credentials[0]['consumerKey'] }}</div>
+                        <button class="copy" data-reference="{{$app['aid']}}" data-type="consumerKey-sandbox">
                             @svg('copy', '#000000')
                             @svg('loading', '#000000')
                             @svg('clipboard', '#000000')
@@ -91,17 +96,33 @@
                     </div>
                     <div class="detail-row cols">
                         <div class="detail-item"><strong>Sandbox secret</strong></div>
-                        <div class="detail-item key">{{ $app['credentials']['consumerSecret'] }}</div>
-                        <button class="copy" data-reference="{{$app['aid']}}" data-type="consumerSecret">
+                        <div class="detail-item key">{{ $credentials[0]['consumerSecret'] }}</div>
+                        <button class="copy" data-reference="{{$app['aid']}}" data-type="consumerSecret-sandbox">
+                            @svg('copy', '#000000')
+                            @svg('loading', '#000000')
+                            @svg('clipboard', '#000000')
+                        </button>
+                    </div>
+                    @if(count($credentials) > 1)
+                    <div class="detail-row cols">
+                        <div class="detail-item"><strong>Production key</strong></div>
+                        <div class="detail-item key">{{ end($credentials)['consumerKey'] }}</div>
+                        <button class="copy" data-reference="{{$app['aid']}}" data-type="consumerKey-production">
                             @svg('copy', '#000000')
                             @svg('loading', '#000000')
                             @svg('clipboard', '#000000')
                         </button>
                     </div>
                     <div class="detail-row cols">
-                        <div class="detail-item"><strong>Callback url</strong></div>
-                        <div class="detail-item">{{ $app['callback_url'] ?: 'No callback url' }}</div>
+                        <div class="detail-item"><strong>Production secret</strong></div>
+                        <div class="detail-item key">{{ end($credentials)['consumerSecret'] }}</div>
+                        <button class="copy" data-reference="{{$app['aid']}}" data-type="consumerSecret-production">
+                            @svg('copy', '#000000')
+                            @svg('loading', '#000000')
+                            @svg('clipboard', '#000000')
+                        </button>
                     </div>
+                    @endif
                 </div>
                 <div class="detail-right">
                     <div class="detail-row cols">
@@ -114,21 +135,31 @@
                     </div>
                     <div class="detail-row cols">
                         <div class="detail-item"><strong>Key issued:</strong></div>
-                        <div class="detail-item">{{ date('d M Y H:i:s', substr($app['credentials']['issuedAt'], 0, 10)) }}</div>
+                        <div class="detail-item">{{ date('d M Y H:i:s', substr($credentials[0]['issuedAt'], 0, 10)) }}</div>
                     </div>
                     <div class="detail-row cols">
                         <div class="detail-item"><strong>Expires:</strong></div>
                         <div class="detail-item">Never</div>
+                    </div>
+                    <div class="detail-row cols">
+                        <div class="detail-item"><strong>Callback url</strong></div>
+                        <div class="detail-item">{{ $app['callback_url'] ?: 'No callback url' }}</div>
                     </div>
                 </div>
             </div>
         @endif
 
         <p class="products-title"><strong>Products</strong></p>
-
         <div class="products">
-            <x-apps.products :app="$app" />
+            <x-apps.products :app="$app" :products="$credentials[0]['apiProducts']" />
         </div>
+
+        @if(count($credentials) > 1)
+        <p class="products-title"><strong>Production products</strong></p>
+        <div class="products">
+            <x-apps.products :app="$app" :products="end($credentials)['apiProducts']" />
+        </div>
+        @endif
 
         @if(!$isAdminPage && is_null($app->live_at))
         <form class="go-live cols centre-align" method="POST" action="{{ route('app.go-live', $app->aid) }}">

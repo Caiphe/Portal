@@ -78,8 +78,6 @@ class AppController extends Controller
 		}
 
 		$attributes = ApigeeService::getAppAttributes($createdResponse['attributes']);
-		$credentials = ApigeeService::getLatestCredentials($createdResponse['credentials']);
-		unset($credentials['apiProducts']);
 
 		$app = App::create([
 			"aid" => $createdResponse['appId'],
@@ -87,7 +85,7 @@ class AppController extends Controller
 			"display_name" => $validated['name'],
 			"callback_url" => $createdResponse['callbackUrl'],
 			"attributes" => $attributes,
-			"credentials" => $credentials,
+			"credentials" => $createdResponse['credentials'],
 			"developer_id" => $createdResponse['developerId'],
 			"status" => $createdResponse['status'],
 			"description" => $attributes['Description'] ?? '',
@@ -125,7 +123,7 @@ class AppController extends Controller
 
 		$data = [
 			'name' => $validated['name'],
-			'key' => $this->getCredentials($app, 'consumerKey'),
+			'key' => $this->getCredentials($app, 'consumerKey', 'string'),
 			'apiProducts' => $request->products,
 			'originalProducts' => $validated['original_products'],
 			'keyExpiresIn' => -1,
@@ -177,25 +175,43 @@ class AppController extends Controller
 		return redirect(route('app.index'));
 	}
 
-	public function getCredentials(App $app, $type)
+	/**
+	 * Gets the credentials.
+	 *
+	 * @param      \App\App                       $app    The application
+	 * @param      string                         $type   The type
+	 *
+	 * @return     string|\Illuminate\Http\JsonResponse  The credentials.
+	 */
+	public function getCredentials(App $app, $type, $respondWith = 'jsonResponse')
 	{
-		if (auth()->user()->developer_id !== $app->developer_id) return "You can't access app keys that don't belong to you.";
-
 		$credentials = ApigeeService::get('apps/' . $app->aid)['credentials'];
-		$credentials = ApigeeService::getLatestCredentials($credentials);
+		$credentials = ApigeeService::sortCredentials($credentials);
+		$typeAndEnvironment = explode('-', $type);
 
-		if ($type === 'all') {
+		if ($typeAndEnvironment[1] === 'production') {
+			$credentials =  end($credentials)[$typeAndEnvironment[0]];
+		} else if ($type !== 'all') {
+			$credentials = $credentials[0][$typeAndEnvironment[0]];
+		}
+
+		if ($respondWith === 'string') {
 			return $credentials;
 		}
 
-		return $credentials[$type];
+		return response()->json([
+			'credentials' => $credentials
+		]);
 	}
 
-	public function approve(App $app)
-	{
-		return $app;
-	}
-
+	/**
+	 * Go live process
+	 *
+	 * @param      \App\App                                                          $app         The application
+	 * @param      \App\Services\KycService                                          $kycService  The kyc service
+	 *
+	 * @return     \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse  Redirect to the correct kyc form
+	 */
 	public function goLive(App $app, KycService $kycService)
 	{
 		$app->load('products');
@@ -215,6 +231,15 @@ class AppController extends Controller
 		return redirect($firstKycProcess['route']);
 	}
 
+	/**
+	 * Show the kyc form
+	 *
+	 * @param      \App\App                                                  $app         The application
+	 * @param      string                                                    $group       The group
+	 * @param      \App\Services\KycService                                  $kycService  The kyc service
+	 *
+	 * @return     \Illuminate\View\View|\Illuminate\Contracts\View\Factory  Show the form
+	 */
 	public function kyc(App $app, $group, KycService $kycService)
 	{
 		$app->load('country');
@@ -223,12 +248,30 @@ class AppController extends Controller
 		return view($kyc['view'])->with($kyc['with']);
 	}
 
+	/**
+	 * Direct to the store mechanism for this kyc
+	 *
+	 * @param      \App\App                  $app      The application
+	 * @param      string                    $group    The group
+	 * @param      \Illuminate\Http\Request  $request  The request
+	 *
+	 * @return     method                    The method to store the form details
+	 */
 	public function kycStore(App $app, $group, Request $request)
 	{
 		$kycStoreMethod = "{$group}KycStore";
 		return $this->$kycStoreMethod($app, $group, $request);
 	}
 
+	/**
+	 * The MoMo kyc store method
+	 *
+	 * @param      \App\App                                                          $app      The application
+	 * @param      string                                                            $group    The group
+	 * @param      \Illuminate\Http\Request                                          $request  The request
+	 *
+	 * @return     \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse  Redirect to app index
+	 */
 	protected function momoKycStore($app, $group, Request $request)
 	{
 		$data = $request->validate([

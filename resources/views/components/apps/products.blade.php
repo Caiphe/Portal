@@ -1,6 +1,11 @@
-@props(['app'])
+@props(['app', 'products'])
 
-@foreach($app['products'] as $product)
+@php
+    $credentialProducts = $app->products->filter(fn($product) => in_array($product->name, $products));
+    $appStatus = !is_null($app->live_at) && count($app->credentials) === 1 ? 'app-status-pending' : '';
+@endphp
+
+@foreach($credentialProducts as $product)
     <a 
         href="{{route('product.show', $product['slug'])}}"
         class="product"
@@ -9,17 +14,8 @@
         data-status="{{ $product['pivot']['status'] }}"
         data-product-display-name="{{ $product['display_name'] }}"
     >
-        <span class="status-bar status-{{ $product['pivot']['status'] }} @if(!is_null($app->live_at)) app-status-pending @endif"></span>
-        <span class="name">{{ $product['display_name'] }}</span>
-        @if(Request::is('admin/*'))
-            <button class="product-approve" data-action="approve" data-aid="{{ $app['name'] }}" data-pid="{{ $product['pivot']['product_pid'] }}" data-product-display-name="{{ $product['display_name'] }}">
-                @svg('thumbs-up', '#000000')
-            </button>
-            <button class="product-revoke" data-action="revoke" data-aid="{{ $app['name'] }}" data-pid="{{ $product['pivot']['product_pid'] }}" data-product-display-name="{{ $product['display_name'] }}">
-                @svg('thumbs-down', '#000000')
-            </button>
-        @else
-            @svg('arrow-forward', '#000000')
-        @endif
+        <span class="status-bar status-{{ $product['pivot']['status'] }} {{ $appStatus }}"></span>
+        <span class="name">{{ preg_replace('/prod$/i', '', $product['display_name']) }}</span>
+        @svg('arrow-forward', '#000000')
     </a>
 @endforeach

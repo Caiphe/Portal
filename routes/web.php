@@ -20,18 +20,17 @@ Route::get('search', 'SearchController')->name('search');
 Route::middleware(['verified', '2fa'])->group(function () {
 	Route::get('apps', 'AppController@index')->name('app.index');
 	Route::get('apps/create', 'AppController@create')->name('app.create');
-	Route::get('apps/{app:slug}/edit', 'AppController@edit')->name('app.edit');
+	Route::get('apps/{app:slug}/edit', 'AppController@edit')->middleware('can:access-own-app,app')->name('app.edit');
 	Route::post('apps', 'AppController@store')->name('app.store');
 
-	Route::put('apps/{app:slug}', 'AppController@update')->name('app.update');
-	Route::delete('apps/{app:slug}', 'AppController@destroy')->name('app.destroy');
+	Route::put('apps/{app:slug}', 'AppController@update')->middleware('can:access-own-app,app')->name('app.update');
+	Route::delete('apps/{app:slug}', 'AppController@destroy')->middleware('can:access-own-app,app')->name('app.destroy');
 
-	Route::get('apps/{app:aid}/credentials/{type}', 'AppController@getCredentials')->name('app.credentials');
+	Route::get('apps/{app:aid}/credentials/{type}', 'AppController@getCredentials')->middleware('can:access-own-app,app')->name('app.credentials');
 
-	Route::post('apps/{app:aid}/go-live', 'AppController@goLive')->name('app.go-live');
-	Route::post('apps/{app:aid}/approve', 'AppController@goLive')->name('app.approve');
-	Route::get('apps/{app:aid}/kyc/{group}', 'AppController@kyc')->name('app.kyc');
-	Route::post('apps/{app:aid}/kyc/{group}', 'AppController@kycStore')->name('app.kyc.store');
+	Route::post('apps/{app:aid}/go-live', 'AppController@goLive')->middleware('can:access-own-app,app')->name('app.go-live');
+	Route::get('apps/{app:aid}/kyc/{group}', 'AppController@kyc')->middleware('can:access-own-app,app')->name('app.kyc');
+	Route::post('apps/{app:aid}/kyc/{group}', 'AppController@kycStore')->middleware('can:access-own-app,app')->name('app.kyc.store');
 
 	Route::get('profile', 'UserController@show')->name('user.profile');
 	Route::put('profile/{user}/update', 'UserController@update')->name('user.profile.update');
@@ -41,7 +40,7 @@ Route::middleware(['verified', '2fa'])->group(function () {
 	Route::post('profile/2fa/disable', 'UserController@disable2fa')->name('user.2fa.disable');
 });
 
-Route::namespace('Admin')->prefix('admin')->middleware(['can:view-admin', '2fa'])->group(function () {
+Route::namespace('Admin')->prefix('admin')->middleware(['verified', '2fa', 'can:view-admin'])->group(function () {
 	Route::get('/', 'HomeController')->name('admin.home');
 
 	// Products
@@ -88,6 +87,7 @@ Route::namespace('Admin')->prefix('admin')->middleware(['can:view-admin', '2fa']
 
 	// Dashboard
 	Route::get('dashboard', 'DashboardController@index')->middleware('can:administer-dashboard')->name('admin.dashboard.index');
+	Route::post('apps/{app:aid}/go-live', 'AppController@approve')->middleware('can:administer-dashboard')->name('app.approve');
 	Route::post('apps/{product}/approve', 'DashboardController@update')->middleware('can:administer-dashboard')->name('app.product.approve');
 	Route::post('apps/{product}/revoke', 'DashboardController@update')->middleware('can:administer-dashboard')->name('app.product.revoke');
 

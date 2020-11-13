@@ -68,6 +68,19 @@ class ApigeeService
 		return $updatedDetails;
 	}
 
+	public static function updateAppWithNewCredentials(array $data)
+	{
+		$user = \Auth::user();
+		$name = $data['name'];
+
+		return self::put("developers/{$user->email}/apps/{$name}", [
+			"name" => $name,
+			"attributes" => $data['attributes'],
+			"callbackUrl" => $data['callbackUrl'],
+			"apiProducts" => $data['apiProducts']
+		]);
+	}
+
 	public static function getAppAttributes(array $attributes)
 	{
 		$a = [];
@@ -88,7 +101,7 @@ class ApigeeService
 				continue;
 			}
 
-			$apps['app'][$i]['credentials'] = self::getLatestCredentials($apps['app'][$i]['credentials']);
+			$apps['app'][$i]['credentials'] = self::sortCredentials($apps['app'][$i]['credentials']);
 		}
 
 		return $apps;
@@ -135,7 +148,7 @@ class ApigeeService
 	public static function getAppCountries(object $products): array
 	{
 		$productLocations = $products->pluck('locations');
-		if($productLocations->contains('all') || $productLocations->contains(null)){
+		if ($productLocations->contains('all') || $productLocations->contains(null)) {
 			return ['all' => 'All'];
 		}
 
@@ -175,7 +188,7 @@ class ApigeeService
 	 */
 	public static function getLatestCredentials(array $credentials): array
 	{
-		usort($credentials, [__CLASS__, "sortByIssuedAt"]);
+		usort($credentials, [__CLASS__, "sortByIssuedAtDesc"]);
 
 		for ($i = 0; $i < count($credentials); $i++) {
 			if ($credentials[$i]['status'] === 'approved') {
@@ -184,6 +197,29 @@ class ApigeeService
 		}
 
 		return $credentials[0];
+	}
+
+	/**
+	 * Sorts credentials by issued date
+	 *
+	 * @param      array  $credentials  The credentials
+	 *
+	 * @return     array  The sorted credentials
+	 */
+	public static function sortCredentials(array $credentials): array
+	{
+		usort($credentials, [__CLASS__, "sortByIssuedAtAsc"]);
+
+		return $credentials;
+	}
+
+	public static function formatAppCredentials(array $credentials): array
+	{
+		for ($i = 0; $i < count($credentials); $i++) {
+			$credentials[$i]['apiProducts'] = array_map(fn ($apiProduct) => $apiProduct['apiproduct'], $credentials[$i]['apiProducts']);
+		}
+
+		return $credentials;
 	}
 
 	protected static function HttpWithBasicAuth()
@@ -225,12 +261,37 @@ class ApigeeService
 	 * Helpers
 	 */
 
-	protected static function sortByIssuedAt($a, $b)
+	/**
+	 * Sort by issued at
+	 *
+	 * @param      int   $a      First sort variable
+	 * @param      int   $b      Second sort variable
+	 *
+	 * @return     int   The sort order
+	 */
+	protected static function sortByIssuedAtDesc($a, $b)
 	{
 		if ($a['issuedAt'] == $b['issuedAt']) {
 			return 0;
 		}
 
 		return ($a['issuedAt'] > $b['issuedAt']) ? -1 : 1;
+	}
+
+	/**
+	 * Sort by issued at
+	 *
+	 * @param      int   $a      First sort variable
+	 * @param      int   $b      Second sort variable
+	 *
+	 * @return     int   The sort order
+	 */
+	protected static function sortByIssuedAtAsc($a, $b)
+	{
+		if ($a['issuedAt'] == $b['issuedAt']) {
+			return 0;
+		}
+
+		return ($a['issuedAt'] < $b['issuedAt']) ? -1 : 1;
 	}
 }

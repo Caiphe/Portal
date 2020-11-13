@@ -17,7 +17,7 @@
         </div>
 
         <div class="column">
-            <p>Date created</p>
+            <p>Requested go live on</p>
         </div>
 
         <div class="column">
