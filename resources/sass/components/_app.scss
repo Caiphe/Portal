@@ -195,7 +195,7 @@
                 }
             }
         }
-    
+
         .go-live {
             border-top: 1px solid $grey900;
             padding-top: 14px;
@@ -230,6 +230,26 @@
                 margin-bottom: 10px;
                 height: 100%;
 
+                &.product-status-approved .product-approve {
+                    display: none;
+                }
+
+                &.product-status-revoked .product-revoke {
+                    display: none;
+                }
+
+                &.product-status-approved .status-bar {
+                    background-color: $success;
+                }
+
+                &.product-status-pending .status-bar {
+                    background-color: $warning;
+                }
+
+                &.product-status-revoked .status-bar {
+                    background-color: $error;
+                }
+
                 span[class^="status-"],
                 span[class*="status-"] {
                     height: auto;
@@ -237,18 +257,6 @@
                     border-radius: 7px;
                     opacity: 1;
                     margin-right: 10px;
-                }
-
-                .status-approved {
-                    background-color: $success;
-                }
-
-                .status-pending {
-                    background-color: $warning;
-                }
-
-                .status-revoked {
-                    background-color: $error;
                 }
 
                 .app-status-pending {

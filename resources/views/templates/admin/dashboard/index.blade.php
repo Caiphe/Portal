@@ -140,13 +140,13 @@
 
             handleUpdateStatus({
                 action: this.dataset.action,
-                app: this.dataset.aid,
-                product: this.dataset.pid,
-                displayName: this.dataset.productDisplayName
-            }, this.parentNode.querySelector('.status-bar'));
+                app: this.parentNode.dataset.aid,
+                product: this.parentNode.dataset.pid,
+                displayName: this.parentNode.dataset.productDisplayName
+            }, this.parentNode);
         }
 
-        function handleUpdateStatus(data, statusBar) {
+        function handleUpdateStatus(data, card) {
             var xhr = new XMLHttpRequest();
             var lookup = {
                 approve: 'approved',
@@ -160,7 +160,7 @@
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
             if(confirm('Are you sure you want to ' + data.action + ' ' + data.displayName + '?')) {
-                statusBar.classList.add('loading');
+                card.classList.add('loading');
 
                 xhr.send(JSON.stringify(data));
             }
@@ -169,9 +169,9 @@
                 var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
                 if (xhr.status === 200) {
-                    statusBar.className = 'status-bar status-' + lookup[data.action];
+                    card.className = 'product product-status-' + lookup[data.action];
                 } else {
-                    statusBar.classList.remove('loading');
+                    card.classList.remove('loading');
                     addAlert('error', result.body || 'There was an error updating the product.');
                 }
             };
