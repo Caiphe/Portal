@@ -12,10 +12,10 @@
         <div class="cols centre-align">
             <form id="filter-form" class="cols centre-align ajaxify" action="{{ route('admin.dashboard.index') }}" method="GET" data-replace="#table-data">
                 <h3>Search</h3>
-                <input type="text" name="q" id="filter-text" class="filter-text ml-1" placeholder="App or developer name">
+                <input type="text" name="q" id="filter-text" class="filter-text ml-1" placeholder="App or developer name" value="{{ $_GET['q'] ?? '' }}">
 
                 <h3 class="ml-2">Country</h3>
-                <x-multiselect id="filter-country" name="countries" class="ml-1" label="Select country" :options="$countries->pluck('name', 'code')" />
+                <x-multiselect id="filter-country" name="countries" class="ml-1" label="Select country" :options="$countries->pluck('name', 'code')" :selected="$_GET['countries'] ?? []" />
             </form>
             
             <form class="ajaxify" data-replace="#table-data" data-func="clearFilter()" action="{{ route('admin.dashboard.index') }}" method="GET">

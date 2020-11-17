@@ -19,8 +19,8 @@ class DashboardController extends Controller
         $user->load('responsibleCountries');
         $isAdmin = $user->hasRole('admin');
         $responsibleCountriesCodes = $user->responsibleCountries->pluck('code')->toArray();
-        $hasSearchTerm = $request->has('q');
         $searchTerm = "%" . $request->get('q', '') . "%";
+        $hasSearchTerm = $searchTerm !== '%%';
         $searchCountries = $request->get('countries');
         $hasCountries = $request->has('countries') && !is_null($searchCountries[0]);
         $notAdminNoResponsibleCountries = !$isAdmin && $user->responsibleCountries()->get()->isEmpty();
@@ -41,17 +41,23 @@ class DashboardController extends Controller
 
         $apps = App::with(['developer', 'country', 'products'])
             ->whereNotNull('country_code')
-            ->whereNotNull('live_at')
             ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes) {
                 $query->whereIn('country_code', $responsibleCountriesCodes);
             })
+            ->when(!$hasSearchTerm && !$hasCountries, function ($q) use ($searchTerm) {
+                $q->whereNotNull('live_at');
+            })
             ->when($hasSearchTerm, function ($q) use ($searchTerm) {
-                $q->where('display_name', 'like', $searchTerm)
-                    ->orWhere('aid', 'like', $searchTerm);
+                $q->where(function ($query) use ($searchTerm) {
+                    $query->where('display_name', 'like', $searchTerm)
+                        ->orWhere('aid', 'like', $searchTerm);
+                });
             })
             ->when($hasCountries, function ($q) use ($searchCountries) {
-                $q->whereHas('country', function ($q) use ($searchCountries) {
-                    $q->whereIn('code', $searchCountries);
+                $q->where(function ($query) use ($searchCountries) {
+                    $query->whereHas('country', function ($q) use ($searchCountries) {
+                        $q->whereIn('code', $searchCountries);
+                    });
                 });
             })
             ->byStatus('approved')

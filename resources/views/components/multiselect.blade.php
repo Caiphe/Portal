@@ -22,7 +22,7 @@
     $id = $id ?? $name;
     $selected = $selected ?? [];
     $label = $label ?? '-- Select --';
-    $selectOptions = "<option disabled selected>$label</option>";
+    $selectOptions = "<option disabled selected value=\"\">$label</option>";
     $selectMultipleOptions = "<option disabled>$label</option>";
     $tags = "";
     $i = 1;

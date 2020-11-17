@@ -48,7 +48,7 @@
                         addAlert('success', (result.body || "Success"));
                     }
 
-                    if(typeof ajaxifyComplete !== 'undefined') ajaxifyComplete();
+                    if (typeof ajaxifyComplete !== 'undefined') ajaxifyComplete();
 
                 } else {
                     addAlert('error', (result.body || "Sorry there was an unexpected error."));
@@ -60,18 +60,26 @@
 
         if (el.elements !== undefined && method === "GET") {
             url += '?true=1';
+            value = "";
             for (var i = el.elements.length - 1; i >= 0; i--) {
-                if (el.elements[i].name === "") continue;
+                if (el.elements[i].name === "" || el.elements[i].value === "") continue;
 
-                url += '&' + el.elements[i].name + '=' + el.elements[i].value;
+                if (el.elements[i].multiple) {
+                    url += getMultiselectValues(el.elements[i]);
+                } else {
+                    url += '&' + el.elements[i].name + '=' + el.elements[i].value;
+                }
+
             }
-        } else if(el.elements !== undefined) {
+            url = url.replace(/true=1&?|\?true=1$/, '');
+        } else if (el.elements !== undefined) {
             for (var i = el.elements.length - 1; i >= 0; i--) {
-                if (el.elements[i].name === "") continue;
+                if (el.elements[i].name === "" || el.elements[i].value === "") continue;
 
                 formData.append(el.elements[i].name, el.elements[i].value);
             }
         }
+
 
         xhr.open(method, url);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -93,5 +101,15 @@
 
     function updateUrl(url) {
         history.pushState(null, null, url.replace(/.*\/|true=1\&/g, ''));
+    }
+
+    function getMultiselectValues(multi) {
+        var selected = '';
+        for (var i = multi.options.length - 1; i >= 0; i--) {
+            if (multi.options[i].selected) {
+                selected += '&' + multi.name + '=' + multi.options[i].value;
+            };
+        }
+        return selected;
     }
 }());
