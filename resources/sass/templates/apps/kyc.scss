@@ -112,6 +112,10 @@
                     display: none;
                 }
 
+                &::after {
+                    content: attr(data-label);
+                }
+
                 &.has-file {
                     background-color: $green;
                     border: 2px solid $green;
@@ -119,6 +123,10 @@
 
                     svg {
                         fill: #FFF;
+                    }
+
+                    &::after {
+                        content: "Uploaded";
                     }
                 }
             }

@@ -314,7 +314,7 @@ class AppController extends Controller
 			$data['files'][] = "kyc/{$app->aid}/$fileName";
 		}
 
-		$opcoUserEmails = $app->country->opcoUser->pluck('email');
+		$opcoUserEmails = $app->country->opcoUser->pluck('email')->toArray();
 		if (empty($opcoUserEmails)) {
 			$opcoUserEmails = env('MAIL_TO_ADDRESS');
 		}

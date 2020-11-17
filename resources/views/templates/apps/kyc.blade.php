@@ -57,8 +57,8 @@
 
         <p class="bold mt-3">Upload Signed Contracting Requirements</p>
         <p>Upload all documents as a pdf file only</p>
-        <label class="file-upload button" for="signed-contracting-requirements">
-            @svg("upload") Upload Signed Application Forms
+        <label class="file-upload button" for="signed-contracting-requirements" data-label="Upload Signed Application Forms">
+            @svg("upload")
             <input class="file-upload-input" type="file" name="files[Signed Contracting Requirements]" id="signed-contracting-requirements" accept=".pdf">
         </label>
 
@@ -67,8 +67,8 @@
             @foreach($businessType['kycChecklist'] as $kycChecklistItem)
             <div class="kyc-checklist-item mt-3">
                 {!! $kycChecklistItem['label'] !!}
-                <label class="button file-upload">
-                    @svg('upload') Upload
+                <label class="button file-upload" data-label="Upload">
+                    @svg('upload')
                     <input class="file-upload-input" type="file" name="files[{{ $businessType['label'] }}][{{ $kycChecklistItem['value'] }}]" accept=".pdf">
                 </label>
             </div>
