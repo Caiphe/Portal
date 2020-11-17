@@ -85,7 +85,7 @@ class Product extends Model {
     }
 
 	public function apps() {
-		return $this->belongsToMany(App::class, "app_product", "product_pid", "app_aid")->withPivot('status');
+		return $this->belongsToMany(App::class, "app_product", "product_pid", "app_aid")->withPivot('status', 'live_at');
 	}
 
 	public function keyFeatures() {

@@ -48,7 +48,11 @@
             </x-app>
             @endif
         @empty
+            @if(Request::is('admin/*'))
+            <p>No apps to approve. You can still search for apps to view.</p>
+            @else
             <p>No apps.</p>
+            @endif
         @endforelse
         {{ $apps->links() }}
     </div>

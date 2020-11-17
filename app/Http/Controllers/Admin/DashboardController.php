@@ -44,8 +44,11 @@ class DashboardController extends Controller
             ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes) {
                 $query->whereIn('country_code', $responsibleCountriesCodes);
             })
-            ->when(!$hasSearchTerm && !$hasCountries, function ($q) use ($searchTerm) {
-                $q->whereNotNull('live_at');
+            ->when(!$hasSearchTerm && !$hasCountries, function ($q) {
+                $q->whereNotNull('live_at')
+                    ->whereHas('products', function ($query) {
+                        $query->whereNull('live_at');
+                    });
             })
             ->when($hasSearchTerm, function ($q) use ($searchTerm) {
                 $q->where(function ($query) use ($searchTerm) {

@@ -55,7 +55,7 @@ class App extends Model
 
 	public function products()
 	{
-		return $this->belongsToMany(Product::class, "app_product", "app_aid", "product_pid")->withPivot('status');
+		return $this->belongsToMany(Product::class, "app_product", "app_aid", "product_pid")->withPivot('status', 'live_at');
 	}
 
 	public function scopeByUserEmail($query, $email)
