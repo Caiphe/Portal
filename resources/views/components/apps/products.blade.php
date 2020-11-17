@@ -7,7 +7,7 @@
 
 @foreach($credentialProducts as $product)
     <a 
-        href="{{route('product.show', $product['slug'])}}"
+        href="{{route('product.show', preg_replace('/[-_]prod$/i', '', $product['slug']))}}"
         class="product"
         data-pid="{{ $product['pid'] }}"
         data-aid="{{ $app['name'] }}"
