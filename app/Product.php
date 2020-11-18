@@ -64,6 +64,10 @@ class Product extends Model {
 	}
 
 	public function scopeBasedOnUser($query, $user, $environment = 'prod') {
+		if(config('app.env') === 'staging'){
+			$environment = 'prod,staging';
+		}
+
 		if ($user && $user->hasPermissionTo('view_internal_products')) {
 			return $query->isPublicWithInternal()->getEnvironment($environment);
 		}
@@ -72,8 +76,15 @@ class Product extends Model {
 	}
 
 	public function scopeGetEnvironment($query, $environment) {
-		return $query
-			->whereRaw("find_in_set('$environment',environments)");
+		$envs = explode(',', $environment);
+
+		$query->where(function($q) use($envs){
+			foreach($envs as $env){
+				$q->orWhereRaw("find_in_set('$env',environments)");
+			}
+		});
+
+		return $query;
 	}
 
 	/**
