@@ -10,7 +10,7 @@ class BundleController extends Controller
 {
     public function index(Request $request)
     {
-        $bundles = Bundle::with('category');
+        $bundles = Bundle::with('category')->byResponsibleCountry($request->user());
 
         if ($request->has('q')) {
             $query = "%" . $request->q . "%";

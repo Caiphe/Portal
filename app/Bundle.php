@@ -59,4 +59,15 @@ class Bundle extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function scopeByResponsibleCountry($query, $user)
+    {
+        if($user->hasRole('admin')) return $query;
+
+        $countriesResponsibleFor = $user->responsibleCountries()->pluck('code');
+
+        return $query->whereHas('products.countries', function ($q) use ($countriesResponsibleFor) {
+            $q->whereIn('country_code', $countriesResponsibleFor);
+        });
+    }
 }
