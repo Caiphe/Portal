@@ -17,7 +17,7 @@
     >
         <span class="status-bar status-{{ $product['pivot']['status'] }} {{ $appStatus }}"></span>
         <span class="name">{{ preg_replace('/prod$/i', '', $product['display_name']) }}</span>
-        @if($isDashboard && !is_null($product['pivot']['live_at']))
+        @if($isDashboard)
             <button class="product-approve" data-action="approve">
                 @svg('thumbs-up', '#000000')
             </button>

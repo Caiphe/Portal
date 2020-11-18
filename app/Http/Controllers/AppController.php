@@ -214,9 +214,55 @@ class AppController extends Controller
 	 */
 	public function goLive(App $app, KycService $kycService)
 	{
-		$app->load('products');
+		$app->load(['products', 'country']);
 		$groups = $app->products->pluck('group')->toArray();
 		$firstKycMethod = $kycService->getFirstKyc($groups);
+		$currentUser = \Auth::user();
+        $updatedApiProducts = [];
+        $apiProducts = [];
+        $now = date('Y-m-d H:i:s');
+        $attr = ['status' => 'approved', 'actioned_by' => $currentUser->id, 'live_at' => $now];
+
+        foreach ($app->products as $product) {
+            $findProduct = Product::whereName("{$product->name}-prod")->first();
+            $updatedApiProducts[$product->name] = $attr;
+            if (is_null($findProduct)) {
+                $apiProducts[] = $product->name;
+                continue;
+            }
+            $updatedApiProducts[$findProduct->name] = $attr;
+            $apiProducts[] = $findProduct->name;
+        }
+
+		$data = [
+            'name' => $app['name'],
+            'apiProducts' => $apiProducts,
+            'callbackUrl' => $app['callback_url'],
+            'attributes' => [
+                [
+                    'name' => 'DisplayName',
+                    'value' => $app['display_name'],
+                ],
+                [
+                    'name' => 'Description',
+                    'value' => $app['description'],
+                ],
+                [
+                    'name' => 'Country',
+                    'value' => $app->country->code,
+                ],
+                [
+                    'name' => 'location',
+                    'value' => $app->country->iso,
+                ],
+                [
+                    'name' => 'ApprovedAt',
+                    'value' => $now,
+                ],
+            ]
+        ];
+		$resp = ApigeeService::updateAppWithNewCredentials($data);
+        $status = $resp->status();
 
 		if ($firstKycMethod === "") {
 			$app->update([
