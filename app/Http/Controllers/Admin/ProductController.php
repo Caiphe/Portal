@@ -13,7 +13,7 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $products = Product::with('category')->basedOnUser($request->user());
+        $products = Product::with('category')->byResponsibleCountry($request->user());
 
         if ($request->has('q')) {
             $query = "%" . $request->q . "%";
