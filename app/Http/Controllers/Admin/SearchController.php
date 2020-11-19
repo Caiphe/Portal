@@ -24,6 +24,7 @@ class SearchController extends Controller
         $query = '%' . $searchTerm . '%';
         $page = $request->get('page', 1) - 1;
         $length = 12;
+        $currentUser = $request->user();
 
         if (empty($searchTerm)) {
             return view('templates.search', [
@@ -35,8 +36,7 @@ class SearchController extends Controller
             ]);
         }
 
-        $products = Product::basedOnUser($request->user())
-            ->hasSwagger()
+        $products = Product::byResponsibleCountry($currentUser)
             ->where(function ($q) use ($query) {
                 $q->where('name', 'like', $query)
                     ->orWhere('display_name', 'like', $query)
@@ -50,7 +50,7 @@ class SearchController extends Controller
             })
             ->toArray();
 
-        $bundles = Bundle::with('content')
+        $bundles = Bundle::with('content')->byResponsibleCountry($currentUser)
             ->where('display_name', 'like', $query)
             ->orWhere('description', 'like', $query)
             ->orWhereHas('content', function ($q) use ($query) {
