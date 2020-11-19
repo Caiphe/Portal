@@ -151,13 +151,13 @@
 
         <p class="products-title"><strong>Products</strong></p>
         <div class="products">
-            <x-apps.products :app="$app" :products="$credentials[0]['apiProducts']" />
+            <x-apps.products :app="$app" :products="$credentials[0]['apiProducts']" for="staging" />
         </div>
 
         @if(count($credentials) > 1)
         <p class="products-title"><strong>Production products</strong></p>
         <div class="products">
-            <x-apps.products :app="$app" :products="end($credentials)['apiProducts']" />
+            <x-apps.products :app="$app" :products="end($credentials)['apiProducts']" for="production" />
         </div>
         @endif
 

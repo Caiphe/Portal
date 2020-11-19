@@ -95,7 +95,16 @@ class AppController extends Controller
 			"created_at" => date('Y-m-d H:i:s', $createdResponse['createdAt'] / 1000),
 		]);
 
-		$app->products()->sync($request->products);
+		$app->products()->sync(
+			array_reduce(
+				$createdResponse['credentials'][0]['apiProducts'],
+				function ($carry, $apiProduct) {
+					$carry[$apiProduct['apiproduct']] = ['status' => $apiProduct['status']];
+					return $carry;
+				},
+				[]
+			)
+		);
 
 		if ($request->ajax()) {
 			return response()->json(['response' => $createdResponse]);
@@ -104,7 +113,7 @@ class AppController extends Controller
 		return redirect(route('app.index'));
 	}
 
-	public function edit(ProductLocationService $productLocationService, App $app, Request $request)
+	public function edit(ProductLocationService $productLocationService, App $app)
 	{
 		[$products, $countries] = $productLocationService->fetch();
 
@@ -155,7 +164,16 @@ class AppController extends Controller
 			'country_code' => $validated['country'],
 		]);
 
-		$app->products()->sync($data['apiProducts']);
+		$app->products()->sync(
+			array_reduce(
+				end($updatedResponse['credentials'])['apiProducts'],
+				function ($carry, $apiProduct) {
+					$carry[$apiProduct['apiproduct']] = ['status' => $apiProduct['status']];
+					return $carry;
+				},
+				[]
+			)
+		);
 
 		if ($request->ajax()) {
 			return response()->json(['response' => $updatedResponse]);
@@ -349,20 +367,17 @@ class AppController extends Controller
 	 */
 	protected function addNewCredentials(App $app): array
 	{
-		$currentUser = \Auth::user();
 		$updatedApiProducts = [];
 		$apiProducts = [];
-		$now = date('Y-m-d H:i:s');
-		$attr = ['status' => 'approved', 'actioned_by' => $currentUser->id, 'live_at' => $now];
 
 		foreach ($app->products as $product) {
 			$findProduct = Product::whereName("{$product->name}-prod")->first();
-			$updatedApiProducts[$product->name] = $attr;
+			$updatedApiProducts[] = $product->name;
 			if (is_null($findProduct)) {
 				$apiProducts[] = $product->name;
 				continue;
 			}
-			$updatedApiProducts[$findProduct->name] = $attr;
+			$updatedApiProducts[] = $findProduct->name;
 			$apiProducts[] = $findProduct->name;
 		}
 
@@ -389,7 +404,7 @@ class AppController extends Controller
 				],
 				[
 					'name' => 'ApprovedAt',
-					'value' => $now,
+					'value' => date('Y-m-d H:i:s'),
 				],
 			]
 		];
@@ -404,8 +419,8 @@ class AppController extends Controller
 		}
 
 		$app->update([
-			'attributes' => $resp['data']['attributes'],
-			'credentials' => $resp['apigeeResp']['credentials']
+			'attributes' => $data['attributes'],
+			'credentials' => $resp['credentials']
 		]);
 
 		$app->products()->sync($updatedApiProducts);

@@ -47,7 +47,7 @@ class DashboardController extends Controller
             ->when(!$hasSearchTerm && !$hasCountries, function ($q) {
                 $q->whereNotNull('live_at')
                     ->whereHas('products', function ($query) {
-                        $query->whereNull('live_at');
+                        $query->whereNull('actioned_at');
                     });
             })
             ->when($hasSearchTerm, function ($q) use ($searchTerm) {
@@ -93,15 +93,15 @@ class DashboardController extends Controller
             'pending' => 'pending'
         ][$validated['action']] ?? 'pending';
 
-        $credentials = ApigeeService::get('apps/' . $app->aid)['credentials'];
-        $credentials = ApigeeService::getLatestCredentials($credentials);
+        $credentials = ApigeeService::getAppCredentials($app);
+        $credentials = $validated['for'] === 'staging' ? $credentials[0] : end($credentials);
 
         $developerId = $app->developer->email ?? $app->developer_id;
 
         $response = ApigeeService::updateProductStatus($developerId, $validated['app'], $credentials['consumerKey'], $validated['product'], $validated['action']);
         $responseStatus = $response->status();
         if (preg_match('/^2/', $responseStatus)) {
-            $app->products()->updateExistingPivot($validated['product'], ['status' => $status, 'actioned_by' => $currentUser->id]);
+            $app->products()->updateExistingPivot($validated['product'], ['status' => $status, 'actioned_by' => $currentUser->id, 'actioned_at' => date('Y-m-d H:i:s')]);
         } else if ($request->ajax()) {
             $body = json_decode($response->body());
             return response()->json(['success' => false, 'body' => $body->message], $responseStatus);

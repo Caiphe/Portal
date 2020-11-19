@@ -130,6 +130,7 @@
 
                     handleUpdateStatus({
                         action: this.dataset.action,
+                        for: this.dataset.for,
                         app: appProducts[i].dataset.aid,
                         product: appProducts[i].dataset.pid,
                         displayName: appProducts[i].dataset.productDisplayName
@@ -140,6 +141,7 @@
 
             handleUpdateStatus({
                 action: this.dataset.action,
+                for: this.dataset.for,
                 app: this.parentNode.dataset.aid,
                 product: this.parentNode.dataset.pid,
                 displayName: this.parentNode.dataset.productDisplayName

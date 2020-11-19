@@ -213,6 +213,15 @@ class ApigeeService
 		return $credentials;
 	}
 
+	public static function getAppCredentials($app)
+	{
+		$credentials = self::get('apps/' . $app->aid)['credentials'];
+
+		usort($credentials, [__CLASS__, "sortByIssuedAtAsc"]);
+
+		return $credentials;
+	}
+
 	public static function formatAppCredentials(array $credentials): array
 	{
 		for ($i = 0; $i < count($credentials); $i++) {

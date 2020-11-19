@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddLiveAtToAppProductTable extends Migration
+class AddActionedAtToAppProductTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddLiveAtToAppProductTable extends Migration
     public function up()
     {
         Schema::table('app_product', function (Blueprint $table) {
-            $table->dateTime('live_at')->nullable();
+            $table->dateTime('actioned_at')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddLiveAtToAppProductTable extends Migration
     public function down()
     {
         Schema::table('app_product', function (Blueprint $table) {
-            $table->dropColumn('live_at');
+            $table->dropColumn('actioned_at');
         });
     }
 }

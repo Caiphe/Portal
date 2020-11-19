@@ -1,27 +1,29 @@
-@props(['app', 'products'])
+@props(['app', 'products', 'for'])
 
 @php
     $credentialProducts = $app->products->filter(fn($product) => in_array($product->name, $products));
-    $appStatus = !is_null($app->live_at) && count($app->credentials) === 1 ? 'app-status-pending' : '';
     $isDashboard = Request::is('admin/dashboard');
 @endphp
 
 @foreach($credentialProducts as $product)
+    @php
+        $displayName = preg_replace('/\s?prod$/i', '', $product['display_name']);
+    @endphp
     <a 
         href="{{route('product.show', preg_replace('/[-_]prod$/i', '', $product['slug']))}}"
         class="product product-status-{{ $product['pivot']['status'] }}"
         data-pid="{{ $product['pid'] }}"
         data-aid="{{ $app['name'] }}"
         data-status="{{ $product['pivot']['status'] }}"
-        data-product-display-name="{{ $product['display_name'] }}"
+        data-product-display-name="{{ $displayName }}"
     >
-        <span class="status-bar status-{{ $product['pivot']['status'] }} {{ $appStatus }}"></span>
-        <span class="name">{{ preg_replace('/prod$/i', '', $product['display_name']) }}</span>
+        <span class="status-bar status-{{ $product['pivot']['status'] }}"></span>
+        <span class="name">{{ $displayName }}</span>
         @if($isDashboard)
-            <button class="product-approve" data-action="approve">
+            <button class="product-approve" data-action="approve" data-for="{{ $for }}">
                 @svg('thumbs-up', '#000000')
             </button>
-            <button class="product-revoke" data-action="revoke">
+            <button class="product-revoke" data-action="revoke" data-for="{{ $for }}">
                 @svg('thumbs-down', '#000000')
             </button>
         @else
