@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\App;
+use App\Product;
 use App\Country;
 use App\Http\Requests\CreateAppRequest;
 use App\Http\Requests\DeleteAppRequest;
@@ -217,54 +218,14 @@ class AppController extends Controller
 		$app->load(['products', 'country']);
 		$groups = $app->products->pluck('group')->toArray();
 		$firstKycMethod = $kycService->getFirstKyc($groups);
-		$currentUser = \Auth::user();
-        $updatedApiProducts = [];
-        $apiProducts = [];
-        $now = date('Y-m-d H:i:s');
-        $attr = ['status' => 'approved', 'actioned_by' => $currentUser->id, 'live_at' => $now];
-
-        foreach ($app->products as $product) {
-            $findProduct = Product::whereName("{$product->name}-prod")->first();
-            $updatedApiProducts[$product->name] = $attr;
-            if (is_null($findProduct)) {
-                $apiProducts[] = $product->name;
-                continue;
-            }
-            $updatedApiProducts[$findProduct->name] = $attr;
-            $apiProducts[] = $findProduct->name;
-        }
-
-		$data = [
-            'name' => $app['name'],
-            'apiProducts' => $apiProducts,
-            'callbackUrl' => $app['callback_url'],
-            'attributes' => [
-                [
-                    'name' => 'DisplayName',
-                    'value' => $app['display_name'],
-                ],
-                [
-                    'name' => 'Description',
-                    'value' => $app['description'],
-                ],
-                [
-                    'name' => 'Country',
-                    'value' => $app->country->code,
-                ],
-                [
-                    'name' => 'location',
-                    'value' => $app->country->iso,
-                ],
-                [
-                    'name' => 'ApprovedAt',
-                    'value' => $now,
-                ],
-            ]
-        ];
-		$resp = ApigeeService::updateAppWithNewCredentials($data);
-        $status = $resp->status();
 
 		if ($firstKycMethod === "") {
+			$resp = $this->addNewCredentials($app);
+
+			if (!$resp['success']) {
+				return redirect()->back()->with('alert', "error:{$resp['message']}");
+			}
+
 			$app->update([
 				'live_at' => date('Y-m-d H:i:s')
 			]);
@@ -360,16 +321,99 @@ class AppController extends Controller
 			$data['files'][] = "kyc/{$app->aid}/$fileName";
 		}
 
+		$resp = $this->addNewCredentials($app);
+
+		if (!$resp['success']) {
+			return redirect()->back()->with('alert', "error:{$resp['message']}");
+		}
+
+		$app->update([
+			'live_at' => date('Y-m-d H:i:s')
+		]);
+
 		$opcoUserEmails = $app->country->opcoUser->pluck('email')->toArray();
 		if (empty($opcoUserEmails)) {
 			$opcoUserEmails = env('MAIL_TO_ADDRESS');
 		}
 		Mail::to($opcoUserEmails)->send(new GoLiveMail($data));
 
+		return redirect()->route('app.index')->with('alert', 'info:Your app is in review;You will get an email about the progress.');
+	}
+
+	/**
+	 * Adds new credentials.
+	 *
+	 * @param      \App\App  $app    The application
+	 *
+	 * @return     array     The response shows if successful or not and has response data
+	 */
+	protected function addNewCredentials(App $app): array
+	{
+		$currentUser = \Auth::user();
+		$updatedApiProducts = [];
+		$apiProducts = [];
+		$now = date('Y-m-d H:i:s');
+		$attr = ['status' => 'approved', 'actioned_by' => $currentUser->id, 'live_at' => $now];
+
+		foreach ($app->products as $product) {
+			$findProduct = Product::whereName("{$product->name}-prod")->first();
+			$updatedApiProducts[$product->name] = $attr;
+			if (is_null($findProduct)) {
+				$apiProducts[] = $product->name;
+				continue;
+			}
+			$updatedApiProducts[$findProduct->name] = $attr;
+			$apiProducts[] = $findProduct->name;
+		}
+
+		$data = [
+			'name' => $app['name'],
+			'apiProducts' => $apiProducts,
+			'callbackUrl' => $app['callback_url'],
+			'attributes' => [
+				[
+					'name' => 'DisplayName',
+					'value' => $app['display_name'],
+				],
+				[
+					'name' => 'Description',
+					'value' => $app['description'],
+				],
+				[
+					'name' => 'Country',
+					'value' => $app->country->code,
+				],
+				[
+					'name' => 'location',
+					'value' => $app->country->iso,
+				],
+				[
+					'name' => 'ApprovedAt',
+					'value' => $now,
+				],
+			]
+		];
+		$resp = ApigeeService::updateAppWithNewCredentials($data);
+		$status = $resp->status();
+		$resp = $resp->json();
+		if ($status !== 200 && $status !== 201) {
+			return [
+				'success' => false,
+				'message' => $resp['message']
+			];
+		}
+
 		$app->update([
-			'live_at' => date('Y-m-d H:i:s')
+			'attributes' => $resp['data']['attributes'],
+			'credentials' => $resp['apigeeResp']['credentials']
 		]);
 
-		return redirect()->route('app.index')->with('alert', 'info:Your app is in review;You will get an email about the progress.');
+		$app->products()->sync($updatedApiProducts);
+
+		return [
+			'success' => true,
+			'apigeeResp' => $resp,
+			'data' => $data
+		];
 	}
 }
