@@ -38,7 +38,7 @@ class KycService
 	{
 		return [
 			'route' => route('app.kyc', [$app->aid, 'momo']),
-			'view' => 'templates.apps.kyc',
+			'view' => 'templates.apps.kyc.momo',
 			'with' => [
 				'options' => $this->momoOptions($app->country_code),
 				'group' => 'momo',

@@ -15,9 +15,19 @@
 
     function inputHasChanged() {
         this.parentNode.classList.add('has-file');
+
+        this.parentNode.insertAdjacentHTML('afterend', '<span class="chosen-file" onclick="removeUpload(this)"><button type="button">&times;</button>' + this.value.replace(/.*[\\\/]/, '') + '</span>')
     }
 
     function strSlug(str) {
         return str.replace(/[^a-zA-Z\s]/g, '').replace(/\s+/g, '-').toLowerCase();
     }
 }());
+
+function removeUpload(el) {
+    var fileLabel = el.previousElementSibling;
+    fileLabel.classList.remove('has-file');
+    fileLabel.querySelector('.file-upload-input').value = "";
+
+    el.parentNode.removeChild(el);
+}

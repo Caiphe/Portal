@@ -131,6 +131,21 @@
                 }
             }
 
+            .chosen-file {
+                display: inline-block;
+                margin-left: 20px;
+                vertical-align: middle;
+                height: 38px;
+
+                button {
+                    height: 20px;
+                    width: 20px;
+                    border: none;
+                    padding: 0;
+                    margin-right: 6px;
+                }
+            }
+
             .accept {
                 padding-left: 40px;
                 display: block;
