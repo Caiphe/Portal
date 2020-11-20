@@ -36,6 +36,7 @@
 
         document.getElementById('filter-text').addEventListener('keyup', filterApps);
         document.getElementById("filter-country").addEventListener('change', submitFilter);
+        document.getElementById("kyc-status").addEventListener('change', handleKycUpdateStatus);
 
         window.onload = init;
         ajaxifyComplete = init;
@@ -174,6 +175,31 @@
                     card.className = 'product product-status-' + lookup[data.action];
                 } else {
                     card.classList.remove('loading');
+                    addAlert('error', result.body || 'There was an error updating the product.');
+                }
+            };
+        }
+
+        function handleKycUpdateStatus() {
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('POST', '/admin/apps/' + this.dataset.aid + '/kyc-status');
+            xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+           addLoading('Updating KYC status');
+
+            xhr.send(JSON.stringify({
+                kyc_status: this.value
+            }));
+
+            xhr.onload = function() {
+                var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+                removeLoading();
+                if (xhr.status === 200) {
+                    addAlert('success', result.body || 'Success.');
+                } else {
                     addAlert('error', result.body || 'There was an error updating the product.');
                 }
             };

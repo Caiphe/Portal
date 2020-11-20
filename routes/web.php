@@ -88,6 +88,7 @@ Route::namespace('Admin')->prefix('admin')->middleware(['verified', '2fa', 'can:
 	// Dashboard
 	Route::get('dashboard', 'DashboardController@index')->middleware('can:administer-dashboard')->name('admin.dashboard.index');
 	Route::post('apps/{app:aid}/go-live', 'AppController@approve')->middleware('can:administer-dashboard')->name('app.approve');
+	Route::post('apps/{app:aid}/kyc-status', 'DashboardController@updateKycStatus')->middleware('can:administer-dashboard')->name('app.kyc-status.update');
 	Route::post('apps/{product}/approve', 'DashboardController@update')->middleware('can:administer-dashboard')->name('app.product.approve');
 	Route::post('apps/{product}/revoke', 'DashboardController@update')->middleware('can:administer-dashboard')->name('app.product.revoke');
 

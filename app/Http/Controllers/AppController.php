@@ -352,7 +352,8 @@ class AppController extends Controller
         }
 
         $app->update([
-            'live_at' => date('Y-m-d H:i:s')
+            'live_at' => date('Y-m-d H:i:s'),
+            'kyc_status' => "Documents Received"
         ]);
 
         $opcoUserEmails = $app->country->opcoUser->pluck('email')->toArray();

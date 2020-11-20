@@ -120,4 +120,21 @@ class DashboardController extends Controller
 
         return redirect()->back();
     }
+
+    public function updateKycStatus(App $app, Request $request)
+    {
+        $data = $request->validate([
+            'kyc_status' => 'required'
+        ]);
+
+        $app->update([
+            'kyc_status' => $data['kyc_status']
+        ]);
+
+        if ($request->ajax()) {
+            return response()->json(['success' => true, 'body' => "The KYC status was updated to {$data['kyc_status']}"]);
+        }
+
+        return redirect()->back()->with('alert', "success:The KYC status was updated to {$data['kyc_status']}");
+    }
 }

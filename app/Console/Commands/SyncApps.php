@@ -52,9 +52,16 @@ class SyncApps extends Command
 		foreach ($apps['app'] as $app) {
 			$apiProducts = [];
 
-			foreach (end($app['credentials'])['apiProducts'] as $product) {
+			foreach ($app['credentials'][0]['apiProducts'] as $product) {
 				if (!in_array($product['apiproduct'], $products)) continue 2;
 				$apiProducts[$product['apiproduct']] = ['status' => $product['status']];
+			}
+
+			if (count($app['credentials']) > 1) {
+				foreach (end($app['credentials'])['apiProducts'] as $product) {
+					if (!in_array($product['apiproduct'], $products)) continue 2;
+					$apiProducts[$product['apiproduct']] = ['status' => $product['status']];
+				}
 			}
 
 			$this->info("Syncing {$app['name']}");

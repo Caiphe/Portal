@@ -103,26 +103,6 @@
                             @svg('clipboard', '#000000')
                         </button>
                     </div>
-                    @if(count($credentials) > 1)
-                    <div class="detail-row cols">
-                        <div class="detail-item"><strong>Production key</strong></div>
-                        <div class="detail-item key">{{ end($credentials)['consumerKey'] }}</div>
-                        <button class="copy" data-reference="{{$app['aid']}}" data-type="consumerKey-production">
-                            @svg('copy', '#000000')
-                            @svg('loading', '#000000')
-                            @svg('clipboard', '#000000')
-                        </button>
-                    </div>
-                    <div class="detail-row cols">
-                        <div class="detail-item"><strong>Production secret</strong></div>
-                        <div class="detail-item key">{{ end($credentials)['consumerSecret'] }}</div>
-                        <button class="copy" data-reference="{{$app['aid']}}" data-type="consumerSecret-production">
-                            @svg('copy', '#000000')
-                            @svg('loading', '#000000')
-                            @svg('clipboard', '#000000')
-                        </button>
-                    </div>
-                    @endif
                 </div>
                 <div class="detail-right">
                     <div class="detail-row cols">
@@ -155,6 +135,35 @@
         </div>
 
         @if(count($credentials) > 1)
+        <div class="mt-2">
+            <div class="detail-left">
+                <div class="detail-row cols">
+                    <div class="detail-item"><strong>Production key</strong></div>
+                    <div class="detail-item key">{{ end($credentials)['consumerKey'] }}</div>
+                    <button class="copy" data-reference="{{$app['aid']}}" data-type="consumerKey-production">
+                        @svg('copy', '#000000')
+                        @svg('loading', '#000000')
+                        @svg('clipboard', '#000000')
+                    </button>
+                </div>
+                <div class="detail-row cols">
+                    <div class="detail-item"><strong>Production secret</strong></div>
+                    <div class="detail-item key">{{ end($credentials)['consumerSecret'] }}</div>
+                    <button class="copy" data-reference="{{$app['aid']}}" data-type="consumerSecret-production">
+                        @svg('copy', '#000000')
+                        @svg('loading', '#000000')
+                        @svg('clipboard', '#000000')
+                    </button>
+                </div>
+                @if(!is_null($app['kyc_status']))
+                <div class="detail-row cols">
+                    <div class="detail-item"><strong>KYC status</strong></div>
+                    <div class="detail-item">{{ $app['kyc_status'] }}</div>
+                </div>
+                @endif
+            </div>
+        </div>
+        <div class="detail-right"></div>
         <p class="products-title"><strong>Production products</strong></p>
         <div class="products">
             <x-apps.products :app="$app" :products="end($credentials)['apiProducts']" for="production" />
@@ -167,13 +176,13 @@
             <p class="spacer-flex"><strong class="mr-1">Ready to launch?</strong>You're just a few clicks away</p>
             <button class="button dark">GO LIVE @svg('rocket', '#FFF')</button>
         </form>
-        @else
+        @elseif($isAdminPage)
         <div class="kyc-status">
             <strong class="mr-2">Update the KYC status</strong>
-            <select name="kyc_status" id="kyc-status">
-                <option value="Documents Received">Documents Received</option>
-                <option value="In Review">In Review</option>
-                <option value="KYC Approved">KYC Approved</option>
+            <select name="kyc_status" id="kyc-status" data-aid="{{ $app['aid'] }}" autocomplete="off">
+                <option @if($app['kyc_status'] === 'Documents Received') selected @endif value="Documents Received">Documents Received</option>
+                <option @if($app['kyc_status'] === 'In Review') selected @endif value="In Review">In Review</option>
+                <option @if($app['kyc_status'] === 'KYC Approved') selected @endif value="KYC Approved">KYC Approved</option>
             </select>
         </div>
         @endif
