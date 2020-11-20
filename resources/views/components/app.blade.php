@@ -167,6 +167,15 @@
             <p class="spacer-flex"><strong class="mr-1">Ready to launch?</strong>You're just a few clicks away</p>
             <button class="button dark">GO LIVE @svg('rocket', '#FFF')</button>
         </form>
+        @else
+        <div class="kyc-status">
+            <strong class="mr-2">Update the KYC status</strong>
+            <select name="kyc_status" id="kyc-status">
+                <option value="Documents Received">Documents Received</option>
+                <option value="In Review">In Review</option>
+                <option value="KYC Approved">KYC Approved</option>
+            </select>
+        </div>
         @endif
     </div>
     <nav class="menu">

@@ -280,6 +280,11 @@
                 }
             }
         }
+
+        .kyc-status {
+            justify-content: end;
+            align-items: center;
+        }
     }
 
     input[readonly] {
