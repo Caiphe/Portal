@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateStatusRequest;
 use App\Services\ApigeeService;
 use App\App;
 use App\Country;
+use App\Mail\KycStatusUpdate;
 use App\Mail\ProductAction;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Request;
@@ -123,6 +124,7 @@ class DashboardController extends Controller
 
     public function updateKycStatus(App $app, Request $request)
     {
+        $app->load('developer');
         $data = $request->validate([
             'kyc_status' => 'required'
         ]);
@@ -130,6 +132,8 @@ class DashboardController extends Controller
         $app->update([
             'kyc_status' => $data['kyc_status']
         ]);
+
+        Mail::to($app->developer->email)->send(new KycStatusUpdate($app->developer, $app));
 
         if ($request->ajax()) {
             return response()->json(['success' => true, 'body' => "The KYC status was updated to {$data['kyc_status']}"]);
