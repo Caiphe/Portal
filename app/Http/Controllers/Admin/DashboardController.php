@@ -15,24 +15,26 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $user = auth()->user();
-        $user->load('responsibleCountries');
+        $user = $request->user();
+        $user->load(['responsibleCountries', 'responsibleGroups']);
         $isAdmin = $user->hasRole('admin');
         $responsibleCountriesCodes = $user->responsibleCountries->pluck('code')->toArray();
+        $responsibleGroups = $user->responsibleGroups->pluck('group')->toArray();
         $searchTerm = "%" . $request->get('q', '') . "%";
         $hasSearchTerm = $searchTerm !== '%%';
         $searchCountries = $request->get('countries');
         $hasCountries = $request->has('countries') && !is_null($searchCountries[0]);
-        $notAdminNoResponsibleCountries = !$isAdmin && $user->responsibleCountries()->get()->isEmpty();
+        $notAdminNoResponsibleCountries = !$isAdmin && empty($responsibleCountriesCodes);
+        $notAdminNoResponsibleGroups = !$isAdmin && empty($responsibleGroups);
 
-        if ($notAdminNoResponsibleCountries && $request->ajax()) {
+        if (($notAdminNoResponsibleCountries || $notAdminNoResponsibleGroups) && $request->ajax()) {
             return response()
                 ->view('templates.admin.dashboard.data', [
                     'apps' => App::where('country_code', 'none')->paginate(),
                     'countries' => Country::all(),
                 ], 200)
                 ->header('Content-Type', 'text/html');
-        } else if ($notAdminNoResponsibleCountries) {
+        } else if (($notAdminNoResponsibleCountries || $notAdminNoResponsibleGroups)) {
             return view('templates.admin.dashboard.index', [
                 'apps' => App::where('country_code', 'none')->paginate(),
                 'countries' => Country::all(),
@@ -41,8 +43,11 @@ class DashboardController extends Controller
 
         $apps = App::with(['developer', 'country', 'products'])
             ->whereNotNull('country_code')
-            ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes) {
-                $query->whereIn('country_code', $responsibleCountriesCodes);
+            ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes, $responsibleGroups) {
+                $query->whereIn('country_code', $responsibleCountriesCodes)
+                    ->whereHas('products', function ($q) use ($responsibleGroups) {
+                        $q->whereIn('group', $responsibleGroups);
+                    });
             })
             ->when(!$hasSearchTerm && !$hasCountries, function ($q) {
                 $q->whereNotNull('live_at')

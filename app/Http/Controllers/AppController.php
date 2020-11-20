@@ -17,418 +17,424 @@ use Illuminate\Support\Facades\Mail;
 
 class AppController extends Controller
 {
-	public function index()
-	{
-		$apps = App::with(['products.countries', 'country'])
-			->byUserEmail(\Auth::user()->email)
-			->orderBy('updated_at', 'desc')
-			->get()
-			->groupBy('status');
+    public function index()
+    {
+        $apps = App::with(['products.countries', 'country'])
+            ->byUserEmail(\Auth::user()->email)
+            ->orderBy('updated_at', 'desc')
+            ->get()
+            ->groupBy('status');
 
-		return view('templates.apps.index', [
-			'approvedApps' => $apps['approved'] ?? [],
-			'revokedApps' => $apps['revoked'] ?? [],
-		]);
-	}
+        return view('templates.apps.index', [
+            'approvedApps' => $apps['approved'] ?? [],
+            'revokedApps' => $apps['revoked'] ?? [],
+        ]);
+    }
 
-	public function create(ProductLocationService $productLocationService)
-	{
-		[$products, $countries] = $productLocationService->fetch();
+    public function create(ProductLocationService $productLocationService)
+    {
+        [$products, $countries] = $productLocationService->fetch();
 
-		return view('templates.apps.create', [
-			'products' => $products,
-			'productCategories' => array_keys($products->toArray()),
-			'countries' => $countries ?? '',
-		]);
-	}
+        return view('templates.apps.create', [
+            'products' => $products,
+            'productCategories' => array_keys($products->toArray()),
+            'countries' => $countries ?? '',
+        ]);
+    }
 
-	public function store(CreateAppRequest $request)
-	{
-		$validated = $request->validated();
-		$countriesByCode = Country::pluck('iso', 'code');
+    public function store(CreateAppRequest $request)
+    {
+        $validated = $request->validated();
+        $countriesByCode = Country::pluck('iso', 'code');
 
-		$data = [
-			'name' => Str::slug($validated['name']),
-			'apiProducts' => $request->products,
-			'keyExpiresIn' => -1,
-			'attributes' => [
-				[
-					'name' => 'DisplayName',
-					'value' => $validated['name'],
-				],
-				[
-					'name' => 'Description',
-					'value' => preg_replace('/[<>"]*/', '', strip_tags($validated['description'])),
-				],
-				[
-					'name' => 'Country',
-					'value' => $validated['country'],
-				],
-				[
-					'name' => 'location',
-					'value' => $countriesByCode[$validated['country']] ?? "",
-				],
-			],
-			'callbackUrl' => preg_replace('/[<>"]*/', '', strip_tags($validated['url'])) ?? '',
-		];
+        $data = [
+            'name' => Str::slug($validated['name']),
+            'apiProducts' => $request->products,
+            'keyExpiresIn' => -1,
+            'attributes' => [
+                [
+                    'name' => 'DisplayName',
+                    'value' => $validated['name'],
+                ],
+                [
+                    'name' => 'Description',
+                    'value' => preg_replace('/[<>"]*/', '', strip_tags($validated['description'])),
+                ],
+                [
+                    'name' => 'Country',
+                    'value' => $validated['country'],
+                ],
+                [
+                    'name' => 'location',
+                    'value' => $countriesByCode[$validated['country']] ?? "",
+                ],
+            ],
+            'callbackUrl' => preg_replace('/[<>"]*/', '', strip_tags($validated['url'])) ?? '',
+        ];
 
-		$createdResponse = ApigeeService::createApp($data);
+        $createdResponse = ApigeeService::createApp($data);
 
-		if (strpos($createdResponse, 'duplicate key') !== false) {
-			return response()->json(['success' => false, 'message' => 'There is already an app with that name.'], 409);
-		}
+        if (strpos($createdResponse, 'duplicate key') !== false) {
+            return response()->json(['success' => false, 'message' => 'There is already an app with that name.'], 409);
+        }
 
-		$attributes = ApigeeService::getAppAttributes($createdResponse['attributes']);
+        $attributes = ApigeeService::getAppAttributes($createdResponse['attributes']);
 
-		$app = App::create([
-			"aid" => $createdResponse['appId'],
-			"name" => $createdResponse['name'],
-			"display_name" => $validated['name'],
-			"callback_url" => $createdResponse['callbackUrl'],
-			"attributes" => $attributes,
-			"credentials" => $createdResponse['credentials'],
-			"developer_id" => $createdResponse['developerId'],
-			"status" => $createdResponse['status'],
-			"description" => $attributes['Description'] ?? '',
-			"country_code" => $validated['country'],
-			"updated_at" => date('Y-m-d H:i:s', $createdResponse['lastModifiedAt'] / 1000),
-			"created_at" => date('Y-m-d H:i:s', $createdResponse['createdAt'] / 1000),
-		]);
+        $app = App::create([
+            "aid" => $createdResponse['appId'],
+            "name" => $createdResponse['name'],
+            "display_name" => $validated['name'],
+            "callback_url" => $createdResponse['callbackUrl'],
+            "attributes" => $attributes,
+            "credentials" => $createdResponse['credentials'],
+            "developer_id" => $createdResponse['developerId'],
+            "status" => $createdResponse['status'],
+            "description" => $attributes['Description'] ?? '',
+            "country_code" => $validated['country'],
+            "updated_at" => date('Y-m-d H:i:s', $createdResponse['lastModifiedAt'] / 1000),
+            "created_at" => date('Y-m-d H:i:s', $createdResponse['createdAt'] / 1000),
+        ]);
 
-		$app->products()->sync(
-			array_reduce(
-				$createdResponse['credentials'][0]['apiProducts'],
-				function ($carry, $apiProduct) {
-					$carry[$apiProduct['apiproduct']] = ['status' => $apiProduct['status']];
-					return $carry;
-				},
-				[]
-			)
-		);
+        $app->products()->sync(
+            array_reduce(
+                $createdResponse['credentials'][0]['apiProducts'],
+                function ($carry, $apiProduct) {
+                    $pivotOptions = ['status' => $apiProduct['status']];
 
-		if ($request->ajax()) {
-			return response()->json(['response' => $createdResponse]);
-		}
+                    if ($apiProduct['status'] === 'approved') {
+                        $pivotOptions['actioned_at'] = date('Y-m-d H:i:s');
+                    }
 
-		return redirect(route('app.index'));
-	}
+                    $carry[$apiProduct['apiproduct']] = $pivotOptions;
+                    return $carry;
+                },
+                []
+            )
+        );
 
-	public function edit(ProductLocationService $productLocationService, App $app)
-	{
-		[$products, $countries] = $productLocationService->fetch();
+        if ($request->ajax()) {
+            return response()->json(['response' => $createdResponse]);
+        }
 
-		$app->load('products', 'country');
+        return redirect(route('app.index'));
+    }
 
-		return view('templates.apps.edit', [
-			'products' => $products,
-			'countries' => $countries ?? '',
-			'data' => $app,
-			'selectedProducts' => array_column($app['products']->toArray(), 'name'),
-		]);
-	}
+    public function edit(ProductLocationService $productLocationService, App $app)
+    {
+        [$products, $countries] = $productLocationService->fetch();
 
-	public function update(App $app, CreateAppRequest $request)
-	{
-		$validated = $request->validated();
+        $app->load('products', 'country');
 
-		$data = [
-			'name' => $validated['name'],
-			'key' => $this->getCredentials($app, 'consumerKey', 'string'),
-			'apiProducts' => $request->products,
-			'originalProducts' => $validated['original_products'],
-			'keyExpiresIn' => -1,
-			'attributes' => [
-				[
-					'name' => 'DisplayName',
-					'value' => $validated['new_name'] ?? $validated['name'],
-				],
-				[
-					'name' => 'Description',
-					'value' => preg_replace('/[<>"]*/', '', strip_tags($validated['description'])),
-				],
-				[
-					'name' => 'Country',
-					'value' => $validated['country'],
-				],
-			],
-			'callbackUrl' => preg_replace('/[<>"]*/', '', strip_tags($validated['url'])) ?? '',
-		];
+        return view('templates.apps.edit', [
+            'products' => $products,
+            'countries' => $countries ?? '',
+            'data' => $app,
+            'selectedProducts' => array_column($app['products']->toArray(), 'name'),
+        ]);
+    }
 
-		$updatedResponse = ApigeeService::updateApp($data);
+    public function update(App $app, CreateAppRequest $request)
+    {
+        $validated = $request->validated();
 
-		$app->update([
-			'display_name' => $data['attributes'][0]['value'],
-			'attributes' => $data['attributes'],
-			'callback_url' => $data['callbackUrl'],
-			'description' => $data['attributes'][1]['value'],
-			'country_code' => $validated['country'],
-		]);
+        $data = [
+            'name' => $validated['name'],
+            'key' => $this->getCredentials($app, 'consumerKey', 'string'),
+            'apiProducts' => $request->products,
+            'originalProducts' => $validated['original_products'],
+            'keyExpiresIn' => -1,
+            'attributes' => [
+                [
+                    'name' => 'DisplayName',
+                    'value' => $validated['new_name'] ?? $validated['name'],
+                ],
+                [
+                    'name' => 'Description',
+                    'value' => preg_replace('/[<>"]*/', '', strip_tags($validated['description'])),
+                ],
+                [
+                    'name' => 'Country',
+                    'value' => $validated['country'],
+                ],
+            ],
+            'callbackUrl' => preg_replace('/[<>"]*/', '', strip_tags($validated['url'])) ?? '',
+        ];
 
-		$app->products()->sync(
-			array_reduce(
-				end($updatedResponse['credentials'])['apiProducts'],
-				function ($carry, $apiProduct) {
-					$carry[$apiProduct['apiproduct']] = ['status' => $apiProduct['status']];
-					return $carry;
-				},
-				[]
-			)
-		);
+        $updatedResponse = ApigeeService::updateApp($data);
 
-		if ($request->ajax()) {
-			return response()->json(['response' => $updatedResponse]);
-		}
+        $app->update([
+            'display_name' => $data['attributes'][0]['value'],
+            'attributes' => $data['attributes'],
+            'callback_url' => $data['callbackUrl'],
+            'description' => $data['attributes'][1]['value'],
+            'country_code' => $validated['country'],
+        ]);
 
-		return redirect(route('app.index'));
-	}
+        $app->products()->sync(
+            array_reduce(
+                end($updatedResponse['credentials'])['apiProducts'],
+                function ($carry, $apiProduct) {
+                    $carry[$apiProduct['apiproduct']] = ['status' => $apiProduct['status']];
+                    return $carry;
+                },
+                []
+            )
+        );
 
-	public function destroy(App $app, DeleteAppRequest $request)
-	{
-		$validated = $request->validated();
+        if ($request->ajax()) {
+            return response()->json(['response' => $updatedResponse]);
+        }
 
-		$user = \Auth::user();
-		ApigeeService::delete("developers/{$user->email}/apps/{$validated['name']}");
+        return redirect(route('app.index'));
+    }
 
-		$app->delete();
+    public function destroy(App $app, DeleteAppRequest $request)
+    {
+        $validated = $request->validated();
 
-		return redirect(route('app.index'));
-	}
+        $user = \Auth::user();
+        ApigeeService::delete("developers/{$user->email}/apps/{$validated['name']}");
 
-	/**
-	 * Gets the credentials.
-	 *
-	 * @param      \App\App                       $app    The application
-	 * @param      string                         $type   The type
-	 *
-	 * @return     string|\Illuminate\Http\JsonResponse  The credentials.
-	 */
-	public function getCredentials(App $app, $type, $respondWith = 'jsonResponse')
-	{
-		$credentials = ApigeeService::get('apps/' . $app->aid)['credentials'];
-		$credentials = ApigeeService::sortCredentials($credentials);
-		$typeAndEnvironment = explode('-', $type);
+        $app->delete();
 
-		if ($typeAndEnvironment[1] === 'production') {
-			$credentials =  end($credentials)[$typeAndEnvironment[0]];
-		} else if ($type !== 'all') {
-			$credentials = $credentials[0][$typeAndEnvironment[0]];
-		}
+        return redirect(route('app.index'));
+    }
 
-		if ($respondWith === 'string') {
-			return $credentials;
-		}
+    /**
+     * Gets the credentials.
+     *
+     * @param      \App\App                       $app    The application
+     * @param      string                         $type   The type
+     *
+     * @return     string|\Illuminate\Http\JsonResponse  The credentials.
+     */
+    public function getCredentials(App $app, $type, $respondWith = 'jsonResponse')
+    {
+        $credentials = ApigeeService::get('apps/' . $app->aid)['credentials'];
+        $credentials = ApigeeService::sortCredentials($credentials);
+        $typeAndEnvironment = explode('-', $type);
 
-		return response()->json([
-			'credentials' => $credentials
-		]);
-	}
+        if ($typeAndEnvironment[1] === 'production') {
+            $credentials =  end($credentials)[$typeAndEnvironment[0]];
+        } else if ($type !== 'all') {
+            $credentials = $credentials[0][$typeAndEnvironment[0]];
+        }
 
-	/**
-	 * Go live process
-	 *
-	 * @param      \App\App                                                          $app         The application
-	 * @param      \App\Services\KycService                                          $kycService  The kyc service
-	 *
-	 * @return     \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse  Redirect to the correct kyc form
-	 */
-	public function goLive(App $app, KycService $kycService)
-	{
-		$app->load(['products', 'country']);
-		$groups = $app->products->pluck('group')->toArray();
-		$firstKycMethod = $kycService->getFirstKyc($groups);
+        if ($respondWith === 'string') {
+            return $credentials;
+        }
 
-		if ($firstKycMethod === "") {
-			$resp = $this->addNewCredentials($app);
+        return response()->json([
+            'credentials' => $credentials
+        ]);
+    }
 
-			if (!$resp['success']) {
-				return redirect()->back()->with('alert', "error:{$resp['message']}");
-			}
+    /**
+     * Go live process
+     *
+     * @param      \App\App                                                          $app         The application
+     * @param      \App\Services\KycService                                          $kycService  The kyc service
+     *
+     * @return     \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse  Redirect to the correct kyc form
+     */
+    public function goLive(App $app, KycService $kycService)
+    {
+        $app->load(['products', 'country']);
+        $groups = $app->products->pluck('group')->toArray();
+        $firstKycMethod = $kycService->getFirstKyc($groups);
 
-			$app->update([
-				'live_at' => date('Y-m-d H:i:s')
-			]);
+        if ($firstKycMethod === "") {
+            $resp = $this->addNewCredentials($app);
 
-			return redirect()->back()->with('alert', "success:{$app->display_name} is now live.");
-		}
+            if (!$resp['success']) {
+                return redirect()->back()->with('alert', "error:{$resp['message']}");
+            }
 
-		$firstKycProcess = $kycService->$firstKycMethod($app);
+            $app->update([
+                'live_at' => date('Y-m-d H:i:s')
+            ]);
 
-		return redirect($firstKycProcess['route']);
-	}
+            return redirect()->back()->with('alert', "success:{$app->display_name} is now live.");
+        }
 
-	/**
-	 * Show the kyc form
-	 *
-	 * @param      \App\App                                                  $app         The application
-	 * @param      string                                                    $group       The group
-	 * @param      \App\Services\KycService                                  $kycService  The kyc service
-	 *
-	 * @return     \Illuminate\View\View|\Illuminate\Contracts\View\Factory  Show the form
-	 */
-	public function kyc(App $app, $group, KycService $kycService)
-	{
-		$app->load('country');
-		$kyc = $kycService->$group($app);
+        $firstKycProcess = $kycService->$firstKycMethod($app);
 
-		return view($kyc['view'])->with($kyc['with']);
-	}
+        return redirect($firstKycProcess['route']);
+    }
 
-	/**
-	 * Direct to the store mechanism for this kyc
-	 *
-	 * @param      \App\App                  $app      The application
-	 * @param      string                    $group    The group
-	 * @param      \Illuminate\Http\Request  $request  The request
-	 *
-	 * @return     method                    The method to store the form details
-	 */
-	public function kycStore(App $app, $group, Request $request)
-	{
-		$kycStoreMethod = "{$group}KycStore";
-		return $this->$kycStoreMethod($app, $group, $request);
-	}
+    /**
+     * Show the kyc form
+     *
+     * @param      \App\App                                                  $app         The application
+     * @param      string                                                    $group       The group
+     * @param      \App\Services\KycService                                  $kycService  The kyc service
+     *
+     * @return     \Illuminate\View\View|\Illuminate\Contracts\View\Factory  Show the form
+     */
+    public function kyc(App $app, $group, KycService $kycService)
+    {
+        $app->load('country');
+        $kyc = $kycService->$group($app);
 
-	/**
-	 * The MoMo kyc store method
-	 *
-	 * @param      \App\App                                                          $app      The application
-	 * @param      string                                                            $group    The group
-	 * @param      \Illuminate\Http\Request                                          $request  The request
-	 *
-	 * @return     \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse  Redirect to app index
-	 */
-	protected function momoKycStore($app, $group, Request $request)
-	{
-		$data = $request->validate([
-			'name' => 'required',
-			'national_id' => 'required',
-			'number' => 'required',
-			'email' => 'required',
-			'business_name' => 'required',
-			'business_type' => 'required',
-			'business_description' => 'required',
-			'files' => 'required',
-			'accept' => 'required',
-		]);
+        return view($kyc['view'])->with($kyc['with']);
+    }
 
-		$app->load([
-			'products' => fn ($query) => $query->where('group', $group),
-			'country' => fn ($query) => $query->with('opcoUser')
-		]);
+    /**
+     * Direct to the store mechanism for this kyc
+     *
+     * @param      \App\App                  $app      The application
+     * @param      string                    $group    The group
+     * @param      \Illuminate\Http\Request  $request  The request
+     *
+     * @return     method                    The method to store the form details
+     */
+    public function kycStore(App $app, $group, Request $request)
+    {
+        $kycStoreMethod = "{$group}KycStore";
+        return $this->$kycStoreMethod($app, $group, $request);
+    }
 
-		$files = $request->file('files');
-		$data['files'] = [];
-		$data['app'] = $app;
-		$data['group'] = $group;
+    /**
+     * The MoMo kyc store method
+     *
+     * @param      \App\App                                                          $app      The application
+     * @param      string                                                            $group    The group
+     * @param      \Illuminate\Http\Request                                          $request  The request
+     *
+     * @return     \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse  Redirect to app index
+     */
+    protected function momoKycStore($app, $group, Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required',
+            'national_id' => 'required',
+            'number' => 'required',
+            'email' => 'required',
+            'business_name' => 'required',
+            'business_type' => 'required',
+            'business_description' => 'required',
+            'files' => 'required',
+            'accept' => 'required',
+        ]);
 
-		if (!isset($files[$data['business_type']])) {
-			return back()->withErrors('Please add all the files requested.')->withInput();
-		}
+        $app->load([
+            'products' => fn ($query) => $query->where('group', $group),
+            'country' => fn ($query) => $query->with('opcoUser')
+        ]);
 
-		$fileName = 'signed-contracting-requirements.pdf';
-		$files['Signed Contracting Requirements']->storeAs("kyc/{$app->aid}", $fileName, 'local');
-		$data['files'][] = "kyc/{$app->aid}/$fileName";
+        $files = $request->file('files');
+        $data['files'] = [];
+        $data['app'] = $app;
+        $data['group'] = $group;
 
-		foreach ($files[$data['business_type']] as $name => $file) {
-			if (!$file) {
-				return back()->withErrors('Please add all the files requested.')->withInput();
-			}
+        if (!isset($files[$data['business_type']])) {
+            return back()->withErrors('Please add all the files requested.')->withInput();
+        }
 
-			$fileName = Str::slug(substr($name, 0, 32)) . '.pdf';
-			$file->storeAs("kyc/{$app->aid}", $fileName, 'local');
-			$data['files'][] = "kyc/{$app->aid}/$fileName";
-		}
+        $fileName = 'signed-contracting-requirements.pdf';
+        $files['Signed Contracting Requirements']->storeAs("kyc/{$app->aid}", $fileName, 'local');
+        $data['files'][] = "kyc/{$app->aid}/$fileName";
 
-		$resp = $this->addNewCredentials($app);
+        foreach ($files[$data['business_type']] as $name => $file) {
+            if (!$file) {
+                return back()->withErrors('Please add all the files requested.')->withInput();
+            }
 
-		if (!$resp['success']) {
-			return redirect()->back()->with('alert', "error:{$resp['message']}");
-		}
+            $fileName = Str::slug(substr($name, 0, 32)) . '.pdf';
+            $file->storeAs("kyc/{$app->aid}", $fileName, 'local');
+            $data['files'][] = "kyc/{$app->aid}/$fileName";
+        }
 
-		$app->update([
-			'live_at' => date('Y-m-d H:i:s')
-		]);
+        $resp = $this->addNewCredentials($app);
 
-		$opcoUserEmails = $app->country->opcoUser->pluck('email')->toArray();
-		if (empty($opcoUserEmails)) {
-			$opcoUserEmails = env('MAIL_TO_ADDRESS');
-		}
-		Mail::to($opcoUserEmails)->send(new GoLiveMail($data));
+        if (!$resp['success']) {
+            return redirect()->back()->with('alert', "error:{$resp['message']}");
+        }
 
-		return redirect()->route('app.index')->with('alert', 'info:Your app is in review;You will get an email about the progress.');
-	}
+        $app->update([
+            'live_at' => date('Y-m-d H:i:s')
+        ]);
 
-	/**
-	 * Adds new credentials.
-	 *
-	 * @param      \App\App  $app    The application
-	 *
-	 * @return     array     The response shows if successful or not and has response data
-	 */
-	protected function addNewCredentials(App $app): array
-	{
-		$updatedApiProducts = [];
-		$apiProducts = [];
+        $opcoUserEmails = $app->country->opcoUser->pluck('email')->toArray();
+        if (empty($opcoUserEmails)) {
+            $opcoUserEmails = env('MAIL_TO_ADDRESS');
+        }
+        Mail::to($opcoUserEmails)->send(new GoLiveMail($data));
 
-		foreach ($app->products as $product) {
-			$findProduct = Product::whereName("{$product->name}-prod")->first();
-			$updatedApiProducts[] = $product->name;
-			if (is_null($findProduct)) {
-				$apiProducts[] = $product->name;
-				continue;
-			}
-			$updatedApiProducts[] = $findProduct->name;
-			$apiProducts[] = $findProduct->name;
-		}
+        return redirect()->route('app.index')->with('alert', 'info:Your app is in review;You will get an email about the progress.');
+    }
 
-		$data = [
-			'name' => $app['name'],
-			'apiProducts' => $apiProducts,
-			'callbackUrl' => $app['callback_url'],
-			'attributes' => [
-				[
-					'name' => 'DisplayName',
-					'value' => $app['display_name'],
-				],
-				[
-					'name' => 'Description',
-					'value' => $app['description'],
-				],
-				[
-					'name' => 'Country',
-					'value' => $app->country->code,
-				],
-				[
-					'name' => 'location',
-					'value' => $app->country->iso,
-				],
-				[
-					'name' => 'ApprovedAt',
-					'value' => date('Y-m-d H:i:s'),
-				],
-			]
-		];
-		$resp = ApigeeService::updateAppWithNewCredentials($data);
-		$status = $resp->status();
-		$resp = $resp->json();
-		if ($status !== 200 && $status !== 201) {
-			return [
-				'success' => false,
-				'message' => $resp['message']
-			];
-		}
+    /**
+     * Adds new credentials.
+     *
+     * @param      \App\App  $app    The application
+     *
+     * @return     array     The response shows if successful or not and has response data
+     */
+    protected function addNewCredentials(App $app): array
+    {
+        $updatedApiProducts = [];
+        $apiProducts = [];
 
-		$app->update([
-			'attributes' => $data['attributes'],
-			'credentials' => $resp['credentials']
-		]);
+        foreach ($app->products as $product) {
+            $findProduct = Product::whereName("{$product->name}-prod")->first();
+            $updatedApiProducts[] = $product->name;
+            if (is_null($findProduct)) {
+                $apiProducts[] = $product->name;
+                continue;
+            }
+            $updatedApiProducts[] = $findProduct->name;
+            $apiProducts[] = $findProduct->name;
+        }
 
-		$app->products()->sync($updatedApiProducts);
+        $data = [
+            'name' => $app['name'],
+            'apiProducts' => $apiProducts,
+            'callbackUrl' => $app['callback_url'],
+            'attributes' => [
+                [
+                    'name' => 'DisplayName',
+                    'value' => $app['display_name'],
+                ],
+                [
+                    'name' => 'Description',
+                    'value' => $app['description'],
+                ],
+                [
+                    'name' => 'Country',
+                    'value' => $app->country->code,
+                ],
+                [
+                    'name' => 'location',
+                    'value' => $app->country->iso,
+                ],
+                [
+                    'name' => 'ApprovedAt',
+                    'value' => date('Y-m-d H:i:s'),
+                ],
+            ]
+        ];
+        $resp = ApigeeService::updateAppWithNewCredentials($data);
+        $status = $resp->status();
+        $resp = $resp->json();
+        if ($status !== 200 && $status !== 201) {
+            return [
+                'success' => false,
+                'message' => $resp['message']
+            ];
+        }
 
-		return [
-			'success' => true,
-			'apigeeResp' => $resp,
-			'data' => $data
-		];
-	}
+        $app->update([
+            'attributes' => $data['attributes'],
+            'credentials' => $resp['credentials']
+        ]);
+
+        $app->products()->sync($updatedApiProducts);
+
+        return [
+            'success' => true,
+            'apigeeResp' => $resp,
+            'data' => $data
+        ];
+    }
 }
