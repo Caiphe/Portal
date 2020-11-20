@@ -29,7 +29,7 @@
     <strong>Go live</strong> - Add KYC information
 </div>
 <div class="content">
-    <form action="{{ route('app.kyc.store', ['app' => $app->aid, 'group' => $group]) }}" method="POST" enctype="multipart/form-data">
+    <form id="kyc-form" action="{{ route('app.kyc.store', ['app' => $app->aid, 'group' => $group]) }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <h2>About business owner</h2>
