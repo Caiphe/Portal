@@ -11,6 +11,7 @@
     @endphp
     <a 
         href="{{route('product.show', preg_replace('/[-_]prod$/i', '', $product['slug']))}}"
+        target="_blank" 
         class="product product-status-{{ $product['pivot']['status'] }}"
         data-pid="{{ $product['pid'] }}"
         data-aid="{{ $app['name'] }}"

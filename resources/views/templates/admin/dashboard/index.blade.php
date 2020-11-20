@@ -182,8 +182,9 @@
 
         function handleKycUpdateStatus() {
             var xhr = new XMLHttpRequest();
+            var kycSelect = this;
 
-            xhr.open('POST', '/admin/apps/' + this.dataset.aid + '/kyc-status');
+            xhr.open('POST', '/admin/apps/' + kycSelect.dataset.aid + '/kyc-status');
             xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -191,7 +192,7 @@
            addLoading('Updating KYC status');
 
             xhr.send(JSON.stringify({
-                kyc_status: this.value
+                kyc_status: kycSelect.value
             }));
 
             xhr.onload = function() {
@@ -199,10 +200,15 @@
                 removeLoading();
                 if (xhr.status === 200) {
                     addAlert('success', result.body || 'Success.');
+                    kycSelect.parentNode.parentNode.querySelector('.production-products').className = "products production-products kyc-status-" + strSlug(kycSelect.value);
                 } else {
                     addAlert('error', result.body || 'There was an error updating the product.');
                 }
             };
+        }
+
+        function strSlug(str) {
+            return str.replace(/[^a-zA-Z\s]/g, '').replace(/\s+/g, '-').toLowerCase();
         }
     </script>
 @endpush

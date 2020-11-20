@@ -64,14 +64,6 @@
                     </div>
                 </div>
                 <div class="detail-right">
-                    <div class="detail-row cols">
-                        <div class="detail-item"><strong>Countries:</strong></div>
-                        <div class="detail-item country-flags">
-                            @foreach($countries as $key => $country)
-                            <span title="{{$country}}">@svg($key, '#000000', 'images/locations')</span>
-                            @endforeach
-                        </div>
-                    </div>
                     <div class="detail-row">
                         <div class="detail-item"><strong>Description:</strong></div>
                         <div class="detail-item">{{ $app['description'] ?: 'No description' }}</div>
@@ -106,24 +98,16 @@
                 </div>
                 <div class="detail-right">
                     <div class="detail-row cols">
-                        <div class="detail-item"><strong>Region:</strong></div>
-                        <div class="detail-item country-flags">
-                            @foreach($countries as $key => $country)
-                            <span title="{{$country}}">@svg($key, '#000000', 'images/locations')</span>
-                            @endforeach
-                        </div>
-                    </div>
-                    <div class="detail-row cols">
-                        <div class="detail-item"><strong>Key issued:</strong></div>
-                        <div class="detail-item">{{ date('d M Y H:i:s', substr($credentials[0]['issuedAt'], 0, 10)) }}</div>
+                        <div class="detail-item"><strong>Callback url</strong></div>
+                        <div class="detail-item">{{ $app['callback_url'] ?: 'No callback url' }}</div>
                     </div>
                     <div class="detail-row cols">
                         <div class="detail-item"><strong>Expires:</strong></div>
                         <div class="detail-item">Never</div>
                     </div>
                     <div class="detail-row cols">
-                        <div class="detail-item"><strong>Callback url</strong></div>
-                        <div class="detail-item">{{ $app['callback_url'] ?: 'No callback url' }}</div>
+                        <div class="detail-item"><strong>Key issued:</strong></div>
+                        <div class="detail-item">{{ date('d M Y H:i:s', substr($credentials[0]['issuedAt'], 0, 10)) }}</div>
                     </div>
                 </div>
             </div>
@@ -135,6 +119,7 @@
         </div>
 
         @if(count($credentials) > 1)
+        @if(!$isAdminPage)
         <div class="mt-2">
             <div class="detail-left">
                 <div class="detail-row cols">
@@ -155,17 +140,28 @@
                         @svg('clipboard', '#000000')
                     </button>
                 </div>
-                @if(!$isAdminPage && !is_null($app['kyc_status']))
+                @if(!is_null($app['kyc_status']))
                 <div class="detail-row cols">
                     <div class="detail-item"><strong>KYC status</strong></div>
                     <div class="detail-item">{{ $app['kyc_status'] }}</div>
                 </div>
                 @endif
             </div>
+            <div class="detail-right">
+                <div class="detail-row cols">
+                    <div class="detail-item"><strong>Expires:</strong></div>
+                    <div class="detail-item">Never</div>
+                </div>
+                <div class="detail-row cols">
+                    <div class="detail-item"><strong>Key issued:</strong></div>
+                    <div class="detail-item">{{ date('d M Y H:i:s', substr(end($credentials)['issuedAt'], 0, 10)) }}</div>
+                </div>
+            </div>
         </div>
+        @endif
         <div class="detail-right"></div>
         <p class="products-title"><strong>Production products</strong></p>
-        <div class="products">
+        <div class="products production-products kyc-status-{{ Str::slug($app->kyc_status ?? 'none') }}">
             <x-apps.products :app="$app" :products="end($credentials)['apiProducts']" for="production" />
         </div>
         @endif

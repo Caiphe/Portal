@@ -280,6 +280,16 @@
                     width: 15px;
                 }
             }
+
+            .product-approve {
+                opacity: 0.4;
+                pointer-events: none;
+            }
+
+            &.kyc-status-kyc-approved .product-approve {
+                opacity: 1;
+                pointer-events: auto;
+            }
         }
 
         .kyc-status {
