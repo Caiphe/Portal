@@ -155,7 +155,7 @@
                         @svg('clipboard', '#000000')
                     </button>
                 </div>
-                @if(!is_null($app['kyc_status']))
+                @if(!$isAdminPage && !is_null($app['kyc_status']))
                 <div class="detail-row cols">
                     <div class="detail-item"><strong>KYC status</strong></div>
                     <div class="detail-item">{{ $app['kyc_status'] }}</div>
