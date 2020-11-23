@@ -85,7 +85,9 @@ class ApigeeService
     {
         $a = [];
         foreach ($attributes as $attribute) {
-            $a[Str::studly($attribute['name'])] = $attribute['value'];
+            $key = Str::studly($attribute['name']);
+            $value = $key === 'Group' ? Str::studly($attribute['value']) : $attribute['value'];
+            $a[$key] = $value;
         }
         return $a;
     }

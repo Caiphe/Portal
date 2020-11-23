@@ -7,11 +7,11 @@ use App\Product;
 use App\Country;
 use App\Http\Requests\CreateAppRequest;
 use App\Http\Requests\DeleteAppRequest;
+use App\Http\Requests\KycRequest;
 use App\Mail\GoLiveMail;
 use App\Services\ApigeeService;
-use App\Services\KycService;
+use App\Services\Kyc\KycService;
 use App\Services\ProductLocationService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 
@@ -233,7 +233,7 @@ class AppController extends Controller
      * Go live process
      *
      * @param      \App\App                                                          $app         The application
-     * @param      \App\Services\KycService                                          $kycService  The kyc service
+     * @param      \App\Services\Kyc\KycService                                      $kycService  The kyc service
      *
      * @return     \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse  Redirect to the correct kyc form
      */
@@ -241,9 +241,9 @@ class AppController extends Controller
     {
         $app->load(['products', 'country']);
         $groups = $app->products->pluck('group')->toArray();
-        $firstKycMethod = $kycService->getFirstKyc($groups);
+        $kyc = $kycService->getNextKyc($groups);
 
-        if ($firstKycMethod === "") {
+        if (is_null($kyc)) {
             $resp = $this->addNewCredentials($app);
 
             if (!$resp['success']) {
@@ -257,9 +257,9 @@ class AppController extends Controller
             return redirect()->back()->with('alert', "success:{$app->display_name} is now live.");
         }
 
-        $firstKycProcess = $kycService->$firstKycMethod($app);
+        $kycResources = $kyc->resources($app);
 
-        return redirect($firstKycProcess['route']);
+        return redirect($kycResources['route']);
     }
 
     /**
@@ -267,28 +267,29 @@ class AppController extends Controller
      *
      * @param      \App\App                                                  $app         The application
      * @param      string                                                    $group       The group
-     * @param      \App\Services\KycService                                  $kycService  The kyc service
+     * @param      \App\Services\Kyc\KycService                              $kycService  The kyc service
      *
      * @return     \Illuminate\View\View|\Illuminate\Contracts\View\Factory  Show the form
      */
     public function kyc(App $app, $group, KycService $kycService)
     {
         $app->load('country');
-        $kyc = $kycService->$group($app);
+        $kyc = $kycService->load($group);
+        $kycResources = $kyc->resources($app);
 
-        return view($kyc['view'])->with($kyc['with']);
+        return view($kycResources['view'])->with($kycResources['with']);
     }
 
     /**
      * Direct to the store mechanism for this kyc
      *
-     * @param      \App\App                  $app      The application
-     * @param      string                    $group    The group
-     * @param      \Illuminate\Http\Request  $request  The request
+     * @param      \App\App                       $app      The application
+     * @param      string                         $group    The group
+     * @param      \App\Http\Requests\KycRequest  $request  The request
      *
-     * @return     method                    The method to store the form details
+     * @return     method                         The method to store the form details
      */
-    public function kycStore(App $app, $group, Request $request)
+    public function kycStore(App $app, $group, KycRequest $request)
     {
         $kycStoreMethod = "{$group}KycStore";
         return $this->$kycStoreMethod($app, $group, $request);
@@ -299,23 +300,13 @@ class AppController extends Controller
      *
      * @param      \App\App                                                          $app      The application
      * @param      string                                                            $group    The group
-     * @param      \Illuminate\Http\Request                                          $request  The request
+     * @param      \App\Http\Requests\KycRequest                                     $request  The request
      *
      * @return     \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse  Redirect to app index
      */
-    protected function momoKycStore($app, $group, Request $request)
+    protected function momoKycStore($app, $group, KycRequest $request)
     {
-        $data = $request->validate([
-            'name' => 'required',
-            'national_id' => 'required',
-            'number' => 'required',
-            'email' => 'required',
-            'business_name' => 'required',
-            'business_type' => 'required',
-            'business_description' => 'required',
-            'files' => 'required',
-            'accept' => 'required',
-        ]);
+        $data = $request->validated();
 
         $app->load([
             'products' => fn ($query) => $query->where('group', $group),
