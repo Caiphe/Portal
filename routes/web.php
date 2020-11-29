@@ -27,13 +27,12 @@ Route::middleware(['verified', '2fa'])->group(function () {
 	Route::delete('apps/{app:slug}', 'AppController@destroy')->middleware('can:access-own-app,app')->name('app.destroy');
 
 	Route::get('apps/{app:aid}/credentials/{type}', 'AppController@getCredentials')->middleware('can:access-own-app,app')->name('app.credentials');
-
 	Route::post('apps/{app:aid}/go-live', 'AppController@goLive')->middleware('can:access-own-app,app')->name('app.go-live');
 	Route::get('apps/{app:aid}/kyc/{group}', 'AppController@kyc')->middleware('can:access-own-app,app')->name('app.kyc');
 	Route::post('apps/{app:aid}/kyc/{group}', 'AppController@kycStore')->middleware('can:access-own-app,app')->name('app.kyc.store');
 
 	Route::get('profile', 'UserController@show')->name('user.profile');
-	Route::put('profile/{user}/update', 'UserController@update')->name('user.profile.update');
+	Route::put('profile/update', 'UserController@update')->name('user.profile.update');
 	Route::post('profile/update/picture', 'UserController@updateProfilePicture')->name('user.profile.update.picture');
 
 	Route::post('profile/2fa/enable', 'UserController@enable2fa')->name('user.2fa.enable');
