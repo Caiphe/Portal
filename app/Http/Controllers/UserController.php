@@ -47,12 +47,14 @@ class UserController extends Controller
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, User $user)
+	public function update(Request $request)
 	{
 		$validateOn = [
 			'first_name' => 'required',
 			'second_name' => 'required',
 		];
+
+		$user = $request->user();
 
 		if ($request->email !== $user->email) {
 			$validateOn = array_merge($validateOn, ['email' => 'email|required|unique:users,email']);
