@@ -20,16 +20,16 @@ Route::get('search', 'SearchController')->name('search');
 Route::middleware(['verified', '2fa'])->group(function () {
 	Route::get('apps', 'AppController@index')->name('app.index');
 	Route::get('apps/create', 'AppController@create')->name('app.create');
-	Route::get('apps/{app:slug}/edit', 'AppController@edit')->name('app.edit');
+	Route::get('apps/{app:slug}/edit', 'AppController@edit')->middleware('can:access-own-app,app')->name('app.edit');
 	Route::post('apps', 'AppController@store')->name('app.store');
 
-	Route::put('apps/{app:slug}', 'AppController@update')->name('app.update');
-	Route::delete('apps/{app:slug}', 'AppController@destroy')->name('app.destroy');
+	Route::put('apps/{app:slug}', 'AppController@update')->middleware('can:access-own-app,app')->name('app.update');
+	Route::delete('apps/{app:slug}', 'AppController@destroy')->middleware('can:access-own-app,app')->name('app.destroy');
 
-	Route::get('apps/{app:aid}/credentials/{type}', 'AppController@getCredentials')->name('app.credentials');
+	Route::get('apps/{app:aid}/credentials/{type}', 'AppController@getCredentials')->middleware('can:access-own-app,app')->name('app.credentials');
 
 	Route::get('profile', 'UserController@show')->name('user.profile');
-	Route::put('profile/{user}/update', 'UserController@update')->name('user.profile.update');
+	Route::put('profile/update', 'UserController@update')->name('user.profile.update');
 	Route::post('profile/update/picture', 'UserController@updateProfilePicture')->name('user.profile.update.picture');
 
 	Route::post('profile/2fa/enable', 'UserController@enable2fa')->name('user.2fa.enable');
