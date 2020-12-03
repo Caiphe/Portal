@@ -286,7 +286,8 @@
                 pointer-events: none;
             }
 
-            &.kyc-status-kyc-approved .product-approve {
+            &.kyc-status-kyc-pending .product-approve,
+            &.kyc-status-kyc-revoked .product-approve {
                 opacity: 1;
                 pointer-events: auto;
             }
