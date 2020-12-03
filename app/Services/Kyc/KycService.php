@@ -12,7 +12,8 @@ class KycService
     public function getNextKyc(array $groups)
     {
         foreach ($groups as $group) {
-            $class = "\App\Services\Kyc\\{$group}Service";
+            $g = ucfirst(ucwords($group));
+            $class = "\App\Services\Kyc\\{$g}Service";
             if (!class_exists($class)) continue;
             return new $class();
         }
@@ -27,6 +28,7 @@ class KycService
      */
     public function load(string $group)
     {
+        $g = ucfirst(ucwords($group));
         $class = "\App\Services\Kyc\\{$group}Service";
         return new $class();
     }
