@@ -91,7 +91,7 @@ class DashboardController extends Controller
     public function update(UpdateStatusRequest $request)
     {
         $validated = $request->validated();
-        $app = App::with('developer')->where('name', $validated['app'])->first();
+        $app = App::with('developer')->find($validated['app']);
         $currentUser = $request->user();
         $status = [
             'approve' => 'approved',

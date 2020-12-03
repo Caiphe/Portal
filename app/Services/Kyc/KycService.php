@@ -29,7 +29,7 @@ class KycService
     public function load(string $group)
     {
         $g = ucfirst(ucwords($group));
-        $class = "\App\Services\Kyc\\{$group}Service";
+        $class = "\App\Services\Kyc\\{$g}Service";
         return new $class();
     }
 }
