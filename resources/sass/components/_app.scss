@@ -281,13 +281,16 @@
                 }
             }
 
-            .product-approve {
+            .product-approve,
+            .product-revoke {
                 opacity: 0.4;
                 pointer-events: none;
             }
 
-            &.kyc-status-kyc-pending .product-approve,
-            &.kyc-status-kyc-revoked .product-approve {
+            .product-status-pending .product-approve,
+            .product-status-pending .product-revoke,
+            .product-status-revoked .product-approve,
+            .product-status-approved .product-revoke {
                 opacity: 1;
                 pointer-events: auto;
             }
