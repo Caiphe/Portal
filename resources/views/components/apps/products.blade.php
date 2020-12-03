@@ -14,7 +14,7 @@
         target="_blank" 
         class="product product-status-{{ $product['pivot']['status'] }}"
         data-pid="{{ $product['pid'] }}"
-        data-aid="{{ $app['name'] }}"
+        data-aid="{{ $app['aid'] }}"
         data-status="{{ $product['pivot']['status'] }}"
         data-product-display-name="{{ $displayName }}"
     >
