@@ -27,6 +27,9 @@ Route::middleware(['verified', '2fa'])->group(function () {
 	Route::delete('apps/{app:slug}', 'AppController@destroy')->middleware('can:access-own-app,app')->name('app.destroy');
 
 	Route::get('apps/{app:aid}/credentials/{type}', 'AppController@getCredentials')->middleware('can:access-own-app,app')->name('app.credentials');
+	Route::post('apps/{app:aid}/go-live', 'AppController@goLive')->middleware('can:access-own-app,app')->name('app.go-live');
+	Route::get('apps/{app:aid}/kyc/{group}', 'AppController@kyc')->middleware('can:access-own-app,app')->name('app.kyc');
+	Route::post('apps/{app:aid}/kyc/{group}', 'AppController@kycStore')->middleware('can:access-own-app,app')->name('app.kyc.store');
 
 	Route::get('profile', 'UserController@show')->name('user.profile');
 	Route::put('profile/update', 'UserController@update')->name('user.profile.update');
@@ -36,7 +39,7 @@ Route::middleware(['verified', '2fa'])->group(function () {
 	Route::post('profile/2fa/disable', 'UserController@disable2fa')->name('user.2fa.disable');
 });
 
-Route::namespace('Admin')->prefix('admin')->middleware(['can:view-admin', '2fa'])->group(function () {
+Route::namespace('Admin')->prefix('admin')->middleware(['verified', '2fa', 'can:view-admin'])->group(function () {
 	Route::get('/', 'HomeController')->name('admin.home');
 
 	// Products
@@ -83,6 +86,8 @@ Route::namespace('Admin')->prefix('admin')->middleware(['can:view-admin', '2fa']
 
 	// Dashboard
 	Route::get('dashboard', 'DashboardController@index')->middleware('can:administer-dashboard')->name('admin.dashboard.index');
+	Route::post('apps/{app:aid}/go-live', 'AppController@approve')->middleware('can:administer-dashboard')->name('app.approve');
+	Route::post('apps/{app:aid}/kyc-status', 'DashboardController@updateKycStatus')->middleware('can:administer-dashboard')->name('app.kyc-status.update');
 	Route::post('apps/{product}/approve', 'DashboardController@update')->middleware('can:administer-dashboard')->name('app.product.approve');
 	Route::post('apps/{product}/revoke', 'DashboardController@update')->middleware('can:administer-dashboard')->name('app.product.revoke');
 

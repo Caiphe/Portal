@@ -45,6 +45,8 @@ class SyncBundle extends Command
         $allow = env('APIGEE_ALLOW_PREFIX');
         $deny = explode(',', env('APIGEE_DENY_PREFIX'));
 
+        if(is_null($bundles)) return;
+
         $this->info("Start syncing bundles");
         foreach ($bundles['monetizationPackage'] as $bundle) {
             if ($allow !== "" && strpos($bundle['displayName'], $allow) === false) continue;

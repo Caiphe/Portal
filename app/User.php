@@ -102,6 +102,14 @@ class User extends Authenticatable implements MustVerifyEmail
 		return $this->belongsToMany(Country::class, 'country_opco');
 	}
 
+	public function responsibleGroups()
+	{
+		return $this
+			->belongsToMany(Product::class, 'group_opco', 'user_id', 'product_group', 'id', 'group')
+			->select('group')
+			->distinct();
+	}
+
 	/**
 	 * Get the user's full name.
 	 *

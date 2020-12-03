@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateStatusRequest;
 use App\Services\ApigeeService;
 use App\App;
 use App\Country;
+use App\Mail\KycStatusUpdate;
 use App\Mail\ProductAction;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,67 +16,60 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $user = auth()->user();
-        $user->load('responsibleCountries');
+        $user = $request->user();
+        $user->load(['responsibleCountries', 'responsibleGroups']);
         $isAdmin = $user->hasRole('admin');
         $responsibleCountriesCodes = $user->responsibleCountries->pluck('code')->toArray();
-        $hasSearchTerm = $request->has('q');
+        $responsibleGroups = $user->responsibleGroups->pluck('group')->toArray();
         $searchTerm = "%" . $request->get('q', '') . "%";
+        $hasSearchTerm = $searchTerm !== '%%';
         $searchCountries = $request->get('countries');
         $hasCountries = $request->has('countries') && !is_null($searchCountries[0]);
-        $notAdminNoResponsibleCountries = !$isAdmin && $user->responsibleCountries()->get()->isEmpty();
+        $notAdminNoResponsibleCountries = !$isAdmin && empty($responsibleCountriesCodes);
+        $notAdminNoResponsibleGroups = !$isAdmin && empty($responsibleGroups);
 
-        if ($notAdminNoResponsibleCountries && $request->ajax()) {
+        if (($notAdminNoResponsibleCountries || $notAdminNoResponsibleGroups) && $request->ajax()) {
             return response()
                 ->view('templates.admin.dashboard.data', [
                     'apps' => App::where('country_code', 'none')->paginate(),
                     'countries' => Country::all(),
                 ], 200)
                 ->header('Content-Type', 'text/html');
-        } else if ($notAdminNoResponsibleCountries) {
+        } else if (($notAdminNoResponsibleCountries || $notAdminNoResponsibleGroups)) {
             return view('templates.admin.dashboard.index', [
                 'apps' => App::where('country_code', 'none')->paginate(),
                 'countries' => Country::all(),
             ]);
         }
 
-        $appsByProductLocation = App::with(['developer', 'country', 'products.countries'])
-            ->whereNull('country_code')
-            ->whereHas('products', function ($query) use ($isAdmin, $responsibleCountriesCodes, $hasCountries, $searchCountries) {
-                $query
-                    ->where('status', 'pending')
-                    ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes) {
-                        $query->whereHas('countries', function($q) use ($responsibleCountriesCodes){
-                            $q->whereIn('code', $responsibleCountriesCodes);
-                        });
-                    })
-                    ->when($hasCountries, function ($q) use ($searchCountries) {
-                        $q->whereRaw("`locations` REGEXP \"(" . implode(',', $searchCountries) . ")\"");
+        $apps = App::with(['developer', 'country', 'products'])
+            ->whereNotNull('country_code')
+            ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes, $responsibleGroups) {
+                $query->whereIn('country_code', $responsibleCountriesCodes)
+                    ->whereHas('products', function ($q) use ($responsibleGroups) {
+                        $q->whereIn('group', $responsibleGroups);
+                    });
+            })
+            ->when(!$hasSearchTerm && !$hasCountries, function ($q) {
+                $q->whereNotNull('live_at')
+                    ->whereHas('products', function ($query) {
+                        $query->whereNull('actioned_at');
                     });
             })
             ->when($hasSearchTerm, function ($q) use ($searchTerm) {
-                $q->where('display_name', 'like', $searchTerm);
-            })
-            ->byStatus('approved');
-
-        $apps = App::with(['developer', 'country', 'products'])
-            ->whereNotNull('country_code')
-            ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes) {
-                $query->whereIn('country_code', $responsibleCountriesCodes);
-            })
-            ->whereHas('products', function ($query) {
-                $query->where('status', 'pending');
-            })
-            ->when($hasSearchTerm, function ($q) use ($searchTerm) {
-                $q->where('display_name', 'like', $searchTerm);
+                $q->where(function ($query) use ($searchTerm) {
+                    $query->where('display_name', 'like', $searchTerm)
+                        ->orWhere('aid', 'like', $searchTerm);
+                });
             })
             ->when($hasCountries, function ($q) use ($searchCountries) {
-                $q->whereHas('country', function ($q) use ($searchCountries) {
-                    $q->whereIn('code', $searchCountries);
+                $q->where(function ($query) use ($searchCountries) {
+                    $query->whereHas('country', function ($q) use ($searchCountries) {
+                        $q->whereIn('code', $searchCountries);
+                    });
                 });
             })
             ->byStatus('approved')
-            ->union($appsByProductLocation)
             ->orderBy('updated_at', 'desc')
             ->paginate();
 
@@ -105,15 +99,15 @@ class DashboardController extends Controller
             'pending' => 'pending'
         ][$validated['action']] ?? 'pending';
 
-        $credentials = ApigeeService::get('apps/' . $app->aid)['credentials'];
-        $credentials = ApigeeService::getLatestCredentials($credentials);
+        $credentials = ApigeeService::getAppCredentials($app);
+        $credentials = $validated['for'] === 'staging' ? $credentials[0] : end($credentials);
 
         $developerId = $app->developer->email ?? $app->developer_id;
 
         $response = ApigeeService::updateProductStatus($developerId, $validated['app'], $credentials['consumerKey'], $validated['product'], $validated['action']);
         $responseStatus = $response->status();
         if (preg_match('/^2/', $responseStatus)) {
-            $app->products()->updateExistingPivot($validated['product'], ['status' => $status, 'actioned_by' => $currentUser->id]);
+            $app->products()->updateExistingPivot($validated['product'], ['status' => $status, 'actioned_by' => $currentUser->id, 'actioned_at' => date('Y-m-d H:i:s')]);
         } else if ($request->ajax()) {
             $body = json_decode($response->body());
             return response()->json(['success' => false, 'body' => $body->message], $responseStatus);
@@ -126,5 +120,25 @@ class DashboardController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    public function updateKycStatus(App $app, Request $request)
+    {
+        $app->load('developer');
+        $data = $request->validate([
+            'kyc_status' => 'required'
+        ]);
+
+        $app->update([
+            'kyc_status' => $data['kyc_status']
+        ]);
+
+        Mail::to($app->developer->email)->send(new KycStatusUpdate($app->developer, $app));
+
+        if ($request->ajax()) {
+            return response()->json(['success' => true, 'body' => "The KYC status was updated to {$data['kyc_status']}"]);
+        }
+
+        return redirect()->back()->with('alert', "success:The KYC status was updated to {$data['kyc_status']}");
     }
 }

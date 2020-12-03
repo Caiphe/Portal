@@ -18,9 +18,9 @@
 @endpush
 @endonce
 
-@props(['title','countries','tags', 'href', 'addButtonId', 'addUrl'])
+@props(['title','countries','tags', 'href', 'addButtonId', 'addUrl', 'target' => '_self'])
 <div {{ $attributes->merge(['class' => 'card card--product']) }} >
-    <a href="{{$href}}">
+    <a href="{{$href}}" target="{{ $target }}">
         <div class="card__content">
             @isset($tags)
                 @foreach ($tags as $tag)
