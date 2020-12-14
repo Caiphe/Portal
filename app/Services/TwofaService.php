@@ -33,15 +33,14 @@ class TwofaService
         );
     }
 
+    /**
+     * Gets the secret key.
+     *
+     * @return     string  The secret key.
+     */
     public static function getSecretKey()
     {
-        if (!$key = self::getStoredKey()) {
-            $key = Google2FA::generateSecretKey(self::$keySize, self::$keyPrefix);
-
-            self::storeKey($key);
-        }
-
-        return $key;
+        return Google2FA::generateSecretKey(self::$keySize, self::$keyPrefix);
     }
 
     /**

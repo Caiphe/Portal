@@ -21,7 +21,7 @@ class UserController extends Controller
 		$user = $request->user();
 		$user->load('countries');
 
-		$key = TwofaService::getSecretKey();
+		$key = $user['2fa'] ?? TwofaService::getSecretKey();
 		$inlineUrl = TwofaService::getInlineUrl($key, $user->email);
 
 		$productLocations = Product::isPublic()
