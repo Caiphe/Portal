@@ -1,19 +1,31 @@
+var closeTimeout = null;
+
 function closeAlert() {
     var alert = document.getElementById('alert');
-    
+
     if (!alert) return;
-    
+
     alert.classList.remove('open');
     setTimeout(function() {
         document.body.removeChild(alert);
         alert = null;
-    }, 600);
+
+        clearTimeout(closeTimeout);
+        closeTimeout = null;
+    }, 260);
 }
 
 function addAlert(type, messages, cb) {
+    closeAlert();
+
+    setTimeout(showAlert.bind(null, type, messages, cb), 260);
+}
+
+function showAlert(type, messages, cb) {
     var messageList = '';
     var alert = '';
-    var time = type.toLowerCase() === 'error' ? 10000 : 4000;
+    var time = type.toLowerCase() === 'error' ? 6000 : 4000;
+
 
     if (typeof(messages) === 'string') {
         messageList = '<li>' + messages + '</li>';
@@ -29,7 +41,7 @@ function addAlert(type, messages, cb) {
 
     setTimeout(function() {
         document.getElementById('alert').classList.add('open');
-        setTimeout((cb || closeAlert), time);
+        closeTimeout = setTimeout((cb || closeAlert), time);
     }, 10);
 }
 
@@ -50,12 +62,12 @@ function addLoading(msg) {
 
 function removeLoading() {
     var loading = document.getElementById('alert-loading');
-    
+
     if (!loading) return;
 
     loading.classList.remove('open');
 
     setTimeout(function() {
         document.body.removeChild(loading);
-    }, 600);
+    }, 260);
 }

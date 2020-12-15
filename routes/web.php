@@ -102,6 +102,13 @@ Route::namespace('Admin')->prefix('admin')->middleware(['verified', '2fa', 'can:
 	Route::post('users/store', 'UserController@store')->middleware('can:administer-users')->name('admin.user.store');
 });
 
+Route::namespace('Api\Admin')->prefix('api/admin')->group(function () {
+	Route::post('/products/{product:slug}/openapi', 'ProductController@openapiUpload')->middleware('can:administer-content')->name('api.product.openapi.upload');
+    Route::post('/products/{product:slug}/image', 'ProductController@imageUpload')->middleware('can:administer-content')->name('api.product.image.upload');
+
+    Route::post('sync', 'SyncController@sync')->middleware('can:administer-dashboard')->name('api.sync');
+});
+
 Route::post('profile/2fa/verify', 'UserController@verify2fa')->middleware('2fa')->name('user.2fa.verify');
 
 Route::get('products', 'ProductController@index')->name('product.index');
@@ -121,7 +128,7 @@ Route::get('faq', 'FaqController@index')->name('faq.index');
 Route::get('faq/{faq:slug}', 'FaqController@show')->name('faq.show');
 
 Route::get('contact', 'ContactController@index')->name('contact.index');
-Route::post('contact', 'ContactController@send')->middleware('throttle:1,1')->name('contact.send');
+Route::post('contact', 'ContactController@send')->middleware('throttle:1,5')->name('contact.send');
 
 Auth::routes(['verify' => true]);
 
