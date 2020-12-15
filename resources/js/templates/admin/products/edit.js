@@ -80,6 +80,7 @@
 
         xhr.open('POST', bladeLookup('openApiUrl'));
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xhr.setRequestHeader('X-CSRF-TOKEN', document.getElementsByName("csrf-token")[0].content);
 
         formData.append("openApi", openApi);
         formData.append(
@@ -107,6 +108,10 @@
     }
 
     function markAsUploaded(response) {
+        var alertType = response.success ? 'success' : 'error';
+
+        addAlert(alertType, response.message);
+
         uploader.classList.remove('uploading');
     }
 }());
@@ -117,7 +122,7 @@ function removeTab(el) {
 
 addEventListener("trix-attachment-add", verifyUpload);
 
-function verifyUpload(e) {
+function verifyUpload(event) {
     if (!event.attachment.file) return;
 
     uploadFileAttachment(event.attachment);
@@ -142,6 +147,7 @@ function uploadFile(file, progressCallback, successCallback) {
     var host = bladeLookup('uploadImageUrl');
 
     xhr.open("POST", host, true);
+    xhr.setRequestHeader('X-CSRF-TOKEN', document.getElementsByName("csrf-token")[0].content);
 
     xhr.upload.addEventListener("progress", function(event) {
         var progress = event.loaded / event.total * 100;
