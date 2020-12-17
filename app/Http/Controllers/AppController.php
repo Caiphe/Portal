@@ -179,6 +179,7 @@ class AppController extends Controller {
 			return $credentials;
 		}
 
-		return $credentials[$type];
+		return response($credentials[$type], 200)
+                  ->header('Content-Type', 'text/plain');
 	}
 }

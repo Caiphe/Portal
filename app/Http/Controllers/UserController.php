@@ -21,7 +21,7 @@ class UserController extends Controller
 		$user = \Auth::user();
 		$user->load('countries');
 
-		$key = TwofaService::getSecretKey();
+		$key = $user['2fa'] ?? TwofaService::getSecretKey();
 		$inlineUrl = TwofaService::getInlineUrl($key, $user->email);
 
 		$productLocations = Product::isPublic()
@@ -51,7 +51,7 @@ class UserController extends Controller
 	{
 		$validateOn = [
 			'first_name' => 'required',
-			'second_name' => 'required',
+			'last_name' => 'required',
 		];
 
 		$user = $request->user();
@@ -68,6 +68,12 @@ class UserController extends Controller
 
 		if (isset($validatedData['password'])) {
 			$validatedData['password'] = bcrypt($validatedData['password']);
+		}
+
+		$validatedData['first_name'] = filter_var($validatedData['first_name'], FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		$validatedData['last_name'] = filter_var($validatedData['last_name'], FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if (!isset($validatedData['email'])) {
+			$validatedData['email'] = filter_var($validatedData['email'], FILTER_SANITIZE_EMAIL);
 		}
 
 		$user->update($validatedData);
