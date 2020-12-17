@@ -88,7 +88,11 @@ Update profile
             <button>Authenticate</button>
         </form>
         @else
-        <form id="twofa" action="{{ route('user.2fa.disable') }}" method="POST">
+        <form id="twofa" class="centre pt-4" action="{{ route('user.2fa.disable') }}" method="POST">
+            <h4>Key: {{ $key }}</h4>
+
+            {!! $inlineUrl !!}
+
             @csrf
             <button class="button outline dark twofa-button">Disable 2FA</button>
         </form>
