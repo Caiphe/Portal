@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="{{ mix('/css/templates/apps/index.css') }}">
 @endpush
 
-@section('title', 'Dashboard')
+@section('title', 'Applications waiting to be processed')
 
 @section('content')
     
@@ -17,11 +17,13 @@
                 <h3 class="ml-2">Country</h3>
                 <x-multiselect id="filter-country" name="countries" class="ml-1" label="Select country" :options="$countries->pluck('name', 'code')" />
             </form>
-            
+
             <form class="ajaxify" data-replace="#table-data" data-func="clearFilter()" action="{{ route('admin.dashboard.index') }}" method="GET">
                 <button id="clearFilter" class="dark outline ml-2">Clear filters</button>
             </form>
         </div>
+
+        <p><sup>*</sup><small>The list below are applications waiting to be processed. If you would like to view a processed application you can use the search form above.</small></p>
 
         <div id="table-data" class="row">
             @include('templates.admin.dashboard.data', compact('apps', 'countries'))

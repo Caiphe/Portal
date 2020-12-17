@@ -24,7 +24,7 @@ class CategoriesServiceProvider extends ServiceProvider
 	 */
 	public function boot()
 	{
-		view()->composer('*', function ($view) {
+		view()->composer(['components.header', 'templates.home'], function ($view) {
 			$globalCategories = Category::whereHas('products', function ($query) {
 				$query->basedOnUser(\Auth::user())->where('cid', '!=', 'misc');
 			})->orWhereHas('bundles', function ($query) {
