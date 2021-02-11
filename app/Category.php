@@ -35,9 +35,14 @@ class Category extends Model
 
     public function setTitleAttribute($value)
     {
+        $categorySlug = Str::slug($value);
+        if (!\Storage::disk('app')->exists('images/icons/' . $categorySlug . '.svg')) {
+            \Storage::disk('app')->copy('images/icons/misc.svg', 'images/icons/' . $categorySlug . '.svg');
+        }
+
         $this->attributes['title'] = $value;
-        $this->attributes['slug'] = Str::slug($value);
-        $this->attributes['cid'] = Str::slug($value);
+        $this->attributes['slug'] = $categorySlug;
+        $this->attributes['cid'] = $categorySlug;
     }
 
     public function faqs()
