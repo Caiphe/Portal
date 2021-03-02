@@ -31,6 +31,11 @@
     @csrf
 
     <div class="editor-field">
+        <h2>Display name</h2>
+        <input type="text" name="display_name" value="{{ $product->display_name }}">
+    </div>
+
+    <div class="editor-field">
         <h2>Category</h2>
         <select name="category_cid" id="category_cid" class="mb-1" autocomplete="off">
             <option value="" selected disabled="">Select category</option>
