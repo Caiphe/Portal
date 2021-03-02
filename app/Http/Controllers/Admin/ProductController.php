@@ -60,6 +60,7 @@ class ProductController extends Controller
         $tabs = $request->get('tab', []);
 
         $product->update([
+            'display_name' => $request->get('display_name'),
             'locations' => implode(',', $request->get('locations', ['all'])),
             'group' => $request->get('group', 'MTN'),
             'category_cid' => $request->get('category_cid', 'misc'),

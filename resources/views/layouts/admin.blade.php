@@ -52,7 +52,7 @@
     <x-alert/>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
     <script>
-        function bladeLookup(key) {
+        function bladeLookupAdmin(key) {
             return {
                 syncApiUrl: "{{ route('api.sync') }}",
             }[key] || null;
