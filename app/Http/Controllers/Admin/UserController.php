@@ -112,7 +112,7 @@ class UserController extends Controller
         $data['profile_picture'] = '/storage/profile/' . $imageName;
 
         $user = User::create($data);
-        $user->roles()->sync([$data['roles']]);
+        $user->roles()->sync($data['roles']);
 
         if (!is_null($request->country)) {
             $user->countries()->sync([$data['country']]);
