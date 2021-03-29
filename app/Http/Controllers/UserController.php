@@ -72,9 +72,9 @@ class UserController extends Controller
 
 		$validatedData['first_name'] = filter_var($validatedData['first_name'], FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		$validatedData['last_name'] = filter_var($validatedData['last_name'], FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if (!isset($validatedData['email'])) {
-			$validatedData['email'] = filter_var($validatedData['email'], FILTER_SANITIZE_EMAIL);
-		}
+		if (isset($validatedData['email'])) {
+            $validatedData['email'] = filter_var($validatedData['email'], FILTER_SANITIZE_EMAIL);
+        }
 
 		$user->update($validatedData);
 
