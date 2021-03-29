@@ -51,7 +51,7 @@ Update profile
             @method('put')
             <h2>Personal details</h2>
             <input type="text" name="first_name" value="{{$user['first_name']}}" placeholder="First name" autocomplete="first_name">
-            <input type="text" name="second_name" value="{{$user['last_name']}}" placeholder="Second name" autocomplete="last_name">
+            <input type="text" name="last_name" value="{{$user['last_name']}}" placeholder="Last name" autocomplete="last_name">
             <input type="email" name="email" value="{{$user['email']}}" placeholder="Email" autocomplete="email">
             <h2>Password</h2>
             <label class="password-label" for="password">
