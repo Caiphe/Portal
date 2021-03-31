@@ -83,7 +83,7 @@
                                     :app="$app"
                                     :attr="$app['attributes']"
                                     :details="$app['developer']"
-                                    :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products)"
+                                    :countries="!is_null($app->country) ? [$app->country->code => $app->country->name] : ['globe' => 'globe']"
                                     :type="$type = 'approved'">
                                 </x-app>
                                 @endif
@@ -132,7 +132,7 @@
                                         :app="$app"
                                         :attr="$app['attributes']"
                                         :details="$app['developer']"
-                                        :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products->pluck('name')->toArray())"
+                                        :countries="!is_null($app->country) ? [$app->country->code => $app->country->name] : ['globe' => 'globe']"
                                         :type="$type = 'revoked'">
                                     </x-app>
                                 @endif

@@ -49,6 +49,7 @@ class SyncProducts extends Command
 		$products = ApigeeService::get('apiproducts?expand=true')['apiProduct'];
 
 		$attributes = [];
+		$stagingProductAttribute = [];
 		$allCountries = Country::all();
 
 		$this->info("Start syncing products");
@@ -59,15 +60,20 @@ class SyncProducts extends Command
 			$this->info("Syncing {$product['displayName']}");
 
 			$prod = Product::withTrashed()->find($product['name']);
-			
+
 			$attributes = ApigeeService::getAppAttributes($product['attributes']);
 
-			if(!is_null($prod)){
+			if (isset($attributes['StagingProduct'])) {
+				$stagingProductAttribute[$attributes['StagingProduct']] = $product['name'];
+			}
+
+			if (!is_null($prod)) {
 				$prod->update([
 					'pid' => $product['name'],
 					'name' => $product['name'],
 					'environments' => implode(',', $product['environments']),
 					'access' => $attributes['Access'] ?? null,
+					'attributes' => json_encode($attributes),
 				]);
 
 				continue;
@@ -98,5 +104,15 @@ class SyncProducts extends Command
 				$prod->countries()->sync($locations);
 			}
 		}
+
+		if (empty($stagingProductAttribute)) return;
+
+		Product::whereIn('name', array_keys($stagingProductAttribute))->get()->each(function ($product) use ($stagingProductAttribute) {
+			$attr = json_decode($product->attributes, true);
+			$attr['ProductionProduct'] = $stagingProductAttribute[$product->name];
+			$product->update([
+				'attributes' => $attr
+			]);
+		});
 	}
 }
