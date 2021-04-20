@@ -117,7 +117,7 @@ class AppController extends Controller {
 
 		$data = [
 			'name' => $validated['name'],
-			'key' => $this->getCredentials($app, 'consumerKey'),
+			'key' => $this->getCredentials($app, 'consumerKey', 'string'),
 			'apiProducts' => $request->products,
 			'originalProducts' => $validated['original_products'],
 			'keyExpiresIn' => -1,
@@ -138,7 +138,7 @@ class AppController extends Controller {
 			'callbackUrl' => preg_replace('/[<>"]*/', '', strip_tags($validated['url'])) ?? '',
 		];
 
-		$updatedResponse = ApigeeService::updateApp($data);
+		[$updatedProducts, $updatedResponse] = ApigeeService::updateApp($data);
 
 		$app->update([
 			'display_name' => $data['attributes'][0]['value'],
@@ -168,7 +168,7 @@ class AppController extends Controller {
 		return redirect(route('app.index'));
 	}
 
-	public function getCredentials(App $app, $type)
+	public function getCredentials(App $app, string $type, string $returnAs = '')
 	{
 		if(auth()->user()->developer_id !== $app->developer_id) return "You can't access app keys that don't belong to you.";
 
@@ -177,6 +177,10 @@ class AppController extends Controller {
 
 		if($type === 'all'){
 			return $credentials;
+		}
+
+		if($returnAs === 'string'){
+			return $credentials[$type];
 		}
 
 		return response($credentials[$type], 200)
