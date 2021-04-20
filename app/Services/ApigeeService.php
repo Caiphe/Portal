@@ -45,7 +45,7 @@ class ApigeeService
 		return self::post("developers/{$user->email}/apps", $data);
 	}
 
-	public static function updateApp(array $data)
+	public static function updateApp(array $data):array
 	{
 		$user = auth()->user();
 		$name = $data['name'];
@@ -54,7 +54,7 @@ class ApigeeService
 		$originalProducts = $data['originalProducts'];
 		$removedProducts = array_diff($originalProducts, $apiProducts);
 
-		self::post("developers/{$user->email}/apps/{$name}/keys/{$key}", ["apiProducts" => $apiProducts]);
+		$updatedProducts = self::post("developers/{$user->email}/apps/{$name}/keys/{$key}", ["apiProducts" => $apiProducts]);
 		$updatedDetails = self::put("developers/{$user->email}/apps/{$name}", [
 			"name" => $name,
 			"attributes" => $data['attributes'],
@@ -65,7 +65,7 @@ class ApigeeService
 			self::delete("developers/{$user->email}/apps/{$name}/keys/{$key}/apiproducts/{$product}");
 		}
 
-		return $updatedDetails;
+		return [$updatedProducts, $updatedDetails];
 	}
 
 	public static function getAppAttributes(array $attributes)
