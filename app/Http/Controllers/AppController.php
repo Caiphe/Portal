@@ -19,7 +19,7 @@ class AppController extends Controller
 {
     public function index()
     {
-        $apps = App::with(['products.countries', 'country'])
+        $apps = App::with(['products.countries', 'country', 'developer'])
             ->byUserEmail(\Auth::user()->email)
             ->orderBy('updated_at', 'desc')
             ->get()
@@ -46,10 +46,17 @@ class AppController extends Controller
     {
         $validated = $request->validated();
         $countriesByCode = Country::pluck('iso', 'code');
+        $products = Product::whereIn('name', $request->products)->pluck('attributes', 'name');
+        $productIds = [];
+        $attr = [];
+        foreach ($products as $name => $attributes) {
+            $attr = json_decode($attributes, true);
+            $productIds[] = $attr['SandboxProduct'] ?? $name;
+        }
 
         $data = [
             'name' => Str::slug($validated['name']),
-            'apiProducts' => $request->products,
+            'apiProducts' => $productIds,
             'keyExpiresIn' => -1,
             'attributes' => [
                 [
@@ -58,7 +65,7 @@ class AppController extends Controller
                 ],
                 [
                     'name' => 'Description',
-                    'value' => preg_replace('/[<>"]*/', '', strip_tags($validated['description'])),
+                    'value' => $validated['description'],
                 ],
                 [
                     'name' => 'Country',
@@ -69,7 +76,7 @@ class AppController extends Controller
                     'value' => $countriesByCode[$validated['country']] ?? "",
                 ],
             ],
-            'callbackUrl' => preg_replace('/[<>"]*/', '', strip_tags($validated['url'])) ?? '',
+            'callbackUrl' => $validated['url'],
         ];
 
         $createdResponse = ApigeeService::createApp($data);
@@ -89,7 +96,7 @@ class AppController extends Controller
             "credentials" => $createdResponse['credentials'],
             "developer_id" => $createdResponse['developerId'],
             "status" => $createdResponse['status'],
-            "description" => $attributes['Description'] ?? '',
+            "description" => $validated['description'],
             "country_code" => $validated['country'],
             "updated_at" => date('Y-m-d H:i:s', $createdResponse['lastModifiedAt'] / 1000),
             "created_at" => date('Y-m-d H:i:s', $createdResponse['createdAt'] / 1000),
@@ -240,7 +247,7 @@ class AppController extends Controller
     public function goLive(App $app, KycService $kycService)
     {
         $app->load(['products', 'country']);
-        $groups = $app->products->pluck('group')->toArray();
+        $groups = $app->products()->pluck('group')->toArray();
         $kyc = $kycService->getNextKyc($groups);
 
         if (is_null($kyc)) {
@@ -365,23 +372,26 @@ class AppController extends Controller
      */
     protected function addNewCredentials(App $app): array
     {
-        $updatedApiProducts = [];
-        $apiProducts = [];
+        $apiProductsApigee = [];
+        $apiProductsPortal = [];
 
         foreach ($app->products as $product) {
-            $findProduct = Product::whereName("{$product->name}-prod")->first();
-            $updatedApiProducts[] = $product->name;
-            if (is_null($findProduct)) {
-                $apiProducts[] = $product->name;
+            $apiProductsPortal[] = $product->name;
+
+            // ProductionProduct is set in the SyncProducts Console Command.
+            // This checks if there is a relationship from a sandbox/staging product to a production product.
+            if (isset($product->attributes['ProductionProduct'])) {
+                $apiProductsPortal[] = $product->attributes['ProductionProduct'];
+                $apiProductsApigee[] = $product->attributes['ProductionProduct'];
                 continue;
             }
-            $updatedApiProducts[] = $findProduct->name;
-            $apiProducts[] = $findProduct->name;
+
+            $apiProductsApigee[] = $product->name;
         }
 
         $data = [
             'name' => $app['name'],
-            'apiProducts' => $apiProducts,
+            'apiProducts' => $apiProductsApigee,
             'callbackUrl' => $app['callback_url'],
             'attributes' => [
                 [
@@ -421,7 +431,7 @@ class AppController extends Controller
             'credentials' => $resp['credentials']
         ]);
 
-        $app->products()->sync($updatedApiProducts);
+        $app->products()->sync($apiProductsPortal);
 
         return [
             'success' => true,

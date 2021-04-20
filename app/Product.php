@@ -32,6 +32,7 @@ class Product extends Model
      */
     protected $casts = [
         'pid' => 'string',
+        'attributes' => 'array',
     ];
 
     public function setNameAttribute($value)

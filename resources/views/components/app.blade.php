@@ -1,4 +1,4 @@
-@props(['app', 'details', 'type', 'attr', 'countries'])
+@props(['app', 'appStagingProducts', 'details', 'type', 'attr', 'countries'])
 
 @php
     $isAdminPage = Request::is('admin/*');

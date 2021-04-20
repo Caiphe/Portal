@@ -6,20 +6,17 @@
 @endphp
 
 @foreach($credentialProducts as $product)
-    @php
-        $displayName = preg_replace('/\s?prod$/i', '', $product['display_name']);
-    @endphp
-    <a 
-        href="{{route('product.show', preg_replace('/[-_]prod$/i', '', $product['slug']))}}"
-        target="_blank" 
+    <a
+        href="{{route('product.show', $product['slug'] ?? '')}}"
+        target="_blank"
         class="product product-status-{{ $product['pivot']['status'] }}"
         data-pid="{{ $product['pid'] }}"
         data-aid="{{ $app['aid'] }}"
         data-status="{{ $product['pivot']['status'] }}"
-        data-product-display-name="{{ $displayName }}"
+        data-product-display-name="{{ $product['display_name'] }}"
     >
         <span class="status-bar status-{{ $product['pivot']['status'] }}"></span>
-        <span class="name">{{ $displayName }}</span>
+        <span class="name">{{ $product['display_name'] }}</span>
         @if($isDashboard)
             <button class="product-approve" data-action="approve" data-for="{{ $for }}">
                 @svg('thumbs-up', '#000000')

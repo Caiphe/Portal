@@ -49,6 +49,7 @@ class SyncProducts extends Command
 		$products = ApigeeService::get('apiproducts?expand=true')['apiProduct'];
 
 		$attributes = [];
+		$sandboxProductAttribute = [];
 		$allCountries = Country::all();
 
 		$this->info("Start syncing products");
@@ -59,15 +60,29 @@ class SyncProducts extends Command
 			$this->info("Syncing {$product['displayName']}");
 
 			$prod = Product::withTrashed()->find($product['name']);
-			
+
 			$attributes = ApigeeService::getAppAttributes($product['attributes']);
 
-			if(!is_null($prod)){
+			if (isset($attributes['SandboxProduct'])) {
+				$sandboxProductAttribute[$attributes['SandboxProduct']] = $product['name'];
+			}
+
+			$productEnvironments = array_map(function($env){
+				$lookup = [
+					'dev' => 'prod',
+					'test' => 'sandbox'
+				];
+
+				return $lookup[$env] ?? $env;
+			}, $product['environments']);
+
+			if (!is_null($prod)) {
 				$prod->update([
 					'pid' => $product['name'],
 					'name' => $product['name'],
-					'environments' => implode(',', $product['environments']),
+					'environments' => implode(',', $productEnvironments),
 					'access' => $attributes['Access'] ?? null,
+					'attributes' => json_encode($attributes),
 				]);
 
 				continue;
@@ -83,7 +98,7 @@ class SyncProducts extends Command
 					'name' => $product['name'],
 					'display_name' => preg_replace('/[-_]+/', ' ', ltrim($product['displayName'], "$allow ")),
 					'description' => $product['description'],
-					'environments' => implode(',', $product['environments']),
+					'environments' => implode(',', $productEnvironments),
 					'group' => $attributes['Group'] ?? "MTN",
 					'category_cid' => strtolower($category->cid),
 					'access' => $attributes['Access'] ?? null,
@@ -98,5 +113,15 @@ class SyncProducts extends Command
 				$prod->countries()->sync($locations);
 			}
 		}
+
+		if (empty($sandboxProductAttribute)) return;
+
+		Product::whereIn('name', array_keys($sandboxProductAttribute))->get()->each(function ($product) use ($sandboxProductAttribute) {
+			$attr = json_decode($product->attributes, true);
+			$attr['ProductionProduct'] = $sandboxProductAttribute[$product->name];
+			$product->update([
+				'attributes' => $attr
+			]);
+		});
 	}
 }
