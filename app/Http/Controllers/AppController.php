@@ -51,7 +51,7 @@ class AppController extends Controller
         $attr = [];
         foreach ($products as $name => $attributes) {
             $attr = json_decode($attributes, true);
-            $productIds[] = $attr['StagingProduct'] ?? $name;
+            $productIds[] = $attr['SandboxProduct'] ?? $name;
         }
 
         $data = [

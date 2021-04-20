@@ -49,7 +49,7 @@ class SyncProducts extends Command
 		$products = ApigeeService::get('apiproducts?expand=true')['apiProduct'];
 
 		$attributes = [];
-		$stagingProductAttribute = [];
+		$sandboxProductAttribute = [];
 		$allCountries = Country::all();
 
 		$this->info("Start syncing products");
@@ -63,15 +63,24 @@ class SyncProducts extends Command
 
 			$attributes = ApigeeService::getAppAttributes($product['attributes']);
 
-			if (isset($attributes['StagingProduct'])) {
-				$stagingProductAttribute[$attributes['StagingProduct']] = $product['name'];
+			if (isset($attributes['SandboxProduct'])) {
+				$sandboxProductAttribute[$attributes['SandboxProduct']] = $product['name'];
 			}
+
+			$productEnvironments = array_map(function($env){
+				$lookup = [
+					'dev' => 'prod',
+					'test' => 'sandbox'
+				];
+
+				return $lookup[$env] ?? $env;
+			}, $product['environments']);
 
 			if (!is_null($prod)) {
 				$prod->update([
 					'pid' => $product['name'],
 					'name' => $product['name'],
-					'environments' => implode(',', $product['environments']),
+					'environments' => implode(',', $productEnvironments),
 					'access' => $attributes['Access'] ?? null,
 					'attributes' => json_encode($attributes),
 				]);
@@ -89,7 +98,7 @@ class SyncProducts extends Command
 					'name' => $product['name'],
 					'display_name' => preg_replace('/[-_]+/', ' ', ltrim($product['displayName'], "$allow ")),
 					'description' => $product['description'],
-					'environments' => implode(',', $product['environments']),
+					'environments' => implode(',', $productEnvironments),
 					'group' => $attributes['Group'] ?? "MTN",
 					'category_cid' => strtolower($category->cid),
 					'access' => $attributes['Access'] ?? null,
@@ -105,11 +114,11 @@ class SyncProducts extends Command
 			}
 		}
 
-		if (empty($stagingProductAttribute)) return;
+		if (empty($sandboxProductAttribute)) return;
 
-		Product::whereIn('name', array_keys($stagingProductAttribute))->get()->each(function ($product) use ($stagingProductAttribute) {
+		Product::whereIn('name', array_keys($sandboxProductAttribute))->get()->each(function ($product) use ($sandboxProductAttribute) {
 			$attr = json_decode($product->attributes, true);
-			$attr['ProductionProduct'] = $stagingProductAttribute[$product->name];
+			$attr['ProductionProduct'] = $sandboxProductAttribute[$product->name];
 			$product->update([
 				'attributes' => $attr
 			]);

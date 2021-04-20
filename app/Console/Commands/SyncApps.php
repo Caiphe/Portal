@@ -78,7 +78,7 @@ class SyncApps extends Command
 			if (isset($attributes['Country']) && is_numeric($attributes['Country'])) {
 				$countryCode = $countryArray[$attributes['Country']]['code'];
 			} else if (isset($attributes['Country']) && strlen($attributes['Country']) > 2) {
-				$countryCode = $countries->first(fn ($country) => $country->name === $attributes['Country'])->code;
+				$countryCode = $countries->first(fn ($country) => $country->name === $attributes['Country'])->code ?? 'all';
 			} else if (isset($attributes['Country'])) {
 				$countryCode = $attributes['Country'];
 			}
