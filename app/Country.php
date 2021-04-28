@@ -41,4 +41,9 @@ class Country extends Model
     {
         return $this->belongsToMany(Product::class);
     }
+
+    public function opcoUser()
+    {
+        return $this->belongsToMany(User::class, 'country_opco');
+    }
 }

@@ -6,184 +6,201 @@ use App\App;
 use App\Country;
 use App\Http\Requests\CreateAppRequest;
 use App\Http\Requests\DeleteAppRequest;
+use App\Mail\NewApp;
 use App\Services\ApigeeService;
 use App\Services\ProductLocationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
 
-class AppController extends Controller {
-	public function index() {
-		$apps = App::with(['products.countries', 'country'])
-			->byUserEmail(\Auth::user()->email)
-			->orderBy('updated_at', 'desc')
-			->get()
-			->groupBy('status');
+class AppController extends Controller
+{
+    public function index()
+    {
+        $apps = App::with(['products.countries', 'country'])
+            ->byUserEmail(\Auth::user()->email)
+            ->orderBy('updated_at', 'desc')
+            ->get()
+            ->groupBy('status');
 
-		return view('templates.apps.index', [
-			'approvedApps' => $apps['approved'] ?? [],
-			'revokedApps' => $apps['revoked'] ?? [],
-		]);
-	}
+        return view('templates.apps.index', [
+            'approvedApps' => $apps['approved'] ?? [],
+            'revokedApps' => $apps['revoked'] ?? [],
+        ]);
+    }
 
-	public function create(ProductLocationService $productLocationService) {
-		[$products, $countries] = $productLocationService->fetch();
+    public function create(ProductLocationService $productLocationService)
+    {
+        [$products, $countries] = $productLocationService->fetch();
 
-		return view('templates.apps.create', [
-			'products' => $products,
-			'productCategories' => array_keys($products->toArray()),
-			'countries' => $countries ?? '',
-		]
-		);
-	}
+        return view(
+            'templates.apps.create',
+            [
+                'products' => $products,
+                'productCategories' => array_keys($products->toArray()),
+                'countries' => $countries ?? '',
+            ]
+        );
+    }
 
-	public function store(CreateAppRequest $request) {
-		$validated = $request->validated();
-		$countriesByCode = Country::pluck('iso', 'code');
+    public function store(CreateAppRequest $request)
+    {
+        $validated = $request->validated();
+        $countriesByCode = Country::pluck('iso', 'code');
 
-		$data = [
-			'name' => Str::slug($validated['name']),
-			'apiProducts' => $request->products,
-			'keyExpiresIn' => -1,
-			'attributes' => [
-				[
-					'name' => 'DisplayName',
-					'value' => $validated['name'],
-				],
-				[
-					'name' => 'Description',
-					'value' => preg_replace('/[<>"]*/', '', strip_tags($validated['description'])),
-				],
-				[
-					'name' => 'Country',
-					'value' => $validated['country'],
-				],
-				[
-					'name' => 'location',
-					'value' => $countriesByCode[$validated['country']] ?? "",
-				],
-			],
-			'callbackUrl' => preg_replace('/[<>"]*/', '', strip_tags($validated['url'])) ?? '',
-		];
+        $data = [
+            'name' => Str::slug($validated['name']),
+            'apiProducts' => $request->products,
+            'keyExpiresIn' => -1,
+            'attributes' => [
+                [
+                    'name' => 'DisplayName',
+                    'value' => $validated['name'],
+                ],
+                [
+                    'name' => 'Description',
+                    'value' => preg_replace('/[<>"]*/', '', strip_tags($validated['description'])),
+                ],
+                [
+                    'name' => 'Country',
+                    'value' => $validated['country'],
+                ],
+                [
+                    'name' => 'location',
+                    'value' => $countriesByCode[$validated['country']] ?? "",
+                ],
+            ],
+            'callbackUrl' => preg_replace('/[<>"]*/', '', strip_tags($validated['url'])) ?? '',
+        ];
 
-		$createdResponse = ApigeeService::createApp($data);
+        $createdResponse = ApigeeService::createApp($data);
 
-		if (strpos($createdResponse, 'duplicate key') !== false) {
-			return response()->json(['success' => false, 'message' => 'There is already an app with that name.'], 409);
-		}
+        if (strpos($createdResponse, 'duplicate key') !== false) {
+            return response()->json(['success' => false, 'message' => 'There is already an app with that name.'], 409);
+        }
 
-		$attributes = ApigeeService::getAppAttributes($createdResponse['attributes']);
-		$credentials = ApigeeService::getLatestCredentials($createdResponse['credentials']);
-		unset($credentials['apiProducts']);
+        $attributes = ApigeeService::getAppAttributes($createdResponse['attributes']);
+        $credentials = ApigeeService::getLatestCredentials($createdResponse['credentials']);
+        unset($credentials['apiProducts']);
 
-		$app = App::create([
-			"aid" => $createdResponse['appId'],
-			"name" => $createdResponse['name'],
-			"display_name" => $validated['name'],
-			"callback_url" => $createdResponse['callbackUrl'],
-			"attributes" => $attributes,
-			"credentials" => $credentials,
-			"developer_id" => $createdResponse['developerId'],
-			"status" => $createdResponse['status'],
-			"description" => $attributes['Description'] ?? '',
-			"country_code" => $validated['country'],
-			"updated_at" => date('Y-m-d H:i:s', $createdResponse['lastModifiedAt'] / 1000),
-			"created_at" => date('Y-m-d H:i:s', $createdResponse['createdAt'] / 1000),
-		]);
+        $app = App::create([
+            "aid" => $createdResponse['appId'],
+            "name" => $createdResponse['name'],
+            "display_name" => $validated['name'],
+            "callback_url" => $createdResponse['callbackUrl'],
+            "attributes" => $attributes,
+            "credentials" => $credentials,
+            "developer_id" => $createdResponse['developerId'],
+            "status" => $createdResponse['status'],
+            "description" => $attributes['Description'] ?? '',
+            "country_code" => $validated['country'],
+            "updated_at" => date('Y-m-d H:i:s', $createdResponse['lastModifiedAt'] / 1000),
+            "created_at" => date('Y-m-d H:i:s', $createdResponse['createdAt'] / 1000),
+        ]);
 
-		$app->products()->sync($request->products);
+        $app->products()->sync($request->products);
 
-		if ($request->ajax()) {
-			return response()->json(['response' => $createdResponse]);
-		}
+        $opcoUserEmails = $app->country->opcoUser->pluck('email')->toArray();
+        if (empty($opcoUserEmails)) {
+            $opcoUserEmails = env('MAIL_TO_ADDRESS');
+        }
+        Mail::to($opcoUserEmails)->send(new NewApp($app));
 
-		return redirect(route('app.index'));
-	}
+        if ($request->ajax()) {
+            return response()->json(['response' => $createdResponse]);
+        }
 
-	public function edit(ProductLocationService $productLocationService, App $app, Request $request) {
-		[$products, $countries] = $productLocationService->fetch();
+        return redirect(route('app.index'));
+    }
 
-		$app->load('products', 'country');
+    public function edit(ProductLocationService $productLocationService, App $app, Request $request)
+    {
+        [$products, $countries] = $productLocationService->fetch();
 
-		return view('templates.apps.edit', [
-			'products' => $products,
-			'countries' => $countries ?? '',
-			'data' => $app,
-			'selectedProducts' => array_column($app['products']->toArray(), 'name'),
-		]);
-	}
+        $app->load('products', 'country');
 
-	public function update(App $app, CreateAppRequest $request) {
-		$validated = $request->validated();
+        return view('templates.apps.edit', [
+            'products' => $products,
+            'countries' => $countries ?? '',
+            'data' => $app,
+            'selectedProducts' => array_column($app['products']->toArray(), 'name'),
+        ]);
+    }
 
-		$data = [
-			'name' => $validated['name'],
-			'key' => $this->getCredentials($app, 'consumerKey', 'string'),
-			'apiProducts' => $request->products,
-			'originalProducts' => $validated['original_products'],
-			'keyExpiresIn' => -1,
-			'attributes' => [
-				[
-					'name' => 'DisplayName',
-					'value' => $validated['new_name'] ?? $validated['name'],
-				],
-				[
-					'name' => 'Description',
-					'value' => preg_replace('/[<>"]*/', '', strip_tags($validated['description'])),
-				],
-				[
-					'name' => 'Country',
-					'value' => $validated['country'],
-				],
-			],
-			'callbackUrl' => preg_replace('/[<>"]*/', '', strip_tags($validated['url'])) ?? '',
-		];
+    public function update(App $app, CreateAppRequest $request)
+    {
+        $validated = $request->validated();
 
-		[$updatedProducts, $updatedResponse] = ApigeeService::updateApp($data);
+        $data = [
+            'name' => $validated['name'],
+            'key' => $this->getCredentials($app, 'consumerKey', 'string'),
+            'apiProducts' => $request->products,
+            'originalProducts' => $validated['original_products'],
+            'keyExpiresIn' => -1,
+            'attributes' => [
+                [
+                    'name' => 'DisplayName',
+                    'value' => $validated['new_name'] ?? $validated['name'],
+                ],
+                [
+                    'name' => 'Description',
+                    'value' => preg_replace('/[<>"]*/', '', strip_tags($validated['description'])),
+                ],
+                [
+                    'name' => 'Country',
+                    'value' => $validated['country'],
+                ],
+            ],
+            'callbackUrl' => preg_replace('/[<>"]*/', '', strip_tags($validated['url'])) ?? '',
+        ];
 
-		$app->update([
-			'display_name' => $data['attributes'][0]['value'],
-			'attributes' => $data['attributes'],
-			'callback_url' => $data['callbackUrl'],
-			'description' => $data['attributes'][1]['value'],
-			'country_code' => $validated['country'],
-		]);
+        [$updatedProducts, $updatedResponse] = ApigeeService::updateApp($data);
 
-		$app->products()->sync($data['apiProducts']);
+        $app->update([
+            'display_name' => $data['attributes'][0]['value'],
+            'attributes' => $data['attributes'],
+            'callback_url' => $data['callbackUrl'],
+            'description' => $data['attributes'][1]['value'],
+            'country_code' => $validated['country'],
+        ]);
 
-		if ($request->ajax()) {
-			return response()->json(['response' => $updatedResponse]);
-		}
+        $app->products()->sync($data['apiProducts']);
 
-		return redirect(route('app.index'));
-	}
+        if ($request->ajax()) {
+            return response()->json(['response' => $updatedResponse]);
+        }
 
-	public function destroy(App $app, DeleteAppRequest $request) {
-		$validated = $request->validated();
+        return redirect(route('app.index'));
+    }
 
-		$user = \Auth::user();
-		ApigeeService::delete("developers/{$user->email}/apps/{$validated['name']}");
+    public function destroy(App $app, DeleteAppRequest $request)
+    {
+        $validated = $request->validated();
 
-		$app->delete();
+        $user = \Auth::user();
+        ApigeeService::delete("developers/{$user->email}/apps/{$validated['name']}");
 
-		return redirect(route('app.index'));
-	}
+        $app->delete();
 
-	public function getCredentials(App $app, string $type, string $returnAs = '')
-	{
-		if(auth()->user()->developer_id !== $app->developer_id) return "You can't access app keys that don't belong to you.";
+        return redirect(route('app.index'));
+    }
 
-		$credentials = ApigeeService::get('apps/' . $app->aid)['credentials'];
-		$credentials = ApigeeService::getLatestCredentials($credentials);
+    public function getCredentials(App $app, string $type, string $returnAs = '')
+    {
+        if (auth()->user()->developer_id !== $app->developer_id) return "You can't access app keys that don't belong to you.";
 
-		if($type === 'all'){
-			return $credentials;
-		}
+        $credentials = ApigeeService::get('apps/' . $app->aid)['credentials'];
+        $credentials = ApigeeService::getLatestCredentials($credentials);
 
-		if($returnAs === 'string'){
-			return $credentials[$type];
-		}
+        if ($type === 'all') {
+            return $credentials;
+        }
 
-		return response($credentials[$type], 200)
-                  ->header('Content-Type', 'text/plain');
-	}
+        if ($returnAs === 'string') {
+            return $credentials[$type];
+        }
+
+        return response($credentials[$type], 200)
+            ->header('Content-Type', 'text/plain');
+    }
 }
