@@ -78,7 +78,9 @@
                         </div>
                         <div class="body">
                             @forelse($approvedApps as $app)
-                                @if(!empty($app['attributes']))
+                                @if(empty($app['attributes'] || !isset($app['credentials'][0])))
+                                    @continue
+                                @endif
                                 <x-app
                                     :app="$app"
                                     :attr="$app['attributes']"
@@ -86,7 +88,6 @@
                                     :countries="!is_null($app->country) ? [$app->country->code => $app->country->name] : ['globe' => 'globe']"
                                     :type="$type = 'approved'">
                                 </x-app>
-                                @endif
                             @empty
                                 <p>No approved apps.</p>
                             @endforelse

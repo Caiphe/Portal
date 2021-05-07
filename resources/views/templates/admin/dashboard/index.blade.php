@@ -35,10 +35,13 @@
 @push('scripts')
     <script>
         var timeout = null;
+        var kycStatus = document.getElementById("kyc-status");
 
         document.getElementById('filter-text').addEventListener('keyup', filterApps);
         document.getElementById("filter-country").addEventListener('change', submitFilter);
-        document.getElementById("kyc-status").addEventListener('change', handleKycUpdateStatus);
+        if(kycStatus){
+            kycStatus.addEventListener('change', handleKycUpdateStatus);
+        }
 
         window.onload = init;
         ajaxifyComplete = init;

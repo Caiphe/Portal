@@ -1,11 +1,10 @@
 @props(['app', 'products', 'for'])
 
 @php
-    $credentialProducts = $app->products->filter(fn($product) => in_array($product->name, $products));
     $isDashboard = Request::is('admin/dashboard');
 @endphp
 
-@foreach($credentialProducts as $product)
+@foreach($products as $product)
     <a
         href="{{route('product.show', $product['slug'] ?? '')}}"
         target="_blank"
