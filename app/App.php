@@ -87,4 +87,41 @@ class App extends Model
         $len = strlen($key) - 8;
         return substr($key, 0, 4) . implode('', array_fill(0, $len, 'X')) . substr($key, -4);
     }
+
+    /**
+     * Gets the products by credentials. Checks if there are sandbox products.
+     *
+     * @return     arrray  The products by credentials seperated by sandbox and prod environments.
+     */
+    public function getProductsByCredentials(): array
+    {
+        $credentials = $this->credentials;
+        $firstProducts = [
+            'credentials' => $credentials[0],
+            'products' => []
+        ];
+        $isFirstProductSandbox = false;
+
+        foreach ($this->products as $product) {
+            if (!in_array($product->name, $credentials[0]['apiProducts'])) continue;
+
+            if (strpos($product->environments, 'sandbox') !== false) {
+                $isFirstProductSandbox = true;
+            }
+
+            $firstProducts['products'][] = $product;
+        }
+        $lastProducts = $isFirstProductSandbox ? [] : $firstProducts;
+        $firstProducts = $isFirstProductSandbox ? $firstProducts : [];
+
+        if (count($credentials) > 1) {
+            $lastProducts = $this->products->filter(fn ($product) => in_array($product->name, end($credentials)['apiProducts']));
+            $lastProducts = [
+                'credentials' => end($credentials),
+                'products' => $lastProducts
+            ];
+        }
+
+        return [$firstProducts, $lastProducts];
+    }
 }
