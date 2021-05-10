@@ -20,7 +20,7 @@ class NewApp extends Mailable
      */
     public function __construct(App $app)
     {
-        $this->app = $app;
+        $this->app = $app->load('developer');
     }
 
     /**
@@ -30,6 +30,12 @@ class NewApp extends Mailable
      */
     public function build()
     {
-        return $this->subject('New App')->markdown('emails.new-app');
+        $email = $this->app->developer->email;
+
+        return $this->withSwiftMessage(function ($message) use ($email) {
+            $message->getHeaders()->addTextHeader('Reply-To', $email);
+        })
+            ->subject('New App')
+            ->markdown('emails.new-app');
     }
 }
