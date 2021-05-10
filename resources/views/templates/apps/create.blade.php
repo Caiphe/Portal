@@ -188,6 +188,8 @@
     }
 
     function handleBackButtonClick() {
+        var selectedProducts = null;
+
         for (var j = 0; j < backButtons.length; j++) {
 
             backButtons[j].addEventListener('click', function (event) {
@@ -205,6 +207,13 @@
                     form.firstElementChild.nextElementSibling.classList.add('active');
 
                     nav.firstElementChild.nextElementSibling.nextElementSibling.classList.remove('active');
+
+                    selectedProducts = document.querySelectorAll('.products .selected .buttons .done');
+                    for (var i = selectedProducts.length - 1; i >= 0; i--) {
+                        selectedProducts[i].classList.toggle('done');
+                        selectedProducts[i].classList.toggle('plus');
+                        selectedProducts[i].parentNode.parentNode.classList.remove('selected');
+                    }
                 }
             });
         }
