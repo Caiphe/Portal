@@ -70,14 +70,30 @@ class Product extends Model
         });
     }
 
+    public function scopeIsPublicWithPrivate($query)
+    {
+        return $query->hasSwagger()->where(function ($query) {
+            $query->where('access', 'public')
+                ->orWhere('access', 'private');
+        });
+    }
+
     public function scopeBasedOnUser($query, $user, $environment = 'prod')
     {
         if (config('app.env') === 'staging') {
             $environment = 'prod,staging';
         }
 
+        if ($user && $user->hasPermissionTo(['view_internal_products', 'view_private_products'])) {
+            return $query->isPublicWithPrivate()->orWhere(fn($q) => $q->isPublicWithInternal())->getEnvironment($environment);
+        }
+
         if ($user && $user->hasPermissionTo('view_internal_products')) {
             return $query->isPublicWithInternal()->getEnvironment($environment);
+        }
+
+        if ($user && $user->hasPermissionTo('view_private_products')) {
+            return $query->isPublicWithPrivate()->getEnvironment($environment);
         }
 
         return $query->isPublic()->getEnvironment($environment);
