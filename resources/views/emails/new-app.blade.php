@@ -1,10 +1,11 @@
 @component('mail::message')
-# A new app has been created
+# A new app from {{ $app->country->name }} has been created
 
 ## Details
 |                   |    |           |
 |:------------------|:---|:----------|
 | **App** | | {{ $app->display_name }} |
+| **Country** | | {{ $app->country->name }} |
 | **Developer** | | {{ $app->developer->full_name }} |
 | **Developer Email** | | <a href="mailto:{{ $app->developer->email }}">{{ $app->developer->email }}</a> |
 | **Products** | | {{ $app->products->implode('display_name', ', ') }} |

@@ -10,7 +10,7 @@ class ProductLocationService
 	public function fetch(array $pids = [], $pluck = "")
 	{
 		$products = empty($pids) ?
-			Product::with('category')->isPublic()->get() :
+			Product::with('category')->basedOnUser(auth()->user())->get() :
 			Product::with('category')->findMany($pids);
 
 		$countryCodes = $products->pluck('locations')->implode(',');

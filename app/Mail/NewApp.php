@@ -20,7 +20,7 @@ class NewApp extends Mailable
      */
     public function __construct(App $app)
     {
-        $this->app = $app->load('developer');
+        $this->app = $app->load(['developer', 'country']);
     }
 
     /**
