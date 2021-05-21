@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\App;
+use App\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -52,6 +53,18 @@ class AuthServiceProvider extends ServiceProvider
 
 		Gate::define('access-own-app', function ($user, App $app) {
 			return $app->developer_id === $user->developer_id;
+		});
+
+		Gate::define('access-hidden-products', function ($user) {
+			return $user->hasAnyPermissionTo(['view_internal_products', 'view_private_products']);
+		});
+
+		Gate::define('access-internal-products', function ($user) {
+			return $user->hasPermissionTo('view_internal_products');
+		});
+
+		Gate::define('access-private-products', function ($user) {
+			return $user->hasPermissionTo('view_private_products');
 		});
 	}
 }
