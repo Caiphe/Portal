@@ -17,15 +17,48 @@ function filterProducts(filterGroup) {
         );
         var categories = document.querySelectorAll(".category");
         for (var i = categories.length - 1; i >= 0; i--) {
-            categories[i].style.display = "none";
             if (
                 categoriesChecked.length === 0 ||
                 inCheckedArray(
                     categoriesChecked,
                     categories[i].dataset.category
                 )
-            )
+            ) {
                 categories[i].style.display = "flex";
+            } else {
+                categories[i].style.display = "none";
+            }
+        }
+    } else if (filterGroup === 'access') {
+        var accessChecked = document.querySelectorAll(".filter-access:checked");
+        var cardProducts = document.querySelectorAll('.card--product');
+        var categories = document.querySelectorAll('.category');
+        var accessCategories = {};
+
+        for (var i = cardProducts.length - 1; i >= 0; i--) {
+            if (
+                accessChecked.length === 0 ||
+                inCheckedArray(
+                    accessChecked,
+                    cardProducts[i].dataset.access
+                )
+            ) {
+                cardProducts[i].style.display = "flex";
+                accessCategories[cardProducts[i].dataset.category] = true;
+            } else {
+                cardProducts[i].style.display = "none";
+                if (accessCategories[cardProducts[i].dataset.category] === undefined) {
+                    accessCategories[cardProducts[i].dataset.category] = false;
+                }
+            }
+        }
+
+        for (var i = categories.length - 1; i >= 0; i--) {
+            if (accessCategories[categories[i].dataset.category.toLowerCase()]) {
+                categories[i].style.display = "flex";
+            } else {
+                categories[i].style.display = "none";
+            }
         }
     } else {
         var groupChecked = document.querySelectorAll(
@@ -35,8 +68,8 @@ function filterProducts(filterGroup) {
         var match = new RegExp(filterText, "gi");
         var countrySelect = getSelected(
             document.getElementById("filter-country")
-		);
-		var products = document.querySelectorAll(".card--product");
+        );
+        var products = document.querySelectorAll(".card--product");
         for (var i = products.length - 1; i >= 0; i--) {
             products[i].style.display = "none";
 
@@ -47,11 +80,11 @@ function filterProducts(filterGroup) {
             textValid =
                 filterText === "" || products[i].dataset.title.match(match);
 
-			var locations =
+            var locations =
                 products[i].dataset.locations !== undefined
                     ? products[i].dataset.locations.split(",")
-					: ["all"];
-			countriesValid =
+                    : ["all"];
+            countriesValid =
                 countrySelect.length === 0 ||
                 locations[0] === "all" ||
                 arrayCompare(locations, countrySelect);
@@ -92,8 +125,8 @@ function toggleFilter() {
         document.getElementById("clearFilter").style.display = "block";
     else if (
         groupChecked.length === 0 &&
-            categoriesChecked.length === 0 &&
-            countrySelect.length === 0 ||
+        categoriesChecked.length === 0 &&
+        countrySelect.length === 0 ||
         filterText.length === 0
     )
         document.getElementById("clearFilter").style.display = "none";
@@ -114,13 +147,13 @@ function clearFilter() {
     }
     var countrySelect = getSelected(document.getElementById("filter-country"));
     if (countrySelect.length > 0) {
-		clearSelected(document.getElementById("filter-country"));
+        clearSelected(document.getElementById("filter-country"));
         var multiselectTags = document.getElementById("filter-country-tags");
         while (multiselectTags.firstChild) {
             multiselectTags.removeChild(multiselectTags.firstChild);
         }
-	}
-	document.getElementById("filter-text").value = "";
+    }
+    document.getElementById("filter-text").value = "";
 
     var categories = document.querySelectorAll(".category");
     for (var i = categories.length - 1; i >= 0; i--) {
@@ -151,10 +184,10 @@ function getSelected(multiSelect) {
 }
 
 function clearSelected(multiselect) {
-	var elements = multiselect.options;
+    var elements = multiselect.options;
     for (var i = 0; i < elements.length; i++) {
         elements[i].selected = false;
-	}
+    }
 }
 
 function arrayCompare(a, b) {
