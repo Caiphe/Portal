@@ -26,6 +26,9 @@
                 @foreach ($tags as $tag)
                     <span class="tag outline yellow">{{$tag}}</span>
                 @endforeach
+                @if(isset($dataAccess) && $dataAccess !== 'public')
+                <span class="tag outline {{ $dataAccess }}">{{ $dataAccess }}</span>
+                @endif
             @endisset
             @isset($title)
             <h3 class="card__header">
