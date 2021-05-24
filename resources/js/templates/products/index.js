@@ -56,8 +56,11 @@ function filterProducts(filterGroup) {
 
         for (var i = categories.length - 1; i >= 0; i--) {
             if (
-                accessCategories[categories[i].dataset.category.toLowerCase()] && 
-                (categoriesChecked.length === 0 || inCheckedArray(accessChecked, categories[i]))
+                (accessChecked.length === 0 && inCheckedArray(categoriesChecked, categories[i])) ||
+                (
+                    accessCategories[categories[i].dataset.category.toLowerCase()] && 
+                    (categoriesChecked.length === 0 || inCheckedArray(accessChecked, categories[i]))
+                )
             ) {
                 categories[i].style.display = "flex";
             } else {
@@ -154,7 +157,7 @@ function clearFilter() {
     if (groupChecked.length > 0) {
         uncheckArray(groupChecked);
     }
-    
+
     if (countrySelect.length > 0) {
         clearSelected(document.getElementById("filter-country"));
         var multiselectTags = document.getElementById("filter-country-tags");
