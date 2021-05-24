@@ -31,6 +31,7 @@ function filterProducts(filterGroup) {
         }
     } else if (filterGroup === 'access') {
         var accessChecked = document.querySelectorAll(".filter-access:checked");
+        var categoriesChecked = document.querySelectorAll("input[name=Categories]:checked");
         var cardProducts = document.querySelectorAll('.card--product');
         var categories = document.querySelectorAll('.category');
         var accessCategories = {};
@@ -54,7 +55,10 @@ function filterProducts(filterGroup) {
         }
 
         for (var i = categories.length - 1; i >= 0; i--) {
-            if (accessCategories[categories[i].dataset.category.toLowerCase()]) {
+            if (
+                accessCategories[categories[i].dataset.category.toLowerCase()] && 
+                (categoriesChecked.length === 0 || inCheckedArray(accessChecked, categories[i]))
+            ) {
                 categories[i].style.display = "flex";
             } else {
                 categories[i].style.display = "none";
@@ -134,18 +138,23 @@ function toggleFilter() {
 
 //clears filter
 function clearFilter() {
-    var categoriesChecked = document.querySelectorAll(
-        "input[name=Categories]:checked"
-    );
+    var categoriesChecked = document.querySelectorAll("input[name=Categories]:checked");
+    var accessChecked = document.querySelectorAll(".filter-access:checked");
+    var groupChecked = document.querySelectorAll("input[name=Group]:checked");
+    var countrySelect = getSelected(document.getElementById("filter-country"));
+
     if (categoriesChecked.length > 0) {
         uncheckArray(categoriesChecked);
     }
 
-    var groupChecked = document.querySelectorAll("input[name=Group]:checked");
+    if (accessChecked.length > 0) {
+        uncheckArray(accessChecked);
+    }
+
     if (groupChecked.length > 0) {
         uncheckArray(groupChecked);
     }
-    var countrySelect = getSelected(document.getElementById("filter-country"));
+    
     if (countrySelect.length > 0) {
         clearSelected(document.getElementById("filter-country"));
         var multiselectTags = document.getElementById("filter-country-tags");

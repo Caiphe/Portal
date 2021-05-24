@@ -43,6 +43,11 @@ class ProductController extends Controller
 	public function show(Request $request, Product $product)
 	{
 		$product->load(['content', 'keyFeatures', 'category', 'countries']);
+		$user = $request->user();
+
+		if($product->access === 'private' && (!$user || !$user->hasRole('private'))){
+			abort(403);
+		}
 
 		$productList = Product::with('category')->basedOnUser($request->user())->get()->sortBy('category.title')->groupBy('category.title');
 		$content = [
