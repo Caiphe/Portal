@@ -16,7 +16,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        $category->load(['products', 'bundles', 'content']);
+        $category->load(['products' => fn ($q) => $q->where('access', 'public'), 'bundles', 'content']);
         $products = $category->products->shuffle()->take(3)->map(function ($product) {
             return [
                 'name' => $product['name'],

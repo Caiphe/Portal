@@ -1,3 +1,5 @@
+@import "../variables";
+
 .card--product {
     .card__content {
         // padding-bottom: 15px;
@@ -61,5 +63,15 @@
         a {
             margin-right: 5px;
         }
+    }
+
+    .tag.private {
+        border: 1px solid $red;
+        color: $red;
+    }
+
+    .tag.internal {
+        border: 1px solid $blue;
+        color: $blue;
     }
 }
