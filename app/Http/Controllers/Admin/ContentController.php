@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Content;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ContentController extends Controller
 {
@@ -47,7 +48,7 @@ class ContentController extends Controller
     public function updatePage(Content $content, Request $request)
     {
         $request->validate([
-            'title' => 'required|unique:contents'
+            'title' => ['required', Rule::unique('contents')->ignore($content->id),]
         ]);
 
         $content->update($request->only(['title', 'body']));
@@ -121,7 +122,7 @@ class ContentController extends Controller
     public function updateDoc(Content $content, Request $request)
     {
         $request->validate([
-            'title' => 'required|unique:contents'
+            'title' => ['required', Rule::unique('contents')->ignore($content->id)]
         ]);
 
         $content->update($request->only(['title', 'body']));
@@ -139,7 +140,7 @@ class ContentController extends Controller
         $request->validate([
             'title' => 'required|unique:contents'
         ]);
-        
+
         Content::create([
             'title' => $request->title,
             'body' => $request->body,
