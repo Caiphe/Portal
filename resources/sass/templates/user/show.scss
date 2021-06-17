@@ -212,3 +212,40 @@
         }
     }
 }
+
+#password-still-needs {
+    margin-top: 10px;
+    font-size: 12px;
+    color: $error;
+}
+
+#password-strength {
+    height: 34px;
+    line-height: 1;
+    background-color: $grey500;
+    border-radius: 5px;
+    padding: 0 20px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    color: $grey600;
+    transition: background-color 0.356s;
+
+    &.password-score-0,
+    &.password-score-1,
+    &.password-score-2 {
+        background-color: $error;
+        color: #FFF;
+    }
+
+    &.password-score-3,
+    &.password-score-4 {
+        background-color: $warning;
+        color: #FFF;
+    }
+
+    &.password-score-5 {
+        background-color: $success;
+        color: #FFF;
+    }
+}

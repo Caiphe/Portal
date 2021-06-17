@@ -15,7 +15,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class RegisterController extends Controller {
+class RegisterController extends Controller
+{
 	/*
 		    |--------------------------------------------------------------------------
 		    | Register Controller
@@ -41,7 +42,8 @@ class RegisterController extends Controller {
 	 *
 	 * @return void
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 		$this->middleware('guest');
 	}
 
@@ -50,7 +52,8 @@ class RegisterController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function showRegistrationForm(ProductLocationService $productLocationService) {
+	public function showRegistrationForm(ProductLocationService $productLocationService)
+	{
 		[$products, $locations] = $productLocationService->fetch();
 		$terms = Content::where('slug', 'terms-and-conditions')->first();
 
@@ -66,12 +69,22 @@ class RegisterController extends Controller {
 	 * @param  array  $data
 	 * @return \Illuminate\Contracts\Validation\Validator
 	 */
-	protected function validator(array $data) {
+	protected function validator(array $data)
+	{
 		return Validator::make($data, [
 			'first_name' => ['required', 'string', 'max:255'],
 			'last_name' => ['required', 'string', 'max:255'],
 			'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-			'password' => ['required', 'string', 'min:8', 'confirmed'],
+			'password' => [
+				'required',
+				'string',
+				'min:12',
+				'confirmed',
+				'regex:/[A-Z]/',
+				'regex:/[a-z]/',
+				'regex:/[0-9]/',
+				'regex:/\p{Z}|\p{S}|\p{P}/u'
+			],
 		]);
 	}
 
@@ -81,7 +94,8 @@ class RegisterController extends Controller {
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function register(Request $request) {
+	public function register(Request $request)
+	{
 		$data = $request->all();
 
 		$this->validator($data)->validate();
@@ -103,8 +117,8 @@ class RegisterController extends Controller {
 		}
 
 		return $request->wantsJson()
-		? new Response('', 201)
-		: redirect($this->redirectPath());
+			? new Response('', 201)
+			: redirect($this->redirectPath());
 	}
 
 	/**
@@ -113,7 +127,8 @@ class RegisterController extends Controller {
 	 * @param  array  $data
 	 * @return \App\User
 	 */
-	protected function create(array $data) {
+	protected function create(array $data)
+	{
 		$imageName = base64_encode('jsklaf88sfjdsfjl' . $data['email']) . '.svg';
 		$user = User::create([
 			'first_name' => $data['first_name'],

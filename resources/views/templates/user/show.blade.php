@@ -62,6 +62,8 @@ Update profile
                 <input type="password" name="password_confirmation" id="passwordConfirmation" placeholder="Confirm password" autocomplete="new-password">
                 <button type="button" class="fab show-password" onclick="togglePasswordVisibility(this)"></button>
             </label>
+            <div id="password-strength">Password strength</div>
+            <div id="password-still-needs" role="alert"></div>
             <h2>Your selected countries</h2>
             <div class="locations">
                 @foreach($locations as $location)
