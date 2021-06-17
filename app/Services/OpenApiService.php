@@ -8,19 +8,25 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * OpenApi class
  */
-class OpenApiService {
+class OpenApiService
+{
 	private $openApi;
 
-	function __construct($openApi) {
+	function __construct($openApi)
+	{
 		$this->openApi = self::yamlToJson($openApi);
 		$this->auth = $this->buildAuth();
+
+		$this->openApi['basePath'] ??= '';
 	}
 
-	public static function yamlToJson($openApi) {
+	public static function yamlToJson($openApi)
+	{
 		return Yaml::parse(file_get_contents(public_path() . "/openapi/" . $openApi));
 	}
 
-	public function buildOpenApiJson() {
+	public function buildOpenApiJson()
+	{
 		$openApiJson = [
 			"info" => [
 				"name" => $this->openApi['info']['title'],
@@ -33,7 +39,8 @@ class OpenApiService {
 		return $openApiJson;
 	}
 
-	protected function buildItems() {
+	protected function buildItems()
+	{
 		$items = [];
 		$i = 0;
 		$params = [];
@@ -61,9 +68,12 @@ class OpenApiService {
 				}
 
 				$requestName =
-				$request['summary'] ??
-				$request['name'] ??
-				Str::slug($url);
+					$request['summary'] ??
+					$request['name'] ??
+					Str::slug($url);
+
+				$headers = $this->buildFormHeader($request['parameters']);
+				$parameters = $this->buildFormData($request['parameters']);
 
 				$items[] = [
 					"name" => $requestName,
@@ -71,20 +81,20 @@ class OpenApiService {
 					"request" => [
 						"auth" => $this->auth,
 						"method" => ucwords($method),
-						"header" => $this->buildFormHeader(
-							$request['parameters']
-						),
+						"header" => $headers,
 						"url" => [
-							"raw" => $this->openApi['host'] . $url,
+							"raw" => $this->openApi['host'] . preg_replace('/\/$/', '', $this->openApi['basePath']) . $url,
 							"protocol" => "https",
 							"host" => explode('.', $this->openApi['host']),
 							"path" => $urlParts,
 						],
+						"code" => [
+							'curl' => $this->getCurlCode($url, $method, $headers, $parameters)
+						]
 					],
 					"response" => $this->buildResponses($request['responses']),
 				];
 
-				$parameters = $this->buildFormData($request['parameters']);
 				if (isset($parameters['query'])) {
 					$items[$i]['request']['url']['query'] =
 						$parameters['query'];
@@ -100,7 +110,8 @@ class OpenApiService {
 		return $items;
 	}
 
-	protected function buildFormData($parameters) {
+	protected function buildFormData($parameters)
+	{
 		$queries = array_filter($parameters, function ($parameter) {
 			return $parameter['in'] === 'query' || $parameter['in'] === 'body';
 		});
@@ -142,7 +153,8 @@ class OpenApiService {
 		);
 	}
 
-	protected function buildFormDataFromRef($ref, $aditionalInfo = '') {
+	protected function buildFormDataFromRef($ref, $aditionalInfo = '')
+	{
 		$properties = [];
 		if (gettype($ref) === 'string') {
 			$definition = explode('/', $ref);
@@ -153,13 +165,13 @@ class OpenApiService {
 					"key" => $aditionalInfo,
 					"value" =>
 					isset($definition['default']) &&
-					$definition['default'] !== 'null'
-					? $definition['default']
-					: '',
+						$definition['default'] !== 'null'
+						? $definition['default']
+						: '',
 					"description" =>
 					$definition['description'] ??
-					implode(', ', $definition['enum']) ??
-					'',
+						implode(', ', $definition['enum']) ??
+						'',
 					"required" => $definition['required'] ?? 0,
 					"type" => $definition['type'],
 				];
@@ -169,8 +181,8 @@ class OpenApiService {
 					"value" => $definition['default'] ?? '',
 					"description" =>
 					$definition['description'] ??
-					implode(', ', $definition['enum']) ??
-					'',
+						implode(', ', $definition['enum']) ??
+						'',
 					"required" => $definition['required'] ?? 0,
 					"type" => $definition['type'],
 				];
@@ -216,9 +228,9 @@ class OpenApiService {
 				"key" => $property,
 				"value" =>
 				isset($properties[$property]['default']) &&
-				$properties[$property]['default'] !== 'null'
-				? $properties[$property]['default']
-				: '',
+					$properties[$property]['default'] !== 'null'
+					? $properties[$property]['default']
+					: '',
 				"description" => $properties[$property]['description'] ?? '',
 				"required" => +in_array($property, $required),
 				"type" => $properties[$property]['type'] ?? '',
@@ -226,7 +238,8 @@ class OpenApiService {
 		}, $propertyKeys);
 	}
 
-	protected function buildFormHeader($parameters) {
+	protected function buildFormHeader($parameters)
+	{
 		$queries = array_filter($parameters, function ($parameter) {
 			return $parameter['in'] === 'header';
 		});
@@ -249,7 +262,8 @@ class OpenApiService {
 		}, $queries);
 	}
 
-	protected function buildAuth() {
+	protected function buildAuth()
+	{
 		if (!isset($this->openApi['securityDefinitions'])) {
 			return [];
 		}
@@ -267,7 +281,8 @@ class OpenApiService {
 		return $this->$authMethodCall($authMethod);
 	}
 
-	protected function getApikey($details) {
+	protected function getApikey($details)
+	{
 		return [
 			"type" => "apikey",
 			"apikey" => [
@@ -280,7 +295,8 @@ class OpenApiService {
 		];
 	}
 
-	protected function getOauth2($details) {
+	protected function getOauth2($details)
+	{
 		return [
 			"type" => "oauth2",
 			"oauth2" => [
@@ -293,15 +309,16 @@ class OpenApiService {
 		];
 	}
 
-	protected function buildResponses($responses) {
+	protected function buildResponses($responses)
+	{
 		$responseKeys = array_keys($responses);
 
 		$r = array_reduce(
 			$responseKeys,
 			function ($carry, $key) use ($responses) {
 				$schema = isset($responses[$key]['schema'])
-				? $this->buildResponsesBody($responses[$key]['schema'])
-				: [];
+					? $this->buildResponsesBody($responses[$key]['schema'])
+					: [];
 				$body = $this->buildResponsesExample($schema);
 				$item = [
 					"code" => $key,
@@ -338,7 +355,8 @@ class OpenApiService {
 		return $r;
 	}
 
-	protected function buildResponsesBody($schema, $extraData = []) {
+	protected function buildResponsesBody($schema, $extraData = [])
+	{
 		if (isset($schema['$ref'])) {
 			$definition = explode('/', $schema['$ref']);
 			$definition = $this->openApi[$definition[1]][$definition[2]];
@@ -354,12 +372,12 @@ class OpenApiService {
 				"type" => $definition["type"],
 				"default" =>
 				isset($definition['default']) &&
-				$definition['default'] !== 'null'
-				? $definition['default']
-				: '',
+					$definition['default'] !== 'null'
+					? $definition['default']
+					: '',
 				"description" =>
 				$definition["definition"] ??
-				implode(',', $definition['enum']),
+					implode(',', $definition['enum']),
 			];
 		}
 
@@ -406,7 +424,8 @@ class OpenApiService {
 		return $body;
 	}
 
-	private function buildResponsesExample($schema, $level = 0) {
+	private function buildResponsesExample($schema, $level = 0)
+	{
 		$exampleKeys = array_keys($schema);
 		$types = ["string" => "string", "integer" => 1, "boolean" => true, "array" => [], "object" => []];
 		$example = array_reduce(
@@ -429,11 +448,11 @@ class OpenApiService {
 				}
 
 				$carry[$key] =
-				isset($schema[$key]['default']) &&
-				!empty($schema[$key]['default']) &&
-				$schema[$key]['default'] !== 'null'
-				? $schema[$key]['default']
-				: $types[$schema[$key]['type']] ?? '';
+					isset($schema[$key]['default']) &&
+					!empty($schema[$key]['default']) &&
+					$schema[$key]['default'] !== 'null'
+					? $schema[$key]['default']
+					: $types[$schema[$key]['type']] ?? '';
 
 				return $carry;
 			},
@@ -447,7 +466,66 @@ class OpenApiService {
 		return $example;
 	}
 
-	private function getStatusCode($status, $description) {
+	/**
+	 * Gets the curl code.
+	 *
+	 * @param      string  $url         The url
+	 * @param      string  $method      The method
+	 * @param      array   $headers     The headers
+	 * @param      array   $parameters  The parameters
+	 *
+	 * @return     string  The curl code.
+	 */
+	protected function getCurlCode(string $url, string $method, array $headers, array $parameters): string
+	{
+		$method = strtoupper($method);
+		$basePath = preg_replace('/\/$/', '', $this->openApi['basePath']);
+		$query = '';
+
+		if (isset($parameters['query'])) {
+			$queryArr = [];
+
+			foreach ($parameters['query'] as $q) {
+				if ($q['type'] === 'integer') {
+					$queryArr[] = "{$q['key']}=" . ($q['value'] ?: 1);
+				} else {
+					$queryArr[] = "{$q['key']}=" . ($q['value'] ?: 'string');
+				}
+			}
+
+			$query = '?' . implode('&', $queryArr);
+		}
+
+		$curl = "curl --location --request {$method} 'https://{$this->openApi['host']}{$basePath}{$url}{$query}'\n";
+
+		if (isset($this->openApi['securityDefinitions']['OAuth2'])) {
+			$tokenUrl = $this->openApi['securityDefinitions']['OAuth2']['tokenUrl'] ?? '';
+			$curl .= "\t--header Authorization: 'token' //{$tokenUrl}\n";
+		}
+
+		foreach ($headers as $header) {
+			$curl .= "\t--header '{$header['key']}': '{$header['value']}'\n";
+		}
+
+		if (isset($parameters['body']['formdata'])) {
+			$curl .= "\t--data-raw {\n";
+			foreach ($parameters['body']['formdata'] as $formData) {
+				if ($formData['type'] === 'integer') {
+					$formData['value'] = $formData['value'] ? $formData['value'] : 1;
+					$curl .= "\t\t{$formData['key']}: {$formData['value']},\n";
+				} else {
+					$formData['value'] = $formData['value'] ? $formData['value'] : 'string';
+					$curl .= "\t\t{$formData['key']}: '{$formData['value']}',\n";
+				}
+			}
+			$curl .= "\t}";
+		}
+
+		return $curl;
+	}
+
+	private function getStatusCode($status, $description)
+	{
 		return [
 			100 => "Continue",
 			101 => "Switching Protocols",

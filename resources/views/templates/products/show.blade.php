@@ -67,11 +67,15 @@
                     <div class="specification-detail">
                         <div class="endpoint" onclick="toggleParent(this)">
                             @svg('chevron-right') <span class="tag {{strtolower($spec['request']['method'])}}">{{strtoupper($spec['request']['method'])}}</span> {{implode('/', $spec['request']['url']['path'])}}
+
+                            @if(!empty($spec['description']))
+                            <p class="specification-description">{{ $spec['description'] }}</p>
+                            @endif
                         </div>
 
-                        <x-products.options :description="$spec['description']" :request="$spec['request']"/>
+                        <x-products.options :request="$spec['request']"/>
 
-                        <x-products.breakdown :responses="$spec['response']"/>
+                        <x-products.breakdown :responses="$spec['response']" :request="$spec['request']"/>
                     </div>
                 @endforeach
                 @else
