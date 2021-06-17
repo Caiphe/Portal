@@ -57,11 +57,18 @@ class UserController extends Controller
 		$user = $request->user();
 
 		if ($request->email !== $user->email) {
-			$validateOn = array_merge($validateOn, ['email' => 'email|required|unique:users,email']);
+			$validateOn = array_merge($validateOn, ['email' => 'email:filter|required|unique:users,email']);
 		}
 
 		if ($request->password !== null) {
-			$validateOn = array_merge($validateOn, ['password' => 'confirmed']);
+			$validateOn = array_merge($validateOn, ['password' => [
+				'confirmed',
+				'min:12',
+				'regex:/[A-Z]/',
+				'regex:/[a-z]/',
+				'regex:/[0-9]/',
+				'regex:/\p{Z}|\p{S}|\p{P}/u'
+			]]);
 		}
 
 		$validatedData = $request->validate($validateOn);
