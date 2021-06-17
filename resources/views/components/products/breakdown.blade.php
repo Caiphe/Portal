@@ -1,4 +1,11 @@
+@props(['responses', 'request'])
+
 <div class="specification-responses">
+    <h4>Request</h4>
+    <div class="specification-request">
+        <pre><code>{{ $request['code']['curl'] }}</code></pre>
+    </div>
+    <h4>Responses</h4>
     @foreach($responses as $response)
     <div class="specification-response @if ($loop->last) last @endif">
         @if(!empty($response['schema']))
