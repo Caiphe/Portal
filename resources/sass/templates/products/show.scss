@@ -284,7 +284,7 @@
         max-width: 150px;
     }
 
-    .specification-description{
+    .specification-description {
         width: 100%;
         margin: 6px 0 0 38px;
     }
@@ -422,11 +422,17 @@
         }
     }
 
+    .specification-request {
+        pre {
+            tab-size: 16px;
+            white-space: pre-wrap;
+        }
+    }
+
     .specification-options {
         display: none;
-        flex: 0 1 32%;
+        flex: 0 1 40%;
         margin-top: 50px;
-        margin-right: $gutter;
     }
 
     .specification-responses {
