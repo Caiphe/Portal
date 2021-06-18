@@ -275,11 +275,11 @@
                 for (var k = 0; k < locations.length; k++) {
                     if(selectedCountry[j] === locations[k] || locations[k] === 'all') {
                         return true;
-                    } else {
-                        return false;
                     }
                 }
             }
+
+            return false;
         }
 
         var addProductButtons = document.querySelectorAll('[data-title] a');
