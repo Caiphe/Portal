@@ -125,7 +125,7 @@ class LoginController extends Controller
             "email" => $user->email,
             "firstName" => $user->first_name,
             "lastName" => $user->last_name,
-            "userName" => $user->username,
+            "userName" => $user->first_name . $user->last_name,
             "attributes" => [
                 [
                     "name" => "MINT_DEVELOPER_LEGAL_NAME",
