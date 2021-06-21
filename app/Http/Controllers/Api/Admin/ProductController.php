@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Exception\ParseException;
 
@@ -23,6 +24,8 @@ class ProductController extends Controller
         $filename = $product->slug . '.yaml';
         $path = $request->file('openApi')->storeAs('openapi', $filename, 'app');
         $product->update(['swagger' => $filename]);
+
+        Cache::forget($product->slug . '-specification');
 
         return response()->json([
             'success' => true,

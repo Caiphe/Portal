@@ -88,9 +88,7 @@ class OpenApiService
 							"host" => explode('.', $this->openApi['host']),
 							"path" => $urlParts,
 						],
-						"code" => [
-							'curl' => $this->getCurlCode($url, $method, $headers, $parameters)
-						]
+						"code" => $this->getCode($url, $method, $headers, $parameters)
 					],
 					"response" => $this->buildResponses($request['responses']),
 				];
@@ -295,7 +293,7 @@ class OpenApiService
 		];
 	}
 
-	protected function getOauth2($details)
+	protected function getOauth2()
 	{
 		return [
 			"type" => "oauth2",
@@ -355,7 +353,7 @@ class OpenApiService
 		return $r;
 	}
 
-	protected function buildResponsesBody($schema, $extraData = [])
+	protected function buildResponsesBody($schema)
 	{
 		if (isset($schema['$ref'])) {
 			$definition = explode('/', $schema['$ref']);
@@ -393,7 +391,7 @@ class OpenApiService
 
 		$body = array_reduce(
 			$propKeys,
-			function ($carry, $key) use ($props, $extraData) {
+			function ($carry, $key) use ($props) {
 				$p = [];
 				if (isset($props[$key]['additionalProperties'])) {
 					$p = $props[$key]['additionalProperties'];
@@ -435,10 +433,18 @@ class OpenApiService
 					$carry[$key] = $schema[$key]['example'];
 					return $carry;
 				}
-				if (
-					!isset($schema[$key]['type']) ||
-					gettype($schema[$key]['type']) === 'array'
+				if (!isset($schema[$key]['type']) && isset($schema[$key]['properties'])) {
+					$schema[$key]['type'] = 'array';
+				} else if (
+					!isset($schema[$key]['type']) &&
+					isset($schema[$key]['example'])
 				) {
+					$schema[$key]['type'] = gettype($schema[$key]['example']);
+				} else {
+					$schema[$key]['type'] = "array";
+				}
+
+				if (gettype($schema[$key]['type']) === 'array') {
 					$carry[$key] = $this->buildResponsesExample(
 						$schema[$key],
 						1
@@ -467,18 +473,20 @@ class OpenApiService
 	}
 
 	/**
-	 * Gets the curl code.
+	 * Gets the code examples.
 	 *
 	 * @param      string  $url         The url
 	 * @param      string  $method      The method
 	 * @param      array   $headers     The headers
 	 * @param      array   $parameters  The parameters
 	 *
-	 * @return     string  The curl code.
+	 * @return     array  The code examples.
 	 */
-	protected function getCurlCode(string $url, string $method, array $headers, array $parameters): string
+	protected function getCode(string $url, string $method, array $headers, array $parameters): array
 	{
-		$method = strtoupper($method);
+		$code = [];
+		$files = \File::allFiles(resource_path('views/stubs/code'));
+		$type = [];
 		$basePath = preg_replace('/\/$/', '', $this->openApi['basePath']);
 		$query = '';
 
@@ -496,32 +504,30 @@ class OpenApiService
 			$query = '?' . implode('&', $queryArr);
 		}
 
-		$curl = "curl --location --request {$method} 'https://{$this->openApi['host']}{$basePath}{$url}{$query}'\n";
+		$url = "https://{$this->openApi['host']}{$basePath}{$url}{$query}";
 
 		if (isset($this->openApi['securityDefinitions']['OAuth2'])) {
 			$tokenUrl = $this->openApi['securityDefinitions']['OAuth2']['tokenUrl'] ?? '';
-			$curl .= "\t--header Authorization: 'token' //{$tokenUrl}\n";
+			array_unshift($headers, [
+				'key' => 'Authorization',
+				'name' => 'Authorization',
+				'type' => 'string',
+				'description' => '',
+				'value' => 'token // ' . $tokenUrl
+			]);
 		}
 
-		foreach ($headers as $header) {
-			$curl .= "\t--header '{$header['key']}': '{$header['value']}'\n";
+		foreach ($files as $file) {
+			preg_match('/\/([^\.\/]*).blade.php$/', (string)$file, $type);
+			$code[$type[1]] = view("stubs.code.{$type[1]}", [
+				'url' => $url,
+				'method' => $method,
+				'headers' => $headers,
+				'parameters' => $parameters,
+			])->render();
 		}
 
-		if (isset($parameters['body']['formdata'])) {
-			$curl .= "\t--data-raw {\n";
-			foreach ($parameters['body']['formdata'] as $formData) {
-				if ($formData['type'] === 'integer') {
-					$formData['value'] = $formData['value'] ? $formData['value'] : 1;
-					$curl .= "\t\t{$formData['key']}: {$formData['value']},\n";
-				} else {
-					$formData['value'] = $formData['value'] ? $formData['value'] : 'string';
-					$curl .= "\t\t{$formData['key']}: '{$formData['value']}',\n";
-				}
-			}
-			$curl .= "\t}";
-		}
-
-		return $curl;
+		return $code;
 	}
 
 	private function getStatusCode($status, $description)
