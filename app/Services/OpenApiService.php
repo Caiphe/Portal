@@ -16,6 +16,8 @@ class OpenApiService
 	{
 		$this->openApi = self::yamlToJson($openApi);
 		$this->auth = $this->buildAuth();
+
+		$this->openApi['basePath'] ??= '';
 	}
 
 	public static function yamlToJson($openApi)
@@ -70,26 +72,27 @@ class OpenApiService
 					$request['name'] ??
 					Str::slug($url);
 
+				$headers = $this->buildFormHeader($request['parameters']);
+				$parameters = $this->buildFormData($request['parameters']);
+
 				$items[] = [
 					"name" => $requestName,
 					"description" => $request['description'] ?? '',
 					"request" => [
 						"auth" => $this->auth,
 						"method" => ucwords($method),
-						"header" => $this->buildFormHeader(
-							$request['parameters']
-						),
+						"header" => $headers,
 						"url" => [
-							"raw" => $this->openApi['host'] . $url,
+							"raw" => $this->openApi['host'] . preg_replace('/\/$/', '', $this->openApi['basePath']) . $url,
 							"protocol" => "https",
 							"host" => explode('.', $this->openApi['host']),
 							"path" => $urlParts,
 						],
+						"code" => $this->getCode($url, $method, $headers, $parameters)
 					],
 					"response" => $this->buildResponses($request['responses']),
 				];
 
-				$parameters = $this->buildFormData($request['parameters']);
 				if (isset($parameters['query'])) {
 					$items[$i]['request']['url']['query'] =
 						$parameters['query'];
@@ -110,42 +113,35 @@ class OpenApiService
 		$queries = array_filter($parameters, function ($parameter) {
 			return $parameter['in'] === 'query' || $parameter['in'] === 'body';
 		});
+		$resp = [];
 
-		return array_reduce(
-			$queries,
-			function ($carry, $query) {
-				if (isset($query['schema'])) {
-					if ($query['in'] === 'body') {
-						$schemaFormData = [
-							'body' => [
-								"mode" => "formdata",
-								"formdata" => $this->buildFormDataFromRef(
-									$query['schema']['$ref']
-								),
-							],
-						];
-					} else {
-						$schemaFormData = [
-							$query['in'] => $this->buildFormDataFromRef(
-								$query['schema']['$ref']
-							),
-						];
-					}
-					return array_merge($carry, $schemaFormData);
+		foreach ($queries as $query) {
+			if (isset($query['schema'])) {
+				if ($query['in'] === 'body') {
+					$schemaFormData = [
+						'body' => [
+							"mode" => "formdata",
+							"formdata" => $this->buildFormDataFromRef($query['schema']['$ref'] ?? $query['schema']['properties']),
+						],
+					];
+				} else {
+					$schemaFormData = [
+						$query['in'] => $this->buildFormDataFromRef($query['schema']['$ref']),
+					];
 				}
+				return array_merge($resp, $schemaFormData);
+			}
 
-				$carry[$query['in']][] = [
-					"key" => $query['name'],
-					"value" => '',
-					"required" => $query['required'] ?? 0,
-					"type" => $query['type'],
-					"description" => $query['description'] ?? '',
-				];
+			$resp[$query['in']][] = [
+				"key" => $query['name'],
+				"value" => '',
+				"required" => $query['required'] ?? 0,
+				"type" => $query['type'],
+				"description" => $query['description'] ?? '',
+			];
+		}
 
-				return $carry;
-			},
-			[]
-		);
+		return $resp;
 	}
 
 	protected function buildFormDataFromRef($ref, $aditionalInfo = '')
@@ -188,6 +184,15 @@ class OpenApiService
 				$definitionKey = array_keys($definition)[0];
 				$properties = $definition[$definitionKey]['properties'];
 			} else {
+				if ($aditionalInfo !== '' && isset($definition['type']) && $definition['type'] === 'object') {
+					return [
+						"key" => $aditionalInfo,
+						"value" => $this->parseDefinitionProperties($definition['properties']),
+						"description" => $this->parseFromDataObjectDesc($definition),
+						"required" => $definition['required'] ?? 0,
+						"type" => $definition['type'],
+					];
+				}
 				$properties = $definition['properties'];
 			}
 		} else {
@@ -196,6 +201,7 @@ class OpenApiService
 
 		$required = $definition['required'] ?? [];
 		$propertyKeys = array_keys($properties);
+
 		return array_map(function ($property) use ($properties, $required) {
 			if (isset($properties[$property]['additionalProperties'])) {
 				return $this->buildFormDataFromRef(
@@ -215,7 +221,7 @@ class OpenApiService
 				$properties[$property]['type'] === 'object'
 			) {
 				return $this->buildFormDataFromRef(
-					$properties[$property]['properties']
+					$properties[$property]['properties'],
 				);
 			}
 
@@ -231,6 +237,46 @@ class OpenApiService
 				"type" => $properties[$property]['type'] ?? '',
 			];
 		}, $propertyKeys);
+	}
+
+	protected function parseFromDataObjectDesc(array $definition): string
+	{
+		$def = ($definition['description'] ?? '') . '<br>Properties:<br>';
+		foreach ($definition['properties'] as $key => $prop) {
+			$def .= "&nbsp;&nbsp;&nbsp;&nbsp;$key:<br>";
+			if (isset($prop['type'])) {
+				$def .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type: {$prop['type']}<br>";
+			}
+			if (isset($prop['description'])) {
+				$def .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;description: {$prop['description']}<br>";
+			}
+			if (isset($prop['enum'])) {
+				$def .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;options: " . implode(', ', $prop['enum']) . "<br>";
+			}
+			if (isset($prop['example'])) {
+				$def .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;example: {$prop['example']}<br>";
+			}
+		}
+
+		return $def;
+	}
+
+	/**
+	 * Parse the definition properties from an object
+	 *
+	 * @param      array   $properties  The properties
+	 *
+	 * @return     string  Returns a json encoded string of the object values
+	 */
+	protected function parseDefinitionProperties(array $properties): string
+	{
+		$resp = [];
+
+		foreach ($properties as $key => $prop) {
+			$resp[$key] = $this->getValue($prop['example'] ?? $prop['value'] ?? '', $prop['type'] ?? '');
+		}
+
+		return json_encode($resp, JSON_PRETTY_PRINT);
 	}
 
 	protected function buildFormHeader($parameters)
@@ -290,7 +336,7 @@ class OpenApiService
 		];
 	}
 
-	protected function getOauth2($details)
+	protected function getOauth2()
 	{
 		return [
 			"type" => "oauth2",
@@ -350,7 +396,7 @@ class OpenApiService
 		return $r;
 	}
 
-	protected function buildResponsesBody($schema, $extraData = [])
+	protected function buildResponsesBody($schema)
 	{
 		if (isset($schema['$ref'])) {
 			$definition = explode('/', $schema['$ref']);
@@ -388,7 +434,7 @@ class OpenApiService
 
 		$body = array_reduce(
 			$propKeys,
-			function ($carry, $key) use ($props, $extraData) {
+			function ($carry, $key) use ($props) {
 				$p = [];
 				if (isset($props[$key]['additionalProperties'])) {
 					$p = $props[$key]['additionalProperties'];
@@ -426,14 +472,22 @@ class OpenApiService
 		$example = array_reduce(
 			$exampleKeys,
 			function ($carry, $key) use ($schema, $types) {
-				if (isset($schema[$key]['example']) && isset($schema[$key]['type']) && $schema[$key]['type'] === 'object') {
+				if (isset($schema[$key]['example']) && $schema[$key]['type'] === 'object') {
 					$carry[$key] = $schema[$key]['example'];
 					return $carry;
 				}
-				if (
-					!isset($schema[$key]['type']) ||
-					gettype($schema[$key]['type']) === 'array'
+				if (!isset($schema[$key]['type']) && isset($schema[$key]['properties'])) {
+					$schema[$key]['type'] = 'array';
+				} else if (
+					!isset($schema[$key]['type']) &&
+					isset($schema[$key]['example'])
 				) {
+					$schema[$key]['type'] = gettype($schema[$key]['example']);
+				} else {
+					$schema[$key]['type'] = "array";
+				}
+
+				if (gettype($schema[$key]['type']) === 'array') {
 					$carry[$key] = $this->buildResponsesExample(
 						$schema[$key],
 						1
@@ -459,6 +513,104 @@ class OpenApiService
 		}
 
 		return $example;
+	}
+
+	/**
+	 * Determins the value
+	 *
+	 * @param      bool|float|int|string  $value  The value
+	 * @param      bool|float|int|string  $type   The type
+	 *
+	 * @return     bool|float|int|string  The value.
+	 */
+	protected function getValue($value, $type)
+	{
+		if ($value !== '') {
+			switch ($type) {
+				case 'string':
+					return $value;
+					break;
+				case 'integer':
+					return (int)$value;
+					break;
+				case 'float':
+					return (float)$value;
+					break;
+				case 'boolean':
+					return $value === 'true' ? 'true' : 'false';
+					break;
+				default:
+					return $value;
+					break;
+			}
+		} else {
+			return [
+				'string' => "string",
+				'integer' => 1,
+				'float' => 1.00,
+				'array' => '[]',
+				'object' => '{}',
+				'boolean' => true,
+			][$type] ?? "string";
+		}
+	}
+
+	/**
+	 * Gets the code examples.
+	 *
+	 * @param      string  $url         The url
+	 * @param      string  $method      The method
+	 * @param      array   $headers     The headers
+	 * @param      array   $parameters  The parameters
+	 *
+	 * @return     array  The code examples.
+	 */
+	protected function getCode(string $url, string $method, array $headers, array $parameters): array
+	{
+		$code = [];
+		$files = \File::allFiles(resource_path('views/stubs/code'));
+		$type = [];
+		$basePath = preg_replace('/\/$/', '', $this->openApi['basePath']);
+		$query = '';
+
+		if (isset($parameters['query'])) {
+			$queryArr = [];
+
+			foreach ($parameters['query'] as $q) {
+				if ($q['type'] === 'integer') {
+					$queryArr[] = "{$q['key']}=" . ($q['value'] ?: 1);
+				} else {
+					$queryArr[] = "{$q['key']}=" . ($q['value'] ?: 'string');
+				}
+			}
+
+			$query = '?' . implode('&', $queryArr);
+		}
+
+		$url = "https://{$this->openApi['host']}{$basePath}{$url}{$query}";
+
+		if (isset($this->openApi['securityDefinitions']['OAuth2'])) {
+			$tokenUrl = $this->openApi['securityDefinitions']['OAuth2']['tokenUrl'] ?? '';
+			array_unshift($headers, [
+				'key' => 'Authorization',
+				'name' => 'Authorization',
+				'type' => 'string',
+				'description' => '',
+				'value' => 'token // ' . $tokenUrl
+			]);
+		}
+
+		foreach ($files as $file) {
+			preg_match('/\/([^\.\/]*).blade.php$/', (string)$file, $type);
+			$code[$type[1]] = view("stubs.code.{$type[1]}", [
+				'url' => $url,
+				'method' => $method,
+				'headers' => $headers,
+				'parameters' => $parameters,
+			])->render();
+		}
+
+		return $code;
 	}
 
 	private function getStatusCode($status, $description)

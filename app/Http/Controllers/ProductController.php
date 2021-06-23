@@ -7,6 +7,7 @@ use App\Country;
 use App\Product;
 use App\Services\OpenApiService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class ProductController extends Controller
 {
@@ -22,7 +23,7 @@ class ProductController extends Controller
 		$productLocations = $products->pluck('locations')->implode(',');
 		$locations = array_unique(explode(',', $productLocations));
 		$countries = Country::whereIn('code', $locations)->pluck('name', 'code');
-        $content = Content::where('contentable_type', 'Products')->get();
+		$content = Content::where('contentable_type', 'Products')->get();
 
 		return view('templates.products.index', [
 			'productsCollection' => $productsCollection,
@@ -44,7 +45,6 @@ class ProductController extends Controller
 	{
 		$product->load(['content', 'keyFeatures', 'category', 'countries']);
 		$user = $request->user();
-
 		if(
 			($product->access === 'private' && (!$user || !$user->hasPermissionTo('view_private_products'))) ||
 			($product->access === 'internal' && (!$user || !$user->hasPermissionTo('view_internal_products')))
@@ -112,14 +112,17 @@ class ProductController extends Controller
 			]);
 		}
 
-		$openApiClass = new OpenApiService($product->swagger);
+		$specification = Cache::rememberForever(
+			$product->slug . '-specification',
+			fn () => (new OpenApiService($product->swagger))->buildOpenApiJson()
+		);
 
 		return view('templates.products.show', [
 			"product" => $product,
 			"sidebarAccordion" => $sidebarAccordion,
 			"content" => $content,
 			"startingPoint" => $startingPoint,
-			"specification" => $openApiClass->buildOpenApiJson(),
+			"specification" => $specification,
 			"alternatives" => $alternatives,
 		]);
 	}
