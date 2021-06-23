@@ -121,14 +121,12 @@ class OpenApiService
 					$schemaFormData = [
 						'body' => [
 							"mode" => "formdata",
-							"formdata" => $this->buildFormDataFromRef($query['schema']['$ref'] ?? $query['schema']),
+							"formdata" => $this->buildFormDataFromRef($query['schema']['$ref'] ?? $query['schema']['properties']),
 						],
 					];
 				} else {
 					$schemaFormData = [
-						$query['in'] => $this->buildFormDataFromRef(
-							$query['schema']['$ref']
-						),
+						$query['in'] => $this->buildFormDataFromRef($query['schema']['$ref']),
 					];
 				}
 				return array_merge($resp, $schemaFormData);
@@ -203,6 +201,7 @@ class OpenApiService
 
 		$required = $definition['required'] ?? [];
 		$propertyKeys = array_keys($properties);
+
 		return array_map(function ($property) use ($properties, $required) {
 			if (isset($properties[$property]['additionalProperties'])) {
 				return $this->buildFormDataFromRef(
@@ -222,7 +221,7 @@ class OpenApiService
 				$properties[$property]['type'] === 'object'
 			) {
 				return $this->buildFormDataFromRef(
-					$properties[$property]['properties']
+					$properties[$property]['properties'],
 				);
 			}
 
