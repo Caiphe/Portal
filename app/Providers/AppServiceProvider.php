@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\Observers\ProductObserver;
-use App\Product;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
@@ -50,7 +48,7 @@ class AppServiceProvider extends ServiceProvider
                             echo $value === 'true' ? 'true' : 'false';
                             break;
                         default:
-                            echo '"' . $value . '"';
+                            echo $value;
                             break;
                     }
                 } else {
@@ -59,6 +57,8 @@ class AppServiceProvider extends ServiceProvider
                         'integer' => 1,
                         'float' => 1.00,
                         'boolean' => true,
+                        'array' => '[]',
+                        'object' => '{}',
                     ][$type] ?? '"string"';
                 }
             ?>
