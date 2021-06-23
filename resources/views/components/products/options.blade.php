@@ -33,7 +33,7 @@
     <h4 class="collapseable" onclick="toggleParameters(this)">@svg('chevron-right') FormData parameters</h4>
     <div class="parameters">
         @foreach($request['body']['formdata'] as $parameter)
-        <x-products.parameter :title="$parameter['key']" :type="$parameter['type']" :required="$parameter['required'] ?? 0" state="open">{!! $parameter['description'] !!}</x-products.parameter>
+        <x-products.parameter :title="$parameter['key']" :type="$parameter['type']" :required="$parameter['required'] ?? 0">{!! $parameter['description'] !!}</x-products.parameter>
         @endforeach
     </div>
     @endif
