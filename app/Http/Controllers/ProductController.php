@@ -110,10 +110,12 @@ class ProductController extends Controller
 			]);
 		}
 
-		$specification = Cache::rememberForever(
-			$product->slug . '-specification',
-			fn () => (new OpenApiService($product->swagger))->buildOpenApiJson()
-		);
+		// $specification = Cache::rememberForever(
+		// 	$product->slug . '-specification',
+		// 	fn () => (new OpenApiService($product->swagger))->buildOpenApiJson()
+		// );
+
+		$specification = (new OpenApiService($product->swagger))->buildOpenApiJson();
 
 		return view('templates.products.show', [
 			"product" => $product,

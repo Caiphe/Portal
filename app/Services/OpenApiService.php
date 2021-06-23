@@ -113,42 +113,37 @@ class OpenApiService
 		$queries = array_filter($parameters, function ($parameter) {
 			return $parameter['in'] === 'query' || $parameter['in'] === 'body';
 		});
+		$resp = [];
 
-		return array_reduce(
-			$queries,
-			function ($carry, $query) {
-				if (isset($query['schema'])) {
-					if ($query['in'] === 'body') {
-						$schemaFormData = [
-							'body' => [
-								"mode" => "formdata",
-								"formdata" => $this->buildFormDataFromRef(
-									$query['schema']['$ref']
-								),
-							],
-						];
-					} else {
-						$schemaFormData = [
-							$query['in'] => $this->buildFormDataFromRef(
-								$query['schema']['$ref']
-							),
-						];
-					}
-					return array_merge($carry, $schemaFormData);
+		foreach ($queries as $query) {
+			if (isset($query['schema'])) {
+				if ($query['in'] === 'body') {
+					$schemaFormData = [
+						'body' => [
+							"mode" => "formdata",
+							"formdata" => $this->buildFormDataFromRef($query['schema']['$ref'] ?? $query['schema']),
+						],
+					];
+				} else {
+					$schemaFormData = [
+						$query['in'] => $this->buildFormDataFromRef(
+							$query['schema']['$ref']
+						),
+					];
 				}
+				return array_merge($resp, $schemaFormData);
+			}
 
-				$carry[$query['in']][] = [
-					"key" => $query['name'],
-					"value" => '',
-					"required" => $query['required'] ?? 0,
-					"type" => $query['type'],
-					"description" => $query['description'] ?? '',
-				];
+			$resp[$query['in']][] = [
+				"key" => $query['name'],
+				"value" => '',
+				"required" => $query['required'] ?? 0,
+				"type" => $query['type'],
+				"description" => $query['description'] ?? '',
+			];
+		}
 
-				return $carry;
-			},
-			[]
-		);
+		return $resp;
 	}
 
 	protected function buildFormDataFromRef($ref, $aditionalInfo = '')
@@ -191,6 +186,15 @@ class OpenApiService
 				$definitionKey = array_keys($definition)[0];
 				$properties = $definition[$definitionKey]['properties'];
 			} else {
+				if ($aditionalInfo !== '' && isset($definition['type']) && $definition['type'] === 'object') {
+					return [
+						"key" => $aditionalInfo,
+						"value" => $this->parseDefinitionProperties($definition['properties']),
+						"description" => $this->parseFromDataObjectDesc($definition),
+						"required" => $definition['required'] ?? 0,
+						"type" => $definition['type'],
+					];
+				}
 				$properties = $definition['properties'];
 			}
 		} else {
@@ -234,6 +238,46 @@ class OpenApiService
 				"type" => $properties[$property]['type'] ?? '',
 			];
 		}, $propertyKeys);
+	}
+
+	protected function parseFromDataObjectDesc(array $definition): string
+	{
+		$def = ($definition['description'] ?? '') . '<br>Properties:<br>';
+		foreach ($definition['properties'] as $key => $prop) {
+			$def .= "&nbsp;&nbsp;&nbsp;&nbsp;$key:<br>";
+			if (isset($prop['type'])) {
+				$def .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type: {$prop['type']}<br>";
+			}
+			if (isset($prop['description'])) {
+				$def .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;description: {$prop['description']}<br>";
+			}
+			if (isset($prop['enum'])) {
+				$def .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;options: " . implode(', ', $prop['enum']) . "<br>";
+			}
+			if (isset($prop['example'])) {
+				$def .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;example: {$prop['example']}<br>";
+			}
+		}
+
+		return $def;
+	}
+
+	/**
+	 * Parse the definition properties from an object
+	 *
+	 * @param      array   $properties  The properties
+	 *
+	 * @return     string  Returns a json encoded string of the object values
+	 */
+	protected function parseDefinitionProperties(array $properties): string
+	{
+		$resp = [];
+
+		foreach ($properties as $key => $prop) {
+			$resp[$key] = $this->getValue($prop['example'] ?? $prop['value'] ?? '', $prop['type'] ?? '');
+		}
+
+		return json_encode($resp, JSON_PRETTY_PRINT);
 	}
 
 	protected function buildFormHeader($parameters)
@@ -470,6 +514,46 @@ class OpenApiService
 		}
 
 		return $example;
+	}
+
+	/**
+	 * Determins the value
+	 *
+	 * @param      bool|float|int|string  $value  The value
+	 * @param      bool|float|int|string  $type   The type
+	 *
+	 * @return     bool|float|int|string  The value.
+	 */
+	protected function getValue($value, $type)
+	{
+		if ($value !== '') {
+			switch ($type) {
+				case 'string':
+					return $value;
+					break;
+				case 'integer':
+					return (int)$value;
+					break;
+				case 'float':
+					return (float)$value;
+					break;
+				case 'boolean':
+					return $value === 'true' ? 'true' : 'false';
+					break;
+				default:
+					return $value;
+					break;
+			}
+		} else {
+			return [
+				'string' => "string",
+				'integer' => 1,
+				'float' => 1.00,
+				'array' => '[]',
+				'object' => '{}',
+				'boolean' => true,
+			][$type] ?? "string";
+		}
 	}
 
 	/**
