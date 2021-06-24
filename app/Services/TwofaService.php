@@ -26,8 +26,9 @@ class TwofaService
      */
     public static function getInlineUrl($key, $email)
     {
+        $name = (config('app.env') === 'staging') ? 'MTN Developer Portal Pre-Prod' : 'MTN Developer Portal';
         return Google2FA::getQRCodeInline(
-            self::$name . config('app.env') === 'staging' ? ' - Pre-Prod' : '',
+            $name,
             $email,
             $key
         );
