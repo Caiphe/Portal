@@ -27,7 +27,7 @@ class TwofaService
     public static function getInlineUrl($key, $email)
     {
         return Google2FA::getQRCodeInline(
-            self::$name . config('app.env') === 'staging' ? 'Pre-prod' : '',
+            self::$name . config('app.env') === 'staging' ? ' - Pre-Prod' : '',
             $email,
             $key
         );
