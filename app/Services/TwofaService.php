@@ -12,7 +12,7 @@ class TwofaService
 {
     private static $fileName = 'google2fasecret.key';
 
-    private static $name = 'MTN Developer Portal';
+    private static $name = config('app.env') === 'staging' ? 'MTN Developer Portal - Pre-Prod' : 'MTN Developer Portal';
 
     private static $secretKey;
 
