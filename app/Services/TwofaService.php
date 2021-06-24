@@ -12,7 +12,7 @@ class TwofaService
 {
     private static $fileName = 'google2fasecret.key';
 
-    private static $name = config('app.env') === 'staging' ? 'MTN Developer Portal - Pre-Prod' : 'MTN Developer Portal';
+    private static $name = 'MTN Developer Portal';
 
     private static $secretKey;
 
@@ -27,7 +27,7 @@ class TwofaService
     public static function getInlineUrl($key, $email)
     {
         return Google2FA::getQRCodeInline(
-            self::$name,
+            self::$name . config('app.env') === 'staging' ? ' - Pre-Prod' : '',
             $email,
             $key
         );
