@@ -18,14 +18,17 @@
 @endpush
 @endonce
 
-@props(['title','countries','tags', 'href', 'addButtonId', 'addUrl'])
+@props(['title','countries','tags', 'href', 'addButtonId', 'addUrl', 'target' => '_self'])
 <div {{ $attributes->merge(['class' => 'card card--product']) }} >
-    <a href="{{$href}}">
+    <a href="{{$href}}" target="{{ $target }}">
         <div class="card__content">
             @isset($tags)
                 @foreach ($tags as $tag)
                     <span class="tag outline yellow">{{$tag}}</span>
                 @endforeach
+                @if(isset($dataAccess) && $dataAccess !== 'public')
+                <span class="tag outline {{ $dataAccess }}">{{ $dataAccess }}</span>
+                @endif
             @endisset
             @isset($title)
             <h3 class="card__header">
@@ -52,11 +55,11 @@
     <div class="buttons">
         <a class="flex button" href="{{$href}}" role="button">View</a>
         @isset($addButtonId)
-		<a
-		@isset($addUrl)
-		href="{{$addUrl}}"
-		@endisset
-		id="{{ $addButtonId }}" data-name="{{$dataTitle}}" class="flex button fab plus dark"></a>
+        <a
+        @isset($addUrl)
+        href="{{$addUrl}}"
+        @endisset
+        id="{{ $addButtonId }}" data-name="{{$dataTitle}}" class="flex button fab plus dark"></a>
         @endisset
     </div>
 </div>

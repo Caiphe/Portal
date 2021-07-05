@@ -45,8 +45,10 @@ class ProductController extends Controller
 	{
 		$product->load(['content', 'keyFeatures', 'category', 'countries']);
 		$user = $request->user();
-
-		if ($product->access === 'private' && (!$user || !$user->hasRole('private'))) {
+		if(
+			($product->access === 'private' && (!$user || !$user->hasPermissionTo('view_private_products'))) ||
+			($product->access === 'internal' && (!$user || !$user->hasPermissionTo('view_internal_products')))
+		){
 			abort(403);
 		}
 

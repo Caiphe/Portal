@@ -253,6 +253,7 @@
                 .products {
                     display: flex;
                     flex-flow: row wrap;
+                    width: 100%;
 
                     @media #{$small} {
                         flex-direction: column;

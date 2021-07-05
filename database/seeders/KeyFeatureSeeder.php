@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Artisan;
+namespace Database\Seeders;
 
-class BundleSeeder extends Seeder
+use Illuminate\Database\Seeder;
+
+class KeyFeatureSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,6 +13,6 @@ class BundleSeeder extends Seeder
      */
     public function run()
     {
-        Artisan::call('sync:bundles');
+        //
     }
 }
