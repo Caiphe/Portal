@@ -45,7 +45,7 @@ class DashboardController extends Controller
                 $query
                     ->where('status', 'pending')
                     ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes) {
-                        $query->whereHas('countries', function($q) use ($responsibleCountriesCodes){
+                        $query->whereHas('countries', function ($q) use ($responsibleCountriesCodes) {
                             $q->whereIn('code', $responsibleCountriesCodes);
                         });
                     })
@@ -63,8 +63,10 @@ class DashboardController extends Controller
             ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes) {
                 $query->whereIn('country_code', $responsibleCountriesCodes);
             })
-            ->whereHas('products', function ($query) {
-                $query->where('status', 'pending');
+            ->when(!$hasSearchTerm && !$hasCountries, function ($q) {
+                $q->whereHas('products', function ($q) {
+                    $q->where('status', 'pending');
+                });
             })
             ->when($hasSearchTerm, function ($q) use ($searchTerm) {
                 $q->where('display_name', 'like', $searchTerm);
