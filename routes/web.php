@@ -106,7 +106,8 @@ Route::namespace('Api\Admin')->prefix('api/admin')->group(function () {
 	Route::post('/products/{product:slug}/openapi', 'ProductController@openapiUpload')->middleware('can:administer-content')->name('api.product.openapi.upload');
     Route::post('/products/{product:slug}/image', 'ProductController@imageUpload')->middleware('can:administer-content')->name('api.product.image.upload');
 
-    Route::post('sync', 'SyncController@sync')->middleware('can:administer-dashboard')->name('api.sync');
+	Route::post('sync', 'SyncController@sync')->middleware('can:administer-dashboard')->name('api.sync');
+	Route::post('sync/products', 'SyncController@syncProducts')->middleware('can:administer-dashboard')->name('api.sync.products');
 });
 
 Route::post('profile/2fa/verify', 'UserController@verify2fa')->middleware('2fa')->name('user.2fa.verify');

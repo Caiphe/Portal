@@ -46,6 +46,8 @@ class SyncApps extends Command
 		$countryArray = Country::get()->toArray();
 		$apps = ApigeeService::getOrgApps('all', 0);
 		$products = Product::pluck('name')->toArray();
+		$deletedApps = App::withTrashed()->whereNotNull('deleted_at')->pluck('deleted_at', 'aid');
+		App::query()->delete();
 
 		$this->info("Start syncing apps");
 
@@ -83,7 +85,7 @@ class SyncApps extends Command
 				$countryCode = $attributes['Country'];
 			}
 
-			$a = App::updateOrCreate(
+			$a = App::withTrashed()->updateOrCreate(
 				["aid" => $app['appId']],
 				[
 					"aid" => $app['appId'],
@@ -98,6 +100,7 @@ class SyncApps extends Command
 					"country_code" => $countryCode,
 					"updated_at" => date('Y-m-d H:i:s', $app['lastModifiedAt'] / 1000),
 					"created_at" => date('Y-m-d H:i:s', $app['createdAt'] / 1000),
+					'deleted_at' => isset($deletedApps[$app['appId']]) ? $deletedApps[$app['appId']] : null
 				]
 			);
 

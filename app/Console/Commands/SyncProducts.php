@@ -52,6 +52,9 @@ class SyncProducts extends Command
 		$sandboxProductAttribute = [];
 		$allCountries = Country::all();
 
+		$deletedProducts = Product::withTrashed()->whereNotNull('deleted_at')->pluck('deleted_at', 'pid');
+		Product::query()->delete();
+
 		$this->info("Start syncing products");
 		foreach ($products as $product) {
 			if ($allow !== "" && strpos($product['displayName'], $allow) === false) continue;
@@ -83,6 +86,7 @@ class SyncProducts extends Command
 					'environments' => implode(',', $productEnvironments),
 					'access' => $attributes['Access'] ?? null,
 					'attributes' => json_encode($attributes),
+					'deleted_at' => isset($deletedProducts[$product['name']]) ? $deletedProducts[$product['name']] : null
 				]);
 
 				continue;

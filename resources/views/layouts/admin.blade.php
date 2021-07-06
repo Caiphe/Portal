@@ -41,7 +41,7 @@
             </ul>
 
             @if(\Auth::user()->can('administer-products'))
-            <button id="sync" class="button yellow outline" onclick="sync(this)">Sync @svg('sync', '#FC0')</button>
+            <button id="sync" class="button yellow outline" onclick="sync(this)">Sync All @svg('sync', '#FC0')</button>
             @endif
         </nav>
         <main id="main">
@@ -55,6 +55,7 @@
         function bladeLookup(key) {
             return {
                 syncApiUrl: "{{ route('api.sync') }}",
+                syncProductApiUrl: "{{ route('api.sync.products') }}",
             }[key] || null;
         }
     </script>
