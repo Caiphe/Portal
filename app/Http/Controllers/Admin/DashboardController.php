@@ -58,6 +58,9 @@ class DashboardController extends Controller
             })
             ->byStatus('approved');
 
+        $statusesSelected = [ $request->get('status') ?: null];
+        $hasStatusesFilter = $this->decideOnStatuses($statusesSelected);
+
         $apps = App::with(['developer', 'country', 'products'])
             ->whereNotNull('country_code')
             ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes) {
@@ -68,6 +71,18 @@ class DashboardController extends Controller
             })
             ->when($hasSearchTerm, function ($q) use ($searchTerm) {
                 $q->where('display_name', 'like', $searchTerm);
+            })
+            ->when($hasStatusesFilter || $hasSearchTerm, function (&$q) use ($statusesSelected, $searchTerm) {
+
+                array_map(function($status) use(&$q) {
+                    if ('pending' !== $status) {
+                        $q->orWhere('status', $status);
+                    }
+                }, $statusesSelected);
+
+                if ("%%" !== $searchTerm[0]) {
+                    $q->where('display_name', 'like', $searchTerm);
+                }
             })
             ->when($hasCountries, function ($q) use ($searchCountries) {
                 $q->whereHas('country', function ($q) use ($searchCountries) {
@@ -126,5 +141,10 @@ class DashboardController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    private function decideOnStatuses($selectedStatuses): bool
+    {
+        return !empty($selectedStatuses) || !is_null($selectedStatuses) && !isset($selectedStatuses['pending']);
     }
 }

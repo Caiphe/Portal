@@ -4,10 +4,10 @@
     <link rel="stylesheet" href="{{ mix('/css/templates/apps/index.css') }}">
 @endpush
 
-@section('title', 'Applications waiting to be processed')
+@section('title', 'Applications')
 
 @section('content')
-    
+
     <div class="container" id="app-index">
         <div class="cols centre-align">
             <form id="filter-form" class="cols centre-align ajaxify" action="{{ route('admin.dashboard.index') }}" method="GET" data-replace="#table-data">
@@ -16,6 +16,13 @@
 
                 <h3 class="ml-2">Country</h3>
                 <x-multiselect id="filter-country" name="countries" class="ml-1" label="Select country" :options="$countries->pluck('name', 'code')" />
+
+                <h3 class="ml-2">Status</h3>
+                <select id="filter-status" name="status" class="ml-1">
+                    <option value="pending" selected>Applications waiting to be processed</option>
+                    <option value="approved">Approved</option>
+                    <option value="revoked">Revoked</option>
+                </select>
             </form>
 
             <form class="ajaxify" data-replace="#table-data" data-func="clearFilter()" action="{{ route('admin.dashboard.index') }}" method="GET">
@@ -38,10 +45,11 @@
 
         document.getElementById('filter-text').addEventListener('keyup', filterApps);
         document.getElementById("filter-country").addEventListener('change', submitFilter);
+        document.getElementById("filter-status").addEventListener('change', submitFilter);
 
         window.onload = init;
         ajaxifyComplete = init;
-        
+
         function init() {
             var buttons = document.querySelectorAll('p.name');
             var actions = document.querySelectorAll('.actions');
@@ -104,9 +112,14 @@
         function clearFilter() {
 
             var countrySelect = document.querySelectorAll('#filter-country-tags .tag');
+            var statusSelect = document.querySelectorAll('#filter-status-tags .tag');
 
             for (var i = countrySelect.length - 1; i >= 0; i--) {
                 countrySelect[i].click();
+            }
+
+            for (var i = statusSelect.length - 1; i >= 0; i--) {
+                statusSelect[i].click();
             }
 
             document.getElementById("filter-text").value = "";
@@ -152,8 +165,7 @@
             var xhr = new XMLHttpRequest();
             var lookup = {
                 approve: 'approved',
-                revoke: 'revoked',
-                pending: 'pending'
+                revoke: 'revoked'
             };
 
             xhr.open('POST', '/admin/apps/' + data.product + '/' + data.action);
