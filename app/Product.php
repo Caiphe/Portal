@@ -80,10 +80,6 @@ class Product extends Model
 
     public function scopeBasedOnUser($query, $user, $environment = 'prod')
     {
-        if (config('app.env') === 'staging') {
-            $environment = 'prod,staging';
-        }
-
         if ($user && $user->hasPermissionTo(['view_internal_products', 'view_private_products'])) {
             return $query->isPublicWithPrivate()->orWhere(fn($q) => $q->isPublicWithInternal())->getEnvironment($environment);
         }

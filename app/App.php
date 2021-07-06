@@ -5,10 +5,14 @@ namespace App;
 use App\Country;
 use App\Services\ApigeeService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class App extends Model
 {
+    
+    use SoftDeletes;
+
     /**
      * The attributes that aren't mass assignable.
      *
