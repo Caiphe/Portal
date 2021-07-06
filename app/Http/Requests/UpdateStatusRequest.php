@@ -27,7 +27,8 @@ class UpdateStatusRequest extends FormRequest
         return [
             'app' => 'required',
             'product' => 'required|exists:products,pid',
-            'action' => 'required'
+            'action' => 'required',
+            'for' => 'required',
         ];
     }
 }

@@ -1,19 +1,17 @@
-<pre><code>
 curl --location --request {{ strtoupper($method) }} '{!! $url !!}'
 @foreach ($headers as $header)
     --header '{{ $header['key'] }}: {{ $header['value'] ?: 'string' }}'
 @endforeach
-@if (isset($parameters['body']['details']))
+@if (isset($parameters['body']['formdata']))
     --data-raw '{
-@foreach ($parameters['body']['details'] as $details)
-@if (!isset($details['type']) && gettype($details) === 'array')
-@foreach($details as $detail)
-        "{{ $detail['key'] }}": @reqType($detail['value'], $detail['type']),
+@foreach ($parameters['body']['formdata'] as $formData)
+@if (!isset($formData['type']) && gettype($formData) === 'array')
+@foreach($formData as $fD)
+        "{{ $fD['key'] }}": @reqType($fD['value'], $fD['type']),
 @endforeach
 @else
-        "{{ $details['key'] }}": @reqType($details['value'], $details['type']),
+        "{{ $formData['key'] }}": @reqType($formData['value'], $formData['type']),
 @endif
 @endforeach
     }'
 @endif
-</code></pre>

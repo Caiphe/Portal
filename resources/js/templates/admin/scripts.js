@@ -16,7 +16,31 @@ function sync(el) {
         }
     };
 
-    xhr.open("POST", bladeLookupAdmin('syncApiUrl'));
+    xhr.open("POST", bladeLookup('syncApiUrl'));
+    xhr.setRequestHeader('X-CSRF-TOKEN', document.getElementsByName("csrf-token")[0].content);
+
+    xhr.send();
+}
+
+function syncProducts() {
+    var xhr = new XMLHttpRequest();
+
+    addLoading('Syncing');
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            removeLoading('Syncing');
+
+            if (xhr.status === 200) {
+                addAlert('success', ['Syncing complete!', 'Refresh the page to see if there is anything new.']);
+            } else {
+                var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+                addAlert('error', (result || 'There was a problem syncing.'));
+            }
+        }
+    };
+
+    xhr.open("POST", bladeLookup('syncProductApiUrl'));
     xhr.setRequestHeader('X-CSRF-TOKEN', document.getElementsByName("csrf-token")[0].content);
 
     xhr.send();

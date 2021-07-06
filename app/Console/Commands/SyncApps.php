@@ -46,21 +46,29 @@ class SyncApps extends Command
 		$countryArray = Country::get()->toArray();
 		$apps = ApigeeService::getOrgApps('all', 0);
 		$products = Product::pluck('name')->toArray();
+		$deletedApps = App::withTrashed()->whereNotNull('deleted_at')->pluck('deleted_at', 'aid');
+		App::query()->delete();
 
 		$this->info("Start syncing apps");
 
 		foreach ($apps['app'] as $app) {
 			$apiProducts = [];
-			foreach ($app['credentials']['apiProducts'] as $product) {
+
+			foreach ($app['credentials'][0]['apiProducts'] as $product) {
 				if (!in_array($product['apiproduct'], $products)) continue 2;
 				$apiProducts[$product['apiproduct']] = ['status' => $product['status']];
+			}
+
+			if (count($app['credentials']) > 1) {
+				foreach (end($app['credentials'])['apiProducts'] as $product) {
+					if (!in_array($product['apiproduct'], $products)) continue 2;
+					$apiProducts[$product['apiproduct']] = ['status' => $product['status']];
+				}
 			}
 
 			$this->info("Syncing {$app['name']}");
 
 			$attributes = ApigeeService::getAppAttributes($app['attributes']);
-
-			unset($app['credentials']['apiProducts']);
 
 			if (isset($attributes['DisplayName']) && !empty($attributes['DisplayName'])) {
 				$displayName = $attributes['DisplayName'];
@@ -74,12 +82,12 @@ class SyncApps extends Command
 			} else if (isset($attributes['Country']) && strlen($attributes['Country']) === 3) {
 				$countryCode = $countries->first(fn($country) => strtolower($country->iso) === strtolower($attributes['Country']))->code ?? '';
 			} else if (isset($attributes['Country']) && strlen($attributes['Country']) > 2) {
-				$countryCode = $countries->first(fn($country) => strtolower($country->name) === strtolower($attributes['Country']))->code ?? '';
+				$countryCode = $countries->first(fn ($country) => $country->name === $attributes['Country'])->code ?? 'all';
 			} else if (isset($attributes['Country'])) {
 				$countryCode = $attributes['Country'];
 			}
 
-			$a = App::updateOrCreate(
+			$a = App::withTrashed()->updateOrCreate(
 				["aid" => $app['appId']],
 				[
 					"aid" => $app['appId'],
@@ -94,6 +102,7 @@ class SyncApps extends Command
 					"country_code" => $countryCode,
 					"updated_at" => date('Y-m-d H:i:s', $app['lastModifiedAt'] / 1000),
 					"created_at" => date('Y-m-d H:i:s', $app['createdAt'] / 1000),
+					'deleted_at' => isset($deletedApps[$app['appId']]) ? $deletedApps[$app['appId']] : null
 				]
 			);
 

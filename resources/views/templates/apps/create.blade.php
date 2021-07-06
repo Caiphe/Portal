@@ -115,6 +115,7 @@
                                 <x-card-product :title="$product->display_name"
                                                 class="product-block"
                                                 :href="$href"
+                                                target="_blank"
                                                 :tags="$tags"
                                                 :addButtonId="$product->slug"
                                                 :data-title="$product->name"
