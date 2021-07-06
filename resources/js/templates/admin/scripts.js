@@ -16,7 +16,7 @@ function sync(el) {
         }
     };
 
-    xhr.open("POST", bladeLookup('syncApiUrl'));
+    xhr.open("POST", bladeLookupAdmin('syncApiUrl'));
     xhr.setRequestHeader('X-CSRF-TOKEN', document.getElementsByName("csrf-token")[0].content);
 
     xhr.send();
@@ -40,7 +40,7 @@ function syncProducts() {
         }
     };
 
-    xhr.open("POST", bladeLookup('syncProductApiUrl'));
+    xhr.open("POST", bladeLookupAdmin('syncProductApiUrl'));
     xhr.setRequestHeader('X-CSRF-TOKEN', document.getElementsByName("csrf-token")[0].content);
 
     xhr.send();
