@@ -146,7 +146,7 @@ class AppController extends Controller
 
         $data = [
             'name' => $validated['name'],
-            'key' => $this->getCredentials($app, 'consumerKey', 'string'),
+            'key' => $this->getCredentials($app, 'consumerKey-production', 'string'),
             'apiProducts' => $request->products,
             'originalProducts' => $validated['original_products'],
             'keyExpiresIn' => -1,
@@ -167,7 +167,7 @@ class AppController extends Controller
             'callbackUrl' => preg_replace('/[<>"]*/', '', strip_tags($validated['url'])) ?? '',
         ];
 
-        $updatedResponse = ApigeeService::updateApp($data);
+        $updatedResponse = ApigeeService::updateApp($data)->json();
 
         $app->update([
             'display_name' => $data['attributes'][0]['value'],

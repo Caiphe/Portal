@@ -102,7 +102,8 @@ class App extends Model
         $credentials = $this->credentials;
         $firstProducts = [
             'credentials' => $credentials[0],
-            'products' => []
+            'products' => [],
+            'hasKyc' => false
         ];
         $isFirstProductSandbox = false;
 
@@ -111,6 +112,10 @@ class App extends Model
 
             if (strpos($product->environments, 'sandbox') !== false) {
                 $isFirstProductSandbox = true;
+            }
+
+            if(!$firstProducts['hasKyc'] && $product->group !== 'MTN'){
+                $firstProducts['hasKyc'] = true;
             }
 
             $firstProducts['products'][] = $product;
@@ -122,7 +127,16 @@ class App extends Model
             $lastProducts = $this->products->filter(fn ($product) => in_array($product->name, end($credentials)['apiProducts']));
             $lastProducts = [
                 'credentials' => end($credentials),
-                'products' => $lastProducts
+                'products' => $lastProducts,
+                'hasKyc' => false
+            ];
+        }
+
+        if(empty($lastProducts)){
+            $lastProducts =[
+                'credentials' => [],
+                'products' => [],
+                'hasKyc' => false
             ];
         }
 
