@@ -41,26 +41,7 @@ class DashboardController extends Controller
                 'countries' => Country::all(),
             ]);
         }
-
-        $appsByProductLocation = App::with(['developer', 'country', 'products.countries'])
-            ->whereNull('country_code')
-            ->whereHas('products', function ($query) use ($isAdmin, $responsibleCountriesCodes, $hasCountries, $searchCountries) {
-                $query
-                    ->where('status', 'pending')
-                    ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes) {
-                        $query->whereHas('countries', function($q) use ($responsibleCountriesCodes){
-                            $q->whereIn('code', $responsibleCountriesCodes);
-                        });
-                    })
-                    ->when($hasCountries, function ($q) use ($searchCountries) {
-                        $q->whereRaw("`locations` REGEXP \"(" . implode(',', $searchCountries) . ")\"");
-                    });
-            })
-            ->when($hasSearchTerm, function ($q) use ($searchTerm) {
-                $q->where('display_name', 'like', $searchTerm);
-            })
-            ->byStatus('approved');
-
+        
         $statusesSelected = [ $request->get('status') ?: null];
         $hasStatusesFilter = $this->decideOnStatuses($statusesSelected);
 
@@ -84,8 +65,8 @@ class DashboardController extends Controller
                         ->orWhere('aid', 'like', $searchTerm);
                 });
             })
-            ->when($hasStatusesFilter, function (&$q) use ($statusesSelected) {
-                array_map(function($status) use(&$q) {
+            ->when($hasStatusesFilter, function ($q) use ($statusesSelected) {
+                array_map(function($status) use($q) {
                     if ('pending' !== $status) {
                         $q->orWhere('status', $status);
                     }
