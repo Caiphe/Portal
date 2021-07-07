@@ -84,8 +84,7 @@ class DashboardController extends Controller
                         ->orWhere('aid', 'like', $searchTerm);
                 });
             })
-            ->when($hasStatusesFilter || $hasSearchTerm, function (&$q) use ($statusesSelected, $searchTerm) {
-
+            ->when($hasStatusesFilter, function (&$q) use ($statusesSelected) {
                 array_map(function($status) use(&$q) {
                     if ('pending' !== $status) {
                         $q->orWhere('status', $status);
