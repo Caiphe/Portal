@@ -10,10 +10,13 @@ use App\Country;
 use App\Mail\KycStatusUpdate;
 use App\Mail\ProductAction;
 use Illuminate\Support\Facades\Mail;
+use App\Util\Search\Admin\AppsFilter;
 use Symfony\Component\HttpFoundation\Request;
 
 class DashboardController extends Controller
 {
+    use AppsFilter;
+
     public function index(Request $request)
     {
         $user = $request->user();
@@ -42,13 +45,10 @@ class DashboardController extends Controller
             ]);
         }
 
-        $statusesSelected = [ $request->get('status') ?: null];
-
-        if (in_array('all', $statusesSelected)) {
-            $statusesSelected = ['approved', 'revoked'];
+        $hasDeveloperFilter = false;
+        if ($hasSearchTerm && $this->hasDeveloperFilter($searchTerm)) {
+            $hasDeveloperFilter = true;
         }
-
-        $hasStatusesFilter = $this->decideOnStatuses($statusesSelected);
 
         $apps = App::with(['developer', 'country', 'products'])
             ->whereNotNull('country_code')
@@ -70,12 +70,16 @@ class DashboardController extends Controller
                         ->orWhere('aid', 'like', $searchTerm);
                 });
             })
-            ->when($hasStatusesFilter, function ($q) use ($statusesSelected) {
+            ->when($this->hasFilterStatuses([$request->get('status')]), function ($q) {
                 array_map(function($status) use($q) {
-                    if ('pending' !== $status) {
-                        $q->orWhere('status', $status);
-                    }
-                }, $statusesSelected);
+                    $q->orWhere('status', $status);
+                }, $this->getSelectedStatuses());
+            })
+            ->when($hasDeveloperFilter, function($query){
+                $query->join('users', function ($join) {
+                    $join->on('users.developer_id', '=', 'apps.developer_id')
+                        ->where('users.email', $this->getDeveloperFilter());
+                });
             })
             ->when($hasCountries, function ($q) use ($searchCountries) {
                 $q->where(function ($query) use ($searchCountries) {
