@@ -325,31 +325,28 @@
         });
     }
 
-    var submit = document.getElementById('create').addEventListener('click', handleCreate);
+    var submit = document.getElementById('form-create-app').addEventListener('submit', handleCreate);
 
     function handleCreate(event) {
-        event.preventDefault();
-
-        var button = document.getElementById('create');
-        button.disabled = true;
-        button.textContent = 'Creating...';
-
+        var elements = this.elements;
         var app = {
-            name: document.querySelector('#name').value,
-            url: document.querySelector('#url').value,
-            description: document.querySelector('#description').value,
+            display_name: elements['name'].value,
+            url: elements['url'].value,
+            description: elements['description'].value,
             country: document.querySelector('.country-checkbox:checked').dataset.location,
             products: []
         };
-
         var selectedProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
+        var button = document.getElementById('create');
 
-        var products = [];
+        event.preventDefault();
+
+        button.disabled = true;
+        button.textContent = 'Creating...';
+
         for(i = 0; i < selectedProducts.length; i++) {
-            products.push(selectedProducts[i].dataset.name);
+             app.products.push(selectedProducts[i].dataset.name);
         }
-
-        app.products = products;
 
         var url = "{{ route('app.store') }}";
         var xhr = new XMLHttpRequest();

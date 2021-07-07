@@ -125,6 +125,12 @@
         @if(!$isAdminPage)
         <div class="mt-2">
             <div class="detail-left">
+                @if(empty($sandboxProducts))
+                <div class="detail-row">
+                    <div class="detail-item"><strong>Description:</strong></div>
+                    <div class="detail-item">{{ $app['description'] ?: 'No description' }}</div>
+                </div>
+                @endif
                 <div class="detail-row cols">
                     <div class="detail-item"><strong>Production key</strong></div>
                     <div class="detail-item key">{{ $prodProducts['credentials']['consumerKey'] }}</div>

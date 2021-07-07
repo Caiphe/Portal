@@ -110,7 +110,7 @@ class App extends Model
         foreach ($this->products as $product) {
             if (!in_array($product->name, $credentials[0]['apiProducts'])) continue;
 
-            if (strpos($product->environments, 'sandbox') !== false) {
+            if (!$isFirstProductSandbox && strpos($product->environments, 'sandbox') !== false) {
                 $isFirstProductSandbox = true;
             }
 

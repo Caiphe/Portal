@@ -55,13 +55,13 @@ class AppController extends Controller
         }
 
         $data = [
-            'name' => Str::slug($validated['name']),
+            'name' => Str::slug($validated['display_name']),
             'apiProducts' => $productIds,
             'keyExpiresIn' => -1,
             'attributes' => [
                 [
                     'name' => 'DisplayName',
-                    'value' => $validated['name'],
+                    'value' => $validated['display_name'],
                 ],
                 [
                     'name' => 'Description',
@@ -90,7 +90,7 @@ class AppController extends Controller
         $app = App::create([
             "aid" => $createdResponse['appId'],
             "name" => $createdResponse['name'],
-            "display_name" => $validated['name'],
+            "display_name" => $validated['display_name'],
             "callback_url" => $createdResponse['callbackUrl'],
             "attributes" => $attributes,
             "credentials" => $createdResponse['credentials'],
@@ -136,35 +136,56 @@ class AppController extends Controller
             'products' => $products,
             'countries' => $countries ?? '',
             'data' => $app,
-            'selectedProducts' => array_column($app['products']->toArray(), 'name'),
+            'selectedProducts' => $app->products->map(fn($prod) => $prod->attributes['ProductionProduct'] ?? $prod->name)->toArray(),
         ]);
     }
 
     public function update(App $app, CreateAppRequest $request)
     {
         $validated = $request->validated();
+        $app->load('products');
+        $credentials = $app->credentials;
+        $sandboxProducts = $app->products->filter(fn ($prod) => strpos($prod->environments, 'sandbox') !== false);
+        $hasSandboxProducts = $sandboxProducts->count() > 0;
+
+        if (count($credentials) === 1 && $hasSandboxProducts) {
+            $products = Product::whereIn('name', $validated['products'])->pluck('attributes', 'name');
+            $credentialsType = 'consumerKey-sandbox';
+            $originalProducts = $credentials[0]['apiProducts'];
+            foreach ($products as $name => $attributes) {
+                $attr = json_decode($attributes, true);
+                $newProducts[] = $attr['SandboxProduct'] ?? $name;
+            }
+        } else {
+            $credentialsType = 'consumerKey-production';
+            $originalProducts = end($credentials)['apiProducts'];
+
+            if ($hasSandboxProducts) {
+                $newProducts = [...$validated['products'], ...$sandboxProducts->pluck('name')];
+            }
+        }
 
         $data = [
-            'name' => $validated['name'],
-            'key' => $this->getCredentials($app, 'consumerKey-production', 'string'),
-            'apiProducts' => $request->products,
-            'originalProducts' => $validated['original_products'],
+            'name' => $app->name,
+            'key' => $this->getCredentials($app, $credentialsType, 'string'),
+            'apiProducts' => $validated['products'],
+            'originalProducts' => $originalProducts,
             'keyExpiresIn' => -1,
             'attributes' => [
                 [
                     'name' => 'DisplayName',
-                    'value' => $validated['new_name'] ?? $validated['name'],
+                    'value' => $validated['display_name'] ?? $app->display_name,
                 ],
                 [
                     'name' => 'Description',
-                    'value' => preg_replace('/[<>"]*/', '', strip_tags($validated['description'])),
+                    'value' => $validated['description'],
                 ],
                 [
                     'name' => 'Country',
                     'value' => $validated['country'],
                 ],
             ],
-            'callbackUrl' => preg_replace('/[<>"]*/', '', strip_tags($validated['url'])) ?? '',
+            'callbackUrl' => $validated['url'] ?? '',
         ];
 
         $updatedResponse = ApigeeService::updateApp($data)->json();
@@ -172,21 +193,13 @@ class AppController extends Controller
         $app->update([
             'display_name' => $data['attributes'][0]['value'],
             'attributes' => $data['attributes'],
+            'credentials' => $updatedResponse['credentials'],
             'callback_url' => $data['callbackUrl'],
             'description' => $data['attributes'][1]['value'],
             'country_code' => $validated['country'],
         ]);
 
-        $app->products()->sync(
-            array_reduce(
-                end($updatedResponse['credentials'])['apiProducts'],
-                function ($carry, $apiProduct) {
-                    $carry[$apiProduct['apiproduct']] = ['status' => $apiProduct['status']];
-                    return $carry;
-                },
-                []
-            )
-        );
+        $app->products()->sync($newProducts);
 
         if ($request->ajax()) {
             return response()->json(['response' => $updatedResponse]);
@@ -248,8 +261,8 @@ class AppController extends Controller
     {
         $app->load(['products', 'country']);
         $goLiveProducts = $app->products();
-        $productionProducts = $goLiveProducts->get()->map(fn($prod) => $prod->attributes['ProductionProduct'] ?? '');
-        if($productionProducts->count() > 0){
+        $productionProducts = $goLiveProducts->get()->map(fn ($prod) => $prod->attributes['ProductionProduct'] ?? '');
+        if ($productionProducts->count() > 0) {
             $productionProducts = Product::findMany($productionProducts);
         }
         $groups = [...$goLiveProducts->pluck('group')->toArray(), ...$productionProducts->pluck('group')->toArray()];
