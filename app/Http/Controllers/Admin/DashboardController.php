@@ -41,8 +41,13 @@ class DashboardController extends Controller
                 'countries' => Country::all(),
             ]);
         }
-        
+
         $statusesSelected = [ $request->get('status') ?: null];
+
+        if (in_array('all', $statusesSelected)) {
+            $statusesSelected = ['approved', 'revoked'];
+        }
+
         $hasStatusesFilter = $this->decideOnStatuses($statusesSelected);
 
         $apps = App::with(['developer', 'country', 'products'])

@@ -19,6 +19,7 @@
 
                 <h3 class="ml-2">Status</h3>
                 <select id="filter-status" name="status" class="ml-1">
+                    <option value="all" selected>All</option>
                     <option value="pending" selected>Applications waiting to be processed</option>
                     <option value="approved">Approved</option>
                     <option value="revoked">Revoked</option>
