@@ -121,7 +121,7 @@
         </div>
         @endif
 
-        @if(!empty($prodProducts))
+        @if(!empty($prodProducts['products']))
         @if(!$isAdminPage)
         <div class="mt-2">
             <div class="detail-left">
@@ -175,10 +175,10 @@
             <p class="spacer-flex"><strong class="mr-1">Ready to launch?</strong>You're just a few clicks away</p>
             <button class="button dark">GO LIVE @svg('rocket', '#FFF')</button>
         </form>
-        @elseif($isAdminPage && !empty($sandboxProducts))
+        @elseif($isAdminPage && $prodProducts['hasKyc'])
         <div class="kyc-status">
             <strong class="mr-2">Update the KYC status</strong>
-            <select name="kyc_status" id="kyc-status" data-aid="{{ $app['aid'] }}" autocomplete="off">
+            <select name="kyc_status" class="kyc-status-select" data-aid="{{ $app['aid'] }}" autocomplete="off">
                 <option @if($app['kyc_status'] === 'Documents Received') selected @endif value="Documents Received">Documents Received</option>
                 <option @if($app['kyc_status'] === 'In Review') selected @endif value="In Review">In Review</option>
                 <option @if($app['kyc_status'] === 'KYC Approved') selected @endif value="KYC Approved">KYC Approved</option>
