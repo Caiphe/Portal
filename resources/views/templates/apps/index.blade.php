@@ -132,7 +132,7 @@
                                         :app="$app"
                                         :attr="$app['attributes']"
                                         :details="$app['developer']"
-                                        :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products->pluck('name')->toArray())"
+                                        :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products)"
                                         :type="$type = 'revoked'">
                                     </x-app>
                                 @endif
