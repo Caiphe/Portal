@@ -117,14 +117,9 @@
         function clearFilter() {
 
             var countrySelect = document.querySelectorAll('#filter-country-tags .tag');
-            var statusSelect = document.querySelectorAll('#filter-status-tags .tag');
 
             for (var i = countrySelect.length - 1; i >= 0; i--) {
                 countrySelect[i].click();
-            }
-
-            for (var i = statusSelect.length - 1; i >= 0; i--) {
-                statusSelect[i].click();
             }
 
             document.getElementById("filter-text").value = "";
