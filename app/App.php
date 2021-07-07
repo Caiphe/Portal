@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 
 class App extends Model
 {
-    
+
     use SoftDeletes;
 
     /**
@@ -114,7 +114,7 @@ class App extends Model
                 $isFirstProductSandbox = true;
             }
 
-            if(!$firstProducts['hasKyc'] && $product->group !== 'MTN'){
+            if (!$firstProducts['hasKyc'] && $product->group !== 'MTN') {
                 $firstProducts['hasKyc'] = true;
             }
 
@@ -124,16 +124,26 @@ class App extends Model
         $firstProducts = $isFirstProductSandbox ? $firstProducts : [];
 
         if (count($credentials) > 1) {
-            $lastProducts = $this->products->filter(fn ($product) => in_array($product->name, end($credentials)['apiProducts']));
+            $hasKyc = false;
+            $lastProducts = collect();
+            foreach ($this->products as $prod) {
+                if (in_array($prod->name, end($credentials)['apiProducts'])) {
+                    $lastProducts->push($prod);
+                }
+
+                if (!$hasKyc && $prod->group !== 'MTN') {
+                    $hasKyc = true;
+                }
+            }
             $lastProducts = [
                 'credentials' => end($credentials),
                 'products' => $lastProducts,
-                'hasKyc' => false
+                'hasKyc' => $hasKyc
             ];
         }
 
-        if(empty($lastProducts)){
-            $lastProducts =[
+        if (empty($lastProducts)) {
+            $lastProducts = [
                 'credentials' => [],
                 'products' => [],
                 'hasKyc' => false
