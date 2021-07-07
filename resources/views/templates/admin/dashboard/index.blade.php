@@ -12,10 +12,10 @@
         <div class="cols centre-align">
             <form id="filter-form" class="cols centre-align ajaxify" action="{{ route('admin.dashboard.index') }}" method="GET" data-replace="#table-data">
                 <h3>Search</h3>
-                <input type="text" name="q" id="filter-text" class="filter-text ml-1" placeholder="App or developer name">
+                <input type="text" name="q" id="filter-text" class="filter-text ml-1" placeholder="App or developer name" value="{{ $_GET['q'] ?? '' }}">
 
                 <h3 class="ml-2">Country</h3>
-                <x-multiselect id="filter-country" name="countries" class="ml-1" label="Select country" :options="$countries->pluck('name', 'code')" />
+                <x-multiselect id="filter-country" name="countries" class="ml-1" label="Select country" :options="$countries->pluck('name', 'code')" :selected="$_GET['countries'] ?? []" />
 
                 <h3 class="ml-2">Status</h3>
                 <select id="filter-status" name="status" class="ml-1">
@@ -23,6 +23,7 @@
                     <option value="approved">Approved</option>
                     <option value="revoked">Revoked</option>
                 </select>
+
             </form>
 
             <form class="ajaxify" data-replace="#table-data" data-func="clearFilter()" action="{{ route('admin.dashboard.index') }}" method="GET">
@@ -42,10 +43,15 @@
 @push('scripts')
     <script>
         var timeout = null;
+        var kycStatus = document.getElementById("kyc-status");
 
         document.getElementById('filter-text').addEventListener('keyup', filterApps);
         document.getElementById("filter-country").addEventListener('change', submitFilter);
         document.getElementById("filter-status").addEventListener('change', submitFilter);
+
+        if(kycStatus){
+            kycStatus.addEventListener('change', handleKycUpdateStatus);
+        }
 
         window.onload = init;
         ajaxifyComplete = init;
@@ -59,7 +65,6 @@
             for (var j = 0; j < buttons.length; j ++) {
                 buttons[j].addEventListener('click', handleButtonClick);
             }
-
 
             for (var k = 0; k < actions.length; k ++) {
                 actions[k].addEventListener('click', handleMenuClick);
@@ -145,6 +150,7 @@
 
                     handleUpdateStatus({
                         action: this.dataset.action,
+                        for: this.dataset.for,
                         app: appProducts[i].dataset.aid,
                         product: appProducts[i].dataset.pid,
                         displayName: appProducts[i].dataset.productDisplayName
@@ -155,13 +161,14 @@
 
             handleUpdateStatus({
                 action: this.dataset.action,
-                app: this.dataset.aid,
-                product: this.dataset.pid,
-                displayName: this.dataset.productDisplayName
-            }, this.parentNode.querySelector('.status-bar'));
+                for: this.dataset.for,
+                app: this.parentNode.dataset.aid,
+                product: this.parentNode.dataset.pid,
+                displayName: this.parentNode.dataset.productDisplayName
+            }, this.parentNode);
         }
 
-        function handleUpdateStatus(data, statusBar) {
+        function handleUpdateStatus(data, card) {
             var xhr = new XMLHttpRequest();
             var lookup = {
                 approve: 'approved',
@@ -174,7 +181,7 @@
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
             if(confirm('Are you sure you want to ' + data.action + ' ' + data.displayName + '?')) {
-                statusBar.classList.add('loading');
+                card.classList.add('loading');
 
                 xhr.send(JSON.stringify(data));
             }
@@ -183,12 +190,43 @@
                 var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
                 if (xhr.status === 200) {
-                    statusBar.className = 'status-bar status-' + lookup[data.action];
+                    card.className = 'product product-status-' + lookup[data.action];
                 } else {
-                    statusBar.classList.remove('loading');
+                    card.classList.remove('loading');
                     addAlert('error', result.body || 'There was an error updating the product.');
                 }
             };
+        }
+
+        function handleKycUpdateStatus() {
+            var xhr = new XMLHttpRequest();
+            var kycSelect = this;
+
+            xhr.open('POST', '/admin/apps/' + kycSelect.dataset.aid + '/kyc-status');
+            xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+           addLoading('Updating KYC status');
+
+            xhr.send(JSON.stringify({
+                kyc_status: kycSelect.value
+            }));
+
+            xhr.onload = function() {
+                var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+                removeLoading();
+                if (xhr.status === 200) {
+                    addAlert('success', result.body || 'Success.');
+                    kycSelect.parentNode.parentNode.querySelector('.production-products').className = "products production-products kyc-status-" + strSlug(kycSelect.value);
+                } else {
+                    addAlert('error', result.body || 'There was an error updating the product.');
+                }
+            };
+        }
+
+        function strSlug(str) {
+            return str.replace(/[^a-zA-Z\s]/g, '').replace(/\s+/g, '-').toLowerCase();
         }
     </script>
 @endpush

@@ -69,7 +69,7 @@
                             </div>
 
                             <div class="column">
-                                <p>Date updated</p>
+                                <p>Last updated</p>
                             </div>
 
                             <div class="column">
@@ -83,7 +83,7 @@
                                     :app="$app"
                                     :attr="$app['attributes']"
                                     :details="$app['developer']"
-                                    :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products)"
+                                    :countries="!is_null($app->country) ? [$app->country->code => $app->country->name] : ['globe' => 'globe']"
                                     :type="$type = 'approved'">
                                 </x-app>
                                 @endif
@@ -132,7 +132,7 @@
                                         :app="$app"
                                         :attr="$app['attributes']"
                                         :details="$app['developer']"
-                                        :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products->pluck('name')->toArray())"
+                                        :countries="!is_null($app->country) ? [$app->country->code => $app->country->name] : ['globe' => 'globe']"
                                         :type="$type = 'revoked'">
                                     </x-app>
                                 @endif
@@ -260,15 +260,24 @@
 
             xhr.open('GET', url, true);
             xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
             xhr.send();
 
             xhr.onload = function() {
                 if(xhr.status === 302 || /login/.test(xhr.responseURL)){
-                     addAlert('info', ['You are currently logged out.', 'Refresh the page to login again.']);
+                    addAlert('info', ['You are currently logged out.', 'Refresh the page to login again.']);
                     btn.className = 'copy';
                 } else if (xhr.status === 200) {
-                    copyToClipboard(xhr.responseText);
+                    var response = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+                    
+                    if(response === null){
+                        btn.className = 'copy';
+                        return void addAlert('error', ['Sorry there was a problem getting the credentials', 'Please try again']);
+                    }
+
+                    copyToClipboard(response.credentials);
                     btn.className = 'copy copied';
                 }
             };

@@ -284,33 +284,49 @@
         max-width: 150px;
     }
 
+    .specification-description {
+        width: 100%;
+
+        @media screen and (min-width: 768px) {
+            margin: 6px 0 0 38px;
+        }
+
+        @media screen and (max-width: 768px) {
+            margin: 6px 0 0 0;
+        }
+    }
+
     .specification-detail {
         padding: $gutterSmall;
         border: 1px solid $grey300;
         border-radius: 8px;
         margin-bottom: 10px;
-        height: 66px;
         overflow: hidden;
         display: flex;
+        flex-wrap: wrap;
 
         @media #{$small} {
             flex-direction: column;
         }
 
         &.open {
-            height: auto;
-
             .endpoint svg {
                 transform: rotate(90deg);
+            }
+
+            .specification-options,
+            .specification-responses {
+                display: block;
             }
         }
     }
 
     .endpoint {
         display: flex;
+        flex: 1 0 100%;
+        flex-wrap: wrap;
         font-family: "Montserrat-Light";
         cursor: pointer;
-        position: absolute;
         z-index: 2;
 
         svg {
@@ -381,7 +397,7 @@
     .parameter {
         height: 40px;
         overflow: hidden;
-        font-size: 10px;
+        font-size: 12px;
         font-family: "Montserrat-Light";
         padding-left: 22px;
 
@@ -413,16 +429,27 @@
         }
     }
 
+    .specification-request {
+        pre {
+            tab-size: 16px;
+            white-space: pre-wrap;
+        }
+    }
+
     .specification-options {
-        flex: 1;
-        flex-shrink: 1;
+        display: none;
+        flex: 0 1 40%;
         margin-top: 50px;
-        margin-right: $gutter;
+
+        @media screen and (min-width: 768px) {
+            margin-right: 40px;
+        }
     }
 
     .specification-responses {
-        flex: 1;
-        flex-shrink: 1;
+        display: none;
+        flex: 1 1 55%;
+        overflow: hidden;
         background-color: $grey400;
         border-radius: 8px;
         padding: 10px;

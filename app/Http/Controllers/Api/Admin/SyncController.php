@@ -17,7 +17,16 @@ class SyncController extends Controller
     {
         Artisan::call('sync:products');
         Artisan::call('sync:bundles');
+        Artisan::call('sync:apps');
 
         return response()->json(['success' => true]);
+    }
+
+    public function syncProducts()
+    {
+        Artisan::call('sync:products');
+        Artisan::call('sync:bundles');
+
+        return response()->json(['success' => true]);        
     }
 }

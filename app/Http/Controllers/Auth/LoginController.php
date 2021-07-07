@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\Services\ApigeeService;
 use App\Services\ApigeeUserService;
 use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -107,5 +108,40 @@ class LoginController extends Controller
         \Storage::copy('public/profile/profile-' . rand(1, 32) . '.svg', $imagePath);
 
         return $user;
+    }
+
+    /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        if (!is_null($user->developer_id)) return;
+
+        $apigeeDeveloper = ApigeeService::post('developers', [
+            "email" => $user->email,
+            "firstName" => $user->first_name,
+            "lastName" => $user->last_name,
+            "userName" => $user->first_name . $user->last_name,
+            "attributes" => [
+                [
+                    "name" => "MINT_DEVELOPER_LEGAL_NAME",
+                    "value" => $user->first_name . " " . $user->last_name
+                ],
+                [
+                    "name" => "MINT_BILLING_TYPE",
+                    "value" => "PREPAID"
+                ]
+            ]
+        ])->json();
+
+        if (isset($apigeeDeveloper['code'])) {
+            $apigeeDeveloper = ApigeeService::get('developers/' . $user->email);
+        }
+
+        $user->update(['developer_id' => $apigeeDeveloper['developerId']]);
     }
 }

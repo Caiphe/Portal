@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Country;
 use App\Http\Controllers\Controller;
+use App\Product;
 use App\Role;
 use App\User;
 use Illuminate\Http\Request;
@@ -36,14 +37,69 @@ class UserController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        $groups = Product::select('group')->where('group', '!=', 'Partner')->where('group', '!=', 'MTN')->groupBy('group')->get()->pluck('group');
+        $groups = array_merge(['MTN' => 'General'], $groups->toArray());
+
+        return view(
+            'templates.admin.users.create',
+            [
+                'roles' => Role::all(),
+                'countries' => Country::orderBy('name')->get(),
+                'groups' => $groups
+            ]
+        );
+    }
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'email:rfc,dns|unique:users,email',
+            'password' => 'required|confirmed',
+            'roles' => 'required',
+            'country' => 'nullable',
+            'responsible_countries' => 'nullable',
+            'responsible_groups' => 'nullable',
+        ]);
+        $randNum = rand(1, 24);
+        $imageName = base64_encode(date('iYHs') . $randNum) . '.svg';
+        $imagePath = 'public/profile/' . $imageName;
+        \Storage::copy('public/profile/profile-' . $randNum . '.svg', $imagePath);
+
+        $data['profile_picture'] = '/storage/profile/' . $imageName;
+
+        $user = User::create($data);
+        $user->roles()->sync([$data['roles']]);
+
+        if (!is_null($request->country)) {
+            $user->countries()->sync([$data['country']]);
+        }
+
+        if (!is_null($request->responsible_countries)) {
+            $user->responsibleCountries()->sync($data['responsible_countries']);
+        }
+
+        if (!is_null($request->responsible_groups)) {
+            $user->responsibleCountries()->sync($data['responsible_groups']);
+        }
+
+        return redirect()->route('admin.user.index')->with('alert', 'success:The user has been created');
+    }
+
     public function edit(User $user)
     {
-        $user->load('roles', 'countries', 'responsibleCountries');
+        $user->load('roles', 'countries', 'responsibleCountries', 'responsibleGroups');
+        $groups = Product::select('group')->where('group', '!=', 'Partner')->where('group', '!=', 'MTN')->groupBy('group')->get()->pluck('group', 'group');
+        $groups = array_merge(['MTN' => 'General'], $groups->toArray());
 
         return view('templates.admin.users.edit', [
             'user' => $user,
             'roles' => Role::all(),
             'countries' => Country::orderBy('name')->get(),
+            'groups' => $groups
         ]);
     }
 
@@ -60,9 +116,10 @@ class UserController extends Controller
             'roles' => 'required',
             'country' => 'nullable',
             'responsible_countries' => 'nullable',
+            'responsible_groups' => 'nullable',
         ]);
 
-        if(is_null($data['password'])){
+        if (is_null($data['password'])) {
             unset($data['password']);
         } else {
             $data['password'] = bcrypt($data['password']);
@@ -75,54 +132,10 @@ class UserController extends Controller
             $user->countries()->sync([$data['country']]);
         }
 
-        if (!is_null($request->responsible_countries)) {
-            $user->responsibleCountries()->sync($data['responsible_countries']);
-        }
+        $user->responsibleCountries()->sync($data['responsible_countries'] ?? []);
+        $user->responsibleGroups()->sync($data['responsible_groups'] ?? []);
 
         return redirect()->route('admin.user.index')->with('alert', 'success:The user has been updated');
-    }
-
-    public function create()
-    {
-        return view(
-            'templates.admin.users.create',
-            [
-                'roles' => Role::all(),
-                'countries' => Country::orderBy('name')->get(),
-            ]
-        );
-    }
-
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'email:rfc,dns|unique:users,email',
-            'password' => 'required|confirmed',
-            'roles' => 'required',
-            'country' => 'nullable',
-            'responsible_countries' => 'nullable',
-        ]);
-        $randNum = rand(1, 24);
-        $imageName = base64_encode(date('iYHs') . $randNum) . '.svg';
-        $imagePath = 'public/profile/' . $imageName;
-        \Storage::copy('public/profile/profile-' . $randNum . '.svg', $imagePath);
-
-        $data['profile_picture'] = '/storage/profile/' . $imageName;
-
-        $user = User::create($data);
-        $user->roles()->sync($data['roles']);
-
-        if (!is_null($request->country)) {
-            $user->countries()->sync([$data['country']]);
-        }
-
-        if (!is_null($request->responsible_countries)) {
-            $user->responsibleCountries()->sync($data['responsible_countries']);
-        }
-
-        return redirect()->route('admin.user.index')->with('alert', 'success:The user has been created');
     }
 
     public function destroy(User $user)

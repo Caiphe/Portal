@@ -18,7 +18,7 @@ class UserController extends Controller
 	 */
 	public function show(Request $request)
 	{
-		$user = \Auth::user();
+		$user = $request->user();
 		$user->load('countries');
 
 		$key = $user['2fa'] ?? TwofaService::getSecretKey();
@@ -80,8 +80,8 @@ class UserController extends Controller
 		$validatedData['first_name'] = filter_var($validatedData['first_name'], FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		$validatedData['last_name'] = filter_var($validatedData['last_name'], FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if (isset($validatedData['email'])) {
-			$validatedData['email'] = filter_var($validatedData['email'], FILTER_SANITIZE_EMAIL);
-		}
+            $validatedData['email'] = filter_var($validatedData['email'], FILTER_SANITIZE_EMAIL);
+        }
 
 		$user->update($validatedData);
 
