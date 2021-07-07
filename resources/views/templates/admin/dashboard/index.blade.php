@@ -35,13 +35,9 @@
 @push('scripts')
     <script>
         var timeout = null;
-        var kycStatus = document.getElementById("kyc-status");
 
         document.getElementById('filter-text').addEventListener('keyup', filterApps);
         document.getElementById("filter-country").addEventListener('change', submitFilter);
-        if(kycStatus){
-            kycStatus.addEventListener('change', handleKycUpdateStatus);
-        }
 
         window.onload = init;
         ajaxifyComplete = init;
@@ -51,11 +47,11 @@
             var actions = document.querySelectorAll('.actions');
             var modals = document.querySelectorAll('.modal');
             var productStatusButtons = document.querySelectorAll('button[class*="product-"]');
+            var kycStatus = document.querySelectorAll(".kyc-status-select");
 
             for (var j = 0; j < buttons.length; j ++) {
                 buttons[j].addEventListener('click', handleButtonClick);
             }
-
 
             for (var k = 0; k < actions.length; k ++) {
                 actions[k].addEventListener('click', handleMenuClick);
@@ -67,6 +63,10 @@
 
             for(var m = 0; m < productStatusButtons.length; m++) {
                 productStatusButtons[m].addEventListener('click', getProductStatus)
+            }
+            
+            for (var i = kycStatus.length - 1; i >= 0; i--) {
+                kycStatus[i].addEventListener('change', handleKycUpdateStatus);
             }
         }
 

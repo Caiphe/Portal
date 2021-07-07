@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 
 class App extends Model
 {
-    
+
     use SoftDeletes;
 
     /**
@@ -102,7 +102,8 @@ class App extends Model
         $credentials = $this->credentials;
         $firstProducts = [
             'credentials' => $credentials[0],
-            'products' => []
+            'products' => [],
+            'hasKyc' => false
         ];
         $isFirstProductSandbox = false;
 
@@ -113,16 +114,39 @@ class App extends Model
                 $isFirstProductSandbox = true;
             }
 
+            if (!$firstProducts['hasKyc'] && $product->group !== 'MTN') {
+                $firstProducts['hasKyc'] = true;
+            }
+
             $firstProducts['products'][] = $product;
         }
         $lastProducts = $isFirstProductSandbox ? [] : $firstProducts;
         $firstProducts = $isFirstProductSandbox ? $firstProducts : [];
 
         if (count($credentials) > 1) {
-            $lastProducts = $this->products->filter(fn ($product) => in_array($product->name, end($credentials)['apiProducts']));
+            $hasKyc = false;
+            $lastProducts = collect();
+            foreach ($this->products as $prod) {
+                if (in_array($prod->name, end($credentials)['apiProducts'])) {
+                    $lastProducts->push($prod);
+                }
+
+                if (!$hasKyc && $prod->group !== 'MTN') {
+                    $hasKyc = true;
+                }
+            }
             $lastProducts = [
                 'credentials' => end($credentials),
-                'products' => $lastProducts
+                'products' => $lastProducts,
+                'hasKyc' => $hasKyc
+            ];
+        }
+
+        if (empty($lastProducts)) {
+            $lastProducts = [
+                'credentials' => [],
+                'products' => [],
+                'hasKyc' => false
             ];
         }
 
