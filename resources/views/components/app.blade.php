@@ -71,7 +71,7 @@
                     </div>
                 </div>
             </div>
-        @elseif(!empty($sandboxProducts))
+        @elseif(!empty($sandboxProducts['products']))
             <div>
                 <div class="detail-left">
                     <div class="detail-row">
@@ -125,6 +125,12 @@
         @if(!$isAdminPage)
         <div class="mt-2">
             <div class="detail-left">
+                @if(empty($sandboxProducts))
+                <div class="detail-row">
+                    <div class="detail-item"><strong>Description:</strong></div>
+                    <div class="detail-item">{{ $app['description'] ?: 'No description' }}</div>
+                </div>
+                @endif
                 <div class="detail-row cols">
                     <div class="detail-item"><strong>Production key</strong></div>
                     <div class="detail-item key">{{ $prodProducts['credentials']['consumerKey'] }}</div>
@@ -151,6 +157,12 @@
                 @endif
             </div>
             <div class="detail-right">
+                @if(empty($sandboxProducts))
+                <div class="detail-row cols">
+                    <div class="detail-item"><strong>Callback url</strong></div>
+                    <div class="detail-item">{{ $app['callback_url'] ?: 'No callback url' }}</div>
+                </div>
+                @endif
                 <div class="detail-row cols">
                     <div class="detail-item"><strong>Expires:</strong></div>
                     <div class="detail-item">Never</div>
