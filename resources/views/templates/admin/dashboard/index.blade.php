@@ -2,6 +2,7 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/templates/apps/index.css') }}">
+    <link rel="stylesheet" href="{{ mix('/css/templates/admin/dashboard/index.css') }}">
 @endpush
 
 @section('title', 'Applications')
@@ -11,28 +12,33 @@
     <div class="container" id="app-index">
         <div class="cols centre-align">
             <form id="filter-form" class="cols centre-align ajaxify" action="{{ route('admin.dashboard.index') }}" method="GET" data-replace="#table-data">
-                <h3>Search</h3>
-                <input type="text" name="q" id="filter-text" class="filter-text ml-1" placeholder="App or developer name" value="{{ $_GET['q'] ?? '' }}">
+                <div class="form-blocks">
+                    <h3>Search</h3>
+                    <input type="text" name="q" id="filter-text" class="filter-text ml-1" placeholder="App or developer name" value="{{ $_GET['q'] ?? '' }}">
+                </div>
 
-                <h3 class="ml-2">Country</h3>
-                <x-multiselect id="filter-country" name="countries" class="ml-1" label="Select country" :options="$countries->pluck('name', 'code')" :selected="$_GET['countries'] ?? []" />
+                <div class="form-blocks">
+                    <h3 class="ml-2">Country</h3>
+                    <x-multiselect id="filter-country" name="countries" class="ml-1" label="Select country" :options="$countries->pluck('name', 'code')" :selected="$_GET['countries'] ?? []" />
+                </div>
 
-                <h3 class="ml-2">Status</h3>
-                <select id="filter-status" name="status" class="ml-1">
-                    <option value="all" selected>All</option>
-                    <option value="pending" selected>Applications waiting to be processed</option>
-                    <option value="approved">Approved</option>
-                    <option value="revoked">Revoked</option>
-                </select>
+                <div class="form-blocks">
+                    <h3 class="ml-2">Status</h3>
+                    <select id="filter-status" name="status" class="ml-1">
+                        <option value="all">All</option>
+                        <option value="pending" selected>Pending</option>
+                        <option value="approved">Approved</option>
+                        <option value="revoked">Revoked</option>
+                    </select>
+                </div>
 
-            </form>
-
-            <form class="ajaxify" data-replace="#table-data" data-func="clearFilter()" action="{{ route('admin.dashboard.index') }}" method="GET">
-                <button id="clearFilter" class="dark outline ml-2">Clear filters</button>
+                <div class="form-blocks">
+                    <form class="ajaxify" data-replace="#table-data" data-func="clearFilter()" action="{{ route('admin.dashboard.index') }}" method="GET">
+                        <button id="clearFilter" class="dark outline ml-2">Clear filters</button>
+                    </form>
+                </div>
             </form>
         </div>
-
-        <p><sup>*</sup><small>The list below are applications waiting to be processed. If you would like to view a processed application you can use the search form above.</small></p>
 
         <div id="table-data" class="row">
             @include('templates.admin.dashboard.data', compact('apps', 'countries'))
@@ -117,7 +123,7 @@
 
         function clearFilter() {
 
-            var countrySelect = document.querySelectorAll('#filter-country-tags .tag');
+            var countrySelect = document.querySelectorAll('.form-blocks #filter-country-tags .tag');
 
             for (var i = countrySelect.length - 1; i >= 0; i--) {
                 countrySelect[i].click();
