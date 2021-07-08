@@ -146,7 +146,7 @@ class AppController extends Controller
 
         $data = [
             'name' => $validated['name'],
-            'key' => $this->getCredentials($app, 'consumerKey', 'string'),
+            'key' => $this->getCredentials($app, 'consumerKey-production', 'string'),
             'apiProducts' => $request->products,
             'originalProducts' => $validated['original_products'],
             'keyExpiresIn' => -1,
@@ -167,7 +167,7 @@ class AppController extends Controller
             'callbackUrl' => preg_replace('/[<>"]*/', '', strip_tags($validated['url'])) ?? '',
         ];
 
-        $updatedResponse = ApigeeService::updateApp($data);
+        $updatedResponse = ApigeeService::updateApp($data)->json();
 
         $app->update([
             'display_name' => $data['attributes'][0]['value'],
@@ -247,7 +247,12 @@ class AppController extends Controller
     public function goLive(App $app, KycService $kycService)
     {
         $app->load(['products', 'country']);
-        $groups = $app->products()->pluck('group')->toArray();
+        $goLiveProducts = $app->products();
+        $productionProducts = $goLiveProducts->get()->map(fn($prod) => $prod->attributes['ProductionProduct'] ?? '');
+        if($productionProducts->count() > 0){
+            $productionProducts = Product::findMany($productionProducts);
+        }
+        $groups = [...$goLiveProducts->pluck('group')->toArray(), ...$productionProducts->pluck('group')->toArray()];
         $kyc = $kycService->getNextKyc($groups);
 
         if (is_null($kyc)) {
@@ -316,7 +321,7 @@ class AppController extends Controller
         $data = $request->validated();
 
         $app->load([
-            'products' => fn ($query) => $query->where('group', $group),
+            'products',
             'country' => fn ($query) => $query->with('opcoUser')
         ]);
 

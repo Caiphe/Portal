@@ -67,6 +67,7 @@ mix.scripts(
     .sass("resources/sass/templates/home.scss", "public/css/templates")
     .sass("resources/sass/templates/admin/edit.scss", "public/css/templates/admin/edit.css")
     .sass("resources/sass/templates/admin/index.scss", "public/css/templates/admin/index.css")
+    .sass("resources/sass/templates/admin/dashboard/index.scss", "public/css/templates/admin/dashboard/index.css")
     .sass("resources/sass/components/_app.scss", "public/css/components")
     .sass("resources/sass/components/_panel.scss", "public/css/components")
     .sass("resources/sass/components/_accordion.scss", "public/css/components")
