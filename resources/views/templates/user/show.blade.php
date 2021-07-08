@@ -53,6 +53,7 @@ Update profile
             <input type="text" name="first_name" value="{{$user['first_name']}}" placeholder="First name" autocomplete="first_name">
             <input type="text" name="last_name" value="{{$user['last_name']}}" placeholder="Second name" autocomplete="last_name">
             <input type="email" name="email" value="{{$user['email']}}" placeholder="Email" autocomplete="email">
+            <small class="email-warning">*If you change your email, it will need to be verified again.</small>
             <h2>Password</h2>
             <label class="password-label" for="password">
                 <input type="password" name="password" id="password" placeholder="Password" autocomplete="new-password">

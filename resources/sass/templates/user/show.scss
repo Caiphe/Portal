@@ -213,6 +213,12 @@
     }
 }
 
+.email-warning {
+    display: block;
+    margin-top: -10px;
+    color: $grey500;
+}
+
 #password-still-needs {
     margin-top: 10px;
     font-size: 12px;

@@ -81,9 +81,14 @@ class UserController extends Controller
 		$validatedData['last_name'] = filter_var($validatedData['last_name'], FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if (isset($validatedData['email'])) {
 			$validatedData['email'] = filter_var($validatedData['email'], FILTER_SANITIZE_EMAIL);
+			$validatedData['email_verified_at'] = null;
 		}
 
 		$user->update($validatedData);
+
+		if (isset($validatedData['email'])) {
+			$user->sendEmailVerificationNotification();
+		}
 
 		if ($request->has('locations')) {
 			$user->countries()->sync($request->locations);
