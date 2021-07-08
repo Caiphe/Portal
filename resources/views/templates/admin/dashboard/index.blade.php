@@ -32,12 +32,13 @@
                     </select>
                 </div>
 
-                <div class="form-blocks">
-                    <form class="ajaxify" data-replace="#table-data" data-func="clearFilter()" action="{{ route('admin.dashboard.index') }}" method="GET">
-                        <button id="clearFilter" class="dark outline ml-2">Clear filters</button>
-                    </form>
-                </div>
+
             </form>
+            <div class="form-blocks">
+                <form class="ajaxify" data-replace="#table-data" data-func="clearFilter()" action="{{ route('admin.dashboard.index') }}" method="GET">
+                    <button id="clearFilter" class="dark outline ml-2">Clear filters</button>
+                </form>
+            </div>
         </div>
 
         <div id="table-data" class="row">
@@ -55,9 +56,7 @@
         document.getElementById("filter-country").addEventListener('change', submitFilter);
         document.getElementById("filter-status").addEventListener('change', submitFilter);
 
-        if(kycStatus){
-            kycStatus.addEventListener('change', handleKycUpdateStatus);
-        }
+
 
         window.onload = init;
         ajaxifyComplete = init;
@@ -127,13 +126,9 @@
 
         function clearFilter() {
 
-            var countrySelect = document.querySelectorAll('.form-blocks #filter-country-tags .tag');
-
-            for (var i = countrySelect.length - 1; i >= 0; i--) {
-                countrySelect[i].click();
-            }
-
             document.getElementById("filter-text").value = "";
+            document.getElementById("filter-country").selectedIndex = 0;
+            document.getElementById('filter-country-tags').innerHTML = "";
         }
 
         function getProductStatus(event) {
