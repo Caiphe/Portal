@@ -102,52 +102,26 @@ class App extends Model
         $credentials = $this->credentials;
         $firstProducts = [
             'credentials' => $credentials[0],
-            'products' => [],
-            'hasKyc' => false
+            'products' => $credentials[0]['apiProducts'],
+            'hasKyc' => !is_null($this->kyc_status)
         ];
-        $isFirstProductSandbox = false;
+        $lastProducts = [
+            'credentials' => [],
+            'products' => [],
+            'hasKyc' => !is_null($this->kyc_status)
+        ];
+        $isFirstProductSandbox = Product::whereIn('name', $firstProducts['products'])->where('environments', 'like', 'sandbox')->count() > 0;
 
-        foreach ($this->products as $product) {
-            if (!in_array($product->name, $credentials[0]['apiProducts'])) continue;
-
-            if (!$isFirstProductSandbox && strpos($product->environments, 'sandbox') !== false) {
-                $isFirstProductSandbox = true;
-            }
-
-            if (!$firstProducts['hasKyc'] && $product->group !== 'MTN') {
-                $firstProducts['hasKyc'] = true;
-            }
-
-            $firstProducts['products'][] = $product;
-        }
-        $lastProducts = $isFirstProductSandbox ? [] : $firstProducts;
-        $firstProducts = $isFirstProductSandbox ? $firstProducts : [];
-
-        if (count($credentials) > 1) {
-            $hasKyc = false;
-            $lastProducts = collect();
-            foreach ($this->products as $prod) {
-                if (in_array($prod->name, end($credentials)['apiProducts'])) {
-                    $lastProducts->push($prod);
-                }
-
-                if (!$hasKyc && $prod->group !== 'MTN') {
-                    $hasKyc = true;
-                }
-            }
-            $lastProducts = [
-                'credentials' => end($credentials),
-                'products' => $lastProducts,
-                'hasKyc' => $hasKyc
-            ];
+        if(count($credentials) > 1){
+            $lastProducts['credentials'] = end($credentials);
+            $lastProducts['products'] = $this->products->filter(fn($prod) => in_array($prod->name, $lastProducts['credentials']['apiProducts']));
         }
 
-        if (empty($lastProducts)) {
-            $lastProducts = [
-                'credentials' => [],
-                'products' => [],
-                'hasKyc' => false
-            ];
+        $firstProducts['products'] = $this->products->filter(fn($prod) => in_array($prod->name, $firstProducts['products']));
+
+        if(!$isFirstProductSandbox){
+            $lastProducts = $firstProducts;
+            $firstProducts = [];
         }
 
         return [$firstProducts, $lastProducts];

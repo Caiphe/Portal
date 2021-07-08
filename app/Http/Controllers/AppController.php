@@ -131,12 +131,18 @@ class AppController extends Controller
         [$products, $countries] = $productLocationService->fetch();
 
         $app->load('products', 'country');
+        $credentials = $app->credentials;
+        $selectedProducts = end($credentials)['apiProducts'] ?? [];
+
+        if(count($credentials) === 1 && $app->products->filter(fn($prod) => isset($prod->attributes['ProductionProduct']))->count() > 0){
+            $selectedProducts = $app->products->map(fn($prod) => $prod->attributes['ProductionProduct'] ?? $prod->name)->toArray();
+        }
 
         return view('templates.apps.edit', [
             'products' => $products,
             'countries' => $countries ?? '',
             'data' => $app,
-            'selectedProducts' => $app->products->map(fn($prod) => $prod->attributes['ProductionProduct'] ?? $prod->name)->toArray(),
+            'selectedProducts' => $selectedProducts,
         ]);
     }
 
@@ -147,28 +153,36 @@ class AppController extends Controller
         $credentials = $app->credentials;
         $sandboxProducts = $app->products->filter(fn ($prod) => strpos($prod->environments, 'sandbox') !== false);
         $hasSandboxProducts = $sandboxProducts->count() > 0;
+        $products = Product::whereIn('name', $validated['products'])->pluck('attributes', 'name');
 
         if (count($credentials) === 1 && $hasSandboxProducts) {
-            $products = Product::whereIn('name', $validated['products'])->pluck('attributes', 'name');
             $credentialsType = 'consumerKey-sandbox';
             $originalProducts = $credentials[0]['apiProducts'];
             foreach ($products as $name => $attributes) {
                 $attr = json_decode($attributes, true);
                 $newProducts[] = $attr['SandboxProduct'] ?? $name;
             }
+            $syncProducts = $newProducts;
         } else {
             $credentialsType = 'consumerKey-production';
             $originalProducts = end($credentials)['apiProducts'];
 
+            foreach ($products as $name => $attributes) {
+                $attr = json_decode($attributes, true);
+                $newProducts[] = $attr['ProductionProduct'] ?? $name;
+            }
+
             if ($hasSandboxProducts) {
-                $newProducts = [...$validated['products'], ...$sandboxProducts->pluck('name')];
+                $syncProducts = [...$newProducts, ...$credentials[0]['apiProducts']];
+            } else {
+                $syncProducts = $newProducts;
             }
         }
 
         $data = [
             'name' => $app->name,
             'key' => $this->getCredentials($app, $credentialsType, 'string'),
-            'apiProducts' => $validated['products'],
+            'apiProducts' => $newProducts,
             'originalProducts' => $originalProducts,
             'keyExpiresIn' => -1,
             'attributes' => [
@@ -199,7 +213,7 @@ class AppController extends Controller
             'country_code' => $validated['country'],
         ]);
 
-        $app->products()->sync($newProducts);
+        $app->products()->sync($syncProducts);
 
         if ($request->ajax()) {
             return response()->json(['response' => $updatedResponse]);

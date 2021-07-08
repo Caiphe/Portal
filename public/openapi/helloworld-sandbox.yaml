@@ -1,0 +1,1702 @@
+swagger: '2.0'
+info:
+  title: Usage Management API
+  description: |-
+    API to retrieve usage history, OOB usage charge and recharge history details for a particular subscriber MSISDN
+  version: 1.0.2
+host: api.mtn.com
+basePath: /usageManagement/v1/
+schemes:
+  - https
+securityDefinitions:
+  OAuth2:
+    type: oauth2
+    flow: application
+    tokenUrl: "https://api.mtn.com/v1/oauth/access_token/accesstoken?grant_type=client_credentials"
+security:
+  - OAuth2: []
+consumes:
+  - application/json;charset=utf-8
+produces:
+  - application/json;charset=utf-8
+tags:
+  - name: usage
+  - name: recharge
+
+paths:
+  /usage/{id}:
+    get:
+      operationId: retrieves usage history for a subscriber
+      summary: Retrieves usage history for a subscriber's MSISDN
+      description: >-
+        This operation retrieves all the call details record for a subscriber like SMS, Voice and Data usage history.
+      tags:
+        - usage
+      parameters:
+        - name: "transactionId"
+          in: header
+          required: true
+          description: 'Client generated Id to include for tracing requests.'
+          type: string
+          x-example: '6f0bece6-7df3-4da4-af02-5e7f16e5e6fc'
+        - name: "id"
+          required: true
+          type: string
+          in: path
+          description: Mobile number, this number reflects to Billing Number in CDR. Billing Number is the service number that pay this CDR.
+          x-example: '250788123456'
+        - name: "usageType"
+          type: string
+          in: query
+          required: true
+          enum:
+            - VOI
+            - SMS
+            - DAT
+            - ALL
+          default: ALL
+          description: "Type of usage. Valid values are 'VOI' for voice,'SMS' for sms, 'DAT' for data and 'ALL' for all type of usages"
+        - name: "startTime"
+          required: false
+          type: string
+          in: query
+          description: Query filter based on the start time selected to fetch the CDR.
+          x-example: '20200608000000'
+        - name: "endTime"
+          required: false
+          type: string
+          in: query
+          description: Query filter based on the end time selected to fetch the CDR.
+          x-example: '20200610235959'
+        - name: "countryCode"
+          type: string
+          in: header
+          required: false
+          description: Will be used internally by application
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ResponseQueryUsage'
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Error'
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        '405':
+          description: Method Not allowed
+          schema:
+            $ref: '#/definitions/Error'
+        '409':
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+  /caag/{id}:
+    get:
+      operationId: retrieves call at a glance for a subscriber
+      summary: Retrieves call at a glance for a subscriber's MSISDN
+      description: >-
+        This operation retrieves all the call details record for a subscriber like SMS, Voice and Data usage history.
+      tags:
+        - usage
+      parameters:
+        - name: "id"
+          required: true
+          type: string
+          in: path
+          description: Mobile number, this number reflects to Billing Number in CDR. Billing Number is the service number that pay this CDR.
+          x-example: '250788123456'
+        - name: "startTime"
+          required: false
+          type: string
+          in: query
+          description: Query filter based on the start time selected to fetch the CDR.
+          x-example: '20200608000000'
+        - name: "endTime"
+          required: false
+          type: string
+          in: query
+          description: Query filter based on the end time selected to fetch the CDR.
+          x-example: '20200610235959'
+        - name: "limit"
+          type: integer
+          in: header
+          required: false
+        - name: "pageNo"
+          type: integer
+          in: header
+          required: false
+        - name: "pageSize"
+          type: integer
+          in: header
+          required: false
+          description: Will be used internally by application
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/CAAGResponse'
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Error'
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        '405':
+          description: Method Not allowed
+          schema:
+            $ref: '#/definitions/Error'
+        '409':
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+  /usageCharge/{id}:
+    get:
+      operationId: retrieve Out of bundle usage charge history for a subscriber
+      summary: Retrieves Out of bundle usage charge for a Subscriber's MSISDN
+      description: >-
+        This operation retrieves all the out of bundle usage charges applied to a subscriber.
+      tags:
+        - usage
+      parameters:
+        - name: "transactionId"
+          in: header
+          required: true
+          description: 'Client generated Id to include for tracing requests.'
+          type: string
+          x-example: '6f0bece6-7df3-4da4-af02-5e7f16e5e6fc'
+        - name: "id"
+          required: true
+          type: string
+          in: path
+          description: Mobile number, this number reflects to Billing Number in CDR. Billing Number is the service number that pay this CDR.
+          x-example: '250788123456'
+        - name: "countryCode"
+          type: string
+          in: header
+          required: false
+          description: Will be used internally by application
+        - name: usageType
+          type: string
+          in: query
+          required: true
+          enum:
+            - VOI
+            - SMS
+            - DAT
+            - ALL
+          default: ALL
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ResponseQueryUsageCharge'
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Error'
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        '405':
+          description: Method Not allowed
+          schema:
+            $ref: '#/definitions/Error'
+        '409':
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+  /usage/{customerId}/history:
+    get:
+      tags:
+        - usage
+      summary: Retrieves customer's loan related transaction history
+      description: Retrieves data for a specific MSISDN.
+      operationId: queryCustomerUsageHistoryUsingGET
+      produces:
+        - application/json
+      parameters:
+        - name: customerId
+          in: path
+          description: the customer msisdn
+          required: true
+          type: string
+        - name: transactionId
+          in: header
+          description: Transaction Id to identify the request
+          type: string
+        - name: x-authorization
+          in: header
+          description: The partner account identifier
+          type: string
+        - name: startDate
+          in: query
+          description: The start date to retrieve records. Format yyyyMMdd eg. 20210302
+          type: string
+        - name: endDate
+          in: query
+          description: The end date to retrieve records. Format yyyyMMdd eg. 20210302
+          type: string
+        - name: momoPartnerId
+          in: query
+          description: Momo partner Identifier eg. 2600110005124 
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/DataFetchResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "405":
+          description: Method No Allowed
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "406":
+          description: Not acceptable
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "415":
+          description: Unsopported media Type
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: false
+  /usage/{customerId}/flags:
+    post:
+      tags:
+        - usage
+      summary: Turns Marketing and Datasharing flags ON/OFF.
+      description: Turns Marketing and Datasharing flags ON/OFF.
+      operationId: queryCustomerDataUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: customerId
+          in: path
+          description: the customer msisdn
+          required: true
+          type: string
+        - name: x-authorization
+          in: header
+          description: The partner account identifier
+          required: true
+          type: string
+        - in: body
+          name: customerInformation
+          description: Operation Name Enum - MARKETING_ON, DATA_SHARING_ON, MARKETING_OFF
+          required: true
+          schema:
+            $ref: '#/definitions/CustomerData'
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: '#/definitions/SetFlagResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "405":
+          description: Method No Allowed
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "406":
+          description: Not acceptable
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "415":
+          description: Unsopported media Type
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+      deprecated: false
+  /recharge/{id}:
+    get:
+      operationId: retrieve recharge history details
+      summary: Retrieves recharge history details for a Subscriber's MSISDN
+      description: >-
+        This operation retrieves all the recharge hostory of a subscriber.
+      tags:
+        - recharge
+      parameters:
+        - name: "id"
+          required: true
+          type: string
+          in: path
+          description: Mobile number, this number reflects to Billing Number in CDR. Billing Number is the service number that pay this CDR.
+          x-example: '250788123456'
+        - name: "transactionId"
+          in: header
+          required: false
+          description: 'Client generated Id to include for tracing requests.'
+          type: string
+          x-example: '6f0bece6-7df3-4da4-af02-5e7f16e5e6fc'
+        - name: startTime
+          in: query
+          type: string
+          description: Query filter based on the start time selected to fetch the CDR.
+          x-example: '20200608000000'
+        - name: endTime
+          in: query
+          type: string
+          description: Query filter based on the end time selected to fetch the CDR.
+          x-example: '20200610235959'
+        - name: pageNo
+          in: query
+          description: Current Page
+          type: integer
+          default: 1
+        - name: limit
+          in: query
+          description: >-
+            Limit the list of results returned by an API. Optional, If its not
+            specified we should return all the values.
+          type: integer
+          default: 50
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/ResponseQueryRechargeHistory'
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Error'
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        '405':
+          description: Method Not allowed
+          schema:
+            $ref: '#/definitions/Error'
+        '409':
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+  /transaction/{id}:
+    get:
+      summary: Retrieves usage history for a subscriber's MSISDN
+      description: >-
+        This operation retrieves all the call details record for a subscriber like SMS, Voice and Data usage history.
+      tags:
+        - transaction
+      parameters:
+        - name: "id"
+          required: true
+          type: string
+          in: path
+          description: Transaction Id or Mobile number(The format must be E.123).
+          x-example: '250788123456'
+        - name: "idType"
+          required: true
+          type: string
+          in: query
+          description: The type of Id to filter with.
+          x-example: 'MSISDN'
+          enum:
+            - MSISDN
+            - TRANSACTION_ID
+        - name: "subId"
+          type: string
+          in: query
+          description: If the idType is set to TRANSACTION_ID, the subId will be set to the account MSISDN.
+        - name: startTime
+          in: query
+          type: string
+          description: Query filter based on the start time selected to fetch the data.
+          x-example: '20200608000000'
+        - name: endTime
+          in: query
+          type: string
+          description: Query filter based on the end time selected to fetch the data.
+          x-example: '20200610235959'
+        - name: pageNo
+          in: query
+          description: Current Page
+          type: integer
+          default: 1
+        - name: limit
+          in: query
+          description: >-
+            Limit the list of results returned by an API. Optional, If its not
+            specified or if specified amount is too big, we should return 50 rows
+          type: integer
+          default: 50
+        - name: offset
+          in: query
+          description: >-
+            number of first row to skip before returning maxRowsPerPage. e.g 100, 1000
+          type: integer
+          default: 50
+        - name: order
+          in: query
+          description: >-
+            Ascending ot Descending Order for the list of results returned by an API.
+          type: string
+          default: desc
+          enum:
+            - desc
+            - asc
+        - name: sort
+          in: query
+          description: >-
+            The field to sort the order by.
+          type: string
+          default: date
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              resultCode:
+                example: "200"
+                type: string
+                description: Result code. Example- '0000'
+              resultDescription:
+                example: "Success"
+                type: string
+                description: Result message. Example- 'Successfully processed'
+              transactionId:
+                example: "6f0bece6-7df3-4da4-af02-5e7f16e5e6fc"
+                type: string
+                description: Transaction id returned by the provider system.
+              data:
+                type: array
+                items:
+                  type: object
+                  description: ""
+                  properties:
+                    uid:
+                      example: "101114652149351570"
+                      type: string
+                      description: unique id
+                    amount:
+                      example: 100.00
+                      type: integer
+                      description: ""
+                    account:
+                      example: "+2347030976868"
+                      type: string
+                      description: ""
+                    date:
+                      example: "2016-06-06T11:09:39Z"
+                      type: string
+                      description: ""
+                    bankId:
+                      example: 9
+                      type: string
+                      description: ""
+                    bankName:
+                      example: "FBN"
+                      type: string
+                      description: ""
+                    externalCustomerId:
+                      example: "+2349001231231"
+                      type: string
+                      description: ""
+                    externalTransactionId:
+                      example: "internal-101114652149351570"
+                      type: string
+                      description: ""
+                    failureType:
+                      example: "PRODUCT_NOT_FOUND"
+                      type: string
+                      description: ""
+                    merchantName:
+                      example: null
+                      type: string
+                      description: ""
+                    paymentMethodId:
+                      example: "202XXXX627"
+                      type: string
+                      description: ""
+                    productName:
+                      example: null
+                      type: string
+                      description: ""
+                    status:
+                      example: successful
+                      type: string
+                      description: "Status value is an enum of pending, pproved and rejected"
+                      enum:
+                        - successful
+                        - reverted
+                        - failed
+                        - progress
+                        - chargedback
+                    terminalShortCode:
+                      example: null
+                      type: string
+                      description: ""
+                    channel:
+                      example: "USSD"
+                      type: string
+                      description: ""
+                    _links:
+                      type: object
+                      properties:
+                        self:
+                          type: string
+                          example: "https://api.mtn.com/usageManagement/v1/transaction/27832000000"
+                  example:
+                    uid: "101114652149351570"
+                    amount: 100.00
+                    account: "+2347030976868"
+                    date: "2016-06-06T11:09:39Z"
+                    bankId: 9
+                    bankName: "FBN"
+                    externalCustomerId: "+2349001231231"
+                    externalTransactionId: "internal-101114652149351570"
+                    failureType: "PRODUCT_NOT_FOUND"
+                    merchantName: null
+                    paymentMethodId: "202XXXX627"
+                    productName: null
+                    status: successful
+                    terminalShortCode: null
+                    channel: "USSD"
+                    _links:
+                      self:
+                        href: >-
+                          https://api.mtn.com/usageManagement/v1/transaction/27832000000
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        '403':
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Error'
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        '405':
+          description: Method Not allowed
+          schema:
+            $ref: '#/definitions/Error'
+        '409':
+          description: Conflict
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  DataFetchResponse:
+    type: object
+    properties:
+      statusCode:
+        type: string
+        example: "0000"
+        description: The canonical
+      statusMessage:
+        type: string
+        example: OK
+      transactionId:
+        type: string
+        example: "174478014184946374"
+      customerId:
+        type: string
+        example: "233549004250"
+        description: The customer msisdn
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Data'
+  SetFlagResponse:
+    type: object
+    properties:
+      statusCode:
+        type: string
+        example: "0000"
+        description: The canonical
+      statusMessage:
+        type: string
+        example: OK
+      transactionId:
+        type: string
+        example: "174478014184946374"
+      customerId:
+        type: string
+        example: "233549004250"
+        description: The customer msisdn
+      dataSharing:
+        type: boolean
+        example: true
+        description: if data sharing flag is true then sharing is allowed, else if false then sharing is not allowed
+      dataSharingExpiryDate:
+        type: string
+        format: date
+        example: "20201103"
+        description: 'format is yyyyMMdd'
+      subscriberId:
+        type: string
+        example: "256789999781"
+        description: The subscriber's id number
+      marketing:
+        type: boolean
+        example: true
+        description: if marketing sharing flag is true then sharing is allowed, else if false then sharing is not allowed
+  Kyc:
+    type: object
+    properties:
+      firstName:
+        type: string
+        example: Bondzi
+      lastName:
+        type: string
+        example: REGINA
+      dateOfBirth:
+        type: string
+        format: date
+        example: '1995-12-05'
+        description: 'format "yyyy-MM-dd"'
+      gender:
+        type: string
+        example: MALE
+      idType:
+        type: string
+        example: "IDCD"
+      idNumber:
+        type: string
+        example: "6535006636"
+      momoId:
+        type: number
+        example: 49522199
+      msisdnRandom:
+        type: number
+        example: 9.00000002019E11
+  Momo:
+    type: object
+    properties:
+      withdrawalMaxAmt6m:
+        type: number
+        example: 0.0
+      sendAmt1m:
+        type: number
+        example: 0.0
+      bankTransferAmt1m:
+        type: number
+        example: 0.0
+      bankTransferMaxAmt3m:
+        type: number
+        example: 0.0
+      billPaymentQty1m:
+        type: number
+        example: 0.0
+      sendQty1m:
+        type: number
+        example: 0.0
+      receivedAcceptorsQty3m:
+        type: number
+        example: 0.0
+      billPaymentAcceptorsQt1:
+        type: number
+        example: 0.0
+      billPaymentMaxAmt3m:
+        type: number
+        example: 0.0
+      sendAcceptorsQty1m:
+        type: number
+        example: 0.0
+      receivedMaxAmt3m:
+        type: number
+        example: 0.0
+      withdrawalAmt6m:
+        type: number
+        example: 0.0
+      receivedQty3m:
+        type: number
+        example: 0.0
+      withdrawalLastDate:
+        type: string
+        format: date
+        example: '1900-01-01'
+        description: 'format "yyyy-MM-dd"'
+      withdrawalAmt3m:
+        type: number
+        example: 0.0
+      sendMaxAmt1m:
+        type: number
+        example: 0.0
+      withdrawalAmt1m:
+        type: number
+        example: 0.0
+      registrationDate:
+        type: string
+        format: date
+        example: '2016-11-09'
+        description: 'format yyyy-MM-dd'
+      depositAmt1m:
+        type: number
+        example: 0.0
+      withdrawalMaxAmt1m:
+        type: number
+        example: 0.0
+      depositAcceptorsQty3m:
+        type: number
+        example: 0.0
+      billPaymentAcceptorsQt3:
+        type: number
+        example: 0.0
+      depositAmt6m:
+        type: number
+        example: 0.0
+      withdrawalAcceptorsQty1m:
+        type: number
+        example: 0.0
+      receivedMaxAmt1m:
+        type: number
+        example: 0.0
+      depositMaxAmt3m:
+        type: number
+        example: 0.0
+      depositQty3m:
+        type: number
+        example: 0.0
+      withdrawalAcceptorsQty6m:
+        type: number
+        example: 0.0
+      billPaymentLastDate:
+        type: string
+        format: date
+        example: '1900-01-01'
+        description: 'format "yyyy-MM-dd"'
+      bankTransferAmt6m:
+        type: number
+        example: 0.0
+      receivedQty6m:
+        type: number
+        example: 0.0
+      billPaymentAmt1m:
+        type: number
+        example: 0.0
+      withdrawalQty3m:
+        type: number
+        example: 0.0
+      billPaymentQty3m:
+        type: number
+        example: 0.0
+      billPaymentMaxAmt1m:
+        type: number
+        example: 0.0
+      receivedaAmt1m:
+        type: number
+        example: 0.0
+      withdrawalAcceptorsqty3m:
+        type: number
+        example: 0.0
+      billPaymentQty6m:
+        type: number
+        example: 0.0
+      sendAmt3m:
+        type: number
+        example: 0.0
+      bankTransferMaxAmt6m:
+        type: number
+        example: 0.0
+      receivedLastDate:
+        type: string
+        format: date
+        example: '1900-01-01'
+        description: 'format "yyyy-MM-dd"'
+      sendqQty3m:
+        type: number
+        example: 0.0
+      bankTransferQty6m:
+        type: number
+        example: 0.0
+      sendAcceptorsQty6m:
+        type: number
+        example: 0.0
+      withdrawalQty1m:
+        type: number
+        example: 0.0
+      bankTransferAmt3m:
+        type: number
+        example: 0.0
+      bankTransferLastDate:
+        type: string
+        format: date
+        example: '1900-01-01'
+        description: 'format "yyyy-MM-dd"'
+      sendMaxAmt6m:
+        type: number
+        example: 0.0
+      sendMaxAmt3m:
+        type: number
+        example: 0.0
+      depositQty1m:
+        type: number
+        example: 0.0
+      depositLastDate:
+        type: string
+        format: date
+        example: '1900-01-01'
+        description: 'format "yyyy-MM-dd"'
+      receivedAcceptorsQty6m:
+        type: number
+        example: 0.0
+      sendQty6m:
+        type: number
+        example: 0.0
+      billPaymentAcceptorsQt6:
+        type: number
+        example: 0.0
+      withdrawalQty6m:
+        type: number
+        example: 0.0
+      depositQty6m:
+        type: number
+        example: 0.0
+      bankTransferMaxAmt1m:
+        type: number
+        example: 0.0
+      depositAcceptorsQty1m:
+        type: number
+        example: 0.0
+      bankTransferAccptrsQt6:
+        type: number
+        example: 0.0
+      depositMaxAmt1m:
+        type: number
+        example: 0.0
+      depositAcceptorsQty6m:
+        type: number
+        example: 0.0
+      sendAcceptorsQty3m:
+        type: number
+        example: 0.0
+      depositMaxAmt6m:
+        type: number
+        example: 0.0
+      receivedQty1m:
+        type: number
+        example: 0.0
+      receivedAcceptorsQty1m:
+        type: number
+        example: 0.0
+      withdrawalMaxAmt3m:
+        type: number
+        example: 0.0
+      billPaymentAmt6m:
+        type: number
+        example: 0.0
+      bankTransferAccptrsQt3:
+        type: number
+        example: 0.0
+      bankTransferQty3m:
+        type: number
+        example: 0.
+      bankTransferAccptrsQt1:
+        type: number
+        example: 0,
+      receivedMaxAmt6m:
+        type: number
+        example: 0.0
+      receivedAmt6m:
+        type: number
+        example: 0.0
+      receivedAmt3m:
+        type: number
+        example: 0.0
+      depositAmt3m:
+        type: number
+        example: 0.0
+      sendAmt6m:
+        type: number
+        example: 0.0
+      bankTransferQty1m:
+        type: number
+        example: 0.0
+      sendLastDate:
+        type: string
+        format: date
+        example: '1900-01-01'
+        description: 'format "yyyy-MM-dd"'
+      billPaymentAmt3m:
+        type: number
+        example: 0.0
+      billPaymentMaxAmt6m:
+        type: number
+        example: 0.0
+  Gsm:
+    type: object
+    properties:
+      avgBundSize3m:
+        type: number
+        example: 0.0
+      topupMethod:
+        type: string
+        example: UNK
+      npt:
+        type: string
+        example: PREPAID
+      timesBlockedPoQty6m:
+        type: number
+        example: 0.0
+      sUcid:
+        type: string
+        example: '1-_'
+      me2uReceivedAmt3m:
+        type: number
+        example: 0.0
+      datVolAmt6m:
+        type: number
+        example: 0.0
+      avgTopupAmt6m:
+        type: number
+        example: 0.0
+      uniqInAnumQty3m:
+        type: number
+        example: 0.0
+      ntaAmt1m:
+        type: number
+        example: 0.0
+      dabQty3m:
+        type: number
+        example: 0.0
+      nauAmt3m:
+        type: number
+        example: 0.0
+      networkTown:
+        type: string
+        example: UNK
+      poLimitAmt:
+        type: number
+        example: 0.0
+      me2uReceivedQty3m:
+        type: number
+        example: 0.0
+      pUsid:
+        type: string
+        example: "14536792"
+      deviceMake:
+        type: string
+        example: ITEL
+      nrd:
+        type: string
+        format: date
+        example: '2012-12-11'
+        description: 'format yyyy-MM-dd'
+      imeiQty1m:
+        type: number
+        example: 1.0
+      daysBundLess2mb1m:
+        type: number
+        example: 29.0
+      uniqOutbnumQty3m:
+        type: number
+        example: 0.0
+      nauAmt1m:
+        type: number
+        example: 0.0
+      inCallsQty3m:
+        type: number
+        example: 0.0
+      avgBundSize6m:
+        type: number
+        example: 0.0
+      inCallsQty6m:
+        type: number
+        example: 0.0
+      datVolAmt3m:
+        type: number
+        example: 0.0
+      timesBlockedPoQty1m:
+        type: number
+        example: 0.0
+      outcallsQty1m:
+        type: number
+        example: 0.0
+      avgTopupAmt3m:
+        type: number
+        example: 0.0
+      imsiNr:
+        type: string
+        example: "620010342785115"
+      uniqInAnumQty6m:
+        type: number
+        example: 0.0
+      avgBundSize1m:
+        type: number
+        example: 0.0
+      avgTopupAmt1m:
+        type: number
+        example: 0.0
+      me2uReceivedAmt6m:
+        type: number
+        example: 0.0
+      activeDaysQty6m:
+        type: number
+        example: 0.0
+      ntaAmt3m:
+        type: number
+        example: 0.0
+      laDaysQty:
+        type: number
+        example: 0.0
+      dabQty1m:
+        type: number
+        example: 0.0
+      daysBundLess2mb3m:
+        type: number
+        example: 91.0
+      me2uReceivedQty1m:
+        type: number
+        example: 0.0
+      inCallsQty1m:
+        type: number
+        example: 0.0
+      uniqInAnumQty1m:
+        type: number
+        example: 0.0
+      datVolAmt1m:
+        type: number
+        example: 0.0
+      imsiQty1m:
+        type: number
+        example: 1.0
+      outCallsQty6m:
+        type: number
+        example: 0.0
+      activeDaysQty3m:
+        type: number
+        example: 0.0
+      uniqOutBnumQty6m:
+        type: number
+        example: 0.0
+      lastBundlePurchase:
+        type: string
+        format: date
+        example: '2020-05-16'
+        description: 'format "yyyy-MM-dd"'
+      timesBlockedPoQty3m:
+        type: number
+        example: 0.0
+      dabQty6m:
+        type: number
+        example: 0.0
+      activeDaysQty1m:
+        type: number
+        example: 0.0
+      me2uReceivedQty6m:
+        type: number
+        example: 0.0
+      nauAmt6m:
+        type: number
+        example: 0.0
+      ntaAmt6m:
+        type: number
+        example: 0.0
+      me2uReceivedAmt1m:
+        type: number
+        example: 0.0
+      daysBundLess2mb6m:
+        type: number
+        example: 182.0
+      imeiNr:
+        type: number
+        example: 3.5595609272662E14
+      uniqOutBnumQty1m:
+        type: number
+        example: 0.0
+      sUsid:
+        type: string
+        example: '_'
+      outCallsQty3m:
+        type: number
+        example: 0.0
+  AtcLoans:
+    type: object
+    properties:
+      overdue:
+        type: number
+        example: 0.0
+      maxTerm:
+        type: number
+        example: 0.0
+      totTerm:
+        type: number
+        example: 0.0
+      lastDate:
+        type: string
+        format: date
+        example: '1900-01-01'
+        description: 'format "yyyy-MM-dd"'
+      qty6m:
+        type: number
+        example: 0.0
+      amtTot:
+        type: number
+        example: 0.0
+      qty1m:
+        type: number
+        example: 0.0
+      lastOverdue:
+        type: string
+        format: date
+        example: '1900-01-01'
+        description: 'format "yyyy-MM-dd"'
+      firstDate:
+        type: string
+        format: date
+        example: '2099-12-31'
+        description: 'format "yyyy-MM-dd"'
+      qty3m:
+        type: number
+        example: 0.0
+  Data:
+    type: object
+    properties:
+      kyc:
+        $ref: '#/definitions/Kyc'
+      momo:
+        $ref: '#/definitions/Momo'
+      gsm:
+        $ref: '#/definitions/Gsm'
+      atcLoans:
+        $ref: '#/definitions/AtcLoans'
+      maxCompletenessDate:
+        type: string
+        format: date
+        example: '2021-03-02'
+        description: 'format yyyy-MM-dd'
+      ewpAccountHolderTypeCd:
+        type: string
+        example: SUBSCRIBER
+      createDate:
+        type: string
+        format: date
+        example: '2021-03-03'
+        description: 'format yyyy-MM-dd'
+      opcoCd:
+        type: string
+        example: GH
+  CustomerData:
+    type: object
+    properties:
+      operationName:
+        type: string
+        description: To specify the flag to be set
+        enum:
+          - MARKETING_ON
+          - DATA_SHARING_ON
+          - MARKETING_OFF
+    title: CustomerData
+  Money:
+    type: object
+    description: A base / value business entity used to represent money
+    properties:
+      unit:
+        type: string
+        description: Currency of the charge aplied
+        example: RWF
+      value:
+        type: number
+        format: float
+        description: value of the usage charge applied to a subscriber
+        example: 133.34
+  QueryUsage:
+    type: object
+    description: >-
+      It contains the Call details record of a subscriber, containing usage characterisctic and event details.
+    properties:
+      id:
+        type: string
+        description: Unique identifier. This can be customer's msisdn with country code etc.
+      description:
+        type: string
+        description: Description of usage
+        enum:
+          - On-net call
+          - off-net call
+          - international call
+      usageDate:
+        example: '2020-09-21T09:13:16-07:00'
+        type: string
+        format: date-time
+        description: Date of usage
+      balanceType:
+        type: string
+        description: Type of balance from where usage got deducted.
+        enum:
+          - "DA"
+          - "MA"
+          - "4G-peak time"
+      usageType:
+        type: string
+        description: Type of usage
+      status:
+        $ref: '#/definitions/UsageStatusType'
+      usageCharacteristic:
+        type: array
+        items:
+          $ref: '#/definitions/UsageCharacteristic'
+      usageSpecification:
+        $ref: '#/definitions/UsageSpecificationRef'
+      ratedProductUsage:
+        type: array
+        items:
+          $ref: '#/definitions/RatedProductUsage'
+  ResponseQueryUsage:
+    type: object
+    required:
+      - resultCode
+      - resultDescription
+      - transactionId
+    properties:
+      resultCode:
+        example: "200"
+        type: string
+        description: Result code. Example- '0000'
+      resultDescription:
+        example: "Transaction successful"
+        type: string
+        description: Result message. Example- 'Successfully processed'
+      transactionId:
+        example: "6f0bece6-7df3-4da4-af02-5e7f16e5e6fc"
+        type: string
+        description: Transaction id returned by the provider system.
+      MSISDN:
+        example: 234903*******
+        type: string
+        description: This is the calling number or subscriber unique identifier, which is subscriber MSSIDN id.
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/QueryUsage'
+  CAAGResponse:
+    type: object
+    required:
+      - apiStatus
+      - apiData
+    properties:
+      resultCode:
+        example: "200"
+        type: string
+        description: Result code. Example- '0000'
+      resultDescription:
+        example: "Transaction successful"
+        type: string
+        description: Result message. Example- 'Successfully processed'
+      transactionId:
+        example: "6f0bece6-7df3-4da4-af02-5e7f16e5e6fc"
+        type: string
+        description: Transaction id returned by the provider system.
+      apiStatus:
+        example: 234903*******
+        $ref: '#/definitions/CAAGResponseStatus'
+        description: This is the calling number or subscriber unique identifier, which is subscriber MSSIDN id.
+      apiData:
+        $ref: '#/definitions/CAAGResponseData'
+  CAAGResponseStatus:
+    type: object
+    properties:
+      statusMsg:
+        example: "Transaction successful"
+        type: string
+        description: Result message. Example- 'Successfully processed'
+      statusCode:
+        example: "200"
+        type: string
+        description: Result code. Example- '0000'
+      transactionId:
+        example: "6f0bece6-7df3-4da4-af02-5e7f16e5e6fc"
+        type: string
+        description: Transaction id returned by the provider system.
+      msisdn:
+        example: 234903*******
+        type: string
+        description: This is the calling number or subscriber unique identifier, which is subscriber MSSIDN id.
+      dateRange:
+        type: array
+        items:
+          type: string
+  CAAGFinalResponseData:
+    type: object
+    $ref: '#/definitions/CAAGGroupedResponseData'
+  CAAGGroupedResponseData:
+    properties:
+      usageType:
+        type: array
+        items:
+          $ref: '#/definitions/CAAGResponseData'
+  CAAGResponseData:
+    type: object
+    properties:
+      eventTimestampEnrich:
+        type: string
+      volumeMb:
+        type: string
+      source:
+        type: string
+      amount:
+        type: string
+      usageType:
+        type: string
+      transactionDate:
+        type: string
+      billTextCag:
+        type: string
+      billTextAll:
+        type: string
+      wallet:
+        type: string
+      accountBalance:
+        type: string
+  Usage:
+    type: object
+    required:
+      - resultCode
+      - resultDescription
+      - transactionId
+    properties:
+      usageDate:
+        example: '2020-09-21'
+        type: string
+        description: Date of usage. Format is 'YYYY-MM-DD'
+      voiceCharge:
+        $ref: '#/definitions/Money'
+      smsCharge:
+        $ref: '#/definitions/Money'
+      dataCharge:
+        $ref: '#/definitions/Money'
+  ResponseQueryUsageCharge:
+    type: object
+    required:
+      - resultCode
+      - resultDescription
+      - transactionId
+    properties:
+      resultCode:
+        example: "200"
+        type: string
+        description: Result code. Example- '0000'
+      resultDescription:
+        example: "Transaction successful"
+        type: string
+        description: Result message. Example- 'Successfully processed'
+      transactionId:
+        example: "6f0bece6-7df3-4da4-af02-5e7f16e5e6fc"
+        type: string
+        description: Transaction id returned by the provider system.
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Usage'
+  Recharge:
+    type: object
+    required:
+      - rechargeHistory
+    properties:
+      subscriberId:
+        example: "250788123456"
+        type: string
+        description: Mobile number that the money is recharged to.
+      rechargeDate:
+        example: '20200106225722'
+        type: string
+        format: date-time
+        description: Date of recharge
+      rechargeHistory:
+        type: array
+        description: This array contains all the details of recharge history of a suscriber.
+        items:
+          type: object
+          required:
+            - rechargeDate
+            - payType
+            - rechargeAmount
+          properties:
+            description:
+              example: Recharge description
+              type: string
+              description: Description of recharge
+            payType:
+              type: string
+              description: Type of payment
+              enum:
+                - MoMo
+                - VC
+                - USSD
+                - Bank
+            rechargeAmount:
+              type: string
+              description: Total amount used to recharge
+              example: "100"
+      adjustmentType:
+        type: string
+        example: "RECHARGE"
+      amountBefore:
+        type: integer
+        example: "-108.700000"
+      amountAfter:
+        type: string
+        example: "8.700000"
+      transaction:
+        type: string
+        example: "Voucher"
+  ResponseQueryRechargeHistory:
+    type: object
+    required:
+      - resultCode
+      - resultDescription
+      - transactionId
+    properties:
+      resultCode:
+        example: "200"
+        type: string
+        description: Result code. Example- '0000'
+      resultDescription:
+        example: "Transaction successful"
+        type: string
+        description: Result message. Example- 'Successfully processed'
+      transactionId:
+        example: "6f0bece6-7df3-4da4-af02-5e7f16e5e6fc"
+        type: string
+        description: Transaction id returned by the provider system.
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Recharge'
+  UsageCharacteristic:
+    type: object
+    description: Provides the value of a given characteristic
+    required:
+      - name
+      - value
+    properties:
+      name:
+        type: string
+        description: Name of the characteristic
+      valueType:
+        type: string
+        description: Data type of the value of the characteristic
+      value:
+        type: string
+        description: The value of the characteristic
+  UsageSpecificationRef:
+    type: object
+    properties:
+      id:
+        type: string
+        description: unique identifier
+      name:
+        type: string
+        description: The name of the usage specification
+        enum:
+          - Voice
+          - SMS
+          - Data
+    required:
+      - name
+  UsageStatusType:
+    type: string
+    description: Possible values for the status of the Usage
+    enum:
+      - received
+      - rejected
+      - recycled
+      - guided
+      - rated
+      - rerated
+      - billed
+  Error:
+    type: "object"
+    title: "Error"
+    required:
+      - "status"
+      - "message"
+    properties:
+      timestamp:
+        type: "string"
+        format: "date-time"
+        description: "Time stamp of the error"
+      status:
+        type: "string"
+        description: "Status/Error code returned from the provider system"
+      error:
+        type: "string"
+        description: "Status/Error description"
+      message:
+        type: "string"
+        description: "More error details and corrective measures"
+      path:
+        type: "string"
+        description: "the path that caused the error"
+  RatedProductUsage:
+    type: object
+    description: An occurrence of employing a product for its intended purpose with all rating details
+    properties:
+      bucketValueConvertedInAmount:
+        $ref: '#/definitions/Money'
+      otherDetails:
+        $ref: '#/definitions/OtherDetails'
+  OtherDetails:
+    type: object
+    description: Other related product usage details that cannot be categoried in the first fields
+    properties:
+      byteSent:
+        type: string
+        description: Quantity of Bytes sent
+      byteReceived:
+        type: string
+        description: Quantity of bytes received
+      balanceBefore:
+        type: string
+        description: Balance amount value before the the service
+      balanceAfter:
+        type: string
+        description: Balance amount after the service
+      balanceDetails:
+        type: array
+        items:
+          $ref: '#/definitions/OtherBalanceDetails'
+  OtherBalanceDetails:
+    type: object
+    properties:
+      accountId:
+        type: string
+        description: account ID
+      amountBefore:
+        type: string
+        description: amount before
+      amountAfter:
+        type: string
+        description: amount after
+      amountCharged:
+        type: string
+        description: Amount charged
+  ErrorResponse:
+    type: object
+    required:
+      - statusCode
+      - statusMessage
+    properties:
+      statusCode:
+        type: string
+        example: "1000"
+        description: This is the MADAPI Canonical Error Code (it is 4 characters long and it is not the HTTP Status Code which is 3 characters long). Back-end system errors are mapped to specific canonical error codes which are returned. More information on these mappings can be found on the MADAPI Confluence Page 'Response Codes'
+      statusMessage:
+        type: string
+        description: More details and corrective actions related to the error which can be shown to a client
+      supportMessage:
+        type: string
+        description: Internal message meant for consumers of the API to troubleshoot the error (could possible include the back-end system error code in the message if it would be useful)
+      msisdn:
+        type: string
+        description: This is the same msisdn that is sent in the request
+      timestamp:
+        type: string
+        format: date-time
+        description: Timestamp of the error
+      _links:
+        $ref: '#/definitions/Error__links'
+  Error__links_self:
+    type: object
+    properties:
+      href:
+        type: string
+        example: https://api.mtn.com/v1/<path>
+  Error__links:
+    type: object
+    properties:
+      self:
+        $ref: '#/definitions/Error__links_self'
