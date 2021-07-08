@@ -160,9 +160,4 @@ class DashboardController extends Controller
 
         return redirect()->back()->with('alert', "success:The KYC status was updated to {$data['kyc_status']}");
     }
-
-    private function decideOnStatuses($selectedStatuses): bool
-    {
-        return !empty($selectedStatuses) || !is_null($selectedStatuses) && !isset($selectedStatuses['pending']);
-    }
 }
