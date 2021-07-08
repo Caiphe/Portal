@@ -2,6 +2,8 @@
 
 namespace App\Services\AppAccess\NoteHandler;
 
+use Illuminate\Database\Eloquent\Model;
+
 /**
  * Trait NoteHandler
  *
@@ -9,7 +11,7 @@ namespace App\Services\AppAccess\NoteHandler;
  */
 trait NoteHandler
 {
-    public function logActivities($subject)
+    public function logActivities(Model $logger, $subject)
     {
         // Logic to log activities
     }

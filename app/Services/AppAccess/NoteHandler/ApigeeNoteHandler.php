@@ -12,9 +12,17 @@ use App\Services\ApigeeService;
 trait ApigeeNoteHandler
 {
     /**
-     * @var $apigeeService
+     * @var ApigeeService $apigeeService
      */
     protected $apigeeService;
+
+    /**
+     * @return ApigeeService
+     */
+    public function getApigeeService(): ApigeeService
+    {
+        return $this->apigeeService;
+    }
 
     /**
      * @param ApigeeService $service
