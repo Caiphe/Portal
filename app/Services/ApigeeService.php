@@ -55,15 +55,16 @@ class ApigeeService
         $removedProducts = array_diff($originalProducts, $apiProducts);
 
         self::post("developers/{$user->email}/apps/{$name}/keys/{$key}", ["apiProducts" => $apiProducts]);
+
+        foreach ($removedProducts as $product) {
+            self::delete("developers/{$user->email}/apps/{$name}/keys/{$key}/apiproducts/{$product}");
+        }
+
         $updatedDetails = self::put("developers/{$user->email}/apps/{$name}", [
             "name" => $name,
             "attributes" => $data['attributes'],
             "callbackUrl" => $data['callbackUrl'],
         ]);
-
-        foreach ($removedProducts as $product) {
-            self::delete("developers/{$user->email}/apps/{$name}/keys/{$key}/apiproducts/{$product}");
-        }
 
         return $updatedDetails;
     }

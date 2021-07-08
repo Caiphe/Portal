@@ -48,7 +48,7 @@
                     @svg('app-avatar', '#ffffff')
                     <div class="group">
                         <label for="name">Name your app *</label>
-                        <input type="text" name="name" id="name" placeholder="Enter name" required value="{{ $data['name'] }}">
+                        <input type="text" name="name" id="name" placeholder="Enter name" required value="{{ $data['display_name'] }}">
                     </div>
 
                     <div class="group">
@@ -304,38 +304,29 @@
             appProducts[p].classList.add('done');
         }
 
-        var update = document.getElementById('update').addEventListener('click', handleUpdate);
+        var update = document.getElementById('form-edit-app').addEventListener('submit', handleUpdate);
 
         function handleUpdate(event) {
-            event.preventDefault();
-
-            document.getElementById('update').textContent = "Updating...";
-
+            var elements = this.elements;
+            var result;
             var app = {
-                key: '{{$data['credentials']['consumerKey'] ?? ''}}',
-                name: {!! json_encode($data['name']) !!},
-                new_name: document.querySelector('#name').value,
-                url: document.querySelector('#url').value,
-                description: document.querySelector('#description').value,
+                display_name: elements['name'].value,
+                url: elements['url'].value,
+                description: elements['description'].value,
                 country: document.querySelector('.country-checkbox:checked').dataset.location,
                 products: [],
-                original_products: @json(array_column($data['products']->toArray(), 'name')),
                 _method: 'PUT'
             };
-
-            var result;
-
-            var selectedProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
-
-            var products = [];
-            for(i = 0; i < selectedProducts.length; i++) {
-                products.push(selectedProducts[i].dataset.name);
-            }
-
-            app.products = products;
-
             var url = "{{ route('app.update', $data) }}";
             var xhr = new XMLHttpRequest();
+            var selectedProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
+
+            event.preventDefault();
+            document.getElementById('update').textContent = "Updating...";
+
+            for(i = 0; i < selectedProducts.length; i++) {
+                app.products.push(selectedProducts[i].dataset.name);
+            }
 
             xhr.open('POST', url, true);
             xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
