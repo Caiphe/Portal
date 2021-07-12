@@ -7,6 +7,10 @@
 
 @section('title', 'Applications')
 
+@section('page-info')
+    <button class="button primary" onclick="syncApps();">Sync Apps</button>
+@endsection
+
 @section('content')
 
     <div class="container" id="app-index">
