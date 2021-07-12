@@ -2,9 +2,10 @@
 
 namespace App\Services\AppAccess;
 
-use App\AppsActivityLog;
-use Illuminate\Http\Request;
+use RuntimeException;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Validation\ValidationException;
 use App\Services\AppAccess\NoteHandler\NoteHandler;
 use App\Services\AppAccess\NoteHandler\ApigeeNoteHandler;
 
@@ -16,40 +17,19 @@ use App\Services\AppAccess\NoteHandler\ApigeeNoteHandler;
 class AppAccess
 {
     use NoteHandler, ApigeeNoteHandler;
-    /**
-     * @var Request $request
-     */
-    protected $request;
-
-    /**
-     * @var Model $appsActivityLog
-     */
-    private $appsActivityLog;
-
-    /**
-     * AppAccess constructor.
-     *
-     * @param Request $request
-     */
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-
-        $this->appsActivityLog = new AppsActivityLog();
-    }
 
     /**
      * @param string $category
      * @param Model $subject
      */
-    public function revokeAccess(string $category, Model $subject)
+    public function revokeAccess($data, $user, $category = "app", $options = [])
     {
-        if ("product" === $category) {
-            $this->revokeAppAccess($subject);
-        } elseif ("app" === $category) {
-            $this->revokeProductAccess($subject);
+        if ("app" === $category) {
+            $this->revokeAppAccess($data, $user, $options);
+        } elseif ("product" === $category) {
+            $this->revokeProductAccess($data, $user);
         } else {
-            throw new \RuntimeException("Could not fulfil request.");
+            throw new RuntimeException("Could not fulfil revoke access note update request.");
         }
     }
 
@@ -57,54 +37,78 @@ class AppAccess
      * @param string $category
      * @param Model $subject
      */
-    public function approveAccess(string $category, Model $subject)
+    public function approveAccess($data, $user, $category = "app", $options = [])
     {
-        if ("product" === $category) {
-            $this->approveAppAccess($subject);
-        } elseif ("app" === $category) {
-            $this->approveProductAccess($subject);
+        if ("app" === $category) {
+            $this->approveAppAccess($data, $user, $options);
+        } elseif ("product" === $category) {
+            $this->approveProductAccess($data, $user);
         } else {
-            throw new \RuntimeException("Could not fulfil request.");
+            throw new RuntimeException("Could not fulfil approve access note update request.");
         }
     }
 
-    protected function revokeProductAccess($subject)
+    /**
+     * @param $data
+     * @param $user
+     */
+    protected function revokeProductAccess($data, $user)
     {
-        // Trigger event to Approve an App Access, if needs be, may include an Email Sending Listener
-
-            // How do we handle approving and revoking of App Access?
-
-        // Add Note to local database storage
+        try
+        {
+            $this->logActivityNote($user, $data);
+        } catch (Exception $exc) {
+            Log::error($exc->getMessage());
+        }
     }
 
-    protected function revokeAppAccess($subject)
+    /**
+     * @param $data
+     * @param $user
+     * @param $options
+     */
+    protected function revokeAppAccess($data, $user, $options)
     {
-        // Trigger event to Approve an App Access, if needs be, may include an Email Sending Listener
-
-            // How do we handle approving and revoking of App Access?
-
-        // Add Note to local database storage
-
-        // Push Note to Apigee
+        try
+        {
+            $this->logActivityNote($user, $data);
+            $this->apigeeService->pushAppNote($data, $user, $options);
+        } catch (Exception $exc) {
+            Log::error($exc->getMessage());
+        } catch (ValidationException $e) {
+            Log::error("Apigee note update failed validation for {$data['appName']}");
+        }
     }
 
-    protected function approveProductAccess($subject)
+    /**
+     * @param $data
+     * @param $user
+     */
+    protected function approveProductAccess($data, $user)
     {
-        // Trigger event to Approve an App Access, if needs be, may include an Email Sending Listener
-
-            // How do we handle approving and revoking of App Access?
-
-        // Add Note to local database storage
+        try
+        {
+            $this->logActivityNote($user, $data);
+        } catch (Exception $exc) {
+            Log::error($exc->getMessage());
+        }
     }
 
-    protected function approveAppAccess($subject)
+    /**
+     * @param $data
+     * @param $user
+     * @param $options
+     */
+    protected function approveAppAccess($data, $user, $options)
     {
-        // Trigger event to Approve an App Access, if needs be, may include an Email Sending Listener
-
-            // How do we handle approving and revoking of App Access?
-
-        // Add Note to local database storage
-
-        // Push Note to Apigee
+        try
+        {
+            $this->logActivityNote($user, $data);
+            $this->apigeeService->pushAppNote($data, $user, $options);
+        } catch (Exception $exc) {
+            Log::error($exc->getMessage());
+        } catch (ValidationException $e) {
+            \Log::error("Apigee note update failed validation for {$data['appName']}");
+        }
     }
 }

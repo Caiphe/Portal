@@ -9,6 +9,7 @@ use App\App;
 use App\Country;
 use App\Mail\KycStatusUpdate;
 use App\Mail\ProductAction;
+use App\Services\AppAccess\AppAccess;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -88,7 +89,7 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function update(UpdateStatusRequest $request)
+    public function update(UpdateStatusRequest $request, AppAccess $appAccess)
     {
         $validated = $request->validated();
         $app = App::with('developer')->find($validated['app']);
@@ -108,6 +109,27 @@ class DashboardController extends Controller
         $responseStatus = $response->status();
         if (preg_match('/^2/', $responseStatus)) {
             $app->products()->updateExistingPivot($validated['product'], ['status' => $status, 'actioned_by' => $currentUser->id, 'actioned_at' => date('Y-m-d H:i:s')]);
+
+            $data = [
+                'aid' => $app->aid,
+                'appName' => $app->name,
+                'comment' => $request->get('additional_status_change_note') ?: "",
+                'status' => $validated['action']
+            ];
+
+            $options = [
+                'callbackUrl' => '',
+                'apiProducts' => ''
+            ];
+
+            $appAccess->setApigeeService(new ApigeeService());
+
+            if ('approve' === $validated['action']) {
+                $appAccess->approveAccess($data, auth()->user(), 'app', $options);
+            } elseif ('revoked' === $validated['action']) {
+                $appAccess->revokeAccess($data, auth()->user(), 'app', $options);
+            }
+
         } else if ($request->ajax()) {
             $body = json_decode($response->body());
             return response()->json(['success' => false, 'body' => $body->message], $responseStatus);

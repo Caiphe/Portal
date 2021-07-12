@@ -3,8 +3,12 @@
 namespace App\Services;
 
 use App\Country;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 /**
  * This is a helper service to connect to Apigee.
@@ -13,6 +17,8 @@ use Illuminate\Support\Str;
  */
 class ApigeeService
 {
+    const STATUSES = ['approved', 'revoked'];
+
     public static function get(string $url)
     {
         return self::HttpWithBasicAuth()->get(config('apigee.base') . $url)->json();
@@ -244,7 +250,7 @@ class ApigeeService
 
     /**
      * @param  string $url
-     * 
+     *
      * @return mixed
      */
     public static function getMint(string $url)
@@ -304,5 +310,46 @@ class ApigeeService
         }
 
         return ($a['issuedAt'] < $b['issuedAt']) ? -1 : 1;
+    }
+
+    /**
+     * @param array $data
+     * @param null $user
+     * @param array $extrasOptions
+     * @return Response
+     * @throws ValidationException
+     */
+    public function pushAppNote(array $data, $user = null, array $extrasOptions = []): Response
+    {
+        $validator = Validator::make($data['attributes'], [
+            'status' => 'required|string',
+            'appName' => 'required|string',
+            'note' => 'required|string'
+        ]);
+
+        if (!$validator->validated()) {
+            throw new Exception("App note update could not be fulfilled. Invalid data attributes.");
+        }
+
+        if (is_null($user)) {
+            $user = auth()->user();
+        }
+
+        $appName = $data['attributes']['appName'];
+        unset($data['attributes']['appName']);
+
+        if (in_array($data['attributes']['status'], self::STATUSES) && !empty($extrasOptions)) {
+
+            unset($data['attributes']['status']);
+
+            return self::put("developers/{$user->email}/apps/{$appName}", [
+                "name" => $appName,
+                "attributes" => $data['attributes'],
+                "callbackUrl" => $extrasOptions['callbackUrl'],
+                "apiProducts" => $extrasOptions['apiProducts']
+            ]);
+        } else {
+            Log::info("Could not update Note for {$appName}");
+        }
     }
 }

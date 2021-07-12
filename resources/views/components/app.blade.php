@@ -121,6 +121,15 @@
         </div>
         @endif
 
+        @if(!empty($sandboxProducts) && $isAdminPage)
+            <div class="detail-right status-change-note">
+                <div class="detail-row">
+                    <div class="detail-item"><strong>Add note:</strong></div>
+                    <textarea id="status-change-note" name="additional_status_change_note" rows="4" cols="50" placeholder="Optional product status change note"></textarea>
+                </div>
+            </div>
+        @endif
+
         @if(!empty($prodProducts))
         @if(!$isAdminPage)
         <div class="mt-2">
@@ -167,6 +176,15 @@
         <div class="products production-products kyc-status-{{ Str::slug($app->kyc_status ?? 'none') }}">
             <x-apps.products :app="$app" :products="$prodProducts['products']" for="production" />
         </div>
+        @endif
+
+        @if(!empty($sandboxProducts) && $isAdminPage)
+            <div class="detail-right status-change-note">
+                <div class="detail-row">
+                    <div class="detail-item"><strong>Add note:</strong></div>
+                    <textarea id="status-change-note" name="additional_status_change_note" rows="4" cols="50" placeholder="Optional product status change note"></textarea>
+                </div>
+            </div>
         @endif
 
         @if(!$isAdminPage && !empty($sandboxProducts) && is_null($app->live_at))

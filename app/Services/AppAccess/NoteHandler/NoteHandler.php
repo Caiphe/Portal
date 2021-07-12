@@ -2,7 +2,7 @@
 
 namespace App\Services\AppAccess\NoteHandler;
 
-use Illuminate\Database\Eloquent\Model;
+use App\AppsActivityLog;
 
 /**
  * Trait NoteHandler
@@ -11,8 +11,17 @@ use Illuminate\Database\Eloquent\Model;
  */
 trait NoteHandler
 {
-    public function logActivities(Model $logger, $subject)
+    /**
+     * @param $data
+     * @param $user
+     */
+    public function logActivityNote($data, $user)
     {
-        // Logic to log activities
+        AppsActivityLog::create([
+            'aid' =>$data['aid'],
+            'user_id' => $user->id,
+            'status' => $data['status'],
+            'comment' => $data['note']
+        ]);
     }
 }
