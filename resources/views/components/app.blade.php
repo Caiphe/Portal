@@ -71,7 +71,7 @@
                     </div>
                 </div>
             </div>
-        @elseif(!empty($sandboxProducts))
+        @elseif(!empty($sandboxProducts['products']))
             <div>
                 <div class="detail-left">
                     <div class="detail-row">
@@ -129,11 +129,16 @@
                 </div>
             </div>
         @endif
-
-        @if(!empty($prodProducts))
+        @if(!empty($prodProducts['products']))
         @if(!$isAdminPage)
         <div class="mt-2">
             <div class="detail-left">
+                @if(empty($sandboxProducts))
+                <div class="detail-row">
+                    <div class="detail-item"><strong>Description:</strong></div>
+                    <div class="detail-item">{{ $app['description'] ?: 'No description' }}</div>
+                </div>
+                @endif
                 <div class="detail-row cols">
                     <div class="detail-item"><strong>Production key</strong></div>
                     <div class="detail-item key">{{ $prodProducts['credentials']['consumerKey'] }}</div>
@@ -160,6 +165,12 @@
                 @endif
             </div>
             <div class="detail-right">
+                @if(empty($sandboxProducts))
+                <div class="detail-row cols">
+                    <div class="detail-item"><strong>Callback url</strong></div>
+                    <div class="detail-item">{{ $app['callback_url'] ?: 'No callback url' }}</div>
+                </div>
+                @endif
                 <div class="detail-row cols">
                     <div class="detail-item"><strong>Expires:</strong></div>
                     <div class="detail-item">Never</div>
@@ -193,10 +204,10 @@
             <p class="spacer-flex"><strong class="mr-1">Ready to launch?</strong>You're just a few clicks away</p>
             <button class="button dark">GO LIVE @svg('rocket', '#FFF')</button>
         </form>
-        @elseif($isAdminPage && !empty($sandboxProducts))
+        @elseif($isAdminPage && $prodProducts['hasKyc'])
         <div class="kyc-status">
             <strong class="mr-2">Update the KYC status</strong>
-            <select name="kyc_status" id="kyc-status" data-aid="{{ $app['aid'] }}" autocomplete="off">
+            <select name="kyc_status" class="kyc-status-select" data-aid="{{ $app['aid'] }}" autocomplete="off">
                 <option @if($app['kyc_status'] === 'Documents Received') selected @endif value="Documents Received">Documents Received</option>
                 <option @if($app['kyc_status'] === 'In Review') selected @endif value="In Review">In Review</option>
                 <option @if($app['kyc_status'] === 'KYC Approved') selected @endif value="KYC Approved">KYC Approved</option>

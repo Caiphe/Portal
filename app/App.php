@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 
 class App extends Model
 {
-    
+
     use SoftDeletes;
 
     /**
@@ -102,28 +102,26 @@ class App extends Model
         $credentials = $this->credentials;
         $firstProducts = [
             'credentials' => $credentials[0],
-            'products' => []
+            'products' => $credentials[0]['apiProducts'],
+            'hasKyc' => !is_null($this->kyc_status)
         ];
-        $isFirstProductSandbox = false;
+        $lastProducts = [
+            'credentials' => [],
+            'products' => [],
+            'hasKyc' => !is_null($this->kyc_status)
+        ];
+        $isFirstProductSandbox = Product::whereIn('name', $firstProducts['products'])->where('environments', 'like', 'sandbox')->count() > 0;
 
-        foreach ($this->products as $product) {
-            if (!in_array($product->name, $credentials[0]['apiProducts'])) continue;
-
-            if (strpos($product->environments, 'sandbox') !== false) {
-                $isFirstProductSandbox = true;
-            }
-
-            $firstProducts['products'][] = $product;
+        if(count($credentials) > 1){
+            $lastProducts['credentials'] = end($credentials);
+            $lastProducts['products'] = $this->products->filter(fn($prod) => in_array($prod->name, $lastProducts['credentials']['apiProducts']));
         }
-        $lastProducts = $isFirstProductSandbox ? [] : $firstProducts;
-        $firstProducts = $isFirstProductSandbox ? $firstProducts : [];
 
-        if (count($credentials) > 1) {
-            $lastProducts = $this->products->filter(fn ($product) => in_array($product->name, end($credentials)['apiProducts']));
-            $lastProducts = [
-                'credentials' => end($credentials),
-                'products' => $lastProducts
-            ];
+        $firstProducts['products'] = $this->products->filter(fn($prod) => in_array($prod->name, $firstProducts['products']));
+
+        if(!$isFirstProductSandbox){
+            $lastProducts = $firstProducts;
+            $firstProducts = [];
         }
 
         return [$firstProducts, $lastProducts];

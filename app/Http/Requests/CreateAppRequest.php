@@ -22,14 +22,11 @@ class CreateAppRequest extends FormRequest {
 	 */
 	public function rules() {
 		return [
-			'key' => 'sometimes',
-			'name' => 'required',
-			'new_name' => 'sometimes',
+			'display_name' => 'sometimes',
 			'url' => 'sometimes',
 			'description' => 'sometimes',
 			'country' => 'sometimes',
 			'products' => 'required:array',
-			'original_products' => 'sometimes:array',
 		];
 	}
 
@@ -41,8 +38,7 @@ class CreateAppRequest extends FormRequest {
     protected function prepareForValidation()
     {
         $this->merge([
-            'name' => filter_var($this->name, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'new_name' => filter_var($this->new_name, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'display_name' => filter_var($this->display_name, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'url' => filter_var($this->url, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description' => filter_var($this->description, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
         ]);

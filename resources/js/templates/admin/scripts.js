@@ -1,11 +1,21 @@
 function sync(el) {
+    el.classList.add('syncing');
+
+    syncApps(function(){
+        el.classList.remove('syncing');
+        el = null;
+    })
+}
+
+function syncApps(cb) {
     var xhr = new XMLHttpRequest();
 
-    el.classList.add('syncing');
+    addLoading('Syncing');
 
     xhr.onreadystatechange = function() {
         if (xhr.readyState === XMLHttpRequest.DONE) {
-            el.classList.remove('syncing');
+            removeLoading('Syncing');
+            cb && cb();
 
             if (xhr.status === 200) {
                 addAlert('success', ['Syncing complete!', 'Refresh the page to see if there is anything new.']);
