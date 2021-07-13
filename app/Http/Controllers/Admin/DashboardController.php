@@ -27,9 +27,10 @@ class DashboardController extends Controller
         $searchTerm = "%" . $request->get('q', '') . "%";
         $hasSearchTerm = $searchTerm !== '%%';
         $searchCountries = $request->get('countries');
-        $hasCountries = $request->has('countries') && !is_null($searchCountries[0]);
+        $hasCountries = $request->has('countries') && !is_null($searchCountries);
         $notAdminNoResponsibleCountries = !$isAdmin && empty($responsibleCountriesCodes);
         $notAdminNoResponsibleGroups = !$isAdmin && empty($responsibleGroups);
+        $status = $request->get('status', 'pending');
 
         if (($notAdminNoResponsibleCountries || $notAdminNoResponsibleGroups) && $request->ajax()) {
             return response()
@@ -58,22 +59,20 @@ class DashboardController extends Controller
                         $q->whereIn('group', $responsibleGroups);
                     });
             })
-            ->when(!$hasSearchTerm && !$hasCountries, function ($q) {
-                $q->whereNotNull('live_at')
-                    ->whereHas('products', function ($query) {
-                        $query->whereNull('actioned_at');
-                    });
-            })
             ->when($hasSearchTerm, function ($q) use ($searchTerm) {
                 $q->where(function ($query) use ($searchTerm) {
                     $query->where('display_name', 'like', $searchTerm)
                         ->orWhere('aid', 'like', $searchTerm);
                 });
             })
-            ->when($this->hasFilterStatuses([$request->get('status')]), function ($q) {
-                array_map(function($status) use($q) {
-                    $q->orWhere('status', $status);
-                }, $this->getSelectedStatuses());
+            ->when($status !== 'all', function ($q) use($status) {
+                if ($status === 'pending') {
+                    $q->whereHas('products', function($query){
+                        $query->where('status', 'pending');
+                    });
+                } else {
+                    $q->where('status', $status);
+                }
             })
             ->when($hasDeveloperFilter, function($query){
                 $query->join('users', function ($join) {
@@ -82,11 +81,7 @@ class DashboardController extends Controller
                 });
             })
             ->when($hasCountries, function ($q) use ($searchCountries) {
-                $q->where(function ($query) use ($searchCountries) {
-                    $query->whereHas('country', function ($q) use ($searchCountries) {
-                        $q->whereIn('code', $searchCountries);
-                    });
-                });
+                $q->where('country_code', $searchCountries);
             })
             ->byStatus('approved')
             ->orderBy('updated_at', 'desc')
@@ -96,14 +91,16 @@ class DashboardController extends Controller
             return response()
                 ->view('templates.admin.dashboard.data', [
                     'apps' => $apps,
-                    'countries' => Country::all(),
+                    'countries' => Country::orderBy('name')->pluck('name', 'code'),
                 ], 200)
                 ->header('Content-Type', 'text/html');
         }
 
         return view('templates.admin.dashboard.index', [
             'apps' => $apps,
-            'countries' => Country::all(),
+            'countries' => Country::orderBy('name')->pluck('name', 'code'),
+            'selectedCountry' => $request->get('countries', ''),
+            'selectedStatus' => $request->get('status', 'pending')
         ]);
     }
 

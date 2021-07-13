@@ -2,7 +2,6 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/templates/apps/index.css') }}">
-    <link rel="stylesheet" href="{{ mix('/css/templates/admin/dashboard/index.css') }}">
 @endpush
 
 @section('title', 'Applications')
@@ -16,33 +15,29 @@
     <div class="container" id="app-index">
         <div class="cols centre-align">
             <form id="filter-form" class="cols centre-align ajaxify" action="{{ route('admin.dashboard.index') }}" method="GET" data-replace="#table-data">
-                <div class="form-blocks">
-                    <h3>Search</h3>
-                    <input type="text" name="q" id="filter-text" class="filter-text ml-1" placeholder="App or developer name" value="{{ $_GET['q'] ?? '' }}">
-                </div>
+                <h3>Search</h3>
+                <input type="text" name="q" id="filter-text" class="filter-text ml-1" placeholder="App or developer name" value="{{ $_GET['q'] ?? '' }}">
 
-                <div class="form-blocks">
-                    <h3 class="ml-2">Country</h3>
-                    <x-multiselect id="filter-country" name="countries" class="ml-1" label="Select country" :options="$countries->pluck('name', 'code')" :selected="$_GET['countries'] ?? []" />
-                </div>
+                <h3 class="ml-2">Country</h3>
+                <select id="filter-country"  name="countries" class="ml-1" label="Select country" >
+                    <option value="">Select country</option>
+                    @foreach($countries as $code => $name)
+                        <option value="{{ $code }}" {{ (($selectedCountry === $code) ? 'selected': '') }}>{{ $name }}</option>
+                    @endforeach
+                </select>
 
-                <div class="form-blocks">
-                    <h3 class="ml-2">Status</h3>
-                    <select id="filter-status" name="status" class="ml-1">
-                        <option value="all">All</option>
-                        <option value="pending" selected>Pending</option>
-                        <option value="approved">Approved</option>
-                        <option value="revoked">Revoked</option>
-                    </select>
-                </div>
-
+                <h3 class="ml-2">Status</h3>
+                <select id="filter-status" name="status" class="ml-1">
+                    <option @if($selectedStatus == 'all') selected @endif value="all">All</option>
+                    <option @if($selectedStatus == 'pending') selected @endif value="pending">Pending</option>
+                    <option @if($selectedStatus == 'approved') selected @endif value="approved">Approved</option>
+                    <option @if($selectedStatus == 'revoked') selected @endif value="revoked">Revoked</option>
+                </select>
 
             </form>
-            <div class="form-blocks">
-                <form class="ajaxify" data-replace="#table-data" data-func="clearFilter()" action="{{ route('admin.dashboard.index') }}" method="GET">
-                    <button id="clearFilter" class="dark outline ml-2">Clear filters</button>
-                </form>
-            </div>
+            <form class="ajaxify" data-replace="#table-data" data-func="clearFilter()" action="{{ route('admin.dashboard.index') }}" method="GET">
+                <button id="clearFilter" class="dark outline ml-2">Clear filters</button>
+            </form>
         </div>
 
         <div id="table-data" class="row">
@@ -132,7 +127,6 @@
 
             document.getElementById("filter-text").value = "";
             document.getElementById("filter-country").selectedIndex = 0;
-            document.getElementById('filter-country-tags').innerHTML = "";
         }
 
         function getProductStatus(event) {
