@@ -45,9 +45,13 @@ class DashboardController extends Controller
         }
 
         $hasDeveloperFilter = false;
-        if ($hasSearchTerm && $this->hasDeveloperFilter($searchTerm)) {
-            $hasDeveloperFilter = true;
-        }
+        $hasDeveloperEmailInputFilter = function ($givenInputString) use(&$hasDeveloperFilter) {
+            if (preg_match('/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/si', $givenInputString)) {
+                $hasDeveloperFilter = true;
+            }
+            return $hasDeveloperFilter;
+        };
+        $hasDeveloperFilter = $hasSearchTerm && $hasDeveloperEmailInputFilter($searchTerm);
 
         $apps = App::with(['developer', 'country', 'products'])
             ->whereNotNull('country_code')
@@ -72,10 +76,10 @@ class DashboardController extends Controller
                     $q->where('status', $status);
                 }
             })
-            ->when($hasDeveloperFilter, function($query){
-                $query->join('users', function ($join) {
+            ->when($hasDeveloperFilter, function($query) use($searchTerm) {
+                $query->join('users', function ($join) use($searchTerm) {
                     $join->on('users.developer_id', '=', 'apps.developer_id')
-                        ->where('users.email', $this->getDeveloperFilter());
+                        ->where('users.email', $searchTerm);
                 });
             })
             ->when($hasCountries, function ($q) use ($searchCountries) {
