@@ -11,12 +11,10 @@ use App\Mail\KycStatusUpdate;
 use App\Mail\ProductAction;
 use App\Services\AppAccess\AppAccess;
 use Illuminate\Support\Facades\Mail;
-use App\Util\Search\Admin\AppsFilter;
 use Symfony\Component\HttpFoundation\Request;
 
 class DashboardController extends Controller
 {
-    use AppsFilter;
 
     public function index(Request $request)
     {
