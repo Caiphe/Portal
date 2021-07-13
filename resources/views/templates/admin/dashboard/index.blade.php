@@ -4,14 +4,14 @@
     <link rel="stylesheet" href="{{ mix('/css/templates/apps/index.css') }}">
 @endpush
 
-@section('title', 'Applications waiting to be processed')
+@section('title', 'Applications')
 
 @section('page-info')
     <button class="button primary" onclick="syncApps();">Sync Apps</button>
 @endsection
 
 @section('content')
-    
+
     <div class="container" id="app-index">
         <div class="cols centre-align">
             <form id="filter-form" class="cols centre-align ajaxify" action="{{ route('admin.dashboard.index') }}" method="GET" data-replace="#table-data">
@@ -19,15 +19,26 @@
                 <input type="text" name="q" id="filter-text" class="filter-text ml-1" placeholder="App or developer name" value="{{ $_GET['q'] ?? '' }}">
 
                 <h3 class="ml-2">Country</h3>
-                <x-multiselect id="filter-country" name="countries" class="ml-1" label="Select country" :options="$countries->pluck('name', 'code')" :selected="$_GET['countries'] ?? []" />
-            </form>
+                <select id="filter-country"  name="countries" class="ml-1" label="Select country" >
+                    <option value="">Select country</option>
+                    @foreach($countries as $code => $name)
+                        <option value="{{ $code }}" {{ (($selectedCountry === $code) ? 'selected': '') }}>{{ $name }}</option>
+                    @endforeach
+                </select>
 
+                <h3 class="ml-2">Status</h3>
+                <select id="filter-status" name="status" class="ml-1">
+                    <option @if($selectedStatus == 'all') selected @endif value="all">All</option>
+                    <option @if($selectedStatus == 'pending') selected @endif value="pending">Pending</option>
+                    <option @if($selectedStatus == 'approved') selected @endif value="approved">Approved</option>
+                    <option @if($selectedStatus == 'revoked') selected @endif value="revoked">Revoked</option>
+                </select>
+
+            </form>
             <form class="ajaxify" data-replace="#table-data" data-func="clearFilter()" action="{{ route('admin.dashboard.index') }}" method="GET">
                 <button id="clearFilter" class="dark outline ml-2">Clear filters</button>
             </form>
         </div>
-
-        <p><sup>*</sup><small>The list below are applications waiting to be processed. If you would like to view a processed application you can use the search form above.</small></p>
 
         <div id="table-data" class="row">
             @include('templates.admin.dashboard.data', compact('apps', 'countries'))
@@ -42,10 +53,13 @@
 
         document.getElementById('filter-text').addEventListener('keyup', filterApps);
         document.getElementById("filter-country").addEventListener('change', submitFilter);
+        document.getElementById("filter-status").addEventListener('change', submitFilter);
+
+
 
         window.onload = init;
         ajaxifyComplete = init;
-        
+
         function init() {
             var buttons = document.querySelectorAll('p.name');
             var actions = document.querySelectorAll('.actions');
@@ -68,7 +82,7 @@
             for(var m = 0; m < productStatusButtons.length; m++) {
                 productStatusButtons[m].addEventListener('click', getProductStatus)
             }
-            
+
             for (var i = kycStatus.length - 1; i >= 0; i--) {
                 kycStatus[i].addEventListener('change', handleKycUpdateStatus);
             }
@@ -111,13 +125,8 @@
 
         function clearFilter() {
 
-            var countrySelect = document.querySelectorAll('#filter-country-tags .tag');
-
-            for (var i = countrySelect.length - 1; i >= 0; i--) {
-                countrySelect[i].click();
-            }
-
             document.getElementById("filter-text").value = "";
+            document.getElementById("filter-country").selectedIndex = 0;
         }
 
         function getProductStatus(event) {
@@ -162,8 +171,7 @@
             var xhr = new XMLHttpRequest();
             var lookup = {
                 approve: 'approved',
-                revoke: 'revoked',
-                pending: 'pending'
+                revoke: 'revoked'
             };
 
             xhr.open('POST', '/admin/apps/' + data.product + '/' + data.action);
