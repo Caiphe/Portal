@@ -54,6 +54,6 @@
             <p>No apps.</p>
             @endif
         @endforelse
-        {{ $apps->links() }}
+        {{ $apps->withQueryString()->links() }}
     </div>
 </div>
