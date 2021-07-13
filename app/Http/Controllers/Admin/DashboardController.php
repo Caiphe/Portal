@@ -44,15 +44,6 @@ class DashboardController extends Controller
             ]);
         }
 
-        $hasDeveloperFilter = false;
-        $hasDeveloperEmailInputFilter = function ($givenInputString) use(&$hasDeveloperFilter) {
-            if (preg_match('/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/si', $givenInputString)) {
-                $hasDeveloperFilter = true;
-            }
-            return $hasDeveloperFilter;
-        };
-        $hasDeveloperFilter = $hasSearchTerm && $hasDeveloperEmailInputFilter($searchTerm);
-
         $apps = App::with(['developer', 'country', 'products'])
             ->whereNotNull('country_code')
             ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes, $responsibleGroups) {
@@ -64,7 +55,12 @@ class DashboardController extends Controller
             ->when($hasSearchTerm, function ($q) use ($searchTerm) {
                 $q->where(function ($query) use ($searchTerm) {
                     $query->where('display_name', 'like', $searchTerm)
-                        ->orWhere('aid', 'like', $searchTerm);
+                        ->orWhere('aid', 'like', $searchTerm)
+                        ->orWhereHas('developer', function($q) use($searchTerm){
+                            $q->where('first_name', 'like', $searchTerm)
+                                ->orWhere('last_name', 'like', $searchTerm)
+                                ->orWhere('email', 'like', $searchTerm);
+                        });
                 });
             })
             ->when($status !== 'all', function ($q) use($status) {
@@ -75,12 +71,6 @@ class DashboardController extends Controller
                 } else {
                     $q->where('status', $status);
                 }
-            })
-            ->when($hasDeveloperFilter, function($query) use($searchTerm) {
-                $query->join('users', function ($join) use($searchTerm) {
-                    $join->on('users.developer_id', '=', 'apps.developer_id')
-                        ->where('users.email', $searchTerm);
-                });
             })
             ->when($hasCountries, function ($q) use ($searchCountries) {
                 $q->where('country_code', $searchCountries);
