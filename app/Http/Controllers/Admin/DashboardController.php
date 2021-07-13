@@ -45,11 +45,6 @@ class DashboardController extends Controller
             ]);
         }
 
-        $hasDeveloperFilter = false;
-        if ($hasSearchTerm && $this->hasDeveloperFilter($searchTerm)) {
-            $hasDeveloperFilter = true;
-        }
-
         $apps = App::with(['developer', 'country', 'products'])
             ->whereNotNull('country_code')
             ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes, $responsibleGroups) {
@@ -61,7 +56,12 @@ class DashboardController extends Controller
             ->when($hasSearchTerm, function ($q) use ($searchTerm) {
                 $q->where(function ($query) use ($searchTerm) {
                     $query->where('display_name', 'like', $searchTerm)
-                        ->orWhere('aid', 'like', $searchTerm);
+                        ->orWhere('aid', 'like', $searchTerm)
+                        ->orWhereHas('developer', function($q) use($searchTerm){
+                            $q->where('first_name', 'like', $searchTerm)
+                                ->orWhere('last_name', 'like', $searchTerm)
+                                ->orWhere('email', 'like', $searchTerm);
+                        });
                 });
             })
             ->when($status !== 'all', function ($q) use($status) {
@@ -72,12 +72,6 @@ class DashboardController extends Controller
                 } else {
                     $q->where('status', $status);
                 }
-            })
-            ->when($hasDeveloperFilter, function($query){
-                $query->join('users', function ($join) {
-                    $join->on('users.developer_id', '=', 'apps.developer_id')
-                        ->where('users.email', $this->getDeveloperFilter());
-                });
             })
             ->when($hasCountries, function ($q) use ($searchCountries) {
                 $q->where('country_code', $searchCountries);
