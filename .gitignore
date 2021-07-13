@@ -15,3 +15,6 @@ npm-debug.log
 yarn-error.log
 .idea/
 *.code-workspace
+.setup/
+docker-compose.yml
+setup/
