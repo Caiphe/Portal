@@ -97,7 +97,7 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function update(UpdateStatusRequest $request, AppAccess $appAccess)
+    public function update(UpdateStatusRequest $request)
     {
         $validated = $request->validated();
         $app = App::with('developer')->find($validated['app']);
@@ -108,6 +108,8 @@ class DashboardController extends Controller
             'pending' => 'pending'
         ][$validated['action']] ?? 'pending';
 
+        $statusNote = $request->get('statusNote', '');
+
         $credentials = ApigeeService::getAppCredentials($app);
         $credentials = $validated['for'] === 'staging' ? $credentials[0] : end($credentials);
 
@@ -116,27 +118,8 @@ class DashboardController extends Controller
         $response = ApigeeService::updateProductStatus($developerId, $app->name, $credentials['consumerKey'], $validated['product'], $validated['action']);
         $responseStatus = $response->status();
         if (preg_match('/^2/', $responseStatus)) {
-            $app->products()->updateExistingPivot($validated['product'], ['status' => $status, 'actioned_by' => $currentUser->id, 'actioned_at' => date('Y-m-d H:i:s')]);
 
-            $data = [
-                'aid' => $app->aid,
-                'appName' => $app->name,
-                'comment' => $request->get('additional_status_change_note') ?: "",
-                'status' => $validated['action']
-            ];
-
-            $options = [
-                'callbackUrl' => '',
-                'apiProducts' => ''
-            ];
-
-            $appAccess->setApigeeService(new ApigeeService());
-
-            if ('approve' === $validated['action']) {
-                $appAccess->approveAccess($data, auth()->user(), 'app', $options);
-            } elseif ('revoked' === $validated['action']) {
-                $appAccess->revokeAccess($data, auth()->user(), 'app', $options);
-            }
+            $app->products()->updateExistingPivot($validated['product'], ['status' => $status, 'actioned_by' => $currentUser->id, 'actioned_at' => date('Y-m-d H:i:s'), 'status_note' => $statusNote]);
 
         } else if ($request->ajax()) {
             $body = json_decode($response->body());
