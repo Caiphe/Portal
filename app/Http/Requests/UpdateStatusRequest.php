@@ -29,6 +29,7 @@ class UpdateStatusRequest extends FormRequest
             'product' => 'required|exists:products,pid',
             'action' => 'required',
             'for' => 'required',
+            'statusNote' => 'sometimes'
         ];
     }
 }

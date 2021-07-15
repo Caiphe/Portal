@@ -93,8 +93,9 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 	Route::post('apps/{product}/approve', 'DashboardController@update')->middleware('can:administer-dashboard')->name('app.product.approve');
 	Route::post('apps/{product}/revoke', 'DashboardController@update')->middleware('can:administer-dashboard')->name('app.product.revoke');
 	Route::get('dashboard/{app:aid}/credentials/renew/{type}', 'DashboardController@renewCredentials')->middleware('can:administer-dashboard')->name('admin.credentials.renew');
+    Route::post('apps/{app:aid}/status', 'DashboardController@updateAppStatus')->middleware('can:administer-dashboard')->name('admin.app.status-update');
 
-	// Global search
+    // Global search
 	Route::get('search', 'SearchController')->name('admin.search');
 
 	// User management

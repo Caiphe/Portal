@@ -10,7 +10,7 @@
 <link href="{{ mix('/css/components/_app.css') }}" rel="stylesheet"/>
 @endallowonce
 
-<div class="app" data-name="{{ $app['name'] }}" data-id="{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
+<div id="app-{{ $app['aid'] }}" class="app" data-name="{{ $app['name'] }}" data-id="{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
      data-locations="{{ implode(',', array_keys($countries)) }}">
     <div class="column">
         <p class="name">
@@ -201,8 +201,14 @@
     <nav class="menu">
         @if($isAdminPage)
             @can('administer-dashboard')
-            <button class="product-all" data-action="approve">Approve all</button>
-            <button class="product-all" data-action="revoke">Revoke all</button>
+            @if($app['status'] === 'revoked')
+            <button class="app-status-update" data-status="approved" data-action="{{ route('admin.app.status-update', $app['aid']) }}">Approve Application</button>
+            @elseif($app['status'] === 'approved')
+            <button class="app-status-update" data-status="revoked" data-action="{{ route('admin.app.status-update', $app['aid']) }}">Revoke Application</button>
+            @endif
+            <div class="status-separator"></div>
+            <button class="product-all" data-action="approve">Approve all products</button>
+            <button class="product-all" data-action="revoke">Revoke all products</button>
             @else
             <button>View only</button>
             @endcan
