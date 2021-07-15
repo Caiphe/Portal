@@ -8,6 +8,7 @@ use App\Country;
 use App\Http\Requests\CreateAppRequest;
 use App\Http\Requests\DeleteAppRequest;
 use App\Http\Requests\KycRequest;
+use App\Mail\CredentialRenew;
 use App\Mail\GoLiveMail;
 use App\Services\ApigeeService;
 use App\Services\Kyc\KycService;
@@ -134,8 +135,8 @@ class AppController extends Controller
         $credentials = $app->credentials;
         $selectedProducts = end($credentials)['apiProducts'] ?? [];
 
-        if(count($credentials) === 1 && $app->products->filter(fn($prod) => isset($prod->attributes['ProductionProduct']))->count() > 0){
-            $selectedProducts = $app->products->map(fn($prod) => $prod->attributes['ProductionProduct'] ?? $prod->name)->toArray();
+        if (count($credentials) === 1 && $app->products->filter(fn ($prod) => isset($prod->attributes['ProductionProduct']))->count() > 0) {
+            $selectedProducts = $app->products->map(fn ($prod) => $prod->attributes['ProductionProduct'] ?? $prod->name)->toArray();
         }
 
         return view('templates.apps.edit', [
@@ -204,9 +205,11 @@ class AppController extends Controller
 
         $updatedResponse = ApigeeService::updateApp($data)->json();
 
+        $attributes = ApigeeService::getAppAttributes($data['attributes']);
+
         $app->update([
             'display_name' => $data['attributes'][0]['value'],
-            'attributes' => $data['attributes'],
+            'attributes' => $attributes,
             'credentials' => $updatedResponse['credentials'],
             'callback_url' => $data['callbackUrl'],
             'description' => $data['attributes'][1]['value'],
@@ -261,6 +264,43 @@ class AppController extends Controller
         return response()->json([
             'credentials' => $credentials
         ]);
+    }
+
+    /**
+     * Request to renew an apps credentials
+     *
+     * @param      \App\App                           $app    The application
+     * @param      string                             $type   The type
+     *
+     * @return     \Illuminate\Http\RedirectResponse  Redirect to the Dashboard
+     */
+    public function requestRenewCredentials(App $app, string $type)
+    {
+        Mail::to(auth()->user())->send(new CredentialRenew($app, $type));
+
+        return redirect()->route('app.index')->with('alert', 'success:You will receive an email to renew your apps credentials');
+    }
+
+     /**
+     * Renew an apps credentials
+     *
+     * @param      \App\App                           $app    The application
+     * @param      string                             $type   The type
+     *
+     * @return     \Illuminate\Http\RedirectResponse  Redirect to the Dashboard
+     */
+    public function renewCredentials(App $app, string $type)
+    {
+        $credentialsType = 'consumerKey-' . $type;
+        $consumerKey = $this->getCredentials($app, $credentialsType, 'string');
+
+        $updatedApp = ApigeeService::renewCredentials(auth()->user(), $app, $consumerKey);
+
+        $app->update([
+            'credentials' => $updatedApp['credentials']
+        ]);
+
+        return redirect()->route('app.index')->with('alert', 'success:Your credentials have been renewed');
     }
 
     /**

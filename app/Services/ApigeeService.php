@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\App;
 use App\Country;
+use App\User;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
@@ -69,9 +71,9 @@ class ApigeeService
         return $updatedDetails;
     }
 
-    public static function updateAppWithNewCredentials(array $data)
+    public static function updateAppWithNewCredentials(array $data, $user = null)
     {
-        $user = \Auth::user();
+        $user ??= auth()->user();
         $name = $data['name'];
 
         return self::put("developers/{$user->email}/apps/{$name}", [
@@ -80,6 +82,71 @@ class ApigeeService
             "callbackUrl" => $data['callbackUrl'],
             "apiProducts" => $data['apiProducts']
         ]);
+    }
+
+    /**
+     * Revoke credentials and then add a set of new credentials
+     *
+     * @param      \App\User                         $user   The user
+     * @param      \App\App                          $app    The application
+     * @param      string                            $key    The key
+     *
+     * @return     \Illuminate\Http\Client\Response  The client response
+     */
+    public static function renewCredentials(User $user, App $app, string $key)
+    {
+        $apiProducts = [];
+        $attributes = [];
+        $redactedKey = $app->redact($key);
+
+        foreach ($app->credentials as $credential) {
+            if ($credential['consumerKey'] === $redactedKey) {
+                $apiProducts = $credential['apiProducts'];
+                break;
+            }
+        }
+
+        $appProducts = $app->products->filter(fn ($prod) => in_array($prod->name, $apiProducts));
+
+        foreach ($app->attributes as $name => $value) {
+            $attributes[] = [
+                'name' => $name,
+                'value' => $value,
+            ];
+        }
+
+        self::revokeCredentials($user, $app, $key);
+
+        $updatedApp = self::updateAppWithNewCredentials([
+            'name' => $app->name,
+            'attributes' => $attributes,
+            'callbackUrl' => $app->callbackUrl ?? '',
+            'apiProducts' => $apiProducts,
+        ], $user);
+
+        $updatedCredentials = self::sortCredentials($updatedApp['credentials']);
+        $updatedCredentials = end($updatedCredentials)['consumerKey'];
+
+        foreach ($appProducts as $prod) {
+            self::updateProductStatus($user->email, $app->name, $updatedCredentials, $prod->name, $prod->pivot->status);
+        }
+
+        return $updatedApp;
+    }
+
+
+    /**
+     * Revoke credentials
+     *
+     * @param      \App\User                         $user   The user
+     * @param      \App\App                          $app    The application
+     * @param      string                            $key    The key
+     *
+     * @return     \Illuminate\Http\Client\Response  The client response
+     */
+    public static function revokeCredentials(User $user, App $app, string $key)
+    {
+        return self::post("developers/{$user->email}/apps/{$app->name}/keys/{$key}?action=revoke", [], ['Content-Type' => 'application/octet-stream']);
     }
 
     public static function getAppAttributes(array $attributes)
