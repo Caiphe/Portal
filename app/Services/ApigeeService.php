@@ -107,6 +107,7 @@ class ApigeeService
             }
         }
 
+
         $appProducts = $app->products->filter(fn ($prod) => in_array($prod->name, $apiProducts));
 
         foreach ($app->attributes as $name => $value) {
@@ -155,7 +156,7 @@ class ApigeeService
         $a = [];
         foreach ($attributes as $attribute) {
             $key = Str::studly($attribute['name']);
-            if(!isset($attribute['value'])){
+            if (!isset($attribute['value'])) {
                 $attribute['value'] = '';
             }
             $value = $key === 'Group' ? Str::studly($attribute['value']) : $attribute['value'];
@@ -280,11 +281,19 @@ class ApigeeService
      *
      * @return     array  The sorted credentials
      */
-    public static function sortCredentials(array $credentials): array
+    public static function sortCredentials(array $credentials, string $sort = 'Asc'): array
     {
-        usort($credentials, [__CLASS__, "sortByIssuedAtAsc"]);
+        $creds = [];
 
-        return $credentials;
+        usort($credentials, [__CLASS__, "sortByIssuedAt{$sort}"]);
+
+        foreach ($credentials as $credential) {
+            if ($credential['status'] === 'revoked') continue;
+
+            $creds[] = $credential;
+        }
+
+        return $creds;
     }
 
     public static function getAppCredentials($app)

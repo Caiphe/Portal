@@ -249,10 +249,25 @@ class AppController extends Controller
     {
         $credentials = ApigeeService::get('apps/' . $app->aid)['credentials'];
         $credentials = ApigeeService::sortCredentials($credentials);
+        $sandboxedProducts = Product::where('environments', 'like', 'sandbox')->pluck('name')->toArray();
         $typeAndEnvironment = explode('-', $type);
+        $creds = [
+            'sandbox' => [],
+            'production' => [],
+        ];
+
+        foreach ($credentials as $credential) {
+            if(count(array_intersect($sandboxedProducts, array_column($credential['apiProducts'], 'apiproduct'))) > 0){
+                $creds['sandbox'] = $credential;
+            } else {
+                $creds['production'] = $credential;
+            }
+        }
 
         if ($typeAndEnvironment[1] === 'production') {
-            $credentials =  end($credentials)[$typeAndEnvironment[0]];
+            $credentials =  $creds['production'][$typeAndEnvironment[0]];
+        } else if ($typeAndEnvironment[1] === 'sandbox') {
+            $credentials =  $creds['sandbox'][$typeAndEnvironment[0]];
         } else if ($type !== 'all') {
             $credentials = $credentials[0][$typeAndEnvironment[0]];
         }
