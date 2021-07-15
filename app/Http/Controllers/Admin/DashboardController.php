@@ -9,7 +9,6 @@ use App\App;
 use App\Country;
 use App\Mail\KycStatusUpdate;
 use App\Mail\ProductAction;
-use App\Services\AppAccess\AppAccess;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -153,5 +152,34 @@ class DashboardController extends Controller
         }
 
         return redirect()->back()->with('alert', "success:The KYC status was updated to {$data['kyc_status']}");
+    }
+
+    public function updateAppStatus(App $app, \Illuminate\Http\Request $request)
+    {
+        $statusNote = $request->get('status-note');
+
+        $attr = $app->attributes;
+        if (isset($attr['Notes'])) {
+            $attr['Notes'] = $statusNote;
+            $attributes = [];
+        } else {
+            $attributes = [[ 'name' => 'Notes', 'value' => $statusNote, ]];
+        }
+
+        foreach ($app->attributes as $name => $value) {
+            $attributes[] = [ 'name' => $name, 'value' => $value, ];
+        }
+
+        $response = ApigeeService::pushAppNote($app, $attributes);
+
+        if (200 === $response->status()) {
+
+            $attributes = ApigeeService::getAppAttributes($response['attributes']);
+            $app->update(['attributes' => $attributes, 'status' => $request->get('status')]);
+
+            return redirect()->back()->with('alert', "success:The status has been updated.");
+        }
+
+        return redirect()->back()->with('alert', "error:Sorry something went wrong updating the status.");
     }
 }

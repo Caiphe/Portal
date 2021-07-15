@@ -10,7 +10,7 @@
 <link href="{{ mix('/css/components/_app.css') }}" rel="stylesheet"/>
 @endallowonce
 
-<div class="app" data-name="{{ $app['name'] }}" data-id="{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
+<div id="app-{{ $app['aid'] }}" class="app" data-name="{{ $app['name'] }}" data-id="{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
      data-locations="{{ implode(',', array_keys($countries)) }}">
     <div class="column">
         <p class="name">
@@ -121,14 +121,6 @@
         </div>
         @endif
 
-        @if(!empty($sandboxProducts) && $isAdminPage)
-            <div class="detail-right status-change-note">
-                <div class="detail-row">
-                    <div class="detail-item"><strong>Add note:</strong></div>
-                    <textarea id="status-change-note" name="additional_status_change_note" rows="4" cols="50" placeholder="Optional product status change note"></textarea>
-                </div>
-            </div>
-        @endif
         @if(!empty($prodProducts['products']))
         @if(!$isAdminPage)
         <div class="mt-2">
@@ -189,15 +181,6 @@
         </div>
         @endif
 
-        @if(!empty($sandboxProducts) && $isAdminPage)
-            <div class="detail-right status-change-note">
-                <div class="detail-row">
-                    <div class="detail-item"><strong>Add note:</strong></div>
-                    <textarea id="status-change-note" name="additional_status_change_note" rows="4" cols="50" placeholder="Optional product status change note"></textarea>
-                </div>
-            </div>
-        @endif
-
         @if(!$isAdminPage && !empty($sandboxProducts) && is_null($app->live_at))
         <form class="go-live cols centre-align" method="POST" action="{{ route('app.go-live', $app->aid) }}">
             @csrf
@@ -214,12 +197,28 @@
             </select>
         </div>
         @endif
+
+        @if($isAdminPage)
+            <form class="status-note-form cols centre-align" name="status-note-form" method="POST" action="{{ route('app.status-note-update', $app->aid) }}">
+                @csrf
+                <div class="detail-right">
+                    <div class="detail-row">
+                        <div class="detail-item"><strong>Add note:</strong></div>
+                        <input type="hidden" value="approved" name="status">
+                        <textarea class="status-note-textarea" name="status-note" rows="4" cols="50" placeholder="Optional product status change note"></textarea>
+                        <button>Submit</button>
+                    </div>
+                </div>
+            </form>
+        @endif
     </div>
     <nav class="menu">
         @if($isAdminPage)
             @can('administer-dashboard')
-            <button class="product-all" data-action="approve">Approve all</button>
-            <button class="product-all" data-action="revoke">Revoke all</button>
+            <button class="product-all" data-action="approve">Approve all products</button>
+            <button class="product-all" data-action="revoke">Revoke all products</button>
+            <button class="product-all" data-action="approveapp">Approve Application</button>
+            <button class="product-all" data-action="revokeapp">Revoke Application</button>
             @else
             <button>View only</button>
             @endcan

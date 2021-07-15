@@ -134,7 +134,7 @@
             var appProducts = void 0;
             var lookBack = {
                 approved: 'approve',
-                revoked: 'revoke'
+                revoked: 'revoke',
             };
 
             event.preventDefault();
@@ -163,7 +163,8 @@
                 for: this.dataset.for,
                 app: this.parentNode.dataset.aid,
                 product: this.parentNode.dataset.pid,
-                displayName: this.parentNode.dataset.productDisplayName
+                displayName: this.parentNode.dataset.productDisplayName,
+                statusNote: document.querySelector("#app-" + this.parentNode.dataset.aid + " .status-note-textarea").value
             }, this.parentNode);
         }
 
