@@ -197,28 +197,18 @@
             </select>
         </div>
         @endif
-
-        @if($isAdminPage)
-            <form class="status-note-form cols centre-align" name="status-note-form" method="POST" action="{{ route('app.status-note-update', $app->aid) }}">
-                @csrf
-                <div class="detail-right">
-                    <div class="detail-row">
-                        <div class="detail-item"><strong>Add note:</strong></div>
-                        <input type="hidden" value="approved" name="status">
-                        <textarea class="status-note-textarea" name="status-note" rows="4" cols="50" placeholder="Optional product status change note"></textarea>
-                        <button>Submit</button>
-                    </div>
-                </div>
-            </form>
-        @endif
     </div>
     <nav class="menu">
         @if($isAdminPage)
             @can('administer-dashboard')
+            @if($app['status'] === 'revoked')
+            <button class="app-status-update" data-status="approved" data-action="{{ route('admin.app.status-update', $app['aid']) }}">Approve Application</button>
+            @elseif($app['status'] === 'approved')
+            <button class="app-status-update" data-status="revoked" data-action="{{ route('admin.app.status-update', $app['aid']) }}">Revoke Application</button>
+            @endif
+            <div class="status-separator"></div>
             <button class="product-all" data-action="approve">Approve all products</button>
             <button class="product-all" data-action="revoke">Revoke all products</button>
-            <button class="product-all" data-action="approveapp">Approve Application</button>
-            <button class="product-all" data-action="revokeapp">Revoke Application</button>
             @else
             <button>View only</button>
             @endcan

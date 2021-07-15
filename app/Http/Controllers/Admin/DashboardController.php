@@ -10,7 +10,7 @@ use App\Country;
 use App\Mail\KycStatusUpdate;
 use App\Mail\ProductAction;
 use Illuminate\Support\Facades\Mail;
-use Symfony\Component\HttpFoundation\Request;
+use \Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -56,16 +56,16 @@ class DashboardController extends Controller
                 $q->where(function ($query) use ($searchTerm) {
                     $query->where('display_name', 'like', $searchTerm)
                         ->orWhere('aid', 'like', $searchTerm)
-                        ->orWhereHas('developer', function($q) use($searchTerm){
+                        ->orWhereHas('developer', function ($q) use ($searchTerm) {
                             $q->where('first_name', 'like', $searchTerm)
                                 ->orWhere('last_name', 'like', $searchTerm)
                                 ->orWhere('email', 'like', $searchTerm);
                         });
                 });
             })
-            ->when($status !== 'all', function ($q) use($status) {
+            ->when($status !== 'all', function ($q) use ($status) {
                 if ($status === 'pending') {
-                    $q->whereHas('products', function($query){
+                    $q->whereHas('products', function ($query) {
                         $query->where('status', 'pending');
                     });
                 } else {
@@ -75,7 +75,6 @@ class DashboardController extends Controller
             ->when($hasCountries, function ($q) use ($searchCountries) {
                 $q->where('country_code', $searchCountries);
             })
-            ->byStatus('approved')
             ->orderBy('updated_at', 'desc')
             ->paginate();
 
@@ -119,7 +118,6 @@ class DashboardController extends Controller
         if (preg_match('/^2/', $responseStatus)) {
 
             $app->products()->updateExistingPivot($validated['product'], ['status' => $status, 'actioned_by' => $currentUser->id, 'actioned_at' => date('Y-m-d H:i:s'), 'status_note' => $statusNote]);
-
         } else if ($request->ajax()) {
             $body = json_decode($response->body());
             return response()->json(['success' => false, 'body' => $body->message], $responseStatus);
@@ -154,28 +152,28 @@ class DashboardController extends Controller
         return redirect()->back()->with('alert', "success:The KYC status was updated to {$data['kyc_status']}");
     }
 
-    public function updateAppStatus(App $app, \Illuminate\Http\Request $request)
+    public function updateAppStatus(App $app, Request $request)
     {
+        $status = $request->get('status');
         $statusNote = $request->get('status-note');
 
         $attr = $app->attributes;
+        $attributes = [];
         if (isset($attr['Notes'])) {
-            $attr['Notes'] = $statusNote;
-            $attributes = [];
-        } else {
-            $attributes = [[ 'name' => 'Notes', 'value' => $statusNote, ]];
+            $attr['Notes'] = $statusNote ?? $attr['Notes'];
+        } else if (!empty($statusNote)) {
+            $attributes = [['name' => 'Notes', 'value' => $statusNote,]];
         }
 
-        foreach ($app->attributes as $name => $value) {
-            $attributes[] = [ 'name' => $name, 'value' => $value, ];
+        foreach ($attr as $name => $value) {
+            $attributes[] = ['name' => $name, 'value' => $value,];
         }
 
-        $response = ApigeeService::pushAppNote($app, $attributes);
+        $response = ApigeeService::pushAppNote($app, $attributes, $status);
 
         if (200 === $response->status()) {
-
             $attributes = ApigeeService::getAppAttributes($response['attributes']);
-            $app->update(['attributes' => $attributes, 'status' => $request->get('status')]);
+            $app->update(['attributes' => $attributes, 'status' => $status]);
 
             return redirect()->back()->with('alert', "success:The status has been updated.");
         }
