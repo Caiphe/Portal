@@ -161,6 +161,7 @@
                 dialog.querySelector('.status-dialog-form').addEventListener('submit', function(ev){
                     ev.preventDefault();
                     document.getElementById('status-dialog').classList.remove('show');
+                    document.querySelector('#status-dialog .status-dialog-textarea').value = '';
                     handleUpdateStatusNoteMany(appProducts, lookBack, this, that);
                 }, {
                   once: true
@@ -174,6 +175,7 @@
             dialog.querySelector('.status-dialog-form').addEventListener('submit', function(ev){
                 ev.preventDefault();
                 document.getElementById('status-dialog').classList.remove('show');
+                document.querySelector('#status-dialog .status-dialog-textarea').value = '';
                 handleUpdateStatusNote(this, that);
             }, {
               once: true
