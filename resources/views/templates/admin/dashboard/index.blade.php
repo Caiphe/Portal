@@ -265,8 +265,13 @@
 
         function updateAppStatus() {
             var dialog = document.getElementById('status-dialog');
+            var dialogForm = dialog.querySelector('.status-dialog-form')
             
-            dialog.querySelector('.status-dialog-form').action = this.dataset.action;
+            dialogForm.action = this.dataset.action;
+            dialogForm.addEventListener('submit', function(){
+                dialog.classList.remove('show');
+                addLoading('Updating status...');
+            });
             dialog.querySelector('.status-dialog-status').value = this.dataset.status;
 
             hideMenu();
