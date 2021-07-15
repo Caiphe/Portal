@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use App\App;
 use App\Country;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\Response;
 
 /**
  * This is a helper service to connect to Apigee.
@@ -87,6 +89,9 @@ class ApigeeService
         $a = [];
         foreach ($attributes as $attribute) {
             $key = Str::studly($attribute['name']);
+            if(!isset($attribute['value'])){
+                $attribute['value'] = '';
+            }
             $value = $key === 'Group' ? Str::studly($attribute['value']) : $attribute['value'];
             $a[$key] = $value;
         }
@@ -245,7 +250,7 @@ class ApigeeService
 
     /**
      * @param  string $url
-     * 
+     *
      * @return mixed
      */
     public static function getMint(string $url)
@@ -305,5 +310,21 @@ class ApigeeService
         }
 
         return ($a['issuedAt'] < $b['issuedAt']) ? -1 : 1;
+    }
+
+    public static function pushAppNote(App $app, array $attributes, string $status = 'approved'): Response
+    {
+        $action = [
+            'approved' => 'approve',
+            'revoked' => 'revoke'
+        ][$status] ?? 'approve';
+
+        self::post("developers/{$app->developer->email}/apps/{$app->name}?action={$action}", [], ['Content-Type' => 'application/octet-stream']);
+
+        return self::put("developers/{$app->developer->email}/apps/{$app->name}", [
+            "name" => $app->name,
+            "attributes" => $attributes,
+            "callbackUrl" => $app->callbackUrl ?? '',
+        ]);
     }
 }

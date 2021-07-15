@@ -45,6 +45,15 @@
         </div>
     </div>
 
+    <x-dialog id="status-dialog">
+        <form class="status-dialog-form" name="status-note-form" method="POST" action="">
+            @csrf
+            <h3>Add note:</h3>
+            <input class="status-dialog-status" type="hidden" value="approved" name="status">
+            <textarea class="status-dialog-textarea" name="status-note" rows="5" placeholder="Optional product status change note" autocomplete="off"></textarea>
+            <button class="status-dialog-button">Submit</button>
+        </form>
+    </x-dialog>
 @endsection
 
 @push('scripts')
@@ -55,8 +64,6 @@
         document.getElementById("filter-country").addEventListener('change', submitFilter);
         document.getElementById("filter-status").addEventListener('change', submitFilter);
 
-
-
         window.onload = init;
         ajaxifyComplete = init;
 
@@ -66,6 +73,7 @@
             var modals = document.querySelectorAll('.modal');
             var productStatusButtons = document.querySelectorAll('button[class*="product-"]');
             var kycStatus = document.querySelectorAll(".kyc-status-select");
+            var appStatusUpdate = document.querySelectorAll('.app-status-update');
 
             for (var j = 0; j < buttons.length; j ++) {
                 buttons[j].addEventListener('click', handleButtonClick);
@@ -85,6 +93,10 @@
 
             for (var i = kycStatus.length - 1; i >= 0; i--) {
                 kycStatus[i].addEventListener('change', handleKycUpdateStatus);
+            }
+
+            for (var i = appStatusUpdate.length - 1; i >= 0; i--) {
+                appStatusUpdate[i].addEventListener('click', updateAppStatus);
             }
         }
 
@@ -132,9 +144,11 @@
         function getProductStatus(event) {
             var data = {};
             var appProducts = void 0;
+            var dialog = document.getElementById('status-dialog');
+            var that = this;
             var lookBack = {
                 approved: 'approve',
-                revoked: 'revoke'
+                revoked: 'revoke',
             };
 
             event.preventDefault();
@@ -144,27 +158,56 @@
 
                 appProducts = this.parentNode.parentNode.querySelectorAll('.product');
 
-                for (var i = appProducts.length - 1; i >= 0; i--) {
-                    if (this.dataset.action === lookBack[appProducts[i].dataset.status]) continue;
+                dialog.querySelector('.status-dialog-form').addEventListener('submit', function(ev){
+                    ev.preventDefault();
+                    document.getElementById('status-dialog').classList.remove('show');
+                    document.querySelector('#status-dialog .status-dialog-textarea').value = '';
+                    handleUpdateStatusNoteMany(appProducts, lookBack, this, that);
+                }, {
+                  once: true
+                });
 
-                    handleUpdateStatus({
-                        action: this.dataset.action,
-                        for: this.dataset.for,
-                        app: appProducts[i].dataset.aid,
-                        product: appProducts[i].dataset.pid,
-                        displayName: appProducts[i].dataset.productDisplayName
-                    }, appProducts[i].querySelector('.status-bar'));
-                }
+                dialog.classList.add('show');
+
                 return;
             }
 
+            dialog.querySelector('.status-dialog-form').addEventListener('submit', function(ev){
+                ev.preventDefault();
+                document.getElementById('status-dialog').classList.remove('show');
+                document.querySelector('#status-dialog .status-dialog-textarea').value = '';
+                handleUpdateStatusNote(this, that);
+            }, {
+              once: true
+            });
+
+            dialog.classList.add('show');
+        }
+
+        function handleUpdateStatusNoteMany(appProducts, lookBack, form, el) {
+            for (var i = appProducts.length - 1; i >= 0; i--) {
+                if (el.dataset.action === lookBack[appProducts[i].dataset.status]) continue;
+
+                handleUpdateStatus({
+                    action: el.dataset.action,
+                    for: appProducts[i].dataset.for,
+                    app: appProducts[i].dataset.aid,
+                    product: appProducts[i].dataset.pid,
+                    displayName: appProducts[i].dataset.productDisplayName,
+                    statusNote: form.elements['status-note'].value
+                }, appProducts[i]);
+            }
+        }
+
+        function handleUpdateStatusNote(form, el) {
             handleUpdateStatus({
-                action: this.dataset.action,
-                for: this.dataset.for,
-                app: this.parentNode.dataset.aid,
-                product: this.parentNode.dataset.pid,
-                displayName: this.parentNode.dataset.productDisplayName
-            }, this.parentNode);
+                action: el.dataset.action,
+                for: el.dataset.for,
+                app: el.parentNode.dataset.aid,
+                product: el.parentNode.dataset.pid,
+                displayName: el.parentNode.dataset.productDisplayName,
+                statusNote: form.elements['status-note'].value
+            }, el.parentNode);
         }
 
         function handleUpdateStatus(data, card) {
@@ -174,16 +217,14 @@
                 revoke: 'revoked'
             };
 
+            card.classList.add('loading');
+
             xhr.open('POST', '/admin/apps/' + data.product + '/' + data.action);
             xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
-            if(confirm('Are you sure you want to ' + data.action + ' ' + data.displayName + '?')) {
-                card.classList.add('loading');
-
-                xhr.send(JSON.stringify(data));
-            }
+            xhr.send(JSON.stringify(data));
 
             xhr.onload = function() {
                 var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
@@ -222,6 +263,21 @@
                     addAlert('error', result.body || 'There was an error updating the product.');
                 }
             };
+        }
+
+        function updateAppStatus() {
+            var dialog = document.getElementById('status-dialog');
+            var dialogForm = dialog.querySelector('.status-dialog-form')
+            
+            dialogForm.action = this.dataset.action;
+            dialogForm.addEventListener('submit', function(){
+                dialog.classList.remove('show');
+                addLoading('Updating status...');
+            });
+            dialog.querySelector('.status-dialog-status').value = this.dataset.status;
+
+            hideMenu();
+            dialog.classList.add('show');
         }
 
         function strSlug(str) {

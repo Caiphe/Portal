@@ -90,8 +90,9 @@ Route::namespace('Admin')->prefix('admin')->middleware(['verified', '2fa', 'can:
 	Route::post('apps/{app:aid}/kyc-status', 'DashboardController@updateKycStatus')->middleware('can:administer-dashboard')->name('app.kyc-status.update');
 	Route::post('apps/{product}/approve', 'DashboardController@update')->middleware('can:administer-dashboard')->name('app.product.approve');
 	Route::post('apps/{product}/revoke', 'DashboardController@update')->middleware('can:administer-dashboard')->name('app.product.revoke');
+    Route::post('apps/{app:aid}/status', 'DashboardController@updateAppStatus')->middleware('can:administer-dashboard')->name('admin.app.status-update');
 
-	// Global search
+    // Global search
 	Route::get('search', 'SearchController')->name('admin.search');
 
 	// User management
