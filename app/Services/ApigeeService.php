@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\App;
 use App\Country;
-use Illuminate\Support\Facades\Http;
+use App\User;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\Response;
 
 /**
  * This is a helper service to connect to Apigee.
@@ -69,9 +72,9 @@ class ApigeeService
         return $updatedDetails;
     }
 
-    public static function updateAppWithNewCredentials(array $data)
+    public static function updateAppWithNewCredentials(array $data, $user = null)
     {
-        $user = \Auth::user();
+        $user ??= auth()->user();
         $name = $data['name'];
 
         return self::put("developers/{$user->email}/apps/{$name}", [
@@ -82,11 +85,80 @@ class ApigeeService
         ]);
     }
 
+    /**
+     * Revoke credentials and then add a set of new credentials
+     *
+     * @param      \App\User                         $user   The user
+     * @param      \App\App                          $app    The application
+     * @param      string                            $key    The key
+     *
+     * @return     \Illuminate\Http\Client\Response  The client response
+     */
+    public static function renewCredentials(User $user, App $app, string $key)
+    {
+        $apiProducts = [];
+        $attributes = [];
+        $redactedKey = $app->redact($key);
+
+        foreach ($app->credentials as $credential) {
+            if ($credential['consumerKey'] === $redactedKey) {
+                $apiProducts = $credential['apiProducts'];
+                break;
+            }
+        }
+
+
+        $appProducts = $app->products->filter(fn ($prod) => in_array($prod->name, $apiProducts));
+
+        foreach ($app->attributes as $name => $value) {
+            $attributes[] = [
+                'name' => $name,
+                'value' => $value,
+            ];
+        }
+
+        self::revokeCredentials($user, $app, $key);
+
+        $updatedApp = self::updateAppWithNewCredentials([
+            'name' => $app->name,
+            'attributes' => $attributes,
+            'callbackUrl' => $app->callbackUrl ?? '',
+            'apiProducts' => $apiProducts,
+        ], $user);
+
+        $updatedCredentials = self::sortCredentials($updatedApp['credentials']);
+        $updatedCredentials = end($updatedCredentials)['consumerKey'];
+
+        foreach ($appProducts as $prod) {
+            self::updateProductStatus($user->email, $app->name, $updatedCredentials, $prod->name, $prod->pivot->status);
+        }
+
+        return $updatedApp;
+    }
+
+
+    /**
+     * Revoke credentials
+     *
+     * @param      \App\User                         $user   The user
+     * @param      \App\App                          $app    The application
+     * @param      string                            $key    The key
+     *
+     * @return     \Illuminate\Http\Client\Response  The client response
+     */
+    public static function revokeCredentials(User $user, App $app, string $key)
+    {
+        return self::post("developers/{$user->email}/apps/{$app->name}/keys/{$key}?action=revoke", [], ['Content-Type' => 'application/octet-stream']);
+    }
+
     public static function getAppAttributes(array $attributes)
     {
         $a = [];
         foreach ($attributes as $attribute) {
             $key = Str::studly($attribute['name']);
+            if (!isset($attribute['value'])) {
+                $attribute['value'] = '';
+            }
             $value = $key === 'Group' ? Str::studly($attribute['value']) : $attribute['value'];
             $a[$key] = $value;
         }
@@ -209,11 +281,19 @@ class ApigeeService
      *
      * @return     array  The sorted credentials
      */
-    public static function sortCredentials(array $credentials): array
+    public static function sortCredentials(array $credentials, string $sort = 'Asc'): array
     {
-        usort($credentials, [__CLASS__, "sortByIssuedAtAsc"]);
+        $creds = [];
 
-        return $credentials;
+        usort($credentials, [__CLASS__, "sortByIssuedAt{$sort}"]);
+
+        foreach ($credentials as $credential) {
+            if ($credential['status'] === 'revoked') continue;
+
+            $creds[] = $credential;
+        }
+
+        return $creds;
     }
 
     public static function getAppCredentials($app)
@@ -245,7 +325,7 @@ class ApigeeService
 
     /**
      * @param  string $url
-     * 
+     *
      * @return mixed
      */
     public static function getMint(string $url)
@@ -305,5 +385,21 @@ class ApigeeService
         }
 
         return ($a['issuedAt'] < $b['issuedAt']) ? -1 : 1;
+    }
+
+    public static function pushAppNote(App $app, array $attributes, string $status = 'approved'): Response
+    {
+        $action = [
+            'approved' => 'approve',
+            'revoked' => 'revoke'
+        ][$status] ?? 'approve';
+
+        self::post("developers/{$app->developer->email}/apps/{$app->name}?action={$action}", [], ['Content-Type' => 'application/octet-stream']);
+
+        return self::put("developers/{$app->developer->email}/apps/{$app->name}", [
+            "name" => $app->name,
+            "attributes" => $attributes,
+            "callbackUrl" => $app->callbackUrl ?? '',
+        ]);
     }
 }

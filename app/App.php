@@ -42,14 +42,34 @@ class App extends Model
 
     public function setCredentialsAttribute($credentials)
     {
-        $credentials = ApigeeService::sortCredentials($credentials);
-        for ($i = 0; $i < count($credentials); $i++) {
-            $credentials[$i]['apiProducts'] = array_map(fn ($apiProduct) => $apiProduct['apiproduct'], $credentials[$i]['apiProducts']);
-            $credentials[$i]['consumerKey'] = $this->redact($credentials[$i]['consumerKey']);
-            $credentials[$i]['consumerSecret'] = $this->redact($credentials[$i]['consumerSecret']);
+        $sandboxedProducts = Product::where('environments', 'like', 'sandbox')->pluck('name')->toArray();
+        $apigeeCredentials = ApigeeService::sortCredentials($credentials);
+        $creds = [];
+        $credentials = [
+            'prod' => [],
+            'sandbox' => [],
+        ];
+
+        for ($i = 0; $i < count($apigeeCredentials); $i++) {
+            if ($apigeeCredentials[$i]['status'] === 'revoked') continue;
+
+            $apigeeCredentials[$i]['apiProducts'] = array_map(fn ($apiProduct) => $apiProduct['apiproduct'], $apigeeCredentials[$i]['apiProducts']);
+            $apigeeCredentials[$i]['consumerKey'] = $this->redact($apigeeCredentials[$i]['consumerKey']);
+            $apigeeCredentials[$i]['consumerSecret'] = $this->redact($apigeeCredentials[$i]['consumerSecret']);
+            $apigeeCredentials[$i]['environment'] = count(array_intersect($sandboxedProducts, $apigeeCredentials[$i]['apiProducts'])) > 0 ? 'sandbox' : 'prod';
+            $credentials[$apigeeCredentials[$i]['environment']][] = $apigeeCredentials[$i];
         }
-        $cred = json_encode($credentials);
-        $this->attributes['credentials'] = $cred;
+
+        
+        if(count($credentials['sandbox']) > 0){
+            $creds[] = end($credentials['sandbox']) ?: [];
+        }
+        
+        if(count($credentials['prod']) > 0){
+            $creds[] = end($credentials['prod']) ?: [];
+        }
+
+        $this->attributes['credentials'] = json_encode($creds);
     }
 
     public function scopeByStatus($query, $status)
@@ -86,7 +106,7 @@ class App extends Model
      *
      * @return     string  The redacted key
      */
-    protected function redact(string $key): string
+    public function redact(string $key): string
     {
         $len = strlen($key) - 8;
         return substr($key, 0, 4) . implode('', array_fill(0, $len, 'X')) . substr($key, -4);
@@ -110,16 +130,17 @@ class App extends Model
             'products' => [],
             'hasKyc' => !is_null($this->kyc_status)
         ];
-        $isFirstProductSandbox = Product::whereIn('name', $firstProducts['products'])->where('environments', 'like', 'sandbox')->count() > 0;
 
-        if(count($credentials) > 1){
+        $isFirstProductSandbox = $firstProducts['credentials']['environment'] === 'sandbox';
+
+        if (count($credentials) > 1) {
             $lastProducts['credentials'] = end($credentials);
-            $lastProducts['products'] = $this->products->filter(fn($prod) => in_array($prod->name, $lastProducts['credentials']['apiProducts']));
+            $lastProducts['products'] = $this->products->filter(fn ($prod) => in_array($prod->name, $lastProducts['credentials']['apiProducts']));
         }
 
-        $firstProducts['products'] = $this->products->filter(fn($prod) => in_array($prod->name, $firstProducts['products']));
+        $firstProducts['products'] = $this->products->filter(fn ($prod) => in_array($prod->name, $firstProducts['products']));
 
-        if(!$isFirstProductSandbox){
+        if (!$isFirstProductSandbox) {
             $lastProducts = $firstProducts;
             $firstProducts = [];
         }

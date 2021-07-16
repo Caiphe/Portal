@@ -154,7 +154,7 @@
         }
     }
 
-    .loading .status-bar{
+    .loading .status-bar {
         background-image:
             repeating-linear-gradient(-45deg,
             transparent,
@@ -174,4 +174,25 @@
 
 .admin #filter-country-tags {
     margin-left: 10px;
+}
+
+#status-dialog {
+    .dialog-content {
+        width: 400px;
+    }
+
+    .status-dialog-textarea {
+        width: 100%;
+    }
+
+    .status-dialog-button {
+        margin-top: 20px;
+    }
+}
+
+.status-separator{
+    width: 100%;
+    height: 1px;
+    background-color: #FFF;
+    margin: 5px auto;
 }

@@ -13,6 +13,7 @@
         data-aid="{{ $app['aid'] }}"
         data-status="{{ $product['pivot']['status'] }}"
         data-product-display-name="{{ $product['display_name'] }}"
+        data-for="{{ $for }}"
     >
         <span class="status-bar status-{{ $product['pivot']['status'] }}"></span>
         <span class="name">{{ $product['display_name'] }}</span>
