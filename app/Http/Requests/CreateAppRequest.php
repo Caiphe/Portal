@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use App\Exceptions\CreateAppException;
+use App\Exceptions\ValidationException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 
@@ -47,15 +47,22 @@ class CreateAppRequest extends FormRequest {
         ]);
     }
 
+    public function messages()
+    {
+        return [
+            'products.required' => 'Please select at least one product.'
+        ];
+    }
+
     /**
      * @param Validator $validator
-     * @throws CreateAppException
+     * @throws ValidationException
      */
     protected function failedValidation(Validator $validator)
     {
         $message = Arr::first(Arr::flatten($validator->messages()->get('*')));
 
-        throw (new CreateAppException($validator, null, 'default', $message))
+        throw (new ValidationException($validator, null, 'default', $message))
             ->errorBag($this->errorBag)
             ->redirectTo($this->getRedirectUrl());
     }

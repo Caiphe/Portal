@@ -8,7 +8,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator as ValidatorFacade;
 
-class CreateAppException extends Exception
+class ValidationException extends Exception
 {
     /**
      * The validator instance.
