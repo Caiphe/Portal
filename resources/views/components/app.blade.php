@@ -116,9 +116,21 @@
 
         @if(!empty($sandboxProducts))
         @if(!$isAdminPage)
-        <p class="products-title"><strong>Products</strong> <a class="button outline small ml-1" href="{{ route('app.credentials.request-renew', ['app' => $app, 'type' => 'sandbox']) }}">Renew credentials</a></p>
+        <div class="products-title">
+            <strong>Products</strong>
+            <form class="ml-1" action="{{ route('app.credentials.request-renew', ['app' => $app, 'type' => 'sandbox']) }}" method="POST" onsubmit="addLoading('Renewing credentials...');">
+                @csrf
+                <button class="outline small">Renew credentials</button>
+            </form>
+        </div>
         @else
-        <p class="products-title"><strong>Products</strong> <a class="button outline small ml-1" href="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'sandbox']) }}">Renew credentials</a></p>
+        <div class="products-title">
+            <strong>Products</strong>
+            <form class="ml-1" action="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'sandbox']) }}" method="POST" onsubmit="addLoading('Renewing credentials...');">
+                @csrf
+                <button class="outline small">Renew credentials</button>
+            </form>
+        </div>
         @endif
         <div class="products">
             <x-apps.products :app="$app" :products="$sandboxProducts['products']" for="staging" />
@@ -180,9 +192,21 @@
         @endif
         <div class="detail-right"></div>
         @if(!$isAdminPage)
-        <p class="products-title"><strong>Production products</strong> <a class="button outline small ml-1" href="{{ route('app.credentials.request-renew', ['app' => $app, 'type' => 'production']) }}">Renew credentials</a></p>
+        <div class="products-title">
+            <strong>Production products</strong>
+            <form class="ml-1" action="{{ route('app.credentials.request-renew', ['app' => $app, 'type' => 'production']) }}" method="POST" onsubmit="addLoading('Renewing credentials...');">
+                @csrf
+                <button class="outline small" href="">Renew credentials</button>
+            </form>
+        </div>
         @else
-        <p class="products-title"><strong>Production products</strong> <a class="button outline small ml-1" href="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'production']) }}">Renew credentials</a></p>
+        <div class="products-title">
+            <strong>Production products</strong>
+            <form class="ml-1" action="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'production']) }}" method="POST" onsubmit="addLoading('Renewing credentials...');">
+                @csrf
+                <button class="outline small" href="">Renew credentials</button>
+            </form>
+        </div>
         @endif
         <div class="products production-products kyc-status-{{ Str::slug($app->kyc_status ?? 'none') }}">
             <x-apps.products :app="$app" :products="$prodProducts['products']" for="production" />
