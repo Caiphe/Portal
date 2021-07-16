@@ -30,7 +30,7 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 	Route::post('apps/{app:aid}/go-live', 'AppController@goLive')->middleware('can:access-own-app,app')->name('app.go-live');
 	Route::get('apps/{app:aid}/kyc/{group}', 'AppController@kyc')->middleware('can:access-own-app,app')->name('app.kyc');
 	Route::post('apps/{app:aid}/kyc/{group}', 'AppController@kycStore')->middleware('can:access-own-app,app')->name('app.kyc.store');
-	Route::get('apps/{app:aid}/credentials/request/renew/{type}', 'AppController@requestRenewCredentials')->middleware('can:access-own-app,app')->name('app.credentials.request-renew');
+	Route::post('apps/{app:aid}/credentials/request/renew/{type}', 'AppController@requestRenewCredentials')->middleware('can:access-own-app,app')->name('app.credentials.request-renew');
 	Route::get('apps/{app:aid}/credentials/renew/{type}', 'AppController@renewCredentials')->middleware(['can:access-own-app,app', 'signed'])->name('app.credentials.renew');
 
 	Route::get('profile', 'UserController@show')->name('user.profile');
@@ -92,7 +92,7 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 	Route::post('apps/{app:aid}/kyc-status', 'DashboardController@updateKycStatus')->middleware('can:administer-dashboard')->name('app.kyc-status.update');
 	Route::post('apps/{product}/approve', 'DashboardController@update')->middleware('can:administer-dashboard')->name('app.product.approve');
 	Route::post('apps/{product}/revoke', 'DashboardController@update')->middleware('can:administer-dashboard')->name('app.product.revoke');
-	Route::get('dashboard/{app:aid}/credentials/renew/{type}', 'DashboardController@renewCredentials')->middleware('can:administer-dashboard')->name('admin.credentials.renew');
+	Route::post('dashboard/{app:aid}/credentials/renew/{type}', 'DashboardController@renewCredentials')->middleware('can:administer-dashboard')->name('admin.credentials.renew');
     Route::post('apps/{app:aid}/status', 'DashboardController@updateAppStatus')->middleware('can:administer-dashboard')->name('admin.app.status-update');
 
     // Global search
