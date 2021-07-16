@@ -4,18 +4,18 @@
     $isAdminPage = Request::is('admin/*');
     $credentials = $app['credentials'];
     [$sandboxProducts, $prodProducts] = $app->getProductsByCredentials();
-    $svgStatusIcon = $app->products->filter(fn($prod) => $prod->pivot->status === 'pending')->count() > 0 ? 'status-pending' : 'status-' . $app['status'];
+    $appStatus = $app->products->filter(fn($prod) => $prod->pivot->status === 'pending')->count() > 0 ? 'status-pending' : 'status-' . $app['status'];
 @endphp
 
 @allowonce('card_link')
 <link href="{{ mix('/css/components/_app.css') }}" rel="stylesheet"/>
 @endallowonce
 
-<div class="app" data-name="{{ $app['name'] }}" data-id="{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
+<div class="app app-{{ $appStatus }}" data-name="{{ $app['name'] }}" data-id="{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
      data-locations="{{ implode(',', array_keys($countries)) }}">
     <div class="column">
         <p class="name">
-            @svg($svgStatusIcon)
+            <span class="status-icon"></span>
             {{ $app['display_name'] }}
         </p>
     </div>
@@ -220,7 +220,7 @@
             <p class="spacer-flex"><strong class="mr-1">Ready to launch?</strong>You're just a few clicks away</p>
             <button class="button dark">GO LIVE @svg('rocket', '#FFF')</button>
         </form>
-        @elseif($isAdminPage && $prodProducts['hasKyc'])
+        @elseif($isAdminPage && !is_null($app['kyc_status']))
         <div class="kyc-status">
             <strong class="mr-2">Update the KYC status</strong>
             <select name="kyc_status" class="kyc-status-select" data-aid="{{ $app['aid'] }}" autocomplete="off">

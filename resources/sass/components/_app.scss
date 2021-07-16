@@ -10,6 +10,26 @@
         overflow: hidden;
     }
 
+    .status-icon {
+        width: 24px;
+        height: 24px;
+        display: inline-block;
+        margin-right: 20px;
+    }
+
+    &.app-status-approved .status-icon {
+        background: url('/images/icons/status-approved.svg') no-repeat center center / contain;
+    }
+
+    &.app-status-revoked .status-icon {
+        background: url('/images/icons/status-revoked.svg') no-repeat center center / contain;
+    }
+
+    &.app-status-pending .status-icon {
+        background: url('/images/icons/status-pending.svg') no-repeat center center / contain;
+    }
+
+
     .column:first-of-type {
         font-size: 14px;
     }
@@ -35,10 +55,6 @@
 
         @media #{$small} {
             margin-right: 10px;
-        }
-
-        svg {
-            margin-right: 20px;
         }
     }
 
@@ -309,12 +325,5 @@
         background-color: transparent;
         padding: 0;
         height: auto;
-    }
-
-    .name {
-        svg {
-            width: 24px;
-            height: 24px;
-        }
     }
 }
