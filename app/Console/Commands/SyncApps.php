@@ -56,13 +56,13 @@ class SyncApps extends Command
 
 			$creds = ApigeeService::sortCredentials($app['credentials']);
 
-			foreach ($app['credentials'][0]['apiProducts'] as $product) {
+			foreach ($creds[0]['apiProducts'] as $product) {
 				if (!in_array($product['apiproduct'], $products)) continue 2;
 				$apiProducts[$product['apiproduct']] = ['status' => $product['status']];
 			}
 
-			if (count($app['credentials']) > 1) {
-				foreach (end($app['credentials'])['apiProducts'] as $product) {
+			if (count($creds) > 1) {
+				foreach (end($creds)['apiProducts'] as $product) {
 					if (!in_array($product['apiproduct'], $products)) continue 2;
 					$apiProducts[$product['apiproduct']] = ['status' => $product['status']];
 				}
