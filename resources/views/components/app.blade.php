@@ -4,6 +4,7 @@
     $isAdminPage = Request::is('admin/*');
     $credentials = $app['credentials'];
     [$sandboxProducts, $prodProducts] = $app->getProductsByCredentials();
+    $svgStatusIcon = $app->products->filter(fn($prod) => $prod->pivot->status === 'pending')->count() > 0 ? 'status-pending' : 'status-' . $app['status'];
 @endphp
 
 @allowonce('card_link')
@@ -14,7 +15,7 @@
      data-locations="{{ implode(',', array_keys($countries)) }}">
     <div class="column">
         <p class="name">
-            @svg('app-avatar', '#fff')
+            @svg($svgStatusIcon)
             {{ $app['display_name'] }}
         </p>
     </div>
