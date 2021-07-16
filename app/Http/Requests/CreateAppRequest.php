@@ -2,8 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use App\Exceptions\CreateAppException;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
 
 class CreateAppRequest extends FormRequest {
 	/**
@@ -42,5 +45,18 @@ class CreateAppRequest extends FormRequest {
             'url' => filter_var($this->url, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description' => filter_var($this->description, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
         ]);
+    }
+
+    /**
+     * @param Validator $validator
+     * @throws CreateAppException
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        $message = Arr::first(Arr::flatten($validator->messages()->get('*')));
+
+        throw (new CreateAppException($validator, null, 'default', $message))
+            ->errorBag($this->errorBag)
+            ->redirectTo($this->getRedirectUrl());
     }
 }
