@@ -123,12 +123,10 @@ class App extends Model
         $firstProducts = [
             'credentials' => $credentials[0],
             'products' => $credentials[0]['apiProducts'],
-            'hasKyc' => !is_null($this->kyc_status)
         ];
         $lastProducts = [
             'credentials' => [],
             'products' => [],
-            'hasKyc' => !is_null($this->kyc_status)
         ];
 
         $isFirstProductSandbox = $firstProducts['credentials']['environment'] === 'sandbox';
