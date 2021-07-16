@@ -264,6 +264,7 @@ class AppController extends Controller
             }
         }
 
+
         if ($typeAndEnvironment[1] === 'production') {
             $credentials =  $creds['production'][$typeAndEnvironment[0]];
         } else if ($typeAndEnvironment[1] === 'sandbox') {
