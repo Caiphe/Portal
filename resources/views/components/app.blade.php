@@ -10,7 +10,7 @@
 <link href="{{ mix('/css/components/_app.css') }}" rel="stylesheet"/>
 @endallowonce
 
-<div id="app-{{ $app['aid'] }}" class="app" data-name="{{ $app['name'] }}" data-id="{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
+<div class="app" data-name="{{ $app['name'] }}" data-id="{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
      data-locations="{{ implode(',', array_keys($countries)) }}">
     <div class="column">
         <p class="name">
@@ -115,7 +115,11 @@
         @endif
 
         @if(!empty($sandboxProducts))
-        <p class="products-title"><strong>Products</strong></p>
+        @if(!$isAdminPage)
+        <p class="products-title"><strong>Products</strong> <a class="button outline small ml-1" href="{{ route('app.credentials.request-renew', ['app' => $app, 'type' => 'sandbox']) }}">Renew credentials</a></p>
+        @else
+        <p class="products-title"><strong>Products</strong> <a class="button outline small ml-1" href="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'sandbox']) }}">Renew credentials</a></p>
+        @endif
         <div class="products">
             <x-apps.products :app="$app" :products="$sandboxProducts['products']" for="staging" />
         </div>
@@ -175,7 +179,11 @@
         </div>
         @endif
         <div class="detail-right"></div>
-        <p class="products-title"><strong>Production products</strong></p>
+        @if(!$isAdminPage)
+        <p class="products-title"><strong>Production products</strong> <a class="button outline small ml-1" href="{{ route('app.credentials.request-renew', ['app' => $app, 'type' => 'production']) }}">Renew credentials</a></p>
+        @else
+        <p class="products-title"><strong>Production products</strong> <a class="button outline small ml-1" href="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'production']) }}">Renew credentials</a></p>
+        @endif
         <div class="products production-products kyc-status-{{ Str::slug($app->kyc_status ?? 'none') }}">
             <x-apps.products :app="$app" :products="$prodProducts['products']" for="production" />
         </div>

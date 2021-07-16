@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateStatusRequest;
 use App\Services\ApigeeService;
 use App\App;
 use App\Country;
+use App\Http\Controllers\AppController;
 use App\Mail\KycStatusUpdate;
 use App\Mail\ProductAction;
 use Illuminate\Support\Facades\Mail;
@@ -130,6 +131,28 @@ class DashboardController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    /**
+     * Renew an apps credentials
+     *
+     * @param      \App\App                           $app    The application
+     * @param      string                             $type   The type
+     *
+     * @return     \Illuminate\Http\RedirectResponse  Redirect to the Dashboard
+     */
+    public function renewCredentials(App $app, string $type)
+    {
+        $credentialsType = 'consumerKey-' . $type;
+        $consumerKey = (new AppController())->getCredentials($app, $credentialsType, 'string');
+
+        $updatedApp = ApigeeService::renewCredentials($app->developer, $app, $consumerKey);
+
+        $app->update([
+            'credentials' => $updatedApp['credentials']
+        ]);
+
+        return redirect()->route('admin.dashboard.index')->with('alert', 'success:Your credentials have been renewed');
     }
 
     public function updateKycStatus(App $app, Request $request)
