@@ -29,7 +29,7 @@ class CreateAppRequest extends FormRequest {
 			'url' => 'sometimes',
 			'description' => 'sometimes',
 			'country' => 'sometimes',
-			'products' => 'required:array',
+			'products' => 'required|array|min:1',
 		];
 	}
 
@@ -52,18 +52,5 @@ class CreateAppRequest extends FormRequest {
         return [
             'products.required' => 'Please select at least one product.'
         ];
-    }
-
-    /**
-     * @param Validator $validator
-     * @throws ValidationException
-     */
-    protected function failedValidation(Validator $validator)
-    {
-        $message = Arr::first(Arr::flatten($validator->messages()->get('*')));
-
-        throw (new ValidationException($validator, null, 'default', $message))
-            ->errorBag($this->errorBag)
-            ->redirectTo($this->getRedirectUrl());
     }
 }
