@@ -67,6 +67,7 @@
                 <h2 class="mt-4">Available endpoints</h2>
                 <elements-api
                   apiDescriptionUrl="{{ asset("openapi/{$product->swagger}") }}"
+                  layout="{{ $layout }}"
                   router="hash"
                 />
                 @else
