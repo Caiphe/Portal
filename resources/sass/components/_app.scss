@@ -12,6 +12,7 @@
 
     .status-icon {
         width: 24px;
+        min-width: 24px;
         height: 24px;
         display: inline-block;
         margin-right: 20px;
@@ -166,6 +167,11 @@
                     width: 30%;
                 }
 
+                .detail-item-description {
+                    word-break: break-all;
+                    padding-right: 20px;
+                }
+
                 .copy {
                     align-items: baseline;
                     background-color: transparent;
@@ -209,6 +215,10 @@
                         }
                     }
                 }
+            }
+
+            .no-wrap {
+                flex-wrap: nowrap;
             }
         }
 

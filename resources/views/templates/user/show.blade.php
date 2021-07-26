@@ -15,8 +15,8 @@ Update profile
             'MANAGE' =>
             [
                 [ 'label' => 'Profile', 'link' => '/profile'],
-                [ 'label' => 'My apps', 'link' => '/apps'],
                 [ 'label' => '2FA', 'link' => '#twofa'],
+                [ 'label' => 'My apps', 'link' => '/apps'],
             ],
             'DISCOVER' =>
             [
