@@ -13,6 +13,8 @@
 |
  */
 
+Route::get('/stoplight-product', 'ProductController@stoplight')->name('product.stoplight');
+
 Route::get('/', 'HomeController')->name('home');
 
 Route::get('search', 'SearchController')->name('search');
