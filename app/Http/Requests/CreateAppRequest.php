@@ -22,7 +22,7 @@ class CreateAppRequest extends FormRequest {
 	 */
 	public function rules() {
 		return [
-			'display_name' => 'sometimes',
+			'display_name' => 'sometimes|max:100',
 			'url' => 'sometimes',
 			'description' => 'sometimes',
 			'country' => 'sometimes',

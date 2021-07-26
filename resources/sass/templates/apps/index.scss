@@ -149,6 +149,10 @@
             // }
         }
 
+        p {
+            white-space: nowrap;
+        }
+
         &.collapse {
             display: none;
         }
