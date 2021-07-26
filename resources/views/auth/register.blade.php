@@ -65,7 +65,7 @@
             <button id="back" type="button" class="dark outline before arrow-left">Back</button>
             <button id="next" type="button" class="after arrow-right">Next</button>
             <button id="create-new-account" type="button">Create new account</button>
-            <div id="enter" class="t-small">Press <strong>enter</strong> @svg('enter', '#999')</div>
+            <div id="enter" class="t-small">or press <strong>enter</strong> @svg('enter', '#999')</div>
         </div>
         <div class="progress">
             <div class="progressed"></div>
