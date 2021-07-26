@@ -131,7 +131,7 @@ class ProductController extends Controller
 	 * @param  \App\Product  $product
 	 * @return \Illuminate\Http\Response
 	 */
-	public function stoplight(Request $request)
+	public function stoplight(Request $request, $layout = 'sidebar')
 	{
 		$product = Product::with(['content', 'keyFeatures', 'category', 'countries'])->find('helloworld');
 		$user = $request->user();
@@ -201,6 +201,7 @@ class ProductController extends Controller
 			"startingPoint" => $startingPoint,
 			"specification" => $specification,
 			"alternatives" => $alternatives,
+			"layout" => $layout
 		]);
 	}
 
