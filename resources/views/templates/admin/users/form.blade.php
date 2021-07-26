@@ -1,8 +1,8 @@
 @php
     $userRoleIds = isset($user) ? $user->roles->pluck('id')->toArray() : [];
     $userCountryCode = $user->countries[0]->pivot->country_code ?? 0;
-    $userResponsableCountries = isset($user) ? $user->responsibleCountries()->pluck('code')->toArray() : [];
-    $userResponsableGroups = isset($user) ? $user->responsibleGroups()->pluck('group')->toArray() : [];
+    $userResponsibleCountries = isset($user) ? $user->responsibleCountries()->pluck('code')->toArray() : [];
+    $userResponsibleGroups = isset($user) ? $user->responsibleGroups()->pluck('group')->toArray() : [];
 @endphp
 
 @csrf
@@ -50,13 +50,13 @@
 </div>
 
 <div class="editor-field">
-    <h2>Countries the user is responsable for</h2>
-    <x-multiselect id="responsible_countries" name="responsible_countries" label="Select country" :options="$countries->pluck('name', 'code')->toArray()" :selected="$userResponsableCountries"/>
+    <h2>Countries the user is responsible for</h2>
+    <x-multiselect id="responsible_countries" name="responsible_countries" label="Select country" :options="$countries->pluck('name', 'code')->toArray()" :selected="$userResponsibleCountries"/>
 </div>
 
 <div class="editor-field">
-    <h2>Groups the user is responsable for</h2>
-    <x-multiselect id="responsible_groups" name="responsible_groups" label="Select groups" :options="$groups" :selected="$userResponsableGroups"/>
+    <h2>Groups the user is responsible for</h2>
+    <x-multiselect id="responsible_groups" name="responsible_groups" label="Select groups" :options="$groups" :selected="$userResponsibleGroups"/>
 </div>
 
 @push('scripts')

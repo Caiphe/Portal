@@ -61,7 +61,7 @@
                             </div>
 
                             <div class="column">
-                                <p>Regions</p>
+                                <p>Region</p>
                             </div>
 
                             <div class="column">

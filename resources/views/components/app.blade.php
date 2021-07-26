@@ -5,6 +5,8 @@
     $credentials = $app['credentials'];
     [$sandboxProducts, $prodProducts] = $app->getProductsByCredentials();
     $appStatus = $app->products->filter(fn($prod) => $prod->pivot->status === 'pending')->count() > 0 ? 'status-pending' : 'status-' . $app['status'];
+    $countryCode = array_keys($countries)[0];
+    $countryName = array_values($countries)[0];
 @endphp
 
 @allowonce('card_link')
@@ -12,7 +14,7 @@
 @endallowonce
 
 <div class="app app-{{ $appStatus }}" data-name="{{ $app['name'] }}" data-id="{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
-     data-locations="{{ implode(',', array_keys($countries)) }}">
+     data-locations="{{ $countryCode }}">
     <div class="column">
         <p class="name">
             <span class="status-icon"></span>
@@ -21,16 +23,7 @@
     </div>
     @if($type === 'approved')
     <div class="column countries">
-        @foreach($countries as $key => $country)
-            @if($loop->index > 0)
-                @break
-            @endif
-            <span title="{{$country}}">@svg($key, '#000000', 'images/locations')</span>
-        @endforeach
-
-        @if(count($countries) > 1)
-        + {{ count($countries) - 1 }} more
-        @endif
+        <span title="{{ $countryName }}">@svg($countryCode, '#000000', 'images/locations')</span>
     </div>
     @else
         <div class="column"></div>
@@ -68,7 +61,7 @@
                 <div class="detail-right">
                     <div class="detail-row">
                         <div class="detail-item"><strong>Description:</strong></div>
-                        <div class="detail-item">{{ $app['description'] ?: 'No description' }}</div>
+                        <div class="detail-item detail-item-description">{{ $app['description'] ?: 'No description' }}</div>
                     </div>
                 </div>
             </div>
@@ -77,9 +70,9 @@
                 <div class="detail-left">
                     <div class="detail-row">
                         <div class="detail-item"><strong>Description:</strong></div>
-                        <div class="detail-item">{{ $app['description'] ?: 'No description' }}</div>
+                        <div class="detail-item detail-item-description">{{ $app['description'] ?: 'No description' }}</div>
                     </div>
-                    <div class="detail-row cols">
+                    <div class="detail-row cols no-wrap">
                         <div class="detail-item"><strong>Sandbox key</strong></div>
                         <div class="detail-item key">{{ $sandboxProducts['credentials']['consumerKey'] }}</div>
                         <button class="copy" data-reference="{{$app['aid']}}" data-type="consumerKey-sandbox">
@@ -88,7 +81,7 @@
                             @svg('clipboard', '#000000')
                         </button>
                     </div>
-                    <div class="detail-row cols">
+                    <div class="detail-row cols no-wrap">
                         <div class="detail-item"><strong>Sandbox secret</strong></div>
                         <div class="detail-item key">{{ $sandboxProducts['credentials']['consumerSecret'] }}</div>
                         <button class="copy" data-reference="{{$app['aid']}}" data-type="consumerSecret-sandbox">
@@ -145,10 +138,10 @@
                 @if(empty($sandboxProducts))
                 <div class="detail-row">
                     <div class="detail-item"><strong>Description:</strong></div>
-                    <div class="detail-item">{{ $app['description'] ?: 'No description' }}</div>
+                    <div class="detail-item detail-item-description">{{ $app['description'] ?: 'No description' }}</div>
                 </div>
                 @endif
-                <div class="detail-row cols">
+                <div class="detail-row cols no-wrap">
                     <div class="detail-item"><strong>Production key</strong></div>
                     <div class="detail-item key">{{ $prodProducts['credentials']['consumerKey'] }}</div>
                     <button class="copy" data-reference="{{$app['aid']}}" data-type="consumerKey-production">
@@ -157,7 +150,7 @@
                         @svg('clipboard', '#000000')
                     </button>
                 </div>
-                <div class="detail-row cols">
+                <div class="detail-row cols no-wrap">
                     <div class="detail-item"><strong>Production secret</strong></div>
                     <div class="detail-item key">{{ $prodProducts['credentials']['consumerSecret'] }}</div>
                     <button class="copy" data-reference="{{$app['aid']}}" data-type="consumerSecret-production">
