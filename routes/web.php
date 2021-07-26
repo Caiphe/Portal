@@ -14,7 +14,7 @@
  */
 
 Route::get('/stoplight-product', 'ProductController@stoplight')->name('product.stoplight');
-Route::get('/stoplight-product/{layout}', 'ProductController@stoplight')->name('product.stoplight');
+Route::get('/stoplight-product/{layout}', 'ProductController@stoplight')->name('product.stoplight.layout');
 
 Route::get('/', 'HomeController')->name('home');
 
