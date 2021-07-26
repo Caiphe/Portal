@@ -341,12 +341,16 @@
 
         event.preventDefault();
 
-        button.disabled = true;
-        button.textContent = 'Creating...';
-
         for(i = 0; i < selectedProducts.length; i++) {
              app.products.push(selectedProducts[i].dataset.name);
         }
+
+        if (app.products.length === 0) {
+            return void addAlert('error', 'Please select at least one product.')
+        }
+
+        button.disabled = true;
+        button.textContent = 'Creating...';
 
         var url = "{{ route('app.store') }}";
         var xhr = new XMLHttpRequest();
@@ -364,7 +368,15 @@
                     window.location.href = "{{ route('app.index') }}";
                 });
             } else {
-                result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+                var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+                if(result.errors) {
+                    result.message = [];
+                    for(var error in result.errors){
+                        result.message.push(result.errors[error]);
+                    }
+                }
+
                 addAlert('error', result.message || 'Sorry there was a problem creating your app. Please try again.');
 
                 button.removeAttribute('disabled');

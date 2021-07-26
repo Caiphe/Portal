@@ -2,8 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use App\Exceptions\ValidationException;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
 
 class CreateAppRequest extends FormRequest {
 	/**
@@ -26,7 +29,7 @@ class CreateAppRequest extends FormRequest {
 			'url' => 'sometimes',
 			'description' => 'sometimes',
 			'country' => 'sometimes',
-			'products' => 'required:array',
+			'products' => 'required|array|min:1',
 		];
 	}
 
@@ -42,5 +45,12 @@ class CreateAppRequest extends FormRequest {
             'url' => filter_var($this->url, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description' => filter_var($this->description, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
         ]);
+    }
+
+    public function messages()
+    {
+        return [
+            'products.required' => 'Please select at least one product.'
+        ];
     }
 }
