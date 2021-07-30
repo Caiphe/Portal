@@ -2,6 +2,7 @@
     var uploader = document.getElementById('uploader');
 
     document.getElementById('new-tab').addEventListener('click', newTab);
+    document.getElementById('uploader-input').addEventListener('change', chooseSwagger);
 
     ["dragenter", "dragover", "dragleave", "drop"].forEach(preventDefaultsListeners);
     ["dragenter", "dragover"].forEach(highlightListeners);
@@ -39,9 +40,12 @@
         e.stopPropagation();
     }
 
+    function chooseSwagger() {
+        verifyOpenApi({ dataTransfer: { files: this.files } });
+    }
+
     function verifyOpenApi(e) {
         var files = e.dataTransfer.files;
-        var input = uploader.querySelector("input");
         var errors = [];
 
         unhighlight();
