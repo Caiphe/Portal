@@ -4,7 +4,7 @@
     $isAdminPage = Request::is('admin/*');
     $credentials = $app['credentials'];
     [$sandboxProducts, $prodProducts] = $app->getProductsByCredentials();
-    $appStatus = $app->products->filter(fn($prod) => $prod->pivot->status === 'pending')->count() > 0 ? 'status-pending' : 'status-' . $app['status'];
+    $appStatus = $app->products->filter(fn($prod) => $prod->pivot->status === 'pending')->count() > 0 ? 'pending' : $app['status'];
     $countryCode = array_keys($countries)[0];
     $countryName = array_values($countries)[0];
 @endphp
@@ -13,11 +13,11 @@
 <link href="{{ mix('/css/components/_app.css') }}" rel="stylesheet"/>
 @endallowonce
 
-<div class="app app-{{ $appStatus }}" data-name="{{ $app['name'] }}" data-id="{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
+<div class="app app-status-{{ $appStatus }}" data-name="{{ $app['name'] }}" data-id="{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
      data-locations="{{ $countryCode }}">
     <div class="column">
-        <p class="name">
-            <span class="status-icon"></span>
+        <p class="name toggle-app">
+            <span title="{{ $appStatus }}" class="status-icon"></span>
             {{ $app['display_name'] }}
         </p>
     </div>
@@ -44,6 +44,7 @@
     </div>
     <div class="column">
         <button class="actions"></button>
+        <button class="toggle-app-button toggle-app">@svg('chevron-down', '#000000')</button>
     </div>
     <div class="detail">
         @if($isAdminPage)

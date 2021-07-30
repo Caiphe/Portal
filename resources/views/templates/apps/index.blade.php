@@ -163,20 +163,14 @@
             heading.querySelector('svg').classList.toggle('active');
         }
 
-        var buttons = document.querySelectorAll('.name');
+        var buttons = document.querySelectorAll('.toggle-app');
 
         for (var j = 0; j < buttons.length; j ++) {
             buttons[j].addEventListener('click', handleButtonClick);
         }
 
         function handleButtonClick(event) {
-            var parent = this.parentNode.parentNode;
-
-            if (parent.querySelector('.detail').style.display === 'block') {
-                parent.querySelector('.detail').style.display = 'none';
-            } else {
-                parent.querySelector('.detail').style.display = 'block';
-            }
+            this.parentNode.parentNode.classList.toggle('show')
         }
 
         var actions = document.querySelectorAll('.actions');

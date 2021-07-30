@@ -49,6 +49,22 @@
         padding: 0;
     }
 
+    .toggle-app-button {
+        background: none;
+        padding: 0;
+        transition: transform 512ms;
+        border: none;
+        width: 34px;
+        height: 34px;
+        margin-left: 10px;
+    }
+
+    &.show {
+        .toggle-app-button {
+            transform: rotate(180deg);
+        }
+    }
+
     .name {
         display: flex;
         align-items: center;
@@ -327,6 +343,12 @@
         .kyc-status {
             justify-content: end;
             align-items: center;
+        }
+    }
+
+    &.show {
+        .detail {
+            display: block;
         }
     }
 
