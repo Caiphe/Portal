@@ -18,17 +18,27 @@
 
 @section('content')
 
-<div id="uploader">
+<label id="uploader">
    @svg('plus-circle-filled')
    @svg('loading-blue')
    <span>Upload Swagger</span>
    <div class="errors"></div>
-</div>
+   <input id="uploader-input" type="file" name="uploader" hidden accept=".yaml,yml">
+</label>
 
 <form id="admin-form" action="{{ route('admin.product.update', $product->slug) }}" method="POST">
 
     @method('PUT')
     @csrf
+
+    <div class="editor-field">
+        <h2>Swagger</h2>
+        @if(!$product->swagger)
+        <p class="mb-0">No Swagger uploaded yet.</p>
+        @else
+        <a class="button" href="/openapi/{{ $product->swagger }}" download>Download</a>
+        @endif
+    </div>
 
     <div class="editor-field">
         <h2>Display name</h2>
