@@ -175,6 +175,7 @@
         function nextButtonHandler(ev) {
             var activeDiv = this.parentNode.parentNode;
             var nextDiv = activeDiv.nextElementSibling;
+            var urlValue = document.getElementById('url').value;
 
             ev.preventDefault();
 
@@ -184,7 +185,7 @@
                 return void addAlert('error', 'Please choose a name for your app.');
             }
 
-            if(!/https?:\/\/.*\..*/.test(document.getElementById('url').value)) {
+            if(urlValue !== '' && !/https?:\/\/.*\..*/.test(urlValue)) {
                 return void addAlert('error', ['Please add a valid url', 'Eg. https://callback.com']);
             }
 
