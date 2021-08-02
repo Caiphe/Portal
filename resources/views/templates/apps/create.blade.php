@@ -115,6 +115,7 @@
                                 <x-card-product :title="$product->display_name"
                                                 class="product-block"
                                                 :href="$href"
+                                                target="_blank"
                                                 :tags="$tags"
                                                 :addButtonId="$product->slug"
                                                 :data-title="$product->name"
@@ -324,31 +325,32 @@
         });
     }
 
-    var submit = document.getElementById('create').addEventListener('click', handleCreate);
+    var submit = document.getElementById('form-create-app').addEventListener('submit', handleCreate);
 
     function handleCreate(event) {
-        event.preventDefault();
-
-        var button = document.getElementById('create');
-        button.disabled = true;
-        button.textContent = 'Creating...';
-
+        var elements = this.elements;
         var app = {
-            name: document.querySelector('#name').value,
-            url: document.querySelector('#url').value,
-            description: document.querySelector('#description').value,
+            display_name: elements['name'].value,
+            url: elements['url'].value,
+            description: elements['description'].value,
             country: document.querySelector('.country-checkbox:checked').dataset.location,
             products: []
         };
-
         var selectedProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
+        var button = document.getElementById('create');
 
-        var products = [];
+        event.preventDefault();
+
         for(i = 0; i < selectedProducts.length; i++) {
-            products.push(selectedProducts[i].dataset.name);
+             app.products.push(selectedProducts[i].dataset.name);
         }
 
-        app.products = products;
+        if (app.products.length === 0) {
+            return void addAlert('error', 'Please select at least one product.')
+        }
+
+        button.disabled = true;
+        button.textContent = 'Creating...';
 
         var url = "{{ route('app.store') }}";
         var xhr = new XMLHttpRequest();
@@ -366,7 +368,15 @@
                     window.location.href = "{{ route('app.index') }}";
                 });
             } else {
-                result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+                var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+                if(result.errors) {
+                    result.message = [];
+                    for(var error in result.errors){
+                        result.message.push(result.errors[error]);
+                    }
+                }
+
                 addAlert('error', result.message || 'Sorry there was a problem creating your app. Please try again.');
 
                 button.removeAttribute('disabled');

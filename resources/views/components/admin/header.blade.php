@@ -5,7 +5,7 @@
         <a class="logo" href="/"><img src="/images/mtn-logo.svg" alt="MTN logo"> Developer Portal</a>
         <div class="spacer"></div>
         <form action="{{route('admin.search')}}">
-            <input type="search" name="q" id="search" class="thin" placeholder="Search">
+            <input type="search" name="q" id="search" class="thin" placeholder="Search whole site...">
         </form>
         <div id="profile-menu">
             <div id="profile-menu-picture" style="background-image: url({{\Auth::user()->profile_picture}})"></div>
