@@ -50,7 +50,7 @@
                 @svg('app-avatar', '#ffffff')
                 <div class="group">
                     <label for="name">Name your app *</label>
-                    <input type="text" name="name" id="name" placeholder="Enter name" required>
+                    <input type="text" name="name" id="name" placeholder="Enter name" maxlength="100" required>
                 </div>
 
                 <div class="group">
@@ -165,7 +165,11 @@
                 event.preventDefault();
                 if(form.firstElementChild.classList.contains('active')) {
                     if(document.getElementById('name').value === '') {
-                        return void alert('Please add a name for your app');
+                        return void addAlert('error', 'Please add a name for your app');
+                    }
+
+                    if(!/https?:\/\/.*\..*/.test(document.getElementById('url').value)) {
+                        return void addAlert('error', ['Please add a valid url', 'Eg. https://callback.com']);
                     }
 
                     nav.querySelector('a').nextElementSibling.classList.add('active');
@@ -176,7 +180,7 @@
 
                 } else if (form.firstElementChild.nextElementSibling.classList.contains('active')) {
                     if(document.querySelectorAll('.country-checkbox:checked').length === 0) {
-                        return void alert('Please select a country');
+                        return void addAlert('error', 'Please select a country');
                     }
 
                     nav.querySelector('a').nextElementSibling.nextElementSibling.classList.add('active');
