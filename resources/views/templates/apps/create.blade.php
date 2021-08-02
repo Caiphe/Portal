@@ -162,13 +162,15 @@
         for (var i = 0; i < buttons.length; i++) {
 
             buttons[i].addEventListener('click', function (event) {
+                var urlValue = document.getElementById('url').value;
                 event.preventDefault();
+
                 if(form.firstElementChild.classList.contains('active')) {
                     if(document.getElementById('name').value === '') {
                         return void addAlert('error', 'Please add a name for your app');
                     }
 
-                    if(!/https?:\/\/.*\..*/.test(document.getElementById('url').value)) {
+                    if(urlValue !== '' && !/https?:\/\/.*\..*/.test(urlValue)) {
                         return void addAlert('error', ['Please add a valid url', 'Eg. https://callback.com']);
                     }
 
