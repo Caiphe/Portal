@@ -69,6 +69,10 @@ class DashboardController extends Controller
                     $q->whereHas('products', function ($query) {
                         $query->where('status', 'pending');
                     });
+                } elseif (in_array($status, ['approved', 'revoked'])) {
+                    $q->whereHas('products', function ($query) use($status){
+                        $query->where('status', $status);
+                    });
                 } else {
                     $q->where('status', $status);
                 }
