@@ -55,7 +55,7 @@
 
                 <div class="group">
                     <label for="url">Callback url</label>
-                    <input type="url" name="url" id="url" placeholder="Enter callback url">
+                    <input type="url" name="url" id="url" placeholder="Enter callback url (eg. https://callback.com)">
                 </div>
 
                 <div class="group">
