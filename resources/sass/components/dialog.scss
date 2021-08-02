@@ -1,0 +1,49 @@
+@import '../variables';
+
+.mdp-dialog {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 512ms ease;
+
+    &.show {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .dialog-background {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    .dialog-content {
+        background-color: #FFF;
+        padding: 40px;
+        border-radius: 10px;
+    }
+
+    .dialog-close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: $yellow;
+        border: none;
+        width: 30px;
+        height: 30px;
+        font-size: 22px;
+        cursor: pointer;
+        border-radius: 0 0 0 10px;
+    }
+}

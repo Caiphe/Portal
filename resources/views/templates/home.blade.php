@@ -121,7 +121,7 @@
                         <div class="content-right">
                             <h2>Browse our products</h2>
                             <p class="t-pxl">
-                                MTN is consistently developing new APIs for developers and businesses to create powerful products. After signing in, you can explore the list of available products and familiarise yourself with the documentaion and endpoints to determine if they would be a match for your next app.
+                                MTN is consistently developing new APIs for developers and businesses to create powerful products. After signing in, you can explore the list of available products and familiarise yourself with the documentation and endpoints to determine if they would be a match for your next app.
                             </p>
                             <span class="t-ps-header">Steps involved</span>
                             <ol>

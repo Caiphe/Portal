@@ -10,6 +10,27 @@
         overflow: hidden;
     }
 
+    .status-icon {
+        width: 24px;
+        min-width: 24px;
+        height: 24px;
+        display: inline-block;
+        margin-right: 20px;
+    }
+
+    &.app-status-approved .status-icon {
+        background: url('/images/icons/status-approved.svg') no-repeat center center / contain;
+    }
+
+    &.app-status-revoked .status-icon {
+        background: url('/images/icons/status-revoked.svg') no-repeat center center / contain;
+    }
+
+    &.app-status-pending .status-icon {
+        background: url('/images/icons/status-pending.svg') no-repeat center center / contain;
+    }
+
+
     .column:first-of-type {
         font-size: 14px;
     }
@@ -28,6 +49,22 @@
         padding: 0;
     }
 
+    .toggle-app-button {
+        background: none;
+        padding: 0;
+        transition: transform 512ms;
+        border: none;
+        width: 34px;
+        height: 34px;
+        margin-left: 10px;
+    }
+
+    &.show {
+        .toggle-app-button {
+            transform: rotate(180deg);
+        }
+    }
+
     .name {
         display: flex;
         align-items: center;
@@ -35,10 +72,6 @@
 
         @media #{$small} {
             margin-right: 10px;
-        }
-
-        svg {
-            margin-right: 20px;
         }
     }
 
@@ -136,15 +169,24 @@
             display: flex;
             flex-wrap: nowrap;
 
-            >div:first-of-type {
-                padding-right: 30px;
+            .detail-left {
+                width: 60%;
             }
 
-            .copy-column {
-                display: flex;
-                flex-direction: column;
-                margin-left: 30px;
-                margin-right: 30px;
+            .detail-right {
+                width: 40%;
+            }
+
+            .detail-row {
+
+                .detail-item:first-child {
+                    width: 30%;
+                }
+
+                .detail-item-description {
+                    word-break: break-all;
+                    padding-right: 20px;
+                }
 
                 .copy {
                     align-items: baseline;
@@ -191,22 +233,28 @@
                 }
             }
 
-            div:nth-of-type(4) {
-                margin-right: 30px;
+            .no-wrap {
+                flex-wrap: nowrap;
             }
+        }
 
-            div:nth-of-type(5) {
-                flex: 1;
+        .go-live,
+        .kyc-status {
+            border-top: 1px solid $grey900;
+            padding-top: 14px;
+            margin-top: 14px;
 
-                div {
-                    display: flex;
-                }
+            svg {
+                width: 16px;
+                margin: 0 0 0 6px;
             }
         }
 
         .products-title {
             margin-top: 15px;
             margin-bottom: 10px;
+            display: flex;
+            align-items: center;
         }
 
         .products {
@@ -227,6 +275,26 @@
                 margin-bottom: 10px;
                 height: 100%;
 
+                &.product-status-approved .product-approve {
+                    display: none;
+                }
+
+                &.product-status-revoked .product-revoke {
+                    display: none;
+                }
+
+                &.product-status-approved .status-bar {
+                    background-color: $success;
+                }
+
+                &.product-status-pending .status-bar {
+                    background-color: $warning;
+                }
+
+                &.product-status-revoked .status-bar {
+                    background-color: $error;
+                }
+
                 span[class^="status-"],
                 span[class*="status-"] {
                     height: auto;
@@ -234,18 +302,6 @@
                     border-radius: 7px;
                     opacity: 1;
                     margin-right: 10px;
-                }
-
-                .status-approved {
-                    background-color: $success;
-                }
-
-                .status-pending {
-                    background-color: $warning;
-                }
-
-                .status-revoked {
-                    background-color: $error;
                 }
 
                 .name {
@@ -268,6 +324,31 @@
                     width: 15px;
                 }
             }
+
+            .product-approve,
+            .product-revoke {
+                opacity: 0.4;
+                pointer-events: none;
+            }
+
+            .product-status-pending .product-approve,
+            .product-status-pending .product-revoke,
+            .product-status-revoked .product-approve,
+            .product-status-approved .product-revoke {
+                opacity: 1;
+                pointer-events: auto;
+            }
+        }
+
+        .kyc-status {
+            justify-content: end;
+            align-items: center;
+        }
+    }
+
+    &.show {
+        .detail {
+            display: block;
         }
     }
 
@@ -276,11 +357,5 @@
         background-color: transparent;
         padding: 0;
         height: auto;
-    }
-
-    .name {
-        svg {
-            border-radius: 50%;
-        }
     }
 }

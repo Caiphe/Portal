@@ -1,4 +1,6 @@
-<div class="parameter">
+@props(['title', 'type', 'required', 'state' => ''])
+
+<div class="parameter {{ $state }}">
     <h5 onclick="toggleParent(this)">
         @svg('chevron-right')
         {{ $title }}

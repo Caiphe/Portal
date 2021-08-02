@@ -45,10 +45,8 @@ class ProductController extends Controller
 	{
 		$product->load(['content', 'keyFeatures', 'category', 'countries']);
 		$user = $request->user();
-		if(
-			($product->access === 'private' && (!$user || !$user->hasPermissionTo('view_private_products'))) ||
-			($product->access === 'internal' && (!$user || !$user->hasPermissionTo('view_internal_products')))
-		){
+
+		if ($product->access === 'private' && (!$user || !$user->hasRole('private'))) {
 			abort(403);
 		}
 
@@ -124,6 +122,86 @@ class ProductController extends Controller
 			"startingPoint" => $startingPoint,
 			"specification" => $specification,
 			"alternatives" => $alternatives,
+		]);
+	}
+
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  \App\Product  $product
+	 * @return \Illuminate\Http\Response
+	 */
+	public function stoplight(Request $request, $layout = 'sidebar')
+	{
+		$product = Product::with(['content', 'keyFeatures', 'category', 'countries'])->find('helloworld');
+		$user = $request->user();
+
+		if ($product->access === 'private' && (!$user || !$user->hasRole('private'))) {
+			abort(403);
+		}
+
+		$productList = Product::with('category')->basedOnUser($request->user())->get()->sortBy('category.title')->groupBy('category.title');
+		$content = [
+			'all' => [],
+			'lhs' => [],
+			'rhs' => [],
+		];
+		$sidebarAccordion = [];
+		$alternatives = [];
+		$startingPoint = "product-specification";
+
+		foreach ($product->content as $c) {
+			$key = in_array($c->title, ['Overview', 'Docs']) ? 'lhs' : 'rhs';
+			$content['all'][$c->title] = $c;
+			$content[$key][$c->title] = $c;
+		}
+
+		if (isset($content['lhs']['Overview'])) {
+			$startingPoint = 'product-' . $content['lhs']['Overview']->slug;
+		} else if (isset($content['lhs']['Docs'])) {
+			$startingPoint = 'product-' . $content['lhs']['Docs']->slug;
+		}
+
+		foreach ($productList as $category => $products) {
+			if (!isset($sidebarAccordion[$category])) {
+				$sidebarAccordion[$category] = [];
+			}
+
+			foreach ($products as $sidebarProduct) {
+				$sidebarAccordion[$category][] = ["label" => $sidebarProduct['display_name'], "link" => '/products/' . $sidebarProduct['slug']];
+				$alternatives[$category][] = $sidebarProduct;
+			}
+
+			asort($sidebarAccordion[$category]);
+		}
+
+		if (!empty($alternatives[$product->category->title]) && count($alternatives[$product->category->title]) > 1) {
+			$alternatives = array_intersect_key(
+				$alternatives[$product->category->title],
+				array_flip(
+					array_rand(
+						$alternatives[$product->category->title],
+						min(count($alternatives[$product->category->title]), 3)
+					)
+				)
+			);
+		} else {
+			$alternatives = [];
+		}
+
+		$specification = Cache::rememberForever(
+			$product->slug . '-specification',
+			fn () => (new OpenApiService($product->swagger))->buildOpenApiJson()
+		);
+
+		return view('templates.products.stoplight', [
+			"product" => $product,
+			"sidebarAccordion" => $sidebarAccordion,
+			"content" => $content,
+			"startingPoint" => $startingPoint,
+			"specification" => $specification,
+			"alternatives" => $alternatives,
+			"layout" => $layout
 		]);
 	}
 

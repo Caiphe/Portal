@@ -11,28 +11,11 @@
 
     <section>
         <div class="container">
-            <x-action-tab
-                link="https://spectrum.chat/mtn-developer-hub"
-                text="For more help, connect with us on Spectrum"
-                logo="spectrum">
-            </x-action-tab>
-
-            <x-action-tab
-                link="https://madapi.statuspage.io/"
-                title="Network status."
-                text="See more on our status page"
-                status="green">
-            </x-action-tab>
-        </div>
-    </section>
-
-    <section>
-        <div class="container">
             <div class="column help">
                 <h2>Need more help?</h2>
 
                 <p>
-                    Want to know about available data, localisation, sandbox, costs and more? So do many others. Check out the answers to some frequentlky asked questions.
+                    Want to know about available data, localisation, sandbox, costs and more? So do many others. Check out the answers to some frequently asked questions.
                 </p>
 
                 <a class="button after arrow-right" href="{{route('faq.index')}}">View FAQ's</a>

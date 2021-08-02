@@ -34,8 +34,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('sync:products')->dailyAt('07:00');
-        $schedule->command('sync:bundles')->dailyAt('07:10');
+        $schedule->command('sync:products')->dailyAt('01:00');
+        $schedule->command('sync:bundles')->dailyAt('01:10');
+        $schedule->command('sync:apps')->dailyAt('01:20');
     }
 
     /**

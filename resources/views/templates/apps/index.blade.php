@@ -61,7 +61,7 @@
                             </div>
 
                             <div class="column">
-                                <p>Regions</p>
+                                <p>Region</p>
                             </div>
 
                             <div class="column">
@@ -69,7 +69,7 @@
                             </div>
 
                             <div class="column">
-                                <p>Date updated</p>
+                                <p>Last updated</p>
                             </div>
 
                             <div class="column">
@@ -83,7 +83,7 @@
                                     :app="$app"
                                     :attr="$app['attributes']"
                                     :details="$app['developer']"
-                                    :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products)"
+                                    :countries="!is_null($app->country) ? [$app->country->code => $app->country->name] : ['globe' => 'globe']"
                                     :type="$type = 'approved'">
                                 </x-app>
                                 @endif
@@ -132,7 +132,7 @@
                                         :app="$app"
                                         :attr="$app['attributes']"
                                         :details="$app['developer']"
-                                        :countries="$app['country'] ? $app->country()->pluck('name', 'code')->toArray() : App\Services\ApigeeService::getAppCountries($app->products)"
+                                        :countries="!is_null($app->country) ? [$app->country->code => $app->country->name] : ['globe' => 'globe']"
                                         :type="$type = 'revoked'">
                                     </x-app>
                                 @endif
@@ -163,20 +163,14 @@
             heading.querySelector('svg').classList.toggle('active');
         }
 
-        var buttons = document.querySelectorAll('.name');
+        var buttons = document.querySelectorAll('.toggle-app');
 
         for (var j = 0; j < buttons.length; j ++) {
             buttons[j].addEventListener('click', handleButtonClick);
         }
 
         function handleButtonClick(event) {
-            var parent = this.parentNode.parentNode;
-
-            if (parent.querySelector('.detail').style.display === 'block') {
-                parent.querySelector('.detail').style.display = 'none';
-            } else {
-                parent.querySelector('.detail').style.display = 'block';
-            }
+            this.parentNode.parentNode.classList.toggle('show')
         }
 
         var actions = document.querySelectorAll('.actions');
@@ -260,15 +254,24 @@
 
             xhr.open('GET', url, true);
             xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
             xhr.send();
 
             xhr.onload = function() {
                 if(xhr.status === 302 || /login/.test(xhr.responseURL)){
-                     addAlert('info', ['You are currently logged out.', 'Refresh the page to login again.']);
+                    addAlert('info', ['You are currently logged out.', 'Refresh the page to login again.']);
                     btn.className = 'copy';
                 } else if (xhr.status === 200) {
-                    copyToClipboard(xhr.responseText);
+                    var response = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+                    
+                    if(response === null){
+                        btn.className = 'copy';
+                        return void addAlert('error', ['Sorry there was a problem getting the credentials', 'Please try again']);
+                    }
+
+                    copyToClipboard(response.credentials);
                     btn.className = 'copy copied';
                 }
             };

@@ -64,10 +64,10 @@ class SearchController extends Controller
             return ['title' => 'FAQ: ' . substr($detail['question'], 0, 80), 'description' => $this->findSearchTerm($detail['answer'], $searchTerm), 'link' => "/faq/#{$detail['slug']}"];
         })->toArray();
 
-        $content = Content::where(function ($q) {
-            $q->whereDoesntHaveMorph('contentable', [Product::class, Bundle::class])
-                ->orWhereNull('contentable_type');
-        })
+        $content = Content::whereIn('type', ['general_docs', 'page', 'blog'])
+            ->where(function ($q) {
+                $q->whereDoesntHaveMorph('contentable', [Product::class, Bundle::class])->orWhereNull('contentable_type');
+            })
             ->where(function ($q) use ($query) {
                 $q->where('title', 'like', $query)->orWhere('body', 'like', $query);
             })

@@ -18,7 +18,7 @@ class UserController extends Controller
 	 */
 	public function show(Request $request)
 	{
-		$user = \Auth::user();
+		$user = $request->user();
 		$user->load('countries');
 
 		$key = $user['2fa'] ?? TwofaService::getSecretKey();

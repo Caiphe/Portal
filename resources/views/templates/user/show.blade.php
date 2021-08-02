@@ -15,8 +15,8 @@ Update profile
             'MANAGE' =>
             [
                 [ 'label' => 'Profile', 'link' => '/profile'],
-                [ 'label' => 'My apps', 'link' => '/apps'],
                 [ 'label' => '2FA', 'link' => '#twofa'],
+                [ 'label' => 'My apps', 'link' => '/apps'],
             ],
             'DISCOVER' =>
             [
@@ -51,7 +51,7 @@ Update profile
             @method('put')
             <h2>Personal details</h2>
             <input type="text" name="first_name" value="{{$user['first_name']}}" placeholder="First name" autocomplete="first_name">
-            <input type="text" name="last_name" value="{{$user['last_name']}}" placeholder="Second name" autocomplete="last_name">
+            <input type="text" name="last_name" value="{{$user['last_name']}}" placeholder="Last name" autocomplete="last_name">
             <input type="email" name="email" value="{{$user['email']}}" placeholder="Email" autocomplete="email">
             <small class="email-warning">*If you change your email, it will need to be verified again.</small>
             <h2>Password</h2>
