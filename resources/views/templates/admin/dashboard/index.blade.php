@@ -67,7 +67,7 @@
         ajaxifyComplete = init;
 
         function init() {
-            var buttons = document.querySelectorAll('p.name');
+            var buttons = document.querySelectorAll('.toggle-app');
             var actions = document.querySelectorAll('.actions');
             var modals = document.querySelectorAll('.modal');
             var productStatusButtons = document.querySelectorAll('button[class*="product-"]');
@@ -99,14 +99,8 @@
             }
         }
 
-        function handleButtonClick(event) {
-            var parent = this.parentNode.parentNode;
-
-            if (parent.querySelector('.detail').style.display === 'block') {
-                parent.querySelector('.detail').style.display = 'none';
-            } else {
-                parent.querySelector('.detail').style.display = 'block';
-            }
+        function handleButtonClick() {
+            this.parentNode.parentNode.classList.toggle('show')
         }
 
         function handleMenuClick() {
