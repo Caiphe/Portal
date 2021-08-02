@@ -48,12 +48,12 @@
                     @svg('app-avatar', '#ffffff')
                     <div class="group">
                         <label for="name">Name your app *</label>
-                        <input type="text" name="name" id="name" placeholder="Enter name" required value="{{ $data['display_name'] }}">
+                        <input type="text" name="name" id="name" placeholder="Enter name" required value="{{ $data['display_name'] }}" maxlength="100">
                     </div>
 
                     <div class="group">
                         <label for="url">Callback url</label>
-                        <input type="url" name="url" id="url" placeholder="Enter callback url" value="{{ $data['callback_url'] }}">
+                        <input type="url" name="url" id="url" placeholder="Enter callback url (Eg. https://callback.com)" value="{{ $data['callback_url'] }}">
                     </div>
 
                     <div class="group">
@@ -182,6 +182,10 @@
 
             if(activeDiv.classList.contains('app-details') && form.elements['name'].value === ''){
                 return void addAlert('error', 'Please choose a name for your app.');
+            }
+
+            if(!/https?:\/\/.*\..*/.test(document.getElementById('url').value)) {
+                return void addAlert('error', ['Please add a valid url', 'Eg. https://callback.com']);
             }
 
             if(activeDiv.classList.contains('select-countries') && document.querySelectorAll('.country-checkbox:checked').length === 0){
@@ -317,16 +321,23 @@
                 products: [],
                 _method: 'PUT'
             };
+            var button = document.getElementById('update');
             var url = "{{ route('app.update', $data) }}";
             var xhr = new XMLHttpRequest();
             var selectedProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
 
             event.preventDefault();
-            document.getElementById('update').textContent = "Updating...";
 
             for(i = 0; i < selectedProducts.length; i++) {
                 app.products.push(selectedProducts[i].dataset.name);
             }
+
+            if (app.products.length === 0) {
+                return void addAlert('error', 'Please select at least one product.')
+            }
+
+            button.disabled = true;
+            button.textContent = "Updating...";
 
             xhr.open('POST', url, true);
             xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
@@ -341,8 +352,19 @@
                         window.location.href = "{{ route('app.index') }}";
                     });
                 } else {
-                    result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+                    var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+                    if(result.errors) {
+                        result.message = [];
+                        for(var error in result.errors){
+                            result.message.push(result.errors[error]);
+                        }
+                    }
+
                     addAlert('error', result.message || 'Sorry there was a problem updating your app. Please try again.');
+
+                    button.removeAttribute('disabled');
+                    button.textContent = 'Update';
                 }
 
                 document.getElementById('update').textContent = "Update";
