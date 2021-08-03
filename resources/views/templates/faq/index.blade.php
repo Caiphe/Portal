@@ -80,7 +80,7 @@
                 Need more help? Get in touch
             </h1>
 
-            <form action="{{ route('contact.send') }}" method="POST">
+            <form action="{{ route('contact.send') }}" method="POST" id="faq-contact-form">
                 @csrf
 
                 <x-panel>
@@ -107,12 +107,26 @@
                     </select>
                 </x-panel>
 
-                <input type="text" name="username" placeholder="Enter a username" autocomplete="off">
-                <input type="text" name="first_name" placeholder="Enter first name" autocomplete="first_name">
-                <input type="text" name="last_name" placeholder="Enter last name" autocomplete="last_name">
-                <input type="email" name="email" placeholder="Enter email address" autocomplete="email">
-
-                <textarea name="message" placeholder="Enter message" rows="4"></textarea>
+                <div style="text-align: left">
+                    <input type="text" name="username" placeholder="Enter a username" autocomplete="off">
+                    <small style="color: red"></small>
+                </div>
+                <div style="text-align: left">
+                    <input type="text" name="first_name" placeholder="Enter first name" autocomplete="first_name">
+                    <small style="color: red"></small>
+                </div>
+                <div style="text-align: left">
+                    <input type="text" name="last_name" placeholder="Enter last name" autocomplete="last_name">
+                    <small style="color: red"></small>
+                </div>
+                <div style="text-align: left">
+                    <input type="email" name="email" placeholder="Enter email address" autocomplete="email">
+                    <small style="color: red"></small>
+                </div>
+                <div style="text-align: left">
+                    <textarea name="message" placeholder="Enter message" rows="4"></textarea>
+                    <small style="color: red"></small>
+                </div>
 
                 <button>Send message</button>
             </form>
@@ -218,6 +232,88 @@
             };
         }
     }
+
+    function showMessage(input, message, type) {
+        const msg = input.parentNode.querySelector("small");
+        msg.innerText = message;
+
+        input.className = type ? "success" : "error";
+        return type;
+    }
+
+    function showError(input, message) {
+        return showMessage(input, message, false);
+    }
+
+    function showSuccess(input) {
+        return showMessage(input, "", true);
+    }
+
+    function hasValue(input, message) {
+        if (input.value.trim() === "") {
+            return showError(input, message);
+        }
+        return showSuccess(input);
+    }
+
+    function validateEmail(input, requiredMsg, invalidMsg) {
+        if (!hasValue(input, requiredMsg)) {
+            return false;
+        }
+
+        const emailRegex =
+            /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        const email = input.value.trim();
+        if (!emailRegex.test(email)) {
+            return showError(input, invalidMsg);
+        }
+        return true;
+    }
+
+    const form = document.querySelector("#faq-contact-form");
+
+    const FIRSTNAME_REQUIRED = "Please enter your first name";
+    const LASTNAME_REQUIRED = "Please enter your last name";
+    const EMAIL_REQUIRED = "Please enter your email";
+    const EMAIL_INVALID = "Please enter a correct email address format";
+    const MESSAGE_REQUIRED = "Please enter a message";
+
+    addEvent(form, "submit", function () {
+        let formErrorsPresent = false;
+
+        if (hasValue(form.elements["first_name"], FIRSTNAME_REQUIRED)) {
+            formErrorsPresent = true;
+        }
+
+        if (hasValue(form.elements["last_name"], LASTNAME_REQUIRED)) {
+            formErrorsPresent = true;
+        }
+
+        if (validateEmail(form.elements["email"], EMAIL_REQUIRED, EMAIL_INVALID)) {
+            formErrorsPresent = true;
+        }
+
+        if (hasValue(form.elements["message"], MESSAGE_REQUIRED)) {
+            formErrorsPresent = true;
+        }
+
+        return formErrorsPresent;
+    });
+
+    function addEvent(element, event, callback) {
+        let previousEventCallBack = element["on"+event];
+        element["on"+event] = function (e) {
+            let output = callback(e);
+
+            if (output === false) return false;
+
+            if (typeof previousEventCallBack === 'function') {
+                output = previousEventCallBack(e);
+                if(output === false) return false;
+            }
+        }
+    };
 }());
 </script>
 @endpushscript

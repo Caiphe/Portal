@@ -99,6 +99,11 @@
             errors['first-name'].push('Please add your first name');
         }
 
+        if (firstName !== '' && false === validateStringInputField(document.getElementById('first-name'))) {
+            hasErrors = true;
+            errors['first-name'].push('Please add correct first name');
+        }
+
         if (email === '') {
             hasErrors = true;
             errors['email'].push('Please add your email');
@@ -135,6 +140,11 @@
         if (lastName === '') {
             hasErrors = true;
             errors['last-name'].push('Please add your last name');
+        }
+
+        if (lastName !== '' && false === validateStringInputField(document.getElementById('last-name'))) {
+            hasErrors = true;
+            errors['last-name'].push('Please add correct last name');
         }
 
         if (hasErrors) {
@@ -232,4 +242,9 @@
 function togglePasswordVisibility(el) {
     el.classList.toggle('password-visible');
     el.previousElementSibling.setAttribute('type', el.classList.contains('password-visible') ? "text" : "password");
+}
+
+function validateStringInputField(el) {
+    let regName = /^[a-zA-Z '.-]*$/;
+    return regName.test(el.value);
 }
