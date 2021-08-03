@@ -144,9 +144,13 @@ class DashboardController extends Controller
     public function renewCredentials(App $app, string $type)
     {
         $credentialsType = 'consumerKey-' . $type;
-        $consumerKey = (new AppController())->getCredentials($app, $credentialsType, 'string');
+        $consumerKey = ApigeeService::getCredentials($app, $credentialsType, 'string');
 
         $updatedApp = ApigeeService::renewCredentials($app->developer, $app, $consumerKey);
+
+        if ($updatedApp->status() !== 200) {
+            return redirect()->route('app.index')->with('alert', 'error:Sorry there was an error renewing the credentials');
+        }
 
         $app->update([
             'credentials' => $updatedApp['credentials']
