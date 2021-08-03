@@ -247,39 +247,7 @@ class AppController extends Controller
      */
     public function getCredentials(App $app, $type, $respondWith = 'jsonResponse')
     {
-        $credentials = ApigeeService::get('apps/' . $app->aid)['credentials'];
-        $credentials = ApigeeService::sortCredentials($credentials);
-        $sandboxedProducts = Product::where('environments', 'like', 'sandbox')->pluck('name')->toArray();
-        $typeAndEnvironment = explode('-', $type);
-        $creds = [
-            'sandbox' => [],
-            'production' => [],
-        ];
-
-        foreach ($credentials as $credential) {
-            if(count(array_intersect($sandboxedProducts, array_column($credential['apiProducts'], 'apiproduct'))) > 0){
-                $creds['sandbox'] = $credential;
-            } else {
-                $creds['production'] = $credential;
-            }
-        }
-
-
-        if ($typeAndEnvironment[1] === 'production') {
-            $credentials =  $creds['production'][$typeAndEnvironment[0]];
-        } else if ($typeAndEnvironment[1] === 'sandbox') {
-            $credentials =  $creds['sandbox'][$typeAndEnvironment[0]];
-        } else if ($type !== 'all') {
-            $credentials = $credentials[0][$typeAndEnvironment[0]];
-        }
-
-        if ($respondWith === 'string') {
-            return $credentials;
-        }
-
-        return response()->json([
-            'credentials' => $credentials
-        ]);
+        return ApigeeService::getCredentials($app, $type, $respondWith);
     }
 
     /**
@@ -297,7 +265,7 @@ class AppController extends Controller
         return redirect()->route('app.index')->with('alert', 'success:You will receive an email to renew your apps credentials');
     }
 
-     /**
+    /**
      * Renew an apps credentials
      *
      * @param      \App\App                           $app    The application
@@ -311,6 +279,10 @@ class AppController extends Controller
         $consumerKey = $this->getCredentials($app, $credentialsType, 'string');
 
         $updatedApp = ApigeeService::renewCredentials(auth()->user(), $app, $consumerKey);
+
+        if ($updatedApp->status() !== 200) {
+            return redirect()->route('app.index')->with('alert', 'error:Sorry there was an error renewing the credentials');
+        }
 
         $app->update([
             'credentials' => $updatedApp['credentials']
