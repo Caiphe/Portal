@@ -1,7 +1,9 @@
-@extends('layouts.sidebar')
+@extends('layouts.master')
 
 @push('styles')
+<link rel="stylesheet" href="{{ mix('/css/vendor/stoplight.css') }}">
 <link rel="stylesheet" href="{{ mix('/css/templates/products/show.css') }}">
+<script src="{{ mix('/js/vendor/stoplight.js') }}"></script>
 @if(!empty($content))
 <style>
     @foreach($content['all'] as $tab)
@@ -25,10 +27,6 @@
 @endpush
 
 @section('title', $product->display_name)
-
-@section('sidebar')
-    <x-sidebar-accordion id="product-page-sidebar" :active="'/' . request()->path()" :list="$sidebarAccordion"/>
-@endsection
 
 @section('content')
     <x-heading :heading="$product->display_name" :edit="route('admin.product.edit', $product->slug)">
@@ -57,27 +55,16 @@
             @endforeach
 
             <div id="product-specification" class="product-section">
-                @if(!is_null($specification))
+                @if($specification)
                 <h2 class="mt-0">Download</h2>
                 <a href="{{ route('product.download.postman', [$product->slug]) }}" class="button">Download Postman collection</a>
                 <a href="{{ route('product.download.swagger', [$product->slug]) }}" class="button">Download Swagger</a>
 
                 <h2 class="mt-4">Available endpoints</h2>
-                @foreach($specification['item'] as $spec)
-                    <div class="specification-detail">
-                        <div class="endpoint" onclick="toggleParent(this)">
-                            @svg('chevron-right') <span class="tag {{strtolower($spec['request']['method'])}}">{{strtoupper($spec['request']['method'])}}</span> {{implode('/', $spec['request']['url']['path'])}}
-
-                            @if(!empty($spec['description']))
-                            <p class="specification-description">{{ $spec['description'] }}</p>
-                            @endif
-                        </div>
-
-                        <x-products.options :request="$spec['request']"/>
-
-                        <x-products.breakdown :responses="$spec['response']" :request="$spec['request']"/>
-                    </div>
-                @endforeach
+                <elements-api
+                    apiDescriptionUrl="{{ asset("openapi/{$product->swagger}") }}"
+                    router="memory"
+                />
                 @else
                 <div class="no-specification">
                     <p>NO CONTENT FOUND</p>

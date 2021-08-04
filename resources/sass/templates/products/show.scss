@@ -1,26 +1,10 @@
 @import "../../variables";
 
-#sidebar {
-    @media #{$small} {
-        display: none;
-    }
-
-    @media #{$medium} {
-        display: none;
-    }
-}
-
-#main {
+body>#main {
     padding: 0 !important;
     margin-bottom: 60px;
-    height: 100%;
 
-    @media #{$small} {
-        margin-top: 80px;
-        padding-top: 3rem !important;
-    }
-
-    @media #{$medium} {
+    @media screen and (max-width: 768px) {
         margin-top: 80px;
         padding-top: 3rem !important;
     }
@@ -66,15 +50,11 @@
         }
 
         .right-side {
-            @media #{$small} {
-                position: initial;
-                display: flex;
-                padding-top: 2rem;
-                height: 100%;
-                width: 100%;
+            @media screen and (min-width: 768px) {
+                right: 8vw;
             }
 
-            @media #{$medium} {
+            @media screen and (max-width: 768px) {
                 position: initial;
                 display: flex;
                 padding-top: 2rem;
