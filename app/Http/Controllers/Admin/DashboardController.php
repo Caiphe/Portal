@@ -31,9 +31,7 @@ class DashboardController extends Controller
         $notAdminNoResponsibleCountries = !$isAdmin && empty($responsibleCountriesCodes);
         $notAdminNoResponsibleGroups = !$isAdmin && empty($responsibleGroups);
         $appStatus = $request->get('app-status', 'pending');
-        $productStatus = $request->get('product-status', 'all products');
-
-        \Log::info("Query parameters: ", [ $appStatus, $productStatus]);
+        $productStatus = $request->get('product-status', 'all');
 
         if (($notAdminNoResponsibleCountries || $notAdminNoResponsibleGroups) && $request->ajax()) {
             return response()
@@ -68,7 +66,7 @@ class DashboardController extends Controller
                         });
                 });
             })
-            ->when($appStatus !== 'all apps', function ($q) use ($appStatus, $productStatus) {
+            ->when($appStatus !== 'all', function ($q) use ($appStatus, $productStatus) {
                 if ($appStatus === 'pending' && $productStatus === 'all') {
                     $q->whereHas('products', function ($query) {
                         $query->where('status', 'pending');
@@ -78,8 +76,9 @@ class DashboardController extends Controller
                         $query->where('status', $productStatus);
                     });
                 } elseif (Str::startsWith('with', $productStatus)) {
-                    $q->whereHas('products', function ($query) {
-                        $query->whereIN('status', ['approved', 'revoked']);
+                    $lookupStatus = Str::contains('approved', $productStatus) ? 'approved' : 'revoked';
+                    $q->whereHas('products', function ($query) use($lookupStatus) {
+                        $query->where('status', $lookupStatus);
                     });
                 } else {
                     $q->where('status', $appStatus);
