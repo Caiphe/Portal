@@ -15,12 +15,21 @@
     <div class="container" id="app-index">
         <div class="cols centre-align">
             <form id="filter-form" class="cols centre-align ajaxify" action="{{ route('admin.dashboard.index') }}" method="GET" data-replace="#table-data">
-                <h3>Status</h3>
-                <select id="filter-status" name="status" class="ml-1">
-                    <option @if($selectedStatus == 'all') selected @endif value="all">All</option>
+                <h3>App Status</h3>
+                <select id="app-filter-status" name="app-status" class="ml-1">
+                    <option @if($selectedStatus == 'all apps') selected @endif value="all">All</option>
                     <option @if($selectedStatus == 'pending') selected @endif value="pending">Has pending products</option>
-                    <option @if($selectedStatus == 'approved') selected @endif value="approved">Approved</option>
-                    <option @if($selectedStatus == 'revoked') selected @endif value="revoked">Revoked</option>
+                    <option @if($selectedStatus == 'approved') selected @endif value="approved">Approved Apps</option>
+                    <option @if($selectedStatus == 'revoked') selected @endif value="revoked">Revoked Apps</option>
+                </select>
+
+                <h3>Product Status</h3>
+                <select id="product-filter-status" name="product-status" class="ml-1">
+                    <option @if($selectedStatus == 'all products') selected @endif value="all">All</option>
+                    <option @if($selectedStatus == 'approved') selected @endif value="approved">All Approved</option>
+                    <option @if($selectedStatus == 'with approved') selected @endif value="with approved">With Approved</option>
+                    <option @if($selectedStatus == 'revoked') selected @endif value="revoked">All Revoked</option>
+                    <option @if($selectedStatus == 'with revoked') selected @endif value="with revoked">With Revoked</option>
                 </select>
 
                 <h3 class="ml-2">Country</h3>
@@ -61,7 +70,8 @@
 
         document.getElementById('filter-text').addEventListener('keyup', filterApps);
         document.getElementById("filter-country").addEventListener('change', submitFilter);
-        document.getElementById("filter-status").addEventListener('change', submitFilter);
+        document.getElementById("app-filter-status").addEventListener('change', submitFilter);
+        document.getElementById("product-filter-status").addEventListener('change', submitFilter);
 
         window.onload = init;
         ajaxifyComplete = init;
@@ -261,7 +271,7 @@
         function updateAppStatus() {
             var dialog = document.getElementById('status-dialog');
             var dialogForm = dialog.querySelector('.status-dialog-form')
-            
+
             dialogForm.action = this.dataset.action;
             dialogForm.addEventListener('submit', function(){
                 dialog.classList.remove('show');

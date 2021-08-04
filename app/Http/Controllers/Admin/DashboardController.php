@@ -12,6 +12,7 @@ use App\Mail\KycStatusUpdate;
 use App\Mail\ProductAction;
 use Illuminate\Support\Facades\Mail;
 use \Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class DashboardController extends Controller
 {
@@ -29,7 +30,10 @@ class DashboardController extends Controller
         $hasCountries = $request->has('countries') && !is_null($searchCountries);
         $notAdminNoResponsibleCountries = !$isAdmin && empty($responsibleCountriesCodes);
         $notAdminNoResponsibleGroups = !$isAdmin && empty($responsibleGroups);
-        $status = $request->get('status', 'pending');
+        $appStatus = $request->get('app-status', 'pending');
+        $productStatus = $request->get('product-status', 'all products');
+
+        \Log::info("Query parameters: ", [ $appStatus, $productStatus]);
 
         if (($notAdminNoResponsibleCountries || $notAdminNoResponsibleGroups) && $request->ajax()) {
             return response()
@@ -64,17 +68,21 @@ class DashboardController extends Controller
                         });
                 });
             })
-            ->when($status !== 'all', function ($q) use ($status) {
-                if ($status === 'pending') {
+            ->when($appStatus !== 'all apps', function ($q) use ($appStatus, $productStatus) {
+                if ($appStatus === 'pending' && $productStatus === 'all') {
                     $q->whereHas('products', function ($query) {
                         $query->where('status', 'pending');
                     });
-                } elseif (in_array($status, ['approved', 'revoked'])) {
-                    $q->whereHas('products', function ($query) use($status){
-                        $query->where('status', $status);
+                } elseif (!Str::startsWith('with', $productStatus) && $productStatus !== 'all') {
+                    $q->whereHas('products', function ($query) use($productStatus) {
+                        $query->where('status', $productStatus);
+                    });
+                } elseif (Str::startsWith('with', $productStatus)) {
+                    $q->whereHas('products', function ($query) {
+                        $query->whereIN('status', ['approved', 'revoked']);
                     });
                 } else {
-                    $q->where('status', $status);
+                    $q->where('status', $appStatus);
                 }
             })
             ->when($hasCountries, function ($q) use ($searchCountries) {
