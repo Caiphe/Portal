@@ -29,7 +29,7 @@
 @section('title', $product->display_name)
 
 @section('content')
-    <x-heading :heading="$product->display_name" :edit="route('admin.product.edit', $product->slug)">
+    <x-heading :heading="$product->display_name" :breadcrumbs="['Products' => route('product.index'), $product->category->title => route('category.show', $product->category->slug)]" :edit="route('admin.product.edit', $product->slug)">
         <div class="available-in">
             <h4>AVAILABLE IN</h4>
             <div class="flags">
@@ -61,10 +61,19 @@
                 <a href="{{ route('product.download.swagger', [$product->slug]) }}" class="button">Download Swagger</a>
 
                 <h2 class="mt-4">Available endpoints</h2>
-                <elements-api
-                    apiDescriptionUrl="{{ asset("openapi/{$product->swagger}") }}"
-                    router="memory"
-                />
+                <div id="elements-api-desktop">
+                    <elements-api
+                        apiDescriptionUrl="{{ asset("openapi/{$product->swagger}") }}"
+                        router="memory"
+                    />
+                </div>
+                <div id="elements-api-mobile">
+                    <elements-api
+                        apiDescriptionUrl="{{ asset("openapi/{$product->swagger}") }}"
+                        router="memory"
+                        layout="stacked"
+                    />
+                </div>
                 @else
                 <div class="no-specification">
                     <p>NO CONTENT FOUND</p>

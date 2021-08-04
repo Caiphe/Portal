@@ -4,6 +4,10 @@ body>#main {
     padding: 0 !important;
     margin-bottom: 60px;
 
+    elements-api div {
+        position: initial;
+    }
+
     @media screen and (max-width: 768px) {
         margin-top: 80px;
         padding-top: 3rem !important;
@@ -50,10 +54,6 @@ body>#main {
         }
 
         .right-side {
-            @media screen and (min-width: 768px) {
-                right: 8vw;
-            }
-
             @media screen and (max-width: 768px) {
                 position: initial;
                 display: flex;
@@ -180,20 +180,33 @@ body>#main {
     }
 }
 
-.product-section-button {
-    display: inline-block;
-    margin: $gutterSmall 6px $gutter 0;
+#elements-api-desktop {
+    @media screen and (max-width: 768px) {
+        display: none;
+    }
+}
+
+#elements-api-mobile {
+    @media screen and (min-width: 768px) {
+        display: none;
+    }
 }
 
 #product-sections {
+    @media screen and (max-width: 768px) {
+        padding: 40px 20px 0;        
+    }
 
-    #button-specification {
-        @media #{$small} {
-            display: none;
+    .product-section-button {
+        @media screen and (min-width: 768px) {
+            display: inline-block;
+            margin: $gutterSmall 6px $gutter 0;
         }
 
-        @media #{$medium} {
-            display: none;
+        @media screen and (max-width: 768px) {
+            width: 100%;
+            height: 30px;
+            margin-bottom: 10px;
         }
     }
 
