@@ -1,9 +1,11 @@
-pre {
+pre:not(.sl-code-viewer) {
     font-size: 10px;
     background-color: $grey750;
     border-radius: 8px;
     padding: $gutterSmall;
     font-family: "Montserrat";
+    word-break: break-word;
+    white-space: break-spaces;
 }
 
 .hljs {
