@@ -4,6 +4,8 @@ pre:not(.sl-code-viewer) {
     border-radius: 8px;
     padding: $gutterSmall;
     font-family: "Montserrat";
+    word-break: break-word;
+    white-space: break-spaces;
 }
 
 .hljs {

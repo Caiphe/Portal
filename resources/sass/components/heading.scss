@@ -11,11 +11,7 @@
         right: 0;
         left: 0;
 
-        @media #{$small} {
-            display: none;
-        }
-
-        @media #{$medium} {
+        @media screen and (max-width: 768px) {
             display: none;
         }
     }
@@ -45,7 +41,7 @@
     padding: 90px $gutter $gutter;
 
     .layout-master & {
-        padding: 90px 8vw $gutter;
+        padding: 90px 40px $gutter;
 
         #heading {
             padding: $gutterSmall 0;
