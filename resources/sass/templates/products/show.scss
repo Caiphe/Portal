@@ -181,6 +181,10 @@ body>#main {
 }
 
 #elements-api-desktop {
+    @media screen and (min-width: 768px) {
+        position: initial;
+    }
+
     @media screen and (max-width: 768px) {
         display: none;
     }
@@ -194,7 +198,7 @@ body>#main {
 
 #product-sections {
     @media screen and (max-width: 768px) {
-        padding: 40px 20px 0;        
+        padding: 40px 20px 0;
     }
 
     .product-section-button {
