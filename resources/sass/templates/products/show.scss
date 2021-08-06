@@ -181,6 +181,9 @@ body>#main {
 }
 
 #elements-api-desktop {
+    @media screen and (min-width: 768px) {
+        position: initial;
+    }
     @media screen and (max-width: 768px) {
         display: none;
     }
