@@ -86,7 +86,7 @@ class ApigeeService
         ]);
     }
 
-    public static function getCredentials(App $app, $type, $respondWith = 'jsonResponse'): mixed
+    public static function getCredentials(App $app, $type, $respondWith = 'jsonResponse')
     {
         $credentials = self::get('apps/' . $app->aid)['credentials'];
         $credentials = self::sortCredentials($credentials);
