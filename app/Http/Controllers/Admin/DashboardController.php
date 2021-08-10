@@ -7,12 +7,10 @@ use App\Http\Requests\UpdateStatusRequest;
 use App\Services\ApigeeService;
 use App\App;
 use App\Country;
-use App\Http\Controllers\AppController;
 use App\Mail\KycStatusUpdate;
 use App\Mail\ProductAction;
 use Illuminate\Support\Facades\Mail;
 use \Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class DashboardController extends Controller
 {
@@ -29,22 +27,21 @@ class DashboardController extends Controller
         $searchCountries = $request->get('countries');
         $hasCountries = $request->has('countries') && !is_null($searchCountries);
         $notAdminNoResponsibleCountries = !$isAdmin && empty($responsibleCountriesCodes);
-        $notAdminNoResponsibleGroups = !$isAdmin && empty($responsibleGroups);
-        $appStatus = $request->get('app-status', 'pending');
-        $productStatus = $request->get('product-status', 'approved');
+        $appStatus = $request->get('app-status', 'all');
+        $productStatus = $request->get('product-status', 'pending');
 
-
-        if (($notAdminNoResponsibleCountries || $notAdminNoResponsibleGroups) && $request->ajax()) {
+        if (($notAdminNoResponsibleCountries) && $request->ajax()) {
             return response()
                 ->view('templates.admin.dashboard.data', [
                     'apps' => App::where('country_code', 'none')->paginate(),
                     'countries' => Country::all(),
                 ], 200)
                 ->header('Content-Type', 'text/html');
-        } else if (($notAdminNoResponsibleCountries || $notAdminNoResponsibleGroups)) {
+        } else if ($notAdminNoResponsibleCountries) {
             return view('templates.admin.dashboard.index', [
                 'apps' => App::where('country_code', 'none')->paginate(),
                 'countries' => Country::all(),
+                'selectedStatus' => $request->get('status', 'pending')
             ]);
         }
 
@@ -67,21 +64,34 @@ class DashboardController extends Controller
                         });
                 });
             })
-            ->whereHas('products', function ($q) use ($appStatus, $productStatus) {
-                $allowedFilterStatuses = ['approved', 'revoked'];
-                $shallowFilterStatuses = ['atleast_approved', 'atleast_revoked'];
-
-                if ($appStatus === 'pending' || !in_array($productStatus, $shallowFilterStatuses)) {
-                    $q->where('status', 'pending');
-                } elseif (in_array($productStatus, $shallowFilterStatuses)) {
-                    $filterStatus = substr($productStatus,8);
-                    if (in_array($filterStatus, $allowedFilterStatuses)) {
-                        $q->where('status', $filterStatus);
-                    }
-                } elseif(in_array($productStatus, $allowedFilterStatuses) || in_array($appStatus, $allowedFilterStatuses)){
-                    $q->whereIn('status', [ $appStatus, $productStatus ]);
-                }else {
-                    $q->where('status', in_array($productStatus, $allowedFilterStatuses) ? [ $productStatus ] : [ $allowedFilterStatuses ]);
+            ->when($appStatus !== 'all', function ($q) use ($appStatus) {
+                $q->where('status', $appStatus);
+            })
+            ->when($productStatus !== 'all', function ($q) use ($productStatus) {
+                switch ($productStatus) {
+                    case 'pending':
+                        $q->whereHas('products', fn ($q) => $q->where('status', 'pending'));
+                        break;
+                    case 'all-approved':
+                        $q->whereDoesntHave('products', function ($q) {
+                            $q->where('status', 'revoked');
+                        })->whereDoesntHave('products', function ($q) {
+                            $q->where('status', 'pending');
+                        });
+                        break;
+                    case 'at-least-one-approved':
+                        $q->whereHas('products', fn ($q) => $q->where('status', 'approved'));
+                        break;
+                    case 'all-revoked':
+                        $q->whereDoesntHave('products', function ($q) {
+                            $q->where('status', 'approved');
+                        })->whereDoesntHave('products', function ($q) {
+                            $q->where('status', 'pending');
+                        });
+                        break;
+                    case 'at-least-one-revoked':
+                        $q->whereHas('products', fn ($q) => $q->where('status', 'revoked'));
+                        break;
                 }
             })
             ->when($hasCountries, function ($q) use ($searchCountries) {
@@ -103,7 +113,8 @@ class DashboardController extends Controller
             'apps' => $apps,
             'countries' => Country::orderBy('name')->pluck('name', 'code'),
             'selectedCountry' => $request->get('countries', ''),
-            'selectedStatus' => $request->get('status', 'pending')
+            'appStatus' => $request->get('app-status', 'pending'),
+            'productStatus' => $request->get('product-status', 'pending')
         ]);
     }
 

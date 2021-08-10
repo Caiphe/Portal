@@ -169,10 +169,6 @@
     }
 }
 
-.admin #filter-country {
-    width: 145px;
-}
-
 #status-dialog {
     .dialog-content {
         width: 400px;
@@ -187,9 +183,58 @@
     }
 }
 
-.status-separator{
+#filter-form {
+    display: flex;
+
+    @media screen and (max-width: 768px) {
+        flex-direction: column;
+
+        select,
+        input {
+            width: 100%;
+        }
+    }
+}
+
+.status-separator {
     width: 100%;
     height: 1px;
     background-color: #FFF;
     margin: 5px auto;
+}
+
+.product-filters {
+    display: flex;
+
+    @media screen and (min-width: 768px) {
+        align-items: flex-end;
+    }
+
+    @media screen and (max-width: 768px) {
+        flex-direction: column;
+    }
+
+    h3 {
+        font-size: 16px;
+        margin: 0 0 10px 0;
+    }
+}
+
+.prodict-filter {
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+
+    @media screen and (max-width: 768px) {
+        margin-top: 20px;
+    }
+}
+
+#clearFilter {
+    margin-bottom: 2px;
+
+    @media screen and (max-width: 768px) {
+        width: 100%;
+        margin: 20px 0 10px;
+    }
 }
