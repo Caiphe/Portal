@@ -33,6 +33,7 @@ class DashboardController extends Controller
         $appStatus = $request->get('app-status', 'pending');
         $productStatus = $request->get('product-status', 'approved');
 
+
         if (($notAdminNoResponsibleCountries || $notAdminNoResponsibleGroups) && $request->ajax()) {
             return response()
                 ->view('templates.admin.dashboard.data', [
@@ -66,22 +67,21 @@ class DashboardController extends Controller
                         });
                 });
             })
-            ->when($appStatus !== 'all', function ($q) use ($appStatus, $productStatus) {
-                if ($appStatus === 'pending') {
-                    $q->whereHas('products', function ($query) {
-                        $query->where('status', 'pending');
-                    });
-                } elseif (Str::startsWith('atleast_', $productStatus)) {
-                    $filterStatus = Str::substr(8, $productStatus);
-                    $q->whereHas('products', function ($query) use($filterStatus) {
-                        $query->andWhere(['like', 'status', $filterStatus]);
-                    });
-                } elseif(in_array($productStatus, ['approved', 'revoked'])){
-                    $q->whereHas('products', function ($query) use($productStatus) {
-                        $query->whereIn('status', [ $productStatus ]);
-                    });
+            ->whereHas('products', function ($q) use ($appStatus, $productStatus) {
+                $allowedFilterStatuses = ['approved', 'revoked'];
+                $shallowFilterStatuses = ['atleast_approved', 'atleast_revoked'];
+
+                if ($appStatus === 'pending' || !in_array($productStatus, $shallowFilterStatuses)) {
+                    $q->where('status', 'pending');
+                } elseif (in_array($productStatus, $shallowFilterStatuses)) {
+                    $filterStatus = substr($productStatus,8);
+                    if (in_array($filterStatus, $allowedFilterStatuses)) {
+                        $q->where('status', $filterStatus);
+                    }
+                } elseif(in_array($productStatus, $allowedFilterStatuses) || in_array($appStatus, $allowedFilterStatuses)){
+                    $q->whereIn('status', [ $appStatus, $productStatus ]);
                 }else {
-                    $q->where('status', $appStatus);
+                    $q->where('status', in_array($productStatus, $allowedFilterStatuses) ? [ $productStatus ] : [ $allowedFilterStatuses ]);
                 }
             })
             ->when($hasCountries, function ($q) use ($searchCountries) {

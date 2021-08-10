@@ -17,7 +17,7 @@
             <form id="filter-form" class="cols centre-align ajaxify" action="{{ route('admin.dashboard.index') }}" method="GET" data-replace="#table-data">
                 <h3>App Status</h3>
                 <select id="app-filter-status" name="app-status" class="ml-1">
-                    <option @if($selectedStatus == 'all apps') selected @endif value="all">All</option>
+                    <option @if($selectedStatus == 'all') selected @endif value="all">All</option>
                     <option @if($selectedStatus == 'pending') selected @endif value="pending">Has pending products</option>
                     <option @if($selectedStatus == 'approved') selected @endif value="approved">Approved Apps</option>
                     <option @if($selectedStatus == 'revoked') selected @endif value="revoked">Revoked Apps</option>
@@ -25,11 +25,10 @@
 
                 <h3>Product Status</h3>
                 <select id="product-filter-status" name="product-status" class="ml-1">
-                    <option @if($selectedStatus == 'all products') selected @endif value="all">All</option>
                     <option @if($selectedStatus == 'approved') selected @endif value="approved">All Approved</option>
-                    <option @if($selectedStatus == 'with approved') selected @endif value="with approved">With Approved</option>
+                    <option @if($selectedStatus == 'atleast_approved') selected @endif value="atleast_approved">At Least One Approved</option>
                     <option @if($selectedStatus == 'revoked') selected @endif value="revoked">All Revoked</option>
-                    <option @if($selectedStatus == 'with revoked') selected @endif value="with revoked">With Revoked</option>
+                    <option @if($selectedStatus == 'atleast_revoked') selected @endif value="atleast_revoked">At least One Revoked</option>
                 </select>
 
                 <h3 class="ml-2">Country</h3>
