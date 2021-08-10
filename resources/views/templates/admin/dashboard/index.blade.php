@@ -13,26 +13,43 @@
 @section('content')
 
     <div class="container" id="app-index">
-        <div class="cols centre-align">
-            <form id="filter-form" class="cols centre-align ajaxify" action="{{ route('admin.dashboard.index') }}" method="GET" data-replace="#table-data">
-                <h3>Status</h3>
-                <select id="filter-status" name="status" class="ml-1">
-                    <option @if($selectedStatus == 'all') selected @endif value="all">All</option>
-                    <option @if($selectedStatus == 'pending') selected @endif value="pending">Has pending products</option>
-                    <option @if($selectedStatus == 'approved') selected @endif value="approved">Approved</option>
-                    <option @if($selectedStatus == 'revoked') selected @endif value="revoked">Revoked</option>
-                </select>
+        <div class="product-filters">
+            <form id="filter-form" class="ajaxify" action="{{ route('admin.dashboard.index') }}" method="GET" data-replace="#table-data">
+                <div class="prodict-filter">
+                    <h3>App Status</h3>
+                    <select id="app-filter-status" name="app-status">
+                        <option @if($appStatus === 'all') selected @endif value="all">All</option>
+                        <option @if($appStatus === 'approved') selected @endif value="approved">Approved Apps</option>
+                        <option @if($appStatus === 'revoked') selected @endif value="revoked">Revoked Apps</option>
+                    </select>
+                </div>
 
-                <h3 class="ml-2">Country</h3>
-                <select id="filter-country"  name="countries" class="ml-1" label="Select country" >
-                    <option value="">Select country</option>
-                    @foreach($countries as $code => $name)
-                        <option value="{{ $code }}" {{ (($selectedCountry === $code) ? 'selected': '') }}>{{ $name }}</option>
-                    @endforeach
-                </select>
+                <div class="prodict-filter">
+                    <h3>Product Status</h3>
+                    <select id="product-filter-status" name="product-status">
+                        <option @if($productStatus === 'all') selected @endif value="all">All</option>
+                        <option @if($productStatus === 'pending') selected @endif value="pending">Pending</option>
+                        <option @if($productStatus === 'all-approved') selected @endif value="all-approved">All Approved</option>
+                        <option @if($productStatus === 'at-least-one-approved') selected @endif value="at-least-one-approved">At Least One Approved</option>
+                        <option @if($productStatus === 'all-revoked') selected @endif value="all-revoked">All Revoked</option>
+                        <option @if($productStatus === 'at-least-one-revoked') selected @endif value="at-least-one-revoked">At least One Revoked</option>
+                    </select>
+                </div>
 
-                <h3 class="ml-2">Search</h3>
-                <input type="text" name="q" id="filter-text" class="filter-text ml-1" placeholder="App or developer name" value="{{ $_GET['q'] ?? '' }}">
+                <div class="prodict-filter">
+                    <h3 class="ml-2">Country</h3>
+                    <select id="filter-country"  name="countries" label="Select country" >
+                        <option value="">Select country</option>
+                        @foreach($countries as $code => $name)
+                            <option value="{{ $code }}" {{ (($selectedCountry === $code) ? 'selected': '') }}>{{ $name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="prodict-filter">
+                    <h3 class="ml-2">Search</h3>
+                    <input type="text" name="q" id="filter-text" class="filter-text" placeholder="App or developer name" value="{{ $_GET['q'] ?? '' }}">
+                </div>
             </form>
             <form class="ajaxify" data-replace="#table-data" data-func="clearFilter()" action="{{ route('admin.dashboard.index') }}" method="GET">
                 <button id="clearFilter" class="dark outline ml-2">Clear filters</button>
@@ -61,7 +78,8 @@
 
         document.getElementById('filter-text').addEventListener('keyup', filterApps);
         document.getElementById("filter-country").addEventListener('change', submitFilter);
-        document.getElementById("filter-status").addEventListener('change', submitFilter);
+        document.getElementById("app-filter-status").addEventListener('change', submitFilter);
+        document.getElementById("product-filter-status").addEventListener('change', submitFilter);
 
         window.onload = init;
         ajaxifyComplete = init;
@@ -261,7 +279,7 @@
         function updateAppStatus() {
             var dialog = document.getElementById('status-dialog');
             var dialogForm = dialog.querySelector('.status-dialog-form')
-            
+
             dialogForm.action = this.dataset.action;
             dialogForm.addEventListener('submit', function(){
                 dialog.classList.remove('show');
