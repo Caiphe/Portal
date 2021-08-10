@@ -10,7 +10,7 @@
     <button class="fab plus"></button>
 */
 
-button:not(.trix-button),
+button:not(.trix-button, .sl-button),
 .button {
     height: 34px;
     line-height: 1;

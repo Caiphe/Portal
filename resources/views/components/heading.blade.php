@@ -15,16 +15,25 @@
     tags: A comma seperated list of tags.
     fab: The classes that will style the fab button
  --}}
-@props(['heading', 'tags', 'fab', 'edit', 'can' => 'view-admin'])
+@props(['heading', 'tags', 'fab', 'breadcrumbs' => [], 'edit', 'can' => 'view-admin'])
 @php 
     $tags = isset($tags) ? preg_split('/,\s?/', $tags) : [] 
 @endphp
 
 @allowonce('heading')
+@push('styles')
 <link rel="stylesheet" href="{{ mix('/css/components/heading.css') }}">
+@endpush
 @endallowonce
 
 <div id="heading">
+    @if(!empty($breadcrumbs))
+    <ul class="breadcrumbs">
+        @foreach($breadcrumbs as $label => $href)
+        <li class="breadcrumb"><a href="{{ $href }}">{{ $label }}</a></li>
+        @endforeach
+    </ul>
+    @endif
     <h1>
         {{ $heading }}
         @foreach($tags as $tag)
