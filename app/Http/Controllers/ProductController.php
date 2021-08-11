@@ -7,7 +7,6 @@ use App\Country;
 use App\Product;
 use App\Services\OpenApiService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 class ProductController extends Controller
 {
