@@ -371,7 +371,6 @@
         .page-info {
             display: flex;
             margin-left: auto;
-            flex: 0 1 750px;
         }
 
         button:hover,
@@ -380,4 +379,9 @@
             background-color: $blue;
         }
     }
+}
+
+body.product-edit .page-info {
+    flex: 1 0 550px;
+    justify-content: flex-end;
 }

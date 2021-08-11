@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', $product->display_name)
+@section('body-class', 'product-edit')
 
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/admin/edit.css') }}">
