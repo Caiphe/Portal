@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{{ mix('/css/styles.css') }}">
     @stack("styles")
 </head>
-<body class="admin">
+<body class="admin @yield('body-class')">
     @yield('banner')
     <div class="wrapper">
         <nav id="sidebar">

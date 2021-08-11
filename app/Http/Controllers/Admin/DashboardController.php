@@ -45,7 +45,7 @@ class DashboardController extends Controller
             ]);
         }
 
-        $apps = App::with(['developer', 'country', 'products'])
+        $apps = App::with(['developer', 'country', 'products.countries'])
             ->whereNotNull('country_code')
             ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes, $responsibleGroups) {
                 $query->whereIn('country_code', $responsibleCountriesCodes)

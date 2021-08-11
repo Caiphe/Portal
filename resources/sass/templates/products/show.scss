@@ -42,15 +42,8 @@ body>#main {
         }
 
         h1 {
-            @media #{$small} {
-                display: flex;
-                width: 100%;
-            }
-
-            @media #{$medium} {
-                display: flex;
-                width: 100%;
-            }
+            word-break: break-word;
+            width: 100%;
         }
 
         .right-side {
@@ -216,6 +209,7 @@ body>#main {
 
     .product-section {
         display: none;
+        word-break: break-word;
 
         h2:first-of-type {
             @media #{$small} {

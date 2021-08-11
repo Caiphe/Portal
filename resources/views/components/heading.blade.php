@@ -32,6 +32,9 @@
         @foreach($breadcrumbs as $label => $href)
         <li class="breadcrumb"><a href="{{ $href }}">{{ $label }}</a></li>
         @endforeach
+        @if(isset($edit) && \Auth::check() && \Auth::user()->can($can))
+        <li class="breadcrumb"><a href="{{ $edit }}">Edit</a></li>
+        @endif
     </ul>
     @endif
     <h1>
@@ -40,9 +43,6 @@
         <span class="tag outline grey">{{ $tag }}</span>
         @endforeach
     </h1>
-    @if(isset($edit) && \Auth::check() && \Auth::user()->can($can))
-    <a href="{{ $edit }}" class="edit button small dark outline">EDIT</a>
-    @endif
 
     @if(isset($fab))
     <button id="heading-fab" class="fab {{ $fab }}"></button>
