@@ -3,6 +3,7 @@
 
     document.getElementById('new-tab').addEventListener('click', newTab);
     document.getElementById('uploader-input').addEventListener('change', chooseSwagger);
+    document.getElementById('admin-form').addEventListener('submit', validateForm);
 
     ["dragenter", "dragover", "dragleave", "drop"].forEach(preventDefaultsListeners);
     ["dragenter", "dragover"].forEach(highlightListeners);
@@ -23,16 +24,12 @@
         uploader.addEventListener(eventName, highlight, false);
     }
 
-    function highlight(e) {
+    function highlight() {
         uploader.classList.add("highlight");
     }
 
-    function unhighlight(e) {
+    function unhighlight() {
         uploader.classList.remove("highlight");
-    }
-
-    function preventDefaultListeners(eventName) {
-        uploader.addEventListener(eventName, preventDefaults, false);
     }
 
     function preventDefaults(e) {
@@ -69,7 +66,7 @@
 
     function newTab() {
         var randId = rand();
-        document.getElementById('custom-tabs').insertAdjacentHTML('beforeend', '<div class="new-tab mt-3"><button class="dark outline" onclick="removeTab(this)">Remove</button><input type="text" name="tab[title][]" placeholder="Title"><input id="' + randId + '" type="hidden" name="tab[body][]"><trix-editor input="' + randId + '"></trix-editor></div>');
+        document.getElementById('custom-tabs').insertAdjacentHTML('beforeend', '<div class="new-tab mt-3"><button class="dark outline" onclick="removeTab(this)">Remove</button><input class="custom-tab-title" type="text" name="tab[title][]" placeholder="Title"><input class="custom-tab-content" id="' + randId + '" type="hidden" name="tab[body][]"><trix-editor input="' + randId + '"></trix-editor></div>');
     }
 
     function rand() {
@@ -118,6 +115,29 @@
 
         uploader.classList.remove('uploading');
     }
+
+    function validateForm(ev) {
+        var customTabTitle = document.querySelectorAll('.custom-tab-title');
+        var customTabContent = document.querySelectorAll('.custom-tab-content');
+        var errors = [];
+
+        for (var i = customTabTitle.length - 1; i >= 0; i--) {
+            if (
+                (customTabTitle[i].value !== '' && customTabContent[i].value === '') ||
+                (customTabTitle[i].value === '' && customTabContent[i].value !== '')
+            ) {
+                errors.push('The custom tab is mising information');
+                break;
+            }
+        }
+
+        if (errors.length > 0) {
+            ev.preventDefault();
+            return void addAlert('error', errors);
+        }
+
+        addLoading('Updating...');
+    }
 }());
 
 function removeTab(el) {
@@ -158,7 +178,7 @@ function uploadFile(file, progressCallback, successCallback) {
         progressCallback(progress);
     })
 
-    xhr.addEventListener("load", function(event) {
+    xhr.addEventListener("load", function() {
         if (xhr.status === 201) {
             result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
