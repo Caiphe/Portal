@@ -107,27 +107,11 @@
                     </select>
                 </x-panel>
 
-                <div style="text-align: left">
-                    <input type="text" name="username" placeholder="Enter a username" autocomplete="off">
-                    <small style="color: red"></small>
-                </div>
-                <div style="text-align: left">
-                    <input type="text" name="first_name" placeholder="Enter first name" autocomplete="first_name">
-                    <small style="color: red"></small>
-                </div>
-                <div style="text-align: left">
-                    <input type="text" name="last_name" placeholder="Enter last name" autocomplete="last_name">
-                    <small style="color: red"></small>
-                </div>
-                <div style="text-align: left">
-                    <input type="email" name="email" placeholder="Enter email address" autocomplete="email">
-                    <small style="color: red"></small>
-                </div>
-                <div style="text-align: left">
-                    <textarea name="message" placeholder="Enter message" rows="4"></textarea>
-                    <small style="color: red"></small>
-                </div>
-
+                <input type="text" name="username" placeholder="Enter a username" autocomplete="off">
+                <input type="text" name="first_name" placeholder="Enter first name" autocomplete="first_name">
+                <input type="text" name="last_name" placeholder="Enter last name" autocomplete="last_name">
+                <input type="email" name="email" placeholder="Enter email address" autocomplete="email">
+                <textarea name="message" placeholder="Enter message" rows="4"></textarea>
                 <button>Send message</button>
             </form>
         </div>
@@ -233,87 +217,62 @@
         }
     }
 
-    function showMessage(input, message, type) {
-        const msg = input.parentNode.querySelector("small");
-        msg.innerText = message;
-
-        input.className = type ? "success" : "error";
-        return type;
-    }
-
-    function showError(input, message) {
-        return showMessage(input, message, false);
-    }
-
-    function showSuccess(input) {
-        return showMessage(input, "", true);
-    }
-
-    function hasValue(input, message) {
+    function hasValue(input) {
         if (input.value.trim() === "") {
-            return showError(input, message);
-        }
-        return showSuccess(input);
-    }
-
-    function validateEmail(input, requiredMsg, invalidMsg) {
-        if (!hasValue(input, requiredMsg)) {
             return false;
-        }
-
-        const emailRegex =
-            /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-        const email = input.value.trim();
-        if (!emailRegex.test(email)) {
-            return showError(input, invalidMsg);
         }
         return true;
     }
 
-    const form = document.querySelector("#faq-contact-form");
+    function validateEmail(input) {
+        var emailRegex =
+            /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    const FIRSTNAME_REQUIRED = "Please enter your first name";
-    const LASTNAME_REQUIRED = "Please enter your last name";
-    const EMAIL_REQUIRED = "Please enter your email";
-    const EMAIL_INVALID = "Please enter a correct email address format";
-    const MESSAGE_REQUIRED = "Please enter a message";
+        var email = input.value.trim();
+        if (!emailRegex.test(email)) {
+            return false;
+        }
+        return true;
+    }
 
-    addEvent(form, "submit", function () {
-        let formErrorsPresent = false;
+    var form = document.querySelector("#faq-contact-form");
 
-        if (hasValue(form.elements["first_name"], FIRSTNAME_REQUIRED)) {
-            formErrorsPresent = true;
+    form.addEventListener("submit", function (evt) {
+        var errors = [];
+
+        var FIRSTNAME_REQUIRED = "Please enter your first name";
+        var LASTNAME_REQUIRED = "Please enter your last name";
+        var EMAIL_REQUIRED = "Please enter your email";
+        var EMAIL_INVALID = "Please enter a correct email address format";
+        var MESSAGE_REQUIRED = "Please enter a message";
+
+        if (!hasValue(form.elements["first_name"])) {
+            errors.push(FIRSTNAME_REQUIRED);
         }
 
-        if (hasValue(form.elements["last_name"], LASTNAME_REQUIRED)) {
-            formErrorsPresent = true;
+        if (!hasValue(form.elements["last_name"])) {
+            errors.push(LASTNAME_REQUIRED);
         }
 
-        if (validateEmail(form.elements["email"], EMAIL_REQUIRED, EMAIL_INVALID)) {
-            formErrorsPresent = true;
+        if (!hasValue(form.elements["email"])) {
+            errors.push(EMAIL_REQUIRED);
         }
 
-        if (hasValue(form.elements["message"], MESSAGE_REQUIRED)) {
-            formErrorsPresent = true;
+        if (!validateEmail(form.elements["email"])) {
+            errors.push(EMAIL_INVALID);
         }
 
-        return formErrorsPresent;
+        if (!hasValue(form.elements["message"])) {
+            errors.push(MESSAGE_REQUIRED);
+        }
+
+        if (errors.length > 0) {
+            addAlert('error', errors);
+            evt.preventDefault();
+        } else {
+            return true;
+        }
     });
-
-    function addEvent(element, event, callback) {
-        let previousEventCallBack = element["on"+event];
-        element["on"+event] = function (e) {
-            let output = callback(e);
-
-            if (output === false) return false;
-
-            if (typeof previousEventCallBack === 'function') {
-                output = previousEventCallBack(e);
-                if(output === false) return false;
-            }
-        }
-    };
 }());
 </script>
 @endpushscript
