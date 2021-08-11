@@ -13,6 +13,10 @@
 |
  */
 
+Route::get('/debug-sentry', function () {
+	throw new Exception('Sentry error!');
+});
+
 Route::get('/', 'HomeController')->name('home');
 
 Route::get('search', 'SearchController')->name('search');
@@ -93,9 +97,9 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 	Route::post('apps/{product}/approve', 'DashboardController@update')->middleware('can:administer-dashboard')->name('app.product.approve');
 	Route::post('apps/{product}/revoke', 'DashboardController@update')->middleware('can:administer-dashboard')->name('app.product.revoke');
 	Route::post('dashboard/{app:aid}/credentials/renew/{type}', 'DashboardController@renewCredentials')->middleware('can:administer-dashboard')->name('admin.credentials.renew');
-    Route::post('apps/{app:aid}/status', 'DashboardController@updateAppStatus')->middleware('can:administer-dashboard')->name('admin.app.status-update');
+	Route::post('apps/{app:aid}/status', 'DashboardController@updateAppStatus')->middleware('can:administer-dashboard')->name('admin.app.status-update');
 
-    // Global search
+	// Global search
 	Route::get('search', 'SearchController')->name('admin.search');
 
 	// User management
@@ -108,7 +112,7 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 
 Route::namespace('Api\Admin')->prefix('api/admin')->group(function () {
 	Route::post('/products/{product:slug}/openapi', 'ProductController@openapiUpload')->middleware('can:administer-content')->name('api.product.openapi.upload');
-    Route::post('/products/{product:slug}/image', 'ProductController@imageUpload')->middleware('can:administer-content')->name('api.product.image.upload');
+	Route::post('/products/{product:slug}/image', 'ProductController@imageUpload')->middleware('can:administer-content')->name('api.product.image.upload');
 
 	Route::post('sync', 'SyncController@sync')->middleware('can:administer-dashboard')->name('api.sync');
 	Route::post('sync/products', 'SyncController@syncProducts')->middleware('can:administer-dashboard')->name('api.sync.products');
