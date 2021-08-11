@@ -94,7 +94,9 @@
                 <input type="text" name="first_name" placeholder="Enter first name" autocomplete="first_name">
                 <input type="text" name="last_name" placeholder="Enter last name" autocomplete="last_name">
                 <input type="email" name="email" placeholder="Enter email address" autocomplete="email">
+
                 <textarea name="message" placeholder="Enter message" rows="4"></textarea>
+
                 <button>Send message</button>
             </form>
         </div>
@@ -223,30 +225,24 @@
     form.addEventListener("submit", function (evt) {
         var errors = [];
 
-        var FIRSTNAME_REQUIRED = "Please enter your first name";
-        var LASTNAME_REQUIRED = "Please enter your last name";
-        var EMAIL_REQUIRED = "Please enter your email";
-        var EMAIL_INVALID = "Please enter a correct email address format";
-        var MESSAGE_REQUIRED = "Please enter a message";
-
         if (!hasValue(form.elements["first_name"])) {
-            errors.push(FIRSTNAME_REQUIRED);
+            errors.push("Please enter your first name");
         }
 
         if (!hasValue(form.elements["last_name"])) {
-            errors.push(LASTNAME_REQUIRED);
+            errors.push("Please enter your last name");
         }
 
         if (!hasValue(form.elements["email"])) {
-            errors.push(EMAIL_REQUIRED);
+            errors.push("Please enter your email");
         }
 
         if (!validateEmail(form.elements["email"])) {
-            errors.push(EMAIL_INVALID);
+            errors.push("Please enter a correct email address format");
         }
 
         if (!hasValue(form.elements["message"])) {
-            errors.push(MESSAGE_REQUIRED);
+            errors.push("Please enter a message");
         }
 
         if (errors.length > 0) {
