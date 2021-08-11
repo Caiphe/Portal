@@ -28,20 +28,20 @@ class DashboardController extends Controller
         $searchCountries = $request->get('countries');
         $hasCountries = $request->has('countries') && !is_null($searchCountries);
         $notAdminNoResponsibleCountries = !$isAdmin && empty($responsibleCountriesCodes);
-        $notAdminNoResponsibleGroups = !$isAdmin && empty($responsibleGroups);
         $status = $request->get('status', 'pending');
 
-        if (($notAdminNoResponsibleCountries || $notAdminNoResponsibleGroups) && $request->ajax()) {
+        if (($notAdminNoResponsibleCountries) && $request->ajax()) {
             return response()
                 ->view('templates.admin.dashboard.data', [
                     'apps' => App::where('country_code', 'none')->paginate(),
                     'countries' => Country::all(),
                 ], 200)
                 ->header('Content-Type', 'text/html');
-        } else if (($notAdminNoResponsibleCountries || $notAdminNoResponsibleGroups)) {
+        } else if (($notAdminNoResponsibleCountries)) {
             return view('templates.admin.dashboard.index', [
                 'apps' => App::where('country_code', 'none')->paginate(),
                 'countries' => Country::all(),
+                'selectedCountry' => $request->get('countries', ''),
                 'selectedStatus' => $request->get('status', 'pending')
             ]);
         }
