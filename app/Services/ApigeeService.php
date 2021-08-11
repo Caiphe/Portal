@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\App;
 use App\Country;
+use App\Product;
 use App\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
@@ -72,7 +73,7 @@ class ApigeeService
         return $updatedDetails;
     }
 
-    public static function updateAppWithNewCredentials(array $data, $user = null)
+    public static function updateAppWithNewCredentials(array $data, $user = null): Response
     {
         $user ??= auth()->user();
         $name = $data['name'];
@@ -82,6 +83,42 @@ class ApigeeService
             "attributes" => $data['attributes'],
             "callbackUrl" => $data['callbackUrl'],
             "apiProducts" => $data['apiProducts']
+        ]);
+    }
+
+    public static function getCredentials(App $app, $type, $respondWith = 'jsonResponse')
+    {
+        $credentials = self::get('apps/' . $app->aid)['credentials'];
+        $credentials = self::sortCredentials($credentials);
+        $sandboxedProducts = Product::where('environments', 'like', 'sandbox')->pluck('name')->toArray();
+        $typeAndEnvironment = explode('-', $type);
+        $creds = [
+            'sandbox' => [],
+            'production' => [],
+        ];
+
+        foreach ($credentials as $credential) {
+            if (count(array_intersect($sandboxedProducts, array_column($credential['apiProducts'], 'apiproduct'))) > 0) {
+                $creds['sandbox'] = $credential;
+            } else {
+                $creds['production'] = $credential;
+            }
+        }
+
+        if ($typeAndEnvironment[1] === 'production') {
+            $credentials =  $creds['production'][$typeAndEnvironment[0]];
+        } else if ($typeAndEnvironment[1] === 'sandbox') {
+            $credentials =  $creds['sandbox'][$typeAndEnvironment[0]];
+        } else if ($type !== 'all') {
+            $credentials = $credentials[0][$typeAndEnvironment[0]];
+        }
+
+        if ($respondWith === 'string') {
+            return $credentials;
+        }
+
+        return response()->json([
+            'credentials' => $credentials
         ]);
     }
 
@@ -117,14 +154,16 @@ class ApigeeService
             ];
         }
 
-        self::revokeCredentials($user, $app, $key);
-
         $updatedApp = self::updateAppWithNewCredentials([
             'name' => $app->name,
             'attributes' => $attributes,
             'callbackUrl' => $app->callbackUrl ?? '',
             'apiProducts' => $apiProducts,
         ], $user);
+
+        if ($updatedApp->status() !== 200) return $updatedApp;
+
+        self::revokeCredentials($user, $app, $key);
 
         $updatedCredentials = self::sortCredentials($updatedApp['credentials']);
         $updatedCredentials = end($updatedCredentials)['consumerKey'];
