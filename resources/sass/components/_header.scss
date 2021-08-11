@@ -330,7 +330,6 @@
     #header {
         .header-inner {
             height: 80px;
-            padding: 0 40px;
         }
 
         .logo {
@@ -349,7 +348,7 @@
         }
 
         #search {
-            width: 500px;
+            width: 492px;
         }
 
         .profile-menu-options {
@@ -361,12 +360,19 @@
         }
     }
 
-    .header-page-info {
+    #main .header-page-info {
         background-color: $grey400;
         position: sticky;
         padding: 6px 40px;
         top: 0;
         z-index: 2;
+        flex-flow: row nowrap;
+
+        .page-info {
+            display: flex;
+            margin-left: auto;
+            flex: 0 1 750px;
+        }
 
         button:hover,
         .button:hover {

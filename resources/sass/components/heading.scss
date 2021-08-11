@@ -5,7 +5,7 @@
         content: '';
         width: 100vw;
         background-color: $grey400;
-        height: 88px;
+        height: 102px;
         position: absolute;
         top: 80px;
         right: 0;
@@ -22,7 +22,7 @@
         content: '';
         width: 50%;
         background-color: $grey400;
-        height: 88px;
+        height: 102px;
         position: absolute;
         top: 80px;
         right: 0;
@@ -74,7 +74,7 @@
     background-color: $grey400;
     overflow: hidden;
     z-index: 1;
-    height: 88px;
+    height: 102px;
 
     @media screen and (max-width: 768px) {
         height: 72px;
@@ -92,7 +92,7 @@
         margin: 0;
         display: inline;
 
-        @media #{$small} {
+        @media screen and (max-width: 768px) {
             line-height: 1;
         }
     }
