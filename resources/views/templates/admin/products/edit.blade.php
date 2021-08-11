@@ -90,8 +90,8 @@
         @endif
         <div class="old-tab mt-3">
             <button class="dark outline mt-1" onclick="removeTab(this)">Remove</button>
-            <input class="custom-tab-title" type="text" name="content[{{ $c[0]['slug'] }}][title]" value="{{ $c[0]['title'] }}">
-            <input class="custom-tab-content" id="{{ $c[0]['slug'] }}" type="hidden" name="content[{{ $c[0]['slug'] }}][body]" value="{{ $c[0]['body'] ?? '' }}">
+            <input class="custom-tab-title" type="text" name="tab[title][]" value="{{ $c[0]['title'] }}">
+            <input class="custom-tab-content" id="{{ $c[0]['slug'] }}" type="hidden" name="tab[body][]" value="{{ $c[0]['body'] ?? '' }}">
             <trix-editor input="{{ $c[0]['slug'] }}"></trix-editor>
         </div>
         @endforeach
