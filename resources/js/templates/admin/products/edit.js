@@ -126,7 +126,7 @@
                 (customTabTitle[i].value !== '' && customTabContent[i].value === '') ||
                 (customTabTitle[i].value === '' && customTabContent[i].value !== '')
             ) {
-                errors.push('The custom tab is mising information');
+                errors.push('The custom tab is missing information');
                 break;
             }
         }
