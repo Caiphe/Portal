@@ -152,7 +152,10 @@ class AppController extends Controller
         $validated = $request->validated();
         $app->load('products');
         $credentials = $app->credentials;
-        $sandboxProducts = $app->products->filter(fn ($prod) => strpos($prod->environments, 'sandbox') !== false);
+        $sandboxProducts = $app->products->filter(function ($prod) {
+            $envArr = explode(',', $prod->environments);
+            return in_array('sandbox', $envArr) && !in_array('prod', $envArr);
+        });
         $hasSandboxProducts = $sandboxProducts->count() > 0;
         $products = Product::whereIn('name', $validated['products'])->pluck('attributes', 'name');
 
@@ -180,9 +183,19 @@ class AppController extends Controller
             }
         }
 
+        $key = $this->getCredentials($app, $credentialsType, 'string');
+
+        if (empty($key)) {
+            if ($request->ajax()) {
+                return response()->json(['message' => 'Could not find the Consumer Key. Please contact us if this happens again'], 500);
+            }
+
+            return redirect()->route('app.index')->with('alert', 'error:Could not find the Consumer Key. Please contact us if this happens again');
+        }
+
         $data = [
             'name' => $app->name,
-            'key' => $this->getCredentials($app, $credentialsType, 'string'),
+            'key' => $key,
             'apiProducts' => $newProducts,
             'originalProducts' => $originalProducts,
             'keyExpiresIn' => -1,
