@@ -47,6 +47,11 @@ body>#main {
         }
 
         .right-side {
+            @media screen and (min-width: 768px) {
+                top: 7px;
+                height: auto;
+            }
+
             @media screen and (max-width: 768px) {
                 position: initial;
                 display: flex;
