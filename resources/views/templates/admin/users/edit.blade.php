@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', $user->full_name)
+@section('title', 'Edit user')
 
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/admin/edit.css') }}">
