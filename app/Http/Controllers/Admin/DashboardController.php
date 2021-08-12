@@ -18,10 +18,9 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $user->load(['responsibleCountries', 'responsibleGroups']);
+        $user->load(['responsibleCountries']);
         $isAdmin = $user->hasRole('admin');
         $responsibleCountriesCodes = $user->responsibleCountries->pluck('code')->toArray();
-        $responsibleGroups = $user->responsibleGroups->pluck('group')->toArray();
         $searchTerm = "%" . $request->get('q', '') . "%";
         $hasSearchTerm = $searchTerm !== '%%';
         $searchCountries = $request->get('countries');
@@ -49,11 +48,8 @@ class DashboardController extends Controller
 
         $apps = App::with(['developer', 'country', 'products.countries'])
             ->whereNotNull('country_code')
-            ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes, $responsibleGroups) {
-                $query->whereIn('country_code', $responsibleCountriesCodes)
-                    ->whereHas('products', function ($q) use ($responsibleGroups) {
-                        $q->whereIn('group', $responsibleGroups);
-                    });
+            ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes) {
+                $query->whereIn('country_code', $responsibleCountriesCodes);
             })
             ->when($hasSearchTerm, function ($q) use ($searchTerm) {
                 $q->where(function ($query) use ($searchTerm) {
