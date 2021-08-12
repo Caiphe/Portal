@@ -90,7 +90,10 @@ class ApigeeService
     {
         $credentials = self::get('apps/' . $app->aid)['credentials'];
         $credentials = self::sortCredentials($credentials);
-        $sandboxedProducts = Product::where('environments', 'like', 'sandbox')->pluck('name')->toArray();
+        $sandboxedProducts = $app->products->filter(function ($prod) {
+            $envArr = explode(',', $prod->environments);
+            return in_array('sandbox', $envArr) && !in_array('prod', $envArr);
+        })->pluck('name')->toArray();
         $typeAndEnvironment = explode('-', $type);
         $creds = [
             'sandbox' => [],
@@ -106,11 +109,11 @@ class ApigeeService
         }
 
         if ($typeAndEnvironment[1] === 'production') {
-            $credentials =  $creds['production'][$typeAndEnvironment[0]];
+            $credentials =  $creds['production'][$typeAndEnvironment[0]] ?? '';
         } else if ($typeAndEnvironment[1] === 'sandbox') {
-            $credentials =  $creds['sandbox'][$typeAndEnvironment[0]];
+            $credentials =  $creds['sandbox'][$typeAndEnvironment[0]] ?? '';
         } else if ($type !== 'all') {
-            $credentials = $credentials[0][$typeAndEnvironment[0]];
+            $credentials = $credentials[0][$typeAndEnvironment[0]] ?? '';
         }
 
         if ($respondWith === 'string') {
@@ -206,16 +209,47 @@ class ApigeeService
 
     public static function getOrgApps(string $status = 'approved', int $rows = 10)
     {
+        $apps = [];
+        $appRows = [];
+        $startKey = '';
+        $lastAppId = '';
+
+        if ($rows > 0) {
+            return self::getOrgAppsRows($status, $rows);
+        }
+
+        while (true) {
+            if (count($apps) !== 0 && $lastAppId === end($apps)['appId']) break;
+
+            $lastAppId = count($apps) === 0 ? '' : end($apps)['appId'];
+            $startKey = empty($lastAppId) ? '' : '&startKey=' . $lastAppId;
+
+            $appRows =  self::getOrgAppsRows($status, 300, $startKey);
+
+            if (count($appRows) === 0) break;
+
+            $apps = array_merge($apps, $appRows);
+        }
+
+        return $apps;
+    }
+
+    public static function getOrgAppsRows(string $status = 'approved', int $rows = 10, string $startKey = ''): array
+    {
         $status = $status === "all" ? "" : "&status={$status}";
-        $rows = $rows === 0 ? "" : "&rows={$rows}";
-        $apps = self::get("/apps?expand=true{$rows}{$status}");
+        $apps = self::get("/apps?expand=true&rows={$rows}{$status}{$startKey}");
+        if (isset($apps['app'])) {
+            $apps = $apps['app'];
+        }
 
-        for ($i = 0; $i < count($apps['app']); $i++) {
-            if (!isset($apps['app'][$i]['credentials'])) {
-                continue;
-            }
+        if ($startKey !== '') {
+            array_shift($apps);
+        }
 
-            $apps['app'][$i]['credentials'] = self::sortCredentials($apps['app'][$i]['credentials']);
+        for ($i = 0; $i < count($apps); $i++) {
+            if (!isset($apps[$i]['credentials'])) continue;
+
+            $apps[$i]['credentials'] = self::sortCredentials($apps[$i]['credentials']);
         }
 
         return $apps;
