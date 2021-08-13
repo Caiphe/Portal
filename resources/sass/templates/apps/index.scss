@@ -1,22 +1,24 @@
 @import '../../variables';
 
 #sidebar {
-    @media #{$small} {
-        display: none;
-    }
-
-    @media #{$medium-portrait} {
+    @media screen and (max-width: 768px) {
         display: none;
     }
 }
 
-#main {
-    @media #{$small} {
-        padding-left: 0 !important;
-    }
+#heading {
+    .create-new {
+        @media screen and (min-width: 768px) {
+            &::before {
+                content: "Create new";
+            }
+        }
 
-    @media #{$medium-portrait} {
-        padding-left: 0 !important;
+        @media screen and (max-width: 768px) {
+            &::before {
+                content: "New";
+            }
+        }
     }
 }
 

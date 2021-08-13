@@ -33,7 +33,7 @@
         <li class="breadcrumb"><a href="{{ $href }}">{{ $label }}</a></li>
         @endforeach
         @if(isset($edit) && \Auth::check() && \Auth::user()->can($can))
-        <li class="breadcrumb"><a href="{{ $edit }}">Edit</a></li>
+        <li class="breadcrumb edit-page"><a href="{{ $edit }}">Edit</a></li>
         @endif
     </ul>
     @endif

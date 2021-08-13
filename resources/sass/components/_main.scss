@@ -1,14 +1,32 @@
-#main {
-    width: 100%;
-    padding: $gutter;
-    position: relative;
-}
-
 body > main {
     flex: 1 0 auto;
 }
 
 body > #main {
-    padding: $gutter 8%;
     margin: 0 auto;
+}
+
+.layout-master {
+    #main {
+        @media screen and (min-width: 768px) {
+            padding: 0 40px;
+            width: 100%;
+        }
+
+        @media screen and (max-width: 768px) {
+            margin: 80px 20px 40px 20px;
+        }
+    }
+}
+
+.layout-master-full-width {
+    #main {
+        @media screen and (min-width: 768px) {
+            overflow: hidden;
+        }
+
+        @media screen and (max-width: 768px) {
+            margin: 80px 20px 40px 20px;
+        }
+    }
 }

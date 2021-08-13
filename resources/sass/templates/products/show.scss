@@ -1,7 +1,6 @@
 @import "../../variables";
 
-body>#main {
-    padding: 0 !important;
+.layout-master>main#main {
     margin-bottom: 60px;
 
     elements-api div {
@@ -48,7 +47,7 @@ body>#main {
 
         .right-side {
             @media screen and (min-width: 768px) {
-                top: 7px;
+                top: 14px;
                 height: auto;
             }
 
@@ -61,39 +60,12 @@ body>#main {
             }
         }
 
-        @media #{$small} {
+        @media screen and (max-width: 768px) {
             background-color: transparent;
             height: auto;
-            padding: 0 !important;
-            position: initial !important;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-        }
-
-        @media #{$medium} {
-            background-color: transparent;
-            height: auto;
-            padding: 0 !important;
-            position: initial !important;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-        }
-    }
-
-    .content {
-        margin-left: 40px;
-        margin-top: 100px;
-
-        @media #{$small} {
-            margin-left: 0;
-            margin-top: 0;
-        }
-
-        @media #{$medium} {
-            margin-left: 0;
-            margin-top: 0;
         }
     }
 
@@ -195,10 +167,6 @@ body>#main {
 }
 
 #product-sections {
-    @media screen and (max-width: 768px) {
-        padding: 40px 20px 0;
-    }
-
     .product-section-button {
         @media screen and (min-width: 768px) {
             display: inline-block;
