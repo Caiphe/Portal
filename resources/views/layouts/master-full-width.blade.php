@@ -17,7 +17,7 @@
 </head>
 <body class="layout-master-full-width">
     <x-header/>
-    <main class="@yield('main-class', 'default')">
+    <main id="main" class="@yield('main-class', 'default')">
         @yield("content")
     </main>
     <x-footer/>

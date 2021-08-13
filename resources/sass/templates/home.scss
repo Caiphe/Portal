@@ -95,6 +95,10 @@ body > #main {
     text-align: center;
     padding-bottom: 40px;
 
+    @media screen and (max-width: 768px) {
+        padding-top: 40px;
+    }
+
     p {
         padding: 0 15em;
 
@@ -238,6 +242,19 @@ section {
             flex: 1 auto !important;
             max-width: 100% !important;
         }
+    }
+}
+
+.container {
+    @media screen and (max-width: 768px) {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+.container-inner{
+    @media screen and (min-width: 768px) {
+        max-width: 1440px;
     }
 }
 

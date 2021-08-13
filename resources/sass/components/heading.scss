@@ -1,83 +1,58 @@
 @import "../variables";
 
-.layout-master {
-    &::before {
-        content: '';
-        width: 100vw;
-        background-color: $grey400;
-        height: 102px;
-        position: absolute;
-        top: 80px;
-        right: 0;
-        left: 0;
+.layout-sidebar {
+    #heading {
+        @media screen and (min-width: 768px) {
+            width: calc(100% + 200px);
+            margin: -40px 0 40px -80px;
+        }
 
         @media screen and (max-width: 768px) {
-            display: none;
+            width: calc(100% + 40px);
+            margin: -20px 0 40px -20px;
         }
     }
 }
 
-.layout-sidebar {
-    &::after {
-        content: '';
-        width: 50%;
-        background-color: $grey400;
-        height: 102px;
-        position: absolute;
-        top: 80px;
-        right: 0;
-
-        @media #{$small} {
-            display: none;
+.layout-master {
+    #heading {
+        @media screen and (min-width: 768px) {
+            width: calc(100% + 120px);
+            margin: 0 0 40px -80px;
         }
 
-        @media #{$medium} {
-            display: none;
+        @media screen and (max-width: 768px) {
+            margin-bottom: 20px;
+            margin-left: -20px;
+            width: calc(100% + 40px);
         }
     }
 }
 
-#main {
-    padding: 90px $gutter $gutter;
-
-    .layout-master & {
-        padding: 90px 40px $gutter;
-
-        #heading {
-            padding: $gutterSmall 0;
-
-            @media screen and (min-width: 768px) {
-                margin: 0 40px;
-            }
-
-            @media screen and (max-width: 768px) {
-                margin: 0 20px;
-            }
+.layout-master-full-width {
+    #heading {
+        @media screen and (max-width: 768px) {
+            margin-bottom: 20px;
+            margin-left: -20px;
+            width: calc(100% + 40px);
         }
-    }
-
-    &>#heading {
-        padding: $gutterSmall $gutter;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
     }
 }
 
 #heading {
-    position: absolute;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    padding: $gutterSmall $gutter;
     background-color: $grey400;
     overflow: hidden;
     z-index: 1;
-    height: 102px;
+
+    @media screen and (min-width: 768px) {
+        padding: 30px 40px 30px 80px;
+    }
 
     @media screen and (max-width: 768px) {
-        height: 72px;
+        padding: 20px;
     }
 
     .edit {
@@ -102,7 +77,13 @@
     }
 
     .tag {
-        vertical-align: top;
+        @media screen and (min-width: 768px) {
+            vertical-align: top;
+        }
+
+        @media screen and (max-width: 768px) {
+            vertical-align: middle;
+        }
     }
 
     .fab:not(.edit) {
@@ -114,11 +95,18 @@
 
     .right-side {
         position: absolute;
-        right: 0;
         display: flex;
         top: 0;
         height: 100%;
         align-items: center;
+
+        @media screen and (min-width: 768px) {
+            right: 40px;
+        }
+
+        @media screen and (max-width: 768px) {
+            right: 20px;
+        }
     }
 
     .breadcrumbs {
@@ -142,5 +130,11 @@
         font-family: "mtn-bold", sans-serif;
         color: $grey900;
         margin-right: 4px;
+    }
+
+    .edit-page {
+        @media screen and (max-width: 768px) {
+            display: none;
+        }
     }
 }

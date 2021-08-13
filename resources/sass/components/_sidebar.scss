@@ -9,16 +9,6 @@
 }
 
 .layout-sidebar {
-    &::before {
-        content: '';
-        width: 50%;
-        background-color: $grey200;
-        height: 100%;
-        position: fixed;
-        left: 0;
-        top: 0;
-    }
-
     .wrapper {
         display: flex;
         flex: 1 0 auto;
@@ -31,10 +21,20 @@
             background-color: $grey200;
             height: 100%;
         }
+    }
 
-        #main {
-            background-color: #FFF;
-            padding-right: 0;
+    #main {
+        @media screen and (min-width: 768px) {
+            padding: 40px 40px 40px 80px;
+            margin-right: 40px;
+            width: 100%;
+        }
+
+        @media screen and (max-width: 768px) {
+            padding: 20px;
+            margin-top: 80px;
+            margin-bottom: 40px;
+            width: 100%;
         }
     }
 }
@@ -194,6 +194,10 @@
         #main {
             background-color: #FFF;
             padding: 0;
+
+            @media screen and (min-width: 768px) {
+                width: 100%;
+            }
 
             section {
                 padding: 40px;
