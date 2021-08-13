@@ -10,6 +10,8 @@ use App\Http\Requests\DeleteAppRequest;
 use App\Http\Requests\KycRequest;
 use App\Mail\CredentialRenew;
 use App\Mail\GoLiveMail;
+use App\Mail\NewApp;
+use App\Mail\UpdateApp;
 use App\Services\ApigeeService;
 use App\Services\Kyc\KycService;
 use App\Services\ProductLocationService;
@@ -119,6 +121,12 @@ class AppController extends Controller
                 []
             )
         );
+
+        $opcoUserEmails = $app->country->opcoUser->pluck('email')->toArray();
+        if (empty($opcoUserEmails)) {
+            $opcoUserEmails = env('MAIL_TO_ADDRESS');
+        }
+        Mail::to($opcoUserEmails)->send(new NewApp($app));
 
         if ($request->ajax()) {
             return response()->json(['response' => $createdResponse]);
@@ -230,6 +238,12 @@ class AppController extends Controller
         ]);
 
         $app->products()->sync($syncProducts);
+
+        $opcoUserEmails = $app->country->opcoUser->pluck('email')->toArray();
+        if (empty($opcoUserEmails)) {
+            $opcoUserEmails = env('MAIL_TO_ADDRESS');
+        }
+        Mail::to($opcoUserEmails)->send(new UpdateApp($app));
 
         if ($request->ajax()) {
             return response()->json(['response' => $updatedResponse]);
