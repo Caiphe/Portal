@@ -2,51 +2,16 @@
 @import "../../functions";
 
 #sidebar {
-    @media #{$small} {
-        display: none;
-    }
-
-    @media #{$medium-portrait} {
+    @media screen and (max-width: 768px) {
         display: none;
     }
 }
 
 #main {
-    padding: 0 !important;
     margin-bottom: 60px;
     height: 100%;
 
-    @media #{$small} {
-        padding: 90px 40px 40px !important;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-    }
-
-    @media #{$medium-portrait} {
-        padding: 90px 40px 40px !important;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-    }
-
-    #heading {
-        margin-bottom: 40px;
-
-        @media #{$small} {
-            background-color: transparent;
-            padding-left: 0 !important;
-            position: static !important;
-        }
-
-        @media #{$medium-portrait} {
-            background-color: transparent;
-            padding-left: 0 !important;
-            position: static !important;
-        }
-    }
-
     .content {
-        margin-left: 40px;
-        margin-top: 110px;
         border: 2px solid $grey300;
         border-radius: 8px;
         padding: $gutter;

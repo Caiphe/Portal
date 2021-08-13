@@ -11,18 +11,6 @@
 }
 
 #main {
-    @media #{$small} {
-        margin-top: 80px;
-        padding-left: 0 !important;
-        padding-top: 1rem !important;
-    }
-
-    @media #{$medium} {
-        margin-top: 80px;
-        padding-left: 0 !important;
-        padding-top: 1rem !important;
-    }
-
     #heading {
         span {
             @media #{$small} {
