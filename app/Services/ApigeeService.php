@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\App;
 use App\Country;
-use App\Product;
 use App\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
@@ -147,7 +146,6 @@ class ApigeeService
             }
         }
 
-
         $appProducts = $app->products->filter(fn ($prod) => in_array($prod->name, $apiProducts));
 
         foreach ($app->attributes as $name => $value) {
@@ -166,14 +164,20 @@ class ApigeeService
 
         if ($updatedApp->status() !== 200) return $updatedApp;
 
-        self::revokeCredentials($user, $app, $key);
-
         $updatedCredentials = self::sortCredentials($updatedApp['credentials']);
         $updatedCredentials = end($updatedCredentials)['consumerKey'];
+        $statusLookup = [
+            'approved' => 'approve',
+            'revoked' => 'revoke'
+        ];
 
         foreach ($appProducts as $prod) {
-            self::updateProductStatus($user->email, $app->name, $updatedCredentials, $prod->name, $prod->pivot->status);
+            if ($prod->pivot->status === 'pending') continue;
+
+            self::updateProductStatus($user->email, $app->name, $updatedCredentials, $prod->name, $statusLookup[$prod->pivot->status]);
         }
+
+        self::revokeCredentials($user, $app, $key);
 
         return $updatedApp;
     }

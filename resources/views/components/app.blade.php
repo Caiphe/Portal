@@ -113,7 +113,7 @@
         @if(!$isAdminPage)
         <div class="products-title">
             <strong>Products</strong>
-            <form class="ml-1" action="{{ route('app.credentials.request-renew', ['app' => $app, 'type' => 'sandbox']) }}" method="POST" onsubmit="addLoading('Renewing credentials...');">
+            <form class="ml-1" action="{{ route('app.credentials.request-renew', ['app' => $app, 'type' => 'sandbox']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
                 @csrf
                 <button class="outline small">Renew credentials</button>
             </form>
@@ -121,7 +121,7 @@
         @else
         <div class="products-title">
             <strong>Products</strong>
-            <form class="ml-1" action="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'sandbox']) }}" method="POST" onsubmit="addLoading('Renewing credentials...');">
+            <form class="ml-1" action="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'sandbox']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
                 @csrf
                 <button class="outline small">Renew credentials</button>
             </form>
@@ -189,7 +189,7 @@
         @if(!$isAdminPage)
         <div class="products-title">
             <strong>Production products</strong>
-            <form class="ml-1" action="{{ route('app.credentials.request-renew', ['app' => $app, 'type' => 'production']) }}" method="POST" onsubmit="addLoading('Renewing credentials...');">
+            <form class="ml-1" action="{{ route('app.credentials.request-renew', ['app' => $app, 'type' => 'production']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
                 @csrf
                 <button class="outline small" href="">Renew credentials</button>
             </form>
@@ -197,7 +197,7 @@
         @else
         <div class="products-title">
             <strong>Production products</strong>
-            <form class="ml-1" action="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'production']) }}" method="POST" onsubmit="addLoading('Renewing credentials...');">
+            <form class="ml-1" action="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'production']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
                 @csrf
                 <button class="outline small" href="">Renew credentials</button>
             </form>
