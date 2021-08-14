@@ -26,7 +26,7 @@
         <span title="{{ $countryName }}">@svg($countryCode, '#000000', 'images/locations')</span>
     </div>
     @else
-        <div class="column">{{ $app->attributes['Notes'] ?? '' }}</div>
+        <div class="column"></div>
     @endif
     <div class="column">
         @if($isAdminPage)
