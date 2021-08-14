@@ -206,10 +206,11 @@ class DashboardController extends Controller
 
         $attr = $app->attributes;
         $attributes = [];
+        $timestamp = date('Ymd');
         if (isset($attr['Notes'])) {
-            $attr['Notes'] = $statusNote ?? $attr['Notes'];
+            $attr['Notes'] = $statusNote ? $attr['Notes'] . "\n\n$timestamp - {$statusNote}" : $attr['Notes'];
         } else if (!empty($statusNote)) {
-            $attributes = [['name' => 'Notes', 'value' => $statusNote,]];
+            $attributes = [['name' => 'Notes', 'value' => "$timestamp - $statusNote",]];
         }
 
         foreach ($attr as $name => $value) {
