@@ -109,7 +109,7 @@
                             </div>
 
                             <div class="column">
-                                <p>Reason</p>
+                                <p></p>
                             </div>
 
                             <div class="column">
