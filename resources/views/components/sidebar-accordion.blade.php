@@ -36,7 +36,7 @@
             @php
             $isOpen = in_array($active, array_merge(array_column($items, 'label'), array_column($items, 'link')));
             @endphp
-            <li class="accordion-item {{ $isSingle ? 'show no-svg' : '' }} @if($isOpen) show @endif">
+            <li class="accordion-item {{ $isSingle ? 'show' : '' }} @if($isOpen) show @endif">
                 <a href="#" data-toggle="accordion-item"> {{ $accordion }} @svg('chevron-right', '#000000')</a>
                 <ul class="accordion-sub-items">
                 @foreach($items as $sub_item)

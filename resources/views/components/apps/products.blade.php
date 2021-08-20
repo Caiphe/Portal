@@ -31,6 +31,6 @@
     </a>
     <x-dialog id="{{ $app->aid . $product->slug }}-note-dialog" class="note-dialog">
         <h3>Profile Log Notes</h3>
-        <div class="note">{!! str_replace("\n", "<br>", ($product['pivot']['status_note'] ?? 'No notes at the moment')) !!}</div>
+        <div class="note">{!! $product['notes'] !!}</div>
     </x-dialog>
 @endforeach

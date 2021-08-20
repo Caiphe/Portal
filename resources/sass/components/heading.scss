@@ -1,7 +1,7 @@
 @import "../variables";
 
 .layout-sidebar {
-    #heading {
+    #main #heading {
         @media screen and (min-width: 768px) {
             width: calc(100% + 200px);
             margin: -40px 0 40px -80px;
@@ -9,7 +9,9 @@
 
         @media screen and (max-width: 768px) {
             width: calc(100% + 40px);
-            margin: -20px 0 40px -20px;
+            margin: -20px 0 20px -20px;
+            padding-left: 20px !important;
+            background-color: $grey400 !important;
         }
     }
 }
