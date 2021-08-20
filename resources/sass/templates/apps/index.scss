@@ -239,3 +239,36 @@
         margin: 20px 0 10px;
     }
 }
+
+.admin #main {
+    .app .detail .products .product {
+        padding: 8px 8px 26px 26px;
+
+        .status-bar {
+            position: absolute;
+            height: calc(100% - 15px);
+            left: 8px;
+        }
+    }
+
+    .product .log-notes {
+        position: absolute;
+        bottom: 0;
+        left: 26px;
+        color: #646464;
+        background: none;
+        border: none;
+        padding: 0;
+    }
+
+    .mdp-dialog.note-dialog .dialog-content {
+        padding-right: 0;
+
+        .note {
+            max-height: 400px;
+            max-width: 340px;
+            overflow-y: auto;
+            padding-right: 40px;
+        }
+    }
+}

@@ -103,14 +103,12 @@
                    </div>
                </div>
            </div>
-
-
        </div>
     </section>
 
     <section id="section-browse-our-products">
         <div class="container flex">
-            <div class="comtainer-inner">
+            <div class="container-inner">
                 <div class="cols">
                     <div class="col col-6 col-image">
                         <div class="image-left">
@@ -133,8 +131,6 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
     </section>
 
