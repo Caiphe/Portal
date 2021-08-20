@@ -119,7 +119,8 @@ class DashboardController extends Controller
     public function update(UpdateStatusRequest $request)
     {
         $validated = $request->validated();
-        $app = App::with('developer')->find($validated['app']);
+        $app = App::with(['developer', 'products'])->find($validated['app']);
+        $product = $app->products()->where('name', $validated['product'])->first();
         $currentUser = $request->user();
         $status = [
             'approve' => 'approved',
@@ -127,7 +128,10 @@ class DashboardController extends Controller
             'pending' => 'pending'
         ][$validated['action']] ?? 'pending';
 
-        $statusNote = $request->get('statusNote', '');
+        $statusNoteRequest = $request->get('statusNote', 'No note given.') ?: 'No note given';
+        $statusNote = $product->pivot->status_note;
+        $statusNote = !is_null($statusNote) ? "{$statusNote}\n\n" : '';
+        $statusNote .= date('d F Y') . "\n" . "$status by $currentUser->full_name" . "\n\nNotes\n" . $statusNoteRequest;
 
         $credentials = ApigeeService::getAppCredentials($app);
         $credentials = $validated['for'] === 'staging' ? $credentials[0] : end($credentials);
@@ -137,8 +141,15 @@ class DashboardController extends Controller
         $response = ApigeeService::updateProductStatus($developerId, $app->name, $credentials['consumerKey'], $validated['product'], $validated['action']);
         $responseStatus = $response->status();
         if (preg_match('/^2/', $responseStatus)) {
-
-            $app->products()->updateExistingPivot($validated['product'], ['status' => $status, 'actioned_by' => $currentUser->id, 'actioned_at' => date('Y-m-d H:i:s'), 'status_note' => $statusNote]);
+            $app->products()->updateExistingPivot(
+                $validated['product'],
+                [
+                    'status' => $status,
+                    'actioned_by' => $currentUser->id,
+                    'actioned_at' => date('Y-m-d H:i:s'),
+                    'status_note' => $statusNote
+                ]
+            );
         } else if ($request->ajax()) {
             $body = json_decode($response->body());
             return response()->json(['success' => false, 'body' => $body->message], $responseStatus);
@@ -202,15 +213,16 @@ class DashboardController extends Controller
     public function updateAppStatus(App $app, Request $request)
     {
         $status = $request->get('status');
-        $statusNote = $request->get('status-note');
+        $statusNote = $request->get('status-note', 'No note given.') ?: 'No note given';
+        $currentUser = $request->user();
 
         $attr = $app->attributes;
         $attributes = [];
-        $timestamp = date('Ymd');
+        $timestamp = date('d F Y');
         if (isset($attr['Notes'])) {
-            $attr['Notes'] = $statusNote ? $attr['Notes'] . "\n\n$timestamp - {$statusNote}" : $attr['Notes'];
+            $attr['Notes'] = $statusNote ? $attr['Notes'] . "\n\n{$timestamp}\n{$status} by {$currentUser->full_name}\n\nNotes\n{$statusNote}" : $attr['Notes'];
         } else if (!empty($statusNote)) {
-            $attributes = [['name' => 'Notes', 'value' => "$timestamp - $statusNote",]];
+            $attributes = [['name' => 'Notes', 'value' => "{$timestamp}\n{$status} by {$currentUser->full_name}\n\nNotes\n$statusNote",]];
         }
 
         foreach ($attr as $name => $value) {

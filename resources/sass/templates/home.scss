@@ -38,7 +38,7 @@ body > #main {
             }
 
             .carousel-content {
-                padding: $gutter 8%;
+                padding: $gutter 40px;
                 max-width: 70%;
                 position: relative;
                 height: 100%;
@@ -212,7 +212,6 @@ section {
 
 .products-cards {
     display: flex;
-    justify-content: space-between;
     align-items: center;
 
     a {
@@ -220,7 +219,7 @@ section {
         margin-right: 20px;
 
         &:last-of-type {
-            margin-right: 0;
+            margin-right: auto;
         }
     }
 
@@ -237,6 +236,12 @@ section {
 }
 
 .steps {
+    @media screen and (min-width: 768px) {
+        max-width: 1024px;        
+        margin-left: auto;
+        margin-right: auto;
+    }
+
     @media #{$small} {
         .col {
             flex: 1 auto !important;
@@ -254,7 +259,9 @@ section {
 
 .container-inner{
     @media screen and (min-width: 768px) {
-        max-width: 1440px;
+        max-width: 1024px;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
