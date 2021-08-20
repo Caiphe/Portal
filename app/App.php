@@ -60,12 +60,12 @@ class App extends Model
             $credentials[$apigeeCredentials[$i]['environment']][] = $apigeeCredentials[$i];
         }
 
-        
-        if(count($credentials['sandbox']) > 0){
+
+        if (count($credentials['sandbox']) > 0) {
             $creds[] = end($credentials['sandbox']) ?: [];
         }
-        
-        if(count($credentials['prod']) > 0){
+
+        if (count($credentials['prod']) > 0) {
             $creds[] = end($credentials['prod']) ?: [];
         }
 
@@ -144,5 +144,17 @@ class App extends Model
         }
 
         return [$firstProducts, $lastProducts];
+    }
+
+    public function getNotesAttribute()
+    {
+        $notes = $this['attributes']['Notes'] ?? 'No notes at the moment';
+        if ($notes === 'No notes at the moment') return $notes;
+
+        $notes = str_replace("\n", "<br>", $notes);
+        $notes = preg_replace('/\b(\d\d [a-zA-Z]+ \d\d\d\d)\b/', '<strong>$1</strong>', $notes);
+        $notes = preg_replace('/\b(Notes)\b/', '<strong>$1</strong>', $notes);
+
+        return $notes;
     }
 }

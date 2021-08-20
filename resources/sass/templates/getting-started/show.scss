@@ -17,21 +17,5 @@
                 display: none;
             }
         }
-
-        @media #{$small} {
-            background-color: transparent;
-            margin-bottom: 15px !important;
-            position: static !important;
-            padding-top: 0 !important;
-            padding-left: 0 !important;
-        }
-
-        @media #{$medium} {
-            background-color: transparent;
-            margin-bottom: 15px !important;
-            position: static !important;
-            padding-top: 0 !important;
-            padding-left: 0 !important;
-        }
     }
 }
