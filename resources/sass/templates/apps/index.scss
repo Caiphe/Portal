@@ -264,9 +264,13 @@
     .mdp-dialog.note-dialog .dialog-content {
         padding-right: 0;
 
+        h3 {
+            margin-top: 0;
+        }
+
         .note {
-            max-height: 400px;
-            max-width: 340px;
+            max-height: 420px;
+            width: 360px;
             overflow-y: auto;
             padding-right: 40px;
         }
