@@ -12,14 +12,20 @@
     .wrapper {
         display: flex;
         flex: 1 0 auto;
+        padding-left: 0;
 
         #sidebar {
             flex: 1;
-            padding: 50px 0;
-            min-width: 250px;
-            max-width: 250px;
+            padding: 40px 40px 0 40px;
+            min-width: 270px;
+            max-width: 270px;
             background-color: $grey200;
             height: 100%;
+
+            input[type='text'],
+            select {
+                width: 100%;
+            }
         }
     }
 

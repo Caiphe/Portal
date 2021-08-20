@@ -130,7 +130,7 @@ class DashboardController extends Controller
 
         $statusNoteRequest = $request->get('statusNote', 'No note given.') ?: 'No note given';
         $statusNote = $product->pivot->status_note ?? '';
-        $statusNote = date('d F Y') . "\n" . ucfirst($status) . " by {$currentUser->full_name}" . "\n\nNotes\n{$statusNoteRequest}\n\n{$statusNote}";
+        $statusNote = date('d F Y') . "\n" . ucfirst($status) . " by {$currentUser->full_name}" . "\n\n{$statusNoteRequest}\n\n{$statusNote}";
 
         $credentials = ApigeeService::getAppCredentials($app);
         $credentials = $validated['for'] === 'staging' ? $credentials[0] : end($credentials);
@@ -219,9 +219,9 @@ class DashboardController extends Controller
         $attributes = [];
         $timestamp = date('d F Y');
         if (isset($attr['Notes'])) {
-            $attr['Notes'] = $statusNote ? "{$timestamp}\n" . ucfirst($status) . " by {$currentUser->full_name}\n\nNotes\n{$statusNote}\n\n{$attr['Notes']}" : $attr['Notes'];
+            $attr['Notes'] = $statusNote ? "{$timestamp}\n" . ucfirst($status) . " by {$currentUser->full_name}\n\n{$statusNote}\n\n{$attr['Notes']}" : $attr['Notes'];
         } else if (!empty($statusNote)) {
-            $attributes = [['name' => 'Notes', 'value' => "{$timestamp}\n" . ucfirst($status) . " by {$currentUser->full_name}\n\nNotes\n$statusNote",]];
+            $attributes = [['name' => 'Notes', 'value' => "{$timestamp}\n" . ucfirst($status) . " by {$currentUser->full_name}\n\n$statusNote",]];
         }
 
         foreach ($attr as $name => $value) {

@@ -12,11 +12,7 @@ section:first-of-type {
     .container {
         display: flex;
 
-        @media #{$small} {
-            flex-direction: column;
-        }
-
-        @media #{$medium-portrait} {
+        @media screen and (max-width: 768px) {
             flex-direction: column;
         }
     }
@@ -39,6 +35,10 @@ section:last-of-type {
 
     .container {
         display: flex;
+
+        @media screen and (min-width: 768px) {
+            padding: 0;
+        }
 
         .content {
             flex: 1;
