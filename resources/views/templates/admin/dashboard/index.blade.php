@@ -304,7 +304,6 @@
         function viewNote(e) {
             var id = this.dataset.id;
             var noteDialog = document.getElementById(id + '-note-dialog');
-            console.log(id + '-note-dialog');
 
             e.preventDefault();
 
