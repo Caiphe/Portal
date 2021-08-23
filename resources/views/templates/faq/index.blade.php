@@ -59,14 +59,12 @@
 
 	<section class="contact">
         <div class="container">
-            <h1>
-                Need more help? Get in touch
-            </h1>
 
             <form action="{{ route('contact.send') }}" method="POST">
                 @csrf
-
                 <x-panel>
+                    <h2>Need more help? Get in touch</h2>
+
                     <label for="categories"></label>
                     <select name="categories" id="categories">
                         <option value="Advertising">
