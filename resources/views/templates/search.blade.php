@@ -7,7 +7,7 @@
 @endpush
 
 @section('content')
-    <h1>Search results</h1>
+    <x-heading heading="Search"></x-heading>
     @include('partials.search', [
         'action' => route('search'),
         'results' => $results

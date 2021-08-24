@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Product;
-use App\User;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use App\Services\TwofaService;
@@ -101,7 +100,11 @@ class UserController extends Controller
 
 	public function updateProfilePicture(Request $request)
 	{
-		$imageName = 'profile/' . base64_encode('jsklaf88sfjdsfjl' . $request->user()->email) . '.png';
+		$request->validate([
+			'profile' => 'required|mimes:jpeg,jpg,png|max:5120',
+		]);
+
+		$imageName = 'profile/' . base64_encode(date('iYHs') . rand(1, 24)) . '.png';
 
 		$image = Image::make($request->file('profile'))
 			->fit(452, 452, function ($constraint) {

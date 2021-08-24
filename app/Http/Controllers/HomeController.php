@@ -2,10 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Product;
-use App\Bundle;
-
 class HomeController extends Controller
 {
     /**
@@ -15,10 +11,6 @@ class HomeController extends Controller
      */
     public function __invoke()
     {
-        return view('templates.home',
-        [
-            'productsCollection' => Product::isPublic()->get()->pluck('category.title')->unique()->take(6),
-            'bundleCollection' => Bundle::all()->take(4)
-        ]);
+        return view('templates.home');
     }
 }

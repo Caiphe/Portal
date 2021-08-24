@@ -9,23 +9,6 @@
 @section('content')
 	<x-heading heading="FAQ"></x-heading>
 
-    <section>
-        <div class="container">
-            <x-action-tab
-                link="https://spectrum.chat/mtn-developer-hub"
-                text="For more help, connect with us on Spectrum"
-                logo="spectrum">
-            </x-action-tab>
-
-            <x-action-tab
-                link="https://madapi.statuspage.io/"
-                title="Network status."
-                text="See more on our status page"
-                status="green">
-            </x-action-tab>
-        </div>
-    </section>
-
     <section class="search">
         <div class="container">
             <div class="content">
@@ -58,32 +41,17 @@
                     </x-accordion>
                 @endforeach
             </div>
-
-            <div class="faq-categories">
-                <span>Categories</span>
-                <ul>
-                    @foreach ($categories as $category)
-                        @if(!$category->faqs->isEmpty())
-                            <li>
-                                <a href="#{!! $category->slug  !!}">{!! $category->title !!}</a>
-                            </li>
-                        @endif
-                    @endforeach
-                </ul>
-            </div>
         </div>
     </section>
 
 	<section class="contact">
         <div class="container">
-            <h1>
-                Need more help? Get in touch
-            </h1>
 
             <form action="{{ route('contact.send') }}" method="POST">
                 @csrf
-
                 <x-panel>
+                    <h2>Need more help? Get in touch</h2>
+
                     <label for="categories"></label>
                     <select name="categories" id="categories">
                         <option value="Advertising">

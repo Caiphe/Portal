@@ -7,7 +7,6 @@ use App\Country;
 use App\Product;
 use App\Services\OpenApiService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 class ProductController extends Controller
 {
@@ -43,20 +42,19 @@ class ProductController extends Controller
 	 */
 	public function show(Request $request, Product $product)
 	{
-		$product->load(['content', 'keyFeatures', 'category', 'countries']);
 		$user = $request->user();
 
 		if ($product->access === 'private' && (!$user || !$user->hasRole('private'))) {
 			abort(403);
 		}
 
-		$productList = Product::with('category')->basedOnUser($request->user())->get()->sortBy('category.title')->groupBy('category.title');
+		$product->load(['content', 'keyFeatures', 'category', 'countries']);
+
 		$content = [
 			'all' => [],
 			'lhs' => [],
 			'rhs' => [],
 		];
-		$sidebarAccordion = [];
 		$alternatives = [];
 		$startingPoint = "product-specification";
 
@@ -66,24 +64,11 @@ class ProductController extends Controller
 			$content[$key][$c->title] = $c;
 		}
 
-		if (isset($content['lhs']['Overview'])) {
-			$startingPoint = 'product-' . $content['lhs']['Overview']->slug;
-		} else if (isset($content['lhs']['Docs'])) {
-			$startingPoint = 'product-' . $content['lhs']['Docs']->slug;
-		}
-
-		foreach ($productList as $category => $products) {
-			if (!isset($sidebarAccordion[$category])) {
-				$sidebarAccordion[$category] = [];
-			}
-
-			foreach ($products as $sidebarProduct) {
-				$sidebarAccordion[$category][] = ["label" => $sidebarProduct['display_name'], "link" => '/products/' . $sidebarProduct['slug']];
-				$alternatives[$category][] = $sidebarProduct;
-			}
-
-			asort($sidebarAccordion[$category]);
-		}
+		// if (isset($content['lhs']['Overview'])) {
+		// 	$startingPoint = 'product-' . $content['lhs']['Overview']->slug;
+		// } else if (isset($content['lhs']['Docs'])) {
+		// 	$startingPoint = 'product-' . $content['lhs']['Docs']->slug;
+		// }
 
 		if (!empty($alternatives[$product->category->title]) && count($alternatives[$product->category->title]) > 1) {
 			$alternatives = array_intersect_key(
@@ -102,25 +87,18 @@ class ProductController extends Controller
 		if ($product->swagger === null || !\Storage::disk('app')->exists("openapi/{$product->swagger}")) {
 			return view('templates.products.show', [
 				"product" => $product,
-				"sidebarAccordion" => $sidebarAccordion,
 				"content" => $content,
 				"startingPoint" => $startingPoint,
-				"specification" => null,
+				"specification" => false,
 				"alternatives" => $alternatives,
 			]);
 		}
 
-		$specification = Cache::rememberForever(
-			$product->slug . '-specification',
-			fn () => (new OpenApiService($product->swagger))->buildOpenApiJson()
-		);
-
 		return view('templates.products.show', [
 			"product" => $product,
-			"sidebarAccordion" => $sidebarAccordion,
 			"content" => $content,
 			"startingPoint" => $startingPoint,
-			"specification" => $specification,
+			"specification" => true,
 			"alternatives" => $alternatives,
 		]);
 	}

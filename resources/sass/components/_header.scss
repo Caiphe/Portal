@@ -7,10 +7,20 @@
 
     .header-inner {
         height: 80px;
-        padding: 0 8%;
+        width: auto;
+        padding: 0;
         display: flex;
         align-items: center;
         justify-content: flex-start;
+        max-width: initial;
+
+        @media screen and (min-width: 768px) {
+            margin: 0 40px;
+        }
+
+        @media screen and (max-width: 768px) {
+            margin: 0 20px;
+        }
 
         .site-name {
             font-size: 1.8rem;
@@ -222,12 +232,7 @@
         }
     }
 
-    @media #{$small} {
-        position: fixed;
-        box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .05);
-    }
-
-    @media #{$medium-portrait} {
+    @media screen and (max-width: 768px) {
         position: fixed;
         box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .05);
     }
@@ -325,7 +330,6 @@
     #header {
         .header-inner {
             height: 80px;
-            padding: 0 40px;
         }
 
         .logo {
@@ -344,7 +348,7 @@
         }
 
         #search {
-            width: 500px;
+            width: 492px;
         }
 
         .profile-menu-options {
@@ -356,12 +360,18 @@
         }
     }
 
-    .header-page-info {
+    #main .header-page-info {
         background-color: $grey400;
         position: sticky;
         padding: 6px 40px;
         top: 0;
         z-index: 2;
+        flex-flow: row nowrap;
+
+        .page-info {
+            display: flex;
+            margin-left: auto;
+        }
 
         button:hover,
         .button:hover {
@@ -369,4 +379,9 @@
             background-color: $blue;
         }
     }
+}
+
+body.product-edit .page-info {
+    flex: 1 0 550px;
+    justify-content: flex-end;
 }

@@ -1,6 +1,6 @@
 document.getElementById('profile-picture').addEventListener('change', chooseProfilePicture);
 
-function chooseProfilePicture(ev) {
+function chooseProfilePicture() {
     var files = this.files;
     var inputAccepts = this.getAttribute("accept");
     var allowedTypes = {
@@ -15,9 +15,11 @@ function chooseProfilePicture(ev) {
         return void alert("You can only add one profile picture");
     }
 
-    if (allowedTypes[inputAccepts].indexOf(files[0].type) !== -1) {
-        changeProfilePicture(files[0]);
-        uploadProfilePicture(files[0]);
+    if (allowedTypes[inputAccepts] !== undefined && allowedTypes[inputAccepts].indexOf(files[0].type) !== -1) {
+    changeProfilePicture(files[0]);
+    uploadProfilePicture(files[0]);
+    } else {
+    addAlert("error", "The type of image you have chosen isn't supported. Please choose a jpg or png to upload");
     }
 }
 
@@ -37,17 +39,24 @@ function uploadProfilePicture(file) {
 
     xhr.onreadystatechange = function() {
         if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                const result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
-                console.log(result);
-            } else {
-                console.log('Error');
-                console.log(xhr.responseText);
+            var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+            var message = [];
+            if (xhr.status !== 200) {
+                if (result.errors !== undefined) {
+                    for (var field in result.errors) {
+                        message.push(result.errors[field].join(', '));
+                    }
+                } else {
+                    message = [result.message || 'There was an error uploading your profile picture.'];
+                }
+                
+                addAlert('error', message);
             }
         }
     };
 
     xhr.open("POST", "/profile/update/picture");
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xhr.setRequestHeader(
         "X-CSRF-TOKEN",
         document.getElementsByName("csrf-token")[0].content

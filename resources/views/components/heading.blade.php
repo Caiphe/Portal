@@ -15,25 +15,34 @@
     tags: A comma seperated list of tags.
     fab: The classes that will style the fab button
  --}}
-@props(['heading', 'tags', 'fab', 'edit', 'can' => 'view-admin'])
+@props(['heading', 'tags', 'fab', 'breadcrumbs' => [], 'edit', 'can' => 'view-admin'])
 @php 
     $tags = isset($tags) ? preg_split('/,\s?/', $tags) : [] 
 @endphp
 
 @allowonce('heading')
+@push('styles')
 <link rel="stylesheet" href="{{ mix('/css/components/heading.css') }}">
+@endpush
 @endallowonce
 
 <div id="heading">
+    @if(!empty($breadcrumbs))
+    <ul class="breadcrumbs">
+        @foreach($breadcrumbs as $label => $href)
+        <li class="breadcrumb"><a href="{{ $href }}">{{ $label }}</a></li>
+        @endforeach
+        @if(isset($edit) && \Auth::check() && \Auth::user()->can($can))
+        <li class="breadcrumb edit-page"><a href="{{ $edit }}">Edit</a></li>
+        @endif
+    </ul>
+    @endif
     <h1>
         {{ $heading }}
         @foreach($tags as $tag)
         <span class="tag outline grey">{{ $tag }}</span>
         @endforeach
     </h1>
-    @if(isset($edit) && \Auth::check() && \Auth::user()->can($can))
-    <a href="{{ $edit }}" class="edit button small dark outline">EDIT</a>
-    @endif
 
     @if(isset($fab))
     <button id="heading-fab" class="fab {{ $fab }}"></button>

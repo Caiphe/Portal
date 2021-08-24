@@ -1,22 +1,24 @@
 @import '../../variables';
 
 #sidebar {
-    @media #{$small} {
-        display: none;
-    }
-
-    @media #{$medium-portrait} {
+    @media screen and (max-width: 768px) {
         display: none;
     }
 }
 
-#main {
-    @media #{$small} {
-        padding-left: 0 !important;
-    }
+#heading {
+    .create-new {
+        @media screen and (min-width: 768px) {
+            &::before {
+                content: "Create new";
+            }
+        }
 
-    @media #{$medium-portrait} {
-        padding-left: 0 !important;
+        @media screen and (max-width: 768px) {
+            &::before {
+                content: "New";
+            }
+        }
     }
 }
 
@@ -115,7 +117,6 @@
 
         .column:nth-of-type(4) {
             width: 15%;
-            text-align: right;
         }
 
         .column:nth-of-type(5) {
@@ -169,10 +170,6 @@
     }
 }
 
-.admin #filter-country {
-    width: 145px;
-}
-
 #status-dialog {
     .dialog-content {
         width: 400px;
@@ -187,9 +184,96 @@
     }
 }
 
-.status-separator{
+#filter-form {
+    display: flex;
+
+    @media screen and (max-width: 768px) {
+        flex-direction: column;
+
+        select,
+        input {
+            width: 100%;
+        }
+    }
+}
+
+.status-separator {
     width: 100%;
     height: 1px;
     background-color: #FFF;
     margin: 5px auto;
+}
+
+.product-filters {
+    display: flex;
+
+    @media screen and (min-width: 768px) {
+        align-items: flex-end;
+    }
+
+    @media screen and (max-width: 768px) {
+        flex-direction: column;
+    }
+
+    h3 {
+        font-size: 16px;
+        margin: 0 0 10px 0;
+    }
+}
+
+.prodict-filter {
+    display: flex;
+    flex-direction: column;
+    margin-right: 10px;
+
+    @media screen and (max-width: 768px) {
+        margin-top: 20px;
+    }
+}
+
+#clearFilter {
+    margin-bottom: 2px;
+
+    @media screen and (max-width: 768px) {
+        width: 100%;
+        margin: 20px 0 10px;
+    }
+}
+
+.admin #main {
+    .app .detail .products .product {
+        padding: 8px 8px 26px 26px;
+
+        .status-bar {
+            position: absolute;
+            height: calc(100% - 15px);
+            left: 8px;
+        }
+    }
+
+    .product .log-notes {
+        position: absolute;
+        bottom: 0;
+        left: 26px;
+        color: #646464;
+        background: none;
+        border: none;
+        padding: 0;
+    }
+
+    .mdp-dialog.note-dialog .dialog-content {
+        padding-right: 0;
+
+        h3 {
+            margin-top: 0;
+        }
+
+        .note {
+            max-height: 420px;
+            width: 360px;
+            overflow-y: auto;
+            padding-right: 40px;
+            word-break: break-word;
+        }
+    }
 }

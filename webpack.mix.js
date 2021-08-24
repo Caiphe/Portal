@@ -34,6 +34,7 @@ mix.scripts(
     .scripts("resources/js/templates/admin/edit.js", "public/js/templates/admin/edit.js")
     .scripts("resources/js/templates/apps/kyc.js", "public/js/templates/apps/kyc.js")
     .scripts("resources/js/vendor/trix.js", "public/js/vendor/trix.js")
+    .scripts("resources/js/vendor/stoplight.js", "public/js/vendor/stoplight.js")
     .sass("resources/sass/auth/login.scss", "public/css/auth")
     .sass("resources/sass/auth/register.scss", "public/css/auth")
     .sass("resources/sass/auth/verify.scss", "public/css/auth")
@@ -74,5 +75,6 @@ mix.scripts(
     .sass("resources/sass/components/_accordion.scss", "public/css/components")
     .sass("resources/sass/components/_select.scss", "public/css/components")
     .sass("resources/sass/styles.scss", "public/css")
+    .sass("resources/sass/vendor/stoplight.scss", "public/css/vendor")
     .styles("resources/sass/vendor/trix.css", "public/css/vendor/trix.css")
     .version();

@@ -129,7 +129,7 @@ class Product extends Model
 
     public function apps()
     {
-        return $this->belongsToMany(App::class, "app_product", "product_pid", "app_aid")->withPivot('status', 'actioned_at');
+        return $this->belongsToMany(App::class, "app_product", "product_pid", "app_aid")->withPivot('status', 'actioned_at', 'status_note');
     }
 
     public function keyFeatures()
@@ -145,5 +145,17 @@ class Product extends Model
     public function countries()
     {
         return $this->belongsToMany(Country::class);
+    }
+
+    public function getNotesAttribute()
+    {
+        $notes = $this->pivot->status_note ?? 'No notes at the moment';
+        if ($notes === 'No notes at the moment') return $notes;
+
+        $notes = str_replace("\n", "<br>", $notes);
+        $notes = preg_replace('/\b(\d\d [a-zA-Z]+ \d\d\d\d)\b/', '<strong>$1</strong>', $notes);
+        $notes = preg_replace('/\b(Notes)\b/', '<strong>$1</strong>', $notes);
+
+        return $notes;
     }
 }

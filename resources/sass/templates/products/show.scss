@@ -1,26 +1,13 @@
 @import "../../variables";
 
-#sidebar {
-    @media #{$small} {
-        display: none;
-    }
-
-    @media #{$medium} {
-        display: none;
-    }
-}
-
-#main {
-    padding: 0 !important;
+.layout-master>main#main {
     margin-bottom: 60px;
-    height: 100%;
 
-    @media #{$small} {
-        margin-top: 80px;
-        padding-top: 3rem !important;
+    elements-api div {
+        position: initial;
     }
 
-    @media #{$medium} {
+    @media screen and (max-width: 768px) {
         margin-top: 80px;
         padding-top: 3rem !important;
     }
@@ -54,68 +41,31 @@
         }
 
         h1 {
-            @media #{$small} {
-                display: flex;
-                width: 100%;
-            }
-
-            @media #{$medium} {
-                display: flex;
-                width: 100%;
-            }
+            word-break: break-word;
+            width: 100%;
         }
 
         .right-side {
-            @media #{$small} {
+            @media screen and (min-width: 768px) {
+                top: 14px;
+                height: auto;
+            }
+
+            @media screen and (max-width: 768px) {
                 position: initial;
                 display: flex;
                 padding-top: 2rem;
                 height: 100%;
                 width: 100%;
             }
-
-            @media #{$medium} {
-                position: initial;
-                display: flex;
-                padding-top: 2rem;
-                height: 100%;
-                width: 100%;
-            }
         }
 
-        @media #{$small} {
+        @media screen and (max-width: 768px) {
             background-color: transparent;
             height: auto;
-            padding: 0 !important;
-            position: initial !important;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-        }
-
-        @media #{$medium} {
-            background-color: transparent;
-            height: auto;
-            padding: 0 !important;
-            position: initial !important;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-        }
-    }
-
-    .content {
-        margin-left: 40px;
-        margin-top: 100px;
-
-        @media #{$small} {
-            margin-left: 0;
-            margin-top: 0;
-        }
-
-        @media #{$medium} {
-            margin-left: 0;
-            margin-top: 0;
         }
     }
 
@@ -200,25 +150,39 @@
     }
 }
 
-.product-section-button {
-    display: inline-block;
-    margin: $gutterSmall 6px $gutter 0;
+#elements-api-desktop {
+    @media screen and (min-width: 768px) {
+        position: initial;
+    }
+
+    @media screen and (max-width: 768px) {
+        display: none;
+    }
+}
+
+#elements-api-mobile {
+    @media screen and (min-width: 768px) {
+        display: none;
+    }
 }
 
 #product-sections {
-
-    #button-specification {
-        @media #{$small} {
-            display: none;
+    .product-section-button {
+        @media screen and (min-width: 768px) {
+            display: inline-block;
+            margin: $gutterSmall 6px $gutter 0;
         }
 
-        @media #{$medium} {
-            display: none;
+        @media screen and (max-width: 768px) {
+            width: 100%;
+            height: 30px;
+            margin-bottom: 10px;
         }
     }
 
     .product-section {
         display: none;
+        word-break: break-word;
 
         h2:first-of-type {
             @media #{$small} {
