@@ -13,10 +13,11 @@
 
         .search {
             flex-grow: 1;
+            width: calc(100% - 400px);
         }
 
         .contact {
-            width: 50%;
+            width: 400px;
             margin-right: 0;
 
             h2 {
