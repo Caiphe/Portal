@@ -41,19 +41,6 @@
                     </x-accordion>
                 @endforeach
             </div>
-
-            <div class="faq-categories">
-                <span>Categories</span>
-                <ul>
-                    @foreach ($categories as $category)
-                        @if(!$category->faqs->isEmpty())
-                            <li>
-                                <a href="#{!! $category->slug  !!}">{!! $category->title !!}</a>
-                            </li>
-                        @endif
-                    @endforeach
-                </ul>
-            </div>
         </div>
     </section>
 
