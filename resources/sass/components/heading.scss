@@ -1,81 +1,60 @@
 @import "../variables";
 
-.layout-master {
-    &::before {
-        content: '';
-        width: 100vw;
-        background-color: $grey400;
-        height: 68px;
-        position: absolute;
-        top: 80px;
-        right: 0;
-        left: 0;
-
-        @media #{$small} {
-            display: none;
-        }
-
-        @media #{$medium} {
-            display: none;
-        }
-    }
-}
-
 .layout-sidebar {
-    &::after {
-        content: '';
-        width: 50%;
-        background-color: $grey400;
-        height: 68px;
-        position: absolute;
-        top: 80px;
-        right: 0;
-
-        @media #{$small} {
-            display: none;
+    #main #heading {
+        @media screen and (min-width: 768px) {
+            width: calc(100% + 200px);
+            margin: -40px 0 40px -80px;
         }
 
-        @media #{$medium} {
-            display: none;
+        @media screen and (max-width: 768px) {
+            width: calc(100% + 40px);
+            margin: -20px 0 20px -20px;
+            padding-left: 20px !important;
+            background-color: $grey400 !important;
         }
     }
 }
 
-#main {
-    padding: 90px $gutter $gutter;
+.layout-master {
+    #heading {
+        @media screen and (min-width: 768px) {
+            width: calc(100% + 120px);
+            margin: 0 0 40px -80px;
+        }
 
-    .layout-master & {
-        padding: 90px 8vw $gutter;
-
-        #heading {
-            padding: $gutterSmall 8vw;
+        @media screen and (max-width: 768px) {
+            margin-bottom: 20px;
+            margin-left: -20px;
+            width: calc(100% + 40px);
         }
     }
+}
 
-    &>#heading {
-        padding: $gutterSmall $gutter;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
+.layout-master-full-width {
+    #heading {
+        @media screen and (max-width: 768px) {
+            margin-bottom: 20px;
+            margin-left: -20px;
+            width: calc(100% + 40px);
+        }
     }
 }
 
 #heading {
-    position: absolute;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    padding: $gutterSmall $gutter;
     background-color: $grey400;
     overflow: hidden;
     z-index: 1;
 
-    @media #{$small} {
-        margin-top: 10px;
+    @media screen and (min-width: 768px) {
+        padding: 30px 40px 30px 80px;
     }
 
-    @media #{$medium-up} {
-        height: 68px;
+    @media screen and (max-width: 768px) {
+        padding: 20px;
     }
 
     .edit {
@@ -90,7 +69,7 @@
         margin: 0;
         display: inline;
 
-        @media #{$small} {
+        @media screen and (max-width: 768px) {
             line-height: 1;
         }
     }
@@ -100,7 +79,13 @@
     }
 
     .tag {
-        vertical-align: top;
+        @media screen and (min-width: 768px) {
+            vertical-align: top;
+        }
+
+        @media screen and (max-width: 768px) {
+            vertical-align: middle;
+        }
     }
 
     .fab:not(.edit) {
@@ -112,10 +97,46 @@
 
     .right-side {
         position: absolute;
-        right: 0;
         display: flex;
         top: 0;
         height: 100%;
         align-items: center;
+
+        @media screen and (min-width: 768px) {
+            right: 40px;
+        }
+
+        @media screen and (max-width: 768px) {
+            right: 20px;
+        }
+    }
+
+    .breadcrumbs {
+        list-style: none;
+        padding: 0;
+        width: 100%;
+        margin: -10px 0 0 0;
+    }
+
+    .breadcrumb {
+        display: inline-block;
+
+        a {
+            font-family: "mtn-bold", sans-serif;
+            color: $grey900;
+        }
+    }
+
+    .breadcrumb+.breadcrumb:before {
+        content: '>';
+        font-family: "mtn-bold", sans-serif;
+        color: $grey900;
+        margin-right: 4px;
+    }
+
+    .edit-page {
+        @media screen and (max-width: 768px) {
+            display: none;
+        }
     }
 }

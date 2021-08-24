@@ -64,6 +64,7 @@
                         <div class="detail-item"><strong>Description:</strong></div>
                         <div class="detail-item detail-item-description">{{ $app['description'] ?: 'No description' }}</div>
                     </div>
+                    <button class="log-notes outline small mt-1" data-id="{{ $app['aid'] }}">View Application Log Notes</button>
                 </div>
             </div>
         @elseif(!empty($sandboxProducts['products']))

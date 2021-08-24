@@ -3,15 +3,15 @@
 }
 
 .container {
-    padding: 0 8%;
-    max-width: 1440px;
     width: 100%;
     position: relative;
-    margin: 0 auto;
+
+    @media screen and (min-width: 768px) {
+        padding: 0 40px;
+    }
 }
 
 .container-inner {
-    max-width: 1440px;
     width: 100%;
     position: relative;
     margin: 0 auto;
@@ -245,4 +245,13 @@
             color: $redDark;
         }
     }
+}
+
+.constrained {
+    max-width: 1200px;
+}
+
+.auto-x {
+    margin-left: auto;
+    margin-right: auto;
 }

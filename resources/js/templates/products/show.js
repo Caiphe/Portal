@@ -10,15 +10,3 @@ function switchSection(section) {
     document.getElementById('product-sections').className = section;
     window.location.hash = '/' + section.replace('product-', '');
 }
-
-function toggleParent(that) {
-    that.parentNode.classList.toggle('open');
-}
-
-function toggleParameters(that) {
-    that.classList.toggle('open');
-}
-
-function toggleResponseDetail(that, responseDetail) {
-    that.parentNode.className = 'response-details show-' + responseDetail;
-}

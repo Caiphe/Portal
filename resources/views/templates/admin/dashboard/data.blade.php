@@ -57,3 +57,10 @@
         {{ $apps->withQueryString()->links() }}
     </div>
 </div>
+
+@foreach($apps as $app)
+<x-dialog id="{{ $app->aid }}-note-dialog" class="note-dialog">
+    <h3>Profile Log Notes</h3>
+    <div class="note">{!! $app['notes'] !!}</div>
+</x-dialog>
+@endforeach

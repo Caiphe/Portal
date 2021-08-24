@@ -11,39 +11,11 @@
 }
 
 #main {
-    @media #{$small} {
-        margin-top: 80px;
-        padding-left: 0 !important;
-        padding-top: 1rem !important;
-    }
-
-    @media #{$medium} {
-        margin-top: 80px;
-        padding-left: 0 !important;
-        padding-top: 1rem !important;
-    }
-
     #heading {
         span {
             @media #{$small} {
                 display: none;
             }
-        }
-
-        @media #{$small} {
-            background-color: transparent;
-            margin-bottom: 15px !important;
-            position: static !important;
-            padding-top: 0 !important;
-            padding-left: 0 !important;
-        }
-
-        @media #{$medium} {
-            background-color: transparent;
-            margin-bottom: 15px !important;
-            position: static !important;
-            padding-top: 0 !important;
-            padding-left: 0 !important;
         }
     }
 }

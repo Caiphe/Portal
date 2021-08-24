@@ -4,10 +4,10 @@
 @endpush
 @endonce
 
-<div class="mdp-dialog" {{ $attributes }}>
-    <div class="dialog-background close-dialog"></div>
+<div {{ $attributes->merge(['class' => 'mdp-dialog']) }}>
+    <div class="dialog-background" onclick="closeDialog(this);"></div>
     <div class="dialog-content">
-        <button class="dialog-close close-dialog">&times;</button>
+        <button class="dialog-close" onclick="closeDialog(this);">&times;</button>
         {!! $slot !!}
     </div>
 </div>
