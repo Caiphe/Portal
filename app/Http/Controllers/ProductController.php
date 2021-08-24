@@ -64,11 +64,11 @@ class ProductController extends Controller
 			$content[$key][$c->title] = $c;
 		}
 
-		if (isset($content['lhs']['Overview'])) {
-			$startingPoint = 'product-' . $content['lhs']['Overview']->slug;
-		} else if (isset($content['lhs']['Docs'])) {
-			$startingPoint = 'product-' . $content['lhs']['Docs']->slug;
-		}
+		// if (isset($content['lhs']['Overview'])) {
+		// 	$startingPoint = 'product-' . $content['lhs']['Overview']->slug;
+		// } else if (isset($content['lhs']['Docs'])) {
+		// 	$startingPoint = 'product-' . $content['lhs']['Docs']->slug;
+		// }
 
 		if (!empty($alternatives[$product->category->title]) && count($alternatives[$product->category->title]) > 1) {
 			$alternatives = array_intersect_key(
