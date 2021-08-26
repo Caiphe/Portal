@@ -17,6 +17,7 @@
         "laravel/framework": "^8.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
+        "mpociot/teamwork": "^6.1",
         "pragmarx/google2fa-laravel": "^1.3",
         "symfony/yaml": "^5.0"
     },

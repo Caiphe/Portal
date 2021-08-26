@@ -10,6 +10,7 @@
         [
             [ 'label' => 'Profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
+            [ 'label' => 'Teams', 'link' => '/teams/create'],
         ],
         'Discover' =>
         [
@@ -264,7 +265,7 @@
                     btn.className = 'copy';
                 } else if (xhr.status === 200) {
                     var response = xhr.responseText ? JSON.parse(xhr.responseText) : null;
-                    
+
                     if(response === null){
                         btn.className = 'copy';
                         return void addAlert('error', ['Sorry there was a problem getting the credentials', 'Please try again']);

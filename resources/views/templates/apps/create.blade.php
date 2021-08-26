@@ -10,6 +10,7 @@
         [
             [ 'label' => 'Profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
+            [ 'label' => 'Teams', 'link' => '/teams/create'],
         ],
         'Discover' =>
         [
@@ -56,6 +57,11 @@
                 <div class="group">
                     <label for="url">Callback url</label>
                     <input type="url" name="url" id="url" placeholder="Enter callback url (eg. https://callback.com)">
+                </div>
+
+                <div class="group">
+                    <label for="team">Select team *</label>
+                    <input type="team" name="team" id="team" placeholder="Please select team to publish app under">
                 </div>
 
                 <div class="group">
@@ -347,13 +353,8 @@
 
         event.preventDefault();
 
-        for(i = 0; i < selectedProducts.length; i++) {
-             app.products.push(selectedProducts[i].dataset.name);
-        }
+        // Handle the Invitees
 
-        if (app.products.length === 0) {
-            return void addAlert('error', 'Please select at least one product.')
-        }
 
         button.disabled = true;
         button.textContent = 'Creating...';

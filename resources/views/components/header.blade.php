@@ -47,6 +47,7 @@
                 <ul class="profile-menu-options shadow">
                     <li><a href="/profile">Profile</a></li>
                     <li><a href="/apps">Apps</a></li>
+                    <li><a href="/teams">Teams</a></li>
                     <li><form action="{{route('logout')}}" method="post">@csrf<button>Sign out</button></form></li>
                 </ul>
             </div>
@@ -81,6 +82,7 @@
         <li>
             <a href="/apps">Apps</a>
         </li>
+            <li><a href="/teams">Teams</a></li>
         <li>
             <form action="{{route('logout')}}" method="post">@csrf<button>Sign out</button></form>
         </li>
