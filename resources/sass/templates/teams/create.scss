@@ -1,0 +1,47 @@
+@import '../../variables';
+
+#main {
+    .content {
+        width: 100%;
+        margin: 0 auto;
+        max-width: 500px;
+
+        h2 {
+            font-size: 30px;
+            line-height: 30px;
+        }
+    }
+
+    #form-create-team {
+        label {
+            display: block;
+            padding-bottom: 10px;
+        }
+
+        input[type=text], input[type=email], input[type=password], input[type=search], input[type=url], input[type=number], input, select, textarea {
+            width: 100%;
+            margin-bottom: 30px;
+            min-height: 40px;
+        }
+
+        input#logo {
+            &::-webkit-file-upload-button {
+                display: none;
+            }
+
+            &:after {
+                content: "+";
+                background: #0700ff;
+                width: 15px;
+                height: 15px;
+                position: absolute;
+                right: 5px;
+                top: 6px;
+                border-radius: 50%;
+                color: white;
+                padding: 0 5px 12px 6px;
+                font-size: 25px;
+            }
+        }
+    }
+}

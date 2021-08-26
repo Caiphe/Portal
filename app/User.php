@@ -7,10 +7,11 @@ use App\Role;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Mpociot\Teamwork\Traits\UserHasTeams;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-	use Notifiable;
+	use Notifiable, UserHasTeams;
 
 	/**
 	 * The attributes that are mass assignable.
@@ -134,4 +135,9 @@ class User extends Authenticatable implements MustVerifyEmail
 	{
 		return $this->roles->pluck('label')->implode(',');
 	}
+
+	public function twoFactorStatus()
+    {
+        return is_null($this->value('2fa')) ? 'Disabled' : 'Enabled';
+    }
 }

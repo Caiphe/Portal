@@ -39,6 +39,11 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 
 	Route::post('profile/2fa/enable', 'UserController@enable2fa')->name('user.2fa.enable');
 	Route::post('profile/2fa/disable', 'UserController@disable2fa')->name('user.2fa.disable');
+
+    Route::get('teams', 'TeamsController@index')->name('teams.listing');
+    Route::get('team/{id}', 'TeamsController@show')->name('team.show');
+    Route::get('teams/create', 'TeamsController@create')->name('teams.create');
+    Route::post('teams/store', 'TeamsController@store')->name('teams.store');
 });
 
 Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa', 'can:view-admin'])->group(function () {
