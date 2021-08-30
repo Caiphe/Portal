@@ -12,7 +12,7 @@
 
 button:not(.trix-button, .sl-button),
 .button {
-    height: 34px;
+    height: 45px;
     line-height: 1;
     background-color: $yellow;
     background-position: center center;
@@ -26,6 +26,19 @@ button:not(.trix-button, .sl-button),
     align-items: center;
     cursor: pointer;
     color: $grey900;
+    transition: all .3s ease-in-out;
+
+    &.red-button{
+        background-color: $red;
+        border: 2px solid $red;
+        color: #fff;
+
+        &:hover{
+            border: 2px solid $red;
+            background-color: #fff;
+            color: $red;
+        }
+    }
 
     &.small {
         height: 24px;
@@ -55,6 +68,7 @@ button:not(.trix-button, .sl-button),
     &.dark {
         background-color: #000;
         border: 2px solid #000;
+        font-weight: 700;
 
         &:hover {
             background-color: mix(#ffffff, #000, 20%);
@@ -178,6 +192,11 @@ button:not(.trix-button, .sl-button),
 
     &.outline {
         background-color: transparent;
+
+        &.black{
+            border: 2px solid #000;
+            color: #000;
+        }
 
         &.white:hover {
             background: $white;

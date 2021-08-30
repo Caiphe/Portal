@@ -18,23 +18,26 @@
     <div class="column">
         <p class="name toggle-app">
             <span title="{{ $appStatus }}" class="status-icon"></span>
-            {{ $app['display_name'] }}
+            <span class="app-name">  {{ $app['display_name'] }}</span>
         </p>
     </div>
-    @if($type === 'approved')
-    <div class="column countries">
-        <span title="{{ $countryName }}">@svg($countryCode, '#000000', 'images/locations')</span>
-    </div>
-    @else
-        <div class="column"></div>
-    @endif
+
     <div class="column">
         @if($isAdminPage)
             {{ $details['email'] ?? '' }}
         @else
-            @subStr($app['callback_url'], 30)
+           <a class="bold" href="" target="_blank"> @subStr($app['callback_url'], 30)</a>
         @endif
     </div>
+
+    @if($type === 'approved')
+    <div class="column countries">
+        <p title="{{ $countryName }}">@svg($countryCode, '#000000', 'images/locations')</p>
+    </div>
+    @else
+        <div class="column"></div>
+    @endif
+
     <div class="column">
         @if($isAdminPage)
             {{ date('Y-m-d', strtotime($app['live_at'] ?? $app['updated_at'])) }}
@@ -42,6 +45,7 @@
             {{ date('Y-m-d', strtotime($app['updated_at'])) }}
         @endif
     </div>
+    
     <div class="column">
         <button class="actions"></button>
         <button class="toggle-app-button toggle-app">@svg('chevron-down', '#000000')</button>

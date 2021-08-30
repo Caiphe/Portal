@@ -26,49 +26,82 @@ Teams
 @endsection
 
 @section('content')
-<x-heading heading="Teams" tags="Dashboard"></x-heading>
+<x-heading heading="Teams" tags="Dashboard">
+    <a href="/" class="button dark outline">Edit profile</a>
+</x-heading>
 
-<div class="header-block">
-    <h2>{{  $team->name }}</h2>
+{{-- Edit teammate --}}
+<div class="modal-container">
+    <div class="overlay-container"></div>
+    <div class="add-teammate-block">
+
+        <button class="close-modal">@svg('close', '#000')</button>
+
+        <h2 class="team-head">Add teammate</h2>
+        <p class="teammate-text">Invite additional team members or other users</p>
+        <form class="form-teammate">
+            <div class="form-group-container">
+                <input type="text" class="form-control teammate-email" placeholder="Add email to invite users" />
+                <button type="submit" class="invite-btn">INVITE</button>
+            </div>
+            <div class="radio-container">
+                <x-radio-round id="user-radio" name="role_name" value="Administrator">Administrator</x-radio-round>
+                <x-radio-round id="user-radio" name="role_name" value="user">User</x-radio-round>
+            </div>
+        </form>
+    </div>
+</div>
+{{-- Edit team mate ends --}}
+
+<div class="header-block team-name-logo">
+   <div class="team-logo"></div> <h2>
+        {{  $team->name }}
+    </h2>
 </div>
 
 <div class="mt-2">
     <h5>Team bio</h5>
     <p>{{ $team->description }}</p>
-    <div class="detail-left">
+    <div class="detail-left team-detail-left">
         <div class="detail-row cols no-wrap">
-            <div class="detail-item"><strong>Contact number:</strong></div>
+            <div class="detail-item"><strong>Contact number</strong></div>
             <div class="detail-item detail-item-description">{{ $team->contact }}</div>
         </div>
+
         <div class="detail-row cols no-wrap">
-            <div class="detail-item"><strong>Company URL:</strong></div>
+            <div class="detail-item"><strong>Company URL</strong></div>
             <div class="detail-item detail-item-description">{{ $team->url }}</div>
         </div>
+
         <div class="detail-row cols no-wrap">
-            <div class="detail-item"><strong>Country:</strong></div>
+            <div class="detail-item"><strong>Country</strong></div>
             <div class="detail-item detail-item-description">{{ $team->country }}</div>
         </div>
     </div>
     <div class="column">
         <div class="team-members-header">
             <h2>Team membership</h2>
-            <button class="outline dark">Add a teammate</button>
+            <button class="outline dark add-team-mate-btn">Add a teammate</button>
         </div>
     </div>
     <div class="column">
         <table class="team-members">
-            <tr>
-                <td>Member name</td>
-                <td>Role</td>
-                <td>2FA Status</td>
+            <tr class="table-title" >
+                <td class="bold">Member name @svg('arrow-down' ,'#cdcdcd')</td>
+                <td class="bold">Role @svg('arrow-down' ,'#cdcdcd')</td>
+                <td class="bold">2FA Status @svg('arrow-down' ,'#cdcdcd')</td>
             </tr>
             @foreach($team->users as $teamUser)
                 <tr>
-                    <td>
-                        {{ $teamUser->first_name }} {{ $teamUser->last_name }}
-                        ({{ $teamUser->email }})
+                    <td class="member-name-profile">
+                        <div class="member-thumbnail"></div>
+                        <p>
+                            <strong> {{ $teamUser->first_name }} {{ $teamUser->last_name }}</strong>
+                            ({{ $teamUser->email }})
+                        </p>
+
                         @if($teamUser->isTeamOwner())
-                            <span>OWNER</span>
+                            <span class="owner-tag red-tag">OWNER</span>
                         @endif
                     </td>
                     <td>{{ $teamUser->roles()->first()->name  === 'admin' ? 'Administrator' : ucfirst($teamUser->roles()->first()->name) }}</td>
@@ -86,32 +119,30 @@ Teams
                     <h3>Approved Apps</h3>
                 </div>
 
-                <div class="my-apps">
-                    <div class="head">
-                        <div class="column">
-                            <p>App name</p>
+                <div class="my-apps my-app-details">
+                    <div class="head headings-container">
+                        <div class="column-heading">
+                            <h4 class="app-heading">App Name @svg('arrow-down' ,'#cdcdcd')</h4>
                         </div>
 
-                        <div class="column">
-                            <p>Callback URL</p>
+                        <div class="column-heading">
+                            <h4 class="app-heading">Callback URL @svg('arrow-down' ,'#cdcdcd')</h4>
                         </div>
 
-                        <div class="column">
-                            <p>Country</p>
+                        <div class="column-heading">
+                            <h4 class="app-heading">Country @svg('arrow-down' ,'#cdcdcd')</h4>
                         </div>
 
-                        <div class="column">
-                            <p>Creator</p>
+                        <div class="column-heading">
+                            <h4 class="app-heading">Creator @svg('arrow-down' ,'#cdcdcd')</h4>
                         </div>
 
-                        <div class="column">
-                            <p>Date created</p>
+                        <div class="column-heading">
+                            <h4 class="app-heading">Date created @svg('arrow-down' ,'#cdcdcd')</h4>
                         </div>
 
-                        <div class="column">
-                            &nbsp;
-                        </div>
                     </div>
+
                     <div class="body">
                         @forelse($approvedApps as $app)
                             @if(!empty($app['attributes']))
@@ -189,6 +220,17 @@ Teams
 
 @push('scripts')
 <script>
+    var clodeModal = document.querySelector('.close-modal');
+    var modalContainer = document.querySelector('.modal-container');
+    var addTeammateBtn = document.querySelector('.add-team-mate-btn');
+
+    addTeammateBtn.addEventListener('click', function(){
+        modalContainer.classList.add('show');
+    });
+
+    clodeModal.addEventListener('click', function(){
+        modalContainer.classList.remove('show');
+    });
 
 </script>
 @endpush

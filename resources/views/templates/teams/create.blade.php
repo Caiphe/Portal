@@ -41,6 +41,7 @@
             @elseif($hasTeams && $isCompanyTeam)
                 <h2>Create a New Team!</h2>
             @endif
+            <h2>Create a New Team!</h2>
             <p>Fortunately, it's very easy to create one. Let's begin by filling out your teams details.</p>
         </div>
 
@@ -49,34 +50,39 @@
             <input type="hidden" name="is_company_team" id="company-team" value="{{ $isCompanyTeam ? 'yes' : 'no' }}">
 
             <div class="group">
-                <label for="name">Name your team *</label>
+                <label for="name">Name your team</label>
                 <input type="text" name="name" id="name" placeholder="Enter team name" maxlength="100" required>
             </div>
 
             <div class="group">
-                <label for="url">Enter team URL*</label>
+                <label for="url">Enter team URL</label>
                 <input type="text" name="url" id="url" placeholder="Enter team URL" maxlength="100" required>
             </div>
 
             <div class="group">
-                <label for="contact">Enter team contact number*</label>
+                <label for="contact">Enter team contact number</label>
                 <input type="text" name="contact" id="contact" placeholder="Enter team contact number" maxlength="100" required>
             </div>
 
             <div class="group countries">
-                <label for="country">Country</label>
+                <label for="country">Which country are you based in?</label>
                 <select id="country" name="country">
                     <option value="">Select country</option>
                     @foreach($countries as $code => $name)
                         <option value="{{ $code }}">{{ $name }}</option>
                     @endforeach
                 </select>
+                <span class="chevron-container">@svg('chevron-down', '#000')</span>
             </div>
 
             <div class="group">
-                <label for="logo">Upload team logo*</label>
-                <input type="file" name="file-input" id="file-input" placeholder="Upload team logo" maxlength="100" required>
-                <!--- <button class="file-input-button">Upload File</button> -->
+               
+                <label for="lfile-input">Upload team logo</label>
+                <label for="file-input" class="logo-file-container">
+                    <span class="upload-file-name">Upload team logo</span>
+                    <input type="file" name="file-input" class="logo-file" id="logo-file" placeholder="Upload team logo" maxlength="100" required>
+                    <button type="button" class="logo-add-icon">@svg('plus', '#fff')</button>
+                </label>
             </div>
 
             <!---
@@ -84,19 +90,25 @@
                 the be converted into an array and posted back to the back-end
             -->
             <div class="group">
-                <label for="invitations">Invite colleagues or other users*</label>
+                <label for="invitations">Invite colleagues or other users</label>
                 <input type="text" name="invitations" id="invitations" placeholder="Add email to invite other users" maxlength="100" required>
+                <button class="invite-btn">INVITE</button>
+
+                <div class="invite-tags">
+                    <span class="each-tag">marc@plusnarrative.com</span>
+                    <span class="each-tag">marc@plusnarrative.com</span>
+                    <span class="each-tag">max@plusnarrative.com</span>
+                </div>
             </div>
 
             <div class="group">
-                <label for="description">Company description*</label>
+                <label for="description">Company description</label>
                 <textarea name="description" id="description" placeholder="Write a short description about your team" ></textarea>
             </div>
 
             <div class="form-actions">
                 <button class="dark next" id="create">
-                    CREATE TEAM
-                    @svg('arrow-forward', '#ffffff')
+                    CREATE TEAM @svg('arrow-forward', '#ffffff')
                 </button>
             </div>
         </form>
@@ -105,9 +117,16 @@
 
 @push('scripts')
     <script>
-
-        //var fileInput = document.getElementById('file-input');
-        //var fileInputButton = document.querySelector('.file-input-button');
+        var logoFile = document.querySelector('.logo-file');
+        var fileName = document.querySelector('.upload-file-name');
+        logoFile.addEventListener('change', function(){
+            var newFile = this.files[0].name.split('.');
+            var extension = newFile[1];
+            var filename = ''
+            if(newFile[0].length > 20){filename = newFile[0].substr(0, 20) + '...' + extension;}
+            else{filename = newFile[0] + '.'+ extension;}
+            fileName.innerHTML = filename
+        });
 
         var createButton = document.getElementById('create');
 

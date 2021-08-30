@@ -1,6 +1,7 @@
 @import '../../variables';
 
-span {
+
+.red-tag{
     display: inline-block;
     text-decoration: none;
     padding: 5px 20px;
@@ -14,6 +15,146 @@ span {
     line-height: 20px;
     margin: 0 10px 10px 0;
     white-space: nowrap;
+}
+
+.modal-container{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 4;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.356s, transform 0.356s;
+
+    &.show{
+        opacity: 1;
+        z-index: 4;
+        pointer-events: auto;
+        transition: all .3s ease-in-out;
+    }
+
+    .overlay-container{
+        position: fixed;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.616);
+    }
+
+    .add-teammate-block{
+        width: 420px;
+        height: 290px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        border-radius: 14px;
+
+        .close-modal{
+            background-color: transparent;
+            position: absolute;
+            cursor: pointer;
+            border: none;
+            right: 5px;
+            top: 5px;
+        }
+
+        .team-head{
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .teammate-text{
+            text-align: center;
+            width: 250px;
+            margin: 15px auto;
+            position: relative;
+        }
+
+        .form-teammate{
+            width: 270px;
+            margin: 0px auto;
+        }
+
+        .radio-container{
+            margin-top: 15px;
+
+            .radio-round{
+                margin-right: 15px;
+            }
+        }
+
+        .form-group-container{
+            display: flex;
+            width: 100%;
+
+            .teammate-email{
+                height: 35px;
+            }
+
+            .invite-btn{
+                width: 98px;
+                height: 35px;
+                color: #fff;
+                border: none;
+                background-color: #000;
+                border-radius: 0px 5px 5px 0px;
+                margin-left: -4px;
+            }
+        }
+    }
+}
+
+.my-app-details{
+
+    .headings-container{
+        .column-heading{
+            &:nth-child(1){
+                width: 30%;
+            }
+            &:nth-child(2){
+                width: 20%;
+            }
+
+            &:nth-child(3){
+                width: 15%;
+            }
+
+            &:nth-child(4){
+                width: 15%;
+            }
+
+            &:nth-child(5){
+                width: 20%;
+            }
+        }
+    }
+
+    .app-heading{
+        display: flex;
+
+        svg{
+            width: 16px;
+            margin-left: 10px;
+            margin-top: -2px;
+        }
+    }
+}
+
+.team-detail-left{
+    position: relative;
+
+    .detail-item{
+        margin-bottom: 7px;
+
+        &:nth-child(1){
+            width: 170px;
+        }
+    }
 }
 
 // NO APPS
@@ -43,11 +184,41 @@ span {
     padding-top: 20px;
 }
 
+.team-members-header{
+    position: relative;
+
+    .add-team-mate-btn{
+        position: absolute;
+        right: 1px;
+        top: 20px;
+    }
+}
+
+.company-logo-name{
+    position: relative;
+    padding-left: 50px;
+
+    .company-logo{
+        position: absolute;
+        width: 27px;
+        height: 27px;
+        border-radius: 50%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        left: 12px;
+    }
+
+    a{
+        color: #000;
+        text-decoration: underline;
+    }
+}
 
 #app-index {
     height: 100%;
     width: 100%;
     padding: 0;
+
 
     .row {
         display: flex;
@@ -235,5 +406,50 @@ span {
     @media screen and (max-width: 768px) {
         width: 100%;
         margin: 20px 0 10px;
+    }
+}
+
+.team-name-logo{
+    display: flex;
+
+    .team-logo{
+        width: 40px;
+        height: 40px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-color: $red;
+        border-radius: 50%;
+        margin-right: 15px;
+    }
+
+    h2{
+        margin-top: 8px;
+    }
+}
+
+.member-name-profile{
+    display: flex;
+
+    .member-thumbnail{
+        width: 40px;
+        height: 40px;
+        background-color: $red;
+        border-radius: 50%;
+        margin-right: 15px;
+    }
+
+    p{
+        line-height: 1.1;
+    }
+
+    .owner-tag{
+        background-color: #BB1E4F;
+        width: 80px;
+        text-align: center;
+        box-sizing: border-box;
+        height: 30px;
+        margin-left: 15px;
+        margin-top: 8px;
     }
 }
