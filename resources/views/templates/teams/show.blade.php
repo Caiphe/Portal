@@ -54,7 +54,8 @@ Teams
 {{-- Edit team mate ends --}}
 
 <div class="header-block team-name-logo">
-   <div class="team-logo"></div> <h2>
+    {{-- To replace with the company logo --}}
+   <div class="team-logo" style="background-image: url('/images/user-thumbnail.jpg')"></div> <h2>
         {{  $team->name }}
     </h2>
 </div>
@@ -75,7 +76,7 @@ Teams
 
         <div class="detail-row cols no-wrap">
             <div class="detail-item"><strong>Country</strong></div>
-            <div class="detail-item detail-item-description">{{ $team->country }}</div>
+            <div class="detail-item detail-item-description">{{ $team->country }} </div>
         </div>
     </div>
     <div class="column">
@@ -94,7 +95,7 @@ Teams
             @foreach($team->users as $teamUser)
                 <tr>
                     <td class="member-name-profile">
-                        <div class="member-thumbnail"></div>
+                        <div class="member-thumbnail"  style="background-image: url('/images/user-thumbnail.jpg')"></div>
                         <p>
                             <strong> {{ $teamUser->first_name }} {{ $teamUser->last_name }}</strong>
                             ({{ $teamUser->email }})
@@ -146,13 +147,13 @@ Teams
                     <div class="body">
                         @forelse($approvedApps as $app)
                             @if(!empty($app['attributes']))
-                                <x-app
+                                <x-team-app
                                     :app="$app"
                                     :attr="$app['attributes']"
                                     :details="$app['developer']"
                                     :countries="!is_null($app->country) ? [$app->country->code => $app->country->name] : ['globe' => 'globe']"
                                     :type="$type = 'approved'">
-                                </x-app>
+                                </x-team-app>
                             @endif
                         @empty
                             <p>No approved apps.</p>

@@ -29,32 +29,34 @@
     <x-heading heading="My teams" tags="Dashboard">
         <a href="{{ route('teams.create') }}" class="button dark outline">Creare New</a>
     </x-heading>
-
-    <div class="mt-2">
-        <div class="column">
-            <table class="teams">
-                <tr class="table-title">
-                    <td class="bold">Team Name @svg('arrow-down' ,'#cdcdcd')</td>
-                    <td class="bold">Country @svg('arrow-down' ,'#cdcdcd')</td>
-                    <td class="bold">Members @svg('arrow-down' ,'#cdcdcd')</td>
-                    <td class="bold">Apps @svg('arrow-down' ,'#cdcdcd')</td>
-                    <td>&nbsp;</td>
-                </tr>
-                @foreach($teams as $team)
-                    <tr>
-                        <td class="company-logo-name">
-                            <div class="company-logo " style="background-image: url('/images/no-logo.svg')"></div>
-                            <a class="company-name-a bold" href="{{route('team.show', [ 'id' => $team->id ])}}">{{ $team->name }}</a>
-                        </td>
-                        <td>{{ $team->country }}</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>
-                            <a href="" class="button red-button">LEAVE</a>
-                        </td>
+    
+    <div class="team-block-container">
+        <div class="mt-2">
+            <div class="column">
+                <table class="teams">
+                    <tr class="table-title">
+                        <td class="bold">Team Name @svg('arrow-down' ,'#cdcdcd')</td>
+                        <td class="bold">Country @svg('arrow-down' ,'#cdcdcd')</td>
+                        <td class="bold">Members @svg('arrow-down' ,'#cdcdcd')</td>
+                        <td class="bold">Apps @svg('arrow-down' ,'#cdcdcd')</td>
+                        <td>&nbsp;</td>
                     </tr>
-                @endforeach
-            </table>
+                    @foreach($teams as $team)
+                        <tr class="team-app-list">
+                            <td class="company-logo-name">
+                                <div class="company-logo " style="background-image: url('/images/user-thumbnail.jpg')"></div>
+                                <a class="company-name-a bold" href="{{route('team.show', [ 'id' => $team->id ])}}">{{ $team->name }}</a>
+                            </td>
+                            <td>{{ $team->country }}</td>
+                            <td>2 of 5</td>
+                            <td>7</td>
+                            <td>
+                                <a href="" class="button red-button">LEAVE</a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </table>
+            </div>
         </div>
     </div>
 @endsection

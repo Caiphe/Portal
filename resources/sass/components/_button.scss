@@ -12,7 +12,7 @@
 
 button:not(.trix-button, .sl-button),
 .button {
-    height: 45px;
+    height: 37px;
     line-height: 1;
     background-color: $yellow;
     background-position: center center;
@@ -20,7 +20,7 @@ button:not(.trix-button, .sl-button),
     background-repeat: no-repeat;
     border: 2px solid $yellow;
     border-radius: 22px;
-    padding: 0 20px;
+    padding: 0 15px;
     display: inline-flex;
     justify-content: center;
     align-items: center;

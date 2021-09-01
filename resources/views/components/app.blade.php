@@ -22,13 +22,6 @@
         </p>
     </div>
 
-    <div class="column">
-        @if($isAdminPage)
-            {{ $details['email'] ?? '' }}
-        @else
-           <a class="bold" href="" target="_blank"> @subStr($app['callback_url'], 30)</a>
-        @endif
-    </div>
 
     @if($type === 'approved')
     <div class="column countries">
@@ -37,6 +30,15 @@
     @else
         <div class="column"></div>
     @endif
+
+    <div class="column">
+        @if($isAdminPage)
+            {{ $details['email'] ?? '' }}
+        @else
+           <a class="bold" href="" target="_blank"> @subStr($app['callback_url'], 30)</a>
+        @endif
+    </div>
+
 
     <div class="column">
         @if($isAdminPage)

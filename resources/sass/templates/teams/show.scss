@@ -1,5 +1,25 @@
 @import '../../variables';
 
+.wrapper{
+    @media(max-width: 768px){
+        overflow: hidden;
+    }
+}
+
+.team-block-container{
+    position: relative;
+    
+    @media(max-width: 768px) {
+        overflow-y: scroll;
+        width: 750px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+}
 
 .red-tag{
     display: inline-block;
@@ -194,18 +214,26 @@
     }
 }
 
+.team-app-list{
+    td{
+        padding-bottom: 4px;
+        padding-top: 15px;
+    }
+}
+
 .company-logo-name{
     position: relative;
-    padding-left: 50px;
+    padding-left: 55px;
 
     .company-logo{
         position: absolute;
-        width: 27px;
-        height: 27px;
+        width: 32px;
+        height: 32px;
         border-radius: 50%;
         background-size: cover;
         background-repeat: no-repeat;
         left: 12px;
+        top: 10px;
     }
 
     a{
@@ -437,6 +465,9 @@
         background-color: $red;
         border-radius: 50%;
         margin-right: 15px;
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
     }
 
     p{

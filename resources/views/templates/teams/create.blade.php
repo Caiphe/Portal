@@ -41,7 +41,6 @@
             @elseif($hasTeams && $isCompanyTeam)
                 <h2>Create a New Team!</h2>
             @endif
-            <h2>Create a New Team!</h2>
             <p>Fortunately, it's very easy to create one. Let's begin by filling out your teams details.</p>
         </div>
 
@@ -66,13 +65,16 @@
 
             <div class="group countries">
                 <label for="country">Which country are you based in?</label>
-                <select id="country" name="country">
-                    <option value="">Select country</option>
-                    @foreach($countries as $code => $name)
-                        <option value="{{ $code }}">{{ $name }}</option>
-                    @endforeach
-                </select>
-                <span class="chevron-container">@svg('chevron-down', '#000')</span>
+                <div class="country-block-container">
+                    <select id="country" name="country">
+                        <option value="">Select country</option>
+                        @foreach($countries as $code => $name)
+                            <option value="{{ $code }}">{{ $name }}</option>
+                        @endforeach
+                    </select>
+                    @svg('chevron-down', '#000')
+                </div>
+              
             </div>
 
             <div class="group">
