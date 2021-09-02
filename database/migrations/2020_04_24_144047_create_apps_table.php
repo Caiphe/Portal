@@ -17,7 +17,7 @@ class CreateAppsTable extends Migration {
 			$table->string('name');
 			$table->string('display_name');
 			$table->string('slug');
-			$table->string('callback_url')->nullable();
+			$table->longText('callback_url')->nullable();
 			$table->json('attributes');
 			$table->json('credentials');
 			$table->string('developer_id');

@@ -115,7 +115,7 @@ class SyncProducts extends Command
 			);
 
 			if (isset($attributes['Locations'])) {
-				$locations = $attributes['Locations'] !== 'all' ? explode(',', $attributes['Locations']) : $allCountries;
+				$locations = $attributes['Locations'] !== 'all' ? preg_split('/, ?/', $attributes['Locations']) : $allCountries;
 				$prod->countries()->sync($locations);
 			}
 		}

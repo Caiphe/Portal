@@ -57,7 +57,7 @@
             <div id="product-specification" class="product-section">
                 @if($specification)
                 <h2 class="mt-0">Download</h2>
-                <a href="{{ route('product.download.postman', [$product->slug]) }}" class="button">Download Postman collection</a>
+                {{-- <a href="{{ route('product.download.postman', [$product->slug]) }}" class="button">Download Postman collection</a> --}}
                 <a href="{{ route('product.download.swagger', [$product->slug]) }}" class="button">Download Swagger</a>
 
                 <h2 class="mt-4">Available endpoints</h2>
