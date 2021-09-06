@@ -290,6 +290,7 @@
     font-size: 1.5rem;
     opacity: 0;
     pointer-events: none;
+    transition: all .3s ease-in-out;
 
     li {
         margin-bottom: 1.5rem;
@@ -297,6 +298,7 @@
 
     &.active {
         opacity: 1;
+        transition: all .3s ease-in-out;
         pointer-events: auto;
     }
 
@@ -375,8 +377,9 @@
 
         button:hover,
         .button:hover {
-            border: 2px solid $blue;
-            background-color: $blue;
+            // border: 2px solid $blue;
+            // background-color: $blue;
+            transition: all .3s ease-in-out;
         }
     }
 }

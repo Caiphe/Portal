@@ -8,15 +8,17 @@
 
 .team-block-container{
     position: relative;
-    
-    @media(max-width: 768px) {
-        overflow-y: scroll;
-        width: 750px;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
 
-        &::-webkit-scrollbar {
-            display: none;
+    .column{
+        @media(max-width: 768px) {
+            overflow-y: scroll;
+            width: 750px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+    
+            &::-webkit-scrollbar {
+                display: none;
+            }
         }
     }
 }
@@ -246,6 +248,20 @@
     height: 100%;
     width: 100%;
     padding: 0;
+    position: relative;
+    overflow-y: hidden;
+    overflow-x: auto;
+
+    @media(max-width: 768px){
+        width: 750px;
+        overflow-y: scroll;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
 
 
     .row {
@@ -482,5 +498,13 @@
         height: 30px;
         margin-left: 15px;
         margin-top: 8px;
+    }
+}
+
+.team-members-list{
+    position: relative;
+
+    @media(max-width:768px){
+        width: 800px;
     }
 }

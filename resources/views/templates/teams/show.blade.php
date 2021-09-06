@@ -85,7 +85,7 @@ Teams
             <button class="outline dark add-team-mate-btn">Add a teammate</button>
         </div>
     </div>
-    <div class="column">
+    <div class="column team-members-list">
         <table class="team-members">
             <tr class="table-title" >
                 <td class="bold">Member name @svg('arrow-down' ,'#cdcdcd')</td>
@@ -110,6 +110,9 @@ Teams
                 </tr>
             @endforeach
         </table>
+
+        <button class="outline dark add-team-mate-btn-mobile">Add a teammate</button>
+
     </div>
     <div class="column" id="app-index">
         <div class="row">
