@@ -92,6 +92,7 @@ Teams
                 <td class="bold">Role @svg('arrow-down' ,'#cdcdcd')</td>
                 <td class="bold">2FA Status @svg('arrow-down' ,'#cdcdcd')</td>
             </tr>
+
             @foreach($team->users as $teamUser)
                 <tr>
                     <td class="member-name-profile">
@@ -109,6 +110,7 @@ Teams
                     <td>{{ $teamUser->twoFactorStatus() }}</td>
                 </tr>
             @endforeach
+
         </table>
 
         <button class="outline dark add-team-mate-btn-mobile">Add a teammate</button>
@@ -143,6 +145,9 @@ Teams
 
                         <div class="column-heading">
                             <h4 class="app-heading">Date created @svg('arrow-down' ,'#cdcdcd')</h4>
+                        </div>
+                        <div class="column-heading">
+                            <h4 class="app-heading"></h4>
                         </div>
 
                     </div>
@@ -227,9 +232,15 @@ Teams
     var clodeModal = document.querySelector('.close-modal');
     var modalContainer = document.querySelector('.modal-container');
     var addTeammateBtn = document.querySelector('.add-team-mate-btn');
+    var addTeamMobile = document.querySelector('.add-team-mate-btn-mobile');
 
     addTeammateBtn.addEventListener('click', function(){
         modalContainer.classList.add('show');
+    });
+
+    addTeamMobile.addEventListener('click', function(){
+        modalContainer.classList.add('show');
+        console.log("Hello there");
     });
 
     clodeModal.addEventListener('click', function(){

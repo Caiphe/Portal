@@ -74,6 +74,7 @@ mix.scripts(
     .sass("resources/sass/templates/teams/create.scss", "public/css/templates/teams/create.css")
     .sass("resources/sass/templates/teams/show.scss", "public/css/templates/teams/show.css")
     .sass("resources/sass/components/_app.scss", "public/css/components")
+    .sass("resources/sass/components/_team_app.scss", "public/css/components")
     .sass("resources/sass/components/_panel.scss", "public/css/components")
     .sass("resources/sass/components/_accordion.scss", "public/css/components")
     .sass("resources/sass/components/_select.scss", "public/css/components")

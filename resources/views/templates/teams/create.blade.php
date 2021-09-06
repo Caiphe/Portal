@@ -98,7 +98,6 @@
 
                 <div class="invite-tags">
                     <span class="each-tag">marc@plusnarrative.com</span>
-                    <span class="each-tag">marc@plusnarrative.com</span>
                     <span class="each-tag">max@plusnarrative.com</span>
                 </div>
             </div>

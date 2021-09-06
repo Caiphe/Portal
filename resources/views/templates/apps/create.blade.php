@@ -48,20 +48,41 @@
         <form id="form-create-app">
 
             <div class="active">
-                @svg('app-avatar', '#ffffff')
+                <div class="user-thumbnails">
+                    <div class="thumbail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
+                    <label for="user-thumb">
+                        <input type="file" name="user-thumb" class="user-thumb">
+                    </label>
+                </div>
+                {{-- @svg('app-avatar', '#ffffff') --}}
+
                 <div class="group">
                     <label for="name">Name your app *</label>
                     <input type="text" name="name" id="name" placeholder="Enter name" maxlength="100" required>
                 </div>
 
-                <div class="group">
-                    <label for="url">Callback url</label>
+                <div class="group group-info">
+                    <label for="url">Callback url @svg('info-icon', '#a5a5a5')</label>
                     <input type="url" name="url" id="url" placeholder="Enter callback url (eg. https://callback.com)">
                 </div>
 
                 <div class="group">
                     <label for="team">Select team *</label>
-                    <input type="team" name="team" id="team" placeholder="Please select team to publish app under">
+                        <select  name="team" id="team">
+                          <option value="0">Please select team to publish app under</option>
+                          <option value="1" style="background-image:url(/images/user-thumbnail.jpg);"> <span>Xoliswa Shandu (You)</span></option>
+                          <option value="1" style="background-image:url(/images/user-thumbnail.jpg);"> <span>Plusnarrative</span></option>
+                          <option value="1" style="background-image:url(/images/user-thumbnail.jpg);"> <span>Plusnarrative</span></option>
+
+                        </select>
+                      
+                    {{-- <select class="custom-select">
+                        <option value="">Please select team to publish app under</option>
+                        <option value="">Xoliswa Shandu</option>
+                        <option value="">Xoliswa Shandu</option>
+                        <option value="">Xoliswa Shandu</option>
+                    </select> --}}
+                    {{-- <input type="team" name="team" id="team" placeholder="Please select team to publish app under"> --}}
                 </div>
 
                 <div class="group">
@@ -151,7 +172,6 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', init);
-
     var nav = document.querySelector('.content nav');
     var form = document.getElementById('form-create-app');
     var buttons = document.querySelectorAll('.next');

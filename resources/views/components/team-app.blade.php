@@ -13,7 +13,7 @@
 <link href="{{ mix('/css/components/_app.css') }}" rel="stylesheet"/>
 @endallowonce
 
-<div class="app app-status-{{ $appStatus }}" data-name="{{ $app['name'] }}" data-id="{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
+<div class="app app-status-{{ $appStatus }} team-app" data-name="{{ $app['name'] }}" data-id="{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
      data-locations="{{ $countryCode }}">
     <div class="column">
         <p class="name toggle-app">
@@ -39,12 +39,10 @@
     @endif
 
 
-    <div class="column">
-        @if($isAdminPage)
-            {{ date('Y-m-d', strtotime($app['live_at'] ?? $app['updated_at'])) }}
-        @else
-            {{ date('Y-m-d', strtotime($app['updated_at'])) }}
-        @endif
+    {{-- creator Profile and name --}}
+    <div class="column creator-details">
+       <div class="creator-profile" style="background-image: url('/images/user-thumbnail.jpg')"></div>
+       <div class="creator-name">Greg Davies</div>
     </div>
 
     <div class="column">
@@ -55,9 +53,9 @@
         @endif
     </div>
     
-    {{-- <div class="column">
+    <div class="column three-dots">
         <button class="actions"></button>
-    </div> --}}
+    </div>
 
     <div class="modal"></div>
 </div>
