@@ -14,7 +14,7 @@ class AddStatusNoteToAppProductTable extends Migration
     public function up()
     {
         Schema::table('app_product', function (Blueprint $table) {
-            $table->string('status_note')->nullable();
+            $table->text('status_note')->nullable();
         });
     }
 

@@ -25,9 +25,8 @@
 @endsection
 
 @section('content')
-
     <x-heading heading="Apps" tags="DASHBOARD">
-        <a href="{{route('app.create')}}" class="button outline dark" id="create">Create new</a>
+        <a href="{{route('app.create')}}" class="button outline dark create-new" id="create"></a>
     </x-heading>
 
     <x-twofa-warning></x-twofa-warning>
@@ -110,7 +109,7 @@
                             </div>
 
                             <div class="column">
-                                <p>Reason</p>
+                                <p></p>
                             </div>
 
                             <div class="column">

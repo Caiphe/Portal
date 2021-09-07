@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    @production
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-EESWEBL5F7"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-EESWEBL5F7');
+        </script>
+    @endproduction
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -10,7 +20,7 @@
     <link rel="stylesheet" href="{{ mix('/css/styles.css') }}">
     @stack("styles")
 </head>
-<body class="admin">
+<body class="admin @yield('body-class')">
     @yield('banner')
     <div class="wrapper">
         <nav id="sidebar">

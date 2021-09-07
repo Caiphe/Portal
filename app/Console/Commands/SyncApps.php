@@ -46,25 +46,32 @@ class SyncApps extends Command
 		$countryArray = Country::get()->toArray();
 		$apps = ApigeeService::getOrgApps('all', 0);
 		$products = Product::pluck('name')->toArray();
-		$deletedApps = App::withTrashed()->whereNotNull('deleted_at')->pluck('deleted_at', 'aid');
-		App::query()->delete();
+		$appsToBeDeleted = App::whereNull('deleted_at')->pluck('display_name', 'aid')->toArray();
 
 		$this->info("Start syncing apps");
 
-		foreach ($apps['app'] as $app) {
+		foreach ($apps as $app) {
 			$apiProducts = [];
 
-			$creds = ApigeeService::sortCredentials($app['credentials']);
-			if(count($creds) === 0) continue;
+			if (count($app['credentials']) === 0) {
+				$this->warn("No creds: {$app['name']}");
+				continue;
+			};
 
-			foreach ($creds[0]['apiProducts'] as $product) {
-				if (!in_array($product['apiproduct'], $products)) continue 2;
+			foreach ($app['credentials'][0]['apiProducts'] as $product) {
+				if (!in_array($product['apiproduct'], $products)) {
+					$this->warn("No product: {$app['name']}");
+					continue 2;
+				}
 				$apiProducts[$product['apiproduct']] = ['status' => $product['status']];
 			}
 
-			if (count($creds) > 1) {
-				foreach (end($creds)['apiProducts'] as $product) {
-					if (!in_array($product['apiproduct'], $products)) continue 2;
+			if (count($app['credentials']) > 1) {
+				foreach (end($app['credentials'])['apiProducts'] as $product) {
+					if (!in_array($product['apiproduct'], $products)) {
+						$this->warn("No sandbox product: {$app['name']}");
+						continue 2;
+					}
 					$apiProducts[$product['apiproduct']] = ['status' => $product['status']];
 				}
 			}
@@ -90,6 +97,10 @@ class SyncApps extends Command
 				$countryCode = $attributes['Country'];
 			}
 
+			if (isset($appsToBeDeleted[$app['appId']])) {
+				unset($appsToBeDeleted[$app['appId']]);
+			}
+
 			$a = App::withTrashed()->updateOrCreate(
 				["aid" => $app['appId']],
 				[
@@ -105,11 +116,16 @@ class SyncApps extends Command
 					"country_code" => $countryCode,
 					"updated_at" => date('Y-m-d H:i:s', $app['lastModifiedAt'] / 1000),
 					"created_at" => date('Y-m-d H:i:s', $app['createdAt'] / 1000),
-					'deleted_at' => isset($deletedApps[$app['appId']]) ? $deletedApps[$app['appId']] : null
 				]
 			);
 
 			$a->products()->sync($apiProducts);
+		}
+
+		$this->info('Total apps to be deleted: ' . count($appsToBeDeleted));
+
+		if (count($appsToBeDeleted) > 0) {
+			App::whereIn('aid', array_keys($appsToBeDeleted))->delete();
 		}
 	}
 }

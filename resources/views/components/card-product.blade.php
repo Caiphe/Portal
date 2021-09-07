@@ -32,7 +32,7 @@
             @endisset
             @isset($title)
             <h3 class="card__header">
-                {{ str_replace("_", " ", $title) }}
+                {{ Str::limit(str_replace("_", " ", $title), 80) }}
             </h3>
             @endisset
             <p class="card__body">

@@ -52,8 +52,8 @@ class SyncProducts extends Command
 		$sandboxProductAttribute = [];
 		$allCountries = Country::all();
 
-		$deletedProducts = Product::withTrashed()->whereNotNull('deleted_at')->pluck('deleted_at', 'pid');
-		Product::query()->delete();
+		$productsToBeDeleted = Product::whereNull('deleted_at')->pluck('display_name', 'name')->toArray();
+		$this->info(count($productsToBeDeleted));
 
 		$this->info("Start syncing products");
 		foreach ($products as $product) {
@@ -70,7 +70,7 @@ class SyncProducts extends Command
 				$sandboxProductAttribute[$attributes['SandboxProduct']] = $product['name'];
 			}
 
-			$productEnvironments = array_map(function($env){
+			$productEnvironments = array_map(function ($env) {
 				$lookup = [
 					'dev' => 'prod',
 					'test' => 'sandbox'
@@ -79,6 +79,10 @@ class SyncProducts extends Command
 				return $lookup[$env] ?? $env;
 			}, $product['environments']);
 
+			if (isset($productsToBeDeleted[$product['name']])) {
+				unset($productsToBeDeleted[$product['name']]);
+			}
+
 			if (!is_null($prod)) {
 				$prod->update([
 					'pid' => $product['name'],
@@ -86,9 +90,7 @@ class SyncProducts extends Command
 					'environments' => implode(',', $productEnvironments),
 					'access' => $attributes['Access'] ?? null,
 					'attributes' => json_encode($attributes),
-					'deleted_at' => isset($deletedProducts[$product['name']]) ? $deletedProducts[$product['name']] : null
 				]);
-
 				continue;
 			}
 
@@ -113,9 +115,15 @@ class SyncProducts extends Command
 			);
 
 			if (isset($attributes['Locations'])) {
-				$locations = $attributes['Locations'] !== 'all' ? explode(',', $attributes['Locations']) : $allCountries;
+				$locations = $attributes['Locations'] !== 'all' ? preg_split('/, ?/', $attributes['Locations']) : $allCountries;
 				$prod->countries()->sync($locations);
 			}
+		}
+
+		$this->info('Total products to be deleted: ' . count($productsToBeDeleted));
+
+		if (count($productsToBeDeleted) > 0) {
+			Product::whereIn('pid', array_keys($productsToBeDeleted))->delete();
 		}
 
 		if (empty($sandboxProductAttribute)) return;

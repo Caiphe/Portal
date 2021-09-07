@@ -7,32 +7,14 @@
 }
 
 #main {
-    padding: 0 !important;
     margin-bottom: 40px;
 
-    @media #{$small} {
-        margin-top: 80px;
-    }
-
-    #heading {
-        margin-bottom: 40px;
-
-        @media #{$small} {
-            background-color: transparent;
-            padding: 0 !important;
-            margin: 0;
-            position: static !important;
-        }
-    }
-
     .content {
-        margin-left: 40px;
-        margin-top: 100px;
         height: 100%;
         width: 100%;
         padding: 0 40px 0 0;
 
-        @media #{$small}{
+        @media #{$small} {
             margin: 0;
             padding: 0;
         }
@@ -97,11 +79,13 @@
             border: 2px solid $grey300;
             border-radius: 10px;
             margin-top: 20px;
-            padding: 40px;
 
-            @media #{$small} {
-                padding-left: 0;
-                padding-right: 0;
+            @media screen and (min-width: 768px) {
+                padding: 40px;
+            }
+
+            @media screen and (max-width: 768px) {
+                padding: 20px;
             }
 
             >div {
@@ -109,11 +93,6 @@
                 display: none;
                 flex-direction: column;
                 align-items: center;
-
-                @media #{$small} {
-                    padding-left: 30px;
-                    padding-right: 30px;
-                }
 
                 >svg {
                     display: flex;
@@ -179,20 +158,23 @@
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    justify-content: center;
+                    justify-content: flex-start;
                     border: 2px solid $grey400;
                     border-radius: 5px;
                     padding: 20px;
                     margin-right: 10px;
                     margin-bottom: 20px;
-                    width: 13%;
                     font-size: 14px;
                     text-align: center;
                     cursor: pointer;
                     position: relative;
 
-                    @media #{$small} {
-                        width: 28%;
+                    @media screen and (min-width: 768px) {
+                        width: 13%;
+                    }
+
+                    @media screen and (max-width: 768px) {
+                        width: calc(50% - 60px);
                     }
 
                     svg {
@@ -230,8 +212,13 @@
                 }
             }
 
-            .select-products {
+            .select-countries {
+                p {
+                    text-align: center;
+                }
+            }
 
+            .select-products {
                 p:nth-of-type(2) {
                     font-size: 10px;
                     text-transform: uppercase;
@@ -240,6 +227,7 @@
 
                 .filtered-countries {
                     display: flex;
+                    flex-wrap: wrap;
                     width: 100%;
                     margin-bottom: 40px;
                     justify-content: center;
@@ -248,6 +236,7 @@
                         display: inline-block;
                         width: 20px;
                         margin-right: 5px;
+                        margin-bottom: 5px;
                     }
                 }
 

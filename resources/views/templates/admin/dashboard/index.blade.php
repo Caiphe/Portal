@@ -88,9 +88,11 @@
             var buttons = document.querySelectorAll('.toggle-app');
             var actions = document.querySelectorAll('.actions');
             var modals = document.querySelectorAll('.modal');
-            var productStatusButtons = document.querySelectorAll('button[class*="product-"]');
+            var productStatusButtons = document.querySelectorAll('.product-status-action');
+            var productNotes = document.querySelectorAll('.product-notes');
             var kycStatus = document.querySelectorAll(".kyc-status-select");
             var appStatusUpdate = document.querySelectorAll('.app-status-update');
+            var logNotes = document.querySelectorAll('.log-notes');
 
             for (var j = 0; j < buttons.length; j ++) {
                 buttons[j].addEventListener('click', handleButtonClick);
@@ -108,12 +110,20 @@
                 productStatusButtons[m].addEventListener('click', getProductStatus)
             }
 
+            for(var m = 0; m < productNotes.length; m++) {
+                productNotes[m].addEventListener('click', viewNote)
+            }
+
             for (var i = kycStatus.length - 1; i >= 0; i--) {
                 kycStatus[i].addEventListener('change', handleKycUpdateStatus);
             }
 
             for (var i = appStatusUpdate.length - 1; i >= 0; i--) {
                 appStatusUpdate[i].addEventListener('click', updateAppStatus);
+            }
+
+            for (var i = logNotes.length - 1; i >= 0; i--) {
+                logNotes[i].addEventListener('click', viewNote);
             }
         }
 
@@ -186,8 +196,8 @@
             dialog.querySelector('.status-dialog-form').addEventListener('submit', function(ev){
                 ev.preventDefault();
                 document.getElementById('status-dialog').classList.remove('show');
-                document.querySelector('#status-dialog .status-dialog-textarea').value = '';
                 handleUpdateStatusNote(this, that);
+                document.querySelector('#status-dialog .status-dialog-textarea').value = '';
             }, {
               once: true
             });
@@ -289,6 +299,17 @@
 
             hideMenu();
             dialog.classList.add('show');
+        }
+
+        function viewNote(e) {
+            var id = this.dataset.id;
+            var noteDialog = document.getElementById(id + '-note-dialog');
+
+            e.preventDefault();
+
+            if(!noteDialog) return;
+
+            noteDialog.classList.add('show');
         }
 
         function strSlug(str) {

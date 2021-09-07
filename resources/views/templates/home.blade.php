@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    @production
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-EESWEBL5F7"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-EESWEBL5F7');
+        </script>
+    @endproduction
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MTN Developer Portal</title>
@@ -103,14 +113,12 @@
                    </div>
                </div>
            </div>
-
-
        </div>
     </section>
 
     <section id="section-browse-our-products">
         <div class="container flex">
-            <div class="comtainer-inner">
+            <div class="container-inner">
                 <div class="cols">
                     <div class="col col-6 col-image">
                         <div class="image-left">
@@ -133,8 +141,6 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
     </section>
 

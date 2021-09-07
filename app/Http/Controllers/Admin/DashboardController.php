@@ -18,10 +18,9 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $user->load(['responsibleCountries', 'responsibleGroups']);
+        $user->load(['responsibleCountries']);
         $isAdmin = $user->hasRole('admin');
         $responsibleCountriesCodes = $user->responsibleCountries->pluck('code')->toArray();
-        $responsibleGroups = $user->responsibleGroups->pluck('group')->toArray();
         $searchTerm = "%" . $request->get('q', '') . "%";
         $hasSearchTerm = $searchTerm !== '%%';
         $searchCountries = $request->get('countries');
@@ -41,17 +40,16 @@ class DashboardController extends Controller
             return view('templates.admin.dashboard.index', [
                 'apps' => App::where('country_code', 'none')->paginate(),
                 'countries' => Country::all(),
-                'selectedStatus' => $request->get('status', 'pending')
+                'selectedCountry' => $request->get('countries', ''),
+                'appStatus' => $request->get('app-status', 'pending'),
+                'productStatus' => $request->get('product-status', 'pending')
             ]);
         }
 
-        $apps = App::with(['developer', 'country', 'products'])
+        $apps = App::with(['developer', 'country', 'products.countries'])
             ->whereNotNull('country_code')
-            ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes, $responsibleGroups) {
-                $query->whereIn('country_code', $responsibleCountriesCodes)
-                    ->whereHas('products', function ($q) use ($responsibleGroups) {
-                        $q->whereIn('group', $responsibleGroups);
-                    });
+            ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes) {
+                $query->whereIn('country_code', $responsibleCountriesCodes);
             })
             ->when($hasSearchTerm, function ($q) use ($searchTerm) {
                 $q->where(function ($query) use ($searchTerm) {
@@ -121,7 +119,8 @@ class DashboardController extends Controller
     public function update(UpdateStatusRequest $request)
     {
         $validated = $request->validated();
-        $app = App::with('developer')->find($validated['app']);
+        $app = App::with(['developer', 'products'])->find($validated['app']);
+        $product = $app->products()->where('name', $validated['product'])->first();
         $currentUser = $request->user();
         $status = [
             'approve' => 'approved',
@@ -129,7 +128,9 @@ class DashboardController extends Controller
             'pending' => 'pending'
         ][$validated['action']] ?? 'pending';
 
-        $statusNote = $request->get('statusNote', '');
+        $statusNoteRequest = $request->get('statusNote', 'No note given.') ?: 'No note given';
+        $statusNote = $product->pivot->status_note ?? '';
+        $statusNote = date('d F Y') . "\n" . ucfirst($status) . " by {$currentUser->full_name}" . "\n\n{$statusNoteRequest}\n\n{$statusNote}";
 
         $credentials = ApigeeService::getAppCredentials($app);
         $credentials = $validated['for'] === 'staging' ? $credentials[0] : end($credentials);
@@ -139,8 +140,15 @@ class DashboardController extends Controller
         $response = ApigeeService::updateProductStatus($developerId, $app->name, $credentials['consumerKey'], $validated['product'], $validated['action']);
         $responseStatus = $response->status();
         if (preg_match('/^2/', $responseStatus)) {
-
-            $app->products()->updateExistingPivot($validated['product'], ['status' => $status, 'actioned_by' => $currentUser->id, 'actioned_at' => date('Y-m-d H:i:s'), 'status_note' => $statusNote]);
+            $app->products()->updateExistingPivot(
+                $validated['product'],
+                [
+                    'status' => $status,
+                    'actioned_by' => $currentUser->id,
+                    'actioned_at' => date('Y-m-d H:i:s'),
+                    'status_note' => $statusNote
+                ]
+            );
         } else if ($request->ajax()) {
             $body = json_decode($response->body());
             return response()->json(['success' => false, 'body' => $body->message], $responseStatus);
@@ -204,14 +212,16 @@ class DashboardController extends Controller
     public function updateAppStatus(App $app, Request $request)
     {
         $status = $request->get('status');
-        $statusNote = $request->get('status-note');
+        $statusNote = $request->get('status-note', 'No note given.') ?: 'No note given';
+        $currentUser = $request->user();
 
         $attr = $app->attributes;
         $attributes = [];
+        $timestamp = date('d F Y');
         if (isset($attr['Notes'])) {
-            $attr['Notes'] = $statusNote ?? $attr['Notes'];
+            $attr['Notes'] = $statusNote ? "{$timestamp}\n" . ucfirst($status) . " by {$currentUser->full_name}\n\n{$statusNote}\n\n{$attr['Notes']}" : $attr['Notes'];
         } else if (!empty($statusNote)) {
-            $attributes = [['name' => 'Notes', 'value' => $statusNote,]];
+            $attributes = [['name' => 'Notes', 'value' => "{$timestamp}\n" . ucfirst($status) . " by {$currentUser->full_name}\n\n$statusNote",]];
         }
 
         foreach ($attr as $name => $value) {

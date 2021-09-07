@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', $product->display_name)
+@section('body-class', 'product-edit')
 
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/admin/edit.css') }}">
@@ -9,7 +10,7 @@
 @endpush
 
 @section('page-info')
-    <a href="#overview" class="button outline dark ml-1">OVERVIEW</a>
+    <a href="#overview" class="button outline dark">OVERVIEW</a>
     <a href="#docs" class="button outline dark ml-1">DOCS</a>
     <a href="#custom-tabs" class="button outline dark ml-1">CUSTOM TABS</a>
     <a href="{{ route('product.show', $product->slug) }}" target="_blank" rel="noreferrer" class="button outline dark ml-1">VIEW</a>
@@ -42,7 +43,7 @@
 
     <div class="editor-field">
         <h2>Display name</h2>
-        <input type="text" name="display_name" value="{{ $product->display_name }}">
+        <input type="text" name="display_name" value="{{ $product->display_name }}" maxlength="140">
     </div>
 
     <div class="editor-field">
@@ -89,8 +90,8 @@
         @endif
         <div class="old-tab mt-3">
             <button class="dark outline mt-1" onclick="removeTab(this)">Remove</button>
-            <input type="text" name="content[{{ $c[0]['slug'] }}][title]" value="{{ $c[0]['title'] }}">
-            <input id="{{ $c[0]['slug'] }}" type="hidden" name="content[{{ $c[0]['slug'] }}][body]" value="{{ $c[0]['body'] ?? '' }}">
+            <input class="custom-tab-title" type="text" name="tab[title][]" value="{{ $c[0]['title'] }}">
+            <input class="custom-tab-content" id="{{ $c[0]['slug'] }}" type="hidden" name="tab[body][]" value="{{ $c[0]['body'] ?? '' }}">
             <trix-editor input="{{ $c[0]['slug'] }}"></trix-editor>
         </div>
         @endforeach
@@ -99,8 +100,8 @@
         @endphp
         <div class="new-tab mt-3">
             <button class="dark outline" onclick="removeTab(this)">Remove</button>
-            <input type="text" name="tab[title][]" placeholder="Title">
-            <input id="{{ $randId }}" type="hidden" name="tab[body][]">
+            <input class="custom-tab-title" type="text" name="tab[title][]" placeholder="Title">
+            <input class="custom-tab-content" id="{{ $randId }}" type="hidden" name="tab[body][]">
             <trix-editor input="{{ $randId }}"></trix-editor>
         </div>
     </div>

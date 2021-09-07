@@ -9,10 +9,6 @@
     @media screen and (min-width: 768px) {
         padding: 0 40px;
     }
-
-    @media screen and (max-width: 768px) {
-        padding: 0 20px;
-    }
 }
 
 .container-inner {
@@ -249,4 +245,13 @@
             color: $redDark;
         }
     }
+}
+
+.constrained {
+    max-width: 1200px;
+}
+
+.auto-x {
+    margin-left: auto;
+    margin-right: auto;
 }

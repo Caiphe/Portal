@@ -41,32 +41,17 @@
                     </x-accordion>
                 @endforeach
             </div>
-
-            <div class="faq-categories">
-                <span>Categories</span>
-                <ul>
-                    @foreach ($categories as $category)
-                        @if(!$category->faqs->isEmpty())
-                            <li>
-                                <a href="#{!! $category->slug  !!}">{!! $category->title !!}</a>
-                            </li>
-                        @endif
-                    @endforeach
-                </ul>
-            </div>
         </div>
     </section>
 
 	<section class="contact">
         <div class="container">
-            <h1>
-                Need more help? Get in touch
-            </h1>
 
             <form action="{{ route('contact.send') }}" method="POST" id="faq-contact-form">
                 @csrf
-
                 <x-panel>
+                    <h2>Need more help? Get in touch</h2>
+
                     <label for="categories"></label>
                     <select name="categories" id="categories">
                         <option value="Advertising">
