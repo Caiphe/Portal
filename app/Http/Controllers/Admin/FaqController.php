@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Category;
 use App\Faq;
-use App\Http\Controllers\Controller;
+use App\Category;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\FaqRequest;
 
 class FaqController extends Controller
 {
@@ -44,7 +45,7 @@ class FaqController extends Controller
         ]);
     }
 
-    public function update(Faq $faq, Request $request)
+    public function update(Faq $faq, FaqRequest $request)
     {
         $faq->update($request->only(['question', 'answer', 'category_cid']));
 
@@ -58,7 +59,7 @@ class FaqController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(FaqRequest $request)
     {
         Faq::create($request->only(['question', 'answer', 'category_cid']));
 
