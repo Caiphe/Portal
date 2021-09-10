@@ -15,7 +15,6 @@ use App\Mail\UpdateApp;
 use App\Services\ApigeeService;
 use App\Services\Kyc\KycService;
 use App\Services\ProductLocationService;
-use App\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 
@@ -140,13 +139,13 @@ class AppController extends Controller
     {
         $products = Product::with('category')
             ->where('category_cid', '!=', 'misc')
-            ->where(fn ($q) => $q->basedOnUser(User::find(4))->orWhereIn('pid', $app->products->pluck('pid')->toArray()))
-            ->get()
-            ->sortBy('category.title')
-            ->groupBy('category.title');
+            ->where(fn ($q) => $q->basedOnUser(auth()->user())->orWhereIn('pid', $app->products->pluck('pid')->toArray()))
+            ->get();
 
         $countryCodes = $products->pluck('locations')->implode(',');
         $countries = Country::whereIn('code', explode(',', $countryCodes))->pluck('name', 'code');
+
+        $products = $products->sortBy('category.title')->groupBy('category.title');
 
         $app->load('products', 'country');
         $credentials = $app->credentials;
