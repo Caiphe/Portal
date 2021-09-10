@@ -129,25 +129,18 @@ class RegisterController extends Controller
 	 */
 	protected function create(array $data)
 	{
-		$imageName = base64_encode('jsklaf88sfjdsfjl' . $data['email']) . '.svg';
 		$user = User::create([
 			'first_name' => $data['first_name'],
 			'last_name' => $data['last_name'],
 			'email' => $data['email'],
 			'developer_id' => $data['developer_id'],
 			'password' => Hash::make($data['password']),
-			'profile_picture' => '/storage/profile/' . $imageName,
+			'profile_picture' => '/storage/profile/profile-' . rand(1, 32) . '.svg',
 		]);
 
 		if (isset($data['locations'])) {
 			$user->countries()->sync($data['locations']);
 		}
-
-		$imagePath = 'public/profile/' . $imageName;
-		if (\Storage::exists($imagePath)) {
-			\Storage::delete($imagePath);
-		}
-		\Storage::copy('public/profile/profile-' . rand(1, 32) . '.svg', $imagePath);
 
 		return $user;
 	}

@@ -15,6 +15,7 @@ use App\Mail\UpdateApp;
 use App\Services\ApigeeService;
 use App\Services\Kyc\KycService;
 use App\Services\ProductLocationService;
+use App\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 
@@ -135,9 +136,17 @@ class AppController extends Controller
         return redirect(route('app.index'));
     }
 
-    public function edit(ProductLocationService $productLocationService, App $app)
+    public function edit(App $app)
     {
-        [$products, $countries] = $productLocationService->fetch();
+        $products = Product::with('category')
+            ->where('category_cid', '!=', 'misc')
+            ->where(fn ($q) => $q->basedOnUser(User::find(4))->orWhereIn('pid', $app->products->pluck('pid')->toArray()))
+            ->get()
+            ->sortBy('category.title')
+            ->groupBy('category.title');
+
+        $countryCodes = $products->pluck('locations')->implode(',');
+        $countries = Country::whereIn('code', explode(',', $countryCodes))->pluck('name', 'code');
 
         $app->load('products', 'country');
         $credentials = $app->credentials;
