@@ -29,6 +29,23 @@
     <x-heading heading="My teams" tags="Dashboard">
         <a href="{{ route('teams.create') }}" class="button dark outline">Creare New</a>
     </x-heading>
+
+    <div class="modal-container">
+        {{-- leave the copany pop up --}}
+        <div class="overlay-container"></div>
+        <div class="add-teammate-block">
+            <button class="close-modal">@svg('close', '#000')</button>
+    
+            <h2 class="team-head">Leave team</h2>
+            <p class="teammate-text">Are you sure you want to leave this company?</p>
+            <p class="app-name">Plusnarrative</p>
+            <form class="form-team">
+                <button type="button" class="btn primary mr-10 cancel-btn">CANCEL</button>
+                <button type="" class="btn dark">LEAVE</button>
+            </form>
+        </div>
+    </div>
+
     
     <div class="team-block-container">
         <div class="mt-2">
@@ -51,7 +68,7 @@
                             <td>2 of 5</td>
                             <td>7</td>
                             <td>
-                                <a href="" class="button red-button">LEAVE</a>
+                                <button type="button" class="button red-button leave-team" data-teamname="{{ $team->name }}">LEAVE</button>
                             </td>
                         </tr>
                     @endforeach
@@ -62,7 +79,27 @@
 @endsection
 
 @push('scripts')
-    <script>
+    <script type="text/javascript">
+        var clodeModal = document.querySelector('.close-modal');
+        var modalContainer = document.querySelector('.modal-container');
+        var leaveTeamBtn = document.querySelectorAll('.leave-team');
+        var overlayContainer = document.querySelector('.overlay-container');
+        var cancelBtn = document.querySelector('.cancel-btn');
 
+        for (var i = 0; i < leaveTeamBtn.length; i++){
+            leaveTeamBtn[i].addEventListener('click', function(){
+                modalContainer.classList.add('show');
+                var teamName  = this.getAttribute("data-teamname");
+                console.log(teamName);
+            });
+        }
+
+        clodeModal.addEventListener('click', hideModal);
+        cancelBtn.addEventListener('click', hideModal)
+        overlayContainer.addEventListener('click', hideModal)
+
+        function hideModal(){
+            modalContainer.classList.remove('show');
+        }
     </script>
 @endpush

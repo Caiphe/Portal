@@ -81,6 +81,7 @@ button{
         right: 0;
         bottom: 0;
         background-color: rgba(0, 0, 0, 0.616);
+        cursor: pointer;
     }
 
     .add-teammate-block{
@@ -118,9 +119,29 @@ button{
             position: relative;
         }
 
+        .app-name{
+            text-align: center;
+            text-decoration: underline;
+            font-size: 15px;
+        }
+
         .form-teammate{
             width: 270px;
             margin: 0px auto;
+        }
+
+        .mr-10{
+            margin-right: 10px;
+        }
+
+        .form-team{
+            width: 280px;
+            margin: 10px auto;
+            text-align: center;
+
+            button{
+                width: 130px;
+            }
         }
 
         .radio-container{

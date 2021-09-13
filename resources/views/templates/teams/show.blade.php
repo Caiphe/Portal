@@ -233,6 +233,8 @@ Teams
     var modalContainer = document.querySelector('.modal-container');
     var addTeammateBtn = document.querySelector('.add-team-mate-btn');
     var addTeamMobile = document.querySelector('.add-team-mate-btn-mobile');
+    var overlayContainer = document.querySelector('.overlay-container');
+
 
     addTeammateBtn.addEventListener('click', function(){
         modalContainer.classList.add('show');
@@ -240,12 +242,15 @@ Teams
 
     addTeamMobile.addEventListener('click', function(){
         modalContainer.classList.add('show');
-        console.log("Hello there");
     });
 
     clodeModal.addEventListener('click', function(){
         modalContainer.classList.remove('show');
     });
+
+    overlayContainer.addEventListener('click', function(){
+        modalContainer.classList.remove('show');
+    })
 
 </script>
 @endpush
