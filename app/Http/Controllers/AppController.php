@@ -135,9 +135,17 @@ class AppController extends Controller
         return redirect(route('app.index'));
     }
 
-    public function edit(ProductLocationService $productLocationService, App $app)
+    public function edit(App $app)
     {
-        [$products, $countries] = $productLocationService->fetch();
+        $products = Product::with('category')
+            ->where('category_cid', '!=', 'misc')
+            ->where(fn ($q) => $q->basedOnUser(auth()->user())->orWhereIn('pid', $app->products->pluck('pid')->toArray()))
+            ->get();
+
+        $countryCodes = $products->pluck('locations')->implode(',');
+        $countries = Country::whereIn('code', explode(',', $countryCodes))->pluck('name', 'code');
+
+        $products = $products->sortBy('category.title')->groupBy('category.title');
 
         $app->load('products', 'country');
         $credentials = $app->credentials;
