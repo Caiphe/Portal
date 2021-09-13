@@ -109,7 +109,7 @@
             errors['email'].push('Please add your email');
         }
 
-        if (!/\w@\w/.test(email)) {
+        if (!/\w@\w*\.\w/.test(email)) {
             hasErrors = true;
             errors['email'].push('Please check your email is valid');
         }
