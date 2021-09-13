@@ -208,7 +208,7 @@
                 _method: 'DELETE'
             };
 
-            var url = '/apps/' + app.dataset.name;
+            var url = '/apps/' + '{{ auth()->user()->developer_id }}' + '/' + app.dataset.name;
             var xhr = new XMLHttpRequest();
 
             if(!confirm('Are you sure you want to delete this app?')) {
