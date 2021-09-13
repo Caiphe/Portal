@@ -135,7 +135,7 @@ class AppController extends Controller
         return redirect(route('app.index'));
     }
 
-    public function edit(App $app)
+    public function edit($developerId, App $app)
     {
         $products = Product::with('category')
             ->where('category_cid', '!=', 'misc')
@@ -163,7 +163,7 @@ class AppController extends Controller
         ]);
     }
 
-    public function update(App $app, CreateAppRequest $request)
+    public function update($developerId, App $app, CreateAppRequest $request)
     {
         $validated = $request->validated();
         $app->load('products');
@@ -260,7 +260,7 @@ class AppController extends Controller
         return redirect(route('app.index'));
     }
 
-    public function destroy(App $app, DeleteAppRequest $request)
+    public function destroy($developerId, App $app, DeleteAppRequest $request)
     {
         $validated = $request->validated();
 
