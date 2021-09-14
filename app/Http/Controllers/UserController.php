@@ -20,7 +20,12 @@ class UserController extends Controller
 		$user = $request->user();
 		$user->load('countries');
 
-		$key = $user['2fa'] ?? TwofaService::getSecretKey();
+		$key = $request->session()->get('2fa');
+		if (is_null($key)) {
+			$key = $user['2fa'] ?? TwofaService::getSecretKey();
+
+			$request->session()->put('2fa', $key);
+		}
 		$inlineUrl = TwofaService::getInlineUrl($key, $user->email);
 
 		$productLocations = Product::isPublic()
@@ -148,9 +153,13 @@ class UserController extends Controller
 				return redirect(URL()->previous())->with('alert', "Error:Your one time password didn't match;Please try again.");
 			}
 
-			$request->user()->update([
-				'2fa' => $request->one_time_key
-			]);
+			$user = $request->user();
+
+			if (is_null($user['2fa'])) {
+				$user->update([
+					'2fa' => $request->one_time_key
+				]);
+			}
 
 			Google2FA::login();
 

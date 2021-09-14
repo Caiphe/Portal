@@ -15,6 +15,7 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "intervention/image": "^2.5",
         "laravel/framework": "^8.0",
+        "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
         "pragmarx/google2fa-laravel": "^1.3",

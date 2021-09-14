@@ -1,5 +1,11 @@
 document.getElementById('profile-picture').addEventListener('change', chooseProfilePicture);
 
+ajax('/api/recovery-codes', 'get', null, userResponse);
+
+function userResponse(resp) {
+    console.log(resp);
+}
+
 function chooseProfilePicture() {
     var files = this.files;
     var inputAccepts = this.getAttribute("accept");
@@ -16,17 +22,17 @@ function chooseProfilePicture() {
     }
 
     if (allowedTypes[inputAccepts] !== undefined && allowedTypes[inputAccepts].indexOf(files[0].type) !== -1) {
-    changeProfilePicture(files[0]);
-    uploadProfilePicture(files[0]);
+        changeProfilePicture(files[0]);
+        uploadProfilePicture(files[0]);
     } else {
-    addAlert("error", "The type of image you have chosen isn't supported. Please choose a jpg or png to upload");
+        addAlert("error", "The type of image you have chosen isn't supported. Please choose a jpg or png to upload");
     }
 }
 
 function changeProfilePicture(file) {
     var reader = new FileReader();
 
-    reader.onload = function(e) {
+    reader.onload = function (e) {
         document.getElementById('profile-picture-label').style.backgroundImage = "url(" + e.target.result + ")";
         document.getElementById('profile-menu-picture').style.backgroundImage = "url(" + e.target.result + ")";
     }
@@ -37,7 +43,7 @@ function changeProfilePicture(file) {
 function uploadProfilePicture(file) {
     var xhr = new XMLHttpRequest();
 
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
             var message = [];
@@ -49,7 +55,7 @@ function uploadProfilePicture(file) {
                 } else {
                     message = [result.message || 'There was an error uploading your profile picture.'];
                 }
-                
+
                 addAlert('error', message);
             }
         }
@@ -73,7 +79,7 @@ function togglePasswordVisibility(that) {
     that.previousElementSibling.setAttribute('type', that.parentNode.classList.contains('password-visible') ? "text" : "password");
 }
 
-(function() {
+(function () {
     var passwordScore = 0;
 
     document.getElementById('password').addEventListener('input', checkPassword);
