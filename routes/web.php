@@ -24,11 +24,11 @@ Route::get('search', 'SearchController')->name('search');
 Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 	Route::get('apps', 'AppController@index')->name('app.index');
 	Route::get('apps/create', 'AppController@create')->name('app.create');
-	Route::get('apps/{user:developer_id}/{app:slug}/edit', 'AppController@edit')->middleware('can:access-own-app,app')->name('app.edit');
+	Route::get('apps/{app:slug}/edit', 'AppController@edit')->name('app.edit');
 	Route::post('apps', 'AppController@store')->name('app.store');
 
-	Route::put('apps/{user:developer_id}/{app:slug}', 'AppController@update')->middleware('can:access-own-app,app')->name('app.update');
-	Route::delete('apps/{user:developer_id}/{app:slug}', 'AppController@destroy')->middleware('can:access-own-app,app')->name('app.destroy');
+	Route::put('apps/{app:slug}', 'AppController@update')->name('app.update');
+	Route::delete('apps/{app:slug}', 'AppController@destroy')->name('app.destroy');
 
 	Route::get('apps/{app:aid}/credentials/{type}', 'AppController@getCredentials')->middleware('can:access-own-app,app')->name('app.credentials');
 	Route::post('apps/{app:aid}/go-live', 'AppController@goLive')->middleware('can:access-own-app,app')->name('app.go-live');

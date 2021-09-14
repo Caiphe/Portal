@@ -135,8 +135,9 @@ class AppController extends Controller
         return redirect(route('app.index'));
     }
 
-    public function edit($developerId, App $app)
+    public function edit($app)
     {
+        $app = App::where('slug', $app)->where('developer_id', auth()->user()->developer_id)->firstOrFail();
         $products = Product::with('category')
             ->where('category_cid', '!=', 'misc')
             ->where(fn ($q) => $q->basedOnUser(auth()->user())->orWhereIn('pid', $app->products->pluck('pid')->toArray()))
@@ -163,8 +164,9 @@ class AppController extends Controller
         ]);
     }
 
-    public function update($developerId, App $app, CreateAppRequest $request)
+    public function update($app, CreateAppRequest $request)
     {
+        $app = App::where('slug', $app)->where('developer_id', $request->user()->developer_id)->firstOrFail();
         $validated = $request->validated();
         $app->load('products');
         $credentials = $app->credentials;
@@ -260,11 +262,12 @@ class AppController extends Controller
         return redirect(route('app.index'));
     }
 
-    public function destroy($developerId, App $app, DeleteAppRequest $request)
+    public function destroy($app, DeleteAppRequest $request)
     {
+        $user = $request->user();
+        $app = App::where('slug', $app)->where('developer_id', $user->developer_id)->firstOrFail();
         $validated = $request->validated();
 
-        $user = \Auth::user();
         ApigeeService::delete("developers/{$user->email}/apps/{$validated['name']}");
 
         $app->delete();

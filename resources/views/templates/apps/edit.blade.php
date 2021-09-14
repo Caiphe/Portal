@@ -323,9 +323,10 @@
                 _method: 'PUT'
             };
             var button = document.getElementById('update');
-            var url = "{{ route('app.update', ['user' => $data->developer_id, 'app' => $data]) }}";
+            var url = "{{ route('app.update', $data) }}";
             var xhr = new XMLHttpRequest();
             var selectedProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
+            console.log(url);
 
             event.preventDefault();
 
