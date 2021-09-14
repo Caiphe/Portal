@@ -136,11 +136,15 @@ button{
 
         .form-team{
             width: 280px;
-            margin: 10px auto;
+            margin: 25px auto 0px;
             text-align: center;
 
             button{
                 width: 130px;
+
+                @media(max-width: 768px){
+                    width: 90px;
+                }
             }
         }
 
@@ -571,4 +575,8 @@ button{
     @media(max-width:768px){
         width: 800px;
     }
+}
+
+.mt-40{
+    margin-top: 40px;
 }

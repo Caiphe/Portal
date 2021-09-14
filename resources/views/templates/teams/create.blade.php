@@ -35,12 +35,13 @@
 
     <div class="content">
 
-        <div class="content-header">
+        <div class="content-header mt-40">
             @if($userOwnsTeam === false)
                 <h2>It looks like you don't have any teams yet!</h2>
             @elseif($hasTeams && $isCompanyTeam)
                 <h2>Create a New Team!</h2>
             @endif
+            <h2>It looks like you don't have any teams yet!</h2>
             <p>Fortunately, it's very easy to create one. Let's begin by filling out your teams details.</p>
         </div>
 
@@ -108,7 +109,7 @@
             </div>
 
             <div class="form-actions">
-                <button class="dark next" id="create">
+                <button class="dark next " id="create">
                     CREATE TEAM @svg('arrow-forward', '#ffffff')
                 </button>
             </div>
