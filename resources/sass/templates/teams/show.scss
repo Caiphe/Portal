@@ -56,6 +56,8 @@ button{
     white-space: nowrap;
 }
 
+.make-user-modal-container,
+.make-admin-modal-container,
 .delete-modal-container,
 .modal-container{
     position: fixed;
@@ -75,6 +77,8 @@ button{
         transition: all .3s ease-in-out;
     }
 
+    .user-overlay-container,
+    .admin-overlay-container,
     .delete-overlay-container,
     .overlay-container{
         position: fixed;
@@ -86,17 +90,29 @@ button{
         cursor: pointer;
     }
 
+    .scrollable-users-container{
+        height: 173px;
+        width: 85%;
+        position: relative;
+        overflow-y: auto;
+        overflow-x: hidden;
+        margin: 0px auto;
+    }
+
     .list-users-container{
         position: relative;
         padding: 0px;
         box-sizing: border-box;
-        width: 80%;
+        width: 93%;
         margin: 0px auto;
 
         .each-user{
             position: relative;
             list-style: none;
             display: flex;
+            padding-left: 12px !important;
+            box-sizing: border-box;
+            margin-bottom: 4px;
 
             &:nth-child(even){
                 background-color: #F3F3F3;
@@ -116,6 +132,66 @@ button{
             .user-full-name{
                 margin-top: 5px;
                 font-weight: bold;
+            }
+
+            .check-container{
+                position: absolute;
+                right: 15px;
+                top: 13px;
+                width: 20px;
+
+                .container {
+                    display: block;
+                    position: relative;
+                    padding-left: 35px;
+                    margin-bottom: 12px;
+                    cursor: pointer;
+                    font-size: 22px;
+                    user-select: none;
+
+                    input{
+                        position: absolute;
+                        opacity: 0;
+                        cursor: pointer;
+                        height: 0;
+                        width: 0;
+                    }
+                  }
+                                    
+                  .checkmark {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 18px;
+                    height: 18px;
+                    background-color: #fff;
+                    border-radius: 3px;
+                    border: solid 2px #000;
+                  }
+
+                  .container input:checked ~ .checkmark {
+                    background-color: #000000;
+                  }
+                  
+                  .checkmark:after {
+                    content: "";
+                    position: absolute;
+                    display: none;
+                  }
+                  
+                  .container input:checked ~ .checkmark:after {
+                    display: block;
+                  }
+                  
+                  .container .checkmark:after {
+                    left: 6px;
+                    top: 1px;
+                    width: 5px;
+                    height: 10px;
+                    border: solid white;
+                    border-width: 0 2px 2px 0;
+                    transform: rotate(45deg);
+                }
             }
         }
     }
@@ -141,7 +217,9 @@ button{
             width: 90%;
         }
 
+        .user-close-modal,
         .confirm-delete-close-modal,
+        .admin-close-modal,
         .delete-close-modal,
         .close-modal{
             background-color: transparent;
@@ -167,6 +245,10 @@ button{
         .team-head{
             text-align: center;
             margin-top: 60px;
+
+            &.custom-head{
+                margin-top: 40px;
+            }
         }
 
         .teammate-text{
@@ -176,6 +258,14 @@ button{
             position: relative;
         }
 
+        .remove-user-text{
+            text-align: center;
+            width: 300px;
+            margin: 15px auto;
+            position: relative;
+        }
+
+        .admin-user-name,
         .user-name,
         .app-name{
             text-align: center;
@@ -237,12 +327,12 @@ button{
 
     .confirm-delete-block{
         height: 460px;
-        // display: none;
-        // pointer-events: none;
+        display: none;
+        pointer-events: none;
 
         &.show{
             display: block;
-            pointer-events: auto
+            pointer-events: auto;
         }
     }
 }
@@ -689,7 +779,7 @@ button{
         position: absolute;
         background-color: #fff;
         border-radius: 10px;
-        border: solid 1px #cdcdcd;
+        // border: solid 1px #cdcdcd;
         z-index: 2;
         top: 37px;
         right: 11px;
@@ -698,6 +788,7 @@ button{
         opacity: 0;
         pointer-events: none;
         transition: all 0.3s ease;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12), 0 3px 6px rgba(0, 0, 0, 0.16);
 
         &.show{
             opacity: 3;
