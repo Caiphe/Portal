@@ -54,22 +54,45 @@ Teams
 {{-- Edit team mate ends --}}
 
 {{-- Delete User Modal --}}
-<div class="delete-modal-container">
+<div class="delete-modal-container show">
     <div class="delete-overlay-container"></div>
-    <div class="add-teammate-block">
+    {{-- Form to confirm the users removal --}}
 
+    <div class="delete-user-block" style="display: none">
         <button class="delete-close-modal">@svg('close', '#000')</button>
 
         <h2 class="team-head">Remove User</h2>
         <p class="teammate-text">Are you sure you want to remove this user?</p>
         <p class="user-name">Xoliswa Shandu</p>
 
-        {{-- Form to confirm the users removal --}}
         <form class="form-delete-user">
-            <button type="button" class="btn primary mr-10">CANCEL</button>
-            <button type="submit" class="btn dark">REMOVE</button>
+            <button type="button" class="btn primary mr-10 cancel-remove-user-btn">CANCEL</button>
+            <button type="button" class="btn dark confirm-delete-btn">REMOVE</button>
         </form>
     </div>
+
+    {{-- This show up if you are the owner so you should assign a different owner --}}
+    <div class="confirm-delete-block">
+        <button class="confirm-delete-close-modal">@svg('close', '#000')</button>
+        <h2 class="team-head">Warning</h2>
+        <p class="teammate-text">
+            <span class="user-name">Xoliswa Shandu</span> You are the owner/creator of this team profile. To be able to delete this account, please assign ownership to another user
+        </p>
+        <ul class="list-users-container">
+            <li class="each-user">
+                <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
+                <div class="user-full-name">Xoliswa Shandu</div>
+                <div class="check-container"></div>
+            </li>
+            <li class="each-user">
+                <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
+                <div class="user-full-name">Byron Dunwoody</div>
+                <div class="check-container"></div>
+            </li>
+        </ul>
+
+    </div>
+
 </div>
 {{-- Delete User Ends --}}
 
@@ -275,6 +298,10 @@ Teams
     var addTeammateBtn = document.querySelector('.add-team-mate-btn');
     var addTeamMobile = document.querySelector('.add-team-mate-btn-mobile');
     var overlayContainer = document.querySelector('.overlay-container');
+    var deleteOverlayContainer = document.querySelector('.delete-overlay-container');
+    var cancelRemoveUserBtn = document.querySelector('.cancel-remove-user-btn');
+
+
 
     for(var i = 0; i < btnActions.length; i++) {
         btnActions[i].addEventListener('click', showUserAction)
@@ -309,9 +336,23 @@ Teams
         deleteModalContainer.classList.add('show');
     });
 
-    deleteClodeModal.addEventListener(click, function(){
+    deleteClodeModal.addEventListener('click',hideDeleteUserModal);
+    deleteOverlayContainer.addEventListener('click', hideDeleteUserModal);
+    cancelRemoveUserBtn.addEventListener('click', hideDeleteUserModal);
+
+    // Switching between delete user and confirm delete user block on the modal
+    var deleteUseBlock = document.querySelector('.delete-user-block');
+    var confirmDeleteBtn = document.querySelector('.confirm-delete-btn');
+    var confirmDeleteBlock = document.querySelector('.confirm-delete-block');
+
+    confirmDeleteBtn.addEventListener('click', function(){
+        deleteUseBlock.classList.add('hide');
+        confirmDeleteBlock.classList.add('show');
+    });
+
+    function hideDeleteUserModal(){
         deleteModalContainer.classList.remove('show');
-    })
+    }
 
     var headings = document.querySelectorAll('.heading-app');
     for (var i = 0; i < headings.length; i++) {

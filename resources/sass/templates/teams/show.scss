@@ -86,6 +86,42 @@ button{
         cursor: pointer;
     }
 
+    .list-users-container{
+        position: relative;
+        padding: 0px;
+        box-sizing: border-box;
+        width: 80%;
+        margin: 0px auto;
+
+        .each-user{
+            position: relative;
+            list-style: none;
+            display: flex;
+
+            &:nth-child(even){
+                background-color: #F3F3F3;
+            }
+
+            .users-thumbnail{
+                width: 34px;
+                height: 34px;
+                border-radius: 50%;
+                background-color: $yellow;
+                margin-right: 15px;
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: center center;
+            }
+
+            .user-full-name{
+                margin-top: 5px;
+                font-weight: bold;
+            }
+        }
+    }
+
+    .confirm-delete-block,
+    .delete-user-block,
     .add-teammate-block{
         width: 420px;
         height: 290px;
@@ -95,11 +131,17 @@ button{
         transform: translate(-50%, -50%);
         background-color: #fff;
         border-radius: 14px;
+        display: block;
+
+        &.hide{
+            display: none;
+        }
 
         @media(max-width: 768px){
             width: 90%;
         }
 
+        .confirm-delete-close-modal,
         .delete-close-modal,
         .close-modal{
             background-color: transparent;
@@ -108,6 +150,18 @@ button{
             border: none;
             right: 5px;
             top: 5px;
+
+            svg{
+                transform: rotate(90deg);
+                transition: all 0.3s ease;
+            }
+
+            &:hover{
+                svg{
+                    transform: rotate(90deg);
+                    transition: all 0.3s ease;
+                }
+            }
         }
 
         .team-head{
@@ -178,6 +232,17 @@ button{
                 border-radius: 0px 5px 5px 0px;
                 margin-left: -4px;
             }
+        }
+    }
+
+    .confirm-delete-block{
+        height: 460px;
+        // display: none;
+        // pointer-events: none;
+
+        &.show{
+            display: block;
+            pointer-events: auto
         }
     }
 }
