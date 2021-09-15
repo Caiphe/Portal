@@ -56,6 +56,7 @@ button{
     white-space: nowrap;
 }
 
+.delete-modal-container,
 .modal-container{
     position: fixed;
     left: 0;
@@ -69,11 +70,12 @@ button{
 
     &.show{
         opacity: 1;
-        z-index: 4;
+        z-index: 5;
         pointer-events: auto;
         transition: all .3s ease-in-out;
     }
 
+    .delete-overlay-container,
     .overlay-container{
         position: fixed;
         left: 0;
@@ -98,6 +100,7 @@ button{
             width: 90%;
         }
 
+        .delete-close-modal,
         .close-modal{
             background-color: transparent;
             position: absolute;
@@ -119,6 +122,7 @@ button{
             position: relative;
         }
 
+        .user-name,
         .app-name{
             text-align: center;
             text-decoration: underline;
@@ -134,6 +138,7 @@ button{
             margin-right: 10px;
         }
 
+        .form-delete-user,
         .form-team{
             width: 280px;
             margin: 25px auto 0px;
@@ -574,6 +579,89 @@ button{
 
     @media(max-width:768px){
         width: 800px;
+    }
+}
+
+.block-hide-menu{
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 0;
+    opacity: 0;
+    background-color: transparent;
+    pointer-events: none;
+
+    &.show{
+        z-index: 3;
+        opacity: 3;
+        pointer-events: auto;
+    }
+}
+
+.team-members{
+    .column-container{
+        position: relative;
+    }
+
+    .btn-actions {
+        background: url('../images/icons/more-vert.svg') no-repeat transparent center / 24px;
+        border: none;
+        display: inline-block;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        padding: 0;
+        background-color: transparent;
+        position: absolute;
+        right: 20px;
+        top: 17px;
+    }
+
+    .block-actions{
+        width: 170px;
+        position: absolute;
+        background-color: #fff;
+        border-radius: 10px;
+        border: solid 1px #cdcdcd;
+        z-index: 2;
+        top: 37px;
+        right: 11px;
+        padding: 7px 13px;
+        box-sizing: border-box;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s ease;
+
+        &.show{
+            opacity: 3;
+            z-index: 4;
+            pointer-events: auto;
+            transition: all 0.3s ease;
+        }
+
+        ul{
+            padding: 0px;
+            margin: 0;
+
+            li{
+                list-style: none;
+                padding: 4px 0;
+
+                button{
+                    background-color: transparent;
+                    padding: 0px;
+                    margin: 0;
+                    border: none;
+                    height: 1px;
+                }
+
+                .user-delete{
+                    color: #FF4380;
+                }
+            }
+        }
     }
 }
 

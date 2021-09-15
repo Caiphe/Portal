@@ -53,6 +53,26 @@ Teams
 </div>
 {{-- Edit team mate ends --}}
 
+{{-- Delete User Modal --}}
+<div class="delete-modal-container">
+    <div class="delete-overlay-container"></div>
+    <div class="add-teammate-block">
+
+        <button class="delete-close-modal">@svg('close', '#000')</button>
+
+        <h2 class="team-head">Remove User</h2>
+        <p class="teammate-text">Are you sure you want to remove this user?</p>
+        <p class="user-name">Xoliswa Shandu</p>
+
+        {{-- Form to confirm the users removal --}}
+        <form class="form-delete-user">
+            <button type="button" class="btn primary mr-10">CANCEL</button>
+            <button type="submit" class="btn dark">REMOVE</button>
+        </form>
+    </div>
+</div>
+{{-- Delete User Ends --}}
+
 <div class="header-block team-name-logo">
     {{-- To replace with the company logo --}}
    <div class="team-logo" style="background-image: url('/images/user-thumbnail.jpg')"></div> <h2>
@@ -107,7 +127,22 @@ Teams
                         @endif
                     </td>
                     <td>{{ $teamUser->roles()->first()->name  === 'admin' ? 'Administrator' : ucfirst($teamUser->roles()->first()->name) }}</td>
-                    <td>{{ $teamUser->twoFactorStatus() }}</td>
+                    <td class="column-container">{{ $teamUser->twoFactorStatus() }}
+                        <button class="btn-actions"></button>
+
+                        {{-- user action menu --}}
+                        <div class="block-actions">
+                            <ul>
+                                <li><button class="make-admin">Make administrator</button></li>
+                                <li><button class="make-user">Make User</button></li>
+                                <li><button class="make-owner">Make Owner</button></li>
+                                <li><button class="user-delete">Delete</button></li>
+                            </ul>
+                        </div>
+                        {{-- Block end --}}
+
+                        <div class="block-hide-menu"></div> 
+                    </td>
                 </tr>
             @endforeach
 
@@ -125,43 +160,43 @@ Teams
                     <h3>Approved Apps</h3>
                 </div>
 
-                <div class="my-apps my-app-details">
+                <div class="updated-app">
                     <div class="head headings-container">
                         <div class="column-heading">
-                            <h4 class="app-heading">App Name @svg('arrow-down' ,'#cdcdcd')</h4>
+                            <p>App Name @svg('arrow-down' ,'#cdcdcd')</p>
                         </div>
 
                         <div class="column-heading">
-                            <h4 class="app-heading">Callback URL @svg('arrow-down' ,'#cdcdcd')</h4>
+                            <p>Callback URL</p>
                         </div>
 
                         <div class="column-heading">
-                            <h4 class="app-heading">Country @svg('arrow-down' ,'#cdcdcd')</h4>
+                            <p>Country @svg('arrow-down' ,'#cdcdcd')</p>
                         </div>
 
                         <div class="column-heading">
-                            <h4 class="app-heading">Creator @svg('arrow-down' ,'#cdcdcd')</h4>
+                            <p>Creator @svg('arrow-down' ,'#cdcdcd')</p>
                         </div>
 
                         <div class="column-heading">
-                            <h4 class="app-heading">Date created @svg('arrow-down' ,'#cdcdcd')</h4>
+                            <p>Date created @svg('arrow-down' ,'#cdcdcd')</p>
                         </div>
                         <div class="column-heading">
-                            <h4 class="app-heading"></h4>
+                            <p></p>
                         </div>
-
                     </div>
 
-                    <div class="body">
+                    <div class="body app-updated-body">
                         @forelse($approvedApps as $app)
                             @if(!empty($app['attributes']))
-                                <x-team-app
+                                <x-app-updated
                                     :app="$app"
                                     :attr="$app['attributes']"
                                     :details="$app['developer']"
+                                    :details="$app['developer']"
                                     :countries="!is_null($app->country) ? [$app->country->code => $app->country->name] : ['globe' => 'globe']"
                                     :type="$type = 'approved'">
-                                </x-team-app>
+                                </x-app-updated>
                             @endif
                         @empty
                             <p>No approved apps.</p>
@@ -179,42 +214,42 @@ Teams
                     <h3>Revoked Apps</h3>
                 </div>
 
-                <div class="my-apps">
+                <div class="updated-app">
                     <div class="head">
-                        <div class="column">
-                            <p>App name</p>
+                        <div class="column-heading">
+                            <p>App Name @svg('arrow-down' ,'#cdcdcd')</p>
                         </div>
 
-                        <div class="column">
+                        <div class="column-heading">
                             <p>Callback URL</p>
                         </div>
 
-                        <div class="column">
-                            <p>Country</p>
+                        <div class="column-heading">
+                            <p>Country @svg('arrow-down' ,'#cdcdcd')</p>
                         </div>
 
-                        <div class="column">
-                            <p>Creator</p>
+                        <div class="column-heading">
+                            <p>Creator @svg('arrow-down' ,'#cdcdcd')</p>
                         </div>
 
-                        <div class="column">
-                            <p>Date created</p>
+                        <div class="column-heading">
+                            <p>Date created @svg('arrow-down' ,'#cdcdcd')</p>
                         </div>
-
-                        <div class="column">
-
+                        <div class="column-heading">
+                            <p></p>
                         </div>
                     </div>
-                    <div class="body">
+                    <div class="body app-updated-body">
                         @forelse($revokedApps as $app)
                             @if(!empty($app['attributes']))
-                                <x-app
-                                    :app="$app"
-                                    :attr="$app['attributes']"
-                                    :details="$app['developer']"
-                                    :countries="!is_null($app->country) ? [$app->country->code => $app->country->name] : ['globe' => 'globe']"
-                                    :type="$type = 'revoked'">
-                                </x-app>
+                            <x-app-updated
+                                :app="$app"
+                                :attr="$app['attributes']"
+                                :details="$app['developer']"
+                                :details="$app['developer']"
+                                :countries="!is_null($app->country) ? [$app->country->code => $app->country->name] : ['globe' => 'globe']"
+                                :type="$type = 'approved'">
+                            </x-app-updated>
                             @endif
                         @empty
                             <p>No revoked apps.</p>
@@ -225,32 +260,184 @@ Teams
         </div>
     </div>
 </div>
+
 @endsection
 
 @push('scripts')
 <script>
+    var btnActions = document.querySelectorAll('.btn-actions');
+    var hideMenuBlock = document.querySelector('.block-hide-menu');
+    var blockActions = document.querySelectorAll('.block-actions');
+    var mainUserMenu = document.querySelector('.main-users-menu')
     var clodeModal = document.querySelector('.close-modal');
+    var deleteClodeModal = document.querySelector('.delete-close-modal');
     var modalContainer = document.querySelector('.modal-container');
     var addTeammateBtn = document.querySelector('.add-team-mate-btn');
     var addTeamMobile = document.querySelector('.add-team-mate-btn-mobile');
     var overlayContainer = document.querySelector('.overlay-container');
 
+    for(var i = 0; i < btnActions.length; i++) {
+        btnActions[i].addEventListener('click', showUserAction)
+    }
+    function showUserAction(){
+        this.nextElementSibling.classList.add('show');
+        hideMenuBlock.classList.add('show');
+    }
 
-    addTeammateBtn.addEventListener('click', function(){
+    hideMenuBlock.addEventListener('click', hideActions);
+    function hideActions(){
+        this.classList.remove('show');
+        this.previousElementSibling.classList.remove('show')
+    }
+    
+    addTeammateBtn.addEventListener('click', hideModalContainer);
+    addTeamMobile.addEventListener('click', hideModalContainer);
+    function hideModalContainer(){
         modalContainer.classList.add('show');
-    });
+    }
 
-    addTeamMobile.addEventListener('click', function(){
-        modalContainer.classList.add('show');
-    });
-
-    clodeModal.addEventListener('click', function(){
+    clodeModal.addEventListener('click', showModalContainer);
+    overlayContainer.addEventListener('click', showModalContainer);
+    function showModalContainer(){
         modalContainer.classList.remove('show');
+    }
+
+    // Show delete modal
+    var userDeleteBtn = document.querySelector('.user-delete');
+    var deleteModalContainer = document.querySelector('.delete-modal-container')
+    userDeleteBtn.addEventListener('click', function(){
+        deleteModalContainer.classList.add('show');
     });
 
-    overlayContainer.addEventListener('click', function(){
-        modalContainer.classList.remove('show');
+    deleteClodeModal.addEventListener(click, function(){
+        deleteModalContainer.classList.remove('show');
     })
+
+    var headings = document.querySelectorAll('.heading-app');
+    for (var i = 0; i < headings.length; i++) {
+        headings[i].addEventListener('click', handleHeadingClick);
+    }
+
+    function handleHeadingClick(event) {
+        var heading = event.currentTarget;
+        heading.nextElementSibling.classList.toggle('collapse');
+        heading.querySelector('svg').classList.toggle('active');
+    }
+
+    var buttons = document.querySelectorAll('.toggle-app');
+    for (var j = 0; j < buttons.length; j ++) {
+        buttons[j].addEventListener('click', handleButtonClick);
+    }
+
+    function handleButtonClick(event) {
+        this.parentNode.parentNode.classList.toggle('show')
+    }
+
+    var actions = document.querySelectorAll('.actions');
+    for (var k = 0; k < actions.length; k ++) {
+        actions[k].addEventListener('click', handleMenuClick);
+    }
+
+    function handleMenuClick() {
+        var parent = this.parentNode.parentNode;
+
+        parent.querySelector('.menu').classList.toggle('show');
+        parent.querySelector('.modal').classList.toggle('show');
+    }
+
+    var modals = document.querySelectorAll('.modal');
+    for (var l = 0; l < modals.length; l ++) {
+        modals[l].addEventListener('click', function() {
+            document.querySelector(".modal.show").classList.remove('show');
+            document.querySelector(".menu.show").classList.remove('show');
+        })
+    }
+
+    var deleteButtons = document.querySelectorAll('.app-delete');
+    for (var m = 0; m < modals.length; m ++) {
+        deleteButtons[m].addEventListener('click', handleDeleteMenuClick);
+    }
+
+    function handleDeleteMenuClick(event) {
+        event.preventDefault();
+
+        var app = event.currentTarget;
+
+        var data = {
+            name: app.dataset.name,
+            _method: 'DELETE'
+        };
+
+        var url = '/apps/' + app.dataset.name;
+        var xhr = new XMLHttpRequest();
+
+        if(!confirm('Are you sure you want to delete this app?')) {
+            document.querySelector(".menu.show").classList.remove('show');
+            return;
+        }
+
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+            xhr.send(JSON.stringify(data));
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    window.location.href = "{{ route('app.index') }}";
+                    addAlert('success', 'Application deleted successfully');
+                }
+            };
+
+        document.querySelector(".menu.show").classList.remove('show');
+    }
+
+    var keys = document.querySelectorAll('.copy');
+    for (var i = 0; i < keys.length; i ++) {
+        keys[i].addEventListener('click', copyText);
+    }
+
+    function copyText() {
+        var url = '/apps/' + this.dataset.reference + '/credentials/' + this.dataset.type;
+        var xhr = new XMLHttpRequest();
+        var btn = this;
+
+        btn.className = 'copy loading';
+
+        xhr.open('GET', url, true);
+        xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+        xhr.send();
+
+        xhr.onload = function() {
+            if(xhr.status === 302 || /login/.test(xhr.responseURL)){
+                addAlert('info', ['You are currently logged out.', 'Refresh the page to login again.']);
+                btn.className = 'copy';
+            } else if (xhr.status === 200) {
+                var response = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+                if(response === null){
+                    btn.className = 'copy';
+                    return void addAlert('error', ['Sorry there was a problem getting the credentials', 'Please try again']);
+                }
+
+                copyToClipboard(response.credentials);
+                btn.className = 'copy copied';
+            }
+        };
+    }
+
+    function copyToClipboard(text) {
+        var dummy = document.createElement("textarea");
+        dummy.style.position = 'absolute';
+        document.body.appendChild(dummy);
+        dummy.value = text;
+        dummy.select();
+        document.execCommand("copy");
+        document.body.removeChild(dummy);
+    }
 
 </script>
 @endpush
