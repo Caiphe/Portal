@@ -388,8 +388,8 @@ button{
 
 .team-app-list{
     td{
-        padding-bottom: 4px;
-        padding-top: 15px;
+        padding-bottom: 8px;
+        padding-top: 8px;
     }
 }
 
@@ -453,8 +453,8 @@ button{
 
     .approved-apps,
     .revoked-apps {
-        @media #{$small} {
-            width: 776px;
+        @media (max-width: 768px){
+            width: 900px;
         }
     }
 
@@ -811,6 +811,11 @@ button{
                     margin: 0;
                     border: none;
                     height: 1px;
+
+                    &.non-active{
+                        pointer-events: none;
+                        color: #cdcdcd;
+                    }
                 }
 
                 .user-delete{

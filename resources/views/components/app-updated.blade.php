@@ -24,7 +24,7 @@
     </div>
 
     <div class="column">
-        <a href="#" target="_blank" class="bold">www.callbackurl.co.ca</a>
+        <a href="#" target="_blank" class="bold">{{ $app['callback_url'] }}</a>
     </div>
 
     @if($type === 'approved')

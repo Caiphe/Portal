@@ -66,23 +66,39 @@
                     <input type="url" name="url" id="url" placeholder="Enter callback url (eg. https://callback.com)">
                 </div>
 
-                <div class="group">
+                <div class="group team-field">
                     <label for="team">Select team *</label>
-                        <select  name="team" id="team">
-                          <option value="0">Please select team to publish app under</option>
-                          <option value="1" style="background-image:url(/images/user-thumbnail.jpg);"> <span>Xoliswa Shandu (You)</span></option>
-                          <option value="1" style="background-image:url(/images/user-thumbnail.jpg);"> <span>Plusnarrative</span></option>
-                          <option value="1" style="background-image:url(/images/user-thumbnail.jpg);"> <span>Plusnarrative</span></option>
+                    <div class="select_wrap">
+                        <input name="team" id="team" class="selected-data" value="">
+                        <ul class="default_option">
+                            <li>
+                                <div class="option">
+                                    <span class="select-default">Please select team to pulbic under</span>
+                                </div>
+                            </li>
+                        </ul>
 
-                        </select>
-                      
-                    {{-- <select class="custom-select">
-                        <option value="">Please select team to publish app under</option>
-                        <option value="">Xoliswa Shandu</option>
-                        <option value="">Xoliswa Shandu</option>
-                        <option value="">Xoliswa Shandu</option>
-                    </select> --}}
-                    {{-- <input type="team" name="team" id="team" placeholder="Please select team to publish app under"> --}}
+                        <ul class="select_ul">
+                            <li>
+                                <div class="option">
+                                    <div class="icon"></div>
+                                    <div class="select-data">Xoliswa Shando (You)</div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="option">
+                                    <div class="icon"></div>
+                                    <div class="select-data">Plusnarrative</div>
+                                </div>  
+                            </li>
+                            <li>
+                                <div class="option">
+                                    <div class="icon"></div>
+                                    <div class="select-data">chenosis</div>
+                                </div>  
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
                 <div class="group">
@@ -165,7 +181,10 @@
         </form>
 
         <button type="reset">Cancel</button>
-    </div>
+
+
+
+
 
 @endsection
 
@@ -411,5 +430,25 @@
             }
         };
     }
+
+    var default_option = document.querySelector('.default_option');
+        var select_wrap = document.querySelector('.select_wrap');
+        var inputData = document.querySelector('.selected-data');
+
+        default_option.addEventListener('click', function(){
+            select_wrap.classList.toggle('active');
+        });
+
+        var select_ul = document.querySelectorAll('.select_ul li');
+        for(var i = 0; i < select_ul.length; i++){
+            select_ul[i].addEventListener('click', toggleSelectList);
+        }
+        function toggleSelectList(){
+            var curentData = this.querySelector('.select-data').innerHTML;
+            default_option.innerHTML = curentData;
+            inputData.value = curentData;
+            select_wrap.classList.remove('active');
+        }
+
 </script>
 @endpush

@@ -236,7 +236,7 @@ Teams
                             <ul>
                                 <li><button class="make-admin">Make administrator</button></li>
                                 <li><button class="make-user">Make User</button></li>
-                                <li><button class="make-owner">Make Owner</button></li>
+                                <li><button class="make-owner @if($teamUser->isTeamOwner()) non-active @endif">Make Owner</button></li>
                                 <li><button class="user-delete">Delete</button></li>
                             </ul>
                         </div>
@@ -437,15 +437,15 @@ Teams
     // Show user modal
     var userModal = document.querySelector('.make-user-modal-container');
     var userModalShow = document.querySelector('.make-user');
-    userModalShow.addEventListener('click', showAdminModalFunc);
-    function showAdminModalFunc(){
+    userModalShow.addEventListener('click', showUserModalFunc);
+    function showUserModalFunc(){
         userModal.classList.add('show');
     }
 
-    document.querySelector('.user-close-modal').addEventListener('click', hideAdminModal);
-    document.querySelector('.user-overlay-container').addEventListener('click', hideAdminModal);
-    document.querySelector('.user-admin-cancel-btn').addEventListener('click', hideAdminModal);
-    function hideAdminModal(){
+    document.querySelector('.user-close-modal').addEventListener('click', hideUserModal);
+    document.querySelector('.user-overlay-container').addEventListener('click', hideUserModal);
+    document.querySelector('.user-admin-cancel-btn').addEventListener('click', hideUserModal);
+    function hideUserModal(){
         userModal.classList.remove('show');
     }
 

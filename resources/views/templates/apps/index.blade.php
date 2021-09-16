@@ -130,14 +130,6 @@
                         <div class="body app-updated-body">
                             @forelse($revokedApps as $app)
                                 @if(!empty($app['attributes']))
-                                    {{-- <x-app-updated
-                                        :app="$app"
-                                        :attr="$app['attributes']"
-                                        :details="$app['developer']"
-                                        :countries="!is_null($app->country) ? [$app->country->code => $app->country->name] : ['globe' => 'globe']"
-                                        :type="$type = 'revoked'">
-                                    </x-app-updated> --}}
-
                                     <x-app-updated
                                         :app="$app"
                                         :attr="$app['attributes']"
