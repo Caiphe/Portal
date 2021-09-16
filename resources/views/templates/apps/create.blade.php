@@ -72,28 +72,28 @@
                         <input name="team" id="team" class="selected-data" value="">
                         <ul class="default_option">
                             <li>
-                                <div class="option">
+                                {{-- <div class="option"> --}}
                                     <span class="select-default">Please select team to pulbic under</span>
-                                </div>
+                                {{-- </div> --}}
                             </li>
                         </ul>
 
                         <ul class="select_ul">
                             <li>
                                 <div class="option">
-                                    <div class="icon"></div>
+                                    <div class="icon" style="background-image: url('/images/user-thumbnail.jpg')"></div>
                                     <div class="select-data">Xoliswa Shando (You)</div>
                                 </div>
                             </li>
                             <li>
                                 <div class="option">
-                                    <div class="icon"></div>
+                                    <div class="icon" style="background-image: url('/images/user-thumbnail.jpg')"></div>
                                     <div class="select-data">Plusnarrative</div>
                                 </div>  
                             </li>
                             <li>
                                 <div class="option">
-                                    <div class="icon"></div>
+                                    <div class="icon" style="background-image: url('/images/user-thumbnail.jpg')"></div>
                                     <div class="select-data">chenosis</div>
                                 </div>  
                             </li>
@@ -446,7 +446,7 @@
         function toggleSelectList(){
             var curentData = this.querySelector('.select-data').innerHTML;
             default_option.innerHTML = curentData;
-            inputData.value = curentData;
+            inputData.setAttribute('value', curentData);
             select_wrap.classList.remove('active');
         }
 

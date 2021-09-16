@@ -34,7 +34,7 @@ Teams
 <div class="modal-container">
     <div class="overlay-container"></div>
     <div class="add-teammate-block">
-        <button class="close-modal">@svg('close', '#000')</button>
+        <button class="close-modal">@svg('close-popup', '#000')</button>
         <h2 class="team-head">Add teammate</h2>
         <p class="teammate-text">Invite additional team members or other users</p>
         <form class="form-teammate">
@@ -55,7 +55,7 @@ Teams
 <div class="make-admin-modal-container">
     <div class="admin-overlay-container"></div>
     <div class="add-teammate-block">
-        <button class="admin-close-modal">@svg('close', '#000')</button>
+        <button class="admin-close-modal">@svg('close-popup', '#000')</button>
         <h2 class="team-head">Make Admin</h2>
         <p class="teammate-text">Would you like change this user's level of access to <strong>administrator</strong> ?</p>
         <p class="admin-user-name">Xoliswa Shandu</p>
@@ -71,7 +71,7 @@ Teams
 <div class="make-user-modal-container">
     <div class="user-overlay-container"></div>
     <div class="add-teammate-block">
-        <button class="user-close-modal">@svg('close', '#000')</button>
+        <button class="user-close-modal">@svg('close-popup', '#000')</button>
         <h2 class="team-head">Make User</h2>
         <p class="teammate-text">Would you like change this user's level of access to <strong>user</strong> ?</p>
         <p class="admin-user-name">Xoliswa Shandu</p>
@@ -88,7 +88,7 @@ Teams
     <div class="delete-overlay-container"></div>
 
     <div class="delete-user-block">
-        <button class="delete-close-modal">@svg('close', '#000')</button>
+        <button class="delete-close-modal">@svg('close-popup', '#000')</button>
 
         <h2 class="team-head">Remove User</h2>
         <p class="teammate-text">Are you sure you want to remove this user?</p>
@@ -103,7 +103,7 @@ Teams
 
     {{-- This show up if you are the owner so you should assign a different owner --}}
     <div class="confirm-delete-block">
-        <button class="confirm-delete-close-modal">@svg('close', '#000')</button>
+        <button class="confirm-delete-close-modal">@svg('close-popup', '#000')</button>
         <h2 class="team-head custom-head">Warning</h2>
         <p class="remove-user-text">
             <span class="user-name">Xoliswa Shandu</span> You are the owner/creator of this team profile. To be able to delete this account, please assign ownership to another user

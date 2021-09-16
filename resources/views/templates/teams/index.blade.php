@@ -34,7 +34,7 @@
         {{-- leave the copany pop up --}}
         <div class="overlay-container"></div>
         <div class="add-teammate-block">
-            <button class="close-modal">@svg('close', '#000')</button>
+            <button class="close-modal">@svg('close-popup', '#000')</button>
     
             <h2 class="team-head">Leave team</h2>
             <p class="teammate-text">Are you sure you want to leave this company?</p>
