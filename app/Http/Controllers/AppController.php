@@ -146,9 +146,18 @@ class AppController extends Controller
         return redirect(route('app.index'));
     }
 
-    public function edit(ProductLocationService $productLocationService, App $app)
+    public function edit($app)
     {
-        [$products, $countries] = $productLocationService->fetch();
+        $app = App::where('slug', $app)->where('developer_id', auth()->user()->developer_id)->firstOrFail();
+        $products = Product::with('category')
+            ->where('category_cid', '!=', 'misc')
+            ->where(fn ($q) => $q->basedOnUser(auth()->user())->orWhereIn('pid', $app->products->pluck('pid')->toArray()))
+            ->get();
+
+        $countryCodes = $products->pluck('locations')->implode(',');
+        $countries = Country::whereIn('code', explode(',', $countryCodes))->pluck('name', 'code');
+
+        $products = $products->sortBy('category.title')->groupBy('category.title');
 
         $app->load('products', 'country');
         $credentials = $app->credentials;
@@ -166,8 +175,9 @@ class AppController extends Controller
         ]);
     }
 
-    public function update(App $app, CreateAppRequest $request)
+    public function update($app, CreateAppRequest $request)
     {
+        $app = App::where('slug', $app)->where('developer_id', $request->user()->developer_id)->firstOrFail();
         $validated = $request->validated();
         $app->load('products');
         $credentials = $app->credentials;
@@ -263,11 +273,12 @@ class AppController extends Controller
         return redirect(route('app.index'));
     }
 
-    public function destroy(App $app, DeleteAppRequest $request)
+    public function destroy($app, DeleteAppRequest $request)
     {
+        $user = $request->user();
+        $app = App::where('slug', $app)->where('developer_id', $user->developer_id)->firstOrFail();
         $validated = $request->validated();
 
-        $user = \Auth::user();
         ApigeeService::delete("developers/{$user->email}/apps/{$validated['name']}");
 
         $app->delete();

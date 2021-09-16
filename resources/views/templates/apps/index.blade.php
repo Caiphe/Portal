@@ -216,6 +216,8 @@
                 return;
             }
 
+            addLoading('Deleting app...');
+
             xhr.open('POST', url, true);
             xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');

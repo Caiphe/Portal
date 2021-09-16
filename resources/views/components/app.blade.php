@@ -241,7 +241,7 @@
             <button>View only</button>
             @endcan
         @else
-            <a href="{{ route('app.edit', $app['slug']) }}">Edit</a>
+            <a href="{{ route('app.edit', $app->slug) }}">Edit</a>
             <form class="delete">
                 @method('DELETE')
                 @csrf

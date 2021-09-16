@@ -310,19 +310,14 @@
         }
     }
 
-    @media #{$medium-up} {
+    @media screen and (min-width: 1024px) {
         display: none !important;
     }
 }
 
 .hidden {
-    @media #{$small} {
+    @media screen and (max-width: 1023px) {
         display: none !important;
-    }
-
-    @media #{$medium-portrait} {
-        display: none !important;
-
     }
 }
 
