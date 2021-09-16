@@ -1,11 +1,5 @@
 document.getElementById('profile-picture').addEventListener('change', chooseProfilePicture);
 
-ajax('/api/recovery-codes', 'get', null, userResponse);
-
-function userResponse(resp) {
-    console.log(resp);
-}
-
 function chooseProfilePicture() {
     var files = this.files;
     var inputAccepts = this.getAttribute("accept");
@@ -79,11 +73,20 @@ function togglePasswordVisibility(that) {
     that.previousElementSibling.setAttribute('type', that.parentNode.classList.contains('password-visible') ? "text" : "password");
 }
 
+function copyCodes(){
+
+}
+
+function downloadCodes(){
+
+}
+
 (function () {
     var passwordScore = 0;
 
     document.getElementById('password').addEventListener('input', checkPassword);
     document.getElementById('profile-form').addEventListener('submit', validateSubmit);
+    document.getElementById('recovery-codes').addEventListener('click', showRecoveryCodes);
 
     function checkPassword() {
         var value = this.value;
@@ -144,5 +147,22 @@ function togglePasswordVisibility(that) {
         }
 
         addLoading('Updating your profile.');
+    }
+
+    function showRecoveryCodes() {
+        ajax('/api/recovery-codes', 'get', null, showRecoveryCodesResponse);
+    }
+
+
+    function showRecoveryCodesResponse(resp) {
+        var codes = '<div class="recovery-codes">';
+
+        for (var i = 0; i < resp.message.length; i++) {
+            codes += resp.message[i] + '<br>';
+        }
+
+        codes += '</div><button class="dark outline recovery-code-action" onclick="copyCodes()">Copy codes</button><button class="blue outline recovery-code-action" onclick="downloadCodes()">Download codes</button>';
+
+        document.getElementById('show-recovery-codes').innerHTML = codes;
     }
 }());

@@ -98,6 +98,9 @@ Update profile
 
             @csrf
             <button class="button outline dark twofa-button">Disable 2FA</button>
+            <button id="recovery-codes" type="button">View recovery codes</button>
+
+            <div id="show-recovery-codes"></div>
         </form>
         @endisset
     </div>

@@ -9,7 +9,17 @@ class UserController extends Controller
 {
     public function getRecoveryCodes(Request $request)
     {
-        return $this->generateCodes();
+        $user = $request->user();
+        $recoveryCodes = $user->recovery_codes;
+
+        if (is_null($recoveryCodes)) {
+            $recoveryCodes = $this->generateCodes();
+            $user->update([
+                'recovery_codes' => $recoveryCodes
+            ]);
+        }
+
+        return $recoveryCodes;
     }
 
     protected function generateCodes()
