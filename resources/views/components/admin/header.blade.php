@@ -18,6 +18,11 @@
     </nav>
 </header>
 <div class="header-page-info cols centre-align">
-    <h1>@yield('title')</h1>
+    <h1 class="page-header-title">@yield('title')
+        @if( request()->is('users/single'))
+            <a class="button outline dark" href="{{ route('app.create') }}">Create an app for this user</a>
+        @endif
+
+    </h1>
     <div class="page-info">@yield('page-info')</div>
 </div>

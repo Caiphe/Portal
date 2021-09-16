@@ -25,6 +25,7 @@ class CreateAppRequest extends FormRequest {
 	 */
 	public function rules() {
 		return [
+		    'app_owner' => 'sometimes',
 			'display_name' => 'sometimes|max:100',
 			'url' => 'sometimes',
 			'description' => 'sometimes',

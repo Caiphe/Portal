@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\App;
+use App\Features\UserSearch\IDeveloper;
 use App\Product;
 use App\Country;
 use App\Http\Requests\CreateAppRequest;
@@ -17,6 +19,7 @@ use App\Services\Kyc\KycService;
 use App\Services\ProductLocationService;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
 
 class AppController extends Controller
 {
@@ -82,7 +85,15 @@ class AppController extends Controller
             'callbackUrl' => $validated['url'],
         ];
 
-        $createdResponse = ApigeeService::createApp($data);
+        $user = $request->user();
+
+        if (($user->hasRole('admin') || $user->hasRole('opco')) && $request->has('app_owner')) {
+            $appOwner = User::where('email', $request->get('app_owner'))->first();
+        } else {
+            $appOwner = $user;
+        }
+
+        $createdResponse = ApigeeService::createApp($data, $appOwner);
 
         if (strpos($createdResponse, 'duplicate key') !== false) {
             return response()->json(['success' => false, 'message' => 'There is already an app with that name.'], 409);

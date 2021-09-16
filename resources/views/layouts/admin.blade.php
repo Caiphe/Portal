@@ -43,7 +43,10 @@
                 </li>
                 @endif
                 @if(\Auth::user()->can('administer-dashboard'))
-                <li @if(Request::is('admin/dashboard')) class="active" @endif><a href="{{ route('admin.dashboard.index') }}">Applications</a></li>
+                <li  class="has-children  @if(Request::is('admin/dashboard')) class="active" @endif><a href="{{ route('admin.dashboard.index') }}">Applications</a></li>
+                    <ul>
+                        <li @if(Request::is('admin/users') || Request::is('admin/users/*')) class="active" @endif><a href="{{ route('admin.app.create') }}">Create New</a></li>
+                    </ul>
                 @endif
                 @if(\Auth::user()->can('administer-users'))
                 <li @if(Request::is('admin/users') || Request::is('admin/users/*')) class="active" @endif><a href="{{ route('admin.user.index') }}">Users</a></li>

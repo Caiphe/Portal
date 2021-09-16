@@ -4,7 +4,7 @@
             @foreach($fields as $specifiedName => $field)
             <th align="left">{{ gettype($specifiedName) === 'string' ? $specifiedName : preg_replace('/[_\.]/', ' ', $field) }}</th>
             @endforeach
-            <th width="92">Actions</th>
+            <th class="action-row" width="92">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -15,7 +15,7 @@
                 <a href="{{ route("admin.{$modelName}.edit", $model->slug) }}">{{ Arr::get($model, $field) }}</a>
             </td>
             @endforeach
-            <td align="center">
+            <td align="center" class="action-row">
                 <a href="{{ route("admin.{$modelName}.edit", $model->slug) }}">@svg('edit', '#053241')</a>
                 @if(Route::has("admin.{$modelName}.show"))
                 <a href="{{ route("{$modelName}.show", $model->slug) }}" target="_blank" rel="noreferrer">@svg('eye', '#053241')</a>

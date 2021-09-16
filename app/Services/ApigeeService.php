@@ -42,9 +42,9 @@ class ApigeeService
         return self::HttpWithBasicAuth()->delete(config('apigee.base') . $url);
     }
 
-    public static function createApp(array $data)
+    public static function createApp(array $data, User $user = null)
     {
-        $user = auth()->user();
+        $user ??= auth()->user();
         return self::post("developers/{$user->email}/apps", $data);
     }
 
