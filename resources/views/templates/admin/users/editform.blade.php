@@ -105,7 +105,6 @@
 <table id="dev-apps">
     <tr>
         <th>Name</th>
-        <th>Keys</th>
         <th>Products</th>
         <th>Created</th>
         <th>Country</th>
@@ -116,7 +115,6 @@
         @foreach($user->getApps() as $app)
             <tr>
                 <td><a href="{{ route('admin.dashboard.index', ['q' => $app->display_name]) }}" class="app-link">{{ $app->display_name }}</a></td>
-                <td>{{ count($app->products) }}</td>
                 <td>{{ count($app->products) }}</td>
                 <td>{{ $app->created_at }}</td>
                 <td><div class="country-flag" style="background-image: url('/images/locations/{{ $app->country->code }}.svg')"></div></td>
