@@ -3,12 +3,6 @@
     $userCountryCode = $user->countries[0]->pivot->country_code ?? 0;
     $userResponsibleCountries = isset($user) ? $user->responsibleCountries()->pluck('code')->toArray() : [];
     $userResponsibleGroups = isset($user) ? $user->responsibleGroups()->pluck('group')->toArray() : [];
-
-    $statuses = [1 => 'Active', 2 => 'Non-Active'];
-    $status = isset($user) && !is_null($user->email_verified_at) ? 'Active' : 'Non-Active';
-
-    $activeStatusLookup = array_flip($statuses);
-    $selectedStatusType = $activeStatusLookup[$status];
 @endphp
 
 @csrf
@@ -30,16 +24,6 @@
         <div class="field-container">
             <label class="control-label">Email</label>
             <input type="text" class="long" name="email" placeholder="Email" value="{{ $user->email ?? old('email') }}" autocomplete="off" maxlength="140">
-        </div>
-
-        <div class="field-container">
-            <label class="control-label">Status</label>
-            <select name="country" autocomplete="off">
-                <option value="">Select Status</option>
-                @foreach($statuses as $statusId => $status)
-                    <option @if($selectedStatusType === $statusId) selected @endif value="{{ $statusId }}">{{ $status }}</option>
-                @endforeach
-            </select>
         </div>
 
         <div class="field-container">
@@ -111,26 +95,6 @@
 <div class="flex-container bottom-section-container">
     <div class="each-container">
         <h2>Developer's apps</h2>
-        <div class="select-container">
-            <div class="each-select-block">
-                <label>Status</label>
-                <select id="status-select-filter" name="status_select_filter">
-                    <option value="all">All</option>
-                    @foreach($statuses as $statusId => $status)
-                        <option @if($statusSelectFilter === $status) selected @endif value="{{ $status }}">{{ $status }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="each-select-block">
-                <label>Country</label>
-                <select id="country-select-filter" name="country_select_filter">
-                    <option value="all">All</option>
-                    @foreach($countries as $country)
-                        <option @if($countrySelectFilterCode === $country->code) selected @endif value="{{ $country->code }}">{{ $country->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
     </div>
     <div class="each-container">
         <a class="button create-btn" href="{{ route('admin.app.create', $user->id) }}">Create an app for this user</a>
@@ -140,10 +104,10 @@
 {{-- apps list --}}
 <table id="dev-apps">
     <tr>
-        <th>Name @svg('chevron-sorter', '#fff')</th>
+        <th>Name</th>
         <th>Keys</th>
         <th>Products</th>
-        <th>Registered @svg('chevron-sorter', '#fff')</th>
+        <th>Registered</th>
         <th>Country</th>
         <th>Status</th>
     </tr>

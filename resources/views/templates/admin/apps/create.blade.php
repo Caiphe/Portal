@@ -181,7 +181,7 @@
                 <div class="success-message-container">
                     <h2 class="success-message">Application created successfully</h2>
 
-                    <a class="back-btn" href="{{ route('admin.dashboard.index') }}}">Back to dashboard</a>
+                    <a class="back-btn" href="{{ route('admin.dashboard.index') }}">Back to dashboard</a>
                 </div>
             </div>
 
