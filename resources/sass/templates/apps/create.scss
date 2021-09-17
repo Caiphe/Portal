@@ -336,7 +336,7 @@
 
     .select-default{
         position: absolute;
-        top: 10px;
+        top: 9px;
     }
 
     .selected-data{
@@ -348,8 +348,8 @@
         width: 100%;
         position: relative;
         user-select: none;
-        margin-top: -11px;
-        z-index: 3;
+        margin-top: -14px;
+        z-index: 1;
 
         .default_option{
             background: #fff;
@@ -398,14 +398,21 @@
             li{
                 list-style: none;
                 border: solid 1px #A5A5A5;
+                border-top: none;
                 position: relative;
                 cursor: pointer;
                 padding: 3px 0;
                 height: 40px;
                 box-sizing: border-box;
+                transition: all 0.3s ease-in-out;
         
                 .select-default{
                     padding-left: 15px;
+                }
+
+                &:hover{
+                    background-color:#eeeeee;
+                    transition: all 0.3s ease-in-out;
                 }
             }
 
@@ -442,4 +449,8 @@
             }
         }
     }
+}
+
+.select-data{
+    margin-top: 1px;
 }

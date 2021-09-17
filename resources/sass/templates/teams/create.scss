@@ -67,6 +67,10 @@
                     width: 25px;
                     font-weight: bold;
                 }
+
+                &.active{
+                    background-color: #BB1E4F;
+                }
             }
 
             .invite-btn{

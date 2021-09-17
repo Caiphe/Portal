@@ -177,15 +177,9 @@
                     </button>
                 </div>
             </div>
-
         </form>
-
         <button type="reset">Cancel</button>
-
-
-
-
-
+    </div>
 @endsection
 
 @push('scripts')
@@ -432,23 +426,23 @@
     }
 
     var default_option = document.querySelector('.default_option');
-        var select_wrap = document.querySelector('.select_wrap');
-        var inputData = document.querySelector('.selected-data');
+    var select_wrap = document.querySelector('.select_wrap');
+    var inputData = document.querySelector('.selected-data');
 
-        default_option.addEventListener('click', function(){
-            select_wrap.classList.toggle('active');
-        });
+    default_option.addEventListener('click', function(){
+        select_wrap.classList.toggle('active');
+    });
 
-        var select_ul = document.querySelectorAll('.select_ul li');
-        for(var i = 0; i < select_ul.length; i++){
-            select_ul[i].addEventListener('click', toggleSelectList);
-        }
-        function toggleSelectList(){
-            var curentData = this.querySelector('.select-data').innerHTML;
-            default_option.innerHTML = curentData;
-            inputData.setAttribute('value', curentData);
-            select_wrap.classList.remove('active');
-        }
+    var select_ul = document.querySelectorAll('.select_ul li');
+    for(var i = 0; i < select_ul.length; i++){
+        select_ul[i].addEventListener('click', toggleSelectList);
+    }
+    function toggleSelectList(){
+        var curentData = this.querySelector('.select-data').innerHTML;
+        default_option.innerHTML = curentData;
+        inputData.setAttribute('value', curentData);
+        select_wrap.classList.remove('active');
+    }
 
 </script>
 @endpush

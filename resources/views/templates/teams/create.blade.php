@@ -121,6 +121,8 @@
     <script>
         var logoFile = document.querySelector('.logo-file');
         var fileName = document.querySelector('.upload-file-name');
+        var fileBtn = document.querySelector('.logo-add-icon');
+
         logoFile.addEventListener('change', function(){
             var newFile = this.files[0].name.split('.');
             var extension = newFile[1];
@@ -128,16 +130,15 @@
             if(newFile[0].length > 20){filename = newFile[0].substr(0, 20) + '...' + extension;}
             else{filename = newFile[0] + '.'+ extension;}
             fileName.innerHTML = filename
+            fileBtn.classList.add('active');
         });
 
         var createButton = document.getElementById('create');
-
         var submit = document.getElementById('form-create-team').addEventListener('submit', handleCreate);
 
         function handleCreate()
         {
             var elements = this.elements;
-
             var newTeam = {
                 name: elements['name'].value,
                 url: elements['url'].value,
@@ -156,7 +157,6 @@
             // Other validations will rely on back-end
 
             e.preventDefault();
-
             createButton.disabled = true;
             createButton.textContent = 'Creating...';
 
