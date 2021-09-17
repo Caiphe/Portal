@@ -45,91 +45,41 @@
             </div>
         </div>
     @else
-        <div class="container" id="app-index">
-            <div class="row">
-                <div class="approved-apps">
-                    <div class="heading-app">
-                        @svg('chevron-down', '#000000')
-                        <h3>Approved Apps</h3>
-                    </div>
-
-                    <div class="updated-app">
-                        <div class="head">
-                            <div class="column">
-                                <p>App name  @svg('arrow-down' ,'#cdcdcd')</p>
-                            </div>
-
-                            <div class="column">
-                                <p>Callback URL</p>
-                            </div>
-
-                            <div class="column">
-                                <p>Country  @svg('arrow-down' ,'#cdcdcd')</p>
-                            </div>
-
-                            <div class="column">
-                                <p>Creator  @svg('arrow-down' ,'#cdcdcd')</p>
-                            </div>
-
-                            <div class="column">
-                                <p>Date Created  @svg('arrow-down' ,'#cdcdcd')</p>
-                            </div>
-
+        <div class="app-main-container">
+            <div class="container" id="app-index">
+                <div class="row">
+                    <div class="approved-apps">
+                        <div class="heading-app">
+                            @svg('chevron-down', '#000000')
+                            <h3>Approved Apps</h3>
                         </div>
-                        <div class="body app-updated-body">
-                            @forelse($approvedApps as $app)
-                                @if(!empty($app['attributes']))
-                                <x-app-updated
-                                    :app="$app"
-                                    :attr="$app['attributes']"
-                                    :details="$app['developer']"
-                                    :details="$app['developer']"
-                                    :countries="!is_null($app->country) ? [$app->country->code => $app->country->name] : ['globe' => 'globe']"
-                                    :type="$type = 'approved'">
-                                </x-app-updated>
-                                @endif
-                            @empty
-                                <p>No approved apps.</p>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="row" id="app">
-                <div class="revoked-apps">
-                    <div class="heading-app">
-                        @svg('chevron-down', '#000000')
+                        <div class="updated-app">
+                            <div class="head">
+                                <div class="column">
+                                    <p>App name  @svg('arrow-down' ,'#cdcdcd')</p>
+                                </div>
 
-                        <h3>Revoked Apps</h3>
-                    </div>
+                                <div class="column">
+                                    <p>Callback URL</p>
+                                </div>
 
-                    <div class="updated-app">
-                        <div class="head">
-                            <div class="column">
-                                <p>App name  @svg('arrow-down' ,'#cdcdcd')</p>
+                                <div class="column">
+                                    <p>Country  @svg('arrow-down' ,'#cdcdcd')</p>
+                                </div>
+
+                                <div class="column">
+                                    <p>Creator  @svg('arrow-down' ,'#cdcdcd')</p>
+                                </div>
+
+                                <div class="column">
+                                    <p>Date Created  @svg('arrow-down' ,'#cdcdcd')</p>
+                                </div>
+
                             </div>
-
-                            <div class="column">
-                                <p>Callback URL</p>
-                            </div>
-
-                            <div class="column">
-                                <p>Country  @svg('arrow-down' ,'#cdcdcd')</p>
-                            </div>
-
-                            <div class="column">
-                                <p>Creator  @svg('arrow-down' ,'#cdcdcd')</p>
-                            </div>
-
-                            <div class="column">
-                                <p>Date Created  @svg('arrow-down' ,'#cdcdcd')</p>
-                            </div>
-                        </div>
-                        
-                        <div class="body app-updated-body">
-                            @forelse($revokedApps as $app)
-                                @if(!empty($app['attributes']))
+                            <div class="body app-updated-body">
+                                @forelse($approvedApps as $app)
+                                    @if(!empty($app['attributes']))
                                     <x-app-updated
                                         :app="$app"
                                         :attr="$app['attributes']"
@@ -138,10 +88,62 @@
                                         :countries="!is_null($app->country) ? [$app->country->code => $app->country->name] : ['globe' => 'globe']"
                                         :type="$type = 'approved'">
                                     </x-app-updated>
-                                @endif
-                            @empty
-                                <p>No revoked apps.</p>
-                            @endforelse
+                                    @endif
+                                @empty
+                                    <p>No approved apps.</p>
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="app">
+                    <div class="revoked-apps">
+                        <div class="heading-app">
+                            @svg('chevron-down', '#000000')
+
+                            <h3>Revoked Apps</h3>
+                        </div>
+
+                        <div class="updated-app">
+                            <div class="head">
+                                <div class="column">
+                                    <p>App name  @svg('arrow-down' ,'#cdcdcd')</p>
+                                </div>
+
+                                <div class="column">
+                                    <p>Callback URL</p>
+                                </div>
+
+                                <div class="column">
+                                    <p>Country  @svg('arrow-down' ,'#cdcdcd')</p>
+                                </div>
+
+                                <div class="column">
+                                    <p>Creator  @svg('arrow-down' ,'#cdcdcd')</p>
+                                </div>
+
+                                <div class="column">
+                                    <p>Date Created  @svg('arrow-down' ,'#cdcdcd')</p>
+                                </div>
+                            </div>
+                            
+                            <div class="body app-updated-body">
+                                @forelse($revokedApps as $app)
+                                    @if(!empty($app['attributes']))
+                                        <x-app-updated
+                                            :app="$app"
+                                            :attr="$app['attributes']"
+                                            :details="$app['developer']"
+                                            :details="$app['developer']"
+                                            :countries="!is_null($app->country) ? [$app->country->code => $app->country->name] : ['globe' => 'globe']"
+                                            :type="$type = 'approved'">
+                                        </x-app-updated>
+                                    @endif
+                                @empty
+                                    <p>No revoked apps.</p>
+                                @endforelse
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -25,17 +25,23 @@ button{
 
 .team-block-container{
     position: relative;
+    overflow-y: hidden;
+    overflow-x: auto;
+
+    @media screen and (max-width: 768px) {
+        overflow-y: scroll;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
 
     .column{
         @media(max-width: 768px) {
-            overflow-y: scroll;
             width: 750px;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-    
-            &::-webkit-scrollbar {
-                display: none;
-            }
+
         }
     }
 }
@@ -417,12 +423,10 @@ button{
     height: 100%;
     width: 100%;
     padding: 0;
-    position: relative;
     overflow-y: hidden;
     overflow-x: auto;
 
-    @media(max-width: 768px){
-        width: 750px;
+    @media screen and (max-width: 768px) {
         overflow-y: scroll;
         scrollbar-width: none;
         -ms-overflow-style: none;
@@ -432,7 +436,6 @@ button{
         }
     }
 
-
     .row {
         display: flex;
         flex-direction: column;
@@ -440,13 +443,18 @@ button{
         border: 2px solid #F2F2F2;
         border-radius: 10px;
 
-        @media #{$small} {
+        @media(max-width:767px) {
             overflow-x: auto;
             padding-bottom: 10px;
+            width: 900px;
         }
 
         >div {
             padding: 10px 20px 10px;
+
+            @media(max-width:768px) {
+                width: 900px;
+            }
         }
     }
 
@@ -478,7 +486,6 @@ button{
     }
 
     .my-apps {
-
         .creator-details{
             display: flex;
 
@@ -495,30 +502,31 @@ button{
 
         .column{
             font-size: 14px;
-        }
 
-        .column:nth-of-type(1) {
-            width: 27%;
-        }
+            &:nth-child(1){
+                width: 27%;
+            }
 
-        .column:nth-of-type(2) {
-            width: 25%;
-        }
+            &:nth-child(2){
+                width: 25%;
+            }
 
-        .column:nth-of-type(3) {
-            width: 15%;
-        }
+            &:nth-child(3){
+                width: 13%;
+            }
 
-        .column:nth-of-type(4) {
-            width: 15%;
-        }
+            &:nth-child(4){
+                width: 15%;
+            }
 
-        .column:nth-of-type(5) {
-            width: 13%;
-        }
-        .column:nth-of-type(6) {
-            width: 5%;
-            text-align: right;
+            &:nth-child(5){
+                width: 13%;
+            }
+
+            &:nth-child(6){
+                width: 5%;
+                text-align: right;
+            }
         }
 
         .head {
@@ -725,6 +733,25 @@ button{
         height: 30px;
         margin-left: 15px;
         margin-top: 8px;
+    }
+}
+
+.main-tema-container{
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    // overflow-y: hidden;
+    position: relative;
+    // overflow-x: auto;
+
+    @media screen and (max-width: 768px) {
+        overflow-y: scroll;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
     }
 }
 

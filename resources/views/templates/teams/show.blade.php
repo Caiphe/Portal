@@ -206,52 +206,56 @@ Teams
             <button class="outline dark add-team-mate-btn">Add a teammate</button>
         </div>
     </div>
-    <div class="column team-members-list">
-        <table class="team-members">
-            <tr class="table-title" >
-                <td class="bold">Member name @svg('arrow-down' ,'#cdcdcd')</td>
-                <td class="bold">Role @svg('arrow-down' ,'#cdcdcd')</td>
-                <td class="bold">2FA Status @svg('arrow-down' ,'#cdcdcd')</td>
-            </tr>
 
-            @foreach($team->users as $teamUser)
-                <tr>
-                    <td class="member-name-profile">
-                        <div class="member-thumbnail"  style="background-image: url('/images/user-thumbnail.jpg')"></div>
-                        <p>
-                            <strong> {{ $teamUser->first_name }} {{ $teamUser->last_name }}</strong>
-                            ({{ $teamUser->email }})
-                        </p>
-
-                        @if($teamUser->isTeamOwner())
-                            <span class="owner-tag red-tag">OWNER</span>
-                        @endif
-                    </td>
-                    <td>{{ $teamUser->roles()->first()->name  === 'admin' ? 'Administrator' : ucfirst($teamUser->roles()->first()->name) }}</td>
-                    <td class="column-container">{{ $teamUser->twoFactorStatus() }}
-                        <button class="btn-actions"></button>
-
-                        {{-- user action menu --}}
-                        <div class="block-actions">
-                            <ul>
-                                <li><button class="make-admin">Make administrator</button></li>
-                                <li><button class="make-user">Make User</button></li>
-                                <li><button class="make-owner @if($teamUser->isTeamOwner()) non-active @endif">Make Owner</button></li>
-                                <li><button class="user-delete">Delete</button></li>
-                            </ul>
-                        </div>
-                        {{-- Block end --}}
-
-                        <div class="block-hide-menu"></div> 
-                    </td>
+    <div class="main-tema-container">
+        <div class="column team-members-list">
+            <table class="team-members">
+                <tr class="table-title" >
+                    <td class="bold">Member name @svg('arrow-down' ,'#cdcdcd')</td>
+                    <td class="bold">Role @svg('arrow-down' ,'#cdcdcd')</td>
+                    <td class="bold">2FA Status @svg('arrow-down' ,'#cdcdcd')</td>
                 </tr>
-            @endforeach
 
-        </table>
+                @foreach($team->users as $teamUser)
+                    <tr>
+                        <td class="member-name-profile">
+                            <div class="member-thumbnail"  style="background-image: url('/images/user-thumbnail.jpg')"></div>
+                            <p>
+                                <strong> {{ $teamUser->first_name }} {{ $teamUser->last_name }}</strong>
+                                ({{ $teamUser->email }})
+                            </p>
 
-        <button class="outline dark add-team-mate-btn-mobile">Add a teammate</button>
+                            @if($teamUser->isTeamOwner())
+                                <span class="owner-tag red-tag">OWNER</span>
+                            @endif
+                        </td>
+                        <td>{{ $teamUser->roles()->first()->name  === 'admin' ? 'Administrator' : ucfirst($teamUser->roles()->first()->name) }}</td>
+                        <td class="column-container">{{ $teamUser->twoFactorStatus() }}
+                            <button class="btn-actions"></button>
 
+                            {{-- user action menu --}}
+                            <div class="block-actions">
+                                <ul>
+                                    <li><button class="make-admin">Make administrator</button></li>
+                                    <li><button class="make-user">Make User</button></li>
+                                    <li><button class="make-owner @if($teamUser->isTeamOwner()) non-active @endif">Make Owner</button></li>
+                                    <li><button class="user-delete">Delete</button></li>
+                                </ul>
+                            </div>
+                            {{-- Block end --}}
+
+                            <div class="block-hide-menu"></div> 
+                        </td>
+                    </tr>
+                @endforeach
+
+            </table>
+
+            <button class="outline dark add-team-mate-btn-mobile">Add a teammate</button>
+
+        </div>
     </div>
+    
     <div class="column" id="app-index">
         <div class="row">
             <div class="approved-apps">
