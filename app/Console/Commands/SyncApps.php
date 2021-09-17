@@ -78,7 +78,7 @@ class SyncApps extends Command
 
 			$this->info("Syncing {$app['name']}");
 
-			$attributes = ApigeeService::getAppAttributes($app['attributes']);
+			$attributes = ApigeeService::formatAppAttributes($app['attributes']);
 
 			if (isset($attributes['DisplayName']) && !empty($attributes['DisplayName'])) {
 				$displayName = $attributes['DisplayName'];
