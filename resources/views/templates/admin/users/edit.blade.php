@@ -3,7 +3,7 @@
 @section('title', 'Edit user')
 
 @push('styles')
-<link rel="stylesheet" href="{{ mix('/css/templates/admin/edit.css') }}">
+<link rel="stylesheet" href="{{ mix('/css/templates/admin/users/edit.css') }}">
 @endpush
 
 @section('page-info')

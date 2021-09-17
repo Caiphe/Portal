@@ -25,7 +25,7 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 
 	Route::get('apps', 'AppController@index')->name('app.index');
 	Route::get('apps/create', 'AppController@create')->name('app.create');
-	Route::any('apps/{app:slug}/edit', 'AppController@edit')->name('app.edit');
+	Route::get('apps/{app:slug}/edit', 'AppController@edit')->name('app.edit');
 	Route::post('apps', 'AppController@store')->name('app.store');
 
 	Route::put('apps/{app:slug}', 'AppController@update')->name('app.update');
@@ -100,9 +100,7 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 	Route::post('dashboard/{app:aid}/credentials/renew/{type}', 'DashboardController@renewCredentials')->middleware('can:administer-dashboard')->name('admin.credentials.renew');
 	Route::post('apps/{app:aid}/status', 'DashboardController@updateAppStatus')->middleware('can:administer-dashboard')->name('admin.app.status-update');
     Route::get('apps/create/{user?}', 'DashboardController@createUserApp')->middleware('can:administer-dashboard')->name('admin.app.create');
-    Route::get('apps/{app:id}/edit', 'DashboardController@editUserApp')->middleware('can:administer-dashboard')->name('admin.app.edit');
-    Route::get('apps/{app:id}/delete', 'DashboardController@destroyUserApp')->middleware('can:administer-dashboard')->name('admin.app.delete');
-	// Global search
+    // Global search
 	Route::get('search', 'SearchController')->name('admin.search');
 
 	// User management

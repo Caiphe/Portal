@@ -71,7 +71,7 @@ mix.scripts(
     .sass("resources/sass/templates/admin/edit.scss", "public/css/templates/admin/edit.css")
     .sass("resources/sass/templates/admin/index.scss", "public/css/templates/admin/index.css")
     .sass("resources/sass/templates/admin/apps/create.scss", "public/css/templates/admin/apps/create.css")
-    .sass("resources/sass/templates/admin/single.scss", "public/css/templates/admin/single.css")
+    .sass("resources/sass/templates/admin/users/edit.scss", "public/css/templates/admin/users/edit.css")
     .sass("resources/sass/templates/admin/dashboard/index.scss", "public/css/templates/admin/dashboard/index.css")
     .sass("resources/sass/components/_app.scss", "public/css/components")
     .sass("resources/sass/components/_app-new.scss", "public/css/components")

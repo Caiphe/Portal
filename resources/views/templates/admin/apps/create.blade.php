@@ -488,7 +488,7 @@
                     addAlert('error', result.message || 'Sorry there was a problem creating your app. Please try again.');
 
                     button.removeAttribute('disabled');
-                    button.textContent = 'Update';
+                    button.textContent = 'Create';
                 }
             };
         }
