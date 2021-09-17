@@ -20,38 +20,35 @@
             <p>Requested go live on</p>
         </div>
 
-        <div class="column">
-            &nbsp;
-        </div>
     </div>
     <div class="body">
         @forelse($apps as $app)
             @if(!empty($app['attributes']))
-            @php
-                $productCountries = [];
-                if(!is_null($app->country_code)){
-                    $productCountries = $app->country()->pluck('name', 'code')->toArray();
-                } else {
-                    $productCountries = $app->products->reduce(function($carry, $product) use ($countryList) {
-                        $locationArray = explode(',', $product->locations);
-                        $carry = array_merge($carry, array_intersect_key($countryList, array_combine($locationArray, $locationArray)));
-                        return $carry;
-                    }, []);
-                }
-            @endphp
-            <x-app
-                :app="$app"
-                :attr="$app->attributes"
-                :details="$app->developer"
-                :countries="$productCountries ?: ['all' => 'Global']"
-                type="approved">
-            </x-app>
+                @php
+                    $productCountries = [];
+                    if(!is_null($app->country_code)){
+                        $productCountries = $app->country()->pluck('name', 'code')->toArray();
+                    } else {
+                        $productCountries = $app->products->reduce(function($carry, $product) use ($countryList) {
+                            $locationArray = explode(',', $product->locations);
+                            $carry = array_merge($carry, array_intersect_key($countryList, array_combine($locationArray, $locationArray)));
+                            return $carry;
+                        }, []);
+                    }
+                @endphp
+                <x-app-new
+                    :app="$app"
+                    :attr="$app->attributes"
+                    :details="$app->developer"
+                    :countries="$productCountries ?: ['all' => 'Global']"
+                    type="approved">
+                </x-app-new>
             @endif
         @empty
             @if(Request::is('admin/*'))
-            <p>No apps to approve. You can still search for apps to view.</p>
+                <p>No apps to approve. You can still search for apps to view.</p>
             @else
-            <p>No apps.</p>
+                <p>No apps.</p>
             @endif
         @endforelse
         {{ $apps->withQueryString()->links() }}
@@ -59,8 +56,8 @@
 </div>
 
 @foreach($apps as $app)
-<x-dialog id="{{ $app->aid }}-note-dialog" class="note-dialog">
-    <h3>Profile Log Notes</h3>
-    <div class="note">{!! $app['notes'] !!}</div>
-</x-dialog>
+    <x-dialog id="{{ $app->aid }}-note-dialog" class="note-dialog">
+        <h3>Profile Log Notes</h3>
+        <div class="note">{!! $app['notes'] !!}</div>
+    </x-dialog>
 @endforeach
