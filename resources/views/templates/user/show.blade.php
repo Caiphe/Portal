@@ -98,6 +98,10 @@ Update profile
 
             @csrf
             <button class="button outline dark twofa-button">Disable 2FA</button>
+
+            <h2>Recovery codes</h2>
+            <p>Recovery codes are a way to be able to log into your account if you have lost access to your Authenticator App.</p>
+            <p>Each recovery code can only be used once. When you run out of recovery codes, you can come back here and generate more codes.</p>
             <button id="recovery-codes" type="button">View recovery codes</button>
 
             <div id="show-recovery-codes"></div>

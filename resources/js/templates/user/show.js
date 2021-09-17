@@ -73,11 +73,19 @@ function togglePasswordVisibility(that) {
     that.previousElementSibling.setAttribute('type', that.parentNode.classList.contains('password-visible') ? "text" : "password");
 }
 
-function copyCodes(){
-
+function copyCodes() {
+    var showRecoveryCodes = document.getElementById('show-recovery-codes');
+    console.log(showRecoveryCodes.textContent);
+    // var dummy = document.createElement("textarea");
+    // dummy.style.position = 'absolute';
+    // document.body.appendChild(dummy);
+    // dummy.value = text;
+    // dummy.select();
+    // document.execCommand("copy");
+    // document.body.removeChild(dummy);
 }
 
-function downloadCodes(){
+function downloadCodes() {
 
 }
 
@@ -150,9 +158,10 @@ function downloadCodes(){
     }
 
     function showRecoveryCodes() {
+        addLoading('Fetching recovery codes...');
+
         ajax('/api/recovery-codes', 'get', null, showRecoveryCodesResponse);
     }
-
 
     function showRecoveryCodesResponse(resp) {
         var codes = '<div class="recovery-codes">';
@@ -161,8 +170,10 @@ function downloadCodes(){
             codes += resp.message[i] + '<br>';
         }
 
-        codes += '</div><button class="dark outline recovery-code-action" onclick="copyCodes()">Copy codes</button><button class="blue outline recovery-code-action" onclick="downloadCodes()">Download codes</button>';
+        codes += '</div><button type="button" class="dark outline recovery-code-action" onclick="copyCodes()">Copy codes</button><button type="button" class="blue outline recovery-code-action" onclick="downloadCodes()">Download codes</button>';
 
         document.getElementById('show-recovery-codes').innerHTML = codes;
+
+        removeLoading();
     }
 }());

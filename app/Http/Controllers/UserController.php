@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use App\Services\TwofaService;
 use Google2FA;
+use PragmaRX\Google2FALaravel\Support\Authenticator;
 
 class UserController extends Controller
 {
@@ -137,7 +138,7 @@ class UserController extends Controller
 
 	public function disable2fa(Request $request)
 	{
-		$request->user()->update(['2fa' => null]);
+		$request->user()->update(['2fa' => null, 'recovery_codes' => null]);
 
 		return redirect()->back()->with('alert', "Success:2FA has been disabled");
 	}
@@ -145,15 +146,15 @@ class UserController extends Controller
 	public function verify2fa(Request $request)
 	{
 		$message = "Success:2FA has been verified";
+		$user = $request->user();
 
 		if ($request->has('one_time_key')) {
 			$verify = Google2FA::verifyGoogle2FA($request->one_time_key, $request->one_time_password);
 
 			if (!$verify) {
-				return redirect(URL()->previous())->with('alert', "Error:Your one time password didn't match;Please try again.");
+				return back()->with('alert', "Error:Your one time password didn't match;Please try again.");
 			}
 
-			$user = $request->user();
 
 			if (is_null($user['2fa'])) {
 				$user->update([
@@ -164,12 +165,29 @@ class UserController extends Controller
 			Google2FA::login();
 
 			$message = "Success:2FA has been enabled";
+		} else {
+			$authenticator = app(Authenticator::class)->bootStateless($request);
+			$oneTimePassword = $request->get('one_time_password', '');
+
+			if (!$authenticator->isAuthenticated()) {
+				if (!in_array($oneTimePassword, $user->recovery_codes, true)) {
+					return back()->with('alert', "Error:Your one time password didn't match;Please try again.");
+				}
+
+				$recoveryCodes = array_values(array_filter($user->recovery_codes, fn ($code) => $code !== $oneTimePassword));
+
+				$user->update([
+					'recovery_codes' => $recoveryCodes ?: null
+				]);
+
+				Google2FA::login();
+			}
 		}
 
 		if (strpos(url()->previous(), '2fa/verify') !== false) {
 			return redirect()->route('app.index')->with('alert', $message);
 		}
 
-		return redirect()->back()->with('alert', $message);
+		return back()->with('alert', $message);
 	}
 }
