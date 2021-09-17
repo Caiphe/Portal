@@ -107,7 +107,7 @@
         <th>Name</th>
         <th>Keys</th>
         <th>Products</th>
-        <th>Registered</th>
+        <th>Created</th>
         <th>Country</th>
         <th>Status</th>
     </tr>
