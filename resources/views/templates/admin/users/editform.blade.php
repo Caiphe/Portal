@@ -148,8 +148,8 @@
         <th>Status</th>
     </tr>
 
-    @if(!$user->getDeveloperApps()->isEmpty())
-        @foreach($user->getDeveloperApps() as $app)
+    @if(!$user->getApps()->isEmpty())
+        @foreach($user->getApps() as $app)
             <tr>
                 <td><a href="{{ route('admin.dashboard.index', ['q' => $app->display_name]) }}" class="app-link">{{ $app->display_name }}</a></td>
                 <td>{{ count($app->products) }}</td>

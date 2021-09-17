@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Features\UserSearch\IDeveloper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DeleteAppRequest;
 use App\Http\Requests\UpdateStatusRequest;
+use App\Product;
 use App\Services\ApigeeService;
 use App\App;
 use App\Country;

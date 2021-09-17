@@ -242,11 +242,9 @@
             @if($app['status'] === 'revoked')
             <button class="app-status-update" data-status="approved" data-action="{{ route('admin.app.status-update', $app['aid']) }}">Approve Application</button>
             @elseif($app['status'] === 'approved')
-            {{-- <button class="app-status-update" data-status="revoked" data-action="{{ route('admin.app.status-update', $app['aid']) }}">Revoke Application</button> --}}
-            <button class="app-status-update app-status-edit">Edit</button>
-            <button class="app-status-update app-status-delete">Delete</button>
+            <button class="app-status-update" data-status="revoked" data-action="{{ route('admin.app.status-update', $app['aid']) }}">Revoke Application</button>
             @endif
-            {{-- <div class="status-separator"></div>
+            <div class="status-separator"></div>
             <button class="product-all product-status-action" data-action="approve">Approve all products</button>
             <button class="product-all product-status-action" data-action="revoke">Revoke all products</button> --}}
             @else
