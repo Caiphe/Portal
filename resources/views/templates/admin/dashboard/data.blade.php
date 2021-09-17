@@ -5,11 +5,11 @@
 <div class="my-apps">
     <div class="head">
         <div class="column">
-            <p>App name @svg('chevron-sorte-black', '#fff')</p>
+            <p>App name</p>
         </div>
 
         <div class="column">
-            <p>Countries @svg('chevron-sorte-black', '#fff')</p>
+            <p>Countries</p>
         </div>
 
         <div class="column">
@@ -17,7 +17,7 @@
         </div>
 
         <div class="column">
-            <p>Requested go live on @svg('chevron-sorte-black', '#fff')</p>
+            <p>Requested go live on</p>
         </div>
 
     </div>
