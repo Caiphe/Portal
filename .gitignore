@@ -18,3 +18,7 @@ yarn-error.log
 .setup/
 docker-compose.yml
 setup/
+public/.DS_Store
+public/images/.DS_Store
+public/images/icons/.DS_Store
+.DS_Store
