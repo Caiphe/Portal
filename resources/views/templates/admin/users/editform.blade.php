@@ -87,7 +87,7 @@
     </div>
     <div class="each-container">
         {{-- Password Strength goes here --}}
-        <div id="password-still-needs" class="invalid-feedback" role="alert"></div>
+        <div id="password-still-needs" class="invalid-feedback users-password-check" role="alert"></div>
     </div>
 
 </div>
