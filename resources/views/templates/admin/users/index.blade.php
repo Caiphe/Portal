@@ -17,7 +17,7 @@
             :fields="['first_name', 'last_name', 'email', 'member_since', 'role', 'status', 'apps']"
             :order="$order"
             :defaultSortQuery="$defaultSortQuery">
-            </x-admin-table>
+            </x-admin.users-table>
     </div>
 @endsection
 @push('scripts')
