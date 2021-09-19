@@ -32,6 +32,11 @@
     .each-container{
         flex: 1;
 
+        .users-password-check{
+            color: #bb1e4f;
+            padding-top: 58px;
+        }
+
         #password-strength {
             height: 34px;
             line-height: 1;
@@ -187,26 +192,22 @@
         transition: all 0.3s ease-in-out;
 
         &:nth-child(1){
-            width: 32%;
+            width: 35%;
         }
 
         &:nth-child(2){
-            width: 10%;
+            width: 15%;
         }
 
         &:nth-child(3){
-            width: 10%;
-        }
-
-        &:nth-child(4){
             width: 20%;
         }
 
-        &:nth-child(3){
-            width: 12%;
+        &:nth-child(4){
+            width: 15%;
         }
-        &:nth-child(3){
-            width: 13%;
+        &:nth-child(5){
+            width: 15%;
         }
     }
 

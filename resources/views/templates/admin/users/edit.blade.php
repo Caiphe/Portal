@@ -6,10 +6,13 @@
 <link rel="stylesheet" href="{{ mix('/css/templates/admin/users/edit.css') }}">
 @endpush
 
-@section('page-info')
+<div class="custom-heading">
+    @section('page-info')
     <a class="button primary" href="{{ route('admin.app.create', $user->id) }}">Create an app for this user</a>
     <button id="save" class="outline dark ml-1" form="admin-form">Save</button>
-@endsection
+    @endsection
+</div>
+
 
 @section('content')
 

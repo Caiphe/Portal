@@ -18,13 +18,15 @@
         <span class="status-bar status-{{ $product['pivot']['status'] }}"></span>
         <span class="name">{{ $product['display_name'] }}</span>
         @if($isDashboard)
+        <div class="buttons-block-container">
             <button class="product-status-action product-approve" data-action="approve" data-for="{{ $for }}">
                 @svg('thumbs-up', '#000000') Approve
             </button>
             <button class="product-status-action product-revoke" data-action="revoke" data-for="{{ $for }}">
-                @svg('thumbs-down', '#000000') Revoke
+                @svg('thumbs-down', '#000000') Decline
             </button>
             <button class="log-notes" data-id="{{ $app->aid . $product->slug }}">View Log Notes</button>
+        </div>
         @else
             @svg('arrow-forward', '#000000')
         @endif
