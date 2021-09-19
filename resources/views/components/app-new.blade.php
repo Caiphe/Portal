@@ -200,18 +200,18 @@
         @if(!$isAdminPage)
         <div class="products-title">
             <strong>Production products</strong>
-            <form class="ml-1" action="{{ route('app.credentials.request-renew', ['app' => $app, 'type' => 'production']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
+            {{-- <form class="ml-1" action="{{ route('app.credentials.request-renew', ['app' => $app, 'type' => 'production']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
                 @csrf
                 <button class="outline small" href="">Renew credentials</button>
-            </form>
+            </form> --}}
         </div>
         @else
         <div class="products-title">
             <strong>Production products</strong>
-            <form class="ml-1" action="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'production']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
+            {{-- <form class="ml-1" action="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'production']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
                 @csrf
                 <button class="outline small" href="">Renew credentials</button>
-            </form>
+            </form> --}}
         </div>
         @endif
         <div class="products production-products kyc-status-{{ Str::slug($app->kyc_status ?? 'none') }}">
@@ -242,11 +242,13 @@
             @if($app['status'] === 'revoked')
             <button class="app-status-update" data-status="approved" data-action="{{ route('admin.app.status-update', $app['aid']) }}">Approve Application</button>
             @elseif($app['status'] === 'approved')
-            <button class="app-status-update" data-status="revoked" data-action="{{ route('admin.app.status-update', $app['aid']) }}">Revoke Application</button>
+            {{-- <button class="app-status-update" data-status="revoked" data-action="{{ route('admin.app.status-update', $app['aid']) }}">Revoke Application</button> --}}
+            <button class="app-status-update app-status-edit">Edit</button>
+            <button class="app-status-update app-status-delete">Delete</button>
             @endif
-                {{-- <div class="status-separator"></div>
-                    <button class="product-all product-status-action" data-action="approve">Approve all products</button>
-                    <button class="product-all product-status-action" data-action="revoke">Revoke all products</button> --}}
+            {{-- <div class="status-separator"></div>
+            <button class="product-all product-status-action" data-action="approve">Approve all products</button>
+            <button class="product-all product-status-action" data-action="revoke">Revoke all products</button> --}}
             @else
             <button>View only</button>
             @endcan
