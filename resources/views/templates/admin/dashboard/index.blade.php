@@ -35,7 +35,7 @@
                 <div class="product-filter">
                     <select id="product-filter-status" name="product-status">
                         <option @if($productStatus === 'all') selected @endif value="all">All product status</option>
-                        <option @if($productStatus === 'pending') selected @endif value="pending">Pending</option>
+                        <option @if($productStatus === 'pending') selected @endif value="pending">Pending apps</option>
                         <option @if($productStatus === 'all-approved') selected @endif value="all-approved">All Approved</option>
                         <option @if($productStatus === 'at-least-one-approved') selected @endif value="at-least-one-approved">At Least One Approved</option>
                         <option @if($productStatus === 'all-revoked') selected @endif value="all-revoked">All Revoked</option>
