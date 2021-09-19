@@ -114,7 +114,7 @@
     @if(!$user->getApps()->isEmpty())
         @foreach($user->getApps() as $app)
             <tr>
-                <td><a href="{{ route('admin.dashboard.index', ['q' => $app->display_name]) }}" class="app-link">{{ $app->display_name }}</a></td>
+                <td><a href="{{ route('admin.dashboard.index', ['q' => $app->display_name, 'product-status' => 'all']) }}" class="app-link">{{ $app->display_name }}</a></td>
                 <td>{{ count($app->products) }}</td>
                 <td>{{ $app->created_at }}</td>
                 <td><div class="country-flag" style="background-image: url('/images/locations/{{ $app->country->code }}.svg')"></div></td>
