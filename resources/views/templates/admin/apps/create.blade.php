@@ -224,8 +224,11 @@
 
         document.getElementById('assign-to-me').addEventListener('click', assignToMe);
 
+        removeThumbnail.style.display = 'none';
+
         function assignToMe() {
             select(appCreatorEmail);
+            removeThumbnail.style.display = '';
         }
 
         function handleButtonClick() {
@@ -239,6 +242,10 @@
 
                         if(inputBox.value === '') {
                             return void addAlert('error', 'Please add a valid email');
+                        }
+
+                        if (inputBox.value === 'No user found try again') {
+                            return void addAlert('error', 'To assign the App ownership to yourself, please select "Assign to me" from below.');
                         }
 
                         nav.querySelector('a').nextElementSibling.classList.add('active');
@@ -533,6 +540,7 @@
                 creatorEmail.innerHTML = 'No creator assigned';
                 inputBox.value = '';
                 ownerAvatar.style.backgroundImage = "url(/images/yellow-vector.svg)";
+                this.style.display = 'none';
             });
         }
 
