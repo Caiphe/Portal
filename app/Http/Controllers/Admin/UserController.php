@@ -123,17 +123,15 @@ class UserController extends Controller
 
     public function edit(Request $request, User $user)
     {
-        $statusSelectFilter = $request->get('status_select_filter', 'all');
-        $countrySelectFilterCode = $request->get('country_select_filter', 'all');
+        $countrySelectFilterCode = $request->get('country-filter', 'all');
 
         $user->load('roles', 'countries', 'responsibleCountries', 'responsibleGroups');
         $groups = Product::select('group')->where('group', '!=', 'Partner')->where('group', '!=', 'MTN')->groupBy('group')->get()->pluck('group', 'group');
         $groups = array_merge(['MTN' => 'General'], $groups->toArray());
 
         return view('templates.admin.users.edit', [
-            'countrySelectFilterCode' => $countrySelectFilterCode,
+            'selectedCountryFilter' => $countrySelectFilterCode,
             'countries' => Country::orderBy('name')->get(),
-            'statusSelectFilter' => $statusSelectFilter,
             'roles' => Role::all(),
             'groups' => $groups,
             'user' => $user,
