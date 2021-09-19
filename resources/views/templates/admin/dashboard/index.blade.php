@@ -21,7 +21,7 @@
         <div class="product-filters">
             <form id="filter-form" class="ajaxify" action="{{ route('admin.dashboard.index') }}" method="GET" data-replace="#table-data">
                 <div class="product-filter">
-                    <input type="text" name="q" id="filter-text" class="filter-text" placeholder="App or developer name" value="{{ $_GET['q'] ?? '' }}">
+                    <input type="text" name="q" id="filter-text" class="filter-text" placeholder="Search app or developer name" value="{{ $_GET['q'] ?? '' }}">
                 </div>
 
                 <div class="product-filter">
