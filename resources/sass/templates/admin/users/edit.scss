@@ -49,6 +49,10 @@
             transition: background-color 0.356s;
             width: 320px;
 
+            @media(max-width: 1300px){
+                width: 280px;
+            }
+
             &.password-score-0,
             &.password-score-1,
             &.password-score-2 {
@@ -80,6 +84,10 @@
 
             label{
                 margin-top: 9px;
+
+                @media(max-width: 1299px){
+                    width: 120px;
+                }
             }
 
             select,
@@ -87,6 +95,10 @@
                 width: 320px;
                 border: 1px solid #707070;
                 border-radius: 4px;
+
+                @media(max-width: 1300px){
+                    width: 280px;
+                }
             }
 
             .block-membership{
@@ -97,6 +109,10 @@
                 box-sizing: border-box;
                 font-size: 14px;
                 padding: 10px 13px;
+
+                @media(max-width: 1300px){
+                    width: 280px;
+                }
             }
         }
 
@@ -136,18 +152,9 @@
 
 .bottom-section-container{
     margin-top: 30px;
-}
-
-.select-container{
-    display: flex;
-    position: relative;
-    padding-right: 50px;
-    margin-top: 30px;
 
     .each-select-block{
-        width: 50%;
         display: flex;
-        justify-content: space-between;
 
         &:nth-child(1){
             margin-right: 30px;
@@ -158,10 +165,20 @@
         }
 
         select{
-            width: 135px;
+            width: 200px;
             border: 1px solid #707070;
+            margin-left: 20px;
         }
     }
+}
+
+.select-container{
+    display: flex;
+    position: relative;
+    padding-right: 50px;
+    margin-top: 30px;
+
+
 }
 
 
