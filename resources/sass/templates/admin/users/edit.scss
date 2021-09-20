@@ -136,18 +136,9 @@
 
 .bottom-section-container{
     margin-top: 30px;
-}
-
-.select-container{
-    display: flex;
-    position: relative;
-    padding-right: 50px;
-    margin-top: 30px;
 
     .each-select-block{
-        width: 50%;
         display: flex;
-        justify-content: space-between;
 
         &:nth-child(1){
             margin-right: 30px;
@@ -158,10 +149,19 @@
         }
 
         select{
-            width: 135px;
+            width: 200px;
             border: 1px solid #707070;
         }
     }
+}
+
+.select-container{
+    display: flex;
+    position: relative;
+    padding-right: 50px;
+    margin-top: 30px;
+
+
 }
 
 
