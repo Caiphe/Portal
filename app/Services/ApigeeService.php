@@ -42,9 +42,9 @@ class ApigeeService
         return self::HttpWithBasicAuth()->delete(config('apigee.base') . $url);
     }
 
-    public static function createApp(array $data)
+    public static function createApp(array $data, User $user = null)
     {
-        $user = auth()->user();
+        $user ??= auth()->user();
         return self::post("developers/{$user->email}/apps", $data);
     }
 
@@ -207,6 +207,28 @@ class ApigeeService
             }
             $value = $key === 'Group' ? Str::studly($attribute['value']) : $attribute['value'];
             $a[$key] = $value;
+        }
+        return $a;
+    }
+
+    public static function formatAppAttributes(array $attributes)
+    {
+        $a = [];
+        foreach ($attributes as $attribute) {
+            if (!isset($attribute['value'])) {
+                $attribute['value'] = '';
+            }
+            $value = $attribute['name'] === 'Group' ? Str::studly($attribute['value']) : $attribute['value'];
+            $a[$attribute['name']] = $value;
+        }
+        return $a;
+    }
+
+    public static function formatToApigeeAttributes(array $attributes)
+    {
+        $a = [];
+        foreach ($attributes as $name => $value) {
+            $a[] = ['name' => $name, 'value' => $value];
         }
         return $a;
     }

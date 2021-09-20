@@ -1,34 +1,41 @@
 @extends('layouts.admin')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ mix('/css/templates/apps/index.css') }}">
+    <link rel="stylesheet" href="{{ mix('/css/templates/admin/dashboard/index.css') }}">
 @endpush
 
 @section('title', 'Applications')
 
 @section('page-info')
-    <button class="button primary" onclick="syncApps();">Sync Apps</button>
+    <a class="button primary mr-2" href="{{ route('admin.app.create') }}">Create new Application</a>
+    <button class="button dark outline" onclick="syncApps();">Sync Apps</button>
 @endsection
 
 @section('content')
 
     <div class="container" id="app-index">
+        <div class="approved-app-popup">
+            <strong> App approved App approved.</strong> <span>The app <span class="app-approved-name">SuperService</span> has been approved</span>
+        </div>
+
         <div class="product-filters">
             <form id="filter-form" class="ajaxify" action="{{ route('admin.dashboard.index') }}" method="GET" data-replace="#table-data">
-                <div class="prodict-filter">
-                    <h3>App Status</h3>
+                <div class="product-filter">
+                    <input type="text" name="q" id="filter-text" class="filter-text" placeholder="Search app or developer name" value="{{ $_GET['q'] ?? '' }}">
+                </div>
+
+                <div class="product-filter">
                     <select id="app-filter-status" name="app-status">
-                        <option @if($appStatus === 'all') selected @endif value="all">All</option>
+                        <option @if($appStatus === 'all') selected @endif value="all">All app status</option>
                         <option @if($appStatus === 'approved') selected @endif value="approved">Approved Apps</option>
                         <option @if($appStatus === 'revoked') selected @endif value="revoked">Revoked Apps</option>
                     </select>
                 </div>
 
-                <div class="prodict-filter">
-                    <h3>Product Status</h3>
+                <div class="product-filter">
                     <select id="product-filter-status" name="product-status">
-                        <option @if($productStatus === 'all') selected @endif value="all">All</option>
-                        <option @if($productStatus === 'pending') selected @endif value="pending">Pending</option>
+                        <option @if($productStatus === 'all') selected @endif value="all">All product status</option>
+                        <option @if($productStatus === 'pending') selected @endif value="pending">Pending apps</option>
                         <option @if($productStatus === 'all-approved') selected @endif value="all-approved">All Approved</option>
                         <option @if($productStatus === 'at-least-one-approved') selected @endif value="at-least-one-approved">At Least One Approved</option>
                         <option @if($productStatus === 'all-revoked') selected @endif value="all-revoked">All Revoked</option>
@@ -36,23 +43,16 @@
                     </select>
                 </div>
 
-                <div class="prodict-filter">
-                    <h3 class="ml-2">Country</h3>
+                <div class="product-filter">
                     <select id="filter-country"  name="countries" label="Select country" >
-                        <option value="">Select country</option>
+                        <option value="">All countries</option>
                         @foreach($countries as $code => $name)
                             <option value="{{ $code }}" {{ (($selectedCountry === $code) ? 'selected': '') }}>{{ $name }}</option>
                         @endforeach
                     </select>
                 </div>
 
-                <div class="prodict-filter">
-                    <h3 class="ml-2">Search</h3>
-                    <input type="text" name="q" id="filter-text" class="filter-text" placeholder="App or developer name" value="{{ $_GET['q'] ?? '' }}">
-                </div>
-            </form>
-            <form class="ajaxify" data-replace="#table-data" data-func="clearFilter()" action="{{ route('admin.dashboard.index') }}" method="GET">
-                <button id="clearFilter" class="dark outline ml-2">Clear filters</button>
+
             </form>
         </div>
 
@@ -185,7 +185,7 @@
                     document.querySelector('#status-dialog .status-dialog-textarea').value = '';
                     handleUpdateStatusNoteMany(appProducts, lookBack, this, that);
                 }, {
-                  once: true
+                    once: true
                 });
 
                 dialog.classList.add('show');
@@ -199,7 +199,7 @@
                 handleUpdateStatusNote(this, that);
                 document.querySelector('#status-dialog .status-dialog-textarea').value = '';
             }, {
-              once: true
+                once: true
             });
 
             dialog.classList.add('show');
@@ -268,7 +268,7 @@
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
-           addLoading('Updating KYC status');
+            addLoading('Updating KYC status');
 
             xhr.send(JSON.stringify({
                 kyc_status: kycSelect.value

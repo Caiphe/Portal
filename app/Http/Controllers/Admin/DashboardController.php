@@ -9,6 +9,9 @@ use App\App;
 use App\Country;
 use App\Mail\KycStatusUpdate;
 use App\Mail\ProductAction;
+use App\Services\ProductLocationService;
+use App\User;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Mail;
 use \Illuminate\Http\Request;
 
@@ -238,5 +241,36 @@ class DashboardController extends Controller
         }
 
         return redirect()->back()->with('alert', "error:Sorry something went wrong updating the status.");
+    }
+
+    /**
+     * @param User $user
+     * @param ProductLocationService $productLocationService
+     * @return Factory
+     */
+    public function createUserApp(ProductLocationService $productLocationService, User $user = null)
+    {
+        $appCreator = \Auth()->user();
+
+        $users = User::whereNotNull(['email_verified_at'])->select(['profile_picture', 'email'])->get();
+
+        $emails = $profiles = [];
+        foreach($users as $u){
+            $profiles[$u->email] = $u->profile_picture;
+            if ($u->email === $appCreator->email) continue;
+            array_push($emails, $u->email );
+        }
+
+        [$products, $countries] = $productLocationService->fetch();
+
+        return view('templates.admin.apps.create', [
+            'productCategories' => array_keys($products->toArray()),
+            'appCreatorEmail' => $appCreator->email,
+            'countries' => $countries ?? '',
+            'userProfiles' => $profiles,
+            'userEmails' => $emails,
+            'products' => $products,
+            'chosenUser' => $user,
+        ]);
     }
 }

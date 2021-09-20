@@ -10,61 +10,71 @@
 @endphp
 
 @allowonce('card_link')
-<link href="{{ mix('/css/components/_app.css') }}" rel="stylesheet"/>
+<link href="{{ mix('/css/components/_app-new.css') }}" rel="stylesheet"/>
 @endallowonce
 
-<div class="app app-status-{{ $appStatus }}" data-name="{{ $app['name'] }}" data-id="{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
+<div class="app new-app-data app-status-{{ $appStatus }}" data-name="{{ $app['name'] }}" data-id="{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
      data-locations="{{ $countryCode }}">
     <div class="column">
         <p class="name toggle-app">
             <span title="{{ $appStatus }}" class="status-icon"></span>
-            {{ $app['display_name'] }}
+            <span class="app-name">  {{ $app['display_name'] }}</span>
         </p>
     </div>
+
     @if($type === 'approved')
     <div class="column countries">
-        <span title="{{ $countryName }}">@svg($countryCode, '#000000', 'images/locations')</span>
+        <p title="{{ $countryName }}">@svg($countryCode, '#000000', 'images/locations')</p>
     </div>
     @else
         <div class="column"></div>
     @endif
+
     <div class="column">
         @if($isAdminPage)
             {{ $details['email'] ?? '' }}
         @else
-            @subStr($app['callback_url'], 30)
+           <a class="bold" href="" target="_blank"> @subStr($app['callback_url'], 30)</a>
         @endif
     </div>
-    <div class="column">
+
+    <div class="column custom-app-last-block">
         @if($isAdminPage)
             {{ date('Y-m-d', strtotime($app['live_at'] ?? $app['updated_at'])) }}
         @else
             {{ date('Y-m-d', strtotime($app['updated_at'])) }}
         @endif
-    </div>
-    <div class="column">
+
         <button class="actions"></button>
         <button class="toggle-app-button toggle-app">@svg('chevron-down', '#000000')</button>
     </div>
+
     <div class="detail">
         @if($isAdminPage)
             <div>
                 <div class="detail-left">
                     <div class="detail-row cols">
-                        <div class="detail-item"><strong>Developer name:</strong></div>
+                        <div class="detail-item"><strong>Developer name</strong></div>
                         <div class="detail-item">{{ ($details['first_name'] ?? 'Not registered')  . ' ' . ($details['last_name'] ?? '') }}</div>
                     </div>
                     <div class="detail-row cols">
-                        <div class="detail-item"><strong>Developer email:</strong></div>
+                        <div class="detail-item"><strong>Developer email</strong></div>
                         <div class="detail-item">{{ $details['email'] ?? '' }}</div>
                     </div>
                 </div>
                 <div class="detail-right">
-                    <div class="detail-row">
+                    <div class="detail-row cols">
+                        <div class="detail-item"><strong>Callback URL</strong></div>
+                        <div class="detail-item">{{ $app['callback_url'] ?: 'No callback url' }}</div>
+                    </div>
+
+                    <div class="detail-row cols">
                         <div class="detail-item"><strong>Description:</strong></div>
                         <div class="detail-item detail-item-description">{{ $app['description'] ?: 'No description' }}</div>
                     </div>
-                    <button class="log-notes outline small mt-1" data-id="{{ $app['aid'] }}">View Application Log Notes</button>
+                </div>
+                <div class="detail-item">
+                    <button class="log-notes outline dark outline mt-1" data-id="{{ $app['aid'] }}">Application log notes</button>
                 </div>
             </div>
         @elseif(!empty($sandboxProducts['products']))
@@ -192,7 +202,7 @@
             <strong>Production products</strong>
             <form class="ml-1" action="{{ route('app.credentials.request-renew', ['app' => $app, 'type' => 'production']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
                 @csrf
-                {{--- Please do not remove this button  --}}
+                {{--- Please do not remove button  --}}
                 <button class="outline small" href="">Renew credentials</button>
             </form>
         </div>
@@ -201,7 +211,7 @@
             <strong>Production products</strong>
             <form class="ml-1" action="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'production']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
                 @csrf
-                {{--- Please do not remove this button  --}}
+                {{--- Please do not remove button  --}}
                 <button class="outline small" href="">Renew credentials</button>
             </form>
         </div>
@@ -228,12 +238,14 @@
         </div>
         @endif
     </div>
-    <nav class="menu">
+    <nav class="menu custom-menu">
         @if($isAdminPage)
             @can('administer-dashboard')
             @if($app['status'] === 'revoked')
+                {{--- Please do not remove or add Edit/Delete buttons  --}}
             <button class="app-status-update" data-status="approved" data-action="{{ route('admin.app.status-update', $app['aid']) }}">Approve Application</button>
             @elseif($app['status'] === 'approved')
+                {{--- Please do not remove or add Edit/Delete buttons  --}}
             <button class="app-status-update" data-status="revoked" data-action="{{ route('admin.app.status-update', $app['aid']) }}">Revoke Application</button>
             @endif
             {{-- <div class="status-separator"></div>
@@ -243,7 +255,7 @@
             <button>View only</button>
             @endcan
         @else
-            <a href="{{ route('app.edit', $app->slug) }}">Edit</a>
+            <a href="{{ route('app.edit', $app['slug']) }}">Edit</a>
             <form class="delete">
                 @method('DELETE')
                 @csrf

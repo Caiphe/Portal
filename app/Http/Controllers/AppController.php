@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\App;
+use App\Features\UserSearch\IDeveloper;
 use App\Product;
 use App\Country;
 use App\Http\Requests\CreateAppRequest;
@@ -17,6 +19,7 @@ use App\Services\Kyc\KycService;
 use App\Services\ProductLocationService;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
 
 class AppController extends Controller
 {
@@ -82,7 +85,15 @@ class AppController extends Controller
             'callbackUrl' => $validated['url'],
         ];
 
-        $createdResponse = ApigeeService::createApp($data);
+        $user = $request->user();
+
+        if (($user->hasRole('admin') || $user->hasRole('opco')) && $request->has('app_owner')) {
+            $appOwner = User::where('email', $request->get('app_owner'))->first();
+        } else {
+            $appOwner = $user;
+        }
+
+        $createdResponse = ApigeeService::createApp($data, $appOwner);
 
         if (strpos($createdResponse, 'duplicate key') !== false) {
             return response()->json(['success' => false, 'message' => 'There is already an app with that name.'], 409);
@@ -176,6 +187,8 @@ class AppController extends Controller
         });
         $hasSandboxProducts = $sandboxProducts->count() > 0;
         $products = Product::whereIn('name', $validated['products'])->pluck('attributes', 'name');
+        $countriesByCode = Country::pluck('iso', 'code');
+        $appAttributes = $app->attributes;
 
         if (count($credentials) === 1 && $hasSandboxProducts) {
             $credentialsType = 'consumerKey-sandbox';
@@ -211,39 +224,31 @@ class AppController extends Controller
             return redirect()->route('app.index')->with('alert', 'error:Could not find the Consumer Key. Please contact us if this happens again');
         }
 
+        $appAttributes = array_merge($appAttributes, [
+            'DisplayName' => $validated['display_name'] ?? $app->display_name,
+            'Description' => $validated['description'],
+            'Country' => $validated['country'],
+            'location' => $countriesByCode[$validated['country']] ?? ""
+        ]);
+
         $data = [
             'name' => $app->name,
             'key' => $key,
             'apiProducts' => $newProducts,
             'originalProducts' => $originalProducts,
             'keyExpiresIn' => -1,
-            'attributes' => [
-                [
-                    'name' => 'DisplayName',
-                    'value' => $validated['display_name'] ?? $app->display_name,
-                ],
-                [
-                    'name' => 'Description',
-                    'value' => $validated['description'],
-                ],
-                [
-                    'name' => 'Country',
-                    'value' => $validated['country'],
-                ],
-            ],
+            'attributes' => ApigeeService::formatToApigeeAttributes($appAttributes),
             'callbackUrl' => $validated['url'] ?? '',
         ];
 
         $updatedResponse = ApigeeService::updateApp($data)->json();
 
-        $attributes = ApigeeService::getAppAttributes($data['attributes']);
-
         $app->update([
-            'display_name' => $data['attributes'][0]['value'],
-            'attributes' => $attributes,
+            'display_name' => $appAttributes['DisplayName'],
+            'attributes' => $appAttributes,
             'credentials' => $updatedResponse['credentials'],
             'callback_url' => $data['callbackUrl'],
-            'description' => $data['attributes'][1]['value'],
+            'description' => $appAttributes['Description'],
             'country_code' => $validated['country'],
         ]);
 
