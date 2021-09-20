@@ -6,7 +6,11 @@
 
 <div class="cols centre-align mb-2 filter-form-container">
     <form id="product-search-form" action="{{ route("admin.{$modelName}.index") }}" method="GET" class="ajaxify" data-replace="#table-data">
-        <input id="search-page" type="text" name="q" placeholder="Search..." autofocus autocomplete="off">
+        @if($modelName === 'product')
+            <input id="search-page" type="text" name="q" placeholder="Search for products..." autofocus autocomplete="off">
+        @else
+            <input id="search-page" type="text" name="q" placeholder="Search..." autofocus autocomplete="off">
+        @endif
         @if($modelName === 'product')
         <select name="access" class="access-level" id="access-level">
             <option value="">All access levels</option>
