@@ -130,7 +130,7 @@
             <div class="select-products">
                 <div class="apps-heading-container">
                     <span class="apps-top-text">Create a new app</span>
-                    <h1 class="app-create-heading">Select products</h1>
+                    <h1 class="app-create-heading">Select countries</h1>
                     <span class="gray-text">Select the products you would like to add to your app.</span>
                 </div>
 
