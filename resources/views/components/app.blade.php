@@ -192,6 +192,7 @@
             <strong>Production products</strong>
             <form class="ml-1" action="{{ route('app.credentials.request-renew', ['app' => $app, 'type' => 'production']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
                 @csrf
+                {{--- Please do not remove this button  --}}
                 <button class="outline small" href="">Renew credentials</button>
             </form>
         </div>
@@ -200,6 +201,7 @@
             <strong>Production products</strong>
             <form class="ml-1" action="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'production']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
                 @csrf
+                {{--- Please do not remove this button  --}}
                 <button class="outline small" href="">Renew credentials</button>
             </form>
         </div>
