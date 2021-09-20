@@ -263,6 +263,11 @@
 
                                     li{
                                         display: block;
+
+                                        &.non-cursor{
+                                            pointer-events: none;
+                                            cursor: none;
+                                        }
                                     }
                                 }
                             }
@@ -561,6 +566,16 @@
             @media #{$small} {
                 width: 100%;
             }
+        }
+    }
+}
+
+
+.page-info{
+    .primary{
+        &:hover{
+            background-color: #fc0;
+            transition: all 0.3s ease-in-out;
         }
     }
 }

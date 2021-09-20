@@ -548,7 +548,7 @@
             let listData;
             if(!list.length){
                 // userValue = inputBox.value;
-                listData = `<li class="non-cursor">No user found try again</li>`;
+                listData = `<li class="non-cursor"><div class="hide-cursor">No user found try again</div></li>`;
             }else{
                 listData = list.join('');
             }
