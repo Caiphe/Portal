@@ -211,6 +211,28 @@ class ApigeeService
         return $a;
     }
 
+    public static function formatAppAttributes(array $attributes)
+    {
+        $a = [];
+        foreach ($attributes as $attribute) {
+            if (!isset($attribute['value'])) {
+                $attribute['value'] = '';
+            }
+            $value = $attribute['name'] === 'Group' ? Str::studly($attribute['value']) : $attribute['value'];
+            $a[$attribute['name']] = $value;
+        }
+        return $a;
+    }
+
+    public static function formatToApigeeAttributes(array $attributes)
+    {
+        $a = [];
+        foreach ($attributes as $name => $value) {
+            $a[] = ['name' => $name, 'value' => $value];
+        }
+        return $a;
+    }
+
     public static function getOrgApps(string $status = 'approved', int $rows = 10)
     {
         $apps = [];
