@@ -155,7 +155,6 @@ class UserController extends Controller
 				return back()->with('alert', "Error:Your one time password didn't match;Please try again.");
 			}
 
-
 			if (is_null($user['2fa'])) {
 				$user->update([
 					'2fa' => $request->one_time_key
@@ -180,6 +179,8 @@ class UserController extends Controller
 					'recovery_codes' => $recoveryCodes ?: null
 				]);
 
+				Google2FA::login();
+			} else {
 				Google2FA::login();
 			}
 		}

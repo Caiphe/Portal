@@ -1,3 +1,5 @@
+var recoveryCodes = [];
+
 document.getElementById('profile-picture').addEventListener('change', chooseProfilePicture);
 
 function chooseProfilePicture() {
@@ -74,19 +76,14 @@ function togglePasswordVisibility(that) {
 }
 
 function copyCodes() {
-    var showRecoveryCodes = document.getElementById('show-recovery-codes');
-    console.log(showRecoveryCodes.textContent);
-    // var dummy = document.createElement("textarea");
-    // dummy.style.position = 'absolute';
-    // document.body.appendChild(dummy);
-    // dummy.value = text;
-    // dummy.select();
-    // document.execCommand("copy");
-    // document.body.removeChild(dummy);
-}
-
-function downloadCodes() {
-
+    var dummy = document.createElement("textarea");
+    dummy.style.position = 'absolute';
+    document.body.appendChild(dummy);
+    dummy.value = recoveryCodes.join("\n");
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
+    addAlert('success', 'Copied')
 }
 
 (function () {
@@ -164,13 +161,14 @@ function downloadCodes() {
     }
 
     function showRecoveryCodesResponse(resp) {
+        recoveryCodes = resp.message;
         var codes = '<div class="recovery-codes">';
 
-        for (var i = 0; i < resp.message.length; i++) {
+        for (var i = 0; i < recoveryCodes.length; i++) {
             codes += resp.message[i] + '<br>';
         }
 
-        codes += '</div><button type="button" class="dark outline recovery-code-action" onclick="copyCodes()">Copy codes</button><button type="button" class="blue outline recovery-code-action" onclick="downloadCodes()">Download codes</button>';
+        codes += '</div><button type="button" class="dark outline recovery-code-action" onclick="copyCodes()">Copy codes</button><a href="data:text/plain;charset=utf-8,' + encodeURIComponent(recoveryCodes.join("\n")) + '" download="mtn-developer-portal-recovery-codes.txt" class="button blue outline recovery-code-action" onclick="downloadCodes()">Download codes</a>';
 
         document.getElementById('show-recovery-codes').innerHTML = codes;
 

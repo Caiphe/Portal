@@ -79,12 +79,12 @@ Update profile
 
         @if(empty($user['2fa']))
         <form id="twofa" class="enable-2fa" action="{{ route('user.2fa.verify') }}" method="POST">
-            <h2>Enable 2FA</h2>
+            <h2>2FA settings</h2>
             <h3>Add to authenticator app</h3>
 
-            <h4>Key: {{ $key }}</h4>
-
             {!! $inlineUrl !!}
+
+            <h4>Key: {{ $key }}</h4>
             @csrf
             <input type="hidden" name="one_time_key" value="{{ $key }}">
             <input id="authenticator-code" type="text" name="one_time_password" placeholder="Authenticator code" required autocomplete="off">
@@ -92,16 +92,17 @@ Update profile
         </form>
         @else
         <form id="twofa" class="centre pt-4" action="{{ route('user.2fa.disable') }}" method="POST">
-            <h4>Key: {{ $key }}</h4>
-
+            <h2>2FA settings</h2>
             {!! $inlineUrl !!}
+
+            <h4>Key: {{ $key }}</h4>
 
             @csrf
             <button class="button outline dark twofa-button">Disable 2FA</button>
 
             <h2>Recovery codes</h2>
-            <p>Recovery codes are a way to be able to log into your account if you have lost access to your Authenticator App.</p>
-            <p>Each recovery code can only be used once. When you run out of recovery codes, you can come back here and generate more codes.</p>
+            <p class="align-left">Recovery codes are a way to be able to log into your account if you have lost access to your Authenticator App.</p>
+            <p class="align-left">Each recovery code can only be used once. When you run out of recovery codes, you can come back here and generate more codes.</p>
             <button id="recovery-codes" type="button">View recovery codes</button>
 
             <div id="show-recovery-codes"></div>
