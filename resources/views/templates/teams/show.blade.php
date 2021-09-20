@@ -115,50 +115,28 @@ Teams
                     <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
                     <div class="user-full-name">Xoliswa Shandu</div>
                     <div class="check-container">
-                        <label class="container">
-                            <input type="radio" name="user-assignee">
-                            <span class="checkmark"></span>
-                        </label>
-                    </div>
-                </li>
-                <li class="each-user">
-                    <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
-                    <div class="user-full-name">Byron Dunwoody</div>
-                    <div class="check-container">
-                        <label class="container">
-                            <input type="radio" name="user-assignee">
-                            <span class="checkmark"></span>
-                        </label>
+                        <x-radio-round name="user-assignee" value=""></x-radio-round>
                     </div>
                 </li>
                 <li class="each-user">
                     <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
                     <div class="user-full-name">Max Bombwell</div>
                     <div class="check-container">
-                        <label class="container">
-                            <input type="radio" name="user-assignee">
-                            <span class="checkmark"></span>
-                        </label>
+                        <x-radio-round name="user-assignee" value=""></x-radio-round>
                     </div>
                 </li>
                 <li class="each-user">
                     <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
                     <div class="user-full-name">Cassy Buary</div>
                     <div class="check-container">
-                        <label class="container">
-                            <input type="radio" name="user-assignee">
-                            <span class="checkmark"></span>
-                        </label>
+                        <x-radio-round name="user-assignee" value=""></x-radio-round>
                     </div>
                 </li>
                 <li class="each-user">
                     <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
-                    <div class="user-full-name">Max Bombwell</div>
+                    <div class="user-full-name">Cassy Buary</div>
                     <div class="check-container">
-                        <label class="container">
-                            <input type="radio" name="user-assignee">
-                            <span class="checkmark"></span>
-                        </label>
+                        <x-radio-round name="user-assignee" value=""></x-radio-round>
                     </div>
                 </li>
             </ul>
@@ -174,14 +152,77 @@ Teams
 </div>
 {{-- Delete User Ends --}}
 
-<div class="header-block team-name-logo">
-    {{-- To replace with the company logo --}}
-   <div class="team-logo" style="background-image: url('/images/user-thumbnail.jpg')"></div> <h2>
-        {{  $team->name }}
-    </h2>
+
+{{-- Transfer ownership --}}
+<div class="ownweship-modal-container">
+    <div class="ownweship-overlay-container"></div>
+
+    {{-- This show up if you are the owner so you should assign a different owner --}}
+    <div class="transfer-ownership-block">
+        <button class="ownweship-close-modal">@svg('close-popup', '#000')</button>
+        <h2 class="team-head custom-head">Transfer Ownership</h2>
+        <p class="remove-user-text">
+            <span class="user-name">Which team member would you like to transfer ownership to? </span>
+        </p>
+
+        <div class="scrollable-users-container">
+            <ul class="list-users-container">
+                <li class="each-user">
+                    <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
+                    <div class="user-full-name">Xoliswa Shandu</div>
+                    <div class="check-container">
+                        <x-radio-round name="user-assignee" value=""></x-radio-round>
+                    </div>
+                </li>
+                <li class="each-user">
+                    <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
+                    <div class="user-full-name">Max Bombwell</div>
+                    <div class="check-container">
+                        <x-radio-round name="user-assignee" value=""></x-radio-round>
+                    </div>
+                </li>
+                <li class="each-user">
+                    <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
+                    <div class="user-full-name">Cassy Buary</div>
+                    <div class="check-container">
+                        <x-radio-round name="user-assignee" value=""></x-radio-round>
+                    </div>
+                </li>
+                <li class="each-user">
+                    <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
+                    <div class="user-full-name">Cassy Buary</div>
+                    <div class="check-container">
+                        <x-radio-round name="user-assignee" value=""></x-radio-round>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <form class="form-delete-user">
+            <button type="button" class="btn primary mr-10 cancel-removal-btn">CANCEL</button>
+            <button type="button" class="btn dark">REMOVE</button>
+        </form>
+
+    </div>
+
 </div>
 
+
 <div class="mt-2">
+    {{-- Top ownerhip block container --}}
+    <div class="top-ownership-banner">
+        <div class="message-container">You have been requested to be the owner of this team.</div>
+        <div class="btn-block-container">
+            <button class="btn blue-button">Accept request</button>
+            <button class="btn blue-button">Revoke request</button>
+        </div>
+    </div>
+
+    <div class="header-block team-name-logo">
+        {{-- To replace with the company logo --}}
+       <div class="team-logo" style="background-image: url('/images/user-thumbnail.jpg')"></div> 
+       <h2>{{  $team->name }}</h2>
+    </div>
     <h5>Team bio</h5>
     <p>{{ $team->description }}</p>
     <div class="detail-left team-detail-left">
@@ -238,7 +279,7 @@ Teams
                                 <ul>
                                     <li><button class="make-admin">Make administrator</button></li>
                                     <li><button class="make-user">Make User</button></li>
-                                    <li><button class="make-owner @if($teamUser->isTeamOwner()) non-active @endif">Make Owner</button></li>
+                                    <li><button class="make-owner @if($teamUser->isTeamOwner()) active @else non-active @endif">Make Owner</button></li>
                                     <li><button class="user-delete">Delete</button></li>
                                 </ul>
                             </div>
@@ -308,6 +349,22 @@ Teams
                         @endforelse
                     </div>
                 </div>
+            </div>
+        </div>
+
+        {{-- Transfer ownership container --}}
+        <div class="transfer-owner-ship-heading">
+            <h2>Transfer ownership</h2>
+            <button class="btn non-active">Select a new owner</button>
+        </div>
+
+        {{-- Transfer request --}}
+        <div class="trasfer-container">
+            <h4>Transfer requests</h4>
+            <div class="">You have been requested to be the new owner of this team. please choose if you would like to accept or revoke the request</div>
+            <div class="transfer-btn-block">
+                <button type="button" class="btn dark dark-accept">Accept request</button>
+                <button type="button" class="btn dark dark-revoked">Revoke request</button>
             </div>
         </div>
 
