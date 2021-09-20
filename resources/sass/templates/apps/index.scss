@@ -22,6 +22,80 @@
     }
 }
 
+.ownership-request{
+    background-color: #0C678F;
+    width: 560px;
+    // position: fixed;
+    // right: 62px;
+    // top: 40px;
+    position: absolute;
+    right: 38px;
+    top: -32px;
+    height: 83px;
+    box-sizing: border-box;
+    z-index: 5;
+    border-radius: 8px;
+    padding-top: 10px;
+    padding-left: 19px;
+    display: flex;
+    pointer-events: auto;
+
+    @media(max-width:767px){
+        position: fixed;
+        top: 50px;
+        width: 90%;
+        height: auto;
+        padding-bottom: 30px;
+        left: 5%;
+    }
+
+    svg{
+        &:nth-child(1){
+            width: 60px;
+        }
+    }
+
+    .message-container{
+        color: #fff;
+        margin-left: 13px;
+        margin-top: 8px;
+        width: 84%;
+
+        @media(max-width: 768px){
+            padding-right: 30px;
+        }
+
+        a{
+            text-decoration: underline;
+            color: #fff;
+            cursor: pointer;
+        }
+    }
+
+    .close-banner{
+        width: 19px;
+        height: 22px;
+        position: absolute;
+        right: 7px;
+        top: 3px;
+        border: none;
+        background-color: transparent;
+        padding: 0px;
+        cursor: pointer;
+
+        &:hover{
+            background-color: transparent;
+        }
+    }
+
+    &.hide{
+        opacity: 0;
+        z-index: -1;
+        transition: all 0.3s ease-in-out;
+        pointer-events: none;
+    }
+}
+
 // NO APPS
 #app-empty {
     height: 100%;

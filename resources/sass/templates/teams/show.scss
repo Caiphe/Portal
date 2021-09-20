@@ -304,6 +304,14 @@ button{
                     width: 90px;
                 }
             }
+
+            .transfer-btn{
+                color: #AEAEAE;
+                background-color: #E9E9E9;
+                pointer-events: none;
+                cursor: none;
+                border: solid 2px #E9E9E9;
+            }
         }
 
         .radio-container{
@@ -334,7 +342,12 @@ button{
         }
     }
 
-    .transfer-ownership-block,
+    .transfer-ownership-block{
+        height: 460px;
+        display: block ;
+        pointer-events: auto ;
+    }
+
     .confirm-delete-block{
         height: 460px;
         display: none;
@@ -986,3 +999,8 @@ button{
         }
     }
 }
+
+.form-delete-user{
+
+}
+

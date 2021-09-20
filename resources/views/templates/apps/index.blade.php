@@ -26,6 +26,15 @@
 @endsection
 
 @section('content')
+
+    <div class="ownership-request animated">
+        @svg('info', '#fff')
+        <div class="message-container">
+            You have been requested to be the new owner of PlusNarrative. Please visit your <a href="#">team's dashboard</a>
+        </div>
+        <button class="close-banner">@svg('close', '#fff')</button>
+    </div>
+
     <x-heading heading="Apps" tags="DASHBOARD">
         <a href="{{route('app.create')}}" class="button outline dark create-new" id="create"></a>
     </x-heading>
@@ -290,6 +299,15 @@
             dummy.select();
             document.execCommand("copy");
             document.body.removeChild(dummy);
+        }
+
+        var closeBannerBtn = document.querySelector('.close-banner');
+        var OwnershipRequest = document.querySelector('.ownership-request');
+        OwnershipRequest.classList.remove('hide')
+
+        closeBannerBtn.addEventListener('click', hideOwnershipBanner);
+        function hideOwnershipBanner(){
+            OwnershipRequest.classList.add('hide');
         }
 
     </script>

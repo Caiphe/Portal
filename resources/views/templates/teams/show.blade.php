@@ -153,17 +153,14 @@ Teams
 {{-- Delete User Ends --}}
 
 
-{{-- Transfer ownership --}}
+{{-- Transfer ownership Modal--}}
 <div class="ownweship-modal-container">
     <div class="ownweship-overlay-container"></div>
-
     {{-- This show up if you are the owner so you should assign a different owner --}}
     <div class="transfer-ownership-block">
         <button class="ownweship-close-modal">@svg('close-popup', '#000')</button>
         <h2 class="team-head custom-head">Transfer Ownership</h2>
-        <p class="remove-user-text">
-            <span class="user-name">Which team member would you like to transfer ownership to? </span>
-        </p>
+        <p class="remove-user-text">Which team member would you like to transfer ownership to? </p>
 
         <div class="scrollable-users-container">
             <ul class="list-users-container">
@@ -171,42 +168,40 @@ Teams
                     <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
                     <div class="user-full-name">Xoliswa Shandu</div>
                     <div class="check-container">
-                        <x-radio-round name="user-assignee" value=""></x-radio-round>
+                        <x-radio-round name="transfer-ownership-check" value=""></x-radio-round>
                     </div>
                 </li>
                 <li class="each-user">
                     <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
                     <div class="user-full-name">Max Bombwell</div>
                     <div class="check-container">
-                        <x-radio-round name="user-assignee" value=""></x-radio-round>
+                        <x-radio-round name="transfer-ownership-check" value=""></x-radio-round>
                     </div>
                 </li>
                 <li class="each-user">
                     <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
                     <div class="user-full-name">Cassy Buary</div>
                     <div class="check-container">
-                        <x-radio-round name="user-assignee" value=""></x-radio-round>
+                        <x-radio-round name="transfer-ownership-check" value=""></x-radio-round>
                     </div>
                 </li>
                 <li class="each-user">
                     <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
                     <div class="user-full-name">Cassy Buary</div>
                     <div class="check-container">
-                        <x-radio-round name="user-assignee" value=""></x-radio-round>
+                        <x-radio-round name="transfer-ownership-check" value=""></x-radio-round>
                     </div>
                 </li>
             </ul>
         </div>
 
         <form class="form-delete-user">
-            <button type="button" class="btn primary mr-10 cancel-removal-btn">CANCEL</button>
-            <button type="button" class="btn dark">REMOVE</button>
+            <button type="button" class="btn primary mr-10 ownership-removal-btn">CANCEL</button>
+            <button type="button" class="btn dark transfer-btn">TRANSFER</button>
         </form>
 
     </div>
-
 </div>
-
 
 <div class="mt-2">
     {{-- Top ownerhip block container --}}
@@ -493,6 +488,33 @@ Teams
     document.querySelector('.make-admin-cancel-btn').addEventListener('click', hideAdminModal);
     function hideAdminModal(){
         adminModal.classList.remove('show');
+    }
+
+    // show Transfer ownership to a user
+    var ownershipModal = document.querySelector('.ownweship-modal-container');
+    var ownershipModalShow = document.querySelector('.make-owner');
+    ownershipModalShow.addEventListener('click', showOwnershipModalFunc);
+    function showOwnershipModalFunc(){
+        ownershipModal.classList.add('show');
+    }
+
+    document.querySelector('.ownweship-close-modal').addEventListener('click', hideOwnershipModal);
+    document.querySelector('.ownweship-overlay-container').addEventListener('click', hideOwnershipModal);
+    document.querySelector('.ownership-removal-btn').addEventListener('click', hideOwnershipModal);
+    function hideOwnershipModal(){
+        ownershipModal.classList.remove('show');
+    }
+
+    var radios = ownershipModal.getElementsByTagName('input');
+    var radioValue;
+    for (var i = 0; i < radios.length; i++) {
+        radios[i].addEventListener('click', function(){
+            if (radios[i].type === 'radio' && radios[i].checked) {
+                radioValue = radios[i].value;    
+                console.log(radioValue)
+                console.log("hello");   
+            }
+        })
     }
 
     // Show user modal
