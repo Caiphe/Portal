@@ -312,19 +312,14 @@
         }
     }
 
-    @media #{$medium-up} {
+    @media screen and (min-width: 1024px) {
         display: none !important;
     }
 }
 
 .hidden {
-    @media #{$small} {
+    @media screen and (max-width: 1023px) {
         display: none !important;
-    }
-
-    @media #{$medium-portrait} {
-        display: none !important;
-
     }
 }
 
@@ -351,6 +346,7 @@
 
         #search {
             width: 492px;
+            margin-top: 18px;
         }
 
         .profile-menu-options {
@@ -369,11 +365,13 @@
         top: 0;
         z-index: 2;
         flex-flow: row nowrap;
+        position: relative;
 
         .page-info {
             display: flex;
             margin-left: auto;
         }
+
 
         button:hover,
         .button:hover {
@@ -381,6 +379,7 @@
             // background-color: $blue;
             transition: all .3s ease-in-out;
         }
+
     }
 }
 

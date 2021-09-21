@@ -1,7 +1,7 @@
 @import '../../variables';
 
 #sidebar {
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1023px), (max-height: 375px) {
         display: none;
     }
 }
@@ -357,8 +357,10 @@
             width: 360px;
             overflow-y: auto;
             padding-right: 40px;
+            word-break: break-word;
         }
     }
+
 }
 
 .updated-app{
@@ -482,3 +484,4 @@
         right: 46px;
     }
 }
+

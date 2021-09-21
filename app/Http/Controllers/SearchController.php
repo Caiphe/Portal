@@ -19,9 +19,13 @@ class SearchController extends Controller
      */
     public function __invoke(Request $request)
     {
+        $page = $request->get('page', 1);
+        if(!is_numeric($page)){
+            $page = 1;
+        }
+        $page -= 1;
         $searchTerm = $request->get('q', '');
         $query = '%' . $searchTerm . '%';
-        $page = $request->get('page', 1) - 1;
         $length = 12;
 
         if (empty($searchTerm)) {

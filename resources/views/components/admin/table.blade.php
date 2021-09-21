@@ -4,13 +4,26 @@
     $modelName ??= explode('.', Route::currentRouteName())[1];
 @endphp
 
-<div class="cols centre-align mb-2">
-    <form action="{{ route("admin.{$modelName}.index") }}" method="GET" class="ajaxify" data-replace="#table-data">
-        <input id="search-page" type="text" name="q" placeholder="Search" autofocus autocomplete="off">
+<div class="cols centre-align mb-2 filter-form-container">
+    <form id="product-search-form" action="{{ route("admin.{$modelName}.index") }}" method="GET" class="ajaxify" data-replace="#table-data">
+        @if($modelName === 'product')
+            <input id="search-page" type="text" name="q" placeholder="Search for products..." autofocus autocomplete="off">
+        @else
+            <input id="search-page" type="text" name="q" placeholder="Search..." autofocus autocomplete="off">
+        @endif
+        @if($modelName === 'product')
+        <select name="access" class="access-level" id="access-level">
+            <option value="">All access levels</option>
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+        </select>
+        @endif
     </form>
+        {{-- <button class="button dark kinda fab">@svg('close', '#FFFFFF')</button> --}}
     <form id="reset-search" action="{{ route("admin.{$modelName}.index") }}" method="GET" class="ajaxify" data-replace="#table-data" data-func="clearSearch()">
-        <button class="button dark kinda fab">@svg('close', '#FFFFFF')</button>
+        <button class="primary kinda custom-right" id="reset-search-filters">Reset Filters</button>
     </form>
+
 </div>
 
 <div id="table-data">
@@ -21,7 +34,6 @@
 <script>
     function removeRow(id) {
         var row = document.querySelector('.' + id);
-
         row.parentNode.removeChild(row);
     }
 

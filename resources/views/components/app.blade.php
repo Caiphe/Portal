@@ -198,6 +198,7 @@
             <strong>Production products</strong>
             <form class="ml-1" action="{{ route('app.credentials.request-renew', ['app' => $app, 'type' => 'production']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
                 @csrf
+                {{--- Please do not remove this button  --}}
                 <button class="outline small" href="">Renew credentials</button>
             </form>
         </div>
@@ -206,6 +207,7 @@
             <strong>Production products</strong>
             <form class="ml-1" action="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'production']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
                 @csrf
+                {{--- Please do not remove this button  --}}
                 <button class="outline small" href="">Renew credentials</button>
             </form>
         </div>
@@ -240,14 +242,14 @@
             @elseif($app['status'] === 'approved')
             <button class="app-status-update" data-status="revoked" data-action="{{ route('admin.app.status-update', $app['aid']) }}">Revoke Application</button>
             @endif
-            <div class="status-separator"></div>
-            <button class="product-all" data-action="approve">Approve all products</button>
-            <button class="product-all" data-action="revoke">Revoke all products</button>
+            {{-- <div class="status-separator"></div>
+            <button class="product-all product-status-action" data-action="approve">Approve all products</button>
+            <button class="product-all product-status-action" data-action="revoke">Revoke all products</button> --}}
             @else
             <button>View only</button>
             @endcan
         @else
-            <a href="{{ route('app.edit', $app['slug']) }}">Edit</a>
+            <a href="{{ route('app.edit', $app->slug) }}">Edit</a>
             <form class="delete">
                 @method('DELETE')
                 @csrf

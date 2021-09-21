@@ -1,6 +1,35 @@
 @import "../../variables";
 
+@media screen and (min-width: 768px) {
+    .layout-master #main #heading {
+        margin: 0 -40px 40px -80px;
+    }
+}
+
 #main {
+    @media screen and (min-width: 1200px) {
+        display: flex;
+        flex-wrap: wrap;
+
+        .search {
+            flex-grow: 1;
+            width: calc(100% - 400px);
+        }
+
+        .contact {
+            width: 400px;
+            margin-right: 0;
+
+            h2 {
+                text-align: left;
+            }
+
+            .container {
+                padding-right: 0;
+            }
+        }
+    }
+
     .edit {
         @media #{$small} {
             display: none;
@@ -8,7 +37,7 @@
     }
 }
 
-section:first-of-type {
+.search {
     .container {
         display: flex;
 
@@ -18,16 +47,12 @@ section:first-of-type {
     }
 }
 
-section:not(:first-of-type) {
-    padding-bottom: 40px;
-}
-
-section:last-of-type {
-    margin-bottom: 40px;
-}
-
 .accordion:not(:last-of-type) {
     margin-bottom: 20px;
+}
+
+.faq {
+    word-break: break-word;
 }
 
 .search {
@@ -130,10 +155,14 @@ section:last-of-type {
     text-align: center;
     width: 100%;
     max-width: 600px;
-    margin: auto;
+    margin: 0 auto 40px;
 
     .panel {
         margin-bottom: 20px;
+    }
+
+    h2 {
+        margin-top: 8px;
     }
 
     p:last-of-type {

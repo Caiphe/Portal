@@ -41,32 +41,17 @@
                     </x-accordion>
                 @endforeach
             </div>
-
-            <div class="faq-categories">
-                <span>Categories</span>
-                <ul>
-                    @foreach ($categories as $category)
-                        @if(!$category->faqs->isEmpty())
-                            <li>
-                                <a href="#{!! $category->slug  !!}">{!! $category->title !!}</a>
-                            </li>
-                        @endif
-                    @endforeach
-                </ul>
-            </div>
         </div>
     </section>
 
 	<section class="contact">
         <div class="container">
-            <h1>
-                Need more help? Get in touch
-            </h1>
 
-            <form action="{{ route('contact.send') }}" method="POST">
+            <form action="{{ route('contact.send') }}" method="POST" id="faq-contact-form">
                 @csrf
-
                 <x-panel>
+                    <h2>Need more help? Get in touch</h2>
+
                     <label for="categories"></label>
                     <select name="categories" id="categories">
                         <option value="Advertising">
@@ -201,6 +186,57 @@
             };
         }
     }
+
+    function hasValue(input) {
+        if (input.value.trim() === "") {
+            return false;
+        }
+        return true;
+    }
+
+    function validateEmail(input) {
+        var emailRegex =
+            /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        var email = input.value.trim();
+        if (!emailRegex.test(email)) {
+            return false;
+        }
+        return true;
+    }
+
+    var form = document.querySelector("#faq-contact-form");
+
+    form.addEventListener("submit", function (evt) {
+        var errors = [];
+
+        if (!hasValue(form.elements["first_name"])) {
+            errors.push("Please enter your first name");
+        }
+
+        if (!hasValue(form.elements["last_name"])) {
+            errors.push("Please enter your last name");
+        }
+
+        if (!hasValue(form.elements["email"])) {
+            errors.push("Please enter your email");
+        }
+
+        if (hasValue(form.elements["email"]) && !validateEmail(form.elements["email"])) {
+            errors.push("Please enter a correct email address format");
+        }
+
+        if (!hasValue(form.elements["message"])) {
+            errors.push("Please enter a message");
+        }
+
+        if (errors.length > 0) {
+            addAlert('error', errors);
+            evt.preventDefault();
+        } else {
+            return true;
+        }
+    });
 }());
 </script>
 @endpushscript

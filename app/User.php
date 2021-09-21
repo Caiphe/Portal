@@ -2,12 +2,14 @@
 
 namespace App;
 
-use App\Country;
 use App\Role;
+use App\Country;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Mpociot\Teamwork\Traits\UserHasTeams;
+
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -136,8 +138,17 @@ class User extends Authenticatable implements MustVerifyEmail
 		return $this->roles->pluck('label')->implode(',');
 	}
 
-	public function twoFactorStatus()
+	public function getDeveloperAppsCount() {
+	    return App::where('developer_id', $this->developer_id)->get()->count();
+    }
+
+    public function getApps($countryCodeFilter = '')
     {
-        return is_null($this->value('2fa')) ? 'Disabled' : 'Enabled';
+        if (!empty($countryCodeFilter) && $countryCodeFilter !== 'all') {
+            $apps = App::where('developer_id', $this->developer_id)->where('country_code', $countryCodeFilter)->get();
+        } else {
+            $apps = App::where('developer_id', $this->developer_id)->get();
+        }
+        return $apps;
     }
 }
