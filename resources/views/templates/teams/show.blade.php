@@ -206,15 +206,20 @@ Teams
     <div class="top-ownership-banner">
         <div class="message-container">You have been requested to be the owner of this team.</div>
         <div class="btn-block-container">
-            <button type="button" class="btn blue-button accept-transfer">Accept request</button>
-            <button type="button" class="btn blue-button revoke-transfer">Revoke request</button>
+            <a type="button" href="#transfer-ownership" class="button blue-button accept-transfer">Accept request</a>
+            <a type="button" href="#transfer-ownership" class="button blue-button revoke-transfer">Revoke request</a>
         </div>
     </div>
 
     <div class="header-block team-name-logo">
         {{-- To replace with the company logo --}}
-       <div class="team-logo" style="background-image: url('/images/user-thumbnail.jpg')"></div> 
-       <h2>{{  $team->name }}</h2>
+        <div class="team-name-logo-container">
+            <div class="team-logo" style="background-image: url('/images/user-thumbnail.jpg')"></div> 
+            <h2>{{  $team->name }}</h2>
+        </div>
+
+       <button class="btn dark make-owner">Select a new owner</button>
+
     </div>
     <h5>Team bio</h5>
     <p>{{ $team->description }}</p>
@@ -241,7 +246,7 @@ Teams
         </div>
     </div>
 
-    <div class="main-tema-container">
+    <div class="main-team-container">
         <div class="column team-members-list">
             <table class="team-members">
                 <tr class="table-title" >
@@ -287,6 +292,26 @@ Teams
 
             <button class="outline dark add-team-mate-btn-mobile">Add a teammate</button>
 
+        </div>
+    </div>
+
+    <div class="transfer-ownership-container" id="transfer-ownership">
+            {{-- Transfer ownership container --}}
+        <div class="transfer-owner-ship-heading">
+            <h2>Transfer ownership</h2>
+            {{-- You can add non-active to make--}}
+        </div>
+
+        {{-- Transfer request --}}
+        <div class="trasfer-container">
+            <h4>Transfer requests</h4>
+            <div class="site-text">You have been requested to be the new owner of this team. please choose if you would like to accept or revoke the request</div>
+            <div class="site-text">You are not the owner of this team, you cannot modify ownership of this team </div>
+
+            <div class="transfer-btn-block">
+                <button type="button" class="btn dark dark-accept">Accept request</button>
+                <button type="button" class="btn dark dark-revoked">Revoke request</button>
+            </div>
         </div>
     </div>
     
@@ -345,25 +370,7 @@ Teams
             </div>
         </div>
 
-        {{-- Transfer ownership container --}}
-        <div class="transfer-owner-ship-heading">
-            <h2>Transfer ownership</h2>
 
-            {{-- You can add non-active to make--}}
-            <button class="btn dark make-owner">Select a new owner</button>
-        </div>
-
-        {{-- Transfer request --}}
-        <div class="trasfer-container">
-            <h4>Transfer requests</h4>
-            <div class="site-text">You have been requested to be the new owner of this team. please choose if you would like to accept or revoke the request</div>
-            <div class="site-text">You are not the owner of this team, you cannot modify ownership of this team </div>
-
-            <div class="transfer-btn-block">
-                <button type="button" class="btn dark dark-accept">Accept request</button>
-                <button type="button" class="btn dark dark-revoked">Revoke request</button>
-            </div>
-        </div>
 
         <div class="row" id="app">
             <div class="revoked-apps">

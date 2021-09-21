@@ -713,7 +713,12 @@ button{
 }
 
 .team-name-logo{
-    display: flex;
+    width: 100%;
+    position: relative;
+
+    .team-name-logo-container{
+        display: flex;
+    }
 
     .team-logo{
         width: 40px;
@@ -728,6 +733,35 @@ button{
 
     h2{
         margin-top: 8px;
+    }
+
+    button{
+        position: absolute;
+        right: 20px;
+        top: 0px;
+        border: none;
+        transition: all 0.3s ease-in-out;
+
+        @media(max-width: 470px){
+            position: relative;
+            margin-top: 15px;
+            right: auto;
+            top: auto;
+        }
+
+        &.non-active{
+            color: #AEAEAE;
+            background-color: #E9E9E9;
+            pointer-events: none;
+            cursor: none;
+            transition: all 0.3s ease-in-out;
+        }
+
+        &.active{
+            background-color: #000000;
+            transition: all 0.3s ease-in-out;
+            color: #fff
+        }
     }
 }
 
@@ -761,7 +795,7 @@ button{
     }
 }
 
-.main-tema-container{
+.main-team-container{
     height: 100%;
     width: 100%;
     padding: 0;
@@ -956,6 +990,10 @@ button{
     }
 }
 
+.transfer-ownership-container{
+    position: relative;
+    width: 100%;
+}
 .transfer-owner-ship-heading{
     position: relative;
     width: 100%;
