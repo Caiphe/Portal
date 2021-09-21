@@ -153,7 +153,7 @@
         }
 
         function submitFilter() {
-            document.getElementById('filter-form').requestSubmit();
+            document.getElementById('filter-form').submit();
         }
 
         function clearFilter() {
