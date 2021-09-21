@@ -46,7 +46,7 @@
 
     </div>
 
-    <div class="each-container">
+    <div class="each-container roles-groups">
         <h2>Groups & Roles</h2>
 
         <div class="form-control mb">
