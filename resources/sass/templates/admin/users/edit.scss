@@ -32,6 +32,14 @@
     .each-container{
         flex: 1;
 
+        &.roles-groups{
+
+            .form-control{
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
         .users-password-check{
             color: #bb1e4f;
             padding-top: 58px;

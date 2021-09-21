@@ -51,6 +51,18 @@
     td a {
         word-break: break-word;
     }
+
+    table{
+        thead{
+            tr{
+                th{
+                    @media(max-width: 1200px){
+                        white-space: nowrap;
+                    }
+                }
+            }
+        }
+    }
 }
 
 .user-table-list{
