@@ -46,12 +46,12 @@
         }
 
         #password-strength {
-            height: 34px;
+            height: 40px;
             line-height: 1;
             background-color: $grey500;
             border-radius: 5px;
             padding-top: 5px;
-            padding-top: 8px;
+            padding-top: 13px;
             padding-left: 13px;
             color: #000;
             transition: background-color 0.356s;
@@ -93,7 +93,7 @@
             label{
                 margin-top: 9px;
 
-                @media(max-width: 1299px){
+                @media(max-width: 1400px){
                     width: 120px;
                 }
             }
