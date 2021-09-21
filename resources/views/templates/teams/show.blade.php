@@ -146,9 +146,7 @@ Teams
             <button type="button" class="btn primary mr-10 cancel-removal-btn">CANCEL</button>
             <button type="button" class="btn dark">REMOVE</button>
         </form>
-
     </div>
-
 </div>
 {{-- Delete User Ends --}}
 
@@ -208,8 +206,8 @@ Teams
     <div class="top-ownership-banner">
         <div class="message-container">You have been requested to be the owner of this team.</div>
         <div class="btn-block-container">
-            <button class="btn blue-button">Accept request</button>
-            <button class="btn blue-button">Revoke request</button>
+            <button type="button" class="btn blue-button accept-transfer">Accept request</button>
+            <button type="button" class="btn blue-button revoke-transfer">Revoke request</button>
         </div>
     </div>
 
@@ -350,13 +348,16 @@ Teams
         {{-- Transfer ownership container --}}
         <div class="transfer-owner-ship-heading">
             <h2>Transfer ownership</h2>
+            {{-- You can remove the non-active class and add dark class when the user recieves the request --}}
             <button class="btn non-active">Select a new owner</button>
         </div>
 
         {{-- Transfer request --}}
         <div class="trasfer-container">
             <h4>Transfer requests</h4>
-            <div class="">You have been requested to be the new owner of this team. please choose if you would like to accept or revoke the request</div>
+            <div class="site-text">You have been requested to be the new owner of this team. please choose if you would like to accept or revoke the request</div>
+            <div class="site-text">You are not the owner of this team, you cannot modify ownership of this team </div>
+
             <div class="transfer-btn-block">
                 <button type="button" class="btn dark dark-accept">Accept request</button>
                 <button type="button" class="btn dark dark-revoked">Revoke request</button>
@@ -516,6 +517,15 @@ Teams
             }
         })
     }
+
+    var acceptTransferBtn = document.querySelector('.accept-transfer');
+    var revokeTransferBtn = document.querySelector('.revoke-transfer');
+    var owneshipTransferBanner = document.querySelector('.top-ownership-banner');
+
+    acceptTransferBtn.addEventListener('click', function(){
+        owneshipTransferBanner.classList.add('hide');
+    });
+
 
     // Show user modal
     var userModal = document.querySelector('.make-user-modal-container');

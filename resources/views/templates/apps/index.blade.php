@@ -30,7 +30,8 @@
     <div class="ownership-request animated">
         @svg('info', '#fff')
         <div class="message-container">
-            You have been requested to be the new owner of PlusNarrative. Please visit your <a href="#">team's dashboard</a>
+            {{-- The link to be changed to dynamic --}}
+            You have been requested to be the new owner of PlusNarrative. Please visit your <a href="/team/3">team's dashboard</a>
         </div>
         <button class="close-banner">@svg('close', '#fff')</button>
     </div>

@@ -84,6 +84,12 @@ button{
         transition: all .3s ease-in-out;
     }
 
+    .ownweship-overlay-container{
+        .scrollable-users-container{
+            height: 193px;
+        }
+    }
+
     .ownweship-overlay-container,
     .user-overlay-container,
     .admin-overlay-container,
@@ -883,6 +889,12 @@ button{
     margin-bottom: 30px;
     display: flex;
     position: relative;
+    transition: all 0.3s ease;
+
+    &.hide{
+        height: 0px;
+        pointer-events: none;
+    }
 
     @media(max-width:1290px){
         display: block;
