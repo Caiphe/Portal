@@ -193,7 +193,7 @@ Teams
             </ul>
         </div>
 
-        <form class="form-delete-user">
+        <form class="form-delete-user mt-40">
             <button type="button" class="btn primary mr-10 ownership-removal-btn">CANCEL</button>
             <button type="button" class="btn dark transfer-btn">TRANSFER</button>
         </form>
@@ -272,7 +272,7 @@ Teams
                                 <ul>
                                     <li><button class="make-admin">Make administrator</button></li>
                                     <li><button class="make-user">Make User</button></li>
-                                    <li><button class="make-owner @if($teamUser->isTeamOwner()) active @else non-active @endif">Make Owner</button></li>
+                                    <li><button class="@if($teamUser->isTeamOwner()) active @else non-active @endif">Make Owner</button></li>
                                     <li><button class="user-delete">Delete</button></li>
                                 </ul>
                             </div>
@@ -348,8 +348,9 @@ Teams
         {{-- Transfer ownership container --}}
         <div class="transfer-owner-ship-heading">
             <h2>Transfer ownership</h2>
-            {{-- You can remove the non-active class and add dark class when the user recieves the request --}}
-            <button class="btn non-active">Select a new owner</button>
+
+            {{-- You can add non-active to make--}}
+            <button class="btn dark make-owner">Select a new owner</button>
         </div>
 
         {{-- Transfer request --}}
@@ -506,26 +507,23 @@ Teams
         ownershipModal.classList.remove('show');
     }
 
-    var radios = ownershipModal.getElementsByTagName('input');
-    var radioValue;
-    for (var i = 0; i < radios.length; i++) {
-        radios[i].addEventListener('click', function(){
-            if (radios[i].type === 'radio' && radios[i].checked) {
-                radioValue = radios[i].value;    
-                console.log(radioValue)
-                console.log("hello");   
-            }
-        })
+    var radioList = document.querySelectorAll('input[name="transfer-ownership-check"]');
+    for (var radio of radioList) {
+        if (radio.checked) {
+            console.log('Checked');
+        }
     }
 
     var acceptTransferBtn = document.querySelector('.accept-transfer');
     var revokeTransferBtn = document.querySelector('.revoke-transfer');
     var owneshipTransferBanner = document.querySelector('.top-ownership-banner');
 
-    acceptTransferBtn.addEventListener('click', function(){
-        owneshipTransferBanner.classList.add('hide');
-    });
+    acceptTransferBtn.addEventListener('click', hideTransferBanner);
+    revokeTransferBtn.addEventListener('click', hideTransferBanner);
 
+    function hideTransferBanner(){
+        owneshipTransferBanner.classList.add('hide');
+    }
 
     // Show user modal
     var userModal = document.querySelector('.make-user-modal-container');
