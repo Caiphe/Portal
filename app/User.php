@@ -137,6 +137,11 @@ class User extends Authenticatable implements MustVerifyEmail
 		return $this->roles->pluck('label')->implode(',');
 	}
 
+	public function twoFactorStatus()
+    {
+        return is_null($this->value('2fa')) ? 'Disabled' : 'Enabled';
+	}
+
 	public function getDeveloperAppsCount() {
 	    return App::where('developer_id', $this->developer_id)->get()->count();
     }
