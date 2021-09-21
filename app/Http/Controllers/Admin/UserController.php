@@ -54,7 +54,7 @@ class UserController extends Controller
             return response()
                 ->view('components.admin.users-data', [
                     'collection' => $users->orderBy('first_name')->paginate($request->get('per-page', 10)),
-                    'fields' => ['first_name', 'last_name', 'email', 'roles_list', 'member_since', 'status', 'apps'],
+                    'fields' => ['first_name', 'last_name', 'email', 'member_since', 'roles_list', 'status', 'apps'],
                     'defaultSortQuery' => $defaultSortQuery,
                     'modelName' => 'user',
                     'order' => $order,
