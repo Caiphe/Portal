@@ -244,10 +244,6 @@
                             return void addAlert('error', 'Please add a valid email');
                         }
 
-                        if (inputBox.value === 'No user found try again') {
-                            return void addAlert('error', 'To assign the App ownership to yourself, please select "Assign to me" from below.');
-                        }
-
                         nav.querySelector('a').nextElementSibling.classList.add('active');
 
                         form.firstElementChild.classList.remove('active');

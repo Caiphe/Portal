@@ -16,7 +16,7 @@
             @foreach($fields as $field)
                 @if($field === 'member_since')
                     <td align="left">
-                        {{ \Carbon\Carbon::parse($model->created_at)->diffForHumans() }}
+                        {{ $model->created_at->format('Y-m-d') }}
                     </td>
                 @elseif($field === 'status')
                     <td align="left">
