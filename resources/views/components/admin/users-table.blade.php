@@ -38,7 +38,8 @@
 
     function clearSearch() {
         var searchPage = document.getElementById('search-page');
-        searchPage.value = "";
+        
+        document.getElementById('users-search-form').reset();
         searchPage.focus();
     }
 </script>
