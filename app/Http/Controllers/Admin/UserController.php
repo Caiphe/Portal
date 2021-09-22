@@ -22,7 +22,8 @@ class UserController extends Controller
 
             $q->where(function ($q) use($query) {
                 $q->where('first_name', 'like', $query)
-                    ->orWhere('last_name', 'like', $query);
+                    ->orWhere('last_name', 'like', $query)
+                    ->orWhere('email', 'like', $query);
             });
         })
             ->when($request->has('verified'), function($q) use($request) {
