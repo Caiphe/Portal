@@ -8,11 +8,23 @@
     }
 }
 
+
+
 .layout-sidebar {
     .wrapper {
         display: flex;
         flex: 1 0 auto;
         padding-left: 0;
+
+        @media(max-width:768px) {
+            display: block;
+        }
+
+        &.container{
+            @media(max-width: 768px){
+                padding: 0px 0px !important;
+            }
+        }
 
         #sidebar {
             flex: 1;

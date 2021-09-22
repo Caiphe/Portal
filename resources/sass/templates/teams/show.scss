@@ -72,7 +72,7 @@ button{
     top: 0;
     right: 0;
     bottom: 0;
-    z-index: 4;
+    z-index: -1;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.356s, transform 0.356s;
@@ -278,6 +278,10 @@ button{
             width: 300px;
             margin: 15px auto;
             position: relative;
+
+            @media(max-width: 768px){
+                width: 90%;
+            }
         }
 
         .admin-user-name,
@@ -450,7 +454,7 @@ button{
     overflow-y: hidden;
     overflow-x: auto;
 
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1024px) {
         overflow-y: scroll;
         scrollbar-width: none;
         -ms-overflow-style: none;
@@ -467,7 +471,7 @@ button{
         border: 2px solid #F2F2F2;
         border-radius: 10px;
 
-        @media(max-width:767px) {
+        @media(max-width:768px) {
             overflow-x: auto;
             padding-bottom: 10px;
             width: 900px;
@@ -533,6 +537,7 @@ button{
 
             &:nth-child(2){
                 width: 25%;
+                white-space: nowrap;
             }
 
             &:nth-child(3){
@@ -606,6 +611,7 @@ button{
             }
             &:nth-child(2){
                 width: 25%;
+                white-space: nowrap;
             }
 
             &:nth-child(3){
@@ -817,7 +823,7 @@ button{
 .team-members-list{
     position: relative;
 
-    @media(max-width:768px){
+    @media(max-width: 768px){
         width: 800px;
     }
 }
@@ -928,6 +934,8 @@ button{
     &.hide{
         height: 0px;
         pointer-events: none;
+        opacity: -1;
+        z-index: 0;
     }
 
     @media(max-width:1290px){
@@ -935,6 +943,13 @@ button{
         height: auto;
         padding: 15px;
         text-align: center;
+
+        &.hide{
+            height: 0px;
+            pointer-events: none;
+            padding: 0px;
+            opacity: -1;
+        }
     }
     
     .message-container{
@@ -945,6 +960,7 @@ button{
         @media(max-width: 1290px){
             margin-left: 0;
             margin-top: 0px;
+            
         }
     }
 
@@ -1053,3 +1069,17 @@ button{
 .mt-40{
     margin-top: 40px;
 }
+
+@media(max-width:768px){
+    #app-index{
+        .row{
+            width: 900px;
+        }
+    }
+    .wrapper{
+        &.container{
+            padding: 0 0px !important;
+        }
+    }
+}
+

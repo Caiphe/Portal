@@ -277,7 +277,6 @@ Teams
                                 <ul>
                                     <li><button class="make-admin">Make administrator</button></li>
                                     <li><button class="make-user">Make User</button></li>
-                                    <li><button class="@if($teamUser->isTeamOwner()) active @else non-active @endif">Make Owner</button></li>
                                     <li><button class="user-delete">Delete</button></li>
                                 </ul>
                             </div>
