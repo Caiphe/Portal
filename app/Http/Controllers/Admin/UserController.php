@@ -59,6 +59,7 @@ class UserController extends Controller
                     'modelName' => 'user',
                     'order' => $order,
                 ], 200)
+                ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         }
 
