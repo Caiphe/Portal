@@ -30,6 +30,7 @@ class BundleController extends Controller
                     'fields' => ['display_name', 'category.title'],
                     'modelName' => 'bundle'
                 ], 200)
+                ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         }
 

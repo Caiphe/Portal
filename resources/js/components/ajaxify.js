@@ -100,7 +100,7 @@
     }
 
     function updateUrl(url) {
-        history.pushState(null, null, url.replace(/.*\/|true=1\&/g, ''));
+        history.replaceState(null, null, url.replace(/.*\?/g, '?').replace(/true=1\&/, ''));
     }
 
     function getMultiselectValues(multi) {
