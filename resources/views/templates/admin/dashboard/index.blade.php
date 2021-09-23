@@ -14,9 +14,7 @@
 @section('content')
 
     <div class="container" id="app-index">
-        <div class="approved-app-popup">
-            <strong> App approved App approved.</strong> <span>The app <span class="app-approved-name">SuperService</span> has been approved</span>
-        </div>
+        <div class="approved-app-popup"></div>
 
         <div class="product-filters">
             <form id="filter-form" class="ajaxify" action="{{ route('admin.dashboard.index') }}" method="GET" data-replace="#table-data">
@@ -224,9 +222,9 @@
             handleUpdateStatus({
                 action: el.dataset.action,
                 for: el.dataset.for,
-                app: el.parentNode.dataset.aid,
-                product: el.parentNode.dataset.pid,
-                displayName: el.parentNode.dataset.productDisplayName,
+                app: el.parentNode.parentNode.dataset.aid,
+                product: el.parentNode.parentNode.dataset.pid,
+                displayName: el.parentNode.parentNode.dataset.productDisplayName,
                 statusNote: form.elements['status-note'].value
             }, el.parentNode);
         }
@@ -238,7 +236,7 @@
                 revoke: 'revoked'
             };
 
-            card.classList.add('loading');
+            addLoading(data.action.replace(/e$/, 'ing') + '...');
 
             xhr.open('POST', '/admin/apps/' + data.product + '/' + data.action);
             xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
@@ -249,13 +247,24 @@
 
             xhr.onload = function() {
                 var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+                var approvedAppPopup;
 
                 if (xhr.status === 200) {
-                    card.className = 'product product-status-' + lookup[data.action];
+                    approvedAppPopup = document.querySelector('.approved-app-popup');
+
+                    approvedAppPopup.innerHTML = '<strong>Product ' + lookup[data.action] + '.</strong> The product <span>' + data.displayName + '</span> has been ' + lookup[data.action];
+                    approvedAppPopup.classList.add('show', lookup[data.action]);
+
+                    window.setTimeout(function(){
+                        document.querySelector('.approved-app-popup').className = 'approved-app-popup';
+                    }, 5000);
+
+                    card.parentNode.className = 'product product-status-' + lookup[data.action];
+
                 } else {
-                    card.classList.remove('loading');
                     addAlert('error', result.body || 'There was an error updating the product.');
                 }
+                removeLoading();
             };
         }
 
