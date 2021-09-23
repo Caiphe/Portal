@@ -127,6 +127,20 @@ class UserController extends Controller
     {
         $countrySelectFilterCode = $request->get('country-filter', 'all');
 
+        $order = 'desc';
+
+        $defaultSortQuery = array_diff_key($request->query(), ['sort' => true, 'order' => true]);
+
+        if (!empty($defaultSortQuery)) {
+            $defaultSortQuery = '&' . http_build_query($defaultSortQuery);
+        } else {
+            $defaultSortQuery = '';
+        }
+
+        if ($request->has('sort')) {
+            $order = ['asc' => 'desc', 'desc' => 'asc'][$request->get('order', 'desc')] ?? 'desc';
+        }
+
         $user->load('roles', 'countries', 'responsibleCountries', 'responsibleGroups');
         $groups = Product::select('group')->where('group', '!=', 'Partner')->where('group', '!=', 'MTN')->groupBy('group')->get()->pluck('group', 'group');
         $groups = array_merge(['MTN' => 'General'], $groups->toArray());
@@ -137,6 +151,9 @@ class UserController extends Controller
             'roles' => Role::all(),
             'groups' => $groups,
             'user' => $user,
+            'order' => $order,
+            'defaultSortQuery' => $defaultSortQuery,
+            'sort' => $request->get('sort', 'name'),
         ]);
     }
 

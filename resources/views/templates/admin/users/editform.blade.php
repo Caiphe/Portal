@@ -114,13 +114,15 @@
 
 {{-- apps list --}}
 <table id="dev-apps">
-    <tr>
-        <th>Name</th>
-        <th>Products</th>
-        <th>Created</th>
-        <th>Country</th>
-        <th>Status</th>
-    </tr>
+    <thead>
+        <tr>
+            <th><a style="color: #ffffff" href="?sort=name&order={{ $order . $defaultSortQuery }}">Name @svg('chevron-sorter', '#fff')</a></th>
+            <th>Products</th>
+            <th><a style="color: #ffffff" href="?sort=created_at&order={{ $order . $defaultSortQuery }}">Registered @svg('chevron-sorter', '#fff')</a></th>
+            <th>Country</th>
+            <th>Status</th>
+        </tr>
+    </thead>
 
     @if(!$user->getApps()->isEmpty())
         @foreach($user->getApps() as $app)

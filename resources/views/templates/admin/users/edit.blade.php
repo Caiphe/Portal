@@ -20,7 +20,7 @@
         <form id="admin-form" action="{{ route('admin.user.update', $user->slug) }}" method="POST">
 
             @method('PUT')
-            @include('templates.admin.users.editform')
+            @include('templates.admin.users.editform', ['order' => $order, 'sort' => $sort, 'defaultSortQuery' => $defaultSortQuery])
 
         </form>
     </div>
