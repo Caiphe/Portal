@@ -58,7 +58,7 @@ Teams
         <button class="admin-close-modal">@svg('close-popup', '#000')</button>
         <h2 class="team-head">Make Admin</h2>
         <p class="teammate-text">Would you like change this user's level of access to <strong>administrator</strong> ?</p>
-        <p class="admin-user-name">Xoliswa Shandu</p>
+        <p class="admin-user-name"></p>
         <form class="form-delete-user">
             <button type="button" class="btn primary mr-10 make-admin-cancel-btn">CANCEL</button>
             <button type="button" class="btn dark">REMOVE</button>
@@ -74,7 +74,7 @@ Teams
         <button class="user-close-modal">@svg('close-popup', '#000')</button>
         <h2 class="team-head">Make User</h2>
         <p class="teammate-text">Would you like change this user's level of access to <strong>user</strong> ?</p>
-        <p class="admin-user-name">Xoliswa Shandu</p>
+        <p class="user-name make-user-name"></p>
         <form class="form-delete-user">
             <button type="button" class="btn primary mr-10 user-admin-cancel-btn">CANCEL</button>
             <button type="button" class="btn dark">REMOVE</button>
@@ -92,7 +92,7 @@ Teams
 
         <h2 class="team-head">Remove User</h2>
         <p class="teammate-text">Are you sure you want to remove this user?</p>
-        <p class="user-name">Xoliswa Shandu</p>
+        <p class="user-name user-delete-name"></p>
 
     {{-- Form to confirm the users removal --}}
         <form class="form-delete-user">
@@ -106,7 +106,7 @@ Teams
         <button class="confirm-delete-close-modal">@svg('close-popup', '#000')</button>
         <h2 class="team-head custom-head">Warning</h2>
         <p class="remove-user-text">
-            <span class="user-name">Xoliswa Shandu</span> You are the owner/creator of this team profile. To be able to delete this account, please assign ownership to another user
+            <span class="user-name user-to-delete-name"></span> You are the owner/creator of this team profile. To be able to delete this account, please assign ownership to another user
         </p>
 
         <div class="scrollable-users-container">
@@ -275,9 +275,9 @@ Teams
                             {{-- user action menu --}}
                             <div class="block-actions">
                                 <ul>
-                                    <li><button class="make-admin">Make administrator</button></li>
-                                    <li><button class="make-user">Make User</button></li>
-                                    <li><button class="user-delete">Delete</button></li>
+                                    <li><button class="make-admin" data-adminname="{{ $teamUser->first_name }} {{ $teamUser->last_name }}">Make administrator</button></li>
+                                    <li><button class="make-user" data-username="{{ $teamUser->first_name }} {{ $teamUser->last_name }}">Make User</button></li>
+                                    <li><button class="user-delete" data-usernamedelete="{{ $teamUser->first_name }} {{ $teamUser->last_name }}">Delete</button></li>
                                 </ul>
                             </div>
                             {{-- Block end --}}
@@ -471,11 +471,17 @@ Teams
     }
 
     // Show delete modal
-    var userDeleteBtn = document.querySelector('.user-delete');
+    var userDeleteBtn = document.querySelectorAll('.user-delete');
     var deleteModalContainer = document.querySelector('.delete-modal-container')
-    userDeleteBtn.addEventListener('click', function(){
+    for(var d = 0; d < userDeleteBtn.length; d++){
+        userDeleteBtn[d].addEventListener('click', showUserDelete);
+    }
+
+    function showUserDelete(){
         deleteModalContainer.classList.add('show');
-    });
+        document.querySelector('.user-delete-name').innerHTML = this.dataset.usernamedelete
+        document.querySelector('.user-to-delete-name').innerHTML = this.dataset.usernamedelete
+    }
 
     deleteClodeModal.addEventListener('click',hideDeleteUserModal);
     deleteOverlayContainer.addEventListener('click', hideDeleteUserModal);
@@ -483,11 +489,15 @@ Teams
     document.querySelector('.cancel-removal-btn').addEventListener('click', hideDeleteUserModal);
     document.querySelector('.confirm-delete-close-modal').addEventListener('click', hideDeleteUserModal);
 
-    // show Make user admin modal
+    // show Make admin modal
     var adminModal = document.querySelector('.make-admin-modal-container');
-    var adminModalShow = document.querySelector('.make-admin');
-    adminModalShow.addEventListener('click', showAdminModalFunc);
+    var adminModalShow = document.querySelectorAll('.make-admin');
+    for(var i = 0; i < adminModalShow.length; i++){
+        adminModalShow[i].addEventListener('click', showAdminModalFunc);
+    }
+   
     function showAdminModalFunc(){
+        document.querySelector('.admin-user-name').innerHTML = this.dataset.adminname;
         adminModal.classList.add('show');
     }
 
@@ -533,10 +543,14 @@ Teams
 
     // Show user modal
     var userModal = document.querySelector('.make-user-modal-container');
-    var userModalShow = document.querySelector('.make-user');
-    userModalShow.addEventListener('click', showUserModalFunc);
+    var userModalShow = document.querySelectorAll('.make-user');
+    for(var u = 0; u < userModalShow.length; u++) {
+        userModalShow[u].addEventListener('click', showUserModalFunc);
+    }
+
     function showUserModalFunc(){
         userModal.classList.add('show');
+        document.querySelector('.make-user-name').innerHTML = this.dataset.username;
     }
 
     document.querySelector('.user-close-modal').addEventListener('click', hideUserModal);

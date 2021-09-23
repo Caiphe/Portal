@@ -38,7 +38,7 @@
     
             <h2 class="team-head">Leave team</h2>
             <p class="teammate-text">Are you sure you want to leave this company?</p>
-            <p class="app-name">Plusnarrative</p>
+            <p class="app-name team-name"></p>
             <form class="form-team">
                 <button type="button" class="btn primary mr-10 cancel-btn">CANCEL</button>
                 <button type="" class="btn dark">LEAVE</button>
@@ -85,11 +85,13 @@
         var leaveTeamBtn = document.querySelectorAll('.leave-team');
         var overlayContainer = document.querySelector('.overlay-container');
         var cancelBtn = document.querySelector('.cancel-btn');
+        var teamNameText = document.querySelector('.team-name');
 
         for (var i = 0; i < leaveTeamBtn.length; i++){
             leaveTeamBtn[i].addEventListener('click', function(){
                 modalContainer.classList.add('show');
-                var teamName  = this.getAttribute("data-teamname");
+                var teamName  = this.dataset.teamname;
+                teamNameText.innerHTML = teamName;
                 console.log(teamName);
             });
         }

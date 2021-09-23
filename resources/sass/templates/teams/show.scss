@@ -295,6 +295,18 @@ button{
         .form-teammate{
             width: 270px;
             margin: 0px auto;
+
+            @media(max-width: 400px){
+                width: 90%;
+
+                .form-control{
+                    width: 80%;
+                }
+
+                .radio-container{
+                    text-align: center;
+                }
+            }
         }
 
         .mr-10{
