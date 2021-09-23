@@ -195,7 +195,7 @@ Teams
 
         <form class="form-delete-user mt-40">
             <button type="button" class="btn primary mr-10 ownership-removal-btn">CANCEL</button>
-            <button type="button" class="btn dark transfer-btn">TRANSFER</button>
+            <button type="button" id="transfer-btn" class="btn dark transfer-btn ">TRANSFER</button>
         </form>
 
     </div>
@@ -523,10 +523,14 @@ Teams
         ownershipModal.classList.remove('show');
     }
 
-    var radioList = document.querySelectorAll('input[name="transfer-ownership-check"]');
-    for (var radio of radioList) {
-        if (radio.checked) {
-            console.log('Checked');
+    var radiosList = document.querySelectorAll('input[name="transfer-ownership-check"]');
+    for(var i = 0; i < radiosList.length; i++){
+        radiosList[i].addEventListener('click', checkedRadio);
+    }
+
+    function checkedRadio(){
+        if(this.checked){
+            document.querySelector('#transfer-btn').classList.remove('transfer-btn');
         }
     }
 
