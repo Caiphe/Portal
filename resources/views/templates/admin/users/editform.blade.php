@@ -91,6 +91,10 @@
     </div>
 
 </div>
+@php
+    $duplicateCountries = [];
+    $userApps = $user->getApps($selectedCountryFilter, $order, $sort);
+@endphp
 
 <div class="flex-container bottom-section-container">
     <div class="each-container">
@@ -99,11 +103,21 @@
             <label>Country</label>
             <select name="country-filter" id="country-filter">
                 <option value="all">All</option>
-                @foreach($countries as $country)
-                    @if(in_array($country->code, $userResponsibleCountries))
+                @if(!$userApps->isEmpty() || $user->hasRole('admin'))
+                    @foreach($userApps as $app)
+                        @php $countryName = $countries[0]->where('code', $app->country_code)->first()->name; @endphp
+                        @if(in_array($app->country_code, $userResponsibleCountries) && !in_array($app->country_code, $duplicateCountries))
+                            <option value="{{ $app->country_code }}" {{ (($selectedCountryFilter === $app->country_code) ? 'selected': '') }}>{{ $countryName }}</option>
+                            @php
+                                $duplicateCountries[] = $app->country_code;
+                            @endphp
+                        @endif
+                    @endforeach
+                @else
+                    @foreach($countries as $country)
                         <option value="{{ $country->code }}" {{ (($selectedCountryFilter === $country->code) ? 'selected': '') }}>{{ $country->name }}</option>
-                    @endif
-                @endforeach
+                    @endforeach
+                @endif
             </select>
         </div>
     </div>
@@ -124,9 +138,9 @@
         </tr>
     </thead>
 
-    @if(!$user->getApps($selectedCountryFilter, $order, $sort)->isEmpty())
-        @foreach($user->getApps($selectedCountryFilter, $order, $sort) as $app)
-            @if(in_array($app->country_code, $userResponsibleCountries))
+    @if(!$userApps->isEmpty())
+        @foreach($userApps as $app)
+            @if(in_array($app->country_code, $userResponsibleCountries) || $user->hasRole('admin'))
                 <tr class="user-app" data-country="{{ $app->country_code }}">
                     <td><a href="{{ route('admin.dashboard.index', ['q' => $app->display_name, 'product-status' => 'all']) }}" class="app-link">{{ $app->display_name }}</a></td>
                     <td>{{ count($app->products) }}</td>
