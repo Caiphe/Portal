@@ -124,13 +124,13 @@
         </tr>
     </thead>
 
-    @if(!$user->getApps()->isEmpty())
-        @foreach($user->getApps() as $app)
+    @if(!$user->getApps($selectedCountryFilter, $order, $sort)->isEmpty())
+        @foreach($user->getApps($selectedCountryFilter, $order, $sort) as $app)
             @if(in_array($app->country_code, $userResponsibleCountries))
                 <tr class="user-app" data-country="{{ $app->country_code }}">
                     <td><a href="{{ route('admin.dashboard.index', ['q' => $app->display_name, 'product-status' => 'all']) }}" class="app-link">{{ $app->display_name }}</a></td>
                     <td>{{ count($app->products) }}</td>
-                    <td>{{ $app->created_at }}</td>
+                    <td>{{ $app->created_at->format('Y-m-d') }}</td>
                     <td><div class="country-flag" style="background-image: url('/images/locations/{{ $app->country->code }}.svg')"></div></td>
                     <td><div class="status {{ ('approved' === $app->status)  ? 'active' : 'non-active' }}"></div></td>
                 </tr>
