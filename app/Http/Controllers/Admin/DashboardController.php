@@ -38,6 +38,7 @@ class DashboardController extends Controller
                     'apps' => App::where('country_code', 'none')->paginate(),
                     'countries' => Country::all(),
                 ], 200)
+                ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         } else if ($notAdminNoResponsibleCountries) {
             return view('templates.admin.dashboard.index', [
@@ -107,6 +108,7 @@ class DashboardController extends Controller
                     'apps' => $apps,
                     'countries' => Country::orderBy('name')->pluck('name', 'code'),
                 ], 200)
+                ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         }
 

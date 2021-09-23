@@ -146,13 +146,13 @@ class User extends Authenticatable implements MustVerifyEmail
 	    return App::where('developer_id', $this->developer_id)->get()->count();
     }
 
-    public function getApps($countryCodeFilter = '')
+    public function getApps($countryCodeFilter = '', $order = 'DESC', $sort = 'name')
     {
-        if (!empty($countryCodeFilter) && $countryCodeFilter !== 'all') {
-            $apps = App::where('developer_id', $this->developer_id)->where('country_code', $countryCodeFilter)->get();
-        } else {
-            $apps = App::where('developer_id', $this->developer_id)->get();
-        }
-        return $apps;
+        $apps = App::where('developer_id', $this->developer_id)
+            ->when(!empty($countryCodeFilter) && $countryCodeFilter !== 'all', function($q) use($countryCodeFilter) {
+            $q->where('country_code', $countryCodeFilter);
+        })->orderBy($sort, $order);
+
+        return $apps->get();
     }
 }

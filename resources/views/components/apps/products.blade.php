@@ -23,7 +23,7 @@
                 @svg('thumbs-up', '#000000') Approve
             </button>
             <button class="product-status-action product-revoke" data-action="revoke" data-for="{{ $for }}">
-                @svg('thumbs-down', '#000000') Decline
+                @svg('thumbs-down', '#000000') Revoke
             </button>
             <button class="log-notes" data-id="{{ $app->aid . $product->slug }}">View Log Notes</button>
         </div>
