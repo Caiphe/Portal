@@ -67,7 +67,7 @@
                 if (el.elements[i].multiple) {
                     url += getMultiselectValues(el.elements[i]);
                 } else {
-                    url += '&' + el.elements[i].name + '=' + el.elements[i].value;
+                    url += '&' + el.elements[i].name + '=' + encodeURIComponent(el.elements[i].value);
                 }
 
             }
@@ -76,7 +76,7 @@
             for (var i = el.elements.length - 1; i >= 0; i--) {
                 if (el.elements[i].name === "" || el.elements[i].value === "") continue;
 
-                formData.append(el.elements[i].name, el.elements[i].value);
+                formData.append(el.elements[i].name, encodeURIComponent(el.elements[i].value));
             }
         }
 
