@@ -54,15 +54,20 @@
             <x-multiselect id="responsible_groups" name="responsible_groups" label="Select groups" :options="$groups" :selected="$userResponsibleGroups"/>
         </div>
 
-        <div class="form-control mb">
-            <label class="control-label">Role this user is responsible for</label>
-            <x-multiselect id="roles" name="roles" label="Select role" :options="$roles->pluck('label', 'id')->toArray()" :selected="$userRoleIds"/>
-        </div>
+        @if(auth()->user()->hasRole('opco') && !empty($userRoleIds))
+            <div class="form-control mb">
+                <label class="control-label">Role this user is responsible for</label>
+                <x-multiselect id="roles" name="roles" label="Select role" :options="$roles->pluck('label', 'id')->toArray()" :selected="$userRoleIds"/>
+            </div>
+        @endif
 
-        <div class="form-control mb">
-            <label class="control-label">Countries this user is responsible for</label>
-            <x-multiselect id="responsible_countries" name="responsible_countries" label="Select country" :options="$countries->pluck('name', 'code')->toArray()" :selected="$userResponsibleCountries"/>
-        </div>
+        @if(auth()->user()->hasRole('opco') && !empty($userResponsibleCountries))
+            <div class="form-control mb">
+                <label class="control-label">Countries this user is responsible for</label>
+                <x-multiselect id="responsible_countries" name="responsible_countries" label="Select country" :options="$countries->pluck('name', 'code')->toArray()" :selected="$userResponsibleCountries"/>
+            </div>
+        @endif
+
     </div>
 
 </div>
@@ -103,21 +108,10 @@
             <label>Country</label>
             <select name="country-filter" id="country-filter">
                 <option value="all">All</option>
-                @if(!$userApps->isEmpty() || $user->hasRole('admin'))
-                    @foreach($userApps as $app)
-                        @php $countryName = $countries[0]->where('code', $app->country_code)->first()->name; @endphp
-                        @if(in_array($app->country_code, $userResponsibleCountries) && !in_array($app->country_code, $duplicateCountries))
-                            <option value="{{ $app->country_code }}" {{ (($selectedCountryFilter === $app->country_code) ? 'selected': '') }}>{{ $countryName }}</option>
-                            @php
-                                $duplicateCountries[] = $app->country_code;
-                            @endphp
-                        @endif
-                    @endforeach
-                @else
-                    @foreach($countries as $country)
+                    @foreach($userApps->pluck('country')->unique('name') as $country)
+                        @if(!in_array($country->code, $userResponsibleCountries) && !$user->hasRole('admin')) @continue @endif
                         <option value="{{ $country->code }}" {{ (($selectedCountryFilter === $country->code) ? 'selected': '') }}>{{ $country->name }}</option>
                     @endforeach
-                @endif
             </select>
         </div>
     </div>
@@ -138,8 +132,8 @@
         </tr>
     </thead>
 
-    @if(!$userApps->isEmpty())
-        @foreach($userApps as $app)
+    @if(!$user->getApps()->isEmpty())
+        @foreach($user->getApps() as $app)
             @if(in_array($app->country_code, $userResponsibleCountries) || $user->hasRole('admin'))
                 <tr class="user-app" data-country="{{ $app->country_code }}">
                     <td><a href="{{ route('admin.dashboard.index', ['q' => $app->display_name, 'product-status' => 'all']) }}" class="app-link">{{ $app->display_name }}</a></td>

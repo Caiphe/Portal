@@ -15,7 +15,10 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $users = User::with('roles');
+        $users = User::with('roles', 'countries')
+            ->when(auth()->user()->hasRole('opco'), function($query){
+                $query->whereHas('countries', fn ($q) => $q->where('code', auth()->countries[0]->pivot->country_code ?? null));
+            });
 
         $users->when($request->has('q'), function($q) use($request) {
             $query = "%" . $request->q . "%";
