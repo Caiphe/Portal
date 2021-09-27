@@ -4,6 +4,7 @@
     $userResponsibleCountries = isset($user) ? $user->responsibleCountries()->pluck('code')->toArray() : [];
     $userResponsibleGroups = isset($user) ? $user->responsibleGroups()->pluck('group')->toArray() : [];
     $currentUser = auth()->user();
+    $isAdminUser = $currentUser->hasRole('admin');
 @endphp
 
 @csrf
@@ -55,14 +56,12 @@
             <x-multiselect id="responsible_groups" name="responsible_groups" label="Select groups" :options="$groups" :selected="$userResponsibleGroups"/>
         </div>
 
-        @if($currentUser->email === $user->email || $currentUser->hasRole('opco') && !empty($userRoleIds))
+        @if($currentUser->hasRole('admin'))
             <div class="form-control mb">
                 <label class="control-label">Role this user is responsible for</label>
                 <x-multiselect id="roles" name="roles" label="Select role" :options="$roles->pluck('label', 'id')->toArray()" :selected="$userRoleIds"/>
             </div>
-        @endif
 
-        @if($currentUser->email === $user->email || $currentUser->hasRole('opco') && !empty($userResponsibleCountries))
             <div class="form-control mb">
                 <label class="control-label">Countries this user is responsible for</label>
                 <x-multiselect id="responsible_countries" name="responsible_countries" label="Select country" :options="$countries->pluck('name', 'code')->toArray()" :selected="$userResponsibleCountries"/>
