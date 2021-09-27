@@ -54,14 +54,14 @@
             <x-multiselect id="responsible_groups" name="responsible_groups" label="Select groups" :options="$groups" :selected="$userResponsibleGroups"/>
         </div>
 
-        @if(auth()->user()->hasRole('opco') && !empty($userRoleIds))
+        @if(auth()->user()->email === $user->email || auth()->user()->hasRole('opco') && !empty($userRoleIds))
             <div class="form-control mb">
                 <label class="control-label">Role this user is responsible for</label>
                 <x-multiselect id="roles" name="roles" label="Select role" :options="$roles->pluck('label', 'id')->toArray()" :selected="$userRoleIds"/>
             </div>
         @endif
 
-        @if(auth()->user()->hasRole('opco') && !empty($userResponsibleCountries))
+        @if(auth()->user()->email === $user->email || auth()->user()->hasRole('opco') && !empty($userResponsibleCountries))
             <div class="form-control mb">
                 <label class="control-label">Countries this user is responsible for</label>
                 <x-multiselect id="responsible_countries" name="responsible_countries" label="Select country" :options="$countries->pluck('name', 'code')->toArray()" :selected="$userResponsibleCountries"/>
