@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use App\Services\TwofaService;
 use Google2FA;
-use PragmaRX\Google2FALaravel\Support\Authenticator;
 
 class UserController extends Controller
 {
