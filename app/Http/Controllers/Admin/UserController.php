@@ -15,7 +15,12 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $users = User::with('roles');
+        $currentUser = auth()->user();
+
+        $users = User::with('roles', 'countries')
+            ->when($currentUser->hasRole('opco'), function($query) use($currentUser) {
+                $query->whereHas('countries', fn ($q) => $q->whereIn('code', $currentUser->responsibleCountries()->pluck('code')->toArray()));
+            });
 
         $users->when($request->has('q'), function($q) use($request) {
             $query = "%" . $request->q . "%";
@@ -93,32 +98,34 @@ class UserController extends Controller
             'last_name' => 'required',
             'email' => 'email:rfc,dns|unique:users,email',
             'password' => 'required|confirmed',
-            'roles' => 'required',
+            'roles' => 'nullable',
             'country' => 'nullable',
             'responsible_countries' => 'nullable',
             'responsible_groups' => 'nullable',
         ]);
-        $randNum = rand(1, 24);
-        $imageName = base64_encode(date('iYHs') . $randNum) . '.svg';
-        $imagePath = 'public/profile/' . $imageName;
-        \Storage::copy('public/profile/profile-' . $randNum . '.svg', $imagePath);
 
-        $data['profile_picture'] = '/storage/profile/' . $imageName;
+        $data['profile_picture'] = '/storage/profile/profile-' . rand(1, 32) . '.svg';
+
 
         $user = User::create($data);
-        $user->roles()->sync([$data['roles']]);
 
-        if (!is_null($request->country)) {
+        if ($request->has('roles')) {
+            $user->roles()->sync($data['roles']);
+        }
+
+        if ($request->has('country')) {
             $user->countries()->sync([$data['country']]);
         }
 
-        if (!is_null($request->responsible_countries)) {
+        if ($request->has('responsible_countries')) {
             $user->responsibleCountries()->sync($data['responsible_countries']);
         }
 
-        if (!is_null($request->responsible_groups)) {
-            $user->responsibleCountries()->sync($data['responsible_groups']);
+        if ($request->has('responsible_groups')) {
+            $user->responsibleGroups()->sync($data['responsible_groups']);
         }
+
+        $user->sendEmailVerificationNotification();
 
         return redirect()->route('admin.user.index')->with('alert', 'success:The user has been created');
     }
@@ -167,7 +174,7 @@ class UserController extends Controller
                 Rule::unique('users')->ignore($user->id),
             ],
             'password' => 'sometimes|confirmed',
-            'roles' => 'required',
+            'roles' => 'nullable',
             'country' => 'nullable',
             'responsible_countries' => 'nullable',
             'responsible_groups' => 'nullable',
@@ -180,9 +187,11 @@ class UserController extends Controller
         }
 
         $user->update($data);
-        $user->roles()->sync($data['roles']);
+        if ($request->has('roles')) {
+            $user->roles()->sync($data['roles']);
+        }
 
-        if (!is_null($request->country)) {
+        if (!$request->has('country')) {
             $user->countries()->sync([$data['country']]);
         }
 

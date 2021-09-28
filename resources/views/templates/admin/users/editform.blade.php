@@ -3,6 +3,8 @@
     $userCountryCode = $user->countries[0]->pivot->country_code ?? 0;
     $userResponsibleCountries = isset($user) ? $user->responsibleCountries()->pluck('code')->toArray() : [];
     $userResponsibleGroups = isset($user) ? $user->responsibleGroups()->pluck('group')->toArray() : [];
+    $currentUser = auth()->user();
+    $isAdminUser = $currentUser->hasRole('admin');
 @endphp
 
 @csrf
@@ -54,15 +56,18 @@
             <x-multiselect id="responsible_groups" name="responsible_groups" label="Select groups" :options="$groups" :selected="$userResponsibleGroups"/>
         </div>
 
-        <div class="form-control mb">
-            <label class="control-label">Role this user is responsible for</label>
-            <x-multiselect id="roles" name="roles" label="Select role" :options="$roles->pluck('label', 'id')->toArray()" :selected="$userRoleIds"/>
-        </div>
+        @if($currentUser->hasRole('admin'))
+            <div class="form-control mb">
+                <label class="control-label">Role this user is responsible for</label>
+                <x-multiselect id="roles" name="roles" label="Select role" :options="$roles->pluck('label', 'id')->toArray()" :selected="$userRoleIds"/>
+            </div>
 
-        <div class="form-control mb">
-            <label class="control-label">Countries this user is responsible for</label>
-            <x-multiselect id="responsible_countries" name="responsible_countries" label="Select country" :options="$countries->pluck('name', 'code')->toArray()" :selected="$userResponsibleCountries"/>
-        </div>
+            <div class="form-control mb">
+                <label class="control-label">Countries this user is responsible for</label>
+                <x-multiselect id="responsible_countries" name="responsible_countries" label="Select country" :options="$countries->pluck('name', 'code')->toArray()" :selected="$userResponsibleCountries"/>
+            </div>
+        @endif
+
     </div>
 
 </div>
@@ -91,6 +96,10 @@
     </div>
 
 </div>
+@php
+    $duplicateCountries = [];
+    $userApps = $user->getApps($selectedCountryFilter, $order, $sort);
+@endphp
 
 <div class="flex-container bottom-section-container">
     <div class="each-container">
@@ -99,11 +108,10 @@
             <label>Country</label>
             <select name="country-filter" id="country-filter">
                 <option value="all">All</option>
-                @foreach($countries as $country)
-                    @if(in_array($country->code, $userResponsibleCountries))
+                    @foreach($userApps->pluck('country')->unique('name') as $country)
+                        @if(!in_array($country->code, $userResponsibleCountries) && !$user->hasRole('admin')) @continue @endif
                         <option value="{{ $country->code }}" {{ (($selectedCountryFilter === $country->code) ? 'selected': '') }}>{{ $country->name }}</option>
-                    @endif
-                @endforeach
+                    @endforeach
             </select>
         </div>
     </div>
@@ -126,11 +134,11 @@
 
     @if(!$user->getApps()->isEmpty())
         @foreach($user->getApps() as $app)
-            @if(in_array($app->country_code, $userResponsibleCountries))
+            @if(in_array($app->country_code, $userResponsibleCountries) || $user->hasRole('admin'))
                 <tr class="user-app" data-country="{{ $app->country_code }}">
                     <td><a href="{{ route('admin.dashboard.index', ['q' => $app->display_name, 'product-status' => 'all']) }}" class="app-link">{{ $app->display_name }}</a></td>
                     <td>{{ count($app->products) }}</td>
-                    <td>{{ $app->created_at }}</td>
+                    <td>{{ $app->created_at->format('Y-m-d') }}</td>
                     <td><div class="country-flag" style="background-image: url('/images/locations/{{ $app->country->code }}.svg')"></div></td>
                     <td><div class="status {{ ('approved' === $app->status)  ? 'active' : 'non-active' }}"></div></td>
                 </tr>
