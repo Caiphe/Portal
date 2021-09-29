@@ -221,7 +221,7 @@
         </div>
         @endif
 
-        @if(!$isAdminPage && !empty($sandboxProducts) && is_null($app->live_at))
+        @if(!$isAdminPage  || auth()->user()->hasRole('opco') && !empty($sandboxProducts) && is_null($app->live_at))
         <form class="go-live cols centre-align" method="POST" action="{{ route('app.go-live', $app->aid) }}">
             @csrf
             <p class="spacer-flex"><strong class="mr-1">Ready to launch?</strong>You're just a few clicks away</p>
