@@ -7,6 +7,7 @@
     $appStatus = $app->products->filter(fn($prod) => $prod->pivot->status === 'pending')->count() > 0 ? 'pending' : $app['status'];
     $countryCode = array_keys($countries)[0];
     $countryName = array_values($countries)[0];
+    $isOpcoAdmin = auth()->user()->hasRole('opco');
 @endphp
 
 @allowonce('card_link')
@@ -120,7 +121,7 @@
             </div>
         @endif
 
-        @if(!empty($sandboxProducts))
+        @if(!empty($sandboxProducts) || $isOpcoAdmin)
         @if(!$isAdminPage)
         <div class="products-title">
             <strong>Products</strong>
@@ -143,7 +144,7 @@
         </div>
         @endif
 
-        @if(!empty($prodProducts['products']))
+        @if(!empty($prodProducts['products']) || $isOpcoAdmin)
         @if(!$isAdminPage)
         <div class="mt-2">
             <div class="detail-left">
@@ -197,7 +198,7 @@
         </div>
         @endif
         <div class="detail-right"></div>
-        @if(!$isAdminPage)
+        @if(!$isAdminPage || $isOpcoAdmin)
         <div class="products-title">
             <strong>Production products</strong>
             <form class="ml-1" action="{{ route('app.credentials.request-renew', ['app' => $app, 'type' => 'production']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
@@ -221,13 +222,13 @@
         </div>
         @endif
 
-        @if(!$isAdminPage && !empty($sandboxProducts) && is_null($app->live_at))
+        @if(!$isAdminPage  || $isOpcoAdmin && !empty($sandboxProducts) && is_null($app->live_at))
         <form class="go-live cols centre-align" method="POST" action="{{ route('app.go-live', $app->aid) }}">
             @csrf
             <p class="spacer-flex"><strong class="mr-1">Ready to launch?</strong>You're just a few clicks away</p>
             <button class="button dark">GO LIVE @svg('rocket', '#FFF')</button>
         </form>
-        @elseif($isAdminPage && !is_null($app['kyc_status']))
+        @elseif($isAdminPage  || $isOpcoAdmin && !is_null($app['kyc_status']))
         <div class="kyc-status">
             <strong class="mr-2">Update the KYC status</strong>
             <select name="kyc_status" class="kyc-status-select" data-aid="{{ $app['aid'] }}" autocomplete="off">
@@ -239,7 +240,7 @@
         @endif
     </div>
     <nav class="menu custom-menu">
-        @if($isAdminPage)
+        @if($isAdminPage  || $isOpcoAdmin)
             @can('administer-dashboard')
             @if($app['status'] === 'revoked')
                 {{--- Please do not remove or add Edit/Delete buttons  --}}
