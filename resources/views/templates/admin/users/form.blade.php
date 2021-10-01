@@ -1,25 +1,25 @@
 @php
-    $userRoleIds = isset($user) ? $user->roles->pluck('id')->toArray() : [];
-    $userCountryCode = $user->countries[0]->pivot->country_code ?? 0;
-    $userResponsibleCountries = isset($user) ? $user->responsibleCountries()->pluck('code')->toArray() : [];
-    $userResponsibleGroups = isset($user) ? $user->responsibleGroups()->pluck('group')->toArray() : [];
+    $currentUser = auth()->user();
+    $userResponsibleCountries = $currentUser->responsibleCountries()->pluck('code')->toArray();
+    $isAdminUser = $currentUser->hasRole('admin');
+    $defaultUserRole = [2 => 'Developer'];
 @endphp
 
 @csrf
 
 <div class="editor-field">
     <h2>First name</h2>
-    <input type="text" class="long" name="first_name" placeholder="First name" value="{{ $user->first_name ?? old('first_name') }}" autocomplete="off" maxlength="140">
+    <input type="text" class="long" name="first_name" placeholder="First name" value="{{ old('first_name') }}" autocomplete="off" maxlength="140">
 </div>
 
 <div class="editor-field">
     <h2>Last name</h2>
-    <input type="text" class="long" name="last_name" placeholder="Last name" value="{{ $user->last_name ?? old('last_name') }}" autocomplete="off" maxlength="140">
+    <input type="text" class="long" name="last_name" placeholder="Last name" value="{{ old('last_name') }}" autocomplete="off" maxlength="140">
 </div>
 
 <div class="editor-field">
     <h2>Email</h2>
-    <input type="text" class="long" name="email" placeholder="Email" value="{{ $user->email ?? old('email') }}" autocomplete="off" maxlength="140">
+    <input type="text" class="long" name="email" placeholder="Email" value="{{ old('email') }}" autocomplete="off" maxlength="140">
 </div>
 
 <div class="editor-field">
@@ -39,24 +39,27 @@
     <select name="country" autocomplete="off">
         <option value="">Select country</option>
         @foreach($countries as $country)
-        <option @if($userCountryCode === $country->code) selected @endif value="{{ $country->code }}">{{ $country->name }}</option>
+            @if(!in_array($country->code, $userResponsibleCountries) && !$isAdminUser) @continue @endif
+        <option value="{{ $country->code }}">{{ $country->name }}</option>
         @endforeach
     </select>
 </div>
 
+@if($isAdminUser)
 <div class="editor-field">
     <h2>Roles</h2>
-    <x-multiselect id="roles" name="roles" label="Select role" :options="$roles->pluck('label', 'id')->toArray()" :selected="$userRoleIds"/>
+    <x-multiselect id="roles" name="roles" label="Select role" :options="$roles->pluck('label', 'id')->toArray()" :selected="$defaultUserRole"/>
 </div>
 
 <div class="editor-field">
     <h2>Countries the user is responsible for</h2>
-    <x-multiselect id="responsible_countries" name="responsible_countries" label="Select country" :options="$countries->pluck('name', 'code')->toArray()" :selected="$userResponsibleCountries"/>
+    <x-multiselect id="responsible_countries" name="responsible_countries" label="Select country" :options="$countries->pluck('name', 'code')->toArray()"/>
 </div>
+@endif
 
 <div class="editor-field">
     <h2>Groups the user is responsible for</h2>
-    <x-multiselect id="responsible_groups" name="responsible_groups" label="Select groups" :options="$groups" :selected="$userResponsibleGroups"/>
+    <x-multiselect id="responsible_groups" name="responsible_groups" label="Select groups" :options="$groups"/>
 </div>
 
 @push('scripts')

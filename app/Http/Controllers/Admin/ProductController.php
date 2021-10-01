@@ -37,6 +37,7 @@ class ProductController extends Controller
                     'fields' => ['display_name', 'access', 'environments', 'category.title'],
                     'modelName' => 'product'
                 ], 200)
+                ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         }
 

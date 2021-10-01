@@ -29,6 +29,7 @@ class FaqController extends Controller
                     'fields' => ['question', 'category.title'],
                     'modelName' => 'faq'
                 ], 200)
+                ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         }
 

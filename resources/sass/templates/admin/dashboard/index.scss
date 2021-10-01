@@ -341,6 +341,14 @@
     &.revoked {
         background-color: $red;
     }
+
+    &.approved {
+        background-color: $green;
+    }
+
+    &.revoked {
+        background-color: $red;
+    }
 }
 
 .admin{

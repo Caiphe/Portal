@@ -270,6 +270,7 @@
 
             xhr.onload = function() {
                 var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+                var approvedAppPopup;
 
                 var noteDialogContent;
                 console.log(result);
