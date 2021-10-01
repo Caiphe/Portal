@@ -1,5 +1,15 @@
-(function() {
+(function () {
     var els = document.querySelectorAll('.ajaxify, .page-link');
+    var ajaxedHtml = [];
+
+    window.onpopstate = function(event) {
+        var params = event.state === null ? {} : event.state.params;
+
+        if (typeof ajaxifyOnPopState !== 'undefined') ajaxifyOnPopState(params);
+
+        ajaxedHtml.pop();
+        document.getElementById('table-data').innerHTML = ajaxedHtml[ajaxedHtml.length - 1];
+    }
 
     for (var i = els.length - 1; i >= 0; i--) {
         els[i].classList.add('ajaxified');
@@ -7,6 +17,8 @@
     }
 
     function handleForm(ev) {
+        ev.preventDefault();
+
         var xhr = new XMLHttpRequest();
         var formData = new FormData();
         var el = this;
@@ -14,13 +26,15 @@
         var url = el.action || el.href;
         var isPager = el.classList.contains('page-link');
 
-        ev.preventDefault();
-
         if (el.dataset.confirm !== undefined && !confirm(el.dataset.confirm)) return;
+
+        if(ajaxedHtml.length === 0){
+            ajaxedHtml.push(document.querySelector((el.dataset.replace || '#table-data')).innerHTML);
+        }
 
         addLoading();
 
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function () {
             var result = null;
             var func = null;
             var args = null;
@@ -42,6 +56,7 @@
 
                     if (el.dataset.replace !== undefined || isPager) {
                         document.querySelector((el.dataset.replace || '#table-data')).innerHTML = result;
+                        ajaxedHtml.push(result || '');
                         resetAjaxify();
                         updateUrl(url);
                     } else {
@@ -51,7 +66,8 @@
                     if (typeof ajaxifyComplete !== 'undefined') ajaxifyComplete();
 
                 } else {
-                    addAlert('error', (result.body || "Sorry there was an unexpected error."));
+                    // addAlert('error', (result.body || "Sorry there was an unexpected error."));
+                    console.log(xhr);
                 }
 
                 removeLoading();
@@ -67,7 +83,7 @@
                 if (el.elements[i].multiple) {
                     url += getMultiselectValues(el.elements[i]);
                 } else {
-                    url += '&' + el.elements[i].name + '=' + el.elements[i].value;
+                    url += '&' + el.elements[i].name + '=' + encodeURIComponent(el.elements[i].value);
                 }
 
             }
@@ -76,7 +92,7 @@
             for (var i = el.elements.length - 1; i >= 0; i--) {
                 if (el.elements[i].name === "" || el.elements[i].value === "") continue;
 
-                formData.append(el.elements[i].name, el.elements[i].value);
+                formData.append(el.elements[i].name, encodeURIComponent(el.elements[i].value));
             }
         }
 
@@ -100,7 +116,10 @@
     }
 
     function updateUrl(url) {
-        history.pushState(null, null, url.replace(/.*\/|true=1\&/g, ''));
+        var urlReplace = url.replace(/.*\?/g, '?').replace(/true=1\&/, '');
+        var params = new URLSearchParams(urlReplace);
+        params = Object.fromEntries(params.entries());
+        history.pushState({ query: urlReplace, params: params }, null, urlReplace);
     }
 
     function getMultiselectValues(multi) {
