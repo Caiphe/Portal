@@ -6,10 +6,8 @@ use App\App;
 use App\Http\Requests\CreateAppRequest;
 use App\User;
 use App\Country;
-use App\TeamMember;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-use App\Services\TeamsService;
+use App\Services\TeamCompanyService;
 use App\Http\Requests\TeamRequest;
 
 class TeamsController extends Controller
@@ -37,7 +35,7 @@ class TeamsController extends Controller
         ]);
     }
 
-    public function store(CreateAppRequest $appRequest, TeamRequest $request, TeamsService $teamsService)
+    public function store(CreateAppRequest $appRequest, TeamRequest $request, TeamCompanyService $teamsService)
     {
         $user = $request->user();
 

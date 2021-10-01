@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Mail\Company;
+namespace App\Mail\CompanyTeams;
 
 use App\User;
 use App\Team;

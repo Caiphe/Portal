@@ -2,18 +2,25 @@
 
 namespace App\Services;
 
-use App\{Team, User};
+use App\User;
+use App\Team;
+
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\CreateAppRequest;
 use Illuminate\Database\Eloquent\Collection;
 
-/**
+/**s
  * Class TeamsService
  *
  * @package App\Services
  */
 class TeamsService
 {
+    public function listCompanyApps()
+    {
+
+    }
+    
     public function storeOrUpdateApp(CreateAppRequest $request, array $team, User $currentUser = null)
     {
         $validated = $request->all();

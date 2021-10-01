@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Mail;
+namespace App\Mail\Invites;
 
 use App\User;
 use App\Team;
+
 use Illuminate\Mail\Mailable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class CompanyInviteUser extends Mailable
+class InviteExistingUser extends Mailable
 {
     use Queueable, SerializesModels;
 
