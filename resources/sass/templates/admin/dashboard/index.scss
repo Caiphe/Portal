@@ -238,6 +238,11 @@
 .product-filters {
     display: flex;
 
+    &.hidden{
+        display: none;
+        pointer-events: none;
+    }
+
     @media screen and (min-width: 768px) {
         align-items: flex-end;
     }
@@ -314,7 +319,6 @@
     color: #fff;
     font-size: 16px;
     padding-left: 20px;
-    padding-top: 19px;
     box-sizing: border-box;
     opacity: 0;
 
@@ -327,6 +331,15 @@
         pointer-events: auto;
         height: 60px;
         margin-bottom: 20px;
+        padding-top: 19px;
+    }
+
+    &.approved {
+        background-color: $green;
+    }
+
+    &.revoked {
+        background-color: $red;
     }
 
     &.approved {

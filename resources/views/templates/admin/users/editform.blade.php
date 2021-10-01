@@ -49,20 +49,22 @@
     </div>
 
     <div class="each-container roles-groups">
-        <h2>Groups & Roles</h2>
+        <h2>Groups</h2>
 
         <div class="form-control mb">
             <label class="control-label">Groups this user is responsible for</label>
             <x-multiselect id="responsible_groups" name="responsible_groups" label="Select groups" :options="$groups" :selected="$userResponsibleGroups"/>
         </div>
 
+        <h2 class="role-heading">Roles</h2>
+
         @if($currentUser->hasRole('admin'))
-            <div class="form-control mb">
+            <div class="form-control">
                 <label class="control-label">Role this user is responsible for</label>
                 <x-multiselect id="roles" name="roles" label="Select role" :options="$roles->pluck('label', 'id')->toArray()" :selected="$userRoleIds"/>
             </div>
 
-            <div class="form-control mb">
+            <div class="form-control">
                 <label class="control-label">Countries this user is responsible for</label>
                 <x-multiselect id="responsible_countries" name="responsible_countries" label="Select country" :options="$countries->pluck('name', 'code')->toArray()" :selected="$userResponsibleCountries"/>
             </div>
@@ -136,11 +138,11 @@
         @foreach($user->getApps() as $app)
             @if(in_array($app->country_code, $userResponsibleCountries) || $user->hasRole('admin'))
                 <tr class="user-app" data-country="{{ $app->country_code }}">
-                    <td><a href="{{ route('admin.dashboard.index', ['q' => $app->display_name, 'product-status' => 'all']) }}" class="app-link">{{ $app->display_name }}</a></td>
+                    <td><a href="{{ route('admin.dashboard.index', ['aid' => $app->aid]) }}" class="app-link">{{ $app->display_name }}</a></td>
                     <td>{{ count($app->products) }}</td>
                     <td>{{ $app->created_at->format('Y-m-d') }}</td>
                     <td><div class="country-flag" style="background-image: url('/images/locations/{{ $app->country->code }}.svg')"></div></td>
-                    <td><div class="status {{ ('approved' === $app->status)  ? 'active' : 'non-active' }}"></div></td>
+                    <td><div class="status app-status-{{ $app->status }}"></div></td>
                 </tr>
             @endif
         @endforeach

@@ -210,8 +210,12 @@
                         text-align: center;
                         margin: 0px auto;
                         position: relative;
-                        padding-left: 26px;
                         height: 41px;
+                        width: 164px;
+
+                        &:nth-child(1){
+                            margin-right: 5px;
+                        }
                     }
 
                     .wrapper{

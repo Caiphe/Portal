@@ -16,14 +16,15 @@
     <div class="container" id="app-index">
         <div class="approved-app-popup"></div>
 
-        <div class="product-filters">
+          
+        <div class="product-filters @if(request()->has('aid')) hidden @endif">
             <form id="filter-form" class="ajaxify" action="{{ route('admin.dashboard.index') }}" method="GET" data-replace="#table-data">
                 <div class="product-filter">
-                    <input type="text" name="q" id="filter-text" class="filter-text" placeholder="Search app or developer name" value="{{ $_GET['q'] ?? '' }}">
+                    <input type="text" autocomplete="off" name="q" id="filter-text" class="filter-text" placeholder="Search app or developer name" value="{{ $_GET['q'] ?? '' }}">
                 </div>
 
                 <div class="product-filter">
-                    <select id="app-filter-status" name="app-status">
+                    <select id="app-filter-status" name="app-status" autocomplete="off">
                         <option @if($appStatus === 'all') selected @endif value="all">All app status</option>
                         <option @if($appStatus === 'approved') selected @endif value="approved">Approved Apps</option>
                         <option @if($appStatus === 'revoked') selected @endif value="revoked">Revoked Apps</option>
@@ -31,7 +32,7 @@
                 </div>
 
                 <div class="product-filter">
-                    <select id="product-filter-status" name="product-status">
+                    <select id="product-filter-status" name="product-status" autocomplete="off">
                         <option @if($productStatus === 'all') selected @endif value="all">All product status</option>
                         <option @if($productStatus === 'pending') selected @endif value="pending">Pending apps</option>
                         <option @if($productStatus === 'all-approved') selected @endif value="all-approved">All Approved</option>
@@ -42,7 +43,7 @@
                 </div>
 
                 <div class="product-filter">
-                    <select id="filter-country"  name="countries" label="Select country" >
+                    <select id="filter-country"  name="countries" label="Select country" autocomplete="off">
                         <option value="">All countries</option>
                         @foreach($countries as $code => $name)
                             <option value="{{ $code }}" {{ (($selectedCountry === $code) ? 'selected': '') }}>{{ $name }}</option>
@@ -53,10 +54,12 @@
 
             </form>
         </div>
+       
 
         <div id="table-data" class="row">
             @include('templates.admin.dashboard.data', compact('apps', 'countries'))
         </div>
+
     </div>
 
     <x-dialog id="status-dialog">
@@ -81,6 +84,7 @@
 
         window.onload = init;
         ajaxifyComplete = init;
+        ajaxifyOnPopState = updateFilters;
 
         function init() {
             var buttons = document.querySelectorAll('.toggle-app');
@@ -125,6 +129,13 @@
             }
         }
 
+        function updateFilters(params) {
+            document.getElementById('filter-text').value = params['q'] || '';
+            document.getElementById('app-filter-status').value = params['app-status'] || 'all';
+            document.getElementById('product-filter-status').value = params['product-status'] || 'pending';
+            document.getElementById('filter-country').value = params['countries'] || '';
+        }
+
         function handleButtonClick() {
             this.parentNode.parentNode.classList.toggle('show')
         }
@@ -151,7 +162,18 @@
         }
 
         function submitFilter() {
-            document.getElementById('filter-form').submit();
+            var filterForm =  document.getElementById('filter-form');
+
+            if(timeout !== null){
+                clearTimeout(timeout);
+                timeout = null;
+            }
+
+            if(filterForm.requestSubmit !== undefined) {
+                filterForm.requestSubmit();
+            }else{
+                filterForm.submit();
+            }
         }
 
         function clearFilter() {
@@ -224,6 +246,7 @@
                 for: el.dataset.for,
                 app: el.parentNode.parentNode.dataset.aid,
                 product: el.parentNode.parentNode.dataset.pid,
+                productSlug: el.parentNode.parentNode.dataset.productSlug,
                 displayName: el.parentNode.parentNode.dataset.productDisplayName,
                 statusNote: form.elements['status-note'].value
             }, el.parentNode);
@@ -249,15 +272,14 @@
                 var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
                 var approvedAppPopup;
 
+                var noteDialogContent;
+                console.log(result);
+
                 if (xhr.status === 200) {
-                    approvedAppPopup = document.querySelector('.approved-app-popup');
+                    noteDialogContent = document.querySelector('#admin-' + data.app + data.productSlug + '-note-dialog .note');
+                    noteDialogContent.innerHTML = result.body;
 
-                    approvedAppPopup.innerHTML = '<strong>Product ' + lookup[data.action] + '.</strong> The product <span>' + data.displayName + '</span> has been ' + lookup[data.action];
-                    approvedAppPopup.classList.add('show', lookup[data.action]);
-
-                    window.setTimeout(function(){
-                        document.querySelector('.approved-app-popup').className = 'approved-app-popup';
-                    }, 5000);
+                    addAlert('success', '<strong>Product ' + lookup[data.action] + '.</strong> The product <span>' + data.displayName + '</span> has been ' + lookup[data.action]);
 
                     card.parentNode.className = 'product product-status-' + lookup[data.action];
 
@@ -312,7 +334,7 @@
 
         function viewNote(e) {
             var id = this.dataset.id;
-            var noteDialog = document.getElementById(id + '-note-dialog');
+            var noteDialog = document.getElementById('admin-' +id + '-note-dialog');
 
             e.preventDefault();
 
@@ -324,5 +346,6 @@
         function strSlug(str) {
             return str.replace(/[^a-zA-Z\s]/g, '').replace(/\s+/g, '-').toLowerCase();
         }
+
     </script>
 @endpush
