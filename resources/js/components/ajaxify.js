@@ -1,5 +1,15 @@
-(function() {
+(function () {
     var els = document.querySelectorAll('.ajaxify, .page-link');
+    var ajaxedHtml = [];
+
+    window.onpopstate = function(event) {
+        var params = event.state === null ? {} : event.state.params;
+
+        if (typeof ajaxifyOnPopState !== 'undefined') ajaxifyOnPopState(params);
+
+        ajaxedHtml.pop();
+        document.getElementById('table-data').innerHTML = ajaxedHtml[ajaxedHtml.length - 1];
+    }
 
     for (var i = els.length - 1; i >= 0; i--) {
         els[i].classList.add('ajaxified');
@@ -7,6 +17,8 @@
     }
 
     function handleForm(ev) {
+        ev.preventDefault();
+
         var xhr = new XMLHttpRequest();
         var formData = new FormData();
         var el = this;
@@ -14,13 +26,15 @@
         var url = el.action || el.href;
         var isPager = el.classList.contains('page-link');
 
-        ev.preventDefault();
-
         if (el.dataset.confirm !== undefined && !confirm(el.dataset.confirm)) return;
+
+        if(ajaxedHtml.length === 0){
+            ajaxedHtml.push(document.querySelector((el.dataset.replace || '#table-data')).innerHTML);
+        }
 
         addLoading();
 
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function () {
             var result = null;
             var func = null;
             var args = null;
@@ -42,6 +56,7 @@
 
                     if (el.dataset.replace !== undefined || isPager) {
                         document.querySelector((el.dataset.replace || '#table-data')).innerHTML = result;
+                        ajaxedHtml.push(result || '');
                         resetAjaxify();
                         updateUrl(url);
                     } else {
@@ -100,7 +115,10 @@
     }
 
     function updateUrl(url) {
-        history.replaceState(null, null, url.replace(/.*\?/g, '?').replace(/true=1\&/, ''));
+        var urlReplace = url.replace(/.*\?/g, '?').replace(/true=1\&/, '');
+        var params = new URLSearchParams(urlReplace);
+        params = Object.fromEntries(params.entries());
+        history.pushState({ query: urlReplace, params: params }, null, urlReplace);
     }
 
     function getMultiselectValues(multi) {
