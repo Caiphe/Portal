@@ -146,6 +146,10 @@
                 </tr>
             @endif
         @endforeach
+    @else
+    <tr>
+        <td>Developer currently has no apps</td>
+    </tr>
     @endif
 </table>
 
