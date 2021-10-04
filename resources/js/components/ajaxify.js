@@ -2,13 +2,17 @@
     var els = document.querySelectorAll('.ajaxify, .page-link');
     var ajaxedHtml = [];
 
-    window.onpopstate = function(event) {
+    window.onpopstate = function (event) {
         var params = event.state === null ? {} : event.state.params;
 
         if (typeof ajaxifyOnPopState !== 'undefined') ajaxifyOnPopState(params);
 
         ajaxedHtml.pop();
         document.getElementById('table-data').innerHTML = ajaxedHtml[ajaxedHtml.length - 1];
+
+        if (typeof ajaxifyComplete !== 'undefined') ajaxifyComplete();
+
+        resetAjaxify();
     }
 
     for (var i = els.length - 1; i >= 0; i--) {
@@ -28,8 +32,8 @@
 
         if (el.dataset.confirm !== undefined && !confirm(el.dataset.confirm)) return;
 
-        if(ajaxedHtml.length === 0){
-            ajaxedHtml.push(document.querySelector((el.dataset.replace || '#table-data')).innerHTML);
+        if (ajaxedHtml.length === 0) {
+            ajaxedHtml.push(document.querySelector((el.dataset.replace || '#table-data')).innerHTML.replace(/ajaxified/, ''));
         }
 
         addLoading();
@@ -55,6 +59,7 @@
                     }
 
                     if (el.dataset.replace !== undefined || isPager) {
+                        result = result.replace(/ajaxified/, '');
                         document.querySelector((el.dataset.replace || '#table-data')).innerHTML = result;
                         ajaxedHtml.push(result || '');
                         resetAjaxify();
