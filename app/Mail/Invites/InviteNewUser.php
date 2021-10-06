@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Mail\CompanyTeams;
+namespace App\Mail\Invites;
 
 use App\User;
 use App\Team;
+
 use Illuminate\Mail\Mailable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -24,9 +25,9 @@ class InviteNewUser extends Mailable
     public $team;
 
     /**
-     * @var $inviter
+     * @var $invitee
      */
-    public $inviter;
+    public $invitee;
 
     /**
      * Create a new message instance.
@@ -38,7 +39,7 @@ class InviteNewUser extends Mailable
     {
         $this->team = $team;
 
-        $this->inviter = $user;
+        $this->invitee = $user;
     }
 
     /**
@@ -48,6 +49,17 @@ class InviteNewUser extends Mailable
      */
     public function build()
     {
-        return $this->subject("{$this->inviter->full_name} has invited you to join {$this->team->name}")->markdown('emails.companies.new-user-invite');
+        $teamOwner = User::find($this->team->owner_id)->first();
+
+        return $this->withSwiftMessage(function ($message) use($teamOwner) {
+            $message->getHeaders()->addTextHeader('Reply-To', $teamOwner->email);
+        })
+            ->to($this->invitee->email, $this->invitee->full_name)
+            ->subject("MTN Developer Portal: {$teamOwner->full_name} has invited you to join {$this->team->name} Team")
+            ->markdown('emails.companies.new-user-invite', [
+                'invitee' => $this->invitee,
+                'inviter' => $teamOwner,
+                'team' => $this->team,
+            ]);
     }
 }

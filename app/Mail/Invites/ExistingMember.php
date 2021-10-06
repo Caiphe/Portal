@@ -10,7 +10,12 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class InviteExistingUser extends Mailable
+/**
+ * Class ExistingMember
+ *
+ * @package App\Mail\Invites
+ */
+class ExistingMember extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -44,6 +49,16 @@ class InviteExistingUser extends Mailable
      */
     public function build()
     {
-        return $this->subject("Update from {$this->team->name} Team")->markdown('emails.companies.user-invite');
+        $teamOwner = User::find($this->team->owner_id)->first();
+
+        return $this->withSwiftMessage(function ($message) use($teamOwner) {
+            $message->getHeaders()->addTextHeader('Reply-To', $teamOwner->email);
+        })
+            ->to($this->invitee->email, $this->invitee->full_name)
+            ->subject("MTN Developer Portal: Update from {$this->team->name} Team")
+            ->markdown('emails.companies.user-invite', [
+                'team' => $this->team,
+                'user' => $this->user,
+            ]);
     }
 }

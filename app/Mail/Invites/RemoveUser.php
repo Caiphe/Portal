@@ -1,20 +1,21 @@
 <?php
 
-namespace App\Mail\CompanyTeams;
+namespace App\Mail\Invites;
 
 use App\User;
 use App\Team;
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 /**
- * Class CompanyRemoveUser
+ * Class RemoveUser
  *
  * @package App\Mail
  */
-class CompanyRemoveUser extends Mailable
+class RemoveUser extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -48,6 +49,16 @@ class CompanyRemoveUser extends Mailable
      */
     public function build()
     {
-        return $this->subject("Update from {$this->team->name} Team")->markdown('emails.companies.user-remove');
+        $teamOwner = User::find($this->team->owner_id)->first();
+
+        return $this->withSwiftMessage(function ($message) use($teamOwner) {
+            $message->getHeaders()->addTextHeader('Reply-To', $teamOwner->email);
+        })
+            ->to($this->user->email, $this->user->full_name)
+            ->subject("MTN Developer Portal: Update from {$this->team->name} Team")
+            ->markdown('emails.companies.user-remove', [
+                'team' => $this->team,
+                'user' => $this->user,
+            ]);
     }
 }
