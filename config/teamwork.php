@@ -81,4 +81,15 @@ return [
     |
     */
     'team_invites_table' => 'team_invites',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Teamwork team invites supported types
+    |--------------------------------------------------------------------------
+    |
+    | Invite and Request being the default supported types, we have added ownership
+    | as well for when a Team Owner requests to transfer ownership
+    |
+    */
+    'team_invite_types' => ['invite', 'request', 'ownership']
 ];

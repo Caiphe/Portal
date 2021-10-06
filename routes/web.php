@@ -45,10 +45,25 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 	Route::post('profile/2fa/enable', 'UserController@enable2fa')->name('user.2fa.enable');
 	Route::post('profile/2fa/disable', 'UserController@disable2fa')->name('user.2fa.disable');
 
-    Route::get('teams', 'TeamsController@index')->name('teams.listing');
-    Route::get('team/{id}', 'TeamsController@show')->name('team.show');
-    Route::get('teams/create', 'TeamsController@create')->name('teams.create');
-    Route::post('teams/store', 'TeamsController@store')->name('teams.store');
+    Route::get('teams', 'CompanyTeamsController@index')->name('teams.listing');
+    Route::get('teams/{id}/team', 'CompanyTeamsController@show')->name('team.show');
+    Route::get('teams/create', 'CompanyTeamsController@create')->name('teams.create');
+    Route::post('teams/update', 'CompanyTeamsController@update')->name('teams.update');
+    Route::post('teams/store', 'CompanyTeamsController@store')->name('teams.store');
+    Route::post('teams/delete', 'CompanyTeamsController@delete')->name('teams.delete');
+    Route::post('teams/leave', 'CompanyTeamsController@leaveTeam')->name('teams.leave.team');
+
+    Route::post('teams/invite', 'CompanyTeamsController@invite')->name('teams.invite');
+    Route::post('teams/upload', 'CompanyTeamsController@fileUpload')->name('teams.file.upload');
+
+    Route::post('teams/team/invite', 'Teams\InvitesController@team')->name('teams.invite.member');
+    Route::post('teams/team/invite/resend', 'Teams\InvitesController@team')->name('teams.invite.resend');
+
+    Route::post('teams/ownership/select', 'Teams\OwnershipsController@select')->name('teams.members.select');
+
+    Route::post('teams/ownership/transfer', 'Teams\OwnershipsController@team')->name('teams.ownership.transfer');
+    Route::post('teams/ownership/accept', 'Teams\OwnershipsController@accept')->name('teams.ownership.accept');
+    Route::post('teams/ownership/revoke', 'Teams\OwnershipsController@revoke')->name('teams.ownership.revoke');
 });
 
 Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa', 'can:view-admin'])->group(function () {

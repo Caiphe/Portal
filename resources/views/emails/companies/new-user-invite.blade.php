@@ -1,5 +1,5 @@
 @component('mail::message')
-    # {{ $inviter->full_name }} has invited you to join {$team->name} team.
+    # {{ $inviter->full_name }} has invited you to join {{ $team->name }} team.
 
     You have been invited to the **{{ $team->name }}** team.
 

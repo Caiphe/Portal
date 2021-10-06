@@ -7,6 +7,7 @@ use App\Country;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Mpociot\Teamwork\TeamInvite;
 use Mpociot\Teamwork\Traits\UserHasTeams;
 
 
@@ -154,5 +155,35 @@ class User extends Authenticatable implements MustVerifyEmail
         })->orderBy($sort, $order);
 
         return $apps->get();
+    }
+
+    /**
+     * Check if User has a Team invite
+     *
+     * @param Team $team
+     * @param string $type
+     * @return bool
+     */
+    public function hasTeamInvite(Team $team, $type = 'invite')
+    {
+        return TeamInvite::where([
+            'team_id' => $team->id,
+            'type' => $type
+        ])->exists();
+    }
+
+    /**
+     * Get a User's team invite
+     *
+     * @param Team $team
+     * @param string $type
+     * @return mixed
+     */
+    public function getTeamInvite(Team $team, $type = 'invite')
+    {
+        return TeamInvite::where([
+            'team_id' => $team->id,
+            'type' => $type
+        ])->get();
     }
 }
