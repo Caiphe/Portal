@@ -18,6 +18,15 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        \Mpociot\Teamwork\Events\UserJoinedTeam::class => [
+            \App\Events\Listeners\Teams\JoinTeamInviteListener::class,
+        ],
+        \Mpociot\Teamwork\Events\UserLeftTeam::class => [
+            \App\Events\Listeners\Teams\UserLeftTeamListener::class,
+        ],
+        \Mpociot\Teamwork\Events\UserInvitedToTeam::class => [
+            \App\Events\Listeners\Teams\UserInvitedToTeamListener::class
+        ],
     ];
 
     /**
