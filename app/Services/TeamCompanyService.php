@@ -3,150 +3,104 @@
 namespace App\Services;
 
 use App\User;
-use App\Team;
+use App\Factory\Teams\TeamFactory;
 
-use Illuminate\Http\RedirectResponse;
-use App\Http\Requests\CreateAppRequest;
 use Illuminate\Database\Eloquent\Collection;
 
 /**s
- * Class TeamsService
+ * Class TeamCompanyService
  *
  * @package App\Services
  */
-class TeamsService
+class TeamCompanyService
 {
-    public function listCompanyApps()
+    /**
+     * @var $apigeeServices
+     */
+    protected $apigeeService;
+
+    /**
+     * Constructor method
+     */
+    public function __construction()
     {
-
-    }
-    
-    public function storeOrUpdateApp(CreateAppRequest $request, array $team, User $currentUser = null)
-    {
-        $validated = $request->all();
-        $currentUser ??= $request->user();
-
-        $now = date('Y-m-d H:i:s');
-        $isUpdating = isset($app['aid']);
-
-        $products = $credentials = [];
-
-        $name = $validated['name'];
-
-        $data = [
-            'name' => Str::slug($name),
-            'apiProducts' => $products,
-            'keyExpiresIn' => -1,
-            'attributes' => [
-                [
-                    'name' => 'DisplayName',
-                    'value' => $name,
-                ],
-                [
-                    'name' => 'Description',
-                    'value' => $validated['description'],
-                ],
-                [
-                    'name' => 'Team',
-                    'value' => $team['name'],
-                ],
-            ],
-            'callbackUrl' => $validated['url'],
-        ];
-
-        $createdResponse = null;
-
-        if ($isUpdating) {
-
-            $data['originalName'] = $app->name;
-            $data['originalProducts'] = $app->products->pluck('name')->toArray();
-
-            $data['key'] = $this->getCredentials($app, 'consumerKey');
-
-            $createdResponse = ApigeeService::updateApp($data);
-        } else {
-
-            $createdResponse = ApigeeService::createApp($data);
-
-            if (str_contains($createdResponse, 'duplicate key')) {
-                return redirect()->back()->with('alert', 'Error:There is already an app with that name.')->withInput();
-            }
-
-            $credentials = ApigeeService::getLatestCredentials($createdResponse['credentials']);
-
-            unset($credentials['apiProducts']);
-        }
-
-        $attributes = ApigeeService::getAppAttributes($createdResponse['attributes']);
-
-        if ($isUpdating) {
-            $app->update([
-                "display_name" => $name,
-                "callback_url" => $data['callbackUrl'],
-                "description" => $data['attributes'][1]['value'],
-                "attributes" => $attributes,
-            ]);
-
-            $app->products()->sync($products);
-
-            if ($request->get('response', '') === 'json') return $app;
-
-            return redirect()->route('app.index')->with('alert', 'success:Your app was updated');
-        } else {
-            $app = App::create([
-                "aid" => $createdResponse['appId'],
-                "name" => $createdResponse['name'],
-                "display_name" => $name,
-                "callback_url" => $createdResponse['callbackUrl'],
-                "attributes" => $attributes,
-                "credentials" => $credentials,
-                "developer_id" => $currentUser->developer_id,
-                "company_username" => $createdResponse['companyName'] ?? null,
-                "status" => $createdResponse['status'],
-                "description" => $attributes['Description'] ?? '',
-                "country_id" => 0,
-                "updated_at" => date('Y-m-d H:i:s', $createdResponse['lastModifiedAt'] / 1000),
-                "created_at" => date('Y-m-d H:i:s', $createdResponse['createdAt'] / 1000),
-            ]);
-
-            $app->products()->sync($products);
-
-            if ($request->get('response', '') === 'json') return $app;
-
-            return redirect()->route('app.index')->with('alert', 'success:Your app was created');
-        }
-    }
-
-    public function getCredentials(App $app, $type)
-    {
-        if (auth()->user()->developer_id !== $app->developer_id) return "You can't access app keys that don't belong to you.";
-
-        $credentials = ApigeeService::get('apps/' . $app->aid)['credentials'];
-
-        $credentials = ApigeeService::getLatestCredentials($credentials);
-
-        return response($credentials, 200)
-            ->header('Content-Type', 'text/plain');
+        $this->apigeeService = new ApigeeService();
     }
 
     /**
-     * A User associated newly created Team object
+     * List Company Apps
      *
-     * @param User $user
-     * @param array $data
-     * @return Team
+     * @param $companyName
+     * @return mixed
      */
-    public static function createTeam(User $user, array $data): Team
+    public function listCompanyApps(string $companyName)
     {
-        return Team::create([
-            'name' => $data['name'],
-            'url' => $data['url'],
-            'contact' => $data['contact'],
-            'country' => $data['country'],
-            'description' => $data['description'],
-            'logo' => $data['filename'],
-            'owner_id' => $user->getKey()
+        return $this->apigeeService->get("/companies/{$companyName}/apps?expand=true");
+    }
+
+    /**
+     * Create Dev Team owned App
+     *
+     * @param string $teamOwnerDevId
+     * @param array $data
+     * @return mixed
+     */
+    public function devOwnedAppCreate(string $teamOwnerDevId, array $data)
+    {
+        return $this->apigeeService->post("/developers/{$teamOwnerDevId}/apps", $data);
+    }
+
+    /**
+     * Delete keys from company App
+     *
+     * @param string $teamOwnerDevId
+     * @param string $companyName
+     * @return mixed
+     */
+    public function deleteCompanyAppKeys(string $teamOwnerDevId, string $companyName)
+    {
+        return $this->apigeeService->post("/developers/{$teamOwnerDevId}/apps/{$companyName}/keys/create");
+    }
+
+    /**
+     * Import company app keys into new app
+     *
+     * @param string $teamOwnerDevId
+     * @param string $companyName
+     * @return mixed
+     */
+    public function importCompanyAppKeys(string $teamOwnerDevId, string $companyName)
+    {
+        return $this->apigeeService->post("/developers/{$teamOwnerDevId}/apps/{$companyName}/keys/create");
+    }
+
+    /**
+     * Add Product(s) to API Key
+     *
+     * @param string $teamOwnerDevId
+     * @param string $companyName
+     * @param string $key
+     * @param array $products
+     * @return mixed
+     */
+    public function addProductKeys(string $teamOwnerDevId, string $companyName, string $key, array $products)
+    {
+        return $this->apigeeService->post("/developers/{$teamOwnerDevId}/apps/{$companyName}/keys/{$key}", [
+            'apiProducts' => $products
         ]);
+    }
+
+    /**
+     * Delete API Key generated when creating new App
+     *
+     * @param string $teamOwnerDevId
+     * @param string $companyName
+     * @param string $key
+     * @return mixed
+     */
+    public function deleteCompanyAppApiKeys(string $teamOwnerDevId, string $companyName, string $key)
+    {
+        return $this->apigeeService->delete("/developers/{$teamOwnerDevId}/apps/{$companyName}/keys/{$key}");
     }
 
     /**
@@ -158,52 +112,12 @@ class TeamsService
      */
     public function createUserTeam(User $user, array $data): Collection
     {
-        $team = static::createTeam($user, $data);
+        $team = TeamFactory::createUserTeam($user, $data);
 
         $user->attachTeam($team);
 
         return $user->teams()
             ->where('id', $team->id)
             ->get();
-    }
-
-    /**
-     * @param $request
-     * @return array|RedirectResponse
-     */
-    public function handleFileUpload($request): array|RedirectResponse
-    {
-        $logoFileData = [];
-
-        if($request->hasFile('logo')){
-
-            $logoFileData = $this->transferClientLogo($request->file('logo'));
-
-            if (!$logoFileData['success']) {
-                return redirect()->back()->with('alert', "error:Your Team's logo file could not be created. Please try again.");
-            }
-        }
-
-        return $logoFileData;
-    }
-
-    /**
-     * Stores this file within the storage folder
-     *
-     * @param $logoFile
-     * @return array
-     */
-    private function transferClientLogo($logoFile): array
-    {
-        $clientFileName = $logoFile->getClientOriginalName();
-
-        $fileName = pathinfo($clientFileName, PATHINFO_FILENAME);
-        $fileExtension = $logoFile->getClientOriginalExtension();
-
-        $newFileName = $fileName . '_' . time(). '.' . $fileExtension;
-
-        $fileSaved = $logoFile->storeAs('public/companies', $newFileName);
-
-        return ['success' => $fileSaved, 'filename' => $newFileName];
     }
 }
