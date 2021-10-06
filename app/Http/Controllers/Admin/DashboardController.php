@@ -52,6 +52,7 @@ class DashboardController extends Controller
 
         $apps = App::with(['developer', 'country', 'products.countries'])
             ->whereNotNull('country_code')
+            ->when($request->has('aid'), fn ($q) => $q->where('aid', $request->get('aid')))
             ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes) {
                 $query->whereIn('country_code', $responsibleCountriesCodes);
             })
@@ -69,7 +70,7 @@ class DashboardController extends Controller
             ->when($appStatus !== 'all', function ($q) use ($appStatus) {
                 $q->where('status', $appStatus);
             })
-            ->when($productStatus !== 'all', function ($q) use ($productStatus) {
+            ->when($productStatus !== 'all' && !$request->has('aid'), function ($q) use ($productStatus) {
                 switch ($productStatus) {
                     case 'pending':
                         $q->whereHas('products', fn ($q) => $q->where('status', 'pending'));
@@ -162,7 +163,8 @@ class DashboardController extends Controller
         Mail::to(env('MAIL_TO_ADDRESS'))->send(new ProductAction($app, $validated, $currentUser));
 
         if ($request->ajax()) {
-            return response()->json(['success' => true]);
+            $product = $app->products()->where('name', $validated['product'])->first();
+            return response()->json(['success' => true, 'body' => $product->notes]);
         }
 
         return redirect()->back();

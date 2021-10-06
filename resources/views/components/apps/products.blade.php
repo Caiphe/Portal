@@ -11,6 +11,7 @@
         class="product product-status-{{ $product['pivot']['status'] }}"
         data-pid="{{ $product['pid'] }}"
         data-aid="{{ $app['aid'] }}"
+        data-product-slug="{{ $product['slug'] }}"
         data-status="{{ $product['pivot']['status'] }}"
         data-product-display-name="{{ $product['display_name'] }}"
         data-for="{{ $for }}"
@@ -31,7 +32,7 @@
             @svg('arrow-forward', '#000000')
         @endif
     </a>
-    <x-dialog id="{{ $app->aid . $product->slug }}-note-dialog" class="note-dialog">
+    <x-dialog id="admin-{{ $app->aid . $product->slug }}-note-dialog" class="note-dialog">
         <h3>Profile Log Notes</h3>
         <div class="note">{!! $product['notes'] !!}</div>
     </x-dialog>

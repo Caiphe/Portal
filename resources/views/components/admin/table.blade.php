@@ -42,5 +42,26 @@
         searchPage.value = "";
         searchPage.focus();
     }
+
+    var searchProduct = document.getElementById('search-page');
+    searchProduct.addEventListener('keyup', filterUsers);
+    var timeout = null;
+
+    function filterUsers() {
+        if(timeout !== null){
+            clearTimeout(timeout);
+            timeout = null;
+        }
+        timeout = setTimeout(submitFilter, 1000);
+    }
+
+    function submitFilter() {
+        var filterForm =  document.getElementById('product-search-form');
+        if(filterForm.requestSubmit !== undefined) {
+            filterForm.requestSubmit();
+        }else{
+            filterForm.submit();
+        }
+    }
 </script>
 @endpush

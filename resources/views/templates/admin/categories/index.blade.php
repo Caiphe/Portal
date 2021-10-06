@@ -13,3 +13,12 @@
 @section('content')
     <x-admin.table :collection="$categories" :fields="['title', 'theme']"></x-admin.table>
 @endsection
+
+@push('scripts')
+<script>
+    ajaxifyOnPopState = updateFilters;
+    function updateFilters(params) {
+        document.getElementById('search-page').value = params['q'] || '';
+    }
+</script>
+@endpush
