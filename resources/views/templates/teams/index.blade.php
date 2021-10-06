@@ -35,7 +35,7 @@
         <div class="overlay-container"></div>
         <div class="add-teammate-block">
             <button class="close-modal">@svg('close-popup', '#000')</button>
-    
+
             <h2 class="team-head">Leave team</h2>
             <p class="teammate-text">Are you sure you want to leave this company?</p>
             <p class="app-name team-name"></p>
@@ -46,7 +46,7 @@
         </div>
     </div>
 
-    
+
     <div class="team-block-container">
         <div class="mt-2">
             <div class="column">
@@ -62,13 +62,13 @@
                         <tr class="team-app-list">
                             <td class="company-logo-name">
                                 <div class="company-logo " style="background-image: url('/images/user-thumbnail.jpg')"></div>
-                                <a class="company-name-a bold" href="{{route('team.show', [ 'id' => $team->id ])}}">{{ $team->name }}</a>
+                                <a class="company-name-a bold" href="{{route('team.show', [ 'id' => $team['id'] ])}}">{{ $team['name'] }}</a>
                             </td>
-                            <td>{{ $team->country }}</td>
-                            <td>2 of 5</td>
-                            <td>7</td>
+                            <td>{{ $team['country'] }}</td>
+                            <td>{{ $team['members'] }}</td>
+                            <td>{{ $team['apps_count'] }}</td>
                             <td>
-                                <button type="button" class="button red-button leave-team" data-teamname="{{ $team->name }}">LEAVE</button>
+                                <button type="button" class="button red-button leave-team" data-teamid="{{ $team['id'] }}" data-teamname="{{ $team['name'] }}" data-teammember="{{ auth()->user()->developer_id }}" data-teamhandler="{{ route('teams.leave.team') }}">LEAVE</button>
                             </td>
                         </tr>
                     @endforeach
@@ -87,12 +87,23 @@
         var cancelBtn = document.querySelector('.cancel-btn');
         var teamNameText = document.querySelector('.team-name');
 
-        for (var i = 0; i < leaveTeamBtn.length; i++){
+        for (var i = 0; i < leaveTeamBtn.length; i++) {
             leaveTeamBtn[i].addEventListener('click', function(){
                 modalContainer.classList.add('show');
+
+                var teamId  = this.dataset.teamid;
                 var teamName  = this.dataset.teamname;
+                var teamUser  = this.dataset.teammember;
+
                 teamNameText.innerHTML = teamName;
-                console.log(teamName);
+
+                var data = {
+                    team_id: teamId,
+                    name: teamName,
+                    member: teamUser
+                };
+
+                handleLeaveTeamAction(this.dataset.teamhandler, data);
             });
         }
 
@@ -100,8 +111,37 @@
         cancelBtn.addEventListener('click', hideModal)
         overlayContainer.addEventListener('click', hideModal)
 
-        function hideModal(){
+        function hideModal() {
             modalContainer.classList.remove('show');
+        }
+
+        /**
+         * Handle leaving of Team by a Member
+         *
+         * @param url
+         * @param data
+         */
+        function handleLeaveTeamAction( url, data ) {
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('POST', url, true);
+
+            xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+            xhr.send(JSON.stringify(data));
+
+            xhr.onload = function() {
+                if (xhr.status === 200 && this.response.success === true) {
+                    addAlert('success', this.response.message);
+                } else {
+                    addAlert('error',  this.response.message);
+                }
+            };
+
+            hideModal();
         }
     </script>
 @endpush

@@ -1,3 +1,8 @@
+@php
+
+    $user = auth()->user();
+
+@endphp
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/teams/show.css') }}">
 @endpush
@@ -111,34 +116,17 @@ Teams
 
         <div class="scrollable-users-container">
             <ul class="list-users-container">
-                <li class="each-user">
-                    <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
-                    <div class="user-full-name">Xoliswa Shandu</div>
-                    <div class="check-container">
-                        <x-radio-round name="user-assignee" value=""></x-radio-round>
-                    </div>
-                </li>
-                <li class="each-user">
-                    <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
-                    <div class="user-full-name">Max Bombwell</div>
-                    <div class="check-container">
-                        <x-radio-round name="user-assignee" value=""></x-radio-round>
-                    </div>
-                </li>
-                <li class="each-user">
-                    <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
-                    <div class="user-full-name">Cassy Buary</div>
-                    <div class="check-container">
-                        <x-radio-round name="user-assignee" value=""></x-radio-round>
-                    </div>
-                </li>
-                <li class="each-user">
-                    <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
-                    <div class="user-full-name">Cassy Buary</div>
-                    <div class="check-container">
-                        <x-radio-round name="user-assignee" value=""></x-radio-round>
-                    </div>
-                </li>
+                @foreach($users as $member)
+                    @if(!$team->hasUser($member) || !$user->isTeamOwner() && $member->twoFactorStatus() === 'Enabled')
+                        <li class="each-user">
+                            <div class="users-thumbnail" style="background-image: url({{ $member->profile_picture }})"></div>
+                            <div class="user-full-name">{{ $member->full_name }}</div>
+                            <div class="check-container">
+                                <x-radio-round name="transfer-ownership-check" id="{{ $member->id }}" value="{{ $member->email }}"></x-radio-round>
+                            </div>
+                        </li>
+                    @endif
+                @endforeach
             </ul>
         </div>
 
@@ -162,34 +150,17 @@ Teams
 
         <div class="scrollable-users-container">
             <ul class="list-users-container">
-                <li class="each-user">
-                    <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
-                    <div class="user-full-name">Xoliswa Shandu</div>
-                    <div class="check-container">
-                        <x-radio-round name="transfer-ownership-check" value=""></x-radio-round>
-                    </div>
-                </li>
-                <li class="each-user">
-                    <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
-                    <div class="user-full-name">Max Bombwell</div>
-                    <div class="check-container">
-                        <x-radio-round name="transfer-ownership-check" value=""></x-radio-round>
-                    </div>
-                </li>
-                <li class="each-user">
-                    <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
-                    <div class="user-full-name">Cassy Buary</div>
-                    <div class="check-container">
-                        <x-radio-round name="transfer-ownership-check" value=""></x-radio-round>
-                    </div>
-                </li>
-                <li class="each-user">
-                    <div class="users-thumbnail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
-                    <div class="user-full-name">Cassy Buary</div>
-                    <div class="check-container">
-                        <x-radio-round name="transfer-ownership-check" value=""></x-radio-round>
-                    </div>
-                </li>
+                @foreach($users as $member)
+                    @if(!$team->hasUser($member) || !$user->isTeamOwner() && $member->twoFactorStatus() === 'Enabled')
+                        <li class="each-user">
+                            <div class="users-thumbnail" style="background-image: url({{ $member->profile_picture }})"></div>
+                            <div class="user-full-name">{{ $member->full_name }}</div>
+                            <div class="check-container">
+                                <x-radio-round name="transfer-ownership-check" id="{{ $member->id }}" value="{{ $member->email }}"></x-radio-round>
+                            </div>
+                        </li>
+                    @endif
+                @endforeach
             </ul>
         </div>
 
@@ -202,6 +173,8 @@ Teams
 </div>
 
 <div class="mt-2">
+
+    @if (!$user->isTeamOwner() && $user->hasTeamInvite($team))
     {{-- Top ownerhip block container --}}
     <div class="top-ownership-banner">
         <div class="message-container">You have been requested to be the owner of this team.</div>
@@ -210,11 +183,12 @@ Teams
             <a type="button" href="#transfer-ownership" class="button blue-button revoke-transfer">Revoke request</a>
         </div>
     </div>
+    @endif
 
     <div class="header-block team-name-logo">
         {{-- To replace with the company logo --}}
         <div class="team-name-logo-container">
-            <div class="team-logo" style="background-image: url('/images/user-thumbnail.jpg')"></div> 
+            <div class="team-logo" style="background-image: url('/images/user-thumbnail.jpg')"></div>
             <h2>{{  $team->name }}</h2>
         </div>
 
@@ -258,7 +232,7 @@ Teams
                 @foreach($team->users as $teamUser)
                     <tr>
                         <td class="member-name-profile">
-                            <div class="member-thumbnail"  style="background-image: url('/images/user-thumbnail.jpg')"></div>
+                            <div class="member-thumbnail"  style="background-image: url({{ $teamUser->profile_picture }})"></div>
                             <p>
                                 <strong> {{ $teamUser->first_name }} {{ $teamUser->last_name }}</strong>
                                 ({{ $teamUser->email }})
@@ -275,14 +249,42 @@ Teams
                             {{-- user action menu --}}
                             <div class="block-actions">
                                 <ul>
-                                    <li><button class="make-admin" data-adminname="{{ $teamUser->first_name }} {{ $teamUser->last_name }}">Make administrator</button></li>
-                                    <li><button class="make-user" data-username="{{ $teamUser->first_name }} {{ $teamUser->last_name }}">Make User</button></li>
-                                    <li><button class="user-delete" data-usernamedelete="{{ $teamUser->first_name }} {{ $teamUser->last_name }}">Delete</button></li>
+                                    @if(!$teamUser->isOwnerOfTeam( $team ))
+                                    <li>
+                                        <button
+                                            class="make-admin"
+                                            data-adminname="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
+                                            data-invite="{{ $teamUser->getTeamInvite($team)->id }}">>
+                                            Make administrator
+                                        </button>
+                                    </li>
+                                    @endif
+                                    @if ($user->hasTeamInvite($team))
+                                    <li>
+                                        <button
+                                            class="make-user"
+                                            data-username="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
+                                            data-useremail="{{ $teamUser->email }}"
+                                            data-teamid="{{ $team->id }}">
+                                            Make User
+                                        </button>
+                                    </li>
+                                    @endif
+                                    @if ($team->hasUser($user))
+                                    <li>
+                                        <button
+                                            class="user-delete"
+                                            data-usernamedelete="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
+                                            data-teamid="{{ $team->id }}">
+                                            Delete
+                                        </button>
+                                    </li>
+                                    @endif
                                 </ul>
                             </div>
                             {{-- Block end --}}
 
-                            <div class="block-hide-menu"></div> 
+                            <div class="block-hide-menu"></div>
                         </td>
                     </tr>
                 @endforeach
@@ -294,6 +296,7 @@ Teams
         </div>
     </div>
 
+    @if ($user->hasTeamInvite($team, 'ownership'))
     <div class="transfer-ownership-container" id="transfer-ownership">
             {{-- Transfer ownership container --}}
         <div class="transfer-owner-ship-heading">
@@ -302,6 +305,7 @@ Teams
         </div>
 
         {{-- Transfer request --}}
+
         <div class="trasfer-container">
             <h4>Transfer requests</h4>
             <div class="site-text">You have been requested to be the new owner of this team. please choose if you would like to accept or revoke the request</div>
@@ -313,7 +317,8 @@ Teams
             </div>
         </div>
     </div>
-    
+    @endif
+
     <div class="column" id="app-index">
         <div class="row">
             <div class="approved-apps">
@@ -456,7 +461,7 @@ Teams
         this.classList.remove('show');
         this.previousElementSibling.classList.remove('show')
     }
-    
+
     addTeammateBtn.addEventListener('click', hideModalContainer);
     addTeamMobile.addEventListener('click', hideModalContainer);
     function hideModalContainer(){
@@ -495,7 +500,7 @@ Teams
     for(var i = 0; i < adminModalShow.length; i++){
         adminModalShow[i].addEventListener('click', showAdminModalFunc);
     }
-   
+
     function showAdminModalFunc(){
         document.querySelector('.admin-user-name').innerHTML = this.dataset.adminname;
         adminModal.classList.add('show');
@@ -554,7 +559,26 @@ Teams
 
     function showUserModalFunc(){
         userModal.classList.add('show');
-        document.querySelector('.make-user-name').innerHTML = this.dataset.username;
+
+        var userName = this.dataset.username;
+        var teamId = this.dataset.teamid;
+        document.querySelector('.make-user-name').innerHTML = userName;
+
+        var invitees = [];
+
+        invitees.push(this.dataset.useremail)
+
+        var data = {
+            team_id: teamId,
+            invitees: invitees
+        };
+
+        var successMsg = "Successfully added" + userName + " to team.";
+        var errorMsg = "Could not add user to team. Please try again!";
+
+        handleAction('POST', "{{ route('teams.invite.member') }}", data, successMsg, errorMsg);
+
+        hideUserModal();
     }
 
     document.querySelector('.user-close-modal').addEventListener('click', hideUserModal);
@@ -704,6 +728,36 @@ Teams
         dummy.select();
         document.execCommand("copy");
         document.body.removeChild(dummy);
+    }
+
+    /**
+     * Handle leaving of Team by a Member
+     *
+     * @param method
+     * @param url
+     * @param data
+     * @param successMsg
+     * @param errorMsg
+     */
+    function handleAction( method, url, data, successMsg, errorMsg ) {
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.open(method, url, true);
+
+        xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+        xhr.send(JSON.stringify(data));
+
+        xhr.onload = function(successMsg, errorMsg ) {
+            if (xhr.status === 200) {
+                return void addAlert('success', successMsg);
+            } else {
+                addAlert('error', errorMsg);
+            }
+        };
     }
 
 </script>

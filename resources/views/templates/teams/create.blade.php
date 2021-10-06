@@ -38,16 +38,13 @@
         <div class="content-header mt-40">
             @if($userOwnsTeam === false)
                 <h2>It looks like you don't have any teams yet!</h2>
-            @elseif($hasTeams && $isCompanyTeam)
+            @elseif($hasTeams)
                 <h2>Create a New Team!</h2>
             @endif
-            <h2>It looks like you don't have any teams yet!</h2>
             <p>Fortunately, it's very easy to create one. Let's begin by filling out your teams details.</p>
         </div>
 
         <form id="form-create-team" novalidate>
-
-            <input type="hidden" name="is_company_team" id="company-team" value="{{ $isCompanyTeam ? 'yes' : 'no' }}">
 
             <div class="group">
                 <label for="name">Name your team</label>
@@ -75,11 +72,11 @@
                     </select>
                     @svg('chevron-down', '#000')
                 </div>
-              
+
             </div>
 
             <div class="group">
-               
+
                 <label for="lfile-input">Upload team logo</label>
                 <label for="file-input" class="logo-file-container">
                     <span class="upload-file-name">Upload team logo</span>
