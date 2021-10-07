@@ -30,7 +30,6 @@
 @section('content')
 
     <x-heading heading="My teams" tags="Dashboard"></x-heading>
-
     <x-twofa-warning class="tall"></x-twofa-warning>
 
     <div class="content">
@@ -80,7 +79,7 @@
                 <label for="lfile-input">Upload team logo</label>
                 <label for="file-input" class="logo-file-container">
                     <span class="upload-file-name">Upload team logo</span>
-                    <input type="file" name="file-input" class="logo-file" id="logo-file" placeholder="Upload team logo" maxlength="100" required>
+                    <input type="file" name="logo-file" class="logo-file" id="logo-file" placeholder="Upload team logo" maxlength="100" required>
                     <button type="button" class="logo-add-icon">@svg('plus', '#fff')</button>
                 </label>
             </div>
@@ -91,13 +90,14 @@
             -->
             <div class="group">
                 <label for="invitations">Invite colleagues or other users</label>
-                <input type="text" name="invitations" id="invitations" placeholder="Add email to invite other users" maxlength="100" required>
-                <button class="invite-btn">INVITE</button>
+                <input type="email" class="invitation-field" name="invitations" id="invitations" placeholder="Add email to invite other users" maxlength="100" required>
+                <button class="invite-btn" type="button">INVITE</button>
 
-                <div class="invite-tags">
-                    <span class="each-tag">marc@plusnarrative.com</span>
-                    <span class="each-tag">max@plusnarrative.com</span>
+                <span class="error-email">Valid Email required !</span>
+
+                <div class="invite-tags" id="invite-list">
                 </div>
+
             </div>
 
             <div class="group">
@@ -116,6 +116,75 @@
 
 @push('scripts')
     <script>
+        var invitationInput = document.querySelector('.invitation-field');
+        var inviteBtn = document.querySelector('.invite-btn');
+        var errorMsg = document.querySelector('.error-email');
+        var closeTagBtnn = document.querySelector('.close-tag');
+        var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        invitationInput.value = "";
+
+        invitationInput.addEventListener('keyup', function(){
+            if(this.value.match(mailformat)){
+                inviteBtn.classList.add('active');
+                errorMsg.classList.remove('show');
+
+            }else{
+                inviteBtn.classList.remove('active');
+                errorMsg.classList.add('show');
+            }
+        });
+
+        var tagList = [];
+
+        function createSingleTag(email){
+            var tagSpan = document.createElement('span');
+            var hiddenInput = document.createElement('input');
+            var closeTagBtn = document.createElement('button');
+
+            tagSpan.setAttribute('class', 'each-tag');
+            tagSpan.textContent = email;
+
+            hiddenInput.setAttribute('type', 'hidden');
+            hiddenInput.setAttribute('name', 'team_member[]');
+            hiddenInput.setAttribute('value', email);
+
+            closeTagBtn.setAttribute('type', 'button');
+            closeTagBtn.setAttribute('class', 'close-tag');
+            closeTagBtn.setAttribute('data-email', email);
+
+            closeTagBtn.addEventListener('click', clearTag);
+
+            tagSpan.appendChild(hiddenInput);
+            tagSpan.appendChild(closeTagBtn);
+
+            return tagSpan;
+        }
+
+        function clearTag(){
+            var email = this.dataset.email;
+            tagList = tagList.filter(function(item){
+                return item !== email;
+            })
+            this.parentNode.remove();
+        }
+
+        inviteBtn.addEventListener('click', createEmailTags);
+
+        function createEmailTags(){
+            var email = invitationInput.value;
+            if(tagList.indexOf(email) !== -1){
+                return void addAlert("error", "Email exists already.");
+            }
+
+            tagList.push(email);
+
+            var tag = createSingleTag(email);
+            var inviteContainer =  document.getElementById('invite-list');
+            inviteContainer.classList.add('m-40');
+            inviteContainer.append(tag);
+            invitationInput.value = "";
+        }
+
         var logoFile = document.querySelector('.logo-file');
         var fileName = document.querySelector('.upload-file-name');
         var fileBtn = document.querySelector('.logo-add-icon');
@@ -141,7 +210,7 @@
                 url: elements['url'].value,
                 contact: elements['contact'].value,
                 country: [elements['country'].selectedIndex].value,
-                logo: elements['logo'].value,
+                logo: elements['logo-file'].value,
                 invitations: {},
                 description: elements['description'].value,
                 is_company: elements['is_company_team'].value,

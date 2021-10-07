@@ -937,17 +937,22 @@ button{
 .top-ownership-banner{
     width: 100%;
     background-color: #0C678F;
-    height: 75px;
     margin-bottom: 30px;
     display: flex;
     position: relative;
     transition: all 0.3s ease;
+    opacity: -1;
+    pointer-events: none;
+    z-index: 0;
+    height: 0;
 
-    &.hide{
+
+    &.show{
         height: 0px;
-        pointer-events: none;
-        opacity: -1;
-        z-index: 0;
+        pointer-events: auto;
+        opacity: 4;
+        height: 75px !important;
+        z-index: 2;
     }
 
     @media(max-width:1290px){

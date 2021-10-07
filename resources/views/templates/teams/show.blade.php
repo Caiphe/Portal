@@ -32,7 +32,7 @@ Teams
 
 @section('content')
 <x-heading heading="Teams" tags="Dashboard">
-    <a href="/" class="button dark outline">Edit profile</a>
+    <a href="/profile" class="button dark outline">Edit profile</a>
 </x-heading>
 
 {{-- Edit teammate --}}
@@ -174,16 +174,16 @@ Teams
 
 <div class="mt-2">
 
-    @if (!$user->isTeamOwner() && $user->hasTeamInvite($team))
+    {{-- @if (!$user->isTeamOwner() && $user->hasTeamInvite($team)) --}}
     {{-- Top ownerhip block container --}}
-    <div class="top-ownership-banner">
+    <div class="top-ownership-banner @if (!$user->isTeamOwner() && $user->hasTeamInvite($team)) show @endif ">
         <div class="message-container">You have been requested to be the owner of this team.</div>
         <div class="btn-block-container">
             <a type="button" href="#transfer-ownership" class="button blue-button accept-transfer">Accept request</a>
             <a type="button" href="#transfer-ownership" class="button blue-button revoke-transfer">Revoke request</a>
         </div>
     </div>
-    @endif
+    {{-- @endif --}}
 
     <div class="header-block team-name-logo">
         {{-- To replace with the company logo --}}

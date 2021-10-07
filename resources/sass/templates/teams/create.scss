@@ -85,6 +85,13 @@
                 width: 105px;
                 border-radius: 0px 5px 5px 0px;
                 transition: all 0.3s ease-in-out;
+                pointer-events: none;
+                cursor: none;
+
+                &.active{
+                    pointer-events: auto;
+                    cursor: pointer;
+                }
 
                 @media(max-width:767px){
                     font-size: 14px;
@@ -98,21 +105,63 @@
                 }
             }
 
+            .error-email{
+                position: absolute;
+                top: 84px;
+                right: 0;
+                color: $error;
+                font-size: 12px;
+                display: none;
+
+                &.show{
+                    display: block;
+                }
+            }
+
             .invite-tags{
                 position: relative;
                 display: flex;
                 flex-wrap: wrap;
-                margin-bottom: 40px;
                 margin-top: -10px;
+                transition: all 0.3s ease-in-out;
+
+                &.m-40{
+                    margin-bottom: 20px;
+                }
     
                 .each-tag{
                     background-color: #000;
                     color: #fff;
                     border-radius: 4px;
                     padding: 4px 6px;
+                    padding: 4px 16px 4px 6px;
                     font-size: 13px;
                     margin-right: 3px;
                     margin-bottom: 3px;
+                    position: relative;
+
+                    .close-tag{
+                        border: none;
+                        background-color: transparent;
+                        position: absolute;
+                        right: 3px;
+                        width: 10px;
+                        height: 23px;
+                        top: 5px;
+                        padding: 0px;
+                        border-radius: 0px;
+                        text-align: center;
+
+                        &:after{
+                            content: "\D7";
+                            margin-left: 6px;
+                            font-size: 1.4rem;
+                            position: absolute;
+                            right: 1px;
+                            color: #fff;
+                            top: 4px;
+                        }
+                    }
                 }
             }
         }
