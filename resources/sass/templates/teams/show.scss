@@ -261,6 +261,11 @@ button{
             text-align: center;
             margin-top: 60px;
 
+            &.addTeam{
+                margin-bottom: 10px;
+                margin-top: 50px;
+            }
+
             &.custom-head{
                 margin-top: 40px;
             }
@@ -360,6 +365,13 @@ button{
                 background-color: #000;
                 border-radius: 0px 5px 5px 0px;
                 margin-left: -4px;
+                pointer-events: none;
+                cursor: none;
+
+                &.active{
+                    pointer-events: auto;
+                    cursor: pointer;
+                }
             }
         }
     }
@@ -1100,3 +1112,14 @@ button{
     }
 }
 
+.teamMateErrorMessage{
+    font-size: 13px;
+    color: $error;
+    margin-top: 15px;
+    display: none;
+    transition: all 0.3s ease;
+
+    &.show{
+        display: block;
+    }
+}
