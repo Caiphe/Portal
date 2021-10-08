@@ -2,8 +2,9 @@
 
 namespace App\Mail;
 
-use App\App;
+use App\Team;
 
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -17,16 +18,16 @@ class TeamAppCreated extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $app;
+    public $team;
 
     /**
      * Create a new message instance.
      *
-     * @param App $app
+     * @param Team $team
      */
-    public function __construct(App $app)
+    public function __construct(Team $team)
     {
-        $this->app = $app->load(['developer', 'country']);
+        $this->team = $team;
     }
 
     /**
@@ -36,7 +37,7 @@ class TeamAppCreated extends Mailable
      */
     public function build()
     {
-        $email = $this->app->developer->email;
+        $email = User::find($this->team->owner_id)->email;
 
         return $this->withSwiftMessage(function ($message) use ($email) {
             $message->getHeaders()->addTextHeader('Reply-To', $email);

@@ -5,12 +5,12 @@
 @extends('layouts.sidebar')
 
 @section('sidebar')
-    <x-sidebar-accordion id="sidebar-accordion" active="/teams/create" :list="
+    <x-sidebar-accordion id="sidebar-accordion" active="/teams" :list="
     [ 'Manage' =>
         [
             [ 'label' => 'Profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
-            [ 'label' => 'Teams', 'link' => '/teams/create']
+            [ 'label' => 'Teams', 'link' => '/teams']
         ],
         'Discover' =>
         [
@@ -39,9 +39,11 @@
             <h2 class="team-head">Leave team</h2>
             <p class="teammate-text">Are you sure you want to leave this company?</p>
             <p class="app-name team-name"></p>
-            <form class="form-team">
+            <form class="form-team-leave">
+                <input type="hidden" value="" name="team_id" class="hidden-team-id"/>
+                <input type="hidden" value="" name="team_user_id" class="hidden-team-user-id"/>
                 <button type="button" class="btn primary mr-10 cancel-btn">CANCEL</button>
-                <button type="" class="btn dark">LEAVE</button>
+                <button type="" class="btn dark leave-team-btn">LEAVE</button>
             </form>
         </div>
     </div>
@@ -61,14 +63,21 @@
                     @foreach($teams as $team)
                         <tr class="team-app-list">
                             <td class="company-logo-name">
-                                <div class="company-logo " style="background-image: url('/images/user-thumbnail.jpg')"></div>
+                                <div class="company-logo" style="background-image: url({{ $team['logo'] }})"></div>
                                 <a class="company-name-a bold" href="{{route('team.show', [ 'id' => $team['id'] ])}}">{{ $team['name'] }}</a>
                             </td>
                             <td>{{ $team['country'] }}</td>
                             <td>{{ $team['members'] }}</td>
                             <td>{{ $team['apps_count'] }}</td>
                             <td>
-                                <button type="button" class="button red-button leave-team" data-teamid="{{ $team['id'] }}" data-teamname="{{ $team['name'] }}" data-teammember="{{ auth()->user()->developer_id }}" data-teamhandler="{{ route('teams.leave.team') }}">LEAVE</button>
+                                <button
+                                    type="button"
+                                    class="button red-button leave-team"
+                                    data-teamname="{{ $team['name'] }}"
+                                    data-teamid="{{ $team['id'] }}"
+                                    data-teamuser="{{ auth()->user()->id }}">
+                                    LEAVE
+                                </button>
                             </td>
                         </tr>
                     @endforeach
@@ -86,24 +95,20 @@
         var overlayContainer = document.querySelector('.overlay-container');
         var cancelBtn = document.querySelector('.cancel-btn');
         var teamNameText = document.querySelector('.team-name');
+        var leaveTeamForm = document.getElementById('form-team-leave');
+        var leaveTeamActionBtn = document.querySelector('.leave-team-btn');
+        var hiddenTeamId = document.querySelector('.hidden-team-id');
+        var hiddenTeamUserId = document.querySelector('.hidden-team-user-id');
 
         for (var i = 0; i < leaveTeamBtn.length; i++) {
             leaveTeamBtn[i].addEventListener('click', function(){
                 modalContainer.classList.add('show');
 
-                var teamId  = this.dataset.teamid;
-                var teamName  = this.dataset.teamname;
-                var teamUser  = this.dataset.teammember;
+                teamNameText.innerHTML = this.dataset.teamname;
 
-                teamNameText.innerHTML = teamName;
-
-                var data = {
-                    team_id: teamId,
-                    name: teamName,
-                    member: teamUser
-                };
-
-                handleLeaveTeamAction(this.dataset.teamhandler, data);
+                //Hidden fields to track the Team being left
+                hiddenTeamId.value = this.dataset.teamid
+                hiddenTeamUserId.value = this.dataset.teamuser
             });
         }
 
@@ -115,33 +120,45 @@
             modalContainer.classList.remove('show');
         }
 
-        /**
-         * Handle leaving of Team by a Member
-         *
-         * @param url
-         * @param data
-         */
-        function handleLeaveTeamAction( url, data ) {
+        leaveTeamActionBtn.addEventListener('click', function(event){
+
+            event.preventDefault();
+
+            var data = {
+                team_id: hiddenTeamId.value,
+                user_id: hiddenTeamUserId.value
+            }
+
+            var url = "{{ route('teams.leave.team') }}";
 
             var xhr = new XMLHttpRequest();
-
-            xhr.open('POST', url, true);
-
+            xhr.open('POST', url);
             xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-
             xhr.send(JSON.stringify(data));
 
             xhr.onload = function() {
-                if (xhr.status === 200 && this.response.success === true) {
-                    addAlert('success', this.response.message);
+                if (xhr.status === 200) {
+
+                    modalContainer.classList.remove('show');
+
+                    addAlert('success', ['Team successfully left.', 'You will be redirected to your teams page shortly.'], function(){
+                        window.location.href = "{{ route('teams.listing') }}";
+                    });
                 } else {
-                    addAlert('error',  this.response.message);
+                    var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+                    if(result.errors) {
+                        result.message = [];
+                        for(var error in result.errors){
+                            result.message.push(result.errors[error]);
+                        }
+                    }
+
+                    addAlert('error', result.message || 'Sorry there was a problem leaving team. Please try again.');
                 }
             };
-
-            hideModal();
-        }
+        });
     </script>
 @endpush

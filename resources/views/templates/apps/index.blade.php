@@ -10,7 +10,7 @@
         [
             [ 'label' => 'Profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
-            [ 'label' => 'Teams', 'link' => '/teams/create'],
+            [ 'label' => 'Teams', 'link' => '/teams'],
         ],
         'Discover' =>
         [
@@ -27,6 +27,7 @@
 
 @section('content')
 
+    @if(!is_null($ownershipInvite))
     <div class="ownership-request animated">
         @svg('info', '#fff')
         <div class="message-container">
@@ -35,6 +36,7 @@
         </div>
         <button class="close-banner">@svg('close', '#fff')</button>
     </div>
+    @endif
 
     <x-heading heading="Apps" tags="DASHBOARD">
         <a href="{{route('app.create')}}" class="button outline dark create-new" id="create"></a>
@@ -137,7 +139,7 @@
                                     <p>Date Created  @svg('arrow-down' ,'#cdcdcd')</p>
                                 </div>
                             </div>
-                            
+
                             <div class="body app-updated-body">
                                 @forelse($revokedApps as $app)
                                     @if(!empty($app['attributes']))

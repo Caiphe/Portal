@@ -5,6 +5,7 @@ namespace App\Services;
 use App\User;
 use App\Factory\Teams\TeamFactory;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Collection;
 
 /**s
@@ -12,21 +13,8 @@ use Illuminate\Database\Eloquent\Collection;
  *
  * @package App\Services
  */
-class TeamCompanyService
+class TeamCompanyService extends ApigeeService
 {
-    /**
-     * @var $apigeeServices
-     */
-    protected $apigeeService;
-
-    /**
-     * Constructor method
-     */
-    public function __construction()
-    {
-        $this->apigeeService = new ApigeeService();
-    }
-
     /**
      * List Company Apps
      *
@@ -35,19 +23,47 @@ class TeamCompanyService
      */
     public function listCompanyApps(string $companyName)
     {
-        return $this->apigeeService->get("/companies/{$companyName}/apps?expand=true");
+        return static::get("/companies/{$companyName}/apps?expand=true");
     }
 
     /**
      * Create Dev Team owned App
      *
-     * @param string $teamOwnerDevId
-     * @param array $data
-     * @return mixed
+     * @param User $owner
+     * @param array $input
      */
-    public function devOwnedAppCreate(string $teamOwnerDevId, array $data)
+    public function createDeveloperTeam(User $owner, array $input)
     {
-        return $this->apigeeService->post("/developers/{$teamOwnerDevId}/apps", $data);
+        $data = [
+            "name" => Str::slug($input['name']),
+            "displayName" => $input['name'],
+            'apiProducts' => [],
+            'keyExpiresIn' => -1,
+            "attributes" => [
+                [
+                    "name" => "TeamName",
+                    "value" => $input['name']
+                ],[
+                    "name" => "TeamOwner",
+                    "value" => $owner->full_name
+                ],[
+                    "name" => "TeamDevId",
+                    "value" => $owner->developer_id
+                ],[
+                    "name" => "OwnerEmail",
+                    "value" => $owner->email
+                ],[
+                    "name" => "Country",
+                    "value" => $input['country']
+                ], [
+                    "name" => "Notes",
+                    "value" => ""
+                ]
+            ],
+            'callbackUrl' => "",
+        ];
+
+        return static::createApp($data, $owner);
     }
 
     /**

@@ -5,7 +5,7 @@
 
     You have been invited to the **{{ $team->name }}** team.
 
-    @component('mail::button', ['url' => \URL::signedRoute('company.join', ['company' => $company->username, 'user' => $user->username])])
+    @component('mail::button', ['url' => route('register')])
         Accept Invite
     @endcomponent
 

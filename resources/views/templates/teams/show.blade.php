@@ -10,12 +10,12 @@
 @extends('layouts.sidebar')
 
 @section('sidebar')
-<x-sidebar-accordion id="sidebar-accordion" active="/teams/create" :list="
+<x-sidebar-accordion id="sidebar-accordion" active="/teams" :list="
     [ 'Manage' =>
         [
             [ 'label' => 'Profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
-            [ 'label' => 'Teams', 'link' => '/teams/create']
+            [ 'label' => 'Teams', 'link' => '/teams']
         ],
         'Discover' =>
         [
@@ -27,7 +27,7 @@
 @endsection
 
 @section('title')
-Teams
+Team
 @endsection
 
 @section('content')
@@ -45,7 +45,7 @@ Teams
         <form class="form-teammate">
             <div class="form-group-container">
                 <input type="text" class="form-control teammate-email" placeholder="Add email to invite users" />
-                <button type="submit" class="invite-btn">INVITE</button>
+                <button type="" class="invite-btn">INVITE</button>
             </div>
             <div class="radio-container">
                 <x-radio-round id="user-radio" name="role_name" value="Administrator">Administrator</x-radio-round>
@@ -98,15 +98,16 @@ Teams
         <h2 class="team-head">Remove User</h2>
         <p class="teammate-text">Are you sure you want to remove this user?</p>
         <p class="user-name user-delete-name"></p>
-
     {{-- Form to confirm the users removal --}}
         <form class="form-delete-user">
+            <input type="hidden" value="" name="team_id" class="hidden-team-id"/>
+            <input type="hidden" value="" name="team_user_id" class="hidden-team-user-id"/>
             <button type="button" class="btn primary mr-10 cancel-remove-user-btn">CANCEL</button>
-            <button type="button" class="btn dark confirm-delete-btn">REMOVE</button>
+            <button type="" class="btn dark remove-user-from-team">REMOVE</button>
         </form>
     </div>
 
-    {{-- This show up if you are the owner so you should assign a different owner --}}
+    {{-- This show up if ou are the owner so you should assign a different owner --}}
     <div class="confirm-delete-block">
         <button class="confirm-delete-close-modal">@svg('close-popup', '#000')</button>
         <h2 class="team-head custom-head">Warning</h2>
@@ -116,17 +117,19 @@ Teams
 
         <div class="scrollable-users-container">
             <ul class="list-users-container">
-                @foreach($users as $member)
-                    @if(!$team->hasUser($member) || !$user->isTeamOwner() && $member->twoFactorStatus() === 'Enabled')
+            @if (!$team->users->isEmpty())
+                @foreach($team->users as $user)
+                    @if(!$user->isTeamOwner())
                         <li class="each-user">
-                            <div class="users-thumbnail" style="background-image: url({{ $member->profile_picture }})"></div>
-                            <div class="user-full-name">{{ $member->full_name }}</div>
+                            <div class="users-thumbnail" style="background-image: url({{ $user->profile_picture }})"></div>
+                            <div class="user-full-name">{{ $user->full_name }}</div>
                             <div class="check-container">
-                                <x-radio-round name="transfer-ownership-check" id="{{ $member->id }}" value="{{ $member->email }}"></x-radio-round>
+                                <x-radio-round name="transfer-ownership-check" id="{{ $user->id }}" value="{{ $user->email }}"></x-radio-round>
                             </div>
                         </li>
                     @endif
                 @endforeach
+            @endif
             </ul>
         </div>
 
@@ -150,17 +153,19 @@ Teams
 
         <div class="scrollable-users-container">
             <ul class="list-users-container">
-                @foreach($users as $member)
-                    @if(!$team->hasUser($member) || !$user->isTeamOwner() && $member->twoFactorStatus() === 'Enabled')
+            @if (!$team->users->isEmpty())
+                @foreach($team->users as $user)
+                    @if(!$user->isTeamOwner())
                         <li class="each-user">
-                            <div class="users-thumbnail" style="background-image: url({{ $member->profile_picture }})"></div>
-                            <div class="user-full-name">{{ $member->full_name }}</div>
+                            <div class="users-thumbnail" style="background-image: url({{ $user->profile_picture }})"></div>
+                            <div class="user-full-name">{{ $user->full_name }}</div>
                             <div class="check-container">
-                                <x-radio-round name="transfer-ownership-check" id="{{ $member->id }}" value="{{ $member->email }}"></x-radio-round>
+                                <x-radio-round name="transfer-ownership-check" id="{{ $user->id }}" value="{{ $user->email }}"></x-radio-round>
                             </div>
                         </li>
                     @endif
                 @endforeach
+            @endif
             </ul>
         </div>
 
@@ -174,9 +179,8 @@ Teams
 
 <div class="mt-2">
 
-    {{-- @if (!$user->isTeamOwner() && $user->hasTeamInvite($team)) --}}
     {{-- Top ownerhip block container --}}
-    <div class="top-ownership-banner @if (!$user->isTeamOwner() && $user->hasTeamInvite($team)) show @endif ">
+    <div class="top-ownership-banner @if (!$user->isTeamOwner() && $user->hasTeamInvite($team, 'ownership')) show @endif ">
         <div class="message-container">You have been requested to be the owner of this team.</div>
         <div class="btn-block-container">
             <a type="button" href="#transfer-ownership" class="button blue-button accept-transfer">Accept request</a>
@@ -188,11 +192,13 @@ Teams
     <div class="header-block team-name-logo">
         {{-- To replace with the company logo --}}
         <div class="team-name-logo-container">
-            <div class="team-logo" style="background-image: url('/images/user-thumbnail.jpg')"></div>
+            <div class="team-logo"  style="background-image: url({{ $team->logo }})"></div>
             <h2>{{  $team->name }}</h2>
         </div>
 
-       <button class="btn dark make-owner">Select a new owner</button>
+        @if ($user->isTeamOwner($team) && $team->users->count() > 1)
+            <button class="btn dark make-owner">Select a new owner</button>
+        @endif
 
     </div>
     <h5>Team bio</h5>
@@ -254,12 +260,12 @@ Teams
                                         <button
                                             class="make-admin"
                                             data-adminname="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
-                                            data-invite="{{ $teamUser->getTeamInvite($team)->id }}">>
+                                            data-invite="">
                                             Make administrator
                                         </button>
                                     </li>
                                     @endif
-                                    @if ($user->hasTeamInvite($team))
+                                    @if ($user->hasTeamInvite($team, 'invite'))
                                     <li>
                                         <button
                                             class="make-user"
@@ -275,7 +281,8 @@ Teams
                                         <button
                                             class="user-delete"
                                             data-usernamedelete="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
-                                            data-teamid="{{ $team->id }}">
+                                            data-teamid="{{ $team->id }}"
+                                            data-teamuserid="{{ auth()->user()->id }}">
                                             Delete
                                         </button>
                                     </li>
@@ -447,6 +454,10 @@ Teams
     var overlayContainer = document.querySelector('.overlay-container');
     var deleteOverlayContainer = document.querySelector('.delete-overlay-container');
     var cancelRemoveUserBtn = document.querySelector('.cancel-remove-user-btn');
+    var hiddenTeamId = document.querySelector('.hidden-team-id');
+    var hiddenTeamUserId = document.querySelector('.hidden-team-user-id');
+    var deleteUserActionBtn = document.querySelector('.remove-user-from-team');
+    var teamInviteUserBtn = document.querySelector('.invite-btn');
 
     for(var i = 0; i < btnActions.length; i++) {
         btnActions[i].addEventListener('click', showUserAction)
@@ -486,6 +497,9 @@ Teams
         deleteModalContainer.classList.add('show');
         document.querySelector('.user-delete-name').innerHTML = this.dataset.usernamedelete
         document.querySelector('.user-to-delete-name').innerHTML = this.dataset.usernamedelete
+
+        hiddenTeamId.value = this.dataset.teamid;
+        hiddenTeamUserId.value = this.dataset.teamuserid;
     }
 
     deleteClodeModal.addEventListener('click',hideDeleteUserModal);
@@ -516,7 +530,12 @@ Teams
     // show Transfer ownership to a user
     var ownershipModal = document.querySelector('.ownweship-modal-container');
     var ownershipModalShow = document.querySelector('.make-owner');
-    ownershipModalShow.addEventListener('click', showOwnershipModalFunc);
+
+    /** Fix a bug when attempting to remove/delete a User from Team */
+    if (ownershipModalShow !== null) {
+        ownershipModalShow.addEventListener('click', showOwnershipModalFunc);
+    }
+
     function showOwnershipModalFunc(){
         ownershipModal.classList.add('show');
     }
@@ -559,25 +578,7 @@ Teams
 
     function showUserModalFunc(){
         userModal.classList.add('show');
-
-        var userName = this.dataset.username;
-        var teamId = this.dataset.teamid;
-        document.querySelector('.make-user-name').innerHTML = userName;
-
-        var invitees = [];
-
-        invitees.push(this.dataset.useremail)
-
-        var data = {
-            team_id: teamId,
-            invitees: invitees
-        };
-
-        var successMsg = "Successfully added" + userName + " to team.";
-        var errorMsg = "Could not add user to team. Please try again!";
-
-        handleAction('POST', "{{ route('teams.invite.member') }}", data, successMsg, errorMsg);
-
+        document.querySelector('.make-user-name').innerHTML = this.dataset.username;
         hideUserModal();
     }
 
@@ -593,10 +594,13 @@ Teams
     var confirmDeleteBtn = document.querySelector('.confirm-delete-btn');
     var confirmDeleteBlock = document.querySelector('.confirm-delete-block');
 
-    confirmDeleteBtn.addEventListener('click', function(){
-        deleteUseBlock.classList.add('hide');
-        confirmDeleteBlock.classList.add('show');
-    });
+    /** Resolves an issue with removing user from team */
+    if (confirmDeleteBtn !== null) {
+        confirmDeleteBtn.addEventListener('click', function(){
+            deleteUseBlock.classList.add('hide');
+            confirmDeleteBlock.classList.add('show');
+        });
+    }
 
     function hideDeleteUserModal(){
         deleteModalContainer.classList.remove('show');
@@ -730,35 +734,87 @@ Teams
         document.body.removeChild(dummy);
     }
 
-    /**
-     * Handle leaving of Team by a Member
-     *
-     * @param method
-     * @param url
-     * @param data
-     * @param successMsg
-     * @param errorMsg
-     */
-    function handleAction( method, url, data, successMsg, errorMsg ) {
+    deleteUserActionBtn.addEventListener('click', function(event){
+
+        var data = {
+            team_id: hiddenTeamId.value,
+            user_id: hiddenTeamUserId.value
+        }
+
+        event.preventDefault();
+
+        var url = "{{ route('team.remove.user') }}";
 
         var xhr = new XMLHttpRequest();
-
-        xhr.open(method, url, true);
-
+        xhr.open('POST', url);
         xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
         xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-
         xhr.send(JSON.stringify(data));
 
-        xhr.onload = function(successMsg, errorMsg ) {
+        xhr.onload = function() {
             if (xhr.status === 200) {
-                return void addAlert('success', successMsg);
+                addAlert('success', ['User successfully removed from team.', 'Please wait meanwhile the page refreshes.'], function(){
+                if (window.history) {
+                    history.back();
+                }
+                });
             } else {
-                addAlert('error', errorMsg);
+                var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+                if(result.errors) {
+                    result.message = [];
+                    for(var error in result.errors){
+                        result.message.push(result.errors[error]);
+                    }
+                }
+
+                addAlert('error', result.message || 'Sorry there was a problem removing team. Please try again.');
             }
         };
-    }
+    });
+
+    teamInviteUserBtn.addEventListener('click', function(event){
+
+        var data = {
+            type: document.querySelector('input[name=role_name]:checked').value,
+            invitee: document.querySelector('.teammate-email').value,
+            team_id: "{{ $team['id'] }}"
+        };
+
+        event.preventDefault();
+
+        var url = "{{ route('team.invite.user') }}";
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', url);
+        xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.send(JSON.stringify(data));
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                addAlert('success', ['User was successfully invited to the team.', 'Please wait meanwhile the page refreshes.']);
+                if (window.history) {
+                    history.back();
+                }
+            } else {
+                var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+                if(result.errors) {
+                    result.message = [];
+                    for(var error in result.errors){
+                        result.message.push(result.errors[error]);
+                    }
+                }
+
+                addAlert('error', result.message || 'Sorry there was a problem inviting the user to the team. Please try again.');
+            }
+
+            hideUserModal();
+        };
+    });
 
 </script>
 @endpush

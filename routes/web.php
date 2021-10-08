@@ -51,7 +51,9 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
     Route::post('teams/update', 'CompanyTeamsController@update')->name('teams.update');
     Route::post('teams/store', 'CompanyTeamsController@store')->name('teams.store');
     Route::post('teams/delete', 'CompanyTeamsController@delete')->name('teams.delete');
-    Route::post('teams/leave', 'CompanyTeamsController@leaveTeam')->name('teams.leave.team');
+    Route::post('teams/leave', 'CompanyTeamsController@leave')->name('teams.leave.team');
+    Route::post('teams/remove', 'CompanyTeamsController@remove')->name('team.remove.user');
+    Route::post('teams/user/invite', 'CompanyTeamsController@invite')->name('team.invite.user');
 
     Route::post('teams/invite', 'CompanyTeamsController@invite')->name('teams.invite');
     Route::post('teams/upload', 'CompanyTeamsController@fileUpload')->name('teams.file.upload');

@@ -11,4 +11,13 @@ use Mpociot\Teamwork\TeamworkTeam;
  */
 class Team extends TeamworkTeam
 {
+    protected $fillable = [
+        'name',
+        'owner_id',
+        'url',
+        'contact',
+        'country',
+        'logo',
+        'description'
+    ];
 }

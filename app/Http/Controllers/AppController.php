@@ -25,8 +25,15 @@ class AppController extends Controller
 {
     public function index()
     {
+        $user = auth()->user();
+
+        $ownershipInvite = \DB::table('team_invites')->where([
+            'email' => $user->email,
+            'type' => 'ownership'
+        ])->first();
+
         $apps = App::with(['products.countries', 'country', 'developer'])
-            ->byUserEmail(\Auth::user()->email)
+            ->byUserEmail($user->email)
             ->orderBy('updated_at', 'desc')
             ->get()
             ->groupBy('status');
@@ -34,6 +41,7 @@ class AppController extends Controller
         return view('templates.apps.index', [
             'approvedApps' => $apps['approved'] ?? [],
             'revokedApps' => $apps['revoked'] ?? [],
+            'ownershipInvite' => $ownershipInvite,
         ]);
     }
 

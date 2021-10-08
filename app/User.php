@@ -169,6 +169,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function hasTeamInvite(Team $team, $type = 'invite')
     {
         return TeamInvite::where([
+            'user_id' => $this->id,
             'team_id' => $team->id,
             'type' => $type
         ])->exists();
@@ -184,6 +185,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getTeamInvite(Team $team, $type = 'invite')
     {
         return TeamInvite::where([
+            'user_id' => $this->id,
             'team_id' => $team->id,
             'type' => $type
         ])->get();

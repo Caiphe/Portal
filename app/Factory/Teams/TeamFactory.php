@@ -27,7 +27,7 @@ class TeamFactory
             'contact' => $data['contact'],
             'country' => $data['country'],
             'description' => $data['description'],
-            'logo' => $data['filename'],
+            'logo' => $data['logo'],
             'owner_id' => $user->getKey()
         ]);
     }

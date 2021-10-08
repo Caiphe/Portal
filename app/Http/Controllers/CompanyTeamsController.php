@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\App;
+use App\Http\Requests\Teams\InviteRequest;
+use App\Mail\Invites\InviteExternalUser;
+use App\Mail\Invites\RemoveUser;
 use App\Team;
 use App\User;
 use App\Country;
@@ -22,8 +25,10 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use App\Http\Requests\Teams\DeleteTeamRequest;
+use Mpociot\Teamwork\Events\UserInvitedToTeam;
 use Mpociot\Teamwork\Events\UserLeftTeam;
 use Mpociot\Teamwork\Exceptions\UserNotInTeamException;
+use Mpociot\Teamwork\Facades\Teamwork;
 
 /**
  * Class CompanyTeamsController
@@ -32,14 +37,12 @@ use Mpociot\Teamwork\Exceptions\UserNotInTeamException;
  */
 class CompanyTeamsController extends Controller
 {
-    /**
-     * Teams, the User is affilliated to
-     *
-     * @param Request $request
-     * @return Factory
-     */
     public function index(Request $request)
     {
+        if (auth()->user()->teams->isEmpty()) {
+            return redirect()->route('teams.create');
+        }
+
         $collectedTeams = [];
 
         foreach($request->user()->teams as $team){
@@ -56,6 +59,7 @@ class CompanyTeamsController extends Controller
                     });
                     return $appsCount;
                 })(),
+                'logo' => $team->logo,
             ];
         }
 
@@ -64,42 +68,59 @@ class CompanyTeamsController extends Controller
         ]);
     }
 
-    /**
-     * User leaves Team
-     *
-     * @param LeaveTeamRequest $teamRequest
-     * @return JsonResponse
-     */
     public function leave(LeaveTeamRequest $teamRequest)
     {
         $data = $teamRequest->validated();
 
-        $team = Team::find($data['team_id'])->first();
-        $member = User::where('developer_id', $data['member'])->first();
+        $user = User::find($data['user_id']);
+        $team = Team::find($data['team_id']);
 
-        if ($team->hasUser($member)) {
-
-            try {
-
-                $member->switchTeam(null);
-                event(new UserLeftTeam($invitee, $validated['team_id']));
-
-            } Catch(UserNotInTeamException $exception) {
-                return response()->json(['error' => 'Given team is not allowed for the user.']);
-            }
-            return response()->json(['message' => 'Successfully left Team'], 200);
+        if ($team->users()->detach($user->id)) {
+            Mail::to($user->email)->send(new RemoveUser($team, $user));
+            return response()->json(['success' => true,]);
         }
-        return response()->json(['error' => 'Could not leave the Team']);
+
+        return response()->json(['success' => false,]);
     }
 
-    /**
-     * Shows a Team with its members, including those
-     * awaiting invite, request and/or ownership transfers
-     *
-     * @param $id
-     * @param Request $request
-     * @return Factory
-     */
+    public function remove(LeaveTeamRequest $teamRequest)
+    {
+        $data = $teamRequest->validated();
+
+        $user = User::find($data['user_id']);
+        $team = Team::find($data['team_id']);
+
+        $userDeleted = \DB::table('team_users')->delete(['user_id' => $user->id, 'team_id' => $team->id]);
+
+        if ($userDeleted) {
+            Mail::to($user->email)->send(new RemoveUser($team, $user));
+            return response()->json(['success' => true,]);
+        }
+
+        return response()->json(['success' => false]);
+    }
+
+    public function invite(InviteRequest $inviteRequest)
+    {
+        $data = $inviteRequest->validated();
+
+        $team = Team::find($data['team_id']);
+        $user = User::where('email', '=', $data['invitee'])->first();
+
+        if (is_null($user)) {
+            $teamOwner = User::find($team->owner_id);
+            Mail::to($teamOwner->email)->send(new InviteExternalUser($team, $data['invitee']));
+            return response()->json(['success' => true]);
+        } elseif($user->exists) {
+            Teamwork::inviteToTeam( $user->email, $team, function( $invite ) use($user) {
+                event(new UserInvitedToTeam($invite));
+            });
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
     public function show($id, Request $request)
     {
         $apps = App::with(['products.countries', 'country', 'developer'])
@@ -112,121 +133,61 @@ class CompanyTeamsController extends Controller
         return view('templates.teams.show', [
             'approvedApps' => $apps['approved'] ?? [],
             'revokedApps' => $apps['revoked'] ?? [],
-            'users' => $team->users,
             'team' => $team,
         ]);
     }
 
-    public function store(TeamCompanyService $companyService, TeamAppRequest $request)
+    public function store(TeamCompanyService $teamService, TeamAppRequest $request)
     {
+        $user = $request->user();
         $validated = $request->validated();
 
-        $countryCodes = Country::pluck('iso', 'code');
-        $products = Product::whereIn('name', $request->get('products'))
-            ->pluck('attributes', 'name');
-
-        $productIds = $attrs = [];
-
-        foreach ($products as $name => $attributes) {
-            $attrs = json_decode($attributes, true);
-            $productIds[] = $attr['SandboxProduct'] ?? $name;
-        }
-
-        $data = [
-            'name' => Str::slug($validated['display_name']),
-            'apiProducts' => $productIds,
-            'attributes' => [
-                [
-                    'name' => 'DisplayName',
-                    'value' => $validated['display_name'],
-                ],
-                [
-                    'name' => 'Description',
-                    'value' => $validated['description'],
-                ],
-                [
-                    'name' => 'Country',
-                    'value' => $validated['country'],
-                ],
-                [
-                    'name' => 'location',
-                    'value' => $countryCodes[$validated['country']] ?? "",
-                ],
-            ],
-            'callbackUrl' => $validated['url'],
-            'keyExpiresIn' => -1,
+        $teamData = [
+            'name' => $validated['name'],
+            'url' => $validated['url'],
+            'contact' => $validated['contact'],
+            'description' => $validated['description'],
         ];
 
-        $user = $request->user();
-
-        if (($user->hasRole('admin') || $user->hasRole('opco')) && $request->has('app_owner')) {
-            $appOwner = User::where('email', $request->get('app_owner'))->first();
-        } else {
-            $appOwner = $user;
+        if (isset($validated['country'])) {
+            $teamData['country'] = Country::where('code', $validated['country'])->value('name');
         }
 
-        $createdResponse = $companyService->devOwnedAppCreate($appOwner->developer_id, $data);
+        $teamData['logo'] = '/storage/profile/profile-' . rand(1, 32) . '.svg';
 
-        if (strpos($createdResponse, 'duplicate key') !== false) {
-            return response()->json(['success' => false, 'message' => 'There is already a Developer app with that name.'], 409);
+        if (isset($validated['logo-file']) && !is_string($validated['logo-file'])) {
+            $fileName =  'logo.' . $request->file('logo-file')->extension();
+            $path = $request->file('logo-file')->storeAs(
+                "public/team/{$user->username}",
+                $fileName
+            );
+            $teamData['logo'] = str_replace('public', '/storage', $path);
         }
 
-        $app = App::create([
-            "aid" => $createdResponse['appId'],
-            "name" => $createdResponse['name'],
-            "display_name" => $validated['display_name'],
-            "callback_url" => $createdResponse['callbackUrl'],
-            "attributes" => $attributes,
-            "credentials" => $createdResponse['credentials'],
-            "developer_id" => $createdResponse['developerId'],
-            "status" => $createdResponse['status'],
-            "description" => $validated['description'],
-            "country_code" => $validated['country'],
-            "updated_at" => date('Y-m-d H:i:s', $createdResponse['lastModifiedAt'] / 1000),
-            "created_at" => date('Y-m-d H:i:s', $createdResponse['createdAt'] / 1000),
-        ]);
+        $team = $teamService->createUserTeam($user, $teamData)->pop();
 
-        $app->products()->sync(
-            array_reduce(
-                $createdResponse['credentials'][0]['apiProducts'],
-                function ($carry, $apiProduct) {
-                    $pivotOptions = ['status' => $apiProduct['status']];
-
-                    if ($apiProduct['status'] === 'approved') {
-                        $pivotOptions['actioned_at'] = date('Y-m-d H:i:s');
+        if ($result = $teamService->createDeveloperTeam($user, $team->toArray())) {
+            if ($result->status() === 201) {
+                if (!empty($data['invitations'])) {
+                    foreach ($data['invitations'] as $emailAddress) {
+                        $user = User::where('email', '=', $emailAddress)->first();
+                        if ($user->exists()) {
+                            Teamwork::inviteToTeam( $user->email , $team);
+                        } else {
+                            Mail::to($emailAddress)->send(new InviteExternalUser($team, $emailAddress));
+                        }
                     }
+                }
 
-                    $carry[$apiProduct['apiproduct']] = $pivotOptions;
-                    return $carry;
-                },
-                []
-            )
-        );
+                Mail::to($user->email)->send(new TeamAppCreated($team));
 
-        $team = $companyService->createUserTeam($teamOwner, $validated);
-
-        $app->update(['team_id' => $team->id]);
-
-        $opcoUserEmails = $app->country->opcoUser->pluck('email')->toArray();
-        if (empty($opcoUserEmails)) {
-            $opcoUserEmails = env('MAIL_TO_ADDRESS');
+                return redirect()->route('teams.listing')->with('alert', "success:{$team->name} has been created!");
+            }
         }
 
-        Mail::to($opcoUserEmails)->send(new TeamAppCreated($app));
-
-        if ($request->ajax()) {
-            return response()->json(['response' => $createdResponse]);
-        }
-
-        return redirect(route('teams.index'));
+        return redirect()->back()->with('alert', "error:Could not create requested Team. Please try again.");
     }
 
-    /**
-     * Create a new Team
-     *
-     * @param Request $request
-     * @return Factory
-     */
     public function create(Request $request)
     {
         $user = $request->user();
@@ -242,13 +203,6 @@ class CompanyTeamsController extends Controller
         ]);
     }
 
-    /**
-     * Deletes a team
-     *
-     * @param TeamCompanyService $companyService
-     * @param DeleteTeamRequest $request
-     * @return RedirectResponse|JsonResponse
-     */
     public function destroy(TeamCompanyService $companyService, DeleteTeamRequest $request)
     {
         $validated = $request->validated();
@@ -270,39 +224,6 @@ class CompanyTeamsController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Could not remove team. Please try again.'
-            ]);
-        }
-    }
-
-    /**
-     * Upload a file and prepare the file name to be saved on local storage
-     *
-     * @param Request $request
-     * @return JsonResponse
-     * @throws ValidationException
-     */
-    public function fileUpload(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'file' => ['required', 'image'],
-            'type' => 'required',
-        ]);
-
-        if ($validator->validate()) {
-            $fileExt = $request->file('file')->extension();
-            $savedFileName = md5(uniqid(microtime())) . '.' . $fileExt;
-
-            $request->file('file')->storeAs('teams/' . $request->get('type'), $savedFileName);
-
-            return response()->json([
-                'success' => false,
-                'data' => ['file_name' => $savedFileName],
-                'message' => 'Could not remove team. Please try again.'
-            ]);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Could not upload requested file. Please try again.'
             ]);
         }
     }

@@ -91,5 +91,5 @@ return [
     | as well for when a Team Owner requests to transfer ownership
     |
     */
-    'team_invite_types' => ['invite', 'request', 'ownership']
+    'team_invite_types' => ['invite', 'request', 'ownership', 'external']
 ];

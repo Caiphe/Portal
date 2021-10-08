@@ -2,11 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use App\Exceptions\ValidationException;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Contracts\Validation\Validator;
 
 class TeamAppRequest extends FormRequest {
     /**
@@ -25,12 +22,13 @@ class TeamAppRequest extends FormRequest {
      */
     public function rules() {
         return [
-            'app_owner' => 'sometimes',
-            'display_name' => 'sometimes|max:100',
-            'url' => 'sometimes',
-            'description' => 'sometimes',
-            'country' => 'sometimes',
-            'products' => 'required|array|min:1',
+            'name' => 'required',
+            'url' => 'required',
+            'contact' => 'required',
+            'country' => 'required',
+            'logo-file' => 'sometimes',
+            'invitations' => 'sometimes',
+            'description' => 'required',
         ];
     }
 
@@ -42,16 +40,16 @@ class TeamAppRequest extends FormRequest {
     protected function prepareForValidation()
     {
         $this->merge([
-            'display_name' => filter_var($this->display_name, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'name' => filter_var($this->name, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'url' => filter_var($this->url, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'contact' => filter_var($this->contact, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'country' => filter_var($this->country, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'description' => filter_var($this->description, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
         ]);
     }
 
     public function messages()
     {
-        return [
-            'products.required' => 'Please select at least one product.'
-        ];
+        return [];
     }
 }

@@ -11,35 +11,35 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 /**
- * Class ExistingMember
+ * Class InviteNewUser
  *
- * @package App\Mail\Invites
+ * @package App\Mail
  */
-class ExistingMember extends Mailable
+class InviteExternalUser extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
-     * @var Team $team
+     * @var $team
      */
     public $team;
 
     /**
-     * @var User $user
+     * @var $email
      */
-    public $user;
+    public $email;
 
     /**
      * Create a new message instance.
      *
      * @param Team $team
-     * @param User $user
+     * @param $email
      */
-    public function __construct(Team $team, User $user)
+    public function __construct(Team $team, $email)
     {
         $this->team = $team;
 
-        $this->user = $user;
+        $this->email = $email;
     }
 
     /**
@@ -54,11 +54,11 @@ class ExistingMember extends Mailable
         return $this->withSwiftMessage(function ($message) use($teamOwner) {
             $message->getHeaders()->addTextHeader('Reply-To', $teamOwner->email);
         })
-            ->to($this->user->email, $this->user->full_name)
-            ->subject("MTN Developer Portal: Update from {$this->team->name} Team")
-            ->markdown('emails.companies.user-invite', [
+            ->to($this->email)
+            ->subject("MTN Developer Portal: {$teamOwner->full_name} has invited you to join {$this->team->name} Team")
+            ->markdown('emails.companies.new-external-user-invite', [
+                'inviter' => $teamOwner,
                 'team' => $this->team,
-                'user' => $this->user,
             ]);
     }
 }
