@@ -285,15 +285,15 @@
         border-radius: 50%;
 
         &.app-status-approved{
-            background: url('/images/icons/approved.svg') no-repeat center center / contain;
+            background: url('/images/icons/status-approved.svg') no-repeat center center / contain;
         }
 
         &.app-status-pending{
-            background: url('/images/icons/pending.svg') no-repeat center center / contain;
+            background: url('/images/icons/status-pending.svg') no-repeat center center / contain;
         }
 
         &.app-status-revoked{
-            background: url('/images/icons/revoked.svg') no-repeat center center / contain;
+            background: url('/images/icons/status-revoked.svg') no-repeat center center / contain;
         }
     }
 }

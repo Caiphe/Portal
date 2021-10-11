@@ -16,18 +16,18 @@
         height: 24px;
         display: inline-block;
         margin-right: 15px;
+    }
 
-        &.pending{
-            background: url('/images/icons/pending.svg') no-repeat center center / contain;
-        }
+    &.app-status-approved .status-icon {
+        background: url('/images/icons/status-approved.svg') no-repeat center center / contain;
+    }
 
-        &.approved{
-            background: url('/images/icons/approved.svg') no-repeat center center / contain;
-        }
+    &.app-status-revoked .status-icon {
+        background: url('/images/icons/status-revoked.svg') no-repeat center center / contain;
+    }
 
-        &.revoked{
-            background: url('/images/icons/revoked.svg') no-repeat center center / contain;
-        }
+    &.app-status-pending .status-icon {
+        background: url('/images/icons/status-pending.svg') no-repeat center center / contain;
     }
 
     .column:first-of-type {
