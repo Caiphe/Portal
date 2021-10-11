@@ -68,7 +68,7 @@ Team
         <p class="admin-user-name"></p>
         <form class="form-delete-user">
             <button type="button" class="btn primary mr-10 make-admin-cancel-btn">CANCEL</button>
-            <button type="button" class="btn dark">REMOVE</button>
+            <button type="button" class="btn dark admin-removal-btn">REMOVE</button>
         </form>
     </div>
 </div>
@@ -84,7 +84,7 @@ Team
         <p class="user-name make-user-name"></p>
         <form class="form-delete-user">
             <button type="button" class="btn primary mr-10 user-admin-cancel-btn">CANCEL</button>
-            <button type="button" class="btn dark">REMOVE</button>
+            <button type="button" class="btn dark user-remove-btn">REMOVE</button>
         </form>
     </div>
 </div>
