@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
@@ -52,7 +53,8 @@ class CategoryController extends Controller
     public function update(Category $category, Request $request)
     {
         $request->validate([
-            'title' => 'required|unique:categories'
+            'title' => ['required', Rule::unique('categories', 'cid')->ignore($category->cid, 'cid')],
+            'heading-title' => 'required'
         ]);
 
         $now = date('Y-m-d H:i:s');
@@ -74,38 +76,38 @@ class CategoryController extends Controller
         $category->content()->delete();
         $category->content()->createMany([
             [
-                'title' => $request->input('heading-title', ''),
+                'title' => $request->input('heading-title', '') ?? '',
                 'slug' => $category->slug . '-heading',
                 'type' => 'heading',
-                'body' => $request->input('heading-body', ''),
+                'body' => $request->input('heading-body', '') ?? '',
                 'published_at' => $now
             ],
             [
-                'title' => $request->input('benefits-title', ''),
+                'title' => $request->input('benefits-title', '') ?? '',
                 'slug' => $category->slug . '-benefits',
                 'type' => 'benefits',
-                'body' => $request->input('benefits-body', ''),
+                'body' => $request->input('benefits-body', '') ?? '',
                 'published_at' => $now
             ],
             [
-                'title' => $request->input('developer-centric-title', ''),
+                'title' => $request->input('developer-centric-title', '') ?? '',
                 'slug' => $category->slug . '-developer-centric',
                 'type' => 'developer-centric',
-                'body' => $request->input('developer-centric-body', ''),
+                'body' => $request->input('developer-centric-body', '') ?? '',
                 'published_at' => $now
             ],
             [
-                'title' => $request->input('bundles-title', ''),
+                'title' => $request->input('bundles-title', '') ?? '',
                 'slug' => $category->slug . '-bundles',
                 'type' => 'bundles',
-                'body' => $request->input('bundles-body', ''),
+                'body' => $request->input('bundles-body', '') ?? '',
                 'published_at' => $now
             ],
             [
-                'title' => $request->input('products-title', ''),
+                'title' => $request->input('products-title', '') ?? '',
                 'slug' => $category->slug . '-products',
                 'type' => 'products',
-                'body' => $request->input('products-body', ''),
+                'body' => $request->input('products-body', '') ?? '',
                 'published_at' => $now
             ],
         ]);
@@ -129,7 +131,8 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|unique:categories'
+            'title' => 'required|unique:categories',
+            'heading-title' => 'required'
         ]);
 
         $now = date('Y-m-d H:i:s');
@@ -139,38 +142,38 @@ class CategoryController extends Controller
         $category = Category::create($categoryData);
         $category->content()->createMany([
             [
-                'title' => $request->input('heading-title', ''),
+                'title' => $request->input('heading-title', '') ?? '',
                 'slug' => $category->slug . '-heading',
                 'type' => 'heading',
-                'body' => $request->input('heading-body', ''),
+                'body' => $request->input('heading-body', '') ?? '',
                 'published_at' => $now
             ],
             [
-                'title' => $request->input('benefits-title', ''),
+                'title' => $request->input('benefits-title', '') ?? '',
                 'slug' => $category->slug . '-benefits',
                 'type' => 'benefits',
-                'body' => $request->input('benefits-body', ''),
+                'body' => $request->input('benefits-body', '') ?? '',
                 'published_at' => $now
             ],
             [
-                'title' => $request->input('developer-centric-title', ''),
+                'title' => $request->input('developer-centric-title', '') ?? '',
                 'slug' => $category->slug . '-developer-centric',
                 'type' => 'developer-centric',
-                'body' => $request->input('developer-centric-body', ''),
+                'body' => $request->input('developer-centric-body', '') ?? '',
                 'published_at' => $now
             ],
             [
-                'title' => $request->input('bundles-title', ''),
+                'title' => $request->input('bundles-title', '') ?? '',
                 'slug' => $category->slug . '-bundles',
                 'type' => 'bundles',
-                'body' => $request->input('bundles-body', ''),
+                'body' => $request->input('bundles-body', '') ?? '',
                 'published_at' => $now
             ],
             [
-                'title' => $request->input('products-title', ''),
+                'title' => $request->input('products-title', '') ?? '',
                 'slug' => $category->slug . '-products',
                 'type' => 'products',
-                'body' => $request->input('products-body', ''),
+                'body' => $request->input('products-body', '') ?? '',
                 'published_at' => $now
             ],
         ]);
