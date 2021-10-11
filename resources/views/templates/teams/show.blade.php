@@ -255,7 +255,6 @@ Team
                         <td class="column-container">{{ $teamUser->twoFactorStatus() }}
                             <div class="block-hide-menu"></div>
                             <button class="btn-actions"></button>
-
                             {{-- user action menu --}}
                             <div class="block-actions">
                                 <ul>
