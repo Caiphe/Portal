@@ -250,8 +250,10 @@ Team
                                 <span class="owner-tag red-tag">OWNER</span>
                             @endif
                         </td>
-                        <td>{{ $teamUser->roles()->first()->name  === 'admin' ? 'Administrator' : ucfirst($teamUser->roles()->first()->name) }}</td>
+                        <td>User role</td>
+                        {{-- <td>{{ $teamUser->roles()->first()->name  === 'admin' ? 'Administrator' : ucfirst($teamUser->roles()->first()->name) }}</td> --}}
                         <td class="column-container">{{ $teamUser->twoFactorStatus() }}
+                            <div class="block-hide-menu"></div>
                             <button class="btn-actions"></button>
 
                             {{-- user action menu --}}
@@ -289,7 +291,6 @@ Team
                             </div>
                             {{-- Block end --}}
 
-                            <div class="block-hide-menu"></div>
                         </td>
                     </tr>
                 @endforeach
