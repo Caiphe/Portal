@@ -19,7 +19,7 @@
     }
 
     &.app-status-approved .status-icon {
-        background: url('/images/icons/approved.svg') no-repeat center center / contain;
+        background: url('/images/icons/status-approved.svg') no-repeat center center / contain;
     }
 
     &.app-status-revoked .status-icon {
@@ -27,7 +27,7 @@
     }
 
     &.app-status-pending .status-icon {
-        background: url('/images/icons/pending.svg') no-repeat center center / contain;
+        background: url('/images/icons/status-pending.svg') no-repeat center center / contain;
     }
 
     .column:first-of-type {
