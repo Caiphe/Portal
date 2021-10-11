@@ -34,9 +34,21 @@
 
         &.roles-groups{
 
+            h2{
+                margin-bottom: 2px;
+            }
+
             .form-control{
                 display: flex;
                 flex-direction: column;
+
+                select{
+                    margin-bottom: 4px;
+                }
+            }
+
+            .role-heading{
+                margin-top: -4px;
             }
         }
 
@@ -272,14 +284,17 @@
         height: 24px;
         border-radius: 50%;
 
-        &.active{
-            background-color: #00BE3F;
+        &.app-status-approved{
+            background: url('/images/icons/approved.svg') no-repeat center center / contain;
         }
 
-        &.non-active{
-            background-color: #FF7700;
+        &.app-status-pending{
+            background: url('/images/icons/pending.svg') no-repeat center center / contain;
         }
 
+        &.app-status-revoked{
+            background: url('/images/icons/revoked.svg') no-repeat center center / contain;
+        }
     }
 }
 

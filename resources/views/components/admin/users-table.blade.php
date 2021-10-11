@@ -31,15 +31,38 @@
 
 @push('scripts')
 <script>
+    var searchUser = document.getElementById('search-page');
+
     function removeRow(id) {
         var row = document.querySelector('.' + id);
         row.parentNode.removeChild(row);
     }
 
     function clearSearch() {
-        var searchPage = document.getElementById('search-page');
-        searchPage.value = "";
-        searchPage.focus();
+        document.getElementById('users-search-form').reset();
+        searchUser.focus();
     }
+
+    searchUser.addEventListener('keyup', filterUsers);
+    var timeout = null;
+
+    function filterUsers() {
+        if(timeout !== null){
+            clearTimeout(timeout);
+            timeout = null;
+        }
+
+        timeout = setTimeout(submitFilter, 1000);
+    }
+
+    function submitFilter() {
+        var filterForm =  document.getElementById('users-search-form');
+        if(filterForm.requestSubmit !== undefined) {
+            filterForm.requestSubmit();
+        }else{
+            filterForm.submit();
+        }
+    }
+
 </script>
 @endpush

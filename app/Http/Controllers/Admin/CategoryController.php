@@ -30,6 +30,7 @@ class CategoryController extends Controller
                     'fields' => ['title', 'theme'],
                     'modelName' => 'category'
                 ], 200)
+                ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         }
 
@@ -53,7 +54,7 @@ class CategoryController extends Controller
         $request->validate([
             'title' => 'required|unique:categories'
         ]);
-        
+
         $now = date('Y-m-d H:i:s');
         $categoryData = $request->only(['title', 'theme']);
         $categoryData['description'] = $request->input('heading-title', '');

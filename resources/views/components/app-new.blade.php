@@ -13,11 +13,11 @@
 <link href="{{ mix('/css/components/_app-new.css') }}" rel="stylesheet"/>
 @endallowonce
 
-<div class="app new-app-data app-status-{{ $appStatus }}" data-name="{{ $app['name'] }}" data-id="{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
+<div class="app new-app-data app-status-{{ $appStatus }} @if(request()->has('aid')) show  @endif" data-name="{{ $app['name'] }}" data-id="{{ $app['aid'] }}"  id="{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
      data-locations="{{ $countryCode }}">
     <div class="column">
         <p class="name toggle-app">
-            <span title="{{ $appStatus }}" class="status-icon"></span>
+            <span title="{{ $appStatus }}" class="status-icon {{ $appStatus }}"></span>
             <span class="app-name">  {{ $app['display_name'] }}</span>
         </p>
     </div>
@@ -221,7 +221,7 @@
         </div>
         @endif
 
-        @if(!$isAdminPage && !empty($sandboxProducts) && is_null($app->live_at))
+        @if(!$isAdminPage  || auth()->user()->hasRole('opco') && !empty($sandboxProducts) && is_null($app->live_at))
         <form class="go-live cols centre-align" method="POST" action="{{ route('app.go-live', $app->aid) }}">
             @csrf
             <p class="spacer-flex"><strong class="mr-1">Ready to launch?</strong>You're just a few clicks away</p>

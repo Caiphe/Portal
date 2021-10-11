@@ -28,7 +28,7 @@
                     </td>
                 @elseif($field === 'apps')
                     <td align="left">
-                        <a href="{{ route("admin.dashboard.index", ['q' => $model->email]) }}">{{ $model->getDeveloperAppsCount() }}</a>
+                        <a href="{{ route("admin.dashboard.index", ['q' => $model->email, 'product-status' => 'all']) }}">{{ $model->getDeveloperAppsCount() }}</a>
                     </td>
                 @else
                     <td align="left">
