@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\TeamAppCreated;
+use App\Team;
 use App\User;
 use App\App;
-use App\Features\UserSearch\IDeveloper;
 use App\Product;
 use App\Country;
 use App\Http\Requests\CreateAppRequest;
@@ -47,11 +48,16 @@ class AppController extends Controller
 
     public function create(ProductLocationService $productLocationService)
     {
+        $user = request()->user();
+
+        $userOwnTeams = $user->teams;
+
         [$products, $countries] = $productLocationService->fetch();
 
         return view('templates.apps.create', [
             'products' => $products,
             'productCategories' => array_keys($products->toArray()),
+            'teams' => $userOwnTeams,
             'countries' => $countries ?? '',
         ]);
     }
@@ -101,6 +107,26 @@ class AppController extends Controller
             $appOwner = $user;
         }
 
+        if ($validated['team_id']) {
+            $team = Team::find($validated['team_id']);
+            if (!isset($data['attributes']['name']['company_team'])) {
+                $data['attributes'] = [
+                    [
+                        'name' => 'company_team',
+                        'value' => $team->name,
+                    ],
+                    [
+                        'name' => 'team_owner',
+                        'value' => $team->owner()->email,
+                    ],
+                    [
+                        'name' => 'app_owner',
+                        'value' => $appOwner->email,
+                    ],
+                ];
+            }
+        }
+
         $createdResponse = ApigeeService::createApp($data, $appOwner);
 
         if (strpos($createdResponse, 'duplicate key') !== false) {
@@ -123,6 +149,13 @@ class AppController extends Controller
             "updated_at" => date('Y-m-d H:i:s', $createdResponse['lastModifiedAt'] / 1000),
             "created_at" => date('Y-m-d H:i:s', $createdResponse['createdAt'] / 1000),
         ]);
+
+        if ($attributes['company_team']) {
+
+            $team->attach($app);
+
+            event(new TeamAppCreated($team));
+        }
 
         $app->products()->sync(
             array_reduce(

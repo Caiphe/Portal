@@ -1,3 +1,7 @@
+@php
+
+    $user = auth()->user();
+@endphp
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/templates/apps/create.css') }}">
 @endpush
@@ -10,7 +14,7 @@
         [
             [ 'label' => 'Profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
-            [ 'label' => 'Teams', 'link' => '/teams/create'],
+            [ 'label' => 'Teams', 'link' => '/teams'],
         ],
         'Discover' =>
         [
@@ -49,7 +53,7 @@
 
             <div class="active">
                 <div class="user-thumbnails">
-                    <div class="thumbail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
+                    <div class="thumbail" style="background-image: url({{ $user->profile_picture }})"></div>
                     <label for="user-thumb">
                         <input type="file" name="user-thumb" class="user-thumb">
                     </label>
@@ -66,14 +70,14 @@
                     <input type="url" name="url" id="url" placeholder="Enter callback url (eg. https://callback.com)">
                 </div>
 
-                <div class="group team-field">
+                <div class="group group-info team-field">
                     <label for="team">Select team *</label>
                     <div class="select_wrap">
                         <input name="team" id="team" class="selected-data" value="">
                         <ul class="default_option">
                             <li>
                                 {{-- <div class="option"> --}}
-                                    <span class="select-default">Please select team to pulbic under</span>
+                                    <span class="select-default">Please select team to publish under</span>
                                 {{-- </div> --}}
                             </li>
                         </ul>
@@ -81,22 +85,18 @@
                         <ul class="select_ul">
                             <li>
                                 <div class="option">
-                                    <div class="icon" style="background-image: url('/images/user-thumbnail.jpg')"></div>
-                                    <div class="select-data">Xoliswa Shando (You)</div>
+                                    <div class="icon" style="background-image: url({{ $user->profile_picture }})"></div>
+                                    <div class="select-data" data-teamuser="{{ $user->email }}">{{ $user->full_name }} (You)</div>
                                 </div>
                             </li>
-                            <li>
-                                <div class="option">
-                                    <div class="icon" style="background-image: url('/images/user-thumbnail.jpg')"></div>
-                                    <div class="select-data">Plusnarrative</div>
-                                </div>  
-                            </li>
-                            <li>
-                                <div class="option">
-                                    <div class="icon" style="background-image: url('/images/user-thumbnail.jpg')"></div>
-                                    <div class="select-data">chenosis</div>
-                                </div>  
-                            </li>
+                            @foreach($teams as $team)
+                                <li>
+                                    <div class="option">
+                                        <div class="icon" style="background-image: url({{ $team['logo'] }})"></div>
+                                        <div class="select-data" data-teamuser="{{ $user->email }}">{{ $team['name'] }}</div>
+                                    </div>
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>

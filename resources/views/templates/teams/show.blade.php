@@ -250,7 +250,7 @@ Team
                                 <span class="owner-tag red-tag">OWNER</span>
                             @endif
                         </td>
-                        <td>{{ $teamUser->roles()->first()->name  === 'admin' ? 'Administrator' : ucfirst($teamUser->roles()->first()->name) }}</td>
+                        <td>Test</td>
                         <td class="column-container">{{ $teamUser->twoFactorStatus() }}
                             <button class="btn-actions"></button>
 

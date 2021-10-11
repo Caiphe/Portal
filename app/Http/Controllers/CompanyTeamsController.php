@@ -51,14 +51,7 @@ class CompanyTeamsController extends Controller
                 'name'=> $team->name,
                 'country' => $team->country,
                 'members' => $team->users->count(),
-                'apps_count' => (function() use($team) {
-                    $appsCount = 0;
-                    $team->users->map(function($user) use (&$appsCount) {
-                        $appsCount += $user->getDeveloperAppsCount();
-                        return $appsCount;
-                    });
-                    return $appsCount;
-                })(),
+                'apps_count' => 0,
                 'logo' => $team->logo,
             ];
         }
