@@ -13,6 +13,7 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
+        $access = $request->get('access', "");
         $products = Product::with('category')
             ->byResponsibleCountry($request->user())
             ->when($request->has('q'), function ($q) use ($request) {
@@ -26,7 +27,7 @@ class ProductController extends Controller
                         });
                 });
             })
-            ->when($request->has('access'), function($q) use ($request) {
+            ->when($access !== "" && !is_null($access), function($q) use ($request) {
                 $q->where('access', $request->get('access'));
             });
 

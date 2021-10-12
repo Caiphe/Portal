@@ -9,13 +9,13 @@
         <input id="search-page" type="text" name="q" placeholder="Search for users..." autofocus autocomplete="off">
         <select name="verified" class="users-status">
             <option value="">Select by Status</option>
-            <option value="verified">Verified</option>
-            <option value="not_verified">Not Verified</option>
+            <option value="verified" @if(request()->get('verified') === 'verified') selected @endif>Verified</option>
+            <option value="not_verified" @if(request()->get('verified') === 'not_verified') selected @endif>Not Verified</option>
         </select>
         <select name="per-page" class="show-per-page">
-            <option value="10">Show 10 per page</option>
-            <option value="25">Show 25 per page</option>
-            <option value="50">Show 50 per page</option>
+            <option value="10" @if(request()->get('per-page') === '10') selected @endif>Show 10 per page</option>
+            <option value="25" @if(request()->get('per-page') === '25') selected @endif>Show 25 per page</option>
+            <option value="50" @if(request()->get('per-page') === '50') selected @endif>Show 50 per page</option>
         </select>
     </form>
         {{-- <button class="button dark kinda fab">@svg('close', '#FFFFFF')</button> --}}
@@ -39,7 +39,10 @@
     }
 
     function clearSearch() {
-        document.getElementById('users-search-form').reset();
+        document.getElementById('search-page').value = '';
+        document.querySelector('.users-status').selectedIndex = 0;
+        document.querySelector('.show-per-page').selectedIndex = 0;
+
         searchUser.focus();
     }
 
