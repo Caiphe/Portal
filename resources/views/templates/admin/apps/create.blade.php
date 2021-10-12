@@ -518,7 +518,7 @@
                     allList[i].setAttribute("onclick", "select(this)");
                     allList[i].addEventListener('click', function(){
                         removeThumbnail.style.display = "block";
-                        buttonsContainer.classList.add("onShow");
+                        buttonsContainer.classList.add("on-show");
                     })
                 }
             }else{
@@ -543,7 +543,7 @@
                 inputBox.value = '';
                 ownerAvatar.style.backgroundImage = "url(/images/yellow-vector.svg)";
                 this.style.display = 'none';
-                buttonsContainer.classList.remove("onShow");
+                buttonsContainer.classList.remove("on-show");
             });
         }
 
