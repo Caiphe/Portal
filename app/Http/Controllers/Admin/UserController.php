@@ -31,7 +31,7 @@ class UserController extends Controller
                     ->orWhere('email', 'like', $query);
             });
         })
-            ->when($request->has('verified'), function($q) use($request) {
+            ->when(!empty($request->get('verified', '')), function($q) use($request) {
                 $verified = $request->get('verified');
                 if ($verified === 'verified') {
                     $q->whereNotNull('email_verified_at');
