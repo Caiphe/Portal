@@ -165,7 +165,7 @@
                             opacity: 2;
                             pointer-events: auto;
                             transition: all 0.2s ease-in-out;
-                            display: block !important;
+                            display: block;
                         }
 
                         svg{
@@ -200,7 +200,7 @@
                         text-align: center;
                         font-size: 13px;
 
-                        &.onShow{
+                        &.on-show{
                             display: flex;
                         }
                     }
