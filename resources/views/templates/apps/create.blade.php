@@ -86,14 +86,14 @@
                             <li>
                                 <div class="option">
                                     <div class="icon" style="background-image: url({{ $user->profile_picture }})"></div>
-                                    <div class="select-data" data-teamuser="{{ $user->email }}">{{ $user->full_name }} (You)</div>
+                                    <div class="select-data" data-createdby="" data-teamid="">{{ $user->full_name }} (You)</div>
                                 </div>
                             </li>
                             @foreach($teams as $team)
                                 <li>
                                     <div class="option">
                                         <div class="icon" style="background-image: url({{ $team['logo'] }})"></div>
-                                        <div class="select-data" data-teamuser="{{ $user->email }}">{{ $team['name'] }}</div>
+                                        <div class="select-data" data-createdby="{{ $user->email }}" data-teamid="{{ $team['id'] }}">{{ $team['name'] }}</div>
                                     </div>
                                 </li>
                             @endforeach
@@ -190,11 +190,29 @@
     var buttons = document.querySelectorAll('.next');
     var backButtons = document.querySelectorAll('.back');
     var checkedBoxes = document.querySelectorAll('input[name=country-checkbox]:checked');
+    var default_option = document.querySelector('.default_option');
+    var select_wrap = document.querySelector('.select_wrap');
+    var inputData = document.querySelector('.selected-data');
 
     function init() {
         handleButtonClick();
         handleBackButtonClick();
         clearCheckBoxes();
+    }
+
+    default_option.addEventListener('click', function(){
+        select_wrap.classList.toggle('active');
+    });
+
+    var select_ul = document.querySelectorAll('.select_ul li');
+    for(var i = 0; i < select_ul.length; i++){
+        select_ul[i].addEventListener('click', toggleSelectList);
+    }
+    function toggleSelectList(){
+        var selectedDataObject = this.querySelector('.select-data');
+        default_option.innerHTML = selectedDataObject.innerHTML;
+        inputData.setAttribute('value', selectedDataObject.dataset.createdby);
+        select_wrap.classList.remove('active');
     }
 
     function handleButtonClick() {
@@ -379,7 +397,9 @@
             url: elements['url'].value,
             description: elements['description'].value,
             country: document.querySelector('.country-checkbox:checked').dataset.location,
-            products: []
+            products: [],
+            team_id: document.querySelector('.select-data').dataset.teamid
+
         };
         var selectedProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
         var button = document.getElementById('create');
@@ -424,25 +444,5 @@
             }
         };
     }
-
-    var default_option = document.querySelector('.default_option');
-    var select_wrap = document.querySelector('.select_wrap');
-    var inputData = document.querySelector('.selected-data');
-
-    default_option.addEventListener('click', function(){
-        select_wrap.classList.toggle('active');
-    });
-
-    var select_ul = document.querySelectorAll('.select_ul li');
-    for(var i = 0; i < select_ul.length; i++){
-        select_ul[i].addEventListener('click', toggleSelectList);
-    }
-    function toggleSelectList(){
-        var curentData = this.querySelector('.select-data').innerHTML;
-        default_option.innerHTML = curentData;
-        inputData.setAttribute('value', curentData);
-        select_wrap.classList.remove('active');
-    }
-
 </script>
 @endpush

@@ -68,7 +68,7 @@ Team
         <p class="admin-user-name"></p>
         <form class="form-delete-user">
             <button type="button" class="btn primary mr-10 make-admin-cancel-btn">CANCEL</button>
-            <button type="button" class="btn dark">REMOVE</button>
+            <button type="button" class="btn dark admin-removal-btn">REMOVE</button>
         </form>
     </div>
 </div>
@@ -84,7 +84,7 @@ Team
         <p class="user-name make-user-name"></p>
         <form class="form-delete-user">
             <button type="button" class="btn primary mr-10 user-admin-cancel-btn">CANCEL</button>
-            <button type="button" class="btn dark">REMOVE</button>
+            <button type="button" class="btn dark user-remove-btn">REMOVE</button>
         </form>
     </div>
 </div>
@@ -250,10 +250,10 @@ Team
                                 <span class="owner-tag red-tag">OWNER</span>
                             @endif
                         </td>
-                        <td>Test</td>
+                        <td>{{ $teamUser->roles()->first()->name  === 'admin' ? 'Administrator' : ucfirst($teamUser->roles()->first()->name) }}</td>
                         <td class="column-container">{{ $teamUser->twoFactorStatus() }}
+                            <div class="block-hide-menu"></div>
                             <button class="btn-actions"></button>
-
                             {{-- user action menu --}}
                             <div class="block-actions">
                                 <ul>
@@ -289,7 +289,6 @@ Team
                             </div>
                             {{-- Block end --}}
 
-                            <div class="block-hide-menu"></div>
                         </td>
                     </tr>
                 @endforeach

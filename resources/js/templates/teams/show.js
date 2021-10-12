@@ -1,5 +1,5 @@
 var btnActions = document.querySelectorAll('.btn-actions');
-var hideMenuBlock = document.querySelector('.block-hide-menu');
+var hideMenuBlock = document.querySelectorAll('.block-hide-menu');
 var blockActions = document.querySelectorAll('.block-actions');
 var mainUserMenu = document.querySelector('.main-users-menu')
 var clodeModal = document.querySelector('.close-modal');
@@ -16,17 +16,21 @@ var deleteUserActionBtn = document.querySelector('.remove-user-from-team');
 var teamInviteUserBtn = document.querySelector('.invite-btn');
 
 for(var i = 0; i < btnActions.length; i++) {
-    btnActions[i].addEventListener('click', showUserAction)
-}
-function showUserAction(){
-    this.nextElementSibling.classList.add('show');
-    hideMenuBlock.classList.add('show');
+    btnActions[i].addEventListener('click', showUserAction);
 }
 
-hideMenuBlock.addEventListener('click', hideActions);
+function showUserAction(){
+    this.previousElementSibling.classList.add("show");
+    this.nextElementSibling.classList.add('show');
+}
+
+for(var i = 0; i < hideMenuBlock.length; i++){
+    hideMenuBlock[i].addEventListener('click', hideActions);
+}
+
 function hideActions(){
     this.classList.remove('show');
-    this.previousElementSibling.classList.remove('show')
+    this.nextElementSibling.nextElementSibling.classList.remove('show');
 }
 
 addTeammateBtn.addEventListener('click', hideModalContainer);
@@ -35,10 +39,10 @@ function hideModalContainer(){
     modalContainer.classList.add('show');
 }
 
-clodeModal.addEventListener('click', showModalContainer);
-overlayContainer.addEventListener('click', showModalContainer);
+clodeModal.addEventListener('click', hideAddTeamMateModalContainer);
+overlayContainer.addEventListener('click', hideAddTeamMateModalContainer);
 
-function showModalContainer(){
+function hideAddTeamMateModalContainer(){
     modalContainer.classList.remove('show');
 }
 
@@ -128,6 +132,7 @@ function hideTransferBanner(){
 // Show user modal
 var userModal = document.querySelector('.make-user-modal-container');
 var userModalShow = document.querySelectorAll('.make-user');
+
 for(var u = 0; u < userModalShow.length; u++) {
     userModalShow[u].addEventListener('click', showUserModalFunc);
 }
@@ -135,12 +140,12 @@ for(var u = 0; u < userModalShow.length; u++) {
 function showUserModalFunc(){
     userModal.classList.add('show');
     document.querySelector('.make-user-name').innerHTML = this.dataset.username;
-    hideUserModal();
 }
 
 document.querySelector('.user-close-modal').addEventListener('click', hideUserModal);
 document.querySelector('.user-overlay-container').addEventListener('click', hideUserModal);
 document.querySelector('.user-admin-cancel-btn').addEventListener('click', hideUserModal);
+
 function hideUserModal(){
     userModal.classList.remove('show');
 }
@@ -390,4 +395,7 @@ teamInviteUserBtn.addEventListener('click', function(event){
     };
 
     teamMateInvitEmail.value = "";
+    setTimeout(function() {
+        hideAddTeamMateModalContainer();
+    }, 2000);
 });
