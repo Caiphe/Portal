@@ -13,7 +13,7 @@
 <link href="{{ mix('/css/components/_app-new.css') }}" rel="stylesheet"/>
 @endallowonce
 
-<div class="app new-app-data app-status-{{ $appStatus }} @if(request()->has('aid')) show  @endif" data-name="{{ $app['name'] }}" data-id="{{ $app['aid'] }}"  id="{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
+<div class="app new-app-data app-status-{{ $appStatus }} @if(request()->has('aid')) show  @endif" data-name="{{ $app['name'] }}" data-status="{{ $app['status'] }}" data-id="{{ $app['aid'] }}"  id="wrapper-{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
      data-locations="{{ $countryCode }}">
     <div class="column">
         <p class="name toggle-app">
