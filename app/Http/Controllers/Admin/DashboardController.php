@@ -9,6 +9,9 @@ use App\App;
 use App\Country;
 use App\Mail\KycStatusUpdate;
 use App\Mail\ProductAction;
+use App\Services\ProductLocationService;
+use App\User;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Mail;
 use \Illuminate\Http\Request;
 
@@ -35,6 +38,7 @@ class DashboardController extends Controller
                     'apps' => App::where('country_code', 'none')->paginate(),
                     'countries' => Country::all(),
                 ], 200)
+                ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         } else if ($notAdminNoResponsibleCountries) {
             return view('templates.admin.dashboard.index', [
@@ -48,6 +52,7 @@ class DashboardController extends Controller
 
         $apps = App::with(['developer', 'country', 'products.countries'])
             ->whereNotNull('country_code')
+            ->when($request->has('aid'), fn ($q) => $q->where('aid', $request->get('aid')))
             ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes) {
                 $query->whereIn('country_code', $responsibleCountriesCodes);
             })
@@ -65,7 +70,7 @@ class DashboardController extends Controller
             ->when($appStatus !== 'all', function ($q) use ($appStatus) {
                 $q->where('status', $appStatus);
             })
-            ->when($productStatus !== 'all', function ($q) use ($productStatus) {
+            ->when($productStatus !== 'all' && !$request->has('aid'), function ($q) use ($productStatus) {
                 switch ($productStatus) {
                     case 'pending':
                         $q->whereHas('products', fn ($q) => $q->where('status', 'pending'));
@@ -104,6 +109,7 @@ class DashboardController extends Controller
                     'apps' => $apps,
                     'countries' => Country::orderBy('name')->pluck('name', 'code'),
                 ], 200)
+                ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         }
 
@@ -157,7 +163,8 @@ class DashboardController extends Controller
         Mail::to(env('MAIL_TO_ADDRESS'))->send(new ProductAction($app, $validated, $currentUser));
 
         if ($request->ajax()) {
-            return response()->json(['success' => true]);
+            $product = $app->products()->where('name', $validated['product'])->first();
+            return response()->json(['success' => true, 'body' => $product->notes]);
         }
 
         return redirect()->back();
@@ -238,5 +245,36 @@ class DashboardController extends Controller
         }
 
         return redirect()->back()->with('alert', "error:Sorry something went wrong updating the status.");
+    }
+
+    /**
+     * @param User $user
+     * @param ProductLocationService $productLocationService
+     * @return Factory
+     */
+    public function createUserApp(ProductLocationService $productLocationService, User $user = null)
+    {
+        $appCreator = \Auth()->user();
+
+        $users = User::whereNotNull(['email_verified_at'])->select(['profile_picture', 'email'])->get();
+
+        $emails = $profiles = [];
+        foreach($users as $u){
+            $profiles[$u->email] = $u->profile_picture;
+            if ($u->email === $appCreator->email) continue;
+            array_push($emails, $u->email );
+        }
+
+        [$products, $countries] = $productLocationService->fetch();
+
+        return view('templates.admin.apps.create', [
+            'productCategories' => array_keys($products->toArray()),
+            'appCreatorEmail' => $appCreator->email,
+            'countries' => $countries ?? '',
+            'userProfiles' => $profiles,
+            'userEmails' => $emails,
+            'products' => $products,
+            'chosenUser' => $user,
+        ]);
     }
 }

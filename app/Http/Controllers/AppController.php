@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\App;
+use App\Features\UserSearch\IDeveloper;
 use App\Product;
 use App\Country;
 use App\Http\Requests\CreateAppRequest;
@@ -17,6 +19,7 @@ use App\Services\Kyc\KycService;
 use App\Services\ProductLocationService;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
 
 class AppController extends Controller
 {
@@ -82,7 +85,15 @@ class AppController extends Controller
             'callbackUrl' => $validated['url'],
         ];
 
-        $createdResponse = ApigeeService::createApp($data);
+        $user = $request->user();
+
+        if (($user->hasRole('admin') || $user->hasRole('opco')) && $request->has('app_owner')) {
+            $appOwner = User::where('email', $request->get('app_owner'))->first();
+        } else {
+            $appOwner = $user;
+        }
+
+        $createdResponse = ApigeeService::createApp($data, $appOwner);
 
         if (strpos($createdResponse, 'duplicate key') !== false) {
             return response()->json(['success' => false, 'message' => 'There is already an app with that name.'], 409);
@@ -135,8 +146,9 @@ class AppController extends Controller
         return redirect(route('app.index'));
     }
 
-    public function edit(App $app)
+    public function edit($app)
     {
+        $app = App::where('slug', $app)->where('developer_id', auth()->user()->developer_id)->firstOrFail();
         $products = Product::with('category')
             ->where('category_cid', '!=', 'misc')
             ->where(fn ($q) => $q->basedOnUser(auth()->user())->orWhereIn('pid', $app->products->pluck('pid')->toArray()))
@@ -163,8 +175,9 @@ class AppController extends Controller
         ]);
     }
 
-    public function update(App $app, CreateAppRequest $request)
+    public function update($app, CreateAppRequest $request)
     {
+        $app = App::where('slug', $app)->where('developer_id', $request->user()->developer_id)->firstOrFail();
         $validated = $request->validated();
         $app->load('products');
         $credentials = $app->credentials;
@@ -254,11 +267,12 @@ class AppController extends Controller
         return redirect(route('app.index'));
     }
 
-    public function destroy(App $app, DeleteAppRequest $request)
+    public function destroy($app, DeleteAppRequest $request)
     {
+        $user = $request->user();
+        $app = App::where('slug', $app)->where('developer_id', $user->developer_id)->firstOrFail();
         $validated = $request->validated();
 
-        $user = \Auth::user();
         ApigeeService::delete("developers/{$user->email}/apps/{$validated['name']}");
 
         $app->delete();

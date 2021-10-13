@@ -30,6 +30,7 @@ class ContentController extends Controller
                     'fields' => ['title'],
                     'modelName' => 'page'
                 ], 200)
+                ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         }
 
@@ -104,6 +105,7 @@ class ContentController extends Controller
                     'fields' => ['title'],
                     'modelName' => 'doc'
                 ], 200)
+                ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         }
 

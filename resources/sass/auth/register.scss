@@ -4,7 +4,13 @@
 
 #auth-main {
     form {
-        height: calc(100vh - 62px);
+        @media screen and (min-height: 375px), (min-width: 768px) {
+            height: calc(100vh - 62px);
+        }
+
+        @media screen and (max-height: 375px), (max-width: 768px) {
+            height: 490px;
+        }
     }
 
     h1 {
