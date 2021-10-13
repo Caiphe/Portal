@@ -165,6 +165,7 @@
                             opacity: 2;
                             pointer-events: auto;
                             transition: all 0.2s ease-in-out;
+                            display: block;
                         }
 
                         svg{
@@ -197,6 +198,11 @@
 
                     .apps-button-container {
                         text-align: center;
+                        font-size: 13px;
+
+                        &.on-show{
+                            display: flex;
+                        }
                     }
 
                     input{
@@ -211,7 +217,8 @@
                         margin: 0px auto;
                         position: relative;
                         height: 41px;
-                        width: 164px;
+                        width: 160px;
+                        display: inline-block;
 
                         &:nth-child(1){
                             margin-right: 5px;

@@ -16,7 +16,7 @@
     <div class="container" id="app-index">
         <div class="approved-app-popup"></div>
 
-          
+
         <div class="product-filters @if(request()->has('aid')) hidden @endif">
             <form id="filter-form" class="ajaxify" action="{{ route('admin.dashboard.index') }}" method="GET" data-replace="#table-data">
                 <div class="product-filter">
@@ -54,7 +54,7 @@
 
             </form>
         </div>
-       
+
 
         <div id="table-data" class="row">
             @include('templates.admin.dashboard.data', compact('apps', 'countries'))
@@ -269,20 +269,32 @@
             xhr.send(JSON.stringify(data));
 
             xhr.onload = function() {
+                var appProducts;
                 var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
-                var approvedAppPopup;
-
                 var noteDialogContent;
-                console.log(result);
+                var statusLists;
+                var appWrapper;
 
                 if (xhr.status === 200) {
+                    appProducts = document.querySelectorAll('#wrapper-' + data.app + ' .product');
                     noteDialogContent = document.querySelector('#admin-' + data.app + data.productSlug + '-note-dialog .note');
                     noteDialogContent.innerHTML = result.body;
 
-                    addAlert('success', '<strong>Product ' + lookup[data.action] + '.</strong> The product <span>' + data.displayName + '</span> has been ' + lookup[data.action]);
-
                     card.parentNode.className = 'product product-status-' + lookup[data.action];
+                    statusLists = Array.prototype.slice.call(appProducts).filter(function(item){
+                        return item.className.indexOf('pending') !== -1;
+                    }).length;
 
+                    if (statusLists === 0) {
+                        appWrapper = document.getElementById('wrapper-' + data.app);
+
+                        appWrapper.classList.remove('app-status-pending');
+                        appWrapper.classList.add('app-status-' + appWrapper.dataset.status);
+
+                        appWrapper.querySelector('.status-icon').className = 'status-icon ' + appWrapper.dataset.status;
+                    }
+
+                    addAlert('success', '<strong>Product ' + lookup[data.action] + '.</strong> The product <span>' + data.displayName + '</span> has been ' + lookup[data.action]);
                 } else {
                     addAlert('error', result.body || 'There was an error updating the product.');
                 }

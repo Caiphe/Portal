@@ -216,6 +216,8 @@
         var removeThumbnail = document.getElementById('remove-assignee');
         var ownerAvatar = document.querySelector(".owner-avatar");
 
+        var buttonsContainer =  document.querySelector(".apps-button-container");
+
         function init() {
             handleButtonClick();
             handleBackButtonClick();
@@ -514,6 +516,10 @@
                 for (let i = 0; i < allList.length; i++) {
                     //adding onclick attribute in all li tag
                     allList[i].setAttribute("onclick", "select(this)");
+                    allList[i].addEventListener('click', function(){
+                        removeThumbnail.style.display = "block";
+                        buttonsContainer.classList.add("on-show");
+                    })
                 }
             }else{
                 searchWrapper.classList.remove("active"); //hide autocomplete box
@@ -537,6 +543,7 @@
                 inputBox.value = '';
                 ownerAvatar.style.backgroundImage = "url(/images/yellow-vector.svg)";
                 this.style.display = 'none';
+                buttonsContainer.classList.remove("on-show");
             });
         }
 
