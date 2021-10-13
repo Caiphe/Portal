@@ -22,13 +22,14 @@ Route::get('/', 'HomeController')->name('home');
 Route::get('search', 'SearchController')->name('search');
 
 Route::middleware(['auth', 'verified', '2fa'])->group(function () {
+
 	Route::get('apps', 'AppController@index')->name('app.index');
 	Route::get('apps/create', 'AppController@create')->name('app.create');
-	Route::get('apps/{app:slug}/edit', 'AppController@edit')->middleware('can:access-own-app,app')->name('app.edit');
+	Route::get('apps/{app:slug}/edit', 'AppController@edit')->name('app.edit');
 	Route::post('apps', 'AppController@store')->name('app.store');
 
-	Route::put('apps/{app:slug}', 'AppController@update')->middleware('can:access-own-app,app')->name('app.update');
-	Route::delete('apps/{app:slug}', 'AppController@destroy')->middleware('can:access-own-app,app')->name('app.destroy');
+	Route::put('apps/{app:slug}', 'AppController@update')->name('app.update');
+	Route::delete('apps/{app:slug}', 'AppController@destroy')->name('app.destroy');
 
 	Route::get('apps/{app:aid}/credentials/{type}', 'AppController@getCredentials')->middleware('can:access-own-app,app')->name('app.credentials');
 	Route::post('apps/{app:aid}/go-live', 'AppController@goLive')->middleware('can:access-own-app,app')->name('app.go-live');
@@ -98,8 +99,8 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 	Route::post('apps/{product}/revoke', 'DashboardController@update')->middleware('can:administer-dashboard')->name('app.product.revoke');
 	Route::post('dashboard/{app:aid}/credentials/renew/{type}', 'DashboardController@renewCredentials')->middleware('can:administer-dashboard')->name('admin.credentials.renew');
 	Route::post('apps/{app:aid}/status', 'DashboardController@updateAppStatus')->middleware('can:administer-dashboard')->name('admin.app.status-update');
-
-	// Global search
+    Route::get('apps/create/{user?}', 'DashboardController@createUserApp')->middleware('can:administer-dashboard')->name('admin.app.create');
+    // Global search
 	Route::get('search', 'SearchController')->name('admin.search');
 
 	// User management

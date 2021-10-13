@@ -2,11 +2,11 @@
 
 namespace App;
 
-use App\Country;
 use App\Role;
+use App\Country;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -64,6 +64,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
 	public function hasPermissionTo($permission)
 	{
+		$test2FA = skip_2fa() || !is_null($this['2fa']);
 		$userPermissions = $this->roles->map->permissions
 			->flatten()
 			->pluck('name')
@@ -71,14 +72,15 @@ class User extends Authenticatable implements MustVerifyEmail
 			->toArray();
 
 		if (is_array($permission)) {
-			return !is_null($this['2fa']) && !array_diff($permission, $userPermissions);
+			return $test2FA && !array_diff($permission, $userPermissions);
 		}
 
-		return !is_null($this['2fa']) && in_array($permission, $userPermissions);
+		return $test2FA && in_array($permission, $userPermissions);
 	}
 
 	public function hasAnyPermissionTo($permission)
 	{
+		$test2FA = skip_2fa() || !is_null($this['2fa']);
 		$userPermissions = $this->roles->map->permissions
 			->flatten()
 			->pluck('name')
@@ -86,10 +88,10 @@ class User extends Authenticatable implements MustVerifyEmail
 			->toArray();
 
 		if (is_array($permission)) {
-			return !is_null($this['2fa']) && count(array_intersect($permission, $userPermissions)) > 0;
+			return $test2FA && count(array_intersect($permission, $userPermissions)) > 0;
 		}
 
-		return !is_null($this['2fa']) && in_array($permission, $userPermissions);
+		return $test2FA && in_array($permission, $userPermissions);
 	}
 
 	public function countries()
@@ -134,4 +136,18 @@ class User extends Authenticatable implements MustVerifyEmail
 	{
 		return $this->roles->pluck('label')->implode(',');
 	}
+
+	public function getDeveloperAppsCount() {
+	    return App::where('developer_id', $this->developer_id)->get()->count();
+    }
+
+    public function getApps($countryCodeFilter = '', $order = 'DESC', $sort = 'name')
+    {
+        $apps = App::where('developer_id', $this->developer_id)
+            ->when(!empty($countryCodeFilter) && $countryCodeFilter !== 'all', function($q) use($countryCodeFilter) {
+            $q->where('country_code', $countryCodeFilter);
+        })->orderBy($sort, $order);
+
+        return $apps->get();
+    }
 }

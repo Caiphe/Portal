@@ -13,18 +13,23 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $products = Product::with('category')->byResponsibleCountry($request->user());
+        $access = $request->get('access', "");
+        $products = Product::with('category')
+            ->byResponsibleCountry($request->user())
+            ->when($request->has('q'), function ($q) use ($request) {
+                $query = "%" . $request->get('q') . "%";
 
-        if ($request->has('q')) {
-            $query = "%" . $request->q . "%";
-            $products->where(function ($q) use ($query) {
-                $q->where('display_name', 'like', $query)
-                    ->orWhereHas('content', function ($q) use ($query) {
-                        $q->where('title', 'like', $query)
-                            ->orWhere('body', 'like', $query);
-                    });
+                $q->where(function ($q) use ($query) {
+                    $q->where('display_name', 'like', $query)
+                        ->orWhereHas('content', function ($q) use ($query) {
+                            $q->where('title', 'like', $query)
+                                ->orWhere('body', 'like', $query);
+                        });
+                });
+            })
+            ->when($access !== "" && !is_null($access), function($q) use ($request) {
+                $q->where('access', $request->get('access'));
             });
-        }
 
         if ($request->ajax()) {
             return response()
@@ -33,6 +38,7 @@ class ProductController extends Controller
                     'fields' => ['display_name', 'access', 'environments', 'category.title'],
                     'modelName' => 'product'
                 ], 200)
+                ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         }
 

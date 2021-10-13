@@ -222,7 +222,7 @@
             errors.push("Please enter your email");
         }
 
-        if (!validateEmail(form.elements["email"])) {
+        if (hasValue(form.elements["email"]) && !validateEmail(form.elements["email"])) {
             errors.push("Please enter a correct email address format");
         }
 
@@ -238,5 +238,10 @@
         }
     });
 }());
+
+    ajaxifyOnPopState = updateFilters;
+    function updateFilters(params) {
+        document.getElementById('search-page').value = params['q'] || '';
+    }
 </script>
 @endpushscript

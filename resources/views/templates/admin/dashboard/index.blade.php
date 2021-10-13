@@ -1,34 +1,40 @@
 @extends('layouts.admin')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ mix('/css/templates/apps/index.css') }}">
+    <link rel="stylesheet" href="{{ mix('/css/templates/admin/dashboard/index.css') }}">
 @endpush
 
 @section('title', 'Applications')
 
 @section('page-info')
-    <button class="button primary" onclick="syncApps();">Sync Apps</button>
+    <a class="button primary mr-2" href="{{ route('admin.app.create') }}">Create new Application</a>
+    <button class="button dark outline" onclick="syncApps();">Sync Apps</button>
 @endsection
 
 @section('content')
 
     <div class="container" id="app-index">
-        <div class="product-filters">
+        <div class="approved-app-popup"></div>
+
+
+        <div class="product-filters @if(request()->has('aid')) hidden @endif">
             <form id="filter-form" class="ajaxify" action="{{ route('admin.dashboard.index') }}" method="GET" data-replace="#table-data">
-                <div class="prodict-filter">
-                    <h3>App Status</h3>
-                    <select id="app-filter-status" name="app-status">
-                        <option @if($appStatus === 'all') selected @endif value="all">All</option>
+                <div class="product-filter">
+                    <input type="text" autocomplete="off" name="q" id="filter-text" class="filter-text" placeholder="Search app or developer name" value="{{ $_GET['q'] ?? '' }}">
+                </div>
+
+                <div class="product-filter">
+                    <select id="app-filter-status" name="app-status" autocomplete="off">
+                        <option @if($appStatus === 'all') selected @endif value="all">All app status</option>
                         <option @if($appStatus === 'approved') selected @endif value="approved">Approved Apps</option>
                         <option @if($appStatus === 'revoked') selected @endif value="revoked">Revoked Apps</option>
                     </select>
                 </div>
 
-                <div class="prodict-filter">
-                    <h3>Product Status</h3>
-                    <select id="product-filter-status" name="product-status">
-                        <option @if($productStatus === 'all') selected @endif value="all">All</option>
-                        <option @if($productStatus === 'pending') selected @endif value="pending">Pending</option>
+                <div class="product-filter">
+                    <select id="product-filter-status" name="product-status" autocomplete="off">
+                        <option @if($productStatus === 'all') selected @endif value="all">All product status</option>
+                        <option @if($productStatus === 'pending') selected @endif value="pending">Pending apps</option>
                         <option @if($productStatus === 'all-approved') selected @endif value="all-approved">All Approved</option>
                         <option @if($productStatus === 'at-least-one-approved') selected @endif value="at-least-one-approved">At Least One Approved</option>
                         <option @if($productStatus === 'all-revoked') selected @endif value="all-revoked">All Revoked</option>
@@ -36,29 +42,24 @@
                     </select>
                 </div>
 
-                <div class="prodict-filter">
-                    <h3 class="ml-2">Country</h3>
-                    <select id="filter-country"  name="countries" label="Select country" >
-                        <option value="">Select country</option>
+                <div class="product-filter">
+                    <select id="filter-country"  name="countries" label="Select country" autocomplete="off">
+                        <option value="">All countries</option>
                         @foreach($countries as $code => $name)
                             <option value="{{ $code }}" {{ (($selectedCountry === $code) ? 'selected': '') }}>{{ $name }}</option>
                         @endforeach
                     </select>
                 </div>
 
-                <div class="prodict-filter">
-                    <h3 class="ml-2">Search</h3>
-                    <input type="text" name="q" id="filter-text" class="filter-text" placeholder="App or developer name" value="{{ $_GET['q'] ?? '' }}">
-                </div>
-            </form>
-            <form class="ajaxify" data-replace="#table-data" data-func="clearFilter()" action="{{ route('admin.dashboard.index') }}" method="GET">
-                <button id="clearFilter" class="dark outline ml-2">Clear filters</button>
+
             </form>
         </div>
+
 
         <div id="table-data" class="row">
             @include('templates.admin.dashboard.data', compact('apps', 'countries'))
         </div>
+
     </div>
 
     <x-dialog id="status-dialog">
@@ -83,6 +84,7 @@
 
         window.onload = init;
         ajaxifyComplete = init;
+        ajaxifyOnPopState = updateFilters;
 
         function init() {
             var buttons = document.querySelectorAll('.toggle-app');
@@ -127,6 +129,13 @@
             }
         }
 
+        function updateFilters(params) {
+            document.getElementById('filter-text').value = params['q'] || '';
+            document.getElementById('app-filter-status').value = params['app-status'] || 'all';
+            document.getElementById('product-filter-status').value = params['product-status'] || 'pending';
+            document.getElementById('filter-country').value = params['countries'] || '';
+        }
+
         function handleButtonClick() {
             this.parentNode.parentNode.classList.toggle('show')
         }
@@ -153,7 +162,18 @@
         }
 
         function submitFilter() {
-            document.getElementById('filter-form').requestSubmit();
+            var filterForm =  document.getElementById('filter-form');
+
+            if(timeout !== null){
+                clearTimeout(timeout);
+                timeout = null;
+            }
+
+            if(filterForm.requestSubmit !== undefined) {
+                filterForm.requestSubmit();
+            }else{
+                filterForm.submit();
+            }
         }
 
         function clearFilter() {
@@ -185,7 +205,7 @@
                     document.querySelector('#status-dialog .status-dialog-textarea').value = '';
                     handleUpdateStatusNoteMany(appProducts, lookBack, this, that);
                 }, {
-                  once: true
+                    once: true
                 });
 
                 dialog.classList.add('show');
@@ -199,7 +219,7 @@
                 handleUpdateStatusNote(this, that);
                 document.querySelector('#status-dialog .status-dialog-textarea').value = '';
             }, {
-              once: true
+                once: true
             });
 
             dialog.classList.add('show');
@@ -224,9 +244,10 @@
             handleUpdateStatus({
                 action: el.dataset.action,
                 for: el.dataset.for,
-                app: el.parentNode.dataset.aid,
-                product: el.parentNode.dataset.pid,
-                displayName: el.parentNode.dataset.productDisplayName,
+                app: el.parentNode.parentNode.dataset.aid,
+                product: el.parentNode.parentNode.dataset.pid,
+                productSlug: el.parentNode.parentNode.dataset.productSlug,
+                displayName: el.parentNode.parentNode.dataset.productDisplayName,
                 statusNote: form.elements['status-note'].value
             }, el.parentNode);
         }
@@ -238,7 +259,7 @@
                 revoke: 'revoked'
             };
 
-            card.classList.add('loading');
+            addLoading(data.action.replace(/e$/, 'ing') + '...');
 
             xhr.open('POST', '/admin/apps/' + data.product + '/' + data.action);
             xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
@@ -248,14 +269,36 @@
             xhr.send(JSON.stringify(data));
 
             xhr.onload = function() {
+                var appProducts;
                 var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+                var noteDialogContent;
+                var statusLists;
+                var appWrapper;
 
                 if (xhr.status === 200) {
-                    card.className = 'product product-status-' + lookup[data.action];
+                    appProducts = document.querySelectorAll('#wrapper-' + data.app + ' .product');
+                    noteDialogContent = document.querySelector('#admin-' + data.app + data.productSlug + '-note-dialog .note');
+                    noteDialogContent.innerHTML = result.body;
+
+                    card.parentNode.className = 'product product-status-' + lookup[data.action];
+                    statusLists = Array.prototype.slice.call(appProducts).filter(function(item){
+                        return item.className.indexOf('pending') !== -1;
+                    }).length;
+
+                    if (statusLists === 0) {
+                        appWrapper = document.getElementById('wrapper-' + data.app);
+
+                        appWrapper.classList.remove('app-status-pending');
+                        appWrapper.classList.add('app-status-' + appWrapper.dataset.status);
+
+                        appWrapper.querySelector('.status-icon').className = 'status-icon ' + appWrapper.dataset.status;
+                    }
+
+                    addAlert('success', '<strong>Product ' + lookup[data.action] + '.</strong> The product <span>' + data.displayName + '</span> has been ' + lookup[data.action]);
                 } else {
-                    card.classList.remove('loading');
                     addAlert('error', result.body || 'There was an error updating the product.');
                 }
+                removeLoading();
             };
         }
 
@@ -268,7 +311,7 @@
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
-           addLoading('Updating KYC status');
+            addLoading('Updating KYC status');
 
             xhr.send(JSON.stringify({
                 kyc_status: kycSelect.value
@@ -303,7 +346,7 @@
 
         function viewNote(e) {
             var id = this.dataset.id;
-            var noteDialog = document.getElementById(id + '-note-dialog');
+            var noteDialog = document.getElementById('admin-' +id + '-note-dialog');
 
             e.preventDefault();
 
@@ -315,5 +358,6 @@
         function strSlug(str) {
             return str.replace(/[^a-zA-Z\s]/g, '').replace(/\s+/g, '-').toLowerCase();
         }
+
     </script>
 @endpush
