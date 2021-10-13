@@ -399,15 +399,19 @@
             country: document.querySelector('.country-checkbox:checked').dataset.location,
             products: [],
             team_id: document.querySelector('.select-data').dataset.teamid
-
         };
         var selectedProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
         var button = document.getElementById('create');
 
         event.preventDefault();
 
-        // Handle the Invitees
+        for(i = 0; i < selectedProducts.length; i++) {
+            app.products.push(selectedProducts[i].dataset.name);
+        }
 
+        if (app.products.length === 0) {
+            return void addAlert('error', 'Please select at least one product.')
+        }
 
         button.disabled = true;
         button.textContent = 'Creating...';

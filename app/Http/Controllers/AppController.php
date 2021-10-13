@@ -74,6 +74,12 @@ class AppController extends Controller
             $productIds[] = $attr['SandboxProduct'] ?? $name;
         }
 
+        $teamExists = false;
+        if ($validated['team_id']) {
+            $team = Team::find($validated['team_id']);
+            $teamExists = $team->exists;
+        }
+
         $data = [
             'name' => Str::slug($validated['display_name']),
             'apiProducts' => $productIds,
@@ -95,6 +101,10 @@ class AppController extends Controller
                     'name' => 'location',
                     'value' => $countriesByCode[$validated['country']] ?? "",
                 ],
+                [
+                    'name' => 'TeamName',
+                    'value' => $team->name ?? "",
+                ],
             ],
             'callbackUrl' => $validated['url'],
         ];
@@ -105,26 +115,6 @@ class AppController extends Controller
             $appOwner = User::where('email', $request->get('app_owner'))->first();
         } else {
             $appOwner = $user;
-        }
-
-        if ($validated['team_id']) {
-            $team = Team::find($validated['team_id']);
-            if (!isset($data['attributes']['name']['company_team'])) {
-                $data['attributes'] = [
-                    [
-                        'name' => 'company_team',
-                        'value' => $team->name,
-                    ],
-                    [
-                        'name' => 'team_owner',
-                        'value' => $team->owner()->email,
-                    ],
-                    [
-                        'name' => 'app_owner',
-                        'value' => $appOwner->email,
-                    ],
-                ];
-            }
         }
 
         $createdResponse = ApigeeService::createApp($data, $appOwner);
@@ -150,10 +140,8 @@ class AppController extends Controller
             "created_at" => date('Y-m-d H:i:s', $createdResponse['createdAt'] / 1000),
         ]);
 
-        if ($attributes['company_team']) {
-
-            $team->attach($app);
-
+        if ($teamExists) {
+            $app->update(['team_id'], $team->id);
             event(new TeamAppCreated($team));
         }
 
