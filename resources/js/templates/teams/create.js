@@ -27,7 +27,7 @@ function createSingleTag(email){
     tagSpan.textContent = email;
 
     hiddenInput.setAttribute('type', 'hidden');
-    hiddenInput.setAttribute('name', 'team_member[]');
+    hiddenInput.setAttribute('name', 'team_members[]');
     hiddenInput.setAttribute('value', email);
 
     closeTagBtn.setAttribute('type', 'button');

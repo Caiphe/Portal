@@ -7,13 +7,12 @@ use App\Team;
 use App\User;
 use App\Country;
 
-use App\Mail\TeamAppCreated;
 use App\Mail\Invites\RemoveUser;
 use App\Mail\Invites\InviteExternalUser;
 
 use App\Services\TeamCompanyService;
 
-use App\Http\Requests\TeamAppRequest;
+use App\Http\Requests\TeamRequest;
 use App\Http\Requests\Teams\InviteRequest;
 use App\Http\Requests\Teams\LeaveTeamRequest;
 
@@ -123,7 +122,7 @@ class CompanyTeamsController extends Controller
         ]);
     }
 
-    public function store(TeamCompanyService $teamService, TeamAppRequest $request)
+    public function store(TeamRequest $request)
     {
         $user = $request->user();
         $validated = $request->validated();
@@ -150,21 +149,29 @@ class CompanyTeamsController extends Controller
             $teamData['logo'] = str_replace('public', '/storage', $path);
         }
 
-        $team = $teamService->createUserTeam($user, $teamData);
+        $team = Team::create([
+            'name' => $teamData['name'],
+            'url' => $teamData['url'],
+            'contact' => $teamData['contact'],
+            'country' => $teamData['country'],
+            'description' => $teamData['description'],
+            'logo' => $teamData['logo'],
+            'owner_id' => $user->getKey()
+        ]);
 
-        if (!empty($data['invitations'])) {
-            foreach ($data['invitations'] as $emailAddress) {
+        if (!empty($data['team_members'])) {
+            foreach ($data['team_members'] as $emailAddress) {
                 $user = User::where('email', '=', $emailAddress)->first();
                 if (!$user->exists()) {
                     Mail::to($emailAddress)->send(new InviteExternalUser($team, $emailAddress));
                 } else {
-                    Teamwork::inviteToTeam( $user->email , $team);
+                    Teamwork::inviteToTeam( $user->email, $team);
                 }
             }
         }
 
         if ($team->exists) {
-            return redirect()->back()->with('alert', "success:Team successfully created!.");
+            return redirect()->route('teams.listing')->with('alert', "success:Team successfully created!.");
         } else {
             return redirect()->back()->with('alert', "error:Could not create Team. Please try again.");
         }

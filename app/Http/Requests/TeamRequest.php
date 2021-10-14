@@ -27,10 +27,10 @@ class TeamRequest extends FormRequest
             'name' => 'required',
             'url' => 'required',
             'contact' => 'required',
-            'country' => 'required|email:rfc,dns',
-            'logo' => 'required',
-            'invitation' => 'required',
-            'description' => 'required',
+            'country' => 'required',
+            'logo-file' => 'sometimes',
+            'team_members' => 'sometimes',
+            'description' => 'sometimes',
         ];
     }
 
@@ -46,8 +46,8 @@ class TeamRequest extends FormRequest
             'url' => filter_var($this->url, FILTER_SANITIZE_STRING),
             'contact' => filter_var($this->contact, FILTER_SANITIZE_STRING),
             'country' => filter_var($this->country, FILTER_SANITIZE_EMAIL),
-            'logo' => filter_var($this->logo, FILTER_SANITIZE_STRING),
-            'invitation' => filter_var($this->required, FILTER_SANITIZE_STRING),
+            'logo-file' => filter_var($this->logo, FILTER_SANITIZE_STRING),
+            'team_members' => filter_var($this->required, FILTER_SANITIZE_STRING),
             'description' => filter_var($this->required, FILTER_SANITIZE_STRING),
         ]);
     }
