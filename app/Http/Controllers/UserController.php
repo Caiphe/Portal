@@ -103,8 +103,17 @@ class UserController extends Controller
 		$request->validate([
 			'profile' => 'required|mimes:jpeg,jpg,png|max:5120',
 		]);
+		$disk = \Storage::disk('public');
+		$user = $request->user();
+		$currentImageName = basename($user->profile_picture);
+		$isDefaultImage = strpos($currentImageName, 'profile-') !== false;
+		$imageName = $isDefaultImage || strlen($currentImageName) > 20 ? base64_encode(date('iYHs') . rand(1, 24)) . '.png' : $currentImageName;
+		$imageName = 'profile/' . $imageName;
+		$currentImageName = 'profile/' . $currentImageName;
 
-		$imageName = 'profile/' . base64_encode(date('iYHs') . rand(1, 24)) . '.png';
+		if (!$isDefaultImage && $disk->exists($currentImageName)) {
+			$disk->delete($currentImageName);
+		}
 
 		$image = Image::make($request->file('profile'))
 			->fit(452, 452, function ($constraint) {
@@ -112,8 +121,7 @@ class UserController extends Controller
 				$constraint->upsize();
 			});
 
-		$success = \Storage::disk('public')->put($imageName, (string) $image->encode('png', 95));
-
+		$success = $disk->put($imageName, (string) $image->encode('png', 95));
 		$request->user()->update(['profile_picture' => '/storage/' . $imageName]);
 
 		return response()->json([
