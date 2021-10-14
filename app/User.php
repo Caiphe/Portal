@@ -188,6 +188,6 @@ class User extends Authenticatable implements MustVerifyEmail
             'user_id' => $this->id,
             'team_id' => $team->id,
             'type' => $type
-        ])->get();
+        ])->first();
     }
 }

@@ -1,7 +1,7 @@
 @php
 
     $user = auth()->user();
-
+    $userTeamInvite = $user->getTeamInvite($team);
 @endphp
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/teams/show.css') }}">
@@ -182,17 +182,19 @@ Team
 <div class="mt-2">
 
     {{-- Top ownerhip block container --}}
-    <div class="top-ownership-banner @if (!$user->isTeamOwner() && $user->hasTeamInvite($team, 'ownership')) show @endif ">
+    <div class="top-ownership-banner @if (!$user->isTeamOwner() && $userTeamInvite) show @endif ">
         <div class="message-container">You have been requested to be the owner of this team.</div>
         <div class="btn-block-container">
-            <a type="button" href="#transfer-ownership" class="button blue-button accept-transfer">Accept request</a>
-            <a type="button" href="#transfer-ownership" class="button blue-button revoke-transfer">Revoke request</a>
+            {{--  Use the accept endpoint --}}
+            <button type="button" class="btn dark dark-accept" data-invite-token="{{ $userTeamInvite ? $userTeamInvite->accept_token : '' }}">Accept request</button>
+            {{--  Use the revoke endpoint --}}
+            <button type="button" class="btn dark dark-revoked" data-invite-token="{{ $userTeamInvite ? $userTeamInvite->deny_token : '' }}">Revoke request</button>
         </div>
     </div>
     {{-- @endif --}}
 
     <div class="header-block team-name-logo">
-        {{-- To replace with the company logo --}}
+        {{-- To replace with the comspany logo --}}
         <div class="team-name-logo-container">
             <div class="team-logo"  style="background-image: url({{ $team->logo }})"></div>
             <h2>{{  $team->name }}</h2>
@@ -257,6 +259,7 @@ Team
                             {{-- user action menu --}}
                             <div class="block-actions">
                                 <ul>
+                                    {{---  Uses the transfer endpoint--}}
                                     <li>
                                         <button
                                             class="make-admin"
@@ -265,7 +268,7 @@ Team
                                             Make administrator
                                         </button>
                                     </li>
-
+                                    {{---  Uses the invite endpoint--}}
                                     <li>
                                         <button
                                             class="make-user"
@@ -275,13 +278,13 @@ Team
                                             Make User
                                         </button>
                                     </li>
-
+                                    {{---  Uses the leave endpoint --}}
                                     <li>
                                         <button
                                             class="user-delete"
                                             data-usernamedelete="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
                                             data-teamid="{{ $team->id }}"
-                                            data-teamuserid="{{ auth()->user()->id }}">
+                                            data-teamuserid="{{ $user->id }}">
                                             Delete
                                         </button>
                                     </li>
@@ -309,18 +312,24 @@ Team
                 {{-- You can add non-active to make--}}
             </div>
 
-            {{-- Transfer request --}}
+            @if($user->hasTeamInvite($team))
+                {{ dd($user->hasTeamInvite($team)) }}
+                {{-- Transfer request --}}
 
-            <div class="trasfer-container">
-                <h4>Transfer requests</h4>
-                <div class="site-text">You have been requested to be the new owner of this team. please choose if you would like to accept or revoke the request</div>
-                <div class="site-text">You are not the owner of this team, you cannot modify ownership of this team </div>
+                <div class="trasfer-container">
+                    <h4>Transfer requests</h4>
+                    <div class="site-text">You have been requested to be the new owner of this team. please choose if you would like to accept or revoke the request</div>
+                    <div class="site-text">You are not the owner of this team, you cannot modify ownership of this team </div>
 
-                <div class="transfer-btn-block">
-                    <button type="button" class="btn dark dark-accept">Accept request</button>
-                    <button type="button" class="btn dark dark-revoked">Revoke request</button>
+                    <div class="transfer-btn-block">
+                        {{--  Use the accept endpoint --}}
+                        <button type="button" class="btn dark dark-accept" data-invite-token="{{ $userTeamInvite ? $userTeamInvite->accept_token : '' }}">Accept request</button>
+                        {{--  Use the revoke endpoint --}}
+                        <button type="button" class="btn dark dark-revoked" data-invite-token="{{ $userTeamInvite ? $userTeamInvite->deny_token : '' }}">Revoke request</button>
+                    </div>
                 </div>
-            </div>
+            @endif
+
         </div>
     @endif
 
