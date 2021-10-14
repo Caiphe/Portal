@@ -3,32 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\App;
-use App\Http\Requests\Teams\InviteRequest;
-use App\Mail\Invites\InviteExternalUser;
-use App\Mail\Invites\RemoveUser;
 use App\Team;
 use App\User;
 use App\Country;
-use App\Product;
-
 
 use App\Mail\TeamAppCreated;
+use App\Mail\Invites\RemoveUser;
+use App\Mail\Invites\InviteExternalUser;
+
 use App\Services\TeamCompanyService;
+
 use App\Http\Requests\TeamAppRequest;
+use App\Http\Requests\Teams\InviteRequest;
 use App\Http\Requests\Teams\LeaveTeamRequest;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
-use App\Http\Requests\Teams\DeleteTeamRequest;
-use Mpociot\Teamwork\Events\UserInvitedToTeam;
-use Mpociot\Teamwork\Events\UserLeftTeam;
-use Mpociot\Teamwork\Exceptions\UserNotInTeamException;
 use Mpociot\Teamwork\Facades\Teamwork;
+use Mpociot\Teamwork\Events\UserInvitedToTeam;
+use App\Http\Requests\Teams\DeleteTeamRequest;
 
 /**
  * Class CompanyTeamsController
@@ -39,7 +32,7 @@ class CompanyTeamsController extends Controller
 {
     public function index(Request $request)
     {
-        if (auth()->user()->teams->isEmpty()) {
+        if (is_null(auth()->user()->teams)) {
             return redirect()->route('teams.create');
         }
 
@@ -51,7 +44,7 @@ class CompanyTeamsController extends Controller
                 'name'=> $team->name,
                 'country' => $team->country,
                 'members' => $team->users->count(),
-                'apps_count' => 0,
+                'apps_count' => App::where(['team_id' => $team->id])->get()->count(),
                 'logo' => $team->logo,
             ];
         }
@@ -157,28 +150,24 @@ class CompanyTeamsController extends Controller
             $teamData['logo'] = str_replace('public', '/storage', $path);
         }
 
-        $team = $teamService->createUserTeam($user, $teamData)->pop();
+        $team = $teamService->createUserTeam($user, $teamData);
 
-        if ($result = $teamService->createDeveloperTeam($user, $team->toArray())) {
-            if ($result->status() === 201) {
-                if (!empty($data['invitations'])) {
-                    foreach ($data['invitations'] as $emailAddress) {
-                        $user = User::where('email', '=', $emailAddress)->first();
-                        if ($user->exists()) {
-                            Teamwork::inviteToTeam( $user->email , $team);
-                        } else {
-                            Mail::to($emailAddress)->send(new InviteExternalUser($team, $emailAddress));
-                        }
-                    }
+        if (!empty($data['invitations'])) {
+            foreach ($data['invitations'] as $emailAddress) {
+                $user = User::where('email', '=', $emailAddress)->first();
+                if (!$user->exists()) {
+                    Mail::to($emailAddress)->send(new InviteExternalUser($team, $emailAddress));
+                } else {
+                    Teamwork::inviteToTeam( $user->email , $team);
                 }
-
-                Mail::to($user->email)->send(new TeamAppCreated($team));
-
-                return redirect()->route('teams.listing')->with('alert', "success:{$team->name} has been created!");
             }
         }
 
-        return redirect()->back()->with('alert', "error:Could not create requested Team. Please try again.");
+        if ($team->exists) {
+            return redirect()->back()->with('alert', "success:Team successfully created!.");
+        } else {
+            return redirect()->back()->with('alert', "error:Could not create Team. Please try again.");
+        }
     }
 
     public function create(Request $request)
