@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Content;
-use App\Country;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Services\ApigeeUserService;
