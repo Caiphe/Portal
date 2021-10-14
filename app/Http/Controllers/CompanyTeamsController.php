@@ -10,8 +10,6 @@ use App\Country;
 use App\Mail\Invites\RemoveUser;
 use App\Mail\Invites\InviteExternalUser;
 
-use App\Services\TeamCompanyService;
-
 use App\Http\Requests\TeamRequest;
 use App\Http\Requests\Teams\InviteRequest;
 use App\Http\Requests\Teams\LeaveTeamRequest;
@@ -20,7 +18,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Mpociot\Teamwork\Facades\Teamwork;
 use Mpociot\Teamwork\Events\UserInvitedToTeam;
-use App\Http\Requests\Teams\DeleteTeamRequest;
 
 /**
  * Class CompanyTeamsController
@@ -190,30 +187,5 @@ class CompanyTeamsController extends Controller
             'hasTeams' => $user->teams()->count() > 0,
             'countries' => $countries,
         ]);
-    }
-
-    public function destroy(TeamCompanyService $companyService, DeleteTeamRequest $request)
-    {
-        $validated = $request->validated();
-
-        $user = $request->user();
-        $team = Team::where('name', $validated['name'])->first();
-
-        $teamDeleted = false;
-        if ($user->isTeamOwner($team)) {
-            $companyService->deleteCompanyAppKeys($user->developer_id, $team->name);
-            $teamDeleted = true;
-        }
-
-        if ($teamDeleted) {
-            $team->delete();
-
-            return redirect(route('teams.index'));
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Could not remove team. Please try again.'
-            ]);
-        }
     }
 }

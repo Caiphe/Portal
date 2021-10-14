@@ -28,7 +28,7 @@ class TeamRequest extends FormRequest
             'url' => 'required',
             'contact' => 'required',
             'country' => 'required',
-            'logo-file' => 'sometimes',
+            'logo_file' => 'sometimes',
             'team_members' => 'sometimes',
             'description' => 'sometimes',
         ];
@@ -46,9 +46,9 @@ class TeamRequest extends FormRequest
             'url' => filter_var($this->url, FILTER_SANITIZE_STRING),
             'contact' => filter_var($this->contact, FILTER_SANITIZE_STRING),
             'country' => filter_var($this->country, FILTER_SANITIZE_EMAIL),
-            'logo-file' => filter_var($this->logo, FILTER_SANITIZE_STRING),
-            'team_members' => filter_var($this->required, FILTER_SANITIZE_STRING),
-            'description' => filter_var($this->required, FILTER_SANITIZE_STRING),
+            'logo_file' => filter_var($this->logo_file, FILTER_SANITIZE_STRING),
+            'team_members' => filter_var($this->team_members, FILTER_SANITIZE_STRING),
+            'description' => filter_var($this->description, FILTER_SANITIZE_STRING),
         ]);
     }
 }
