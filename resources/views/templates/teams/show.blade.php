@@ -312,8 +312,7 @@ Team
                 {{-- You can add non-active to make--}}
             </div>
 
-            @if($user->hasTeamInvite($team))
-                {{ dd($user->hasTeamInvite($team)) }}
+            @if($userTeamInvite)
                 {{-- Transfer request --}}
 
                 <div class="trasfer-container">

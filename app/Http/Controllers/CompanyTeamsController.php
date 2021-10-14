@@ -28,7 +28,9 @@ class CompanyTeamsController extends Controller
 {
     public function index(Request $request)
     {
-        if (is_null(auth()->user()->teams)) {
+        $user = auth()->user();
+
+        if ($user->teams) {
             return redirect()->route('teams.create');
         }
 
