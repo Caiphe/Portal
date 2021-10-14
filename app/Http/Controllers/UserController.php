@@ -106,13 +106,12 @@ class UserController extends Controller
 		$disk = \Storage::disk('public');
 		$user = $request->user();
 		$currentImageName = basename($user->profile_picture);
-		$oldImageFormat = strlen($currentImageName) > 20;
-		$createNewName = strpos($currentImageName, 'profile-') !== false || $oldImageFormat;
-		$imageName = $createNewName ? base64_encode(date('iYHs') . rand(1, 24)) . '.png' : $currentImageName;
+		$isDefaultImage = strpos($currentImageName, 'profile-') !== false;
+		$imageName = $isDefaultImage || strlen($currentImageName) > 20 ? base64_encode(date('iYHs') . rand(1, 24)) . '.png' : $currentImageName;
 		$imageName = 'profile/' . $imageName;
 		$currentImageName = 'profile/' . $currentImageName;
 
-		if ($oldImageFormat && $disk->exists($currentImageName)) {
+		if (!$isDefaultImage && $disk->exists($currentImageName)) {
 			$disk->delete($currentImageName);
 		}
 
