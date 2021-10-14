@@ -30,7 +30,7 @@ class TeamRequest extends FormRequest
             'country' => 'required',
             'logo_file' => 'sometimes',
             'team_members' => 'sometimes',
-            'description' => 'sometimes',
+            'description' => 'required',
         ];
     }
 

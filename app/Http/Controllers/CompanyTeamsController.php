@@ -105,12 +105,13 @@ class CompanyTeamsController extends Controller
 
     public function show($id, Request $request)
     {
+        $team = $request->user()->teams()->where('id', $id)->first();
+
         $apps = App::with(['products.countries', 'country', 'developer'])
+            ->where('team_id', $team->id)
             ->orderBy('updated_at', 'desc')
             ->get()
             ->groupBy('status');
-
-        $team = $request->user()->teams()->where('id', $id)->first();
 
         return view('templates.teams.show', [
             'approvedApps' => $apps['approved'] ?? [],
