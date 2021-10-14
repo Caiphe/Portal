@@ -300,26 +300,29 @@ Team
         </div>
     </div>
 
-    <div class="transfer-ownership-container" id="transfer-ownership">
+    @if(is_null($team->users))
+        {{---  Only show team transfer if team has members --}}
+        <div class="transfer-ownership-container" id="transfer-ownership">
             {{-- Transfer ownership container --}}
-        <div class="transfer-owner-ship-heading">
-            <h2>Transfer ownership</h2>
-            {{-- You can add non-active to make--}}
-        </div>
+            <div class="transfer-owner-ship-heading">
+                <h2>Transfer ownership</h2>
+                {{-- You can add non-active to make--}}
+            </div>
 
-        {{-- Transfer request --}}
+            {{-- Transfer request --}}
 
-        <div class="trasfer-container">
-            <h4>Transfer requests</h4>
-            <div class="site-text">You have been requested to be the new owner of this team. please choose if you would like to accept or revoke the request</div>
-            <div class="site-text">You are not the owner of this team, you cannot modify ownership of this team </div>
+            <div class="trasfer-container">
+                <h4>Transfer requests</h4>
+                <div class="site-text">You have been requested to be the new owner of this team. please choose if you would like to accept or revoke the request</div>
+                <div class="site-text">You are not the owner of this team, you cannot modify ownership of this team </div>
 
-            <div class="transfer-btn-block">
-                <button type="button" class="btn dark dark-accept">Accept request</button>
-                <button type="button" class="btn dark dark-revoked">Revoke request</button>
+                <div class="transfer-btn-block">
+                    <button type="button" class="btn dark dark-accept">Accept request</button>
+                    <button type="button" class="btn dark dark-revoked">Revoke request</button>
+                </div>
             </div>
         </div>
-    </div>
+    @endif
 
     <div class="column" id="app-index">
         <div class="row">
