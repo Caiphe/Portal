@@ -85,8 +85,8 @@
                 width: 105px;
                 border-radius: 0px 5px 5px 0px;
                 transition: all 0.3s ease-in-out;
-                pointer-events: none !important;
-                cursor: none !important;
+                pointer-events: none;
+                cursor: none;
 
                 &.active{
                     pointer-events: auto;
