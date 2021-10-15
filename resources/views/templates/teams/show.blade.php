@@ -259,35 +259,41 @@ Team
                             {{-- user action menu --}}
                             <div class="block-actions">
                                 <ul>
-                                    {{---  Uses the transfer endpoint--}}
-                                    <li>
-                                        <button
-                                            class="make-admin"
-                                            data-adminname="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
-                                            data-invite="">
-                                            Make administrator
-                                        </button>
-                                    </li>
-                                    {{---  Uses the invite endpoint--}}
-                                    <li>
-                                        <button
-                                            class="make-user"
-                                            data-username="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
-                                            data-useremail="{{ $teamUser->email }}"
-                                            data-teamid="{{ $team->id }}">
-                                            Make User
-                                        </button>
-                                    </li>
-                                    {{---  Uses the leave endpoint --}}
-                                    <li>
-                                        <button
-                                            class="user-delete"
-                                            data-usernamedelete="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
-                                            data-teamid="{{ $team->id }}"
-                                            data-teamuserid="{{ $user->id }}">
-                                            Delete
-                                        </button>
-                                    </li>
+                                    @if(!$teamUser->isOwnerOfTeam($team))
+                                        {{---  Uses the transfer endpoint--}}
+                                        <li>
+                                            <button
+                                                class="make-admin"
+                                                data-adminname="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
+                                                data-invite="">
+                                                Make administrator
+                                            </button>
+                                        </li>
+                                    @endif
+                                    @if($user->isOwnerOfTeam($team))
+                                        {{---  Uses the invite endpoint--}}
+                                        <li>
+                                            <button
+                                                class="make-user"
+                                                data-username="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
+                                                data-useremail="{{ $teamUser->email }}"
+                                                data-teamid="{{ $team->id }}">
+                                                Make User
+                                            </button>
+                                        </li>
+                                    @endif
+                                    @if($team->hasUser($user))
+                                        {{---  Uses the leave endpoint --}}
+                                        <li>
+                                            <button
+                                                class="user-delete"
+                                                data-usernamedelete="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
+                                                data-teamid="{{ $team->id }}"
+                                                data-teamuserid="{{ $user->id }}">
+                                                Delete
+                                            </button>
+                                        </li>
+                                    @endif
                                 </ul>
                             </div>
                             {{-- Block end --}}
