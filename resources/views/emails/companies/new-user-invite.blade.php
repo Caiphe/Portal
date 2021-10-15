@@ -1,14 +1,19 @@
 @component('mail::message')
-    # {{ $inviter->full_name }} has invited you to join {{ $team->name }} team.
+    # Update from MTN Developer Portal.
+
+    Hi {{ $invitee->first_name }}
 
     You have been invited to the **{{ $team->name }}** team.
 
-    To join {{ $team->name }}, click on the register button below to create your own account. Once registered you can accept the invitation from {{ $inviter->first_name }} by going to your profile and clicking on the accept button.
+    @component('mail::button', ['url' => route('teams.invite.accept', ['token' => $invitee->getTeamInvite($team)->accept_token])])
+        Accept Invite
+    @endcomponent
 
-    @component('mail::button', ['url' => route('register')])
-        Register
+    @component('mail::button', ['url' => route('teams.invite.deny', ['token' => $invitee->getTeamInvite($team)->deny_token])])
+        Denys Invite
     @endcomponent
 
     Thanks,<br>
     {{ config('app.name') }}
 @endcomponent
+s
