@@ -123,8 +123,10 @@ var owneshipTransferBanner = document.querySelector('.top-ownership-banner');
 /** Picking on the availability of this component */
 if (document.querySelector('.accept-transfer')) {
     var acceptTransferBtn = document.querySelector('.accept-transfer');
+    if(acceptTransferBtn.length > 0){
+        acceptTransferBtn.addEventListener('click', hideTransferBanner);
+    }
 
-    acceptTransferBtn.addEventListener('click', hideTransferBanner);
 }
 
 /** Picking on the availability of this component */
