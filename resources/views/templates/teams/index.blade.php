@@ -27,7 +27,7 @@
 
 @section('content')
     <x-heading heading="My teams" tags="Dashboard">
-        <a href="{{ route('teams.create') }}" class="button dark outline">Creare New</a>
+        <a href="{{ route('teams.create') }}" class="button dark outline">Create New</a>
     </x-heading>
 
     <div class="modal-container">

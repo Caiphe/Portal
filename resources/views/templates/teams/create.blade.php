@@ -42,7 +42,7 @@
             <p>Fortunately, it's very easy to create one. Let's begin by filling out your teams details.</p>
         </div>
 
-        <form id="form-create-team" method="POST" action="{{ route('teams.store') }}" novalidate>
+        <form id="form-create-team" method="POST" action="{{ route('teams.store') }}" enctype="multipart/form-data" novalidate>
 
             @csrf
 

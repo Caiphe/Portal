@@ -71,7 +71,8 @@ var logoFile = document.querySelector('.logo-file');
 var fileName = document.querySelector('.upload-file-name');
 var fileBtn = document.querySelector('.logo-add-icon');
 
-logoFile.addEventListener('change', function(){
+logoFile.addEventListener('change', chooseTeamPicture);
+function chooseTeamPicture() {
     var newFile = this.files[0].name.split('.');
     var extension = newFile[1];
     var filename = ''
@@ -79,4 +80,25 @@ logoFile.addEventListener('change', function(){
     else{filename = newFile[0] + '.'+ extension;}
     fileName.innerHTML = filename
     fileBtn.classList.add('active');
-});
+
+    var files = this.files;
+    var inputAccepts = this.getAttribute("accept");
+    var allowedTypes = {
+        "image/*": [
+            "image/jpeg",
+            "image/jpg",
+            "image/png"
+        ]
+    }
+
+    if (files.length > 1) {
+        return void alert("You can only add one profile picture");
+    }
+
+    if (allowedTypes[inputAccepts] !== undefined && allowedTypes[inputAccepts].indexOf(files[0].type) !== -1) {
+    console.log(allowedTypes);
+
+    } else {
+        addAlert("error", "The type of image you have chosen isn't supported. Please choose a jpg or png to upload");
+    }
+}
