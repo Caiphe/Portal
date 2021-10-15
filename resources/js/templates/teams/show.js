@@ -118,12 +118,21 @@ function checkedRadio(){
     }
 }
 
-var acceptTransferBtn = document.querySelector('.accept-transfer');
-var revokeTransferBtn = document.querySelector('.revoke-transfer');
 var owneshipTransferBanner = document.querySelector('.top-ownership-banner');
 
-acceptTransferBtn.addEventListener('click', hideTransferBanner);
-revokeTransferBtn.addEventListener('click', hideTransferBanner);
+/** Picking on the availability of this component */
+if (document.querySelector('.accept-transfer')) {
+    var acceptTransferBtn = document.querySelector('.accept-transfer');
+
+    acceptTransferBtn.addEventListener('click', hideTransferBanner);
+}
+
+/** Picking on the availability of this component */
+if (document.querySelector('.revoke-transfer')) {
+    var revokeTransferBtn = document.querySelector('.revoke-transfer');
+
+    revokeTransferBtn.addEventListener('click', hideTransferBanner);
+}
 
 function hideTransferBanner(){
     owneshipTransferBanner.classList.add('hide');
@@ -304,7 +313,7 @@ deleteUserActionBtn.addEventListener('click', function(event){
 
     event.preventDefault();
 
-    var url = "{{ route('team.remove.user') }}";
+    var url = "/teams/remove";
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', url);
@@ -357,27 +366,27 @@ teamMateInvitEmail.addEventListener('keyup', function(){
 });
 
 teamInviteUserBtn.addEventListener('click', function(event){
-
+    var url = "/teams/invite";
+    var xhr = new XMLHttpRequest();
     var data = {
         type: document.querySelector('input[name=role_name]:checked').value,
         invitee: document.querySelector('.teammate-email').value,
-        team_id: "{{ $team['id'] }}"
+        team_id: this.dataset.teamid
     };
 
     event.preventDefault();
 
-    var url = "{{ route('team.invite.user') }}";
-
-    var xhr = new XMLHttpRequest();
     xhr.open('POST', url);
-    xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+
+    xhr.setRequestHeader('X-CSRF-TOKEN', this.dataset.csrf);
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
     xhr.send(JSON.stringify(data));
 
     xhr.onload = function() {
         if (xhr.status === 200) {
-            addAlert('success', ['User was successfully invited to the team.', 'Please wait meanwhile the page refreshes.']);
+            addAlert('success', 'User was successfully invited to the team.');
         } else {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
