@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Mpociot\Teamwork\Facades\Teamwork;
 use Mpociot\Teamwork\Events\UserInvitedToTeam;
+use Mpociot\Teamwork\TeamInvite;
 
 /**
  * Class CompanyTeamsController
@@ -85,9 +86,21 @@ class CompanyTeamsController extends Controller
         $team = Team::find($data['team_id']);
         $user = User::where('email', '=', $data['invitee'])->first();
 
-        if (is_null($user)) {
+        if (is_null($user) && !is_null($team)) {
             $teamOwner = User::find($team->owner_id);
+
+            $invite = new TeamInvite();
+
+            $invite->user_id = $teamOwner->id;
+            $invite->team_id = $team->id;
+            $invite->type = 'invite';
+            $invite->email = $data['invitee'];
+            $invite->accept_token = md5(uniqid(microtime()));
+            $invite->deny_token = md5(uniqid(microtime()));
+            $invite->save();
+
             Mail::to($teamOwner->email)->send(new InviteExternalUser($team, $data['invitee']));
+
             return response()->json(['success' => true]);
         } elseif($user->exists) {
             Teamwork::inviteToTeam( $user->email, $team, function( $invite ) use($user) {

@@ -44,8 +44,8 @@ Team
         <p class="teammate-text">Invite additional team members or other users</p>
         <form class="form-teammate">
             <div class="form-group-container">
-                <input type="text" class="form-control teammate-email" placeholder="Add email to invite users" />
-                <button type="" class="invite-btn">INVITE</button>
+                <input type="text" class="form-control teammate-email" placeholder="Add email to invite users"/>
+                <button type="" class="invite-btn" data-teamid="{{ $team->id }}" data-csrf="{{ csrf_token() }}">INVITE</button>
             </div>
             <div class="radio-container">
                 <x-radio-round id="user-radio" name="role_name" value="Administrator">Administrator</x-radio-round>
