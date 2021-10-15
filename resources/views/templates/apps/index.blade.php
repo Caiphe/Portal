@@ -32,7 +32,7 @@
         @svg('info', '#fff')
         <div class="message-container">
             {{-- The link to be changed to dynamic --}}
-            You have been requested to be the new owner of PlusNarrative. Please visit your <a href="/team/3">team's dashboard</a>
+            You have been requested to be the new owner of PlusNarrative. Please visit your <a href="/teams/{{ $ownershipInvite->team_id }}/team">team's dashboard</a>
         </div>
         <button class="close-banner">@svg('close', '#fff')</button>
     </div>

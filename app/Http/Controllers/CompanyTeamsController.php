@@ -200,4 +200,40 @@ class CompanyTeamsController extends Controller
             'countries' => $countries,
         ]);
     }
+
+    public function accept(Request $request)
+    {
+        $invite = Teamwork::getInviteFromAcceptToken( $request->get('token') );
+
+        $accepted = false;
+
+        if( $invite ) {
+            Teamwork::acceptInvite( $invite );
+            $accepted = true;
+        }
+
+        if ($accepted) {
+            return redirect()->route('teams.listing')->with('success:Invite successfully accepted.');
+        } else {
+            return redirect()->route('user.profile')->with('error:Team invite could not be accepted. Contact administrator.');
+        }
+    }
+
+    public function deny(Request $request)
+    {
+        $invite = Teamwork::getInviteFromDenyToken( $request->get('token') );
+
+        $denied = false;
+
+        if( $invite ) {
+            Teamwork::denyInvite( $invite );
+            $denied = true;
+        }
+
+        if ($denied) {
+            return redirect()->route('teams.listing')->with('success:Invite successfully denied.');
+        } else {
+            return redirect()->route('user.profile')->with('error:Team invite could not be denied. Contact administrator.');
+        }
+    }
 }

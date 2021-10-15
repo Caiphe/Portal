@@ -5,8 +5,12 @@
 
     You have been invited to the **{{ $team->name }}** team.
 
-    @component('mail::button', ['url' => route('register')])
+    @component('mail::button', ['url' => route('teams.invite.accept', ['token' => $user->getTeamInvite($team)->accept_token])])
         Accept Invite
+    @endcomponent
+
+    @component('mail::button', ['url' => route('teams.invite.deny', ['token' => $user->getTeamInvite($team)->deny_token])])
+        Denys Invite
     @endcomponent
 
     Thanks,<br>
