@@ -1,6 +1,8 @@
 @props(['app', 'appStagingProducts', 'details', 'type', 'attr', 'countries'])
 
 @php
+
+    $user = auth()->user();
     $isAdminPage = Request::is('admin/*');
     $credentials = $app['credentials'];
     [$sandboxProducts, $prodProducts] = $app->getProductsByCredentials();
@@ -37,14 +39,14 @@
 
     {{-- Creatorn column--}}
     <div class="column flexed-column">
-        <div class="creator-thumbail" style="background-image: url('/images/user-thumbnail.jpg')"></div>
-        <div class="creator-name">Steve Hash</div>
+        <div class="creator-thumbail" style="background-image: url({{ !isset($app['team_id']) ? $user->profile_picture : \App\Team::find($app['team_id'])->logo }})"></div>
+        <div class="creator-name">{{ !isset($app['team_id']) ? $user->full_name : \App\Team::find($app['team_id'])->name }}</div>
     </div>
 
     <div class="column">
         {{ date('Y-m-d', strtotime($app['created_at'])) }}
     </div>
-    
+
     <div class="column">
         <button class="actions"></button>
         <button class="toggle-app-button toggle-app">@svg('chevron-down', '#000000')</button>
@@ -55,7 +57,7 @@
         <div class="mt-2">
 
             <div class="detail-left">
-               
+
                 <div class="detail-row cols no-wrap">
                     <div class="detail-item"><strong>Production key</strong></div>
                     <div class="detail-item key">{{ $prodProducts['credentials']['consumerKey'] }}</div>
@@ -105,12 +107,12 @@
                     <div class="detail-item"><strong>Key issued:</strong></div>
                     <div class="detail-item">{{ date('d M Y H:i:s', substr(end($credentials)['issuedAt'], 0, 10)) }}</div>
                 </div>
-               
+
                 <div class="detail-row cols">
                     <div class="detail-item"><strong>Expires:</strong></div>
                     <div class="detail-item">Never</div>
                 </div>
-              
+
             </div>
         </div>
         @endif
@@ -134,7 +136,7 @@
         @if(!$isAdminPage)
         <div class="mt-2">
             <div class="detail-left">
-              
+
                 <div class="detail-row cols no-wrap">
                     <div class="detail-item"><strong>Consumer key:</strong></div>
                     <div class="detail-item key">{{ $prodProducts['credentials']['consumerKey'] }}</div>

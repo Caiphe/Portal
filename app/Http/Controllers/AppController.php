@@ -18,6 +18,7 @@ use App\Mail\UpdateApp;
 use App\Services\ApigeeService;
 use App\Services\Kyc\KycService;
 use App\Services\ProductLocationService;
+use DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class AppController extends Controller
     {
         $user = auth()->user();
 
-        $ownershipInvite = \DB::table('team_invites')->where([
+        $ownershipInvite = DB::table('team_invites')->where([
             'email' => $user->email,
             'type' => 'ownership'
         ])->first();
@@ -141,7 +142,7 @@ class AppController extends Controller
         ]);
 
         if ($teamExists) {
-            $app->update(['team_id'], $team->id);
+            $app->update(['team_id' => $team->id]);
             event(new TeamAppCreated($team));
         }
 

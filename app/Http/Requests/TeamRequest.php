@@ -36,7 +36,7 @@ class TeamRequest extends FormRequest
 
     /**
      * Prepare the data for validation.
-     *
+     *s
      * @return void
      */
     protected function prepareForValidation()
@@ -47,7 +47,6 @@ class TeamRequest extends FormRequest
             'contact' => filter_var($this->contact, FILTER_SANITIZE_STRING),
             'country' => filter_var($this->country, FILTER_SANITIZE_EMAIL),
             'logo_file' => filter_var($this->logo_file, FILTER_SANITIZE_STRING),
-            'team_members' => filter_var($this->team_members, FILTER_SANITIZE_STRING),
             'description' => filter_var($this->description, FILTER_SANITIZE_STRING),
         ]);
     }

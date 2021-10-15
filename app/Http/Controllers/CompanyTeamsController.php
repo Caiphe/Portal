@@ -28,12 +28,6 @@ class CompanyTeamsController extends Controller
 {
     public function index(Request $request)
     {
-        $user = auth()->user();
-
-        if ($user->teams) {
-            return redirect()->route('teams.create');
-        }
-
         $collectedTeams = [];
 
         foreach($request->user()->teams as $team){
@@ -140,9 +134,9 @@ class CompanyTeamsController extends Controller
 
         $teamData['logo'] = '/storage/profile/profile-' . rand(1, 32) . '.svg';
 
-        if (isset($validated['logo-file']) && !is_string($validated['logo-file'])) {
-            $fileName =  'logo.' . $request->file('logo-file')->extension();
-            $path = $request->file('logo-file')->storeAs(
+        if (isset($validated['logo_file']) && !is_string($validated['logo_file'])) {
+            $fileName =  'logo.' . $request->file('logo_file')->extension();
+            $path = $request->file('logo_file')->storeAs(
                 "public/team/{$user->username}",
                 $fileName
             );
@@ -159,10 +153,12 @@ class CompanyTeamsController extends Controller
             'owner_id' => $user->getKey()
         ]);
 
+        $user->attachTeam($team);
+
         if (!empty($data['team_members'])) {
             foreach ($data['team_members'] as $emailAddress) {
-                $user = User::where('email', '=', $emailAddress)->first();
-                if (!$user->exists()) {
+                $user = User::where('email', $emailAddress)->first();
+                if (is_null($user)) {
                     Mail::to($emailAddress)->send(new InviteExternalUser($team, $emailAddress));
                 } else {
                     Teamwork::inviteToTeam( $user->email, $team);
@@ -170,11 +166,11 @@ class CompanyTeamsController extends Controller
             }
         }
 
-        if ($team->exists) {
-            return redirect()->route('teams.listing')->with('alert', "success:Team successfully created!.");
-        } else {
-            return redirect()->back()->with('alert', "error:Could not create Team. Please try again.");
+        if (strpos(url()->previous(), 'teams/create') !== false) {
+            return redirect()->route('teams.listing')->with('alert', "success:{$team->name} has been created");
         }
+
+        return redirect()->back()->with('alert', "success:{$team->name} has been created");
     }
 
     public function create(Request $request)

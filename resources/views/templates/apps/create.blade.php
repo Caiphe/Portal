@@ -212,6 +212,7 @@
         var selectedDataObject = this.querySelector('.select-data');
         default_option.innerHTML = selectedDataObject.innerHTML;
         inputData.setAttribute('value', selectedDataObject.dataset.createdby);
+        inputData.setAttribute('data-teamid', selectedDataObject.dataset.teamid);
         select_wrap.classList.remove('active');
     }
 
@@ -398,7 +399,7 @@
             description: elements['description'].value,
             country: document.querySelector('.country-checkbox:checked').dataset.location,
             products: [],
-            team_id: document.querySelector('.select-data').dataset.teamid
+            team_id: inputData.dataset.teamid
         };
         var selectedProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
         var button = document.getElementById('create');
