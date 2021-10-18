@@ -363,7 +363,7 @@ Team
                         </div>
 
                         <div class="column-heading">
-                            <p>Creator @svg('arrow-down' ,'#cdcdcd')</p>
+                            <p>Owner @svg('arrow-down' ,'#cdcdcd')</p>
                         </div>
 
                         <div class="column-heading">
@@ -417,7 +417,7 @@ Team
                         </div>
 
                         <div class="column-heading">
-                            <p>Creator @svg('arrow-down' ,'#cdcdcd')</p>
+                            <p>Owner @svg('arrow-down' ,'#cdcdcd')</p>
                         </div>
 
                         <div class="column-heading">
