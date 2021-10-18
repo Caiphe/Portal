@@ -2,6 +2,9 @@
 
     $user = auth()->user();
     $userTeamInvite = $user->getTeamInvite($team);
+    $country = \App\Country::where('name', $team->country)->first();
+    $countryCode = $country->code;
+
 @endphp
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/teams/show.css') }}">
@@ -221,7 +224,7 @@ Team
 
         <div class="detail-row cols no-wrap">
             <div class="detail-item"><strong>Country</strong></div>
-            <div class="detail-item detail-item-description">{{ $team->country }} </div>
+            <div class="detail-item detail-item-description">@svg($countryCode, '#000000', 'images/locations')</div>
         </div>
     </div>
     <div class="column">
