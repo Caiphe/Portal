@@ -31,8 +31,8 @@ Team
 @endsection
 
 @section('content')
-<x-heading heading="Teams" tags="Dashboard">
-    <a href="/profile" class="button dark outline">Edit profile</a>
+<x-heading heading="Team" tags="Dashboard">
+    <a href="/profile" class="button dark outline">Edit team profile</a>
 </x-heading>
 
 {{-- Edit teammate --}}
@@ -101,7 +101,8 @@ Team
         <p class="teammate-text">Are you sure you want to remove this user?</p>
         <p class="user-name user-delete-name"></p>
     {{-- Form to confirm the users removal --}}
-        <form class="form-delete-user">
+        <form class="form-delete-user" method="post">
+            @csrf()
             <input type="hidden" value="" name="team_id" class="hidden-team-id"/>
             <input type="hidden" value="" name="team_user_id" class="hidden-team-user-id"/>
             <button type="button" class="btn primary mr-10 cancel-remove-user-btn">CANCEL</button>
@@ -194,7 +195,7 @@ Team
     {{-- @endif --}}
 
     <div class="header-block team-name-logo">
-        {{-- To replace with the comspany logo --}}
+        {{-- To replace with the team profile picture --}}
         <div class="team-name-logo-container">
             <div class="team-logo"  style="background-image: url({{ $team->logo }})"></div>
             <h2>{{  $team->name }}</h2>
@@ -203,8 +204,8 @@ Team
         @if ($user->isTeamOwner($team) && $team->users->count() > 1)
             <button class="btn dark make-owner">Select a new owner</button>
         @endif
-
     </div>
+
     <h5>Team bio</h5>
     <p>{{ $team->description }}</p>
     <div class="detail-left team-detail-left">
@@ -233,10 +234,10 @@ Team
     <div class="main-team-container">
         <div class="column team-members-list">
             <table class="team-members">
-                <tr class="table-title" >
+                <tr class="table-title">
                     <td class="bold">Member name @svg('arrow-down' ,'#cdcdcd')</td>
-                    <td class="bold">Role @svg('arrow-down' ,'#cdcdcd')</td>
-                    <td class="bold">2FA Status @svg('arrow-down' ,'#cdcdcd')</td>
+                    <td class="bold bold-role">Role @svg('arrow-down' ,'#cdcdcd')</td>
+                    <td class="bold bold-2fa">2FA Status @svg('arrow-down' ,'#cdcdcd')</td>
                 </tr>
 
                 @foreach($team->users as $teamUser)
@@ -266,7 +267,7 @@ Team
                                                 class="make-admin"
                                                 data-adminname="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
                                                 data-invite="">
-                                                Make administrator
+                                                Make Owner
                                             </button>
                                         </li>
                                     @endif
