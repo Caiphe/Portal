@@ -9,13 +9,13 @@ use App\Country;
 
 use App\Mail\Invites\RemoveUser;
 use App\Mail\Invites\InviteExternalUser;
-
 use App\Http\Requests\TeamRequest;
 use App\Http\Requests\Teams\InviteRequest;
 use App\Http\Requests\Teams\LeaveTeamRequest;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Validator;
 use Mpociot\Teamwork\Facades\Teamwork;
 use Mpociot\Teamwork\Events\UserInvitedToTeam;
 use Mpociot\Teamwork\TeamInvite;
@@ -235,5 +235,54 @@ class CompanyTeamsController extends Controller
         } else {
             return redirect()->route('user.profile')->with('error:Team invite could not be denied. Contact administrator.');
         }
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = $request->user();
+        $user->load(['responsibleCountries']);
+
+        $countries = Country::whereIn('code', Country::all()->pluck('code'))->orderBy('name')->pluck('name', 'code');
+
+        if ($request->post() && $request->get('action') === 'update') {
+
+            $validator = \Validator::make($request->all(), [
+                'action' => 'required',
+                'name' => 'required',
+                'url' => 'required',
+                'contact' => 'required',
+                'country' => 'required',
+                'description' => 'required',
+            ]);
+
+            if (!$validator->fails()) {
+
+                $team = Team::find($id);
+
+                if ($request->has('team_members')) {
+                    foreach ($request->get('team_members') as $emailAddress) {
+                        $user = User::where('email', $emailAddress)->first();
+                        if (is_null($user)) {
+                            Mail::to($emailAddress)->send(new InviteExternalUser($team, $emailAddress));
+                        } else {
+                            Teamwork::inviteToTeam( $user->email, $team);
+                        }
+                    }
+                }
+                
+                $team->update($request->only(['name', 'url', 'contact', 'country', 'description',]));
+
+                return redirect()->route('team.show', $team->id)
+                    ->with('success: Your team was successfully updated.');
+            } else {
+                return redirect()->back()
+                    ->with('error: Your team could not be successfully updated.');
+            }
+        }
+
+        return view('templates.teams.update', [
+            'countries' => $countries,
+            'team' => Team::find($id),
+        ]);
     }
 }
