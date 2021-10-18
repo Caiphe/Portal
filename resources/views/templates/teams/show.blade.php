@@ -221,7 +221,7 @@ Team
 
         <div class="detail-row cols no-wrap">
             <div class="detail-item"><strong>Country</strong></div>
-            <div class="detail-item detail-item-description">{{ $team->country }} </div>
+            <div class="detail-item detail-item-description">{{ $team->country }}</div>
         </div>
     </div>
     <div class="column">
