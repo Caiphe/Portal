@@ -32,7 +32,7 @@ Team
 
 @section('content')
 <x-heading heading="Team" tags="Dashboard">
-    <a href="{{ route('teams.update', $team->id) }}" class="button dark outline">Edit team profile</a>
+    <a href="{{ route('teams.edit', $team->id) }}" class="button dark outline">Edit team profile</a>
 </x-heading>
 
 {{-- Edit teammate --}}

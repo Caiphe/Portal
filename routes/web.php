@@ -48,7 +48,8 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
     Route::get('teams', 'CompanyTeamsController@index')->name('teams.listing');
     Route::get('teams/{id}/team', 'CompanyTeamsController@show')->name('team.show');
     Route::get('teams/create', 'CompanyTeamsController@create')->name('teams.create');
-    Route::any('teams/{id}/update', 'CompanyTeamsController@update')->name('teams.update');
+    Route::get('teams/{id}/edit', 'CompanyTeamsController@edit')->name('teams.edit');
+    Route::post('teams/{id}/update', 'CompanyTeamsController@update')->name('teams.update');
     Route::post('teams/store', 'CompanyTeamsController@store')->name('teams.store');
     Route::post('teams/leave', 'CompanyTeamsController@leave')->name('teams.leave.team');
     Route::post('teams/remove', 'CompanyTeamsController@remove')->name('team.remove.user');

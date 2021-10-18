@@ -33,7 +33,7 @@
 
     <div class="content">
 
-        <form id="form-create-team" method="POST" action="{{ route('teams.update', $team->id) }}" enctype="multipart/form-data" novalidate>
+        <form id="form-create-team" method="POST" action="{{ route('teams.update', $team->id) }}" enctype="multipart/form-data">
 
             @csrf
 
@@ -71,14 +71,14 @@
                 <label for="lfile-input">Upload team logo</label>
                 <label for="file-input" class="logo-file-container">
                     <span class="upload-file-name">Upload team logo</span>
-                    <input type="file" name="logo_file" class="logo-file" id="logo-file" placeholder="Upload team logo" maxlength="100"  accept="image/*" required>
+                    <input type="file" name="logo_file" class="logo-file" id="logo-file" placeholder="Upload team logo" maxlength="100"  accept="image/*">
                     <button type="button" class="logo-add-icon">@svg('plus', '#fff')</button>
                 </label>
             </div>
 
             <div class="group">
                 <label for="invitations">Invite colleagues or other users</label>
-                <input type="email" class="invitation-field" name="invitations" id="invitations" placeholder="Add email to invite other users" maxlength="100" required>
+                <input type="email" class="invitation-field" name="invitations" id="invitations" placeholder="Add email to invite other users" maxlength="100">
                 <button class="invite-btn" type="button">INVITE</button>
                 <span class="error-email">Valid Email required !</span>
                 <div class="invite-tags" id="invite-list">
