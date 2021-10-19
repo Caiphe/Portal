@@ -110,18 +110,7 @@ class CompanyTeamsController extends Controller
         $user = User::where('email', '=', $data['invitee'])->first();
 
         if (is_null($user) && !is_null($team)) {
-            $teamOwner = User::find($team->owner_id);
-
-            $invite = new TeamInvite();
-
-            $invite->user_id = $teamOwner->id;
-            $invite->team_id = $team->id;
-            $invite->type = 'invite';
-            $invite->email = $data['invitee'];
-            $invite->accept_token = md5(uniqid(microtime()));
-            $invite->deny_token = md5(uniqid(microtime()));
-            $invite->save();
-
+            $this->createExternalTeamInvite($team, $emailAddress);
             Mail::to($teamOwner->email)->send(new InviteExternalUser($team, $data['invitee']));
 
             return response()->json(['success' => true]);
@@ -168,15 +157,10 @@ class CompanyTeamsController extends Controller
             $teamData['country'] = Country::where('code', $validated['country'])->value('name');
         }
 
-        $teamData['logo'] = '/storage/profile/profile-' . rand(1, 32) . '.svg';
-
         if (isset($validated['logo_file']) && !is_string($validated['logo_file'])) {
-            $fileName =  'logo.' . $request->file('logo_file')->extension();
-            $path = $request->file('logo_file')->storeAs(
-                "public/team/{$user->username}",
-                $fileName
-            );
-            $teamData['logo'] = str_replace('public', '/storage', $path);
+                $fileName =  md5(uniqid()) . '.' . $request->file('logo_file')->extension();
+                $path = $request->file('logo_file')->storeAs("public/team/", $fileName);
+                $teamData['logo'] = str_replace('public', '/storage', $path);
         }
 
         $team = Team::create([
@@ -194,7 +178,8 @@ class CompanyTeamsController extends Controller
         if (!empty($data['team_members'])) {
             foreach ($data['team_members'] as $emailAddress) {
                 $user = User::where('email', $emailAddress)->first();
-                if (is_null($user)) {
+                if (is_null($user) && !is_null($team)) {
+                    $this->createExternalTeamInvite($team, $emailAddress);
                     Mail::to($emailAddress)->send(new InviteExternalUser($team, $emailAddress));
                 } else {
                     Teamwork::inviteToTeam( $user->email, $team);
@@ -305,7 +290,7 @@ class CompanyTeamsController extends Controller
             if ($request->has('team_members')) {
                 foreach ($request->get('team_members') as $emailAddress) {
                     $user = User::where('email', $emailAddress)->first();
-                    if (is_null($user)) {
+                    if (is_null($user) && !is_null($team)) {
                         Mail::to($emailAddress)->send(new InviteExternalUser($team, $emailAddress));
                     } else {
                         Teamwork::inviteToTeam( $user->email, $team);
@@ -319,6 +304,12 @@ class CompanyTeamsController extends Controller
                 $data['country'] = Country::where('code', $request->get('country'))->value('name');
             }
 
+            if ($request->has('logo_file')) {
+                $fileName =  md5(uniqid()) . '.' . $request->file('logo_file')->extension();
+                $path = $request->file('logo_file')->storeAs("public/team/", $fileName);
+                $data['logo'] = str_replace('public', '/storage', $path);
+            }
+
             $team->update($data);
 
             return redirect()->route('team.show', $team->id)
@@ -327,5 +318,20 @@ class CompanyTeamsController extends Controller
             return redirect()->back()
                 ->with('error: Your team could not be successfully updated.');
         }
+    }
+
+    private function createExternalTeamInvite($team, $email)
+    {
+        $teamOwner = User::find($team->owner_id);
+
+        $invite = new TeamInvite();
+
+        $invite->user_id = $teamOwner->id;
+        $invite->team_id = $team->id;
+        $invite->type = 'invite';
+        $invite->email = $email;
+        $invite->accept_token = md5(uniqid(microtime()));
+        $invite->deny_token = md5(uniqid(microtime()));
+        $invite->save();
     }
 }
