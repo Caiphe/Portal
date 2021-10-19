@@ -761,10 +761,18 @@ button{
         background-color: $red;
         border-radius: 50%;
         margin-right: 15px;
+
+        @media(max-width: 768px){
+            margin-top: 7px;
+        }
     }
 
     h2{
         margin-top: 8px;
+
+        @media(max-width: 768px){
+            width: 70%;
+        }
     }
 
     button{
@@ -971,8 +979,11 @@ button{
     pointer-events: none;
     z-index: 0;
     padding: 0px;
-    height: 0px !important;
+    height: 0px;
 
+    @media (max-width: 768px) {
+        display: block;
+    }
 
     &.show{
         height: 0px;
@@ -980,7 +991,17 @@ button{
         opacity: 4;
         height: 75px;
         z-index: 2;
-        padding: 15px;
+
+        @media(max-width: 768px){
+            height: auto;
+            padding: 12px;
+            text-align: center;
+
+            button{
+                margin-bottom: 10px;
+            }
+
+        }
     }
 
     .message-container{
