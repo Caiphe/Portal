@@ -291,7 +291,7 @@ Team
                                             </button>
                                         </li>
                                     @endif
-                                    @if($team->hasUser($user) && $user->email === $teamUser->email)
+                                    @if($team->hasUser($user))
                                         {{---  Uses the leave endpoint --}}
                                         <li>
                                             <button
