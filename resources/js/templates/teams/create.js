@@ -102,3 +102,56 @@ function chooseTeamPicture() {
         addAlert("error", "The type of image you have chosen isn't supported. Please choose a jpg or png to upload");
     }
 }
+
+document.querySelector('.accept-team-invite').addEventListener('click', function (event){
+    var data = {
+        token: this.dataset.invitetoken,
+        csrftoken: this.dataset.csrftoken
+    };
+
+    handleTimeInvite('/teams/accept', data, event);
+});
+
+document.querySelector('.reject-team-invite').addEventListener('click', function (event){
+    var data = {
+        token: this.dataset.invitetoken,
+        csrftoken: this.dataset.csrftoken
+    };
+
+    handleTimeInvite('/teams/reject', data, event);
+});
+
+function handleTimeInvite(url, data, event) {
+    var xhr = new XMLHttpRequest();
+
+    event.preventDefault();
+
+    xhr.open('POST', url);
+
+    xhr.setRequestHeader('X-CSRF-TOKEN', data.csrftoken);
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+    xhr.send(JSON.stringify(data));
+
+    addLoading('Handling team invite response.');
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            window.reload();
+        } else {
+            var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+            if(result.errors) {
+                result.message = [];
+                for(var error in result.errors){
+                    result.message.push(result.errors[error]);
+                }
+            }
+
+            addAlert('error', result.message || 'Sorry there was a problem handling team invitation. Please try again.');
+        }
+
+        removeLoading();
+    };
+}

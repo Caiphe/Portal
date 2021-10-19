@@ -31,6 +31,8 @@ Update profile
 @section("content")
     <x-heading heading="Profile"/>
 
+    <!--- Add team invite banner -->
+
     <x-twofa-warning class="tall"></x-twofa-warning>
 
     <div class="content" id="profile">

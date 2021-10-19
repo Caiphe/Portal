@@ -15,7 +15,6 @@ use App\Http\Requests\Teams\LeaveTeamRequest;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Validation\Validator;
 use Mpociot\Teamwork\Facades\Teamwork;
 use Mpociot\Teamwork\Events\UserInvitedToTeam;
 use Mpociot\Teamwork\TeamInvite;
@@ -42,9 +41,13 @@ class CompanyTeamsController extends Controller
             ];
         }
 
-        return view('templates.teams.index', [
-            'teams' => $collectedTeams,
-        ]);
+        if (empty($collectedTeams)) {
+            return redirect()->route('teams.create');
+        } else {
+            return view('templates.teams.index', [
+                'teams' => $collectedTeams,
+            ]);
+        }
     }
 
     public function leave(LeaveTeamRequest $teamRequest)
@@ -77,6 +80,26 @@ class CompanyTeamsController extends Controller
         }
 
         return response()->json(['success' => false]);
+    }
+
+    public function ownership(InviteRequest $inviteRequest)
+    {
+        $data = $inviteRequest->validated();
+
+        $team = Team::find($data['team_id']);
+        $user = User::where('email', '=', $data['invitee'])->first();
+
+        $invite = new TeamInvite();
+
+        $invite->user_id = $user->id;
+        $invite->team_id = $team->id;
+        $invite->type = 'ownership';
+        $invite->email = $data['invitee'];
+        $invite->accept_token = md5(uniqid(microtime()));
+        $invite->deny_token = md5(uniqid(microtime()));
+        $invite->save();
+
+        return response()->json(['success' => true]);
     }
 
     public function invite(InviteRequest $inviteRequest)
@@ -193,11 +216,18 @@ class CompanyTeamsController extends Controller
 
         $countries = Country::whereIn('code', Country::all()->pluck('code'))->orderBy('name')->pluck('name', 'code');
 
+        $teamInvite = TeamInvite::where('email', $user->email)
+            ->first();
+
+        $team = Team::find($teamInvite->team_id);
+
         return view('templates.teams.create', [
             'colleagues' => User::all()->pluck('email'),
             'userOwnsTeam' => !is_null($user->current_team_id),
             'hasTeams' => $user->teams()->count() > 0,
+            'teamInvite' => $teamInvite,
             'countries' => $countries,
+            'team' => $team,
         ]);
     }
 
@@ -205,35 +235,39 @@ class CompanyTeamsController extends Controller
     {
         $invite = Teamwork::getInviteFromAcceptToken( $request->get('token') );
 
-        $accepted = false;
+        if( $invite->type === 'ownership') {
+            $team = Team::find($invite->team_id);
 
-        if( $invite ) {
+            $teamOwner = User::where('email', $team->owner->email)->first();
+            $newTeamOwner = User::where('email', $invite->email)->first();
+
+            $teamOwner->detach($team);
+            $newTeamOwner->switchTeam($team);
+
             Teamwork::acceptInvite( $invite );
-            $accepted = true;
+        }else{
+            Teamwork::acceptInvite( $invite );
         }
 
-        if ($accepted) {
+        if (!$invite->exists) {
             return redirect()->route('teams.listing')->with('success:Invite successfully accepted.');
         } else {
-            return redirect()->route('user.profile')->with('error:Team invite could not be accepted. Contact administrator.');
+            return redirect()->route('teams.listing')->with('error:Team invite could not be accepted. Contact administrator.');
         }
     }
 
-    public function deny(Request $request)
+    public function reject(Request $request)
     {
         $invite = Teamwork::getInviteFromDenyToken( $request->get('token') );
 
-        $denied = false;
-
         if( $invite ) {
             Teamwork::denyInvite( $invite );
-            $denied = true;
         }
 
-        if ($denied) {
+        if (!$invite->exists) {
             return redirect()->route('teams.listing')->with('success:Invite successfully denied.');
         } else {
-            return redirect()->route('user.profile')->with('error:Team invite could not be denied. Contact administrator.');
+            return redirect()->route('teams.listing')->with('error:Team invite could not be denied. Contact administrator.');
         }
     }
 

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use App\Services\TwofaService;
 use Google2FA;
+use Mpociot\Teamwork\TeamInvite;
 
 class UserController extends Controller
 {
@@ -30,12 +31,16 @@ class UserController extends Controller
 			->get()
 			->implode('locations', ',');
 
+        $teamInvite = TeamInvite::where('email', $user->email)
+            ->first();
+
 		return view('templates.user.show', [
 			'user' => $user,
 			'userLocations' => $user->countries->pluck('code')->toArray(),
 			'locations' => array_unique(explode(',', $productLocations)),
 			'key' => $key,
 			'inlineUrl' => $inlineUrl,
+            'teamInvite' => $teamInvite,
 		]);
 	}
 

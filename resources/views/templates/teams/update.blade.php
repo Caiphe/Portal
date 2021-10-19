@@ -29,6 +29,7 @@
 @section('content')
 
     <x-heading heading="My team" tags="Dashboard"></x-heading>
+
     <x-twofa-warning class="tall"></x-twofa-warning>
 
     <div class="content">

@@ -44,7 +44,7 @@
     </div>
 
     <div class="column">
-        {{ date('Y-m-d', strtotime($app['created_at'])) }}
+        {{ \Carbon\Carbon::parse($app['created_at'])->format('d M Y') }}
     </div>
 
     <div class="column">

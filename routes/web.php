@@ -55,16 +55,8 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
     Route::post('teams/remove', 'CompanyTeamsController@remove')->name('team.remove.user');
     Route::post('teams/invite', 'CompanyTeamsController@invite')->name('teams.invite');
     Route::any('teams/accept', 'CompanyTeamsController@accept')->name('teams.invite.accept');
-    Route::any('teams/deny', 'CompanyTeamsController@deny')->name('teams.invite.deny');
-
-    Route::post('teams/team/invite', 'Teams\InvitesController@team')->name('teams.invite.member');
-    Route::post('teams/team/invite/resend', 'Teams\InvitesController@team')->name('teams.invite.resend');
-
-    Route::post('teams/ownership/select', 'Teams\OwnershipsController@select')->name('teams.members.select');
-
-    Route::post('teams/ownership/transfer', 'Teams\OwnershipsController@team')->name('teams.ownership.transfer');
-    Route::post('teams/ownership/accept', 'Teams\OwnershipsController@accept')->name('teams.ownership.accept');
-    Route::post('teams/ownership/revoke', 'Teams\OwnershipsController@revoke')->name('teams.ownership.revoke');
+    Route::any('teams/reject', 'CompanyTeamsController@deny')->name('teams.invite.deny');
+    Route::any('teams/ownership', 'CompanyTeamsController@ownership')->name('teams.ownership.invite');
 });
 
 Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa', 'can:view-admin'])->group(function () {

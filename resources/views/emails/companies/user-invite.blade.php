@@ -10,7 +10,7 @@
     @endcomponent
 
     @component('mail::button', ['url' => route('teams.invite.deny', ['token' => $user->getTeamInvite($team)->deny_token])])
-        Denys Invite
+        Reject Invite
     @endcomponent
 
     Thanks,<br>

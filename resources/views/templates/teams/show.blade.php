@@ -2,6 +2,7 @@
 
     $user = auth()->user();
     $userTeamInvite = $user->getTeamInvite($team);
+    $userTeamOwnershipInvite = $user->getTeamInvite($team, 'ownership');
     $country = \App\Country::where('name', $team->country)->first();
     $countryCode = $country->code;
 
@@ -66,12 +67,12 @@ Team
     <div class="admin-overlay-container"></div>
     <div class="add-teammate-block">
         <button class="admin-close-modal">@svg('close-popup', '#000')</button>
-        <h2 class="team-head">Make Admin</h2>
-        <p class="teammate-text">Would you like change this user's level of access to <strong>administrator</strong> ?</p>
+        <h2 class="team-head">Make Owner</h2>
+        <p class="teammate-text">Would you like to make this user a new <strong>owner</strong> of this team?</p>
         <p class="admin-user-name"></p>
         <form class="form-delete-user">
             <button type="button" class="btn primary mr-10 make-admin-cancel-btn">CANCEL</button>
-            <button type="button" class="btn dark admin-removal-btn">REMOVE</button>
+            <button type="button" class="btn dark admin-removal-btn">Transfer Ownership</button>
         </form>
     </div>
 </div>
@@ -123,7 +124,7 @@ Team
 
         <div class="scrollable-users-container">
             <ul class="list-users-container">
-            @if (!$team->users->isEmpty())
+            @if ($team->users)
                 @foreach($team->users as $user)
                     @if(!$user->isTeamOwner())
                         <li class="each-user">
@@ -159,7 +160,7 @@ Team
 
         <div class="scrollable-users-container">
             <ul class="list-users-container">
-            @if (!$team->users->isEmpty())
+            @if ($team->users)
                 @foreach($team->users as $user)
                     @if(!$user->isTeamOwner())
                         <li class="each-user">
@@ -186,13 +187,13 @@ Team
 <div class="mt-2">
 
     {{-- Top ownerhip block container --}}
-    <div class="top-ownership-banner @if (!$user->isTeamOwner() && $userTeamInvite) show @endif ">
+    <div class="top-ownership-banner @if ($userTeamOwnershipInvite) show @endif ">
         <div class="message-container">You have been requested to be the owner of this team.</div>
         <div class="btn-block-container">
             {{--  Use the accept endpoint --}}
-            <button type="button" class="btn dark dark-accept" data-invite-token="{{ $userTeamInvite ? $userTeamInvite->accept_token : '' }}">Accept request</button>
+            <button type="button" class="btn dark dark-accept accept-team-ownership" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->accept_token : '' }}" data-csrfToken="{{ @csrf_token() }}">Accept request</button>
             {{--  Use the revoke endpoint --}}
-            <button type="button" class="btn dark dark-revoked" data-invite-token="{{ $userTeamInvite ? $userTeamInvite->deny_token : '' }}">Revoke request</button>
+            <button type="button" class="btn dark dark-revoked reject-team-ownership" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->deny_token : '' }}" data-csrfToken="{{ @csrf_token() }}">Revoke request</button>
         </div>
     </div>
     {{-- @endif --}}
@@ -204,7 +205,7 @@ Team
             <h2>{{  $team->name }}</h2>
         </div>
 
-        @if ($user->isTeamOwner($team) && $team->users->count() > 1)
+        @if ($team->users->count() > 1 && $user->isOwnerOfTeam($team))
             <button class="btn dark make-owner">Select a new owner</button>
         @endif
     </div>
@@ -263,13 +264,16 @@ Team
                             {{-- user action menu --}}
                             <div class="block-actions">
                                 <ul>
-                                    @if(!$teamUser->isOwnerOfTeam($team))
+                                    @if(!$teamUser->isOwnerOfTeam($team) && !$userTeamOwnershipInvite)
                                         {{---  Uses the transfer endpoint--}}
                                         <li>
                                             <button
-                                                class="make-admin"
+                                                class="make-admin {{ $teamUser->isOwnerOfTeam($team) ? 'non-active' : '' }} transfer-ownership"
                                                 data-adminname="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
-                                                data-invite="">
+                                                data-invite=""
+                                                data-teamid="{{ $team->id }}"
+                                                data-useremail="{{ $teamUser->email }}"
+                                                data-token="{{ @csrf_token() }}">
                                                 Make Owner
                                             </button>
                                         </li>
@@ -281,12 +285,13 @@ Team
                                                 class="make-user"
                                                 data-username="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
                                                 data-useremail="{{ $teamUser->email }}"
-                                                data-teamid="{{ $team->id }}">
+                                                data-teamid="{{ $team->id }}"
+                                                data-token="{{ @csrf_token() }}">
                                                 Make User
                                             </button>
                                         </li>
                                     @endif
-                                    @if($team->hasUser($user))
+                                    @if($team->hasUser($user) && $user->email === $teamUser->email)
                                         {{---  Uses the leave endpoint --}}
                                         <li>
                                             <button
@@ -313,7 +318,7 @@ Team
         </div>
     </div>
 
-    @if(is_null($team->users))
+    @if($userTeamOwnershipInvite)
         {{---  Only show team transfer if team has members --}}
         <div class="transfer-ownership-container" id="transfer-ownership">
             {{-- Transfer ownership container --}}
@@ -322,7 +327,6 @@ Team
                 {{-- You can add non-active to make--}}
             </div>
 
-            @if($userTeamInvite)
                 {{-- Transfer request --}}
 
                 <div class="trasfer-container">
@@ -332,12 +336,11 @@ Team
 
                     <div class="transfer-btn-block">
                         {{--  Use the accept endpoint --}}
-                        <button type="button" class="btn dark dark-accept" data-invite-token="{{ $userTeamInvite ? $userTeamInvite->accept_token : '' }}">Accept request</button>
+                        <button type="button" class="btn dark dark-accept accept-team-ownership" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->accept_token : '' }}" data-csrfToken="{{ @csrf_token() }}">Accept request</button>
                         {{--  Use the revoke endpoint --}}
-                        <button type="button" class="btn dark dark-revoked" data-invite-token="{{ $userTeamInvite ? $userTeamInvite->deny_token : '' }}">Revoke request</button>
+                        <button type="button" class="btn dark dark-revoked reject-team-ownership" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->deny_token : '' }}" data-csrfToken="{{ @csrf_token() }}">Revoke request</button>
                     </div>
                 </div>
-            @endif
 
         </div>
     @endif

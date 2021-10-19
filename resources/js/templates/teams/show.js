@@ -410,3 +410,95 @@ teamInviteUserBtn.addEventListener('click', function(event){
         hideAddTeamMateModalContainer();
     }, 2000);
 });
+
+if (document.querySelector('.transfer-ownership')) {
+    document.querySelector('.transfer-ownership').addEventListener('click', function (event){
+        var url = "/teams/ownership";
+        var xhr = new XMLHttpRequest();
+        var data = {
+            type: 'ownership',
+            invitee: this.dataset.useremail,
+            team_id: this.dataset.teamid
+        };
+
+        event.preventDefault();
+
+        xhr.open('POST', url);
+
+        xhr.setRequestHeader('X-CSRF-TOKEN', this.dataset.token);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+        xhr.send(JSON.stringify(data));
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                addAlert('success', 'Team transfer ownership requested to member.');
+            } else {
+                var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+                if(result.errors) {
+                    result.message = [];
+                    for(var error in result.errors){
+                        result.message.push(result.errors[error]);
+                    }
+                }
+
+                addAlert('error', result.message || 'Sorry there was a problem requesting ownership from the team member. Please try again.');
+            }
+        };
+    });
+}
+
+document.querySelector('.accept-team-ownership').addEventListener('click', function (event){
+    var data = {
+        token: this.dataset.invitetoken,
+        csrftoken: this.dataset.csrftoken
+    };
+
+    handleOwnershipTransfer('/teams/accept', data, event);
+});
+
+document.querySelector('.reject-team-ownership').addEventListener('click', function (event){
+    var data = {
+        token: this.dataset.invitetoken,
+        csrftoken: this.dataset.csrftoken
+    };
+
+    handleOwnershipTransfer('/teams/reject', data, event);
+});
+
+function handleOwnershipTransfer(url, data, event) {
+    var xhr = new XMLHttpRequest();
+
+    event.preventDefault();
+
+    xhr.open('POST', url);
+
+    xhr.setRequestHeader('X-CSRF-TOKEN', data.csrftoken);
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+    xhr.send(JSON.stringify(data));
+
+    addLoading('Sending ownership request for team.');
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            window.reload();
+        } else {
+            var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+            if(result.errors) {
+                result.message = [];
+                for(var error in result.errors){
+                    result.message.push(result.errors[error]);
+                }
+            }
+
+            addAlert('error', result.message || 'Sorry there was a problem requesting ownership from the team member. Please try again.');
+        }
+
+        removeLoading();
+    };
+}

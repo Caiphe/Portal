@@ -29,6 +29,21 @@
 @section('content')
 
     <x-heading heading="My teams" tags="Dashboard"></x-heading>
+
+    @if (!is_null($teamInvite) && !is_null($team))
+    {{-- Top ownerhip block container --}}
+    <div class="top-invite-banner show">
+        <div class="message-container">You have been requested to be part of {{ $team->name }}.</div>
+        <div class="btn-block-container">
+            {{--  Use the accept endpoint --}}
+            <button type="button" class="btn dark dark-accept accept-team-invite" data-invitetoken="{{ $teamInvite->accept_token }}" data-csrfToken="{{ @csrf_token() }}">Accept request</button>
+            {{--  Use the revoke endpoint --}}
+            <button type="button" class="btn dark dark-revoked reject-team-invite" data-invitetoken="{{ $teamInvite->deny_token }}" data-csrfToken="{{ @csrf_token() }}">Revoke request</button>
+        </div>
+    </div>
+    {{-- @endif --}}
+    @endif
+
     <x-twofa-warning class="tall"></x-twofa-warning>
 
     <div class="content">
