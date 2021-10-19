@@ -241,8 +241,8 @@ class CompanyTeamsController extends Controller
             $teamOwner = User::where('email', $team->owner->email)->first();
             $newTeamOwner = User::where('email', $invite->email)->first();
 
-            $teamOwner->detach($team);
-            $newTeamOwner->switchTeam($team);
+            $teamOwner->detachTeam($team);
+            $newTeamOwner->attachTeam($team);
 
             Teamwork::acceptInvite( $invite );
         }else{
