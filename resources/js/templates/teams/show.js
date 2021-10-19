@@ -368,6 +368,7 @@ teamMateInvitEmail.addEventListener('keyup', function(){
 });
 
 teamInviteUserBtn.addEventListener('click', function(event){
+    console.log("invite btn");
     var url = "/teams/invite";
     var xhr = new XMLHttpRequest();
     var data = {
