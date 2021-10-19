@@ -65,6 +65,7 @@ function createEmailTags(){
     inviteContainer.classList.add('m-40');
     inviteContainer.append(tag);
     invitationInput.value = "";
+    this.classList.remove('active');
 }
 
 var logoFile = document.querySelector('.logo-file');

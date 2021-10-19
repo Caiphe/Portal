@@ -185,7 +185,6 @@ Team
 </div>
 
 <div class="mt-2">
-
     {{-- Top ownerhip block container --}}
     <div class="top-ownership-banner @if ($userTeamOwnershipInvite) show @endif ">
         <div class="message-container">You have been requested to be the owner of this team.</div>
