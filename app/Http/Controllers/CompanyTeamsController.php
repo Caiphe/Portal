@@ -219,7 +219,10 @@ class CompanyTeamsController extends Controller
         $teamInvite = TeamInvite::where('email', $user->email)
             ->first();
 
-        $team = Team::find($teamInvite->team_id);
+        $team = null;
+        if ( $teamInvite ) {
+            $team = Team::find($teamInvite->team_id);
+        }
 
         return view('templates.teams.create', [
             'colleagues' => User::all()->pluck('email'),
