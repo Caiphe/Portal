@@ -81,7 +81,8 @@ button{
         opacity: 1;
         z-index: 5;
         pointer-events: auto;
-        transition: all .3s ease-in-out;
+        // transition: all .3s ease-in-out;
+        // transition: opacity 0.356s, transform 0.356s;
     }
 
     .ownweship-overlay-container{

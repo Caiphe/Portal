@@ -168,7 +168,7 @@ Team
                             <div class="users-thumbnail" style="background-image: url({{ $user->profile_picture }})"></div>
                             <div class="user-full-name">{{ $user->full_name }}</div>
                             <div class="check-container">
-                                <x-radio-round name="transfer-ownership-check" id="{{ $user->id }}" value="{{ $user->email }}"></x-radio-round>
+                                <x-radio-round-two name="transfer-ownership-check" id="{{ $user->id }}" value="{{ $user->email }}"></x-radio-round-two>
                             </div>
                         </li>
                     @endif

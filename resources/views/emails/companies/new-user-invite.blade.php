@@ -12,4 +12,4 @@
     Thanks,<br>
     {{ config('app.name') }}
 @endcomponent
-s
+
