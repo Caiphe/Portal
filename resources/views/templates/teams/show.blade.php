@@ -205,7 +205,7 @@ Team
             <h2>{{  $team->name }}</h2>
         </div>
 
-        @if ($team->users->count() > 1 && $user->isOwnerOfTeam($team))
+        @if ($team->users->count() > 0 && !$user->isOwnerOfTeam($team))
             <button class="btn dark make-owner">Select a new owner</button>
         @endif
     </div>
