@@ -4,20 +4,20 @@ namespace App\Http\Controllers;
 
 use App\App;
 use App\Team;
-use App\User;
 use App\Country;
 
-use App\Mail\Invites\RemoveUser;
-use App\Mail\Invites\InviteExternalUser;
-use App\Http\Requests\TeamRequest;
-use App\Http\Requests\Teams\InviteRequest;
-use App\Http\Requests\Teams\LeaveTeamRequest;
+use App\Concerns\Teams\InviteActions;
+use App\Concerns\Teams\InviteRequests;
+
+use App\Http\Requests\Teams\UpdateRequest;
+use App\Http\Requests\Teams\Invites\InviteRequest;
+use App\Http\Requests\Teams\Invites\LeavingRequest;
+use App\Http\Requests\Teams\Request as TeamRequest;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
+
 use Mpociot\Teamwork\Facades\Teamwork;
 use Mpociot\Teamwork\Events\UserInvitedToTeam;
-use Mpociot\Teamwork\TeamInvite;
 
 /**
  * Class CompanyTeamsController
@@ -26,6 +26,12 @@ use Mpociot\Teamwork\TeamInvite;
  */
 class CompanyTeamsController extends Controller
 {
+    use InviteRequests, InviteActions;
+
+    /**
+     * List available logged in User's teams
+     * or allow them to create ones
+    */
     public function index(Request $request)
     {
         $collectedTeams = [];
@@ -45,8 +51,8 @@ class CompanyTeamsController extends Controller
             return redirect()->route('teams.create');
         }
 
-        $teamInvite = TeamInvite::where('email', auth()->user()->email)->first();
-        
+        $teamInvite = $this->getInviteByEmail(auth()->user()->email);
+
         $team = null;
         if ( $teamInvite ) {
             $team = Team::find($teamInvite->team_id);
@@ -54,91 +60,152 @@ class CompanyTeamsController extends Controller
 
         return view('templates.teams.index', [
             'teams' => $collectedTeams,
-            'team' => $team,
             'teamInvite' => $teamInvite,
+            'team' => $team,
         ]);
     }
 
-    public function leave(LeaveTeamRequest $teamRequest)
+    /**
+     * Leave/Delete endpoint(s)
+     */
+    public function leave(LeavingRequest $teamRequest)
     {
         $data = $teamRequest->validated();
 
-        $user = User::find($data['user_id']);
-        $team = Team::find($data['team_id']);
+        $team = $this->getTeam($data['team_id']);
+        $user = $this->getTeamUser($data['user_id']);
 
-        if ($team->users()->detach($user->id)) {
-            Mail::to($user->email)->send(new RemoveUser($team, $user));
-            return response()->json(['success' => true,]);
+        if ( $team->hasUser($user) && $this->memberLeavesTeam($team, $user) ) {
+            return response()->json([
+                'success' => true,
+                'success:message' => $user->full_name . ' has successfully left ' . $team->name
+            ]);
         }
 
-        return response()->json(['success' => false,]);
+        return response()->json([
+            'success' => false,
+            'error:message' => $user->full_name . ' could not leave and/or be removed from ' . $team->name
+        ]);
     }
 
-    public function remove(LeaveTeamRequest $teamRequest)
+    /**
+     * Create Team
+     *
+     */
+    public function create(Request $request)
     {
-        $data = $teamRequest->validated();
+        $user = $request->user();
 
-        $user = User::find($data['user_id']);
-        $team = Team::find($data['team_id']);
+        $user->load(['responsibleCountries']);
 
-        $userDeleted = \DB::table('team_users')->delete(['user_id' => $user->id, 'team_id' => $team->id]);
+        $countries = Country::whereIn('code', Country::all()->pluck('code'))->orderBy('name')->pluck('name', 'code');
 
-        if ($userDeleted) {
-            Mail::to($user->email)->send(new RemoveUser($team, $user));
-            return response()->json(['success' => true,]);
+        $teamInvite = $this->getInviteByEmail($user->email);
+
+        $invitingTeam = null;
+        if ( $teamInvite ) {
+            $invitingTeam = $this->getTeam($teamInvite->team_id);
         }
 
-        return response()->json(['success' => false]);
+        return view('templates.teams.create', [
+            'team' => $invitingTeam,
+            'teamInvite' => $teamInvite,
+            'countries' => $countries,
+            'user' => $user
+        ]);
     }
 
+    /**
+     * Transfer ownership request endpoint
+     */
     public function ownership(InviteRequest $inviteRequest)
     {
         $data = $inviteRequest->validated();
 
-        $team = Team::find($data['team_id']);
-        $user = User::where('email', '=', $data['invitee'])->first();
+        $team = $this->getTeam($data['team_id']);
+        $user = $this->getTeamUserByEmail($data['invitee']);
 
-        $invite = new TeamInvite();
+        $invite = $this->createTeamInvite($team, $user->email, 'ownership');
 
-        $invite->user_id = $user->id;
-        $invite->team_id = $team->id;
-        $invite->type = 'invite';
-        $invite->email = $data['invitee'];
-        $invite->accept_token = md5(uniqid(microtime()));
-        $invite->deny_token = md5(uniqid(microtime()));
-        $invite->save();
+        if ( $invite ) {
 
-        return response()->json(['success' => true]);
+            $this->sendOwnershipInvite($team, $user, $invite);
+
+            return response()->json([
+                'success' => true,
+                'success:message' => $user->full_name . ' has been successfully requested to take ownership of ' . $team->name
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'error:message' => $user->full_name . ' could not be successfully requested to take ownership of ' . $team->name
+        ]);
     }
 
+    /**
+     * Invite endpoint
+     */
     public function invite(InviteRequest $inviteRequest)
     {
         $data = $inviteRequest->validated();
 
-        $team = Team::find($data['team_id']);
-        $user = User::where('email', '=', $data['invitee'])->first();
+        $invitedEmail = $data['invitee'];
 
-        if (is_null($user) && !is_null($team)) {
-            $this->createExternalTeamInvite($team, $data['invitee']);
-            Mail::to($user->email)->send(new InviteExternalUser($team, $data['invitee']));
+        $team = $this->getTeam($data['team_id']);
+        $user = $this->getTeamUserByEmail($invitedEmail);
 
-            return response()->json(['success' => true]);
-        } elseif($user->exists) {
-            Teamwork::inviteToTeam( $user->email, $team, function( $invite ) use($user) {
-                event(new UserInvitedToTeam($invite));
-            });
-            return response()->json(['success' => true]);
-        } else {
-            return response()->json(['success' => false]);
+        $inviteSent = false;
+
+        if ( !$user && $team ) {
+
+            $invite = $this->createTeamInvite($team, $invitedEmail, 'external');
+
+            if ( $invite ) {
+                $this->sendExternalInvite($team, $invitedEmail);
+
+                $inviteSent = $invite->exists;
+            }
+
+        } elseif( $user->exists ) {
+
+            if ( !Teamwork::hasPendingInvite($team, $user->email)) {
+                Teamwork::inviteToTeam( $user->email, $team, function( $invite ) use( $user, &$inviteSent ) {
+                    event( new UserInvitedToTeam( $invite ) );
+
+                    $inviteSent = $invite->exists;
+                });
+            } elseif (Teamwork::hasPendingInvite($team, $user->email) && $user->hasTeamInvite($team)) {
+                $this->sendRemindingInvite($team, $user, $invite);
+                $inviteSent = true;
+            }
         }
+
+        if ( $inviteSent ) {
+
+            return response()->json([
+                'success' => true,
+                'success:message' => 'Invite successfully sent to prospective team member of ' . $team->name . '.'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'error:message' => $user->full_name . ' could not be successfully send ' . $team->name . ' prospective member invite.'
+        ]);
     }
 
-    public function show($id, Request $request)
+    /**
+     * Show a given Team with its details
+     */
+    public function show(Request $request, $id)
     {
         $team = $request->user()->teams()->where('id', $id)->first();
 
-        $apps = App::with(['products.countries', 'country', 'developer'])
-            ->where('team_id', $team->id)
+        $apps = App::with(['products.countries', 'country', 'developer', 'team'])
+            ->whereHas('team', function( $q ) use ( $team ) {
+                $q->where('id', $team->id);
+            })
             ->orderBy('updated_at', 'desc')
             ->get()
             ->groupBy('status');
@@ -150,50 +217,25 @@ class CompanyTeamsController extends Controller
         ]);
     }
 
+    /**
+     * Pesrsist the Team
+     */
     public function store(TeamRequest $request)
     {
         $user = $request->user();
+
         $validated = $request->validated();
 
-        $teamData = [
-            'name' => $validated['name'],
-            'url' => $validated['url'],
-            'contact' => $validated['contact'],
-            'description' => $validated['description'],
-        ];
+        $data = $this->prepareData($validated);
 
-        if (isset($validated['country'])) {
-            $teamData['country'] = Country::where('code', $validated['country'])->value('name');
+        if ( !$this->processLogoFile($request, $data) ) {
+            abort(422, 'Could not process logo file upload for your team.');
         }
 
-        if (isset($validated['logo_file']) && !is_string($validated['logo_file'])) {
-                $fileName =  md5(uniqid()) . '.' . $request->file('logo_file')->extension();
-                $path = $request->file('logo_file')->storeAs("public/team/", $fileName);
-                $teamData['logo'] = str_replace('public', '/storage', $path);
-        }
-
-        $team = Team::create([
-            'name' => $teamData['name'],
-            'url' => $teamData['url'],
-            'contact' => $teamData['contact'],
-            'country' => $teamData['country'],
-            'description' => $teamData['description'],
-            'logo' => $teamData['logo'],
-            'owner_id' => $user->getKey()
-        ]);
-
-        $user->attachTeam($team);
+        $team = $this->createTeam($user, $data);
 
         if (!empty($data['team_members'])) {
-            foreach ($data['team_members'] as $emailAddress) {
-                $user = User::where('email', $emailAddress)->first();
-                if (is_null($user) && !is_null($team)) {
-                    $this->createExternalTeamInvite($team, $emailAddress);
-                    Mail::to($emailAddress)->send(new InviteExternalUser($team, $emailAddress));
-                } else {
-                    Teamwork::inviteToTeam( $user->email, $team);
-                }
-            }
+            $this->sendInvites($data['team_members']);
         }
 
         if (strpos(url()->previous(), 'teams/create') !== false) {
@@ -203,144 +245,97 @@ class CompanyTeamsController extends Controller
         return redirect()->back()->with('alert', "success:{$team->name} has been created");
     }
 
-    public function create(Request $request)
+    /**
+     * Edit Team
+     */
+    public function edit(Request $request, $id)
     {
         $user = $request->user();
+
         $user->load(['responsibleCountries']);
 
         $countries = Country::whereIn('code', Country::all()->pluck('code'))->orderBy('name')->pluck('name', 'code');
 
-        $teamInvite = TeamInvite::where('email', $user->email)
-            ->first();
-
-        $team = null;
-        if ( $teamInvite ) {
-            $team = Team::find($teamInvite->team_id);
-        }
-
-        return view('templates.teams.create', [
-            'colleagues' => User::all()->pluck('email'),
-            'userOwnsTeam' => !is_null($user->current_team_id),
-            'hasTeams' => $user->teams()->count() > 0,
-            'teamInvite' => $teamInvite,
+        return view('templates.teams.update', [
+            'team' => $this->getTeam($id),
             'countries' => $countries,
-            'team' => $team,
         ]);
     }
 
+    /**
+     * Persist team update
+     */
+    public function update(UpdateRequest $request, $id)
+    {
+        $validated = $request->validated();
+
+        $team = Team::find($id);
+
+        if ( $request->post() && $team) {
+
+            $data = $this->prepareData($validated);
+
+            if ( !$this->processLogoFile($request, $data) ) {
+                abort(422, 'Could not process logo file upload for your team.');
+            }
+
+            if ($validated['team_members']) {
+                $this->sendInvites($validated['team_members']);
+            }
+
+            if ( $team->update($data) ) {
+                return redirect()->route('team.show', $team->id)
+                    ->with('success: Your team was successfully updated.');
+            }
+        } else {
+            return redirect()->back()
+                ->with('error: Somethidng went wrong updating your team..');
+        }
+    }
+
+    /**
+     * Accept an invite
+     */
     public function accept(Request $request)
     {
         $invite = Teamwork::getInviteFromAcceptToken( $request->get('token') );
 
+        $inviteType = ucfirst($invite->type);
+
         if( $invite->type === 'ownership') {
-            $team = Team::find($invite->team_id);
 
-            $teamOwner = User::where('email', $team->owner->email)->first();
-            $newTeamOwner = User::where('email', $invite->email)->first();
+            $team = $this->getTeam($invite->team_id);
+            $owner = $this->getTeamUserByEmail($invite->email);
 
-            $teamOwner->detachTeam($team);
-            $newTeamOwner->attachTeam($team);
+            auth()->user()->teams()->detach($team->id);
+            $team->update([ 'owner_id' => $owner->id ]);
 
             Teamwork::acceptInvite( $invite );
         }else{
+
             Teamwork::acceptInvite( $invite );
         }
 
         if (!$invite->exists) {
-            return redirect()->route('teams.listing')->with('success:Invite successfully accepted.');
-        } else {
-            return redirect()->route('teams.listing')->with('error:Team invite could not be accepted. Contact administrator.');
+            return redirect()->route('teams.listing')->with('success: ' . $inviteType . ' was successfully accepted.');
         }
     }
 
+    /**
+     * Reject an invite
+     */
     public function reject(Request $request)
     {
         $invite = Teamwork::getInviteFromDenyToken( $request->get('token') );
+
+        $inviteType = ucfirst($invite);
 
         if( $invite ) {
             Teamwork::denyInvite( $invite );
         }
 
         if (!$invite->exists) {
-            return redirect()->route('teams.listing')->with('success:Invite successfully denied.');
-        } else {
-            return redirect()->route('teams.listing')->with('error:Team invite could not be denied. Contact administrator.');
+            return redirect()->route('teams.listing')->with('success:' . $inviteType . ' successfully denied.');
         }
-    }
-
-    public function edit(Request $request, $id)
-    {
-        $user = $request->user();
-        $user->load(['responsibleCountries']);
-
-        $countries = Country::whereIn('code', Country::all()->pluck('code'))->orderBy('name')->pluck('name', 'code');
-
-        return view('templates.teams.update', [
-            'countries' => $countries,
-            'team' => Team::find($id),
-        ]);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $validator = \Validator::make($request->all(), [
-            'action' => 'required',
-            'name' => 'required',
-            'url' => 'required',
-            'contact' => 'required',
-            'country' => 'required',
-            'description' => 'required',
-        ]);
-
-        if (!$validator->fails()) {
-
-            $team = Team::find($id);
-
-            if ($request->has('team_members')) {
-                foreach ($request->get('team_members') as $emailAddress) {
-                    $user = User::where('email', $emailAddress)->first();
-                    if (is_null($user) && !is_null($team)) {
-                        Mail::to($emailAddress)->send(new InviteExternalUser($team, $emailAddress));
-                    } else {
-                        Teamwork::inviteToTeam( $user->email, $team);
-                    }
-                }
-            }
-
-            $data = $request->only(['name', 'url', 'contact', 'description',]);
-
-            if ($request->has('country')) {
-                $data['country'] = Country::where('code', $request->get('country'))->value('name');
-            }
-
-            if ($request->has('logo_file')) {
-                $fileName =  md5(uniqid()) . '.' . $request->file('logo_file')->extension();
-                $path = $request->file('logo_file')->storeAs("public/team/", $fileName);
-                $data['logo'] = str_replace('public', '/storage', $path);
-            }
-
-            $team->update($data);
-
-            return redirect()->route('team.show', $team->id)
-                ->with('success: Your team was successfully updated.');
-        } else {
-            return redirect()->back()
-                ->with('error: Your team could not be successfully updated.');
-        }
-    }
-
-    private function createExternalTeamInvite($team, $email)
-    {
-        $teamOwner = User::find($team->owner_id);
-
-        $invite = new TeamInvite();
-
-        $invite->user_id = $teamOwner->id;
-        $invite->team_id = $team->id;
-        $invite->type = 'invite';
-        $invite->email = $email;
-        $invite->accept_token = md5(uniqid(microtime()));
-        $invite->deny_token = md5(uniqid(microtime()));
-        $invite->save();
     }
 }

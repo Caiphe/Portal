@@ -19,7 +19,7 @@ class AddTeamAttributesToTeamsTable extends Migration
             $table->string('contact');
             $table->string('country');
             $table->string('logo');
-            $table->string('description');
+            $table->text('description');
         });
     }
 

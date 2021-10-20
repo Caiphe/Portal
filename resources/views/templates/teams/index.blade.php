@@ -30,7 +30,7 @@
         <a href="{{ route('teams.create') }}" class="button dark outline">Create New</a>
     </x-heading>
 
-    @if (!is_null($teamInvite))
+    @if ( $teamInvite )
     {{-- Top ownerhip block container --}}
     <div class="top-invite-banner show">
         <div class="message-container">You have been requested to be part of {{ $team->name }}.</div>

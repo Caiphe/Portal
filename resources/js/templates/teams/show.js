@@ -221,8 +221,11 @@ function handleDeleteMenuClick(event) {
     }
 
     xhr.open('POST', url, true);
-    xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    xhr.setRequestHeader("X-CSRF-TOKEN",
+        document.getElementsByName("csrf-token")[0].content
+    );
 
         xhr.send(JSON.stringify(data));
 
@@ -249,9 +252,12 @@ function copyText() {
     btn.className = 'copy loading';
 
     xhr.open('GET', url, true);
-    xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.setRequestHeader("X-CSRF-TOKEN",
+        document.getElementsByName("csrf-token")[0].content
+    );
 
     xhr.send();
 
@@ -284,7 +290,8 @@ function copyToClipboard(text) {
 }
 
 deleteUserActionBtn.addEventListener('click', function(event){
-
+    var url = "/teams/leave";
+    var xhr = new XMLHttpRequest();
     var data = {
         team_id: hiddenTeamId.value,
         user_id: hiddenTeamUserId.value
@@ -292,21 +299,22 @@ deleteUserActionBtn.addEventListener('click', function(event){
 
     event.preventDefault();
 
-    var url = "/teams/remove";
-
-    var xhr = new XMLHttpRequest();
     xhr.open('POST', url);
-    xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.setRequestHeader("X-CSRF-TOKEN",
+        document.getElementsByName("csrf-token")[0].content
+    );
+
     xhr.send(JSON.stringify(data));
 
     xhr.onload = function() {
         if (xhr.status === 200) {
             addAlert('success', ['User successfully removed from team.', 'Please wait meanwhile the page refreshes.'], function(){
-            if (window.history) {
-                history.back();
-            }
+                if (window.history) {
+                    history.back();
+                }
             });
         } else {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
@@ -345,7 +353,6 @@ teamMateInvitEmail.addEventListener('keyup', function(){
 });
 
 teamInviteUserBtn.addEventListener('click', function(event){
-    console.log("invite btn");
     var url = "/teams/invite";
     var xhr = new XMLHttpRequest();
     var data = {
@@ -358,15 +365,21 @@ teamInviteUserBtn.addEventListener('click', function(event){
 
     xhr.open('POST', url);
 
-    xhr.setRequestHeader('X-CSRF-TOKEN', this.dataset.csrf);
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.setRequestHeader("X-CSRF-TOKEN",
+        document.getElementsByName("csrf-token")[0].content
+    );
 
     xhr.send(JSON.stringify(data));
 
     xhr.onload = function() {
         if (xhr.status === 200) {
-            addAlert('success', 'User was successfully invited to the team.');
+            addAlert('success', ['User was successfully invited to the team.', 'Please wait meanwhile the page refreshes.'], function(){
+                if (window.history) {
+                    history.back();
+                }
+            });
         } else {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
@@ -403,9 +416,11 @@ if (document.querySelector('.transfer-ownership')) {
 
         xhr.open('POST', url);
 
-        xhr.setRequestHeader('X-CSRF-TOKEN', this.dataset.token);
         xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.setRequestHeader("X-CSRF-TOKEN",
+            document.getElementsByName("csrf-token")[0].content
+        );
 
         xhr.send(JSON.stringify(data));
 
@@ -472,8 +487,6 @@ function handleOwnershipTransfer(url, data, event) {
         "X-CSRF-TOKEN",
         document.getElementsByName("csrf-token")[0].content
     );
-
-    console.log(data.csrftoken);
 
     xhr.send(JSON.stringify(data));
 

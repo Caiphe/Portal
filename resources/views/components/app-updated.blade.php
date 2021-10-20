@@ -9,6 +9,11 @@
     $appStatus = $app->products->filter(fn($prod) => $prod->pivot->status === 'pending')->count() > 0 ? 'pending' : $app['status'];
     $countryCode = array_keys($countries)[0];
     $countryName = array_values($countries)[0];
+
+    $team = null;
+    if (isset($app['team_id'])) {
+        $team = \App\Team::find($app['team_id']);
+    }
 @endphp
 
 @allowonce('card_link')
@@ -39,8 +44,8 @@
 
     {{-- Creatorn column--}}
     <div class="column flexed-column">
-        <div class="creator-thumbail" style="background-image: url({{ !isset($app['team_id']) ? $user->profile_picture : \App\Team::find($app['team_id'])->logo }})"></div>
-        <div class="creator-name">{{ !isset($app['team_id']) ? $user->full_name : \App\Team::find($app['team_id'])->name }}</div>
+        <div class="creator-thumbail" style="background-image: url({{ is_null($team) ? $user->profile_picture : $team->logo }})"></div>
+        <div class="creator-name">{{ is_null($team) ? $user->full_name : $team->name }}</div>
     </div>
 
     <div class="column">
@@ -89,7 +94,7 @@
                 @if(empty($sandboxProducts))
                 <div class="detail-row cols">
                     <div class="detail-item"><strong>Country</strong></div>
-                    <div class="detail-item">South Africa</div>
+                    <div class="detail-item">{{ $countryName }}</div>
                 </div>
                 @endif
 
@@ -167,7 +172,7 @@
                 @if(empty($sandboxProducts))
                 <div class="detail-row cols">
                     <div class="detail-item"><strong>Country</strong></div>
-                    <div class="detail-item">South Africa</div>
+                    <div class="detail-item">{{ $countryName }}</div>
                 </div>
                 @endif
 

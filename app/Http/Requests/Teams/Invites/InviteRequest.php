@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Teams;
+namespace App\Http\Requests\Teams\Invites;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -17,9 +17,9 @@ class InviteRequest extends FormRequest
 
     public function rules() {
         return [
+            'team_id' => 'required',
             'invitee' => 'required',
             'type' => 'sometimes',
-            'team_id' => 'required',
         ];
     }
 }

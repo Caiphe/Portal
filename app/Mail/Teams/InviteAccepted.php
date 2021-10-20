@@ -1,31 +1,35 @@
 <?php
 
-namespace App\Mail\Invites;
+namespace App\Mail\Teams;
 
-use App\User;
 use App\Team;
 
+use App\User;
 use Illuminate\Mail\Mailable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 /**
- * Class ExistingMember
+ * Class InviteAccepted
  *
- * @package App\Mail\Invites
+ * @package App\Mail\Teams
  */
-class ExistingMember extends Mailable
+class InviteAccepted extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
-     * @var Team $team
+     * Inviting Team
+     *
+     * @var $team
      */
     public $team;
 
     /**
-     * @var User $user
+     * Possible User email address
+     *
+     * @var $user
      */
     public $user;
 
@@ -49,14 +53,15 @@ class ExistingMember extends Mailable
      */
     public function build()
     {
-        $teamOwner = User::find($this->team->owner_id)->first();
+        $owner = $this->team->owner;
 
-        return $this->withSwiftMessage(function ($message) use($teamOwner) {
-            $message->getHeaders()->addTextHeader('Reply-To', $teamOwner->email);
+        return $this->withSwiftMessage(function ($message) use($owner) {
+            $message->getHeaders()->addTextHeader('Reply-To', $owner->email);
         })
-            ->to($this->user->email, $this->user->full_name)
-            ->subject("MTN Developer Portal: Update from {$this->team->name} Team")
-            ->markdown('emails.companies.user-invite', [
+            ->to($this->user->email)
+            ->cc($owner->email)
+            ->subject("MTN Developer Portal: {$this->user->full_name} has accepted your invite to join {$this->team->name} Team")
+            ->markdown('emails.teams.invites.invite-accepted', [
                 'team' => $this->team,
                 'user' => $this->user,
             ]);

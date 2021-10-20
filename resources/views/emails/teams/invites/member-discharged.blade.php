@@ -1,11 +1,11 @@
 @component('mail::message')
     # Update from MTN Developer Portal.
 
-    Hi {{ $user->first_name }}
+    Hi {{ $dischargedMember->first_name }}
 
     You have been removed from the **{{ $team->name }}** team.
 
-    @component('mail::button', ['url' => route('user.profile')])
+    @component('mail::button', [ 'url' => route('user.profile') ])
         View Profile
     @endcomponent
 

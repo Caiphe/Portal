@@ -2,20 +2,22 @@
 
 namespace App\Events\Listeners\Teams;
 
-use App\Team;
+use App\Mail\Teams\LeavingInvite;
 
-use App\Mail\Invites\RemoveUser;
+use App\Events\Listeners\Concerns\TeamsEvents;
 
 use Illuminate\Support\Facades\Mail;
 use Mpociot\Teamwork\Events\UserLeftTeam;
 
 /**
- * Class UserLeftTeamListener
+ * Class LeavingInviteListener
  *
  * @package App\Events\Listeners\Teams
  */
-class UserLeftTeamListener
+class LeavingInviteListener
 {
+    use TeamsEvents;
+
     /**
      * Create the event listener.
      *
@@ -34,9 +36,9 @@ class UserLeftTeamListener
      */
     public function handle(UserLeftTeam $event)
     {
-        $user = $event->getUser();
-        $team = Team::findOrFail($event->getTeamId());
+        $user = $this->getLeavingUser( $event );
 
-        Mail::to($user->email)->send(new RemoveUser($team, $user));
+        Mail::to($user->email)
+            ->send( new LeavingInvite( $this->getTeam($event), $user ) );
     }
 }

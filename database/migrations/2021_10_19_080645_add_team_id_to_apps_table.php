@@ -15,6 +15,10 @@ class AddTeamIdToAppsTable extends Migration
     {
         Schema::table('apps', function (Blueprint $table) {
             $table->integer('team_id')->unsigned()->nullable(true);
+
+            $table->foreign('team_id')
+                ->references('id')
+                ->on('teams');
         });
     }
 
@@ -27,6 +31,8 @@ class AddTeamIdToAppsTable extends Migration
     {
         Schema::table('apps', function (Blueprint $table) {
             $table->dropColumn('team_id');
+
+            $table->dropForeign('apps_team_id_foreign');
         });
     }
 }

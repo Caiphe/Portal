@@ -19,13 +19,13 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         \Mpociot\Teamwork\Events\UserJoinedTeam::class => [
-            \App\Events\Listeners\Teams\JoinTeamInviteListener::class,
+            \App\Events\Listeners\Teams\AcceptingInviteListener::class,
         ],
         \Mpociot\Teamwork\Events\UserLeftTeam::class => [
-            \App\Events\Listeners\Teams\UserLeftTeamListener::class,
+            \App\Events\Listeners\Teams\LeavingInviteListener::class,
         ],
         \Mpociot\Teamwork\Events\UserInvitedToTeam::class => [
-            \App\Events\Listeners\Teams\UserInvitedToTeamListener::class
+            \App\Events\Listeners\Teams\RemindingInviteListener::class,
         ],
     ];
 

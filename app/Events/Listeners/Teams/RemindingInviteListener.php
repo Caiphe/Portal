@@ -2,19 +2,22 @@
 
 namespace App\Events\Listeners\Teams;
 
-use App\Team;
-use App\Mail\Invites\InviteNewUser;
+use App\Mail\Teams\PendingInvite;
+
+use App\Events\Listeners\Concerns\TeamsEvents;
 
 use Illuminate\Support\Facades\Mail;
 use Mpociot\Teamwork\Events\UserInvitedToTeam;
 
 /**
- * Class UserInvitedToTeamListener
+ * Class RemindingInviteListener
  *
  * @package App\Events\Listeners\Teams
  */
-class UserInvitedToTeamListener
+class RemindingInviteListener
 {
+    use TeamsEvents;
+
     /**
      * Create the event listener.
      *
@@ -33,9 +36,9 @@ class UserInvitedToTeamListener
      */
     public function handle(UserInvitedToTeam $event)
     {
-        $user = $event->getInvite()->user;
-        $team = Team::findOrFail($event->getTeamId());
+        $user = $this->getRemindedUser( $event );
 
-        Mail::to($user->email)->send(new InviteNewUser($team, $user));
+        Mail::to($user->email)
+            ->send( new PendingInvite( $this->getTeam($event), $user, $event->getInvite() ));
     }
 }

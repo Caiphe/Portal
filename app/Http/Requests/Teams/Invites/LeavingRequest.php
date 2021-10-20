@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Teams;
+namespace App\Http\Requests\Teams\Invites;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -9,7 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
  *
  * @package App\Http\Requests\Teams
  */
-class LeaveTeamRequest extends FormRequest
+class LeavingRequest extends FormRequest
 {
     public function authorize() {
         return true;

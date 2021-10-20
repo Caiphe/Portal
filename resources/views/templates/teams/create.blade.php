@@ -29,7 +29,10 @@
 @section('content')
 
     <x-heading heading="My teams" tags="Dashboard"></x-heading>
-    @if (!is_null($teamInvite) && !is_null($team))
+
+    <x-twofa-warning class="tall"></x-twofa-warning>
+
+    @if ( $teamInvite )
     {{-- Top ownerhip block container --}}
     <div class="top-invite-banner show">
         <div class="message-container">You have been requested to be part of {{ $team->name }}.</div>
@@ -43,12 +46,10 @@
     {{-- @endif --}}
     @endif
 
-    <x-twofa-warning class="tall"></x-twofa-warning>
-
     <div class="content">
 
         <div class="content-header mt-40">
-            @if(auth()->user()->isTeamOwner())
+            @if($user->isTeamOwner())
                 <h2>Create a New Team!</h2>
             @else
                 <h2>It looks like you don't have any teams yet!</h2>

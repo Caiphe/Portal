@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Mail\Invites;
+namespace App\Mail\Teams;
 
-use App\User;
 use App\Team;
 
 use Illuminate\Mail\Mailable;
@@ -11,20 +10,24 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 /**
- * Class InviteNewUser
+ * Class ExternalInvite
  *
- * @package App\Mail
+ * @package App\Mail\Teams
  */
-class InviteExternalUser extends Mailable
+class ExternalInvite extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
+     * Inviting Team
+     *
      * @var $team
      */
     public $team;
 
     /**
+     * Possible User email address
+     *
      * @var $email
      */
     public $email;
@@ -33,9 +36,9 @@ class InviteExternalUser extends Mailable
      * Create a new message instance.
      *
      * @param Team $team
-     * @param $email
+     * @param string $email
      */
-    public function __construct(Team $team, $email)
+    public function __construct(Team $team, string $email)
     {
         $this->team = $team;
 
@@ -49,15 +52,14 @@ class InviteExternalUser extends Mailable
      */
     public function build()
     {
-        $teamOwner = User::find($this->team->owner_id)->first();
+        $owner = $this->team->owner;
 
-        return $this->withSwiftMessage(function ($message) use($teamOwner) {
-            $message->getHeaders()->addTextHeader('Reply-To', $teamOwner->email);
+        return $this->withSwiftMessage(function ($message) use($owner) {
+            $message->getHeaders()->addTextHeader('Reply-To', $owner->email);
         })
             ->to($this->email)
-            ->subject("MTN Developer Portal: {$teamOwner->full_name} has invited you to join {$this->team->name} Team")
-            ->markdown('emails.companies.new-external-user-invite', [
-                'inviter' => $teamOwner,
+            ->subject("MTN Developer Portal: {$owner->full_name} has invited you to join {$this->team->name} Team")
+            ->markdown('emails.teams.invites.external-invite', [
                 'team' => $this->team,
             ]);
     }

@@ -2,19 +2,22 @@
 
 namespace App\Events\Listeners\Teams;
 
-use App\Team;
-use App\Mail\Invites\ExistingMember;
+use App\Mail\Teams\InviteAccepted;
+
+use App\Events\Listeners\Concerns\TeamsEvents;
 
 use Illuminate\Support\Facades\Mail;
 use Mpociot\Teamwork\Events\UserJoinedTeam;
 
 /**
- * Class JoinedTeamListener
+ * Class AcceptingInviteListener
  *
  * @package App\Events\Listeners\Teams
  */
-class JoinTeamInviteListener
+class AcceptingInviteListener
 {
+    use TeamsEvents;
+
     /**
      * Create the event listener.
      *
@@ -33,9 +36,9 @@ class JoinTeamInviteListener
      */
     public function handle(UserJoinedTeam $event)
     {
-        $user = $event->getUser();
-        $team = Team::findOrFail($event->getTeamId());
+        $user = $this->getJoiningUser( $event );
 
-        Mail::to($user->email)->send(new ExistingMember($team, $user));
+        Mail::to($user->email)
+            ->send( new InviteAccepted( $this->getTeam($event), $user ) );
     }
 }

@@ -1,10 +1,15 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Teams;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TeamRequest extends FormRequest
+/**
+ * Class UpdateRequest
+ *
+ * @package App\Http\Requests\Teams
+ */
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +29,11 @@ class TeamRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:teams,name',
+            'name' => 'required',
             'url' => 'required',
             'contact' => 'required',
             'country' => 'required',
-            'logo_file' => 'sometimes',
-            'team_members' => 'sometimes',
+            'logo_file' => 'sometimes|file',
             'description' => 'required',
         ];
     }
@@ -46,7 +50,6 @@ class TeamRequest extends FormRequest
             'url' => filter_var($this->url, FILTER_SANITIZE_STRING),
             'contact' => filter_var($this->contact, FILTER_SANITIZE_STRING),
             'country' => filter_var($this->country, FILTER_SANITIZE_EMAIL),
-            'logo_file' => filter_var($this->logo_file, FILTER_SANITIZE_STRING),
             'description' => filter_var($this->description, FILTER_SANITIZE_STRING),
         ]);
     }
