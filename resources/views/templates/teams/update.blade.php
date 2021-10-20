@@ -23,7 +23,7 @@
 @endsection
 
 @section('title')
-    Create Team
+    Update Team
 @endsection
 
 @section('content')
@@ -77,14 +77,9 @@
                 </label>
             </div>
 
-            <div class="group">
-                <label for="invitations">Invite colleagues or other users</label>
-                <input type="email" class="invitation-field" name="invitations" id="invitations" placeholder="Add email to invite other users" maxlength="100">
-                <button class="invite-btn" type="button">INVITE</button>
-                <span class="error-email">Valid Email required !</span>
-                <div class="invite-tags" id="invite-list">
-                </div>
-            </div>
+            {{-- <div class="group custom-manage-team">
+               <a href="{{ route('team.show', $team->id) }}">Manage team members</a>
+            </div> --}}
 
             <div class="group">
                 <label for="description">Company description</label>

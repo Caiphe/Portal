@@ -431,7 +431,6 @@ if (document.querySelector('.transfer-ownership')) {
 document.querySelector('.accept-team-ownership').addEventListener('click', function (event){
     var data = {
         token: this.dataset.invitetoken,
-        csrftoken: this.dataset.csrftoken
     };
 
     handleOwnershipTransfer('/teams/accept', data, event);
@@ -440,7 +439,6 @@ document.querySelector('.accept-team-ownership').addEventListener('click', funct
 document.querySelector('.reject-team-ownership').addEventListener('click', function (event){
     var data = {
         token: this.dataset.invitetoken,
-        csrftoken: this.dataset.csrftoken
     };
 
     handleOwnershipTransfer('/teams/reject', data, event);

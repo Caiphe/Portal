@@ -192,9 +192,9 @@ Team
         <div class="message-container">You have been requested to be the owner of this team.</div>
         <div class="btn-block-container">
             {{--  Use the accept endpoint --}}
-            <button type="button" class="btn dark dark-accept accept-team-ownership" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->accept_token : '' }}" data-csrfToken="{{ @csrf_token() }}">Accept request</button>
+            <button type="button" class="btn blue-button dark-accept accept-team-ownership" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->accept_token : '' }}" data-csrfToken="{{ @csrf_token() }}">Accept request</button>
             {{--  Use the revoke endpoint --}}
-            <button type="button" class="btn dark dark-revoked reject-team-ownership" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->deny_token : '' }}" data-csrfToken="{{ @csrf_token() }}">Revoke request</button>
+            <button type="button" class="btn blue-button dark-revoked reject-team-ownership" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->deny_token : '' }}" data-csrfToken="{{ @csrf_token() }}">Revoke request</button>
         </div>
     </div>
     {{-- @endif --}}

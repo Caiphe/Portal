@@ -43,11 +43,20 @@ class CompanyTeamsController extends Controller
 
         if (empty($collectedTeams)) {
             return redirect()->route('teams.create');
-        } else {
-            return view('templates.teams.index', [
-                'teams' => $collectedTeams,
-            ]);
         }
+
+        $teamInvite = TeamInvite::where('email', auth()->user()->email)->first();
+        
+        $team = null;
+        if ( $teamInvite ) {
+            $team = Team::find($teamInvite->team_id);
+        }
+
+        return view('templates.teams.index', [
+            'teams' => $collectedTeams,
+            'team' => $team,
+            'teamInvite' => $teamInvite,
+        ]);
     }
 
     public function leave(LeaveTeamRequest $teamRequest)

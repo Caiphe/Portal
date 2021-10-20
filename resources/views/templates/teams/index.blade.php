@@ -30,6 +30,20 @@
         <a href="{{ route('teams.create') }}" class="button dark outline">Create New</a>
     </x-heading>
 
+    @if (!is_null($teamInvite))
+    {{-- Top ownerhip block container --}}
+    <div class="top-invite-banner show">
+        <div class="message-container">You have been requested to be part of {{ $team->name }}.</div>
+        <div class="btn-block-container">
+            {{--  Use the accept endpoint --}}
+            <button type="button" class="btn blue-button dark-accept accept-team-invite" data-invitetoken="{{ $teamInvite->accept_token }}" data-csrfToken="{{ @csrf_token() }}">Accept request</button>
+            {{--  Use the revoke endpoint --}}
+            <button type="button" class="btn blue-button dark-revoked reject-team-invite" data-invitetoken="{{ $teamInvite->deny_token }}" data-csrfToken="{{ @csrf_token() }}">Revoke request</button>
+        </div>
+    </div>
+    {{-- @endif --}}
+    @endif
+
     <div class="modal-container">
         {{-- leave the copany pop up --}}
         <div class="overlay-container"></div>
@@ -160,5 +174,58 @@
                 }
             };
         });
+
+
+        document.querySelector('.accept-team-invite').addEventListener('click', function (event){
+            var data = {
+                token: this.dataset.invitetoken,
+                csrftoken: this.dataset.csrftoken
+            };
+
+            handleTimeInvite('/teams/accept', data, event);
+        });
+
+        document.querySelector('.reject-team-invite').addEventListener('click', function (event){
+            var data = {
+                token: this.dataset.invitetoken,
+                csrftoken: this.dataset.csrftoken
+            };
+
+            handleTimeInvite('/teams/reject', data, event);
+        });
+
+        function handleTimeInvite(url, data, event) {
+            var xhr = new XMLHttpRequest();
+
+            event.preventDefault();
+
+            xhr.open('POST', url);
+
+            xhr.setRequestHeader('X-CSRF-TOKEN', data.csrftoken);
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+            xhr.send(JSON.stringify(data));
+
+            addLoading('Handling team invite response.');
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    document.querySelector('.top-invite-banner').classList.remove('show');
+                } else {
+                    var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+                    if(result.errors) {
+                        result.message = [];
+                        for(var error in result.errors){
+                            result.message.push(result.errors[error]);
+                        }
+                    }
+
+                    addAlert('error', result.message || 'Sorry there was a problem handling team invitation. Please try again.');
+                }
+                removeLoading();
+            };
+        }
     </script>
 @endpush
