@@ -93,7 +93,7 @@ class CompanyTeamsController extends Controller
 
         $invite->user_id = $user->id;
         $invite->team_id = $team->id;
-        $invite->type = 'ownership';
+        $invite->type = 'invite';
         $invite->email = $data['invitee'];
         $invite->accept_token = md5(uniqid(microtime()));
         $invite->deny_token = md5(uniqid(microtime()));
@@ -110,8 +110,8 @@ class CompanyTeamsController extends Controller
         $user = User::where('email', '=', $data['invitee'])->first();
 
         if (is_null($user) && !is_null($team)) {
-            $this->createExternalTeamInvite($team, $emailAddress);
-            Mail::to($teamOwner->email)->send(new InviteExternalUser($team, $data['invitee']));
+            $this->createExternalTeamInvite($team, $data['invitee']);
+            Mail::to($user->email)->send(new InviteExternalUser($team, $data['invitee']));
 
             return response()->json(['success' => true]);
         } elseif($user->exists) {

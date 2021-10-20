@@ -55,7 +55,7 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
     Route::post('teams/remove', 'CompanyTeamsController@remove')->name('team.remove.user');
     Route::post('teams/invite', 'CompanyTeamsController@invite')->name('teams.invite');
     Route::any('teams/accept', 'CompanyTeamsController@accept')->name('teams.invite.accept');
-    Route::any('teams/reject', 'CompanyTeamsController@deny')->name('teams.invite.deny');
+    Route::any('teams/reject', 'CompanyTeamsController@reject')->name('teams.invite.deny');
     Route::any('teams/ownership', 'CompanyTeamsController@ownership')->name('teams.ownership.invite');
 });
 

@@ -72,7 +72,7 @@ Team
         <p class="admin-user-name"></p>
         <form class="form-delete-user">
             <button type="button" class="btn primary mr-10 make-admin-cancel-btn">CANCEL</button>
-            <button type="button" class="btn dark admin-removal-btn">Submit</button>
+            <button type="button" id="make-owner-btn" class="btn dark admin-removal-btn"  data-teamid="{{ $team->id }}">Submit</button>
             {{-- <button type="button" class="btn dark admin-removal-btn">Transfer Ownership</button> --}}
         </form>
     </div>
@@ -168,6 +168,7 @@ Team
                             <div class="users-thumbnail" style="background-image: url({{ $user->profile_picture }})"></div>
                             <div class="user-full-name">{{ $user->full_name }}</div>
                             <div class="check-container">
+
                                 <x-radio-round-two name="transfer-ownership-check" id="{{ $user->id }}" value="{{ $user->email }}"></x-radio-round-two>
                             </div>
                         </li>
@@ -179,13 +180,13 @@ Team
 
         <form class="form-delete-user mt-40">
             <button type="button" class="btn primary mr-10 ownership-removal-btn">CANCEL</button>
-            <button type="button" id="transfer-btn" class="btn dark transfer-btn ">TRANSFER</button>
+            <button type="button" id="transfer-btn" data-teamid="{{ $team->id }}" class="btn dark transfer-btn">TRANSFER</button>
         </form>
 
     </div>
 </div>
 
-<div class="mt-2">
+<div class="mt-2 custom-margin">
     {{-- Top ownerhip block container --}}
     <div class="top-ownership-banner @if ($userTeamOwnershipInvite) show @endif ">
         <div class="message-container">You have been requested to be the owner of this team.</div>
@@ -267,7 +268,7 @@ Team
                                     {{---  Uses the transfer endpoint--}}
                                     <li>
                                         <button
-                                            class="make-admin {{ $teamUser->isOwnerOfTeam($team) ? 'non-active' : '' }} transfer-ownership"
+                                            class="make-admin {{ $teamUser->isOwnerOfTeam($team) ? 'non-active' : '' }} transfer-ownership make-owner-btn"
                                             data-adminname="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
                                             data-invite=""
                                             data-teamid="{{ $team->id }}"
@@ -276,6 +277,10 @@ Team
                                             Make Owner
                                         </button>
                                     </li>
+
+                                    @if($user->isOwnerOfTeam($team))
+                                    @endif
+
                                     @if($user->isOwnerOfTeam($team))
                                         {{---  Uses the invite endpoint--}}
                                         <li>

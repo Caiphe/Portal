@@ -38,7 +38,7 @@
 
             <h2 class="team-head">Leave team</h2>
             <p class="teammate-text">Are you sure you want to leave this company?</p>
-            <p class="app-name team-name"></p>
+            <p class="app-name team-name mb-20"></p>
             <form class="form-team-leave">
                 <input type="hidden" value="" name="team_id" class="hidden-team-id"/>
                 <input type="hidden" value="" name="team_user_id" class="hidden-team-user-id"/>

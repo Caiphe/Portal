@@ -43,6 +43,6 @@ class TeamAppCreated extends Mailable
             $message->getHeaders()->addTextHeader('Reply-To', $email);
         })
             ->subject('New team app from the MTN Developer Portal')
-            ->markdown('emails.new-team-app');
+            ->markdown('emails.new-team');
     }
 }

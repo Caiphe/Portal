@@ -15,6 +15,9 @@ var hiddenTeamUserId = document.querySelector('.hidden-team-user-id');
 var deleteUserActionBtn = document.querySelector('.remove-user-from-team');
 var teamInviteUserBtn = document.querySelector('.invite-btn');
 
+var transferOwnsershipBtn = document.querySelector('#transfer-btn');
+var makeOwnershipBtn = document.querySelector('#make-owner-btn');
+
 for(var i = 0; i < btnActions.length; i++) {
     btnActions[i].addEventListener('click', showUserAction);
 }
@@ -71,41 +74,13 @@ document.querySelector('.confirm-delete-close-modal').addEventListener('click', 
 // show Make admin modal
 var adminModal = document.querySelector('.make-admin-modal-container');
 var adminModalShow = document.querySelectorAll('.make-admin');
-for(var i = 0; i < adminModalShow.length; i++){
-    adminModalShow[i].addEventListener('click', showAdminModalFunc);
-}
 
-function showAdminModalFunc(){
-    document.querySelector('.admin-user-name').innerHTML = this.dataset.adminname;
-    adminModal.classList.add('show');
-}
 
-document.querySelector('.admin-close-modal').addEventListener('click', hideAdminModal);
-document.querySelector('.admin-overlay-container').addEventListener('click', hideAdminModal);
-document.querySelector('.make-admin-cancel-btn').addEventListener('click', hideAdminModal);
-function hideAdminModal(){
-    adminModal.classList.remove('show');
-}
 
 // show Transfer ownership to a user
 var ownershipModal = document.querySelector('.ownweship-modal-container');
 var ownershipModalShow = document.querySelector('.make-owner');
 
-/** Fix a bug when attempting to remove/delete a User from Team */
-if (ownershipModalShow !== null) {
-    ownershipModalShow.addEventListener('click', showOwnershipModalFunc);
-}
-
-function showOwnershipModalFunc(){
-    ownershipModal.classList.add('show');
-}
-
-document.querySelector('.ownweship-close-modal').addEventListener('click', hideOwnershipModal);
-document.querySelector('.ownweship-overlay-container').addEventListener('click', hideOwnershipModal);
-document.querySelector('.ownership-removal-btn').addEventListener('click', hideOwnershipModal);
-function hideOwnershipModal(){
-    ownershipModal.classList.remove('show');
-}
 
 var radiosList = document.querySelectorAll('input[name="transfer-ownership-check"]');
 for(var i = 0; i < radiosList.length; i++){
@@ -114,7 +89,9 @@ for(var i = 0; i < radiosList.length; i++){
 
 function checkedRadio(){
     if(this.checked){
-        document.querySelector('#transfer-btn').classList.remove('transfer-btn');
+        transferOwnsershipBtn.classList.remove('transfer-btn');
+        transferOwnsershipBtn.setAttribute('data-useremail', this.value);
+        console.log(this.value);
     }
 }
 
@@ -469,16 +446,36 @@ document.querySelector('.reject-team-ownership').addEventListener('click', funct
     handleOwnershipTransfer('/teams/reject', data, event);
 });
 
+transferOwnsershipBtn.addEventListener('click', function(event){
+    var data = {
+        team_id: this.dataset.teamid,
+        invitee: this.dataset.useremail
+    };
+    handleOwnershipTransfer('/teams/ownership', data, event);
+});
+
+makeOwnershipBtn.addEventListener('click', function(event){
+    var data = {
+        team_id: this.dataset.teamid,
+        invitee: this.dataset.useremail
+    };
+    handleOwnershipTransfer('/teams/ownership', data, event);
+});
+
 function handleOwnershipTransfer(url, data, event) {
     var xhr = new XMLHttpRequest();
 
     event.preventDefault();
 
     xhr.open('POST', url);
-
-    xhr.setRequestHeader('X-CSRF-TOKEN', data.csrftoken);
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.setRequestHeader(
+        "X-CSRF-TOKEN",
+        document.getElementsByName("csrf-token")[0].content
+    );
+
+    console.log(data.csrftoken);
 
     xhr.send(JSON.stringify(data));
 
@@ -486,7 +483,9 @@ function handleOwnershipTransfer(url, data, event) {
 
     xhr.onload = function() {
         if (xhr.status === 200) {
-            window.reload();
+           addAlert('success', "Ownership trafer request sent successfully !");
+           hideOwnershipModal();
+           hideAdminModal();
         } else {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
@@ -502,4 +501,41 @@ function handleOwnershipTransfer(url, data, event) {
 
         removeLoading();
     };
+}
+
+
+/** Fix a bug when attempting to remove/delete a User from Team */
+if (ownershipModalShow !== null) {
+    ownershipModalShow.addEventListener('click', showOwnershipModalFunc);
+}
+
+function showOwnershipModalFunc(){
+    ownershipModal.classList.add('show');
+}
+
+document.querySelector('.ownweship-close-modal').addEventListener('click', hideOwnershipModal);
+document.querySelector('.ownweship-overlay-container').addEventListener('click', hideOwnershipModal);
+document.querySelector('.ownership-removal-btn').addEventListener('click', hideOwnershipModal);
+function hideOwnershipModal(){
+    ownershipModal.classList.remove('show');
+}
+
+
+// This hides and shows the ownership modal from the user's list
+
+for(var i = 0; i < adminModalShow.length; i++){
+    adminModalShow[i].addEventListener('click', showAdminModalFunc);
+}
+
+function showAdminModalFunc(){
+    document.querySelector('.admin-user-name').innerHTML = this.dataset.adminname;
+    document.querySelector('#make-owner-btn').setAttribute('data-useremail', this.dataset.useremail);
+    adminModal.classList.add('show');
+}
+
+document.querySelector('.admin-close-modal').addEventListener('click', hideAdminModal);
+document.querySelector('.admin-overlay-container').addEventListener('click', hideAdminModal);
+document.querySelector('.make-admin-cancel-btn').addEventListener('click', hideAdminModal);
+function hideAdminModal(){
+    adminModal.classList.remove('show');
 }

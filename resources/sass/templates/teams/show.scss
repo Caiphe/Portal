@@ -405,6 +405,12 @@ button{
             width: 170px;
         }
     }
+
+    .cols{
+        @media(max-width: 768px){
+            display: block;
+        }
+    }
 }
 
 // NO APPS
@@ -439,7 +445,7 @@ button{
 
     .add-team-mate-btn{
         position: absolute;
-        right: 1px;
+        right: 27px;
         top: 20px;
     }
 }
@@ -782,6 +788,10 @@ button{
         top: 0px;
         border: none;
         transition: all 0.3s ease-in-out;
+
+        @media(max-width: 768px){
+            right: 40px;
+        }
 
         @media(max-width: 470px){
             position: relative;
@@ -1154,4 +1164,15 @@ button{
         margin-bottom: -4px;
         margin-right: 5px;
     }
+}
+
+.custom-margin{
+    margin-right: -40px;
+}
+
+.form-team-leave{
+    text-align: center;
+}
+.mb-20{
+    margin-bottom: 20px;
 }

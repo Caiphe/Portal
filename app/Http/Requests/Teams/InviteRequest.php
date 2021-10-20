@@ -18,7 +18,7 @@ class InviteRequest extends FormRequest
     public function rules() {
         return [
             'invitee' => 'required',
-            'type' => 'required',
+            'type' => 'sometimes',
             'team_id' => 'required',
         ];
     }

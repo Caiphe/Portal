@@ -139,7 +139,7 @@ function handleTimeInvite(url, data, event) {
 
     xhr.onload = function() {
         if (xhr.status === 200) {
-            window.reload();
+            document.querySelector('.top-invite-banner').classList.remove('show');
         } else {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
@@ -152,7 +152,6 @@ function handleTimeInvite(url, data, event) {
 
             addAlert('error', result.message || 'Sorry there was a problem handling team invitation. Please try again.');
         }
-
         removeLoading();
     };
 }
