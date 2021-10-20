@@ -203,7 +203,7 @@ Team
         {{-- To replace with the team profile picture --}}
         <div class="team-name-logo-container">
             <div class="team-logo"  style="background-image: url({{ $team->logo }})"></div>
-            <h2>{{  $team->name }}</h2>
+            <h2>{{ $team->name }}</h2>
         </div>
 
         @if ($team->users->count() > 0 && !$user->isOwnerOfTeam($team))

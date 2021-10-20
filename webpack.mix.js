@@ -36,6 +36,7 @@ mix.scripts(
     .scripts("resources/js/vendor/trix.js", "public/js/vendor/trix.js")
     .scripts("resources/js/vendor/stoplight.js", "public/js/vendor/stoplight.js")
     .scripts("resources/js/templates/teams/create.js", "public/js/templates/teams/create.js")
+    .scripts("resources/js/templates/teams/update.js", "public/js/templates/teams/update.js")
     .scripts("resources/js/templates/teams/show.js", "public/js/templates/teams/show.js")
     .sass("resources/sass/auth/login.scss", "public/css/auth")
     .sass("resources/sass/auth/register.scss", "public/css/auth")

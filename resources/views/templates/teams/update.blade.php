@@ -77,6 +77,8 @@
                 </label>
             </div>
 
+            <div class="group team-logo-container" style="background-image: url({{ $team->logo }})"></div>
+
             {{-- <div class="group custom-manage-team">
                <a href="{{ route('team.show', $team->id) }}">Manage team members</a>
             </div> --}}
@@ -96,5 +98,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ mix('/js/templates/teams/create.js') }}"></script>
+    <script src="{{ mix('/js/templates/teams/update.js') }}"></script>
 @endpush
