@@ -53,10 +53,10 @@ Team
             </div>
             <div class="radio-container">
                 <x-radio-round id="user-radio" name="role_name" value="Administrator">Administrator</x-radio-round>
-                <x-radio-round id="user-radio" name="role_name" value="user">User</x-radio-round>
+                <x-radio-round id="user-radio-two" name="role_name" checked value="user">User</x-radio-round>
             </div>
 
-            <div class="teamMateErrorMessage">Valid email and User type required !</div>
+            <div class="teamMateErrorMessage">Valid email required !</div>
         </form>
     </div>
 </div>

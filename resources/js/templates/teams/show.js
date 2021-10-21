@@ -336,20 +336,18 @@ deleteUserActionBtn.addEventListener('click', function(event){
 var teamMateInvitEmail = document.querySelector('.teammate-email');
 var inviteTeamMateError = document.querySelector('.teamMateErrorMessage');
 var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-var roleRadiosList = document.querySelector('input[name="role_name');
 teamMateInvitEmail.value = "";
 
-
-teamMateInvitEmail.addEventListener('keyup', function(){
+teamMateInvitEmail.addEventListener('keyup', emailCheck);
+function emailCheck(){
     if(this.value.match(mailformat)){
-        teamInviteUserBtn.classList.add('active');
         inviteTeamMateError.classList.remove('show');
-
+        teamInviteUserBtn.classList.add('active');
     }else{
-        teamInviteUserBtn.classList.remove('active');
         inviteTeamMateError.classList.add('show');
+        teamInviteUserBtn.classList.remove('active');
     }
-});
+}
 
 teamInviteUserBtn.addEventListener('click', function(event){
     var url = "/teams/invite";
@@ -530,9 +528,7 @@ function hideOwnershipModal(){
     ownershipModal.classList.remove('show');
 }
 
-
 // This hides and shows the ownership modal from the user's list
-
 for(var i = 0; i < adminModalShow.length; i++){
     adminModalShow[i].addEventListener('click', showAdminModalFunc);
 }
