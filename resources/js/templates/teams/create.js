@@ -107,7 +107,6 @@ function chooseTeamPicture() {
 document.querySelector('.accept-team-invite').addEventListener('click', function (event){
     var data = {
         token: this.dataset.invitetoken,
-        csrftoken: this.dataset.csrftoken
     };
 
     handleTimeInvite('/teams/accept', data, event);
@@ -116,7 +115,6 @@ document.querySelector('.accept-team-invite').addEventListener('click', function
 document.querySelector('.reject-team-invite').addEventListener('click', function (event){
     var data = {
         token: this.dataset.invitetoken,
-        csrftoken: this.dataset.csrftoken
     };
 
     handleTimeInvite('/teams/reject', data, event);
@@ -129,9 +127,15 @@ function handleTimeInvite(url, data, event) {
 
     xhr.open('POST', url);
 
-    xhr.setRequestHeader('X-CSRF-TOKEN', data.csrftoken);
+    // xhr.setRequestHeader('X-CSRF-TOKEN', data.csrftoken);
+    // xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    // xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.setRequestHeader("X-CSRF-TOKEN",
+        document.getElementsByName("csrf-token")[0].content
+    );
 
     xhr.send(JSON.stringify(data));
 
