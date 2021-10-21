@@ -1,5 +1,4 @@
 @php
-
     $user = auth()->user();
 @endphp
 @push('styles')

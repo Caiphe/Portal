@@ -1,3 +1,6 @@
+@php
+    $user = auth()->user();
+@endphp
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/templates/teams/show.css') }}">
 @endpush
@@ -30,7 +33,7 @@
         <a href="{{ route('teams.create') }}" class="button dark outline">Create New</a>
     </x-heading>
 
-    @if($teamInvite)
+    @if($teamInvite &&  !$team->hasUser($user))
     {{-- Top ownerhip block container --}}
     <div class="top-invite-banner show">
         <div class="message-container">You have been requested to be part of {{ $team->name }}.</div>

@@ -1,3 +1,6 @@
+@php
+    $user = auth()->user();
+@endphp
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/templates/teams/create.css') }}">
 @endpush
@@ -32,7 +35,7 @@
 
     <x-twofa-warning class="tall"></x-twofa-warning>
 
-    @if ( $teamInvite )
+    @if ($teamInvite &&  !$team->hasUser($user))
     {{-- Top ownerhip block container --}}
     <div class="top-invite-banner show">
         <div class="message-container">You have been requested to be part of {{ $team->name }}.</div>

@@ -1,3 +1,6 @@
+@php
+    $user = auth()->user();
+@endphp
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/templates/apps/index.css') }}">
 @endpush
@@ -43,6 +46,20 @@
     </x-heading>
 
     <x-twofa-warning></x-twofa-warning>
+
+    @if($teamInvite &&  !$team->hasUser($user))
+    {{-- Top ownerhip block container --}}
+    <div class="top-invite-banner show">
+        <div class="message-container">You have been requested to be part of {{ $team->name }}.</div>
+        <div class="btn-block-container">
+            {{--  Use the accept endpoint --}}
+            <button type="button" class="btn blue-button dark-accept accept-team-invite" data-invitetoken="{{ $teamInvite->accept_token }}">Accept request</button>
+            {{--  Use the revoke endpoint --}}
+            <button type="button" class="btn blue-button dark-revoked reject-team-invite" data-invitetoken="{{ $teamInvite->deny_token }}">Revoke request</button>
+        </div>
+    </div>
+    {{-- @endif --}}
+    @endif
 
     @if(empty($approvedApps) && empty($revokedApps))
         <div class="container" id="app-empty">
@@ -313,6 +330,72 @@
         closeBannerBtn.addEventListener('click', hideOwnershipBanner);
         function hideOwnershipBanner(){
             OwnershipRequest.classList.add('hide');
+        }
+
+        // Invits functionality
+        if(document.querySelector('.accept-team-invite')){
+            var btnAcceptInvite = document.querySelector('.accept-team-invite');
+            if(btnAcceptInvite.length > 0){
+                btnAcceptInvite.addEventListener('click', function (event){
+                    var data = {
+                        token: this.dataset.invitetoken,
+                    };
+
+                    handleTimeInvite('/teams/accept', data, event);
+                });
+            }
+        }
+       
+        if(document.querySelector('.reject-team-invite')){
+            var btnRejectInvite =  document.querySelector('.reject-team-invite')
+            if(btnRejectInvite.length > 0 ){
+                    btnRejectInvite.addEventListener('click', function (event){
+                    var data = {
+                        token: this.dataset.invitetoken,
+                    };
+
+                    handleTimeInvite('/teams/reject', data, event);
+                });
+            };
+        }
+      
+
+        function handleTimeInvite(url, data, event) {
+            var xhr = new XMLHttpRequest();
+
+            event.preventDefault();
+
+            xhr.open('POST', url);
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.setRequestHeader(
+                "X-CSRF-TOKEN",
+                document.getElementsByName("csrf-token")[0].content
+            );
+
+
+            xhr.send(JSON.stringify(data));
+
+            addLoading('Handling team invite response.');
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    document.querySelector('.top-invite-banner').classList.remove('show');
+                    addAlert('success', "Thanks, for your response");
+                } else {
+                    var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+                    if(result.errors) {
+                        result.message = [];
+                        for(var error in result.errors){
+                            result.message.push(result.errors[error]);
+                        }
+                    }
+
+                    addAlert('error', result.message || 'Sorry there was a problem handling team invitation. Please try again.');
+                }
+                removeLoading();
+            };
         }
 
     </script>
