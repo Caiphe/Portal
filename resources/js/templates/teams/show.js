@@ -440,21 +440,29 @@ if (document.querySelector('.transfer-ownership')) {
     });
 }
 
-document.querySelector('.accept-team-ownership').addEventListener('click', function (event){
-    var data = {
-        token: this.dataset.invitetoken,
-    };
+var btnAcceptOwnership = document.querySelector('.accept-team-ownership');
+if(btnAcceptOwnership){
+    btnAcceptOwnership.addEventListener('click', function (event){
+        var data = {
+            token: this.dataset.invitetoken,
+        };
+    
+        handleOwnershipTransfer('/teams/accept', data, event);
+    });
+}
 
-    handleOwnershipTransfer('/teams/accept', data, event);
-});
 
-document.querySelector('.reject-team-ownership').addEventListener('click', function (event){
-    var data = {
-        token: this.dataset.invitetoken,
-    };
+var btnRejectOwnership = document.querySelector('.reject-team-ownership');
+if(btnRejectOwnership){
+    btnRejectOwnership.addEventListener('click', function (event){
+        var data = {
+            token: this.dataset.invitetoken,
+        };
+    
+        handleOwnershipTransfer('/teams/reject', data, event);
+    });
+}
 
-    handleOwnershipTransfer('/teams/reject', data, event);
-});
 
 transferOwnsershipBtn.addEventListener('click', function(event){
     var data = {

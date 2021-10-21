@@ -33,18 +33,18 @@
         <a href="{{ route('teams.create') }}" class="button dark outline">Create New</a>
     </x-heading>
 
-    @if($teamInvite &&  !$team->hasUser($user))
+    {{-- && !$team->hasUser($user) --}}
+    @if ($teamInvite && !$team->hasUser($user))
     {{-- Top ownerhip block container --}}
     <div class="top-invite-banner show">
         <div class="message-container">You have been requested to be part of {{ $team->name }}.</div>
         <div class="btn-block-container">
             {{--  Use the accept endpoint --}}
-            <button type="button" class="btn blue-button dark-accept accept-team-invite" data-invitetoken="{{ $teamInvite->accept_token }}">Accept request</button>
+            <button type="button" class="btn blue-button dark-accept accept-team-invite" data-invitetoken="{{ $teamInvite->accept_token }}" data-csrfToken="{{ @csrf_token() }}">Accept request</button>
             {{--  Use the revoke endpoint --}}
-            <button type="button" class="btn blue-button dark-revoked reject-team-invite" data-invitetoken="{{ $teamInvite->deny_token }}">Revoke request</button>
+            <button type="button" class="btn blue-button dark-revoked reject-team-invite" data-invitetoken="{{ $teamInvite->deny_token }}" data-csrfToken="{{ @csrf_token() }}">Revoke request</button>
         </div>
     </div>
-    {{-- @endif --}}
     @endif
 
     <div class="modal-container">
@@ -180,32 +180,29 @@
         });
 
 
-        if(document.querySelector('.accept-team-invite')){
-            var btnAcceptInvite = document.querySelector('.accept-team-invite');
-            if(btnAcceptInvite.length > 0){
-                btnAcceptInvite.addEventListener('click', function (event){
-                    var data = {
-                        token: this.dataset.invitetoken,
-                    };
+        var btnAcceptInvite = document.querySelector('.accept-team-invite');
+        if(btnAcceptInvite){
+           
+            btnAcceptInvite.addEventListener('click', function (event){
+                var data = {
+                    token: this.dataset.invitetoken,
+                };
 
-                    handleTimeInvite('/teams/accept', data, event);
-                });
-            }
+                handleTimeInvite('/teams/accept', data, event);
+            });
         }
-       
-        if(document.querySelector('.reject-team-invite')){
-            var btnRejectInvite =  document.querySelector('.reject-team-invite')
-            if(btnRejectInvite.length > 0 ){
-                    btnRejectInvite.addEventListener('click', function (event){
-                    var data = {
-                        token: this.dataset.invitetoken,
-                    };
 
-                    handleTimeInvite('/teams/reject', data, event);
-                });
-            };
+        var btnRejectInvite =  document.querySelector('.reject-team-invite')
+        if(btnRejectInvite){
+            btnRejectInvite.addEventListener('click', function (event){
+                var data = {
+                    token: this.dataset.invitetoken,
+                };
+
+                handleTimeInvite('/teams/reject', data, event);
+            });
         }
-      
+    
 
         function handleTimeInvite(url, data, event) {
             var xhr = new XMLHttpRequest();

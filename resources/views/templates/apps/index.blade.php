@@ -325,41 +325,39 @@
 
         var closeBannerBtn = document.querySelector('.close-banner');
         var OwnershipRequest = document.querySelector('.ownership-request');
-        OwnershipRequest.classList.remove('hide')
+        if(OwnershipRequest){
+            OwnershipRequest.classList.remove('hide');
 
-        closeBannerBtn.addEventListener('click', hideOwnershipBanner);
-        function hideOwnershipBanner(){
-            OwnershipRequest.classList.add('hide');
-        }
-
-        // Invits functionality
-        if(document.querySelector('.accept-team-invite')){
-            var btnAcceptInvite = document.querySelector('.accept-team-invite');
-            if(btnAcceptInvite.length > 0){
-                btnAcceptInvite.addEventListener('click', function (event){
-                    var data = {
-                        token: this.dataset.invitetoken,
-                    };
-
-                    handleTimeInvite('/teams/accept', data, event);
-                });
+            closeBannerBtn.addEventListener('click', hideOwnershipBanner);
+            function hideOwnershipBanner(){
+                OwnershipRequest.classList.add('hide');
             }
         }
-       
-        if(document.querySelector('.reject-team-invite')){
-            var btnRejectInvite =  document.querySelector('.reject-team-invite')
-            if(btnRejectInvite.length > 0 ){
-                    btnRejectInvite.addEventListener('click', function (event){
-                    var data = {
-                        token: this.dataset.invitetoken,
-                    };
 
-                    handleTimeInvite('/teams/reject', data, event);
-                });
+
+        // Invits functionality
+        var btnAcceptInvite = document.querySelector('.accept-team-invite');
+        if(btnAcceptInvite){
+            btnAcceptInvite.addEventListener('click', function (event){
+                var data = {
+                    token: this.dataset.invitetoken,
+                };
+
+                handleTimeInvite('/teams/accept', data, event);
+            });
+        }
+       
+        var btnRejectInvite =  document.querySelector('.reject-team-invite')
+        if(btnRejectInvite){
+            btnRejectInvite.addEventListener('click', function (event){
+            var data = {
+                token: this.dataset.invitetoken,
             };
+
+            handleTimeInvite('/teams/reject', data, event);
+            });
         }
       
-
         function handleTimeInvite(url, data, event) {
             var xhr = new XMLHttpRequest();
 

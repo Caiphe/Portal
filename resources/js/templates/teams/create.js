@@ -104,21 +104,27 @@ function chooseTeamPicture() {
     }
 }
 
-document.querySelector('.accept-team-invite').addEventListener('click', function (event){
+var btnAcceptInvite = document.querySelector('.accept-team-invite');
+if(btnAcceptInvite){
+    btnAcceptInvite.addEventListener('click', function (event){
+        var data = {
+            token: this.dataset.invitetoken,
+        };
+
+        handleTimeInvite('/teams/accept', data, event);
+    });
+}
+
+var btnRejectInvite =  document.querySelector('.reject-team-invite')
+if(btnRejectInvite){
+    btnRejectInvite.addEventListener('click', function (event){
     var data = {
         token: this.dataset.invitetoken,
     };
 
-    handleTimeInvite('/teams/accept', data, event);
-});
-
-document.querySelector('.reject-team-invite').addEventListener('click', function (event){
-    var data = {
-        token: this.dataset.invitetoken,
-    };
-
-    handleTimeInvite('/teams/reject', data, event);
-});
+        handleTimeInvite('/teams/reject', data, event);
+    });
+}
 
 function handleTimeInvite(url, data, event) {
     var xhr = new XMLHttpRequest();
@@ -126,11 +132,6 @@ function handleTimeInvite(url, data, event) {
     event.preventDefault();
 
     xhr.open('POST', url);
-
-    // xhr.setRequestHeader('X-CSRF-TOKEN', data.csrftoken);
-    // xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-    // xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xhr.setRequestHeader("X-CSRF-TOKEN",
