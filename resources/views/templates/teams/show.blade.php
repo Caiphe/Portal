@@ -49,7 +49,7 @@ Team
         <form class="form-teammate">
             <div class="form-group-container">
                 <input type="text" class="form-control teammate-email" placeholder="Add email to invite users"/>
-                <button type="" class="invite-btn" data-teamid="{{ $team->id }}" data-csrf="{{ csrf_token() }}">INVITE</button>
+                <button type="" class="invite-btn" data-teamid="{{ $team->id }}">INVITE</button>
             </div>
             <div class="radio-container">
                 <x-radio-round id="user-radio" name="role_name" value="Administrator">Administrator</x-radio-round>
@@ -72,8 +72,7 @@ Team
         <p class="admin-user-name"></p>
         <form class="form-delete-user">
             <button type="button" class="btn primary mr-10 make-admin-cancel-btn">CANCEL</button>
-            <button type="button" id="make-owner-btn" class="btn dark admin-removal-btn"  data-teamid="{{ $team->id }}">Submit</button>
-            {{-- <button type="button" class="btn dark admin-removal-btn">Transfer Ownership</button> --}}
+            <button type="button" id="make-owner-btn" class="btn dark admin-removal-btn"  data-teamid="{{ $team->id }}">Transfer Ownership</button>
         </form>
     </div>
 </div>
@@ -206,7 +205,7 @@ Team
             <h2>{{ $team->name }}</h2>
         </div>
 
-        @if ($team->users->count() > 0 && !$user->isOwnerOfTeam($team))
+        @if ( $team->users->count() > 0 && ( !$user->isTeamOwner($team) ) )
             <button class="btn dark make-owner">Select a new owner</button>
         @endif
     </div>
@@ -258,7 +257,7 @@ Team
                                 <span class="owner-tag red-tag">OWNER</span>
                             @endif
                         </td>
-                        <td>{{ $teamUser->roles()->first()->name  === 'admin' ? 'Administrator' : ucfirst($teamUser->roles()->first()->name) }}</td>
+                        <td>{{ $teamUser->teamRole($team)->label }}</td>
                         <td class="column-container">{{ $teamUser->twoFactorStatus() }}
                             <div class="block-hide-menu"></div>
                             <button class="btn-actions"></button>
@@ -268,44 +267,41 @@ Team
                                     {{---  Uses the transfer endpoint--}}
                                     <li>
                                         <button
-                                            class="make-admin {{ $teamUser->isOwnerOfTeam($team) ? 'non-active' : '' }} transfer-ownership make-owner-btn"
+                                            class="make-admin {{ $user->hasTeamRole($team, 'team_admin') || $teamUser->isOwnerOfTeam($team) ? 'non-active' : '' }} transfer-ownership make-owner-btn"
                                             data-adminname="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
                                             data-invite=""
                                             data-teamid="{{ $team->id }}"
-                                            data-useremail="{{ $teamUser->email }}"
-                                            data-token="{{ @csrf_token() }}">
+                                            data-useremail="{{ $teamUser->email }}">
                                             Make Owner
                                         </button>
                                     </li>
 
-                                    @if($user->isOwnerOfTeam($team))
-                                    @endif
+                                    {{---  Uses the invite endpoint--}}
+                                    <li>
+                                        <button
+                                            class="make-user {{ $user->hasTeamRole($team, 'team_admin') || $teamUser->isOwnerOfTeam($team) ? 'non-active' : '' }}"
+                                            data-username="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
+                                            data-useremail="{{ $teamUser->email }}"
+                                            data-teamid="{{ $team->id }}"
+                                            data-teamuserid="{{ $user->id }}">
+                                            @if ($teamUser->isOwnerOfTeam($team))
+                                                Make Administrator
+                                            @else
+                                                @php echo $teamUser->teamRole($team)->name === 'team_user' ? 'Make Administrator' : 'Make User' @endphp
+                                            @endif
+                                        </button>
+                                    </li>
 
-                                    @if($user->isOwnerOfTeam($team))
-                                        {{---  Uses the invite endpoint--}}
-                                        <li>
-                                            <button
-                                                class="make-user"
-                                                data-username="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
-                                                data-useremail="{{ $teamUser->email }}"
-                                                data-teamid="{{ $team->id }}"
-                                                data-token="{{ @csrf_token() }}">
-                                                Make User
-                                            </button>
-                                        </li>
-                                    @endif
-                                    @if($team->hasUser($user))
-                                        {{---  Uses the leave endpoint --}}
-                                        <li>
-                                            <button
-                                                class="user-delete"
-                                                data-usernamedelete="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
-                                                data-teamid="{{ $team->id }}"
-                                                data-teamuserid="{{ $user->id }}">
-                                                Delete
-                                            </button>
-                                        </li>
-                                    @endif
+                                    {{---  Uses the leave endpoinst --}}
+                                    <li>
+                                        <button
+                                            class="user-delete {{ !$user->hasTeamRole($team, 'team_admin') || !$teamUser->isOwnerOfTeam($team) ? 'non-active' : '' }}"
+                                            data-usernamedelete="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
+                                            data-teamid="{{ $team->id }}"
+                                            data-teamuserid="{{ $user->id }}">
+                                            Delete
+                                        </button>
+                                    </li>
                                 </ul>
                             </div>
                             {{-- Block end --}}
@@ -316,12 +312,14 @@ Team
 
             </table>
 
-            <button class="outline dark add-team-mate-btn-mobile">Add a teammate</button>
+            @if ($user->hasTeamRole($team, 'team_admin'))
+                <button class="outline dark add-team-mate-btn-mobile">Add a teammate</button>
+            @endif
 
         </div>
     </div>
 
-    @if($userTeamOwnershipInvite)
+    @if($userTeamOwnershipInvite && $userTeamOwnershipInvite->type === 'ownership' && !$user->isOwnerOfTeam($team))
         {{---  Only show team transfer if team has members --}}
         <div class="transfer-ownership-container" id="transfer-ownership">
             {{-- Transfer ownership container --}}

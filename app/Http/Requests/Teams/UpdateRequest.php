@@ -49,7 +49,7 @@ class UpdateRequest extends FormRequest
             'name' => filter_var($this->name, FILTER_SANITIZE_STRING),
             'url' => filter_var($this->url, FILTER_SANITIZE_STRING),
             'contact' => filter_var($this->contact, FILTER_SANITIZE_STRING),
-            'country' => filter_var($this->country, FILTER_SANITIZE_EMAIL),
+            'country' => filter_var($this->country, FILTER_SANITIZE_STRING),
             'description' => filter_var($this->description, FILTER_SANITIZE_STRING),
         ]);
     }

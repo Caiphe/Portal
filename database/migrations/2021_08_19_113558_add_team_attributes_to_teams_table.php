@@ -14,7 +14,7 @@ class AddTeamAttributesToTeamsTable extends Migration
     public function up()
     {
         Schema::table('teams', function (Blueprint $table) {
-            $table->string('name');
+            $table->string('name')->unique();
             $table->string('url');
             $table->string('contact');
             $table->string('country');

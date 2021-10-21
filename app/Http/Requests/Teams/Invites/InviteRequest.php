@@ -19,7 +19,7 @@ class InviteRequest extends FormRequest
         return [
             'team_id' => 'required',
             'invitee' => 'required',
-            'type' => 'sometimes',
+            'role' => 'sometimes',
         ];
     }
 }

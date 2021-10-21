@@ -23,6 +23,20 @@ use Mpociot\Teamwork\Facades\Teamwork;
  */
 trait InviteActions
 {
+    public function updateRole(Team $team, User $user, $invite)
+    {
+        if (strtolower($user->teamRole($team)->label) !== $invite->role) {
+            return \DB::table('team_user')->where([
+                'team_id' => $team->id,
+                'user_id' => $user->id
+            ])->update([
+                'role' => $invite->role
+            ]);
+        }
+
+        return false;
+    }
+
     /**
      * Invite a list of potentials members whether they
      * exists or not within the portal

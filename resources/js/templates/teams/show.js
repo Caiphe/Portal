@@ -5,8 +5,6 @@ var mainUserMenu = document.querySelector('.main-users-menu')
 var clodeModal = document.querySelector('.close-modal');
 var deleteClodeModal = document.querySelector('.delete-close-modal');
 var modalContainer = document.querySelector('.modal-container');
-var addTeammateBtn = document.querySelector('.add-team-mate-btn');
-var addTeamMobile = document.querySelector('.add-team-mate-btn-mobile');
 var overlayContainer = document.querySelector('.overlay-container');
 var deleteOverlayContainer = document.querySelector('.delete-overlay-container');
 var cancelRemoveUserBtn = document.querySelector('.cancel-remove-user-btn');
@@ -14,9 +12,10 @@ var hiddenTeamId = document.querySelector('.hidden-team-id');
 var hiddenTeamUserId = document.querySelector('.hidden-team-user-id');
 var deleteUserActionBtn = document.querySelector('.remove-user-from-team');
 var teamInviteUserBtn = document.querySelector('.invite-btn');
-
 var transferOwnsershipBtn = document.querySelector('#transfer-btn');
 var makeOwnershipBtn = document.querySelector('#make-owner-btn');
+var addTeamMobile;
+var addTeammateBtn;
 
 for(var i = 0; i < btnActions.length; i++) {
     btnActions[i].addEventListener('click', showUserAction);
@@ -36,8 +35,14 @@ function hideActions(){
     this.nextElementSibling.nextElementSibling.classList.remove('show');
 }
 
-addTeammateBtn.addEventListener('click', hideModalContainer);
-addTeamMobile.addEventListener('click', hideModalContainer);
+if (addTeamMobile = document.querySelector('.add-team-mate-btn-mobile') ) {
+    addTeamMobile.addEventListener('click', hideModalContainer);
+}
+
+if (addTeammateBtn = document.querySelector('.add-team-mate-btn')) {
+    addTeammateBtn.addEventListener('click', hideModalContainer);
+}
+
 function hideModalContainer(){
     modalContainer.classList.add('show');
 }
