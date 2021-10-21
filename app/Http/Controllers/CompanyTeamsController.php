@@ -204,7 +204,9 @@ class CompanyTeamsController extends Controller
 
         $apps = App::with(['products.countries', 'country', 'developer', 'team'])
             ->whereHas('team', function( $q ) use ( $team ) {
-                $q->where('id', $team->id);
+                if ( $team ) {
+                    $q->where('id', $team->id);
+                }
             })
             ->orderBy('updated_at', 'desc')
             ->get()
@@ -279,10 +281,6 @@ class CompanyTeamsController extends Controller
                 abort(422, 'Could not process logo file upload for your team.');
             }
 
-            if ($validated['team_members']) {
-                $this->sendInvites($validated['team_members']);
-            }
-
             if ( $team->update($data) ) {
                 return redirect()->route('team.show', $team->id)
                     ->with('success: Your team was successfully updated.');
@@ -313,6 +311,10 @@ class CompanyTeamsController extends Controller
             Teamwork::acceptInvite( $invite );
         }else{
 
+            $team = $this->getTeam($invite->team_id);
+            $member = $this->getTeamUserByEmail($invite->email);
+
+            $this->updateRole($team, $member, $invite);
             Teamwork::acceptInvite( $invite );
         }
 

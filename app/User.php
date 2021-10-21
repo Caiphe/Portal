@@ -65,6 +65,38 @@ class User extends Authenticatable implements MustVerifyEmail
 			->unique();
 	}
 
+	public function teamRole($team)
+    {
+        return $this->leftJoin('team_user', 'users.id', '=', 'team_user.user_id')
+            ->leftJoin('teams', 'teams.id', '=', 'team_user.team_id')
+            ->leftJoin('roles', 'roles.id', '=', 'team_user.role_id')
+            ->where('users.id', $this->id)
+            ->where('teams.id', $team->id)
+            ->select('roles.id', 'roles.label', 'roles.name')
+            ->first();
+    }
+
+    public function hasTeamRole($team, $role)
+    {
+        return $this->teamRole($team)->name === $role;
+    }
+
+    public function hasTeamPermissionTo($permission, $team)
+    {
+        $role = $this->teamRole($team);
+        $userPermissions = Role::with('permissions')->find($role->id)->permissions
+            ->flatten()
+            ->pluck('name')
+            ->unique()
+            ->toArray();
+
+        if (is_array($permission)) {
+            return !array_diff($permission, $userPermissions);
+        }
+
+        return in_array($permission, $userPermissions);
+    }
+
 	public function hasPermissionTo($permission)
 	{
 		$test2FA = skip_2fa() || !is_null($this['2fa']);
