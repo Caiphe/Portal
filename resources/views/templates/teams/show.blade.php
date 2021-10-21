@@ -52,7 +52,7 @@ Team
                 <button type="" class="invite-btn" data-teamid="{{ $team->id }}" data-csrf="{{ csrf_token() }}">INVITE</button>
             </div>
             <div class="radio-container">
-                <x-radio-round id="user-radio" name="role_name" value="administrator">Administrator</x-radio-round>
+                <x-radio-round id="user-radio" name="role_name" value="Administrator">Administrator</x-radio-round>
                 <x-radio-round id="user-radio" name="role_name" value="user">User</x-radio-round>
             </div>
 
@@ -202,7 +202,7 @@ Team
     <div class="header-block team-name-logo">
         {{-- To replace with the team profile picture --}}
         <div class="team-name-logo-container">
-            <div class="team-logo"  style="background-image: url({{ $team->logo }})"></div>
+            <div class="team-logo"  style="background-image: url({{ $team['logo'] }})"></div>
             <h2>{{ $team->name }}</h2>
         </div>
 
@@ -254,7 +254,7 @@ Team
                                 ({{ $teamUser->email }})
                             </p>
 
-                            @if($teamUser->isOwnerOfTeam($team))
+                            @if($teamUser->isTeamOwner())
                                 <span class="owner-tag red-tag">OWNER</span>
                             @endif
                         </td>
@@ -265,18 +265,20 @@ Team
                             {{-- user action menu --}}
                             <div class="block-actions">
                                 <ul>
+                                    {{---  Uses the transfer endpoint--}}
+                                    <li>
+                                        <button
+                                            class="make-admin {{ $teamUser->isOwnerOfTeam($team) ? 'non-active' : '' }} transfer-ownership make-owner-btn"
+                                            data-adminname="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
+                                            data-invite=""
+                                            data-teamid="{{ $team->id }}"
+                                            data-useremail="{{ $teamUser->email }}"
+                                            data-token="{{ @csrf_token() }}">
+                                            Make Owner
+                                        </button>
+                                    </li>
+
                                     @if($user->isOwnerOfTeam($team))
-                                        {{---  Uses the transfer endpoint--}}
-                                        <li>
-                                            <button
-                                                class="make-admin {{ $teamUser->isOwnerOfTeam($team) ? 'non-active' : '' }} transfer-ownership make-owner-btn"
-                                                data-adminname="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
-                                                data-teamid="{{ $team->id }}"
-                                                data-useremail="{{ $teamUser->email }}"
-                                                data-teamuserid="{{ $user->id }}">
-                                                Make Owner
-                                            </button>
-                                        </li>
                                     @endif
 
                                     @if($user->isOwnerOfTeam($team))
@@ -287,7 +289,7 @@ Team
                                                 data-username="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
                                                 data-useremail="{{ $teamUser->email }}"
                                                 data-teamid="{{ $team->id }}"
-                                                data-teamuserid="{{ $user->id }}">
+                                                data-token="{{ @csrf_token() }}">
                                                 Make User
                                             </button>
                                         </li>
@@ -298,7 +300,6 @@ Team
                                             <button
                                                 class="user-delete"
                                                 data-usernamedelete="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
-                                                data-useremail="{{ $teamUser->email }}"
                                                 data-teamid="{{ $team->id }}"
                                                 data-teamuserid="{{ $user->id }}">
                                                 Delete

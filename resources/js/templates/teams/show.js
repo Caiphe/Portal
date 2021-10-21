@@ -91,7 +91,6 @@ function checkedRadio(){
     if(this.checked){
         transferOwnsershipBtn.classList.remove('transfer-btn');
         transferOwnsershipBtn.setAttribute('data-useremail', this.value);
-        console.log(this.value);
     }
 }
 

@@ -202,7 +202,7 @@
     background-color: $redDark;
     border-radius: 10px;
     color: #FFF;
-    margin: 10px 0 0 0;
+    margin: 10px 0 15px 0;
     padding: 14px 20px;
     display: flex;
     align-items: center;
@@ -214,7 +214,8 @@
     }
 
     &.tall {
-        margin: 100px 0 0 40px;
+        margin: 70px 0 20px 0px;
+
 
         &+.content {
             margin-top: 40px;
