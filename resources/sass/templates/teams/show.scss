@@ -319,6 +319,7 @@ button{
             margin-right: 10px;
         }
 
+        .custom-modal-form,
         .form-delete-user,
         .form-team{
             width: 280px;
@@ -805,12 +806,10 @@ button{
             background-color: #E9E9E9;
             pointer-events: none;
             cursor: none;
-            transition: all 0.3s ease-in-out;
         }
 
         &.active{
             background-color: #000000;
-            transition: all 0.3s ease-in-out;
             color: #fff
         }
     }
@@ -1127,10 +1126,6 @@ button{
             }
         }
     }
-}
-
-.mt-40{
-    margin-top: 40px;
 }
 
 @media(max-width:768px){

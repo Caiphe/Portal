@@ -41,9 +41,9 @@
         <div class="message-container">You have been requested to be part of {{ $team->name }}.</div>
         <div class="btn-block-container">
             {{--  Use the accept endpoint --}}
-            <button type="button" class="btn blue-button dark-accept accept-team-invite" data-invitetoken="{{ $teamInvite->accept_token }}" data-csrfToken="{{ @csrf_token() }}">Accept request</button>
+            <button type="button" class="btn blue-button dark-accept accept-team-invite" data-invitetoken="{{ $teamInvite->accept_token }}" >Accept request</button>
             {{--  Use the revoke endpoint --}}
-            <button type="button" class="btn blue-button dark-revoked reject-team-invite" data-invitetoken="{{ $teamInvite->deny_token }}" data-csrfToken="{{ @csrf_token() }}">Revoke request</button>
+            <button type="button" class="btn blue-button dark-revoked reject-team-invite" data-invitetoken="{{ $teamInvite->deny_token }}">Revoke request</button>
         </div>
     </div>
     {{-- @endif --}}

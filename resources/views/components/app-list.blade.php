@@ -49,7 +49,7 @@
     </div>
 
     <div class="column">
-        {{ \Carbon\Carbon::parse($app['created_at'])->format('d M Y') }}
+       {{ $app->created_at->format('d M Y') }}
     </div>
 
     <div class="column">

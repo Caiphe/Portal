@@ -68,8 +68,9 @@ class AuthServiceProvider extends ServiceProvider
 			return $user->hasPermissionTo('view_private_products');
 		});
 
-        Gate::define('administer-team', function ($user, Team $team) {
-            return $user->teamRole($team)->name === 'team_admin' || $user->hasRole('admin');
+        Gate::define('administer-team', function ($user, $teamId) {
+			$team = Team::find($teamId);
+            return $user->hasTeamRole($team, 'team_admin') || $user->isOwnerOfTeam($team);
         });
 	}
 }

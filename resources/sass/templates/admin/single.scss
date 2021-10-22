@@ -6,10 +6,10 @@
     top: 2px;
     background-image: url("/images/icons/visible.svg");
     background-size: 20px;
-    background-color: transparent !important;
+    background-color: transparent;
     background-repeat: no-repeat;
     background-position: center;
-    border: none !important;
+    border: none;
     width: 30px;
     height: 30px;
     z-index: 1;
@@ -22,7 +22,7 @@
 }
 
 .password-visible {
-    background-image: url('/images/icons/hidden.svg') !important;
+    background-image: url('/images/icons/hidden.svg');
 }
 
 .flex-container{
@@ -178,7 +178,7 @@
 
         td{
             a{
-                color: #5FAEE9 !important;
+                color: #5FAEE9;
             }
         }
     }

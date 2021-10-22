@@ -256,3 +256,223 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+.red-button{
+    background-color: $red;
+}
+
+// Font end app 
+.updated-app{
+    .head{
+        .column-heading {
+            font-size: 14px;
+
+            &:nth-child(1){
+                width: 23%;
+            }
+
+            &:nth-child(2){
+                width: 25%;
+            }
+
+            &:nth-child(3){
+                width: 12%;
+            }
+
+            &:nth-child(4){
+                width: 10%;
+            }
+
+            &:nth-child(4){
+                width: 20%;
+            }
+
+            &:nth-child(5){
+                width: 10%;
+            }
+        }
+    }
+
+    .app-list-body{
+        .column {
+            position: relative;
+
+            &:nth-child(1){
+                width: 23%;
+            }
+
+            &:nth-child(2){
+                width: 25%;
+            }
+
+            &:nth-child(3){
+                width: 12%;
+            }
+
+            &:nth-child(4){
+                width: 10%;
+            }
+
+            &:nth-child(4){
+                width: 20%;
+            }
+
+            &:nth-child(5){
+                width: 10%;
+                display: flex;
+            }
+
+            .toggle-app-button{
+                margin-top: 10px;
+            }
+
+            .actions{
+                top: -10px;
+            }
+        }
+    }
+
+    .head {
+        border-bottom: 2px solid $grey300;
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0;
+
+        h4,
+        p {
+            white-space: nowrap;
+            font-weight: bold;
+            position: relative;
+
+            svg{
+                width: 16px;
+                margin-bottom: -7px;
+                margin-left: 2px;
+            }
+        }
+    }
+
+    .body {
+        display: flex;
+        flex-wrap: wrap;
+        padding-top: 10px;
+
+        p {
+            word-break: break-word;
+            padding-right: 20px;
+        }
+    }
+
+    &.collapse {
+        display: none;
+    }
+
+    .details-row-container{
+        display: flex;
+
+        .detail-item{
+            width: 30%;
+        }
+
+        .detail-item-description{
+            width: 284px;
+        }
+    }
+
+    .copy-btn{
+        position: absolute;
+        right: 46px;
+    }
+}
+
+
+.top-ownership-banner,
+.top-invite-banner{
+    width: 100%;
+    background-color: #0C678F;
+    margin-bottom: 30px;
+    display: flex;
+    position: relative;
+    transition: all 0.3s ease;
+    opacity: -1;
+    pointer-events: none;
+    z-index: 0;
+    padding: 0px;
+    height: 0px;
+    border-radius: 10px;
+
+    @media (max-width: 768px) {
+        display: block;
+    }
+
+    &.show{
+        height: 0px;
+        pointer-events: auto;
+        opacity: 4;
+        height: 75px;
+        z-index: 2;
+
+        @media(max-width: 768px){
+            height: auto;
+            padding: 12px;
+            text-align: center;
+
+            button{
+                margin-bottom: 10px;
+            }
+        }
+    }
+
+    .message-container{
+        color: #fff;
+        margin-top: 26px;
+        margin-left: 20px;
+
+        @media(max-width: 1290px){
+            margin-left: 0;
+            margin-top: 0px;
+            
+        }
+    }
+
+    .btn-block-container{
+        position: absolute;
+        width: 360px;
+        right: 20px;
+        top: 20px;
+        
+        @media(max-width: 1290px){
+            position: relative;
+            margin: 18px auto;
+            top: auto;
+            right: auto;
+        }
+
+        @media(max-width: 400px){
+            width: 177px;
+        }
+
+        .blue-button{
+            border: 2px solid #fff;
+            color: #fff;
+            background-color: transparent;
+            transition: all 0.3s ease;
+            width: 166px;
+
+            &:hover{
+                background-color: #fff;
+                color: #0C678F;
+                transition: all 0.3s ease;
+            }
+
+            &:nth-child(1){
+                margin-right: 10px;
+
+                @media(max-width: 400px){
+                    margin-right: 0;
+                    margin-bottom: 8px;
+                }
+            }
+        }
+    }
+}

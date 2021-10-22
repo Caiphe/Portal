@@ -5,6 +5,7 @@
     $userTeamOwnershipInvite = $user->getTeamInvite($team, 'ownership');
     $country = \App\Country::where('name', $team->country)->first();
     $countryCode = $country->code;
+    $isAdmin = $user->hasTeamRole($team, 'team_admin') || $user->isOwnerOfTeam($team)
 
 @endphp
 @push('styles')
@@ -36,7 +37,9 @@ Team
 
 @section('content')
 <x-heading heading="Team" tags="Dashboard">
-    <a href="{{ route('teams.edit', $team->id) }}" class="button dark outline">Edit team profile</a>
+    @if($isAdmin) 
+        <a href="{{ route('teams.edit', $team->id) }}" class="button dark outline">Edit team profile</a>
+    @endif
 </x-heading>
 
 {{-- Edit teammate --}}
@@ -56,7 +59,7 @@ Team
                 <x-radio-round id="user-radio-two" name="role_name" checked value="user">User</x-radio-round>
             </div>
 
-            <div class="teamMateErrorMessage">Valid email required !</div>
+            <div class="teamMateErrorMessage">Valid email required!</div>
         </form>
     </div>
 </div>
@@ -70,9 +73,9 @@ Team
         <h2 class="team-head">Make Owner</h2>
         <p class="teammate-text">Would you like to make this user a new <strong>owner</strong> of this team?</p>
         <p class="admin-user-name"></p>
-        <form class="form-delete-user">
+        <form class="custom-modal-form">
             <button type="button" class="btn primary mr-10 make-admin-cancel-btn">CANCEL</button>
-            <button type="button" id="make-owner-btn" class="btn dark admin-removal-btn"  data-teamid="{{ $team->id }}">Transfer Ownership</button>
+            <button type="button" id="make-owner-btn" class="btn dark admin-removal-btn"  data-teamid="{{ $team->id }}">Submit</button>
         </form>
     </div>
 </div>
@@ -84,11 +87,16 @@ Team
     <div class="add-teammate-block">
         <button class="user-close-modal">@svg('close-popup', '#000')</button>
         <h2 class="team-head">Make User</h2>
-        <p class="teammate-text">Would you like change this user's level of access to <strong>user</strong> ?</p>
+        <p class="teammate-text">Would you like change this user's level of access to <strong>user</strong>?</p>
         <p class="user-name make-user-name"></p>
-        <form class="form-delete-user">
+        <form class="custom-modal-form" method="post" id="make-user-form">
+            @csrf()
+            <input type="hidden" name="team_id" id="each-team-id" value="" />
+            <input type="hidden" name="user_id" id="each-user-id" value="" />
+            <input type="hidden" name="user_role" id="each-user-role" value="" />
+
             <button type="button" class="btn primary mr-10 user-admin-cancel-btn">CANCEL</button>
-            <button type="button" class="btn dark user-remove-btn">REMOVE</button>
+            <button type="button" class="btn dark make-user-btn">SUBMIT</button>
         </form>
     </div>
 </div>
@@ -105,7 +113,7 @@ Team
         <p class="teammate-text">Are you sure you want to remove this user?</p>
         <p class="user-name user-delete-name"></p>
     {{-- Form to confirm the users removal --}}
-        <form class="form-delete-user" method="post">
+        <form class="custom-modal-form" method="post">
             @csrf()
             <input type="hidden" value="" name="team_id" class="hidden-team-id"/>
             <input type="hidden" value="" name="team_user_id" class="hidden-team-user-id"/>
@@ -177,7 +185,7 @@ Team
             </ul>
         </div>
 
-        <form class="form-delete-user mt-40">
+        <form class="custom-modal-form mt-40">
             <button type="button" class="btn primary mr-10 ownership-removal-btn">CANCEL</button>
             <button type="button" id="transfer-btn" data-teamid="{{ $team->id }}" class="btn dark transfer-btn">TRANSFER</button>
         </form>
@@ -191,9 +199,9 @@ Team
         <div class="message-container">You have been requested to be the owner of this team.</div>
         <div class="btn-block-container">
             {{--  Use the accept endpoint --}}
-            <button type="button" class="btn blue-button dark-accept accept-team-ownership" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->accept_token : '' }}" data-csrfToken="{{ @csrf_token() }}">Accept request</button>
+            <button type="button" class="btn blue-button dark-accept accept-team-ownership" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->accept_token : '' }}">Accept request</button>
             {{--  Use the revoke endpoint --}}
-            <button type="button" class="btn blue-button dark-revoked reject-team-ownership" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->deny_token : '' }}" data-csrfToken="{{ @csrf_token() }}">Revoke request</button>
+            <button type="button" class="btn blue-button dark-revoked reject-team-ownership" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->deny_token : '' }}">Revoke request</button>
         </div>
     </div>
     {{-- @endif --}}
@@ -202,10 +210,10 @@ Team
         {{-- To replace with the team profile picture --}}
         <div class="team-name-logo-container">
             <div class="team-logo"  style="background-image: url({{ $team['logo'] }})"></div>
-            <h2>{{ $team->name }}</h2>
+            <h2>{{ $team->name }} </h2>
         </div>
 
-        @if ( $team->users->count() > 0 && ( !$user->isTeamOwner($team) ) )
+        @if ($team->users->count() > 0 && $isAdmin)
             <button class="btn dark make-owner">Select a new owner</button>
         @endif
     </div>
@@ -230,8 +238,12 @@ Team
     </div>
     <div class="column">
         <div class="team-members-header">
-            <h2>Team membership</h2>
-            <button class="outline dark add-team-mate-btn">Add a teammate</button>
+            <h2>Team membership </h2>
+
+            @if($isAdmin) 
+                <button class="outline dark add-team-mate-btn">Add a teammate</button>
+            @endif
+
         </div>
     </div>
 
@@ -260,7 +272,7 @@ Team
                         <td>{{ $teamUser->teamRole($team)->label }}</td>
                         <td class="column-container">{{ $teamUser->twoFactorStatus() }}
                             <div class="block-hide-menu"></div>
-                            <button class="btn-actions"></button>
+                            @if($isAdmin) <button class="btn-actions"></button>@endif
                             {{-- user action menu --}}
                             <div class="block-actions">
                                 <ul>
@@ -283,19 +295,18 @@ Team
                                             data-username="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
                                             data-useremail="{{ $teamUser->email }}"
                                             data-teamid="{{ $team->id }}"
-                                            data-teamuserid="{{ $user->id }}">
-                                            @if ($teamUser->isOwnerOfTeam($team))
-                                                Make Administrator
-                                            @else
-                                                @php echo $teamUser->teamRole($team)->name === 'team_user' ? 'Make Administrator' : 'Make User' @endphp
-                                            @endif
+                                            data-teamuserid="{{ $user->id }}"
+                                            data-userrole = "{{ $teamUser->teamRole($team)->name === 'team_user' ? 'team_admin' : 'team_user' }}">
+                                         
+                                            {{ $teamUser->teamRole($team)->name === 'team_user' ? 'Make Administrator' : 'Make User' }}
+
                                         </button>
                                     </li>
 
                                     {{---  Uses the leave endpoinst --}}
                                     <li>
                                         <button
-                                            class="user-delete {{ !$user->hasTeamRole($team, 'team_admin') || !$teamUser->isOwnerOfTeam($team) ? 'non-active' : '' }}"
+                                            class="user-delete {{ $teamUser->isOwnerOfTeam($team) ? 'non-active' : '' }}"
                                             data-usernamedelete="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
                                             data-teamid="{{ $team->id }}"
                                             data-teamuserid="{{ $user->id }}">
@@ -337,9 +348,9 @@ Team
 
                     <div class="transfer-btn-block">
                         {{--  Use the accept endpoint --}}
-                        <button type="button" class="btn dark dark-accept accept-team-ownership" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->accept_token : '' }}" data-csrfToken="{{ @csrf_token() }}">Accept request</button>
+                        <button type="button" class="btn dark dark-accept accept-team-ownership" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->accept_token : '' }}">Accept request</button>
                         {{--  Use the revoke endpoint --}}
-                        <button type="button" class="btn dark dark-revoked reject-team-ownership" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->deny_token : '' }}" data-csrfToken="{{ @csrf_token() }}">Revoke request</button>
+                        <button type="button" class="btn dark dark-revoked reject-team-ownership" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->deny_token : '' }}">Revoke request</button>
                     </div>
                 </div>
 
@@ -381,17 +392,17 @@ Team
                         </div>
                     </div>
 
-                    <div class="body app-updated-body">
+                    <div class="body app-list-body">
                         @forelse($approvedApps as $app)
                             @if(!empty($app['attributes']))
-                                <x-app-updated
+                                <x-app-list
                                     :app="$app"
                                     :attr="$app['attributes']"
                                     :details="$app['developer']"
                                     :details="$app['developer']"
                                     :countries="!is_null($app->country) ? [$app->country->code => $app->country->name] : ['globe' => 'globe']"
                                     :type="$type = 'approved'">
-                                </x-app-updated>
+                                </x-app-list>
                             @endif
                         @empty
                             <p>No approved apps.</p>
@@ -434,17 +445,17 @@ Team
                             <p></p>
                         </div>
                     </div>
-                    <div class="body app-updated-body">
+                    <div class="body app-list-body">
                         @forelse($revokedApps as $app)
                             @if(!empty($app['attributes']))
-                            <x-app-updated
+                            <x-app-list
                                 :app="$app"
                                 :attr="$app['attributes']"
                                 :details="$app['developer']"
                                 :details="$app['developer']"
                                 :countries="!is_null($app->country) ? [$app->country->code => $app->country->name] : ['globe' => 'globe']"
                                 :type="$type = 'approved'">
-                            </x-app-updated>
+                            </x-app-list>
                             @endif
                         @empty
                             <p>No revoked apps.</p>

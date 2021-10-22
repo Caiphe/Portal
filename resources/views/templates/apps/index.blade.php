@@ -106,17 +106,17 @@
                                 </div>
 
                             </div>
-                            <div class="body app-updated-body">
+                            <div class="body app-list-body">
                                 @forelse($approvedApps as $app)
                                     @if(!empty($app['attributes']))
-                                    <x-app-updated
+                                    <x-app-list
                                         :app="$app"
                                         :attr="$app['attributes']"
                                         :details="$app['developer']"
                                         :details="$app['developer']"
                                         :countries="!is_null($app->country) ? [$app->country->code => $app->country->name] : ['globe' => 'globe']"
                                         :type="$type = 'approved'">
-                                    </x-app-updated>
+                                    </x-app-list>
                                     @endif
                                 @empty
                                     <p>No approved apps.</p>
@@ -157,17 +157,17 @@
                                 </div>
                             </div>
 
-                            <div class="body app-updated-body">
+                            <div class="body app-list-body">
                                 @forelse($revokedApps as $app)
                                     @if(!empty($app['attributes']))
-                                        <x-app-updated
+                                        <x-app-list
                                             :app="$app"
                                             :attr="$app['attributes']"
                                             :details="$app['developer']"
                                             :details="$app['developer']"
                                             :countries="!is_null($app->country) ? [$app->country->code => $app->country->name] : ['globe' => 'globe']"
                                             :type="$type = 'approved'">
-                                        </x-app-updated>
+                                        </x-app-list>
                                     @endif
                                 @empty
                                     <p>No revoked apps.</p>

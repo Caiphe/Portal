@@ -97,7 +97,6 @@ function chooseTeamPicture() {
     }
 
     if (allowedTypes[inputAccepts] !== undefined && allowedTypes[inputAccepts].indexOf(files[0].type) !== -1) {
-    console.log(allowedTypes);
 
     } else {
         addAlert("error", "The type of image you have chosen isn't supported. Please choose a jpg or png to upload");

@@ -17,6 +17,7 @@ var makeOwnershipBtn = document.querySelector('#make-owner-btn');
 var addTeamMobile;
 var addTeammateBtn;
 
+
 for(var i = 0; i < btnActions.length; i++) {
     btnActions[i].addEventListener('click', showUserAction);
 }
@@ -63,8 +64,8 @@ for(var d = 0; d < userDeleteBtn.length; d++){
 
 function showUserDelete(){
     deleteModalContainer.classList.add('show');
-    document.querySelector('.user-delete-name').innerHTML = this.dataset.usernamedelete
-    document.querySelector('.user-to-delete-name').innerHTML = this.dataset.usernamedelete
+    document.querySelector('.user-delete-name').innerHTML = this.dataset.usernamedelete;
+    document.querySelector('.user-to-delete-name').innerHTML = this.dataset.usernamedelete;
 
     hiddenTeamId.value = this.dataset.teamid;
     hiddenTeamUserId.value = this.dataset.teamuserid;
@@ -79,8 +80,6 @@ document.querySelector('.confirm-delete-close-modal').addEventListener('click', 
 // show Make admin modal
 var adminModal = document.querySelector('.make-admin-modal-container');
 var adminModalShow = document.querySelectorAll('.make-admin');
-
-
 
 // show Transfer ownership to a user
 var ownershipModal = document.querySelector('.ownweship-modal-container');
@@ -102,18 +101,14 @@ function checkedRadio(){
 var owneshipTransferBanner = document.querySelector('.top-ownership-banner');
 
 /** Picking on the availability of this component */
-if (document.querySelector('.accept-transfer')) {
-    var acceptTransferBtn = document.querySelector('.accept-transfer');
-    if(acceptTransferBtn.length > 0){
-        acceptTransferBtn.addEventListener('click', hideTransferBanner);
-    }
-
+var acceptTransferBtn = document.querySelector('.accept-transfer');
+if (acceptTransferBtn) {
+    acceptTransferBtn.addEventListener('click', hideTransferBanner);
 }
 
 /** Picking on the availability of this component */
-if (document.querySelector('.revoke-transfer')) {
-    var revokeTransferBtn = document.querySelector('.revoke-transfer');
-
+var revokeTransferBtn = document.querySelector('.revoke-transfer');
+if (revokeTransferBtn) {
     revokeTransferBtn.addEventListener('click', hideTransferBanner);
 }
 
@@ -122,16 +117,73 @@ function hideTransferBanner(){
 }
 
 // Show user modal
+var makeUserId = document.querySelector('#each-user-id');
+var makeTeamId = document.querySelector('#each-team-id');
+var makeUserRole = document.querySelector('#each-user-role');
+
 var userModal = document.querySelector('.make-user-modal-container');
+var makeUserBtn = document.querySelector('.make-user-btn');
 var userModalShow = document.querySelectorAll('.make-user');
 
 for(var u = 0; u < userModalShow.length; u++) {
     userModalShow[u].addEventListener('click', showUserModalFunc);
 }
 
+if(makeUserBtn){
+    makeUserBtn.addEventListener('click', function(event){
+        var data = {
+            'user_id': makeUserId,
+            'team_id': makeTeamId,
+            'role': makeUserRole
+        };
+        
+        console.log(data);
+        handleMakeUserRole('teams/user/role', data, event);
+    })
+}
+function handleMakeUserRole(url, data, event) {
+    var xhr = new XMLHttpRequest();
+
+    event.preventDefault();
+
+    xhr.open('POST', url);
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.setRequestHeader(
+        "X-CSRF-TOKEN",
+        document.getElementsByName("csrf-token")[0].content
+    );
+
+    xhr.send(JSON.stringify(data));
+
+    addLoading("Updating user's role.");
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+           addAlert('success', "Use's role has been updated");
+           hideUserModal
+        } else {
+            var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+            if(result.errors) {
+                result.message = [];
+                for(var error in result.errors){
+                    result.message.push(result.errors[error]);
+                }
+            }
+            addAlert('error', result.message || 'Something went wrong. Please try again.');
+        }
+        removeLoading();
+    };
+}
+
 function showUserModalFunc(){
-    userModal.classList.add('show');
+    makeUserId.value = this.dataset.teamuserid;
+    makeTeamId.value = this.dataset.teamid;
+    makeUserRole.value = this.dataset.userrole;
+
     document.querySelector('.make-user-name').innerHTML = this.dataset.username;
+    userModal.classList.add('show');
 }
 
 document.querySelector('.user-close-modal').addEventListener('click', hideUserModal);
@@ -188,7 +240,6 @@ for (var k = 0; k < actions.length; k ++) {
 
 function handleMenuClick() {
     var parent = this.parentNode.parentNode;
-
     parent.querySelector('.menu').classList.toggle('show');
     parent.querySelector('.modal').classList.toggle('show');
 }
@@ -225,7 +276,6 @@ function handleDeleteMenuClick(event) {
     }
 
     xhr.open('POST', url, true);
-
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhr.setRequestHeader("X-CSRF-TOKEN",
         document.getElementsByName("csrf-token")[0].content
@@ -399,9 +449,7 @@ teamInviteUserBtn.addEventListener('click', function(event){
     };
 
     teamMateInvitEmail.value = "";
-    setTimeout(function() {
-        hideAddTeamMateModalContainer();
-    }, 2000);
+    setTimeout(hideAddTeamMateModalContainer(), 2000);
 });
 
 if (document.querySelector('.transfer-ownership')) {
@@ -417,7 +465,6 @@ if (document.querySelector('.transfer-ownership')) {
         event.preventDefault();
 
         xhr.open('POST', url);
-
         xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         xhr.setRequestHeader("X-CSRF-TOKEN",
@@ -484,6 +531,7 @@ makeOwnershipBtn.addEventListener('click', function(event){
     };
     handleOwnershipTransfer('/teams/ownership', data, event);
 });
+
 
 function handleOwnershipTransfer(url, data, event) {
     var xhr = new XMLHttpRequest();
