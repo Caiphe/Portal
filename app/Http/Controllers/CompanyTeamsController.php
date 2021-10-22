@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\App;
+use App\Http\Requests\Teams\RoleUpdateRequest;
 use App\Team;
 use App\Country;
 
@@ -336,5 +337,23 @@ class CompanyTeamsController extends Controller
         if (!$invite->exists) {
             return redirect()->route('teams.listing')->with('success:' . $inviteType . ' successfully denied.');
         }
+    }
+
+    /**
+     * Make Team member Admin/User
+     */
+    public function roleUpdate(RoleUpdateRequest $roleRequest)
+    {
+        $data = $roleRequest->validated();
+
+        $team = $this->getTeam($data['team_id']);
+        $user = $this->getUser($data['user_id']);
+
+        $updated = false;
+        if ( $team->hasUser($user)) {
+            $updated = $this->updateRole($team, $user, $data['role']);
+        }
+
+        return response()->json(['success' => $updated]);
     }
 }

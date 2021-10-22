@@ -49,13 +49,14 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
     Route::get('teams/{id}/team', 'CompanyTeamsController@show')->name('team.show');
     Route::get('teams/create', 'CompanyTeamsController@create')->name('teams.create');
     Route::get('teams/{id}/edit', 'CompanyTeamsController@edit')->middleware('can:can:administer-team')->name('teams.edit');
-    Route::post('teams/{id}/update', 'CompanyTeamsController@update')->name('teams.update');
-    Route::post('teams/store', 'CompanyTeamsController@store')->name('teams.store');
+    Route::post('teams/{id}/update', 'CompanyTeamsController@update')->middleware('can:can:administer-team')->name('teams.update');
+    Route::post('teams/store', 'CompanyTeamsController@store')->middleware('can:can:administer-team')->name('teams.store');
     Route::post('teams/leave', 'CompanyTeamsController@leave')->name('teams.leave.team');
     Route::post('teams/invite', 'CompanyTeamsController@invite')->middleware('can:can:administer-team')->name('teams.invite');
     Route::any('teams/accept', 'CompanyTeamsController@accept')->name('teams.invite.accept');
     Route::any('teams/reject', 'CompanyTeamsController@reject')->name('teams.invite.deny');
     Route::any('teams/ownership', 'CompanyTeamsController@ownership')->middleware('can:can:administer-team')->name('teams.ownership.invite');
+    Route::post('teams/user/role', 'CompanyTeamsController@roleUpdate')->middleware('can:can:administer-team')->name('teams.member.role');
 });
 
 Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa', 'can:view-admin'])->group(function () {
