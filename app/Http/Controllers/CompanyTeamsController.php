@@ -285,9 +285,6 @@ class CompanyTeamsController extends Controller
                 return redirect()->route('team.show', $team->id)
                     ->with('success: Your team was successfully updated.');
             }
-        } else {
-            return redirect()->back()
-                ->with('error: Somethidng went wrong updating your team..');
         }
     }
 
