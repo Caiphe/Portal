@@ -45,8 +45,7 @@ trait InviteActions
      */
     public function sendInvites(array $emails)
     {
-        array_map( function(string $email) {
-
+        foreach($emails as $email) {
             $invitee = $this->getTeamUserByEmail($email);
 
             if ( $invitee ) {
@@ -62,8 +61,7 @@ trait InviteActions
                     $this->sendExternalInvite( $team, $email );
                 }
             }
-
-        }, $emails);
+        }
     }
 
     /**
@@ -114,18 +112,13 @@ trait InviteActions
      */
     public function prepareData( array $data )
     {
-        $prepared = [
+        return [
             'name' => $data['name'],
             'url' => $data['url'],
             'contact' => $data['contact'],
             'description' => $data['description'],
+            'country' => $data['country'],
         ];
-
-        if (isset($data['country'])) {
-            $prepared['country'] = Country::where('code', $data['country'])->value('name');
-        }
-
-        return $prepared;
     }
 
     /**

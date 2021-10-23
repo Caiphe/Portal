@@ -35,10 +35,8 @@
     <div class="content">
 
         <form id="form-create-team" method="POST" action="{{ route('teams.update', $team->id) }}" enctype="multipart/form-data">
-
+            @method('put')
             @csrf
-
-            <input type="hidden" name="action" id="action" value="update">
 
             <div class="group">
                 <label for="name">Name your team</label>
