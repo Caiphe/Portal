@@ -66,23 +66,23 @@
 
             <div class="group">
                 <label for="name">Name your team</label>
-                <input type="text" name="name" id="name" placeholder="Enter team name" maxlength="100" required>
+                <input type="text" name="name" id="team-name" class="form-field" placeholder="Enter team name" maxlength="100" required>
             </div>
 
             <div class="group">
                 <label for="url">Enter team URL</label>
-                <input type="text" name="url" id="url" placeholder="Enter team URL" maxlength="100" required>
+                <input type="text" name="url" id="team-url" placeholder="Enter team URL" maxlength="100" required>
             </div>
 
             <div class="group">
                 <label for="contact">Enter team contact number</label>
-                <input type="text" name="contact" id="contact" placeholder="Enter team contact number" maxlength="100" required>
+                <input type="text" name="contact" id="team-contact" placeholder="Enter team contact number" maxlength="100" required>
             </div>
 
             <div class="group countries">
                 <label for="country">Which country are you based in?</label>
                 <div class="country-block-container">
-                    <select id="country" name="country">
+                    <select id="team-country" name="country">
                         <option value="">Select country</option>
                         @foreach($countries as $code => $name)
                             <option value="{{ $code }}">{{ $name }}</option>

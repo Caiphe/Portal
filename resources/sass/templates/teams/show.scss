@@ -36,6 +36,16 @@ button{
         &::-webkit-scrollbar {
             display: none;
         }
+
+        .table-title{
+            .members-column{
+                width: 91px;
+            }
+
+            .apps-column{
+                width: 61px;
+            }
+        }
     }
 
     .column{
@@ -791,10 +801,6 @@ button{
         transition: all 0.3s ease-in-out;
 
         @media(max-width: 768px){
-            right: 40px;
-        }
-
-        @media(max-width: 470px){
             position: relative;
             margin-top: 15px;
             right: auto;
@@ -880,7 +886,8 @@ button{
     }
 
     @media(max-width: 768px){
-        width: 800px;
+        width: 850px;
+        padding-right: 20px;
     }
 }
 

@@ -2,6 +2,7 @@ var invitationInput = document.querySelector('.invitation-field');
 var inviteBtn = document.querySelector('.invite-btn');
 var errorMsg = document.querySelector('.error-email');
 var closeTagBtnn = document.querySelector('.close-tag');
+var teamForm = document.querySelector('#form-create-team');
 var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 invitationInput.value = "";
 

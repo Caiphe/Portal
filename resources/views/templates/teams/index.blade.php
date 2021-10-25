@@ -73,8 +73,8 @@
                     <tr class="table-title">
                         <td class="bold">Team Name @svg('arrow-down' ,'#cdcdcd')</td>
                         <td class="bold">Country @svg('arrow-down' ,'#cdcdcd')</td>
-                        <td class="bold">Members @svg('arrow-down' ,'#cdcdcd')</td>
-                        <td class="bold">Apps @svg('arrow-down' ,'#cdcdcd')</td>
+                        <td class="bold members-column">Members @svg('arrow-down' ,'#cdcdcd')</td>
+                        <td class="bold apps-column">Apps @svg('arrow-down' ,'#cdcdcd')</td>
                         <td>&nbsp;</td>
                     </tr>
                     @foreach($teams as $team)
