@@ -295,9 +295,6 @@ class CompanyTeamsController extends Controller
 
             Teamwork::acceptInvite($invite);
         } else {
-
-            $team = $this->getTeam($invite->team_id);
-
             Teamwork::acceptInvite($invite);
         }
 
@@ -326,16 +323,14 @@ class CompanyTeamsController extends Controller
     /**
      * Make Team member Admin/User
      */
-    public function roleUpdate(RoleUpdateRequest $roleRequest)
+    public function roleUpdate(RoleUpdateRequest $roleRequest, Team $team)
     {
         $data = $roleRequest->validated();
-
-        $team = $this->getTeam($data['team_id']);
         $user = $this->getUser($data['user_id']);
 
         $updated = false;
         if ($team->hasUser($user)) {
-            $updated = $this->updateRole($team, $user, $data['role']);
+            $updated = $user->teams()->updateExistingPivot($team, ['role_id' => $data['role']]);
         }
 
         return response()->json(['success' => $updated]);

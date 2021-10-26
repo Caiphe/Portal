@@ -35,7 +35,7 @@ Team
 
 @section('content')
 <x-heading heading="Team" tags="Dashboard">
-    @if($isAdmin) 
+    @if($isAdmin)
         <a href="{{ route('teams.edit', $team->id) }}" class="button dark outline">Edit team profile</a>
     @endif
 </x-heading>
@@ -237,7 +237,7 @@ Team
         <div class="team-members-header">
             <h2>Team membership </h2>
 
-            @if($isAdmin) 
+            @if($isAdmin)
                 <button class="outline dark add-team-mate-btn">Add a teammate</button>
             @endif
 
@@ -276,7 +276,7 @@ Team
                                     {{---  Uses the transfer endpoint--}}
                                     <li>
                                         <button
-                                            class="make-admin {{ $user->hasTeamRole($team, 'team_admin') || $teamUser->isOwnerOfTeam($team) ? 'non-active' : '' }} transfer-ownership make-owner-btn"
+                                            class="make-admin {{ $user->hasTeamRole($team, 'team_admin') ? 'non-active' : '' }} transfer-ownership make-owner-btn"
                                             data-adminname="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
                                             data-invite=""
                                             data-teamid="{{ $team->id }}"
@@ -288,13 +288,13 @@ Team
                                     {{---  Uses the invite endpoint--}}
                                     <li>
                                         <button
-                                            class="make-user {{ $user->hasTeamRole($team, 'team_admin') || $teamUser->isOwnerOfTeam($team) ? 'non-active' : '' }}"
+                                            class="make-user {{ $user->hasTeamRole($team, 'team_admin') ? 'non-active' : '' }}"
                                             data-username="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
                                             data-useremail="{{ $teamUser->email }}"
                                             data-teamid="{{ $team->id }}"
                                             data-teamuserid="{{ $user->id }}"
                                             data-userrole = "{{ $teamUser->teamRole($team)->name === 'team_user' ? 'team_admin' : 'team_user' }}">
-                                         
+
                                             {{ $teamUser->teamRole($team)->name === 'team_user' ? 'Make Administrator' : 'Make User' }}
 
                                         </button>
@@ -303,7 +303,7 @@ Team
                                     {{---  Uses the leave endpoinst --}}
                                     <li>
                                         <button
-                                            class="user-delete {{ $teamUser->isOwnerOfTeam($team) ? 'non-active' : '' }}"
+                                            class="user-delete {{ $user->hasTeamRole($team, 'team_admin') ? 'non-active' : '' }}"
                                             data-usernamedelete="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
                                             data-teamid="{{ $team->id }}"
                                             data-teamuserid="{{ $user->id }}">

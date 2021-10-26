@@ -136,9 +136,8 @@ if(makeUserBtn){
             'team_id': makeTeamId,
             'role': makeUserRole
         };
-        
-        console.log(data);
-        handleMakeUserRole('teams/user/role', data, event);
+
+        handleMakeUserRole('teams/' + makeTeamId + '/user/role', data, event);
     })
 }
 function handleMakeUserRole(url, data, event) {
@@ -161,7 +160,7 @@ function handleMakeUserRole(url, data, event) {
     xhr.onload = function() {
         if (xhr.status === 200) {
            addAlert('success', "Use's role has been updated");
-           hideUserModal
+           hideUserModal();
         } else {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
@@ -458,7 +457,7 @@ teamInviteUserBtn.addEventListener('click', function(event){
 
 if (document.querySelector('.transfer-ownership')) {
     document.querySelector('.transfer-ownership').addEventListener('click', function (event){
-        var url = "/teams/ownership";
+        var url = "/teams/" + this.dataset.teamid + "/ownership";
         var xhr = new XMLHttpRequest();
         var data = {
             type: 'ownership',
@@ -502,7 +501,7 @@ if(btnAcceptOwnership){
         var data = {
             token: this.dataset.invitetoken,
         };
-    
+
         handleOwnershipTransfer('/teams/accept', data, event);
     });
 }
@@ -514,7 +513,7 @@ if(btnRejectOwnership){
         var data = {
             token: this.dataset.invitetoken,
         };
-    
+
         handleOwnershipTransfer('/teams/reject', data, event);
     });
 }
@@ -525,7 +524,7 @@ transferOwnsershipBtn.addEventListener('click', function(event){
         team_id: this.dataset.teamid,
         invitee: this.dataset.useremail
     };
-    handleOwnershipTransfer('/teams/ownership', data, event);
+    handleOwnershipTransfer('/teams/' + this.dataset.teamid + '/ownership', data, event);
 });
 
 makeOwnershipBtn.addEventListener('click', function(event){
@@ -533,7 +532,7 @@ makeOwnershipBtn.addEventListener('click', function(event){
         team_id: this.dataset.teamid,
         invitee: this.dataset.useremail
     };
-    handleOwnershipTransfer('/teams/ownership', data, event);
+    handleOwnershipTransfer('/teams/' + this.dataset.teamid + '/ownership', data, event);
 });
 
 
@@ -599,8 +598,13 @@ for(var i = 0; i < adminModalShow.length; i++){
 }
 
 function showAdminModalFunc(){
+    var makeOwnerBtn = document.querySelector('#make-owner-btn');
+
     document.querySelector('.admin-user-name').innerHTML = this.dataset.adminname;
-    document.querySelector('#make-owner-btn').setAttribute('data-useremail', this.dataset.useremail);
+
+    makeOwnerBtn.setAttribute('data-useremail', this.dataset.useremail)
+    makeOwnerBtn.setAttribute('data-userrole', this.dataset.userrole);
+
     adminModal.classList.add('show');
 }
 
