@@ -290,8 +290,8 @@ class CompanyTeamsController extends Controller
             $team = $this->getTeam($invite->team_id);
             $owner = $this->getTeamUserByEmail($invite->email);
 
-            auth()->user()->teams()->detach($team->id);
             $team->update(['owner_id' => $owner->id]);
+            $owner->teams()->updateExistingPivot($team, ['role_id' => 7]);
 
             Teamwork::acceptInvite($invite);
         } else {
