@@ -52,7 +52,7 @@
     <div class="content">
 
         <div class="content-header mt-40">
-            @if($user->isTeamOwner())
+            @if($user->teams)
                 <h2>Create a New Team!</h2>
             @else
                 <h2>It looks like you don't have any teams yet!</h2>
