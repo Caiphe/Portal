@@ -20,4 +20,14 @@ class Team extends TeamworkTeam
         'logo',
         'description'
     ];
+
+    public function teamCountry()
+    {
+        return $this->belongsTo(Country::class, 'country', 'code');
+    }
+
+    public function apps()
+    {
+        return $this->hasMany(App::class);
+    }
 }

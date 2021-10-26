@@ -14,7 +14,7 @@ class AddRoleIdToTeamUserTable extends Migration
     public function up()
     {
         Schema::table('team_user', function (Blueprint $table) {
-            $table->foreignId('role_id')->default(6)->after('team_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('role_id')->default(8)->after('team_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

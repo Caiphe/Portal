@@ -3,8 +3,6 @@
     $user = auth()->user();
     $userTeamInvite = $user->getTeamInvite($team);
     $userTeamOwnershipInvite = $user->getTeamInvite($team, 'ownership');
-    $country = \App\Country::where('name', $team->country)->first();
-    $countryCode = $country->code;
     $isAdmin = $user->hasTeamRole($team, 'team_admin') || $user->isOwnerOfTeam($team)
 
 @endphp
@@ -59,7 +57,7 @@ Team
                 <x-radio-round id="user-radio-two" name="role_name" checked value="user">User</x-radio-round>
             </div>
 
-            <div class="teamMateErrorMessage">Valid email required!</div>
+            <div class="teammate-error-message">Valid email required!</div>
         </form>
     </div>
 </div>
@@ -233,7 +231,7 @@ Team
 
         <div class="detail-row cols no-wrap">
             <div class="detail-item"><strong>Country</strong></div>
-            <div class="detail-item detail-item-description country-name-flag">@svg($countryCode, '#000000', 'images/locations') {{ $team->country }}</div>
+            <div class="detail-item detail-item-description country-name-flag">@svg($country->code, '#000000', 'images/locations') {{ $team->name }}</div>
         </div>
     </div>
     <div class="column">

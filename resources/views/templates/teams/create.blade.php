@@ -66,23 +66,23 @@
 
             <div class="group">
                 <label for="name">Name your team</label>
-                <input type="text" name="name" id="team-name" class="form-field" placeholder="Enter team name" maxlength="100" required>
+                <input type="text" name="name" value="{{ old('name') }}" id="team-name" class="form-field" placeholder="Enter team name" maxlength="100" required>
             </div>
 
             <div class="group">
                 <label for="url">Enter team URL</label>
-                <input type="text" name="url" id="team-url" placeholder="Enter team URL" maxlength="100" required>
+                <input type="text" name="url" value="{{ old('url') }}" id="team-url" placeholder="Enter team URL" maxlength="100" required>
             </div>
 
             <div class="group">
                 <label for="contact">Enter team contact number</label>
-                <input type="text" name="contact" id="team-contact" placeholder="Enter team contact number" maxlength="100" required>
+                <input type="text" name="contact" value="{{ old('contact') }}" id="team-contact" placeholder="Enter team contact number" maxlength="100" required>
             </div>
 
             <div class="group countries">
                 <label for="country">Which country are you based in?</label>
                 <div class="country-block-container">
-                    <select id="team-country" name="country">
+                    <select id="team-country" name="country" value="{{ old('country') }}" autocomplete="off">
                         <option value="">Select country</option>
                         @foreach($countries as $code => $name)
                             <option value="{{ $code }}">{{ $name }}</option>
@@ -103,16 +103,15 @@
 
             <div class="group">
                 <label for="invitations">Invite colleagues or other users</label>
-                <input type="email" class="invitation-field" name="invitations" id="invitations" placeholder="Add email to invite other users" maxlength="100" required>
+                <input type="email" class="invitation-field" name="invitations" id="invitations" placeholder="Add email to invite other users" maxlength="100" required autocomplete="off">
                 <button class="invite-btn" type="button">INVITE</button>
                 <span class="error-email">Valid Email required !</span>
-                <div class="invite-tags" id="invite-list">
-                </div>
+                <div class="invite-tags" id="invite-list"></div>
             </div>
 
             <div class="group">
                 <label for="description">Company description</label>
-                <textarea name="description" id="description" placeholder="Write a short description about your team" ></textarea>
+                <textarea name="description" id="description" placeholder="Write a short description about your team">{{ old('description') }}</textarea>
             </div>
 
             <div class="form-actions">

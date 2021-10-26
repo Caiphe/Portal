@@ -4,7 +4,6 @@ namespace App\Concerns\Teams;
 
 use App\Team;
 use App\User;
-use App\Country;
 
 use App\Mail\Teams\InternalInvite;
 use App\Mail\Teams\OwnershipInvite;
@@ -25,16 +24,12 @@ trait InviteActions
 {
     public function updateRole(Team $team, User $user, $invite)
     {
-        if (strtolower($user->teamRole($team)->label) !== $invite->role) {
-            return \DB::table('team_user')->where([
-                'team_id' => $team->id,
-                'user_id' => $user->id
-            ])->update([
-                'role' => $invite->role
-            ]);
-        }
-
-        return false;
+        return \DB::table('team_user')->where([
+            'team_id' => $team->id,
+            'user_id' => $user->id
+        ])->update([
+            'role' => $invite->role
+        ]);
     }
 
     /**
@@ -43,22 +38,26 @@ trait InviteActions
      *
      * @param array $emails
      */
-    public function sendInvites(array $emails)
+    public function sendInvites(array $emails, Team $team)
     {
-        foreach($emails as $email) {
+        foreach ($emails as $email) {
             $invitee = $this->getTeamUserByEmail($email);
 
-            if ( $invitee ) {
-                if ( !Teamwork::hasPendingInvite($team, $invitee->email) ) {
-                    Teamwork::inviteToTeam( $invitee->email, $team);
+            if ($invitee) {
+                if (!Teamwork::hasPendingInvite($team, $invitee->email)) {
+                    $invite = Teamwork::inviteToTeam($invitee->email, $team);
+
+                    if ($invite) {
+                        $this->sendInternalInvite($team, $invitee, $invite);
+                    }
                 } else {
-                    $this->sendRemindingInvite($team, $invitee);
+                    $this->sendRemindingInvite($team, $invitee, $invitee->getTeamInvite($team));
                 }
             } else {
-                $invite = $this->createTeamInvite( $team, $email, 'external' );
+                $invite = $this->createTeamInvite($team, $email, 'external');
 
-                if ( $invite ) {
-                    $this->sendExternalInvite( $team, $email );
+                if ($invite) {
+                    $this->sendExternalInvite($team, $email);
                 }
             }
         }
@@ -71,6 +70,7 @@ trait InviteActions
      */
     public function createTeam(User $owner, array $data)
     {
+        $now = date('Y-m-d H:i:s');
         $team = Team::create([
             'name' => $data['name'],
             'url' => $data['url'],
@@ -81,7 +81,7 @@ trait InviteActions
             'owner_id' => $owner->getKey()
         ]);
 
-        $owner->attachTeam($team);
+        $owner->attachTeam($team, ['role_id' => 7, 'created_at' => $now, 'updated_at' => $now]);
 
         return $team;
     }
@@ -90,9 +90,9 @@ trait InviteActions
      * @param $request
      * @param array $data
      */
-    public function processLogoFile( $request, array &$data )
+    public function processLogoFile($request, array &$data)
     {
-        if ( $request->has('logo_file') ) {
+        if ($request->has('logo_file')) {
 
             $fileName =  md5(uniqid()) . '.' . $request->file('logo_file')->extension();
 
@@ -110,7 +110,7 @@ trait InviteActions
      * @param array $data
      * @return array
      */
-    public function prepareData( array $data )
+    public function prepareData(array $data)
     {
         return [
             'name' => $data['name'],
@@ -126,7 +126,7 @@ trait InviteActions
      *
      * @param string $emailAddress
      */
-    public function getInviteByEmail( string $emailAddress)
+    public function getInviteByEmail(string $emailAddress)
     {
         return TeamInvite::where('email', $emailAddress)->first();
     }
@@ -142,7 +142,7 @@ trait InviteActions
     {
         $userLeft = false;
 
-        if ( $team->users()->detach($user->id) ) {
+        if ($team->users()->detach($user->id)) {
 
             Mail::to($user->email)
                 ->send(new LeavingInvite($team, $user));
@@ -171,10 +171,10 @@ trait InviteActions
      * @param $team
      * @param $user
      */
-    public function sendInternalInvite($team, $user)
+    public function sendInternalInvite($team, $user, $invite)
     {
         Mail::to($team->owner->email)
-            ->send(new InternalInvite($team, $user));
+            ->send(new InternalInvite($team, $user, $invite));
     }
 
     /**

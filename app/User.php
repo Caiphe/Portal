@@ -191,6 +191,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $apps->get();
     }
 
+    public function teams()
+    {
+    	return $this->belongsToMany(Team::class);
+    }
+
     /**
      * Check if User has a Team invite
      *

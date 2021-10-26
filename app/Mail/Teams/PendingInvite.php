@@ -8,7 +8,6 @@ use App\Team;
 use Illuminate\Mail\Mailable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 /**
  * Class PendingInvite
@@ -47,9 +46,7 @@ class PendingInvite extends Mailable
     public function __construct(Team $team, User $invitee, $invite)
     {
         $this->team = $team;
-
         $this->invitee = $invitee;
-
         $this->invite = $invite;
     }
 
@@ -73,8 +70,6 @@ class PendingInvite extends Mailable
             ->to($this->invitee->email, $this->invitee->full_name)
             ->subject("MTN Developer Portal: {$owner->full_name} has invited you to join {$this->team->name} Team")
             ->markdown('emails.teams.invites.pending-invite', [
-                'invitee' => $this->invitee,
-                'team' => $this->team,
                 'tokens' => $tokens,
             ]);
     }

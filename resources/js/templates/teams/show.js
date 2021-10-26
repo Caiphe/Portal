@@ -353,6 +353,8 @@ deleteUserActionBtn.addEventListener('click', function(event){
 
     event.preventDefault();
 
+    addLoading('Leaving...');
+
     xhr.open('POST', url);
 
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
@@ -385,11 +387,13 @@ deleteUserActionBtn.addEventListener('click', function(event){
                 console.log("Hide the modal");
             }, 4000);
         }
+
+        removeLoading();
     };
 });
 
 var teamMateInvitEmail = document.querySelector('.teammate-email');
-var inviteTeamMateError = document.querySelector('.teamMateErrorMessage');
+var inviteTeamMateError = document.querySelector('.teammate-error-message');
 var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 teamMateInvitEmail.value = "";
 
@@ -405,10 +409,10 @@ function emailCheck(){
 }
 
 teamInviteUserBtn.addEventListener('click', function(event){
-    var url = "/teams/invite";
+    var url = "/teams/" + this.dataset.teamid + "/invite";
     var xhr = new XMLHttpRequest();
     var data = {
-        type: document.querySelector('input[name=role_name]:checked').value,
+        role: document.querySelector('input[name=role_name]:checked').value,
         invitee: document.querySelector('.teammate-email').value,
         team_id: this.dataset.teamid
     };

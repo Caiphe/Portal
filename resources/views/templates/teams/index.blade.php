@@ -1,6 +1,3 @@
-@php
-    $user = auth()->user();
-@endphp
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/templates/teams/show.css') }}">
 @endpush
@@ -34,7 +31,7 @@
     </x-heading>
 
     {{-- && !$team->hasUser($user) --}}
-    @if ($teamInvite && !$team->hasUser($user))
+    @if ($teamInvite && $team && !$team->hasUser($user))
     {{-- Top ownerhip block container --}}
     <div class="top-invite-banner show">
         <div class="message-container">You have been requested to be part of {{ $team->name }}.</div>
@@ -80,19 +77,19 @@
                     @foreach($teams as $team)
                         <tr class="team-app-list">
                             <td class="company-logo-name">
-                                <div class="company-logo" style="background-image: url({{ $team['logo'] }})"></div>
-                                <a class="company-name-a bold" href="{{route('team.show', [ 'id' => $team['id'] ])}}">{{ $team['name'] }}</a>
+                                <div class="company-logo" style="background-image: url({{ $team->logo }})"></div>
+                                <a class="company-name-a bold" href="{{route('team.show', [ 'id' => $team->id ])}}">{{ $team->name }}</a>
                             </td>
-                            <td>{{ $team['country'] }}</td>
-                            <td>{{ $team['members'] }}</td>
-                            <td>{{ $team['apps_count'] }}</td>
+                            <td>{{ $team->teamCountry->name }}</td>
+                            <td>{{ $team->users_count }}</td>
+                            <td>{{ $team->apps_count }}</td>
                             <td>
                                 <button
                                     type="button"
                                     class="button red-button leave-team"
-                                    data-teamname="{{ $team['name'] }}"
-                                    data-teamid="{{ $team['id'] }}"
-                                    data-teamuser="{{ auth()->user()->id }}">
+                                    data-teamname="{{ $team->name }}"
+                                    data-teamid="{{ $team->id }}"
+                                    data-teamuser="{{ $user->id }}">
                                     LEAVE
                                 </button>
                             </td>
@@ -119,37 +116,39 @@
 
       
         for (var i = 0; i < leaveTeamBtn.length; i++) {
-            leaveTeamBtn[i].addEventListener('click', function(){
-                modalContainer.classList.add('show');
-
-                teamNameText.innerHTML = this.dataset.teamname;
-
-                //Hidden fields to track the Team being left
-                hiddenTeamId.value = this.dataset.teamid
-                hiddenTeamUserId.value = this.dataset.teamuser
-            });
+            leaveTeamBtn[i].addEventListener('click', showLeaveTeamModal);
         }
 
         clodeModal.addEventListener('click', hideModal);
         cancelBtn.addEventListener('click', hideModal)
         overlayContainer.addEventListener('click', hideModal)
 
+        function showLeaveTeamModal(){
+            modalContainer.classList.add('show');
+
+            teamNameText.innerHTML = this.dataset.teamname;
+
+            //Hidden fields to track the Team being left
+            hiddenTeamId.value = this.dataset.teamid
+            hiddenTeamUserId.value = this.dataset.teamuser
+        }
+
         function hideModal() {
             modalContainer.classList.remove('show');
         }
 
         leaveTeamActionBtn.addEventListener('click', function(event){
-
-            event.preventDefault();
-
+            var xhr = new XMLHttpRequest();
             var data = {
                 team_id: hiddenTeamId.value,
                 user_id: hiddenTeamUserId.value
             }
+            var url = "teams/" + data.team_id + "/leave";
 
-            var url = "{{ route('teams.leave.team') }}";
+            event.preventDefault();
 
-            var xhr = new XMLHttpRequest();
+            addLoading('Leaving...');
+
             xhr.open('POST', url);
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -180,6 +179,8 @@
                     addAlert('error', result.message || 'Sorry there was a problem leaving team. Please try again.');
                 }
             };
+
+            removeLoading();
         });
 
 
@@ -191,7 +192,7 @@
                     token: this.dataset.invitetoken,
                 };
 
-                handleTimeInvite('/teams/accept', data, event);
+                handleInvite('/teams/accept', data, event);
             });
         }
 
@@ -202,12 +203,12 @@
                     token: this.dataset.invitetoken,
                 };
 
-                handleTimeInvite('/teams/reject', data, event);
+                handleInvite('/teams/reject', data, event);
             });
         }
     
 
-        function handleTimeInvite(url, data, event) {
+        function handleInvite(url, data, event) {
             var xhr = new XMLHttpRequest();
 
             event.preventDefault();
@@ -220,7 +221,6 @@
                 document.getElementsByName("csrf-token")[0].content
             );
 
-
             xhr.send(JSON.stringify(data));
 
             addLoading('Handling team invite response.');
@@ -228,7 +228,13 @@
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     document.querySelector('.top-invite-banner').classList.remove('show');
-                    addAlert('success', "Thanks, for your response");
+                    if(/reject/.test(url)){
+                        addAlert('success', "Thanks, for your response");
+                    } else {
+                       addAlert('success', ["Thanks, for your response", "The page will refresh shortly"], function(){
+                            window.location.reload();
+                        }); 
+                    }
                 } else {
                     var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
@@ -241,6 +247,7 @@
 
                     addAlert('error', result.message || 'Sorry there was a problem handling team invitation. Please try again.');
                 }
+
                 removeLoading();
             };
         }

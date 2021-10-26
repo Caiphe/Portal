@@ -14,7 +14,7 @@ class AddTeamAttributesToTeamsTable extends Migration
     public function up()
     {
         Schema::table('teams', function (Blueprint $table) {
-            $table->string('name')->unique();
+            $table->unique('name');
             $table->string('url');
             $table->string('contact');
             $table->string('country');
@@ -31,7 +31,7 @@ class AddTeamAttributesToTeamsTable extends Migration
     public function down()
     {
         Schema::table('teams', function (Blueprint $table) {
-            $table->dropColumn('name');
+            $table->dropUnique('name');
             $table->dropColumn('url');
             $table->dropColumn('contact');
             $table->dropColumn('country');

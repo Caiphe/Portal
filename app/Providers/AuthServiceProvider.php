@@ -72,5 +72,9 @@ class AuthServiceProvider extends ServiceProvider
 			$team = Team::find($teamId);
             return $user->hasTeamRole($team, 'team_admin') || $user->isOwnerOfTeam($team);
         });
+
+        Gate::define('administer-own-team', function ($user, Team $team) {
+            return $team->hasUser($user) || $user->hasTeamRole($team, 'team_admin') || $user->isOwnerOfTeam($team);
+        });
 	}
 }

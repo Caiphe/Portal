@@ -32,35 +32,28 @@ class CompanyTeamsController extends Controller
     /**
      * List available logged in User's teams
      * or allow them to create ones
-    */
+     */
     public function index(Request $request)
     {
-        $collectedTeams = [];
+        $user = $request->user();
+        $teams = $user->load([
+            'teams' => fn ($team) => $team->with('teamCountry')->withCount('users', 'apps')
+        ])->teams;
 
-        foreach($request->user()->teams as $team){
-            $collectedTeams[] = [
-                'id' => $team->id,
-                'name'=> $team->name,
-                'country' => $team->country,
-                'members' => $team->users->count(),
-                'apps_count' => App::where(['team_id' => $team->id])->get()->count(),
-                'logo' => $team->logo,
-            ];
-        }
-
-        if (empty($collectedTeams)) {
+        if (!$teams) {
             return redirect()->route('teams.create');
         }
 
-        $teamInvite = $this->getInviteByEmail(auth()->user()->email);
+        $teamInvite = $this->getInviteByEmail($user->email);
 
         $team = null;
-        if ( $teamInvite ) {
+        if ($teamInvite) {
             $team = Team::find($teamInvite->team_id);
         }
 
         return view('templates.teams.index', [
-            'teams' => $collectedTeams,
+            'teams' => $teams,
+            'user' => $user,
             'teamInvite' => $teamInvite,
             'team' => $team,
         ]);
@@ -69,14 +62,14 @@ class CompanyTeamsController extends Controller
     /**
      * Leave/Delete endpoint(s)
      */
-    public function leave(LeavingRequest $teamRequest)
+    public function leave(LeavingRequest $teamRequest, Team $team)
     {
         $data = $teamRequest->validated();
 
         $team = $this->getTeam($data['team_id']);
         $user = $this->getTeamUser($data['user_id']);
 
-        if ( $team->hasUser($user) && $this->memberLeavesTeam($team, $user) ) {
+        if ($team->hasUser($user) && $this->memberLeavesTeam($team, $user)) {
             return response()->json([
                 'success' => true,
                 'success:message' => $user->full_name . ' has successfully left ' . $team->name
@@ -104,7 +97,7 @@ class CompanyTeamsController extends Controller
         $teamInvite = $this->getInviteByEmail($user->email);
 
         $invitingTeam = null;
-        if ( $teamInvite ) {
+        if ($teamInvite) {
             $invitingTeam = $this->getTeam($teamInvite->team_id);
         }
 
@@ -128,7 +121,7 @@ class CompanyTeamsController extends Controller
 
         $invite = $this->createTeamInvite($team, $user->email, 'ownership');
 
-        if ( $invite ) {
+        if ($invite) {
 
             $this->sendOwnershipInvite($team, $user, $invite);
 
@@ -150,39 +143,36 @@ class CompanyTeamsController extends Controller
     public function invite(InviteRequest $inviteRequest)
     {
         $data = $inviteRequest->validated();
-
         $invitedEmail = $data['invitee'];
-
         $team = $this->getTeam($data['team_id']);
         $user = $this->getTeamUserByEmail($invitedEmail);
-
         $inviteSent = false;
 
-        if ( !$user && $team ) {
+        if (!$user && $team) {
 
             $invite = $this->createTeamInvite($team, $invitedEmail, 'external');
 
-            if ( $invite ) {
+            if ($invite) {
                 $this->sendExternalInvite($team, $invitedEmail);
 
                 $inviteSent = $invite->exists;
             }
+        } elseif ($user->exists) {
+            $invite = Teamwork::hasPendingInvite($team, $user->email);
 
-        } elseif( $user->exists ) {
-
-            if ( !Teamwork::hasPendingInvite($team, $user->email)) {
-                Teamwork::inviteToTeam( $user->email, $team, function( $invite ) use( $user, &$inviteSent ) {
-                    event( new UserInvitedToTeam( $invite ) );
+            if (!$invite) {
+                Teamwork::inviteToTeam($user->email, $team, function ($invite) use (&$inviteSent) {
+                    event(new UserInvitedToTeam($invite));
 
                     $inviteSent = $invite->exists;
                 });
-            } elseif (Teamwork::hasPendingInvite($team, $user->email) && $user->hasTeamInvite($team)) {
+            } elseif ($invite && $user->hasTeamInvite($team)) {
                 $this->sendRemindingInvite($team, $user, $invite);
                 $inviteSent = true;
             }
         }
 
-        if ( $inviteSent ) {
+        if ($inviteSent) {
 
             return response()->json([
                 'success' => true,
@@ -204,8 +194,8 @@ class CompanyTeamsController extends Controller
         $team = $request->user()->teams()->where('id', $id)->first();
 
         $apps = App::with(['products.countries', 'country', 'developer', 'team'])
-            ->whereHas('team', function( $q ) use ( $team ) {
-                if ( $team ) {
+            ->whereHas('team', function ($q) use ($team) {
+                if ($team) {
                     $q->where('id', $team->id);
                 }
             })
@@ -216,6 +206,7 @@ class CompanyTeamsController extends Controller
         return view('templates.teams.show', [
             'approvedApps' => $apps['approved'] ?? [],
             'revokedApps' => $apps['revoked'] ?? [],
+            'country' => Country::where('code', $team->country)->first(),
             'team' => $team,
         ]);
     }
@@ -226,19 +217,16 @@ class CompanyTeamsController extends Controller
     public function store(TeamRequest $request)
     {
         $user = $request->user();
+        $data = $request->validated();
 
-        $validated = $request->validated();
-
-        $data = $this->prepareData($validated);
-
-        if ( !$this->processLogoFile($request, $data) ) {
+        if (!$this->processLogoFile($request, $data)) {
             abort(422, 'Could not process logo file upload for your team.');
         }
 
         $team = $this->createTeam($user, $data);
 
         if (!empty($data['team_members'])) {
-            $this->sendInvites($data['team_members']);
+            $this->sendInvites($data['team_members'], $team);
         }
 
         if (strpos(url()->previous(), 'teams/create') !== false) {
@@ -274,15 +262,15 @@ class CompanyTeamsController extends Controller
 
         $team = Team::find($id);
 
-        if ( $request->post() && $team) {
+        if ($request->post() && $team) {
 
             $data = $this->prepareData($validated);
 
-            if ( !$this->processLogoFile($request, $data) ) {
+            if (!$this->processLogoFile($request, $data)) {
                 abort(422, 'Could not process logo file upload for your team.');
             }
 
-            if ( $team->update($data) ) {
+            if ($team->update($data)) {
                 return redirect()->route('team.show', $team->id)
                     ->with('success: Your team was successfully updated.');
             }
@@ -294,26 +282,24 @@ class CompanyTeamsController extends Controller
      */
     public function accept(Request $request)
     {
-        $invite = Teamwork::getInviteFromAcceptToken( $request->get('token') );
-
+        $invite = Teamwork::getInviteFromAcceptToken($request->get('token'));
         $inviteType = ucfirst($invite->type);
 
-        if( $invite->type === 'ownership') {
+
+        if ($invite->type === 'ownership') {
 
             $team = $this->getTeam($invite->team_id);
             $owner = $this->getTeamUserByEmail($invite->email);
 
             auth()->user()->teams()->detach($team->id);
-            $team->update([ 'owner_id' => $owner->id ]);
+            $team->update(['owner_id' => $owner->id]);
 
-            Teamwork::acceptInvite( $invite );
-        }else{
+            Teamwork::acceptInvite($invite);
+        } else {
 
             $team = $this->getTeam($invite->team_id);
-            $member = $this->getTeamUserByEmail($invite->email);
 
-            $this->updateRole($team, $member, $invite);
-            Teamwork::acceptInvite( $invite );
+            Teamwork::acceptInvite($invite);
         }
 
         if (!$invite->exists) {
@@ -326,16 +312,15 @@ class CompanyTeamsController extends Controller
      */
     public function reject(Request $request)
     {
-        $invite = Teamwork::getInviteFromDenyToken( $request->get('token') );
+        $invite = Teamwork::getInviteFromDenyToken($request->get('token'));
+        $inviteType = ucfirst($invite->type);
 
-        $inviteType = ucfirst($invite);
-
-        if( $invite ) {
-            Teamwork::denyInvite( $invite );
+        if ($invite) {
+            Teamwork::denyInvite($invite);
         }
 
         if (!$invite->exists) {
-            return redirect()->route('teams.listing')->with('success:' . $inviteType . ' successfully denied.');
+            return redirect()->route('teams.listing')->with('success:' . $inviteType . ' successfully rejected.');
         }
     }
 
@@ -350,7 +335,7 @@ class CompanyTeamsController extends Controller
         $user = $this->getUser($data['user_id']);
 
         $updated = false;
-        if ( $team->hasUser($user)) {
+        if ($team->hasUser($user)) {
             $updated = $this->updateRole($team, $user, $data['role']);
         }
 

@@ -41,7 +41,6 @@ class ExternalInvite extends Mailable
     public function __construct(Team $team, string $email)
     {
         $this->team = $team;
-
         $this->email = $email;
     }
 
@@ -59,8 +58,6 @@ class ExternalInvite extends Mailable
         })
             ->to($this->email)
             ->subject("MTN Developer Portal: {$owner->full_name} has invited you to join {$this->team->name} Team")
-            ->markdown('emails.teams.invites.external-invite', [
-                'team' => $this->team,
-            ]);
+            ->markdown('emails.teams.invites.external-invite');
     }
 }
