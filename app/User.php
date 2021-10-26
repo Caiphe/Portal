@@ -174,7 +174,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
 	public function twoFactorStatus()
     {
-        return is_null($this->value('2fa')) ? 'Disabled' : 'Enabled';
+        return is_null($this['2fa']) ? 'Disabled' : 'Enabled';
 	}
 
 	public function getDeveloperAppsCount() {

@@ -132,16 +132,22 @@ for(var u = 0; u < userModalShow.length; u++) {
 if(makeUserBtn){
     makeUserBtn.addEventListener('click', function(event){
         var data = {
-            'user_id': makeUserId,
-            'team_id': makeTeamId,
-            'role': makeUserRole
+            'user_id': makeUserId.value,
+            'team_id': makeTeamId.value,
+            'role': makeUserRole.value
         };
 
-        handleMakeUserRole('teams/' + makeTeamId + '/user/role', data, event);
+        document.querySelector('.block-hide-menu.show').click();
+
+        handleMakeUserRole('/teams/' + data.team_id + '/user/role', data, event);
     })
 }
 function handleMakeUserRole(url, data, event) {
     var xhr = new XMLHttpRequest();
+    var roleLookup = {
+        'team_admin': 'Team Admin',
+        'team_user': 'Team User',
+    };
 
     event.preventDefault();
 
@@ -159,7 +165,8 @@ function handleMakeUserRole(url, data, event) {
 
     xhr.onload = function() {
         if (xhr.status === 200) {
-           addAlert('success', "Use's role has been updated");
+           addAlert('success', "User's role has been updated");
+           document.getElementById('team-role-' + data.user_id).textContent = roleLookup[data.role];
            hideUserModal();
         } else {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
@@ -172,16 +179,26 @@ function handleMakeUserRole(url, data, event) {
             }
             addAlert('error', result.message || 'Something went wrong. Please try again.');
         }
+
         removeLoading();
     };
 }
 
 function showUserModalFunc(){
+    var textLookup = {
+        'team_admin_header': 'Make Administrator',
+        'team_user_header': 'Make User',
+        'team_admin_role': 'administrator',
+        'team_user_role': 'user',
+    };
     makeUserId.value = this.dataset.teamuserid;
     makeTeamId.value = this.dataset.teamid;
     makeUserRole.value = this.dataset.userrole;
 
-    document.querySelector('.make-user-name').innerHTML = this.dataset.username;
+    document.querySelector('.make-user-name').textContent = this.dataset.username;
+
+    userModal.querySelector('.team-head').textContent = textLookup[(this.dataset.userrole + '_header')];
+    userModal.querySelector('.teammate-text strong').textContent = textLookup[(this.dataset.userrole + '_role')];
     userModal.classList.add('show');
 }
 

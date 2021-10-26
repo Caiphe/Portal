@@ -14,7 +14,8 @@ use App\Http\Requests\Teams\UpdateRequest;
 use App\Http\Requests\Teams\Invites\InviteRequest;
 use App\Http\Requests\Teams\Invites\LeavingRequest;
 use App\Http\Requests\Teams\Request as TeamRequest;
-
+use App\Role;
+use App\User;
 use Illuminate\Http\Request;
 
 use Mpociot\Teamwork\Facades\Teamwork;
@@ -190,7 +191,9 @@ class CompanyTeamsController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $team = $request->user()->teams()->where('id', $id)->first();
+        $user = $request->user();
+        $team = $user->teams()->where('id', $id)->first();
+        $isOwner = $user->isOwnerOfTeam($team);
 
         $apps = App::with(['products.countries', 'country', 'developer', 'team'])
             ->whereHas('team', function ($q) use ($team) {
@@ -203,10 +206,15 @@ class CompanyTeamsController extends Controller
             ->groupBy('status');
 
         return view('templates.teams.show', [
-            'approvedApps' => $apps['approved'] ?? [],
-            'revokedApps' => $apps['revoked'] ?? [],
-            'country' => Country::where('code', $team->country)->first(),
             'team' => $team,
+            'user' => $user,
+            'revokedApps' => $apps['revoked'] ?? [],
+            'approvedApps' => $apps['approved'] ?? [],
+            'userTeamInvite' => $user->getTeamInvite($team),
+            'country' => Country::where('code', $team->country)->first(),
+            'userTeamOwnershipInvite' => $user->getTeamInvite($team, 'ownership'),
+            'isOwner' => $isOwner,
+            'isAdmin' => $user->hasTeamRole($team, 'team_admin'),
         ]);
     }
 
@@ -323,14 +331,16 @@ class CompanyTeamsController extends Controller
     /**
      * Make Team member Admin/User
      */
-    public function roleUpdate(RoleUpdateRequest $roleRequest, Team $team)
+    public function roleUpdate(RoleUpdateRequest $roleRequest, $teamId)
     {
         $data = $roleRequest->validated();
-        $user = $this->getUser($data['user_id']);
+        $user = User::find($data['user_id']);
+        $team = Team::find($teamId);
+        $role = Role::where('name', $data['role'])->first();
 
         $updated = false;
         if ($team->hasUser($user)) {
-            $updated = $user->teams()->updateExistingPivot($team, ['role_id' => $data['role']]);
+            $updated = $user->teams()->updateExistingPivot($team, ['role_id' => $role->id]);
         }
 
         return response()->json(['success' => $updated]);

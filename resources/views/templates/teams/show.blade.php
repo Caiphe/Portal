@@ -1,11 +1,3 @@
-@php
-
-    $user = auth()->user();
-    $userTeamInvite = $user->getTeamInvite($team);
-    $userTeamOwnershipInvite = $user->getTeamInvite($team, 'ownership');
-    $isAdmin = $user->hasTeamRole($team, 'team_admin') || $user->isOwnerOfTeam($team)
-
-@endphp
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/teams/show.css') }}">
 @endpush
@@ -131,13 +123,13 @@ Team
         <div class="scrollable-users-container">
             <ul class="list-users-container">
             @if ($team->users)
-                @foreach($team->users as $user)
-                    @if(!$user->isTeamOwner($team))
+                @foreach($team->users as $teamUser)
+                    @if(!$teamUser->isTeamOwner($team))
                         <li class="each-user">
-                            <div class="users-thumbnail" style="background-image: url({{ $user->profile_picture }})"></div>
-                            <div class="user-full-name">{{ $user->full_name }}</div>
+                            <div class="users-thumbnail" style="background-image: url({{ $teamUser->profile_picture }})"></div>
+                            <div class="user-full-name">{{ $teamUser->full_name }}</div>
                             <div class="check-container">
-                                <x-radio-round name="transfer-ownership-check" id="{{ $user->id }}" value="{{ $user->email }}"></x-radio-round>
+                                <x-radio-round name="transfer-ownership-check" id="{{ $teamUser->id }}" value="{{ $teamUser->email }}"></x-radio-round>
                             </div>
                         </li>
                     @endif
@@ -167,13 +159,13 @@ Team
         <div class="scrollable-users-container">
             <ul class="list-users-container">
             @if ($team->users)
-                @foreach($team->users as $user)
-                    @if(!$user->isTeamOwner($team))
+                @foreach($team->users as $teamUser)
+                    @if(!$teamUser->isTeamOwner($team))
                         <li class="each-user">
-                            <div class="users-thumbnail" style="background-image: url({{ $user->profile_picture }})"></div>
-                            <div class="user-full-name">{{ $user->full_name }}</div>
+                            <div class="users-thumbnail" style="background-image: url({{ $teamUser->profile_picture }})"></div>
+                            <div class="user-full-name">{{ $teamUser->full_name }}</div>
                             <div class="check-container">
-                                <x-radio-round-two name="transfer-ownership-check" id="{{ $user->id }}" value="{{ $user->email }}"></x-radio-round-two>
+                                <x-radio-round-two name="transfer-ownership-check" id="{{ $teamUser->id }}" value="{{ $teamUser->email }}"></x-radio-round-two>
                             </div>
                         </li>
                     @endif
@@ -258,7 +250,7 @@ Team
                         <td class="member-name-profile">
                             <div class="member-thumbnail"  style="background-image: url({{ $teamUser->profile_picture }})"></div>
                             <p>
-                                <strong> {{ $teamUser->first_name }} {{ $teamUser->last_name }}</strong>
+                                <strong> {{ $teamUser->full_name }}</strong>
                                 ({{ $teamUser->email }})
                             </p>
 
@@ -266,52 +258,54 @@ Team
                                 <span class="owner-tag red-tag">OWNER</span>
                             @endif
                         </td>
-                        <td>{{ $teamUser->teamRole($team)->label }}</td>
+                        <td id="team-role-{{ $teamUser->id }}">{{ $teamUser->teamRole($team)->label }}</td>
                         <td class="column-container">{{ $teamUser->twoFactorStatus() }}
                             <div class="block-hide-menu"></div>
-                            @if($isAdmin) <button class="btn-actions"></button>@endif
+                            @if($isAdmin && $teamUser->id !== $user->id && $teamUser->id !== $team->owner_id) 
+                            <button class="btn-actions"></button>
                             {{-- user action menu --}}
                             <div class="block-actions">
                                 <ul>
                                     {{---  Uses the transfer endpoint--}}
+                                    @if($isOwner)
                                     <li>
                                         <button
-                                            class="make-admin {{ $user->hasTeamRole($team, 'team_admin') ? 'non-active' : '' }} transfer-ownership make-owner-btn"
-                                            data-adminname="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
+                                            class="make-admin transfer-ownership make-owner-btn"
+                                            data-adminname="{{ $teamUser->full_name }}"
                                             data-invite=""
                                             data-teamid="{{ $team->id }}"
                                             data-useremail="{{ $teamUser->email }}">
                                             Make Owner
                                         </button>
                                     </li>
+                                    @endif
 
                                     {{---  Uses the invite endpoint--}}
                                     <li>
                                         <button
-                                            class="make-user {{ $user->hasTeamRole($team, 'team_admin') ? 'non-active' : '' }}"
-                                            data-username="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
+                                            class="make-user"
+                                            data-username="{{ $teamUser->full_name }}"
                                             data-useremail="{{ $teamUser->email }}"
                                             data-teamid="{{ $team->id }}"
-                                            data-teamuserid="{{ $user->id }}"
+                                            data-teamuserid="{{ $teamUser->id }}"
                                             data-userrole = "{{ $teamUser->teamRole($team)->name === 'team_user' ? 'team_admin' : 'team_user' }}">
-
                                             {{ $teamUser->teamRole($team)->name === 'team_user' ? 'Make Administrator' : 'Make User' }}
-
                                         </button>
                                     </li>
 
                                     {{---  Uses the leave endpoinst --}}
                                     <li>
                                         <button
-                                            class="user-delete {{ $user->hasTeamRole($team, 'team_admin') ? 'non-active' : '' }}"
-                                            data-usernamedelete="{{ $teamUser->first_name }} {{ $teamUser->last_name }}"
+                                            class="user-delete"
+                                            data-usernamedelete="{{ $teamUser->full_name }}"
                                             data-teamid="{{ $team->id }}"
-                                            data-teamuserid="{{ $user->id }}">
+                                            data-teamuserid="{{ $teamUser->id }}">
                                             Delete
                                         </button>
                                     </li>
                                 </ul>
                             </div>
+                            @endif
                             {{-- Block end --}}
 
                         </td>
