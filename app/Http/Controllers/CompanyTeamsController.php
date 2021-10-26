@@ -112,11 +112,10 @@ class CompanyTeamsController extends Controller
     /**
      * Transfer ownership request endpoint
      */
-    public function ownership(InviteRequest $inviteRequest)
+    public function ownership(InviteRequest $inviteRequest, Team $team)
     {
         $data = $inviteRequest->validated();
 
-        $team = $this->getTeam($data['team_id']);
         $user = $this->getTeamUserByEmail($data['invitee']);
 
         $invite = $this->createTeamInvite($team, $user->email, 'ownership');

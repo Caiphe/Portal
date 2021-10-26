@@ -197,6 +197,16 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Wrapper method for "isOwner".
+     *
+     * @return bool
+     */
+    public function isTeamOwner(Team $team)
+    {
+        return $team->owner_id === $this->id;
+    }
+
+    /**
      * Check if User has a Team invite
      *
      * @param Team $team

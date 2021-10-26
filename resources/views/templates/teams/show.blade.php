@@ -132,7 +132,7 @@ Team
             <ul class="list-users-container">
             @if ($team->users)
                 @foreach($team->users as $user)
-                    @if(!$user->isTeamOwner())
+                    @if(!$user->isTeamOwner($team))
                         <li class="each-user">
                             <div class="users-thumbnail" style="background-image: url({{ $user->profile_picture }})"></div>
                             <div class="user-full-name">{{ $user->full_name }}</div>
@@ -168,12 +168,11 @@ Team
             <ul class="list-users-container">
             @if ($team->users)
                 @foreach($team->users as $user)
-                    @if(!$user->isTeamOwner())
+                    @if(!$user->isTeamOwner($team))
                         <li class="each-user">
                             <div class="users-thumbnail" style="background-image: url({{ $user->profile_picture }})"></div>
                             <div class="user-full-name">{{ $user->full_name }}</div>
                             <div class="check-container">
-
                                 <x-radio-round-two name="transfer-ownership-check" id="{{ $user->id }}" value="{{ $user->email }}"></x-radio-round-two>
                             </div>
                         </li>
@@ -263,7 +262,7 @@ Team
                                 ({{ $teamUser->email }})
                             </p>
 
-                            @if($teamUser->isTeamOwner())
+                            @if($teamUser->isTeamOwner($team))
                                 <span class="owner-tag red-tag">OWNER</span>
                             @endif
                         </td>

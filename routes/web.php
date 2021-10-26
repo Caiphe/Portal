@@ -59,7 +59,7 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
     Route::post('teams/{id}/invite', 'CompanyTeamsController@invite')->middleware('can:administer-team,id')->name('teams.invite');
     Route::any('teams/accept', 'CompanyTeamsController@accept')->name('teams.invite.accept');
     Route::any('teams/reject', 'CompanyTeamsController@reject')->name('teams.invite.deny');
-    Route::any('teams/ownership', 'CompanyTeamsController@ownership')->middleware('can:administer-team')->name('teams.ownership.invite');
+    Route::any('teams/{team}/ownership', 'CompanyTeamsController@ownership')->middleware('can:administer-team-by-owner,team')->name('teams.ownership.invite');
     Route::post('teams/user/role', 'CompanyTeamsController@roleUpdate')->middleware('can:administer-team')->name('teams.member.role');
 });
 
