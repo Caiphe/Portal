@@ -261,7 +261,7 @@ Team
                         <td id="team-role-{{ $teamUser->id }}">{{ $teamUser->teamRole($team)->label }}</td>
                         <td class="column-container">{{ $teamUser->twoFactorStatus() }}
                             <div class="block-hide-menu"></div>
-                            @if($isAdmin && $teamUser->id !== $user->id && $teamUser->id !== $team->owner_id) 
+                            @if($isAdmin && $teamUser->id !== $user->id && $teamUser->id !== $team->owner_id)
                             <button class="btn-actions"></button>
                             {{-- user action menu --}}
                             <div class="block-actions">
@@ -423,6 +423,10 @@ Team
 
                         <div class="column-heading">
                             <p>Country @svg('arrow-down' ,'#cdcdcd')</p>
+                        </div>
+
+                        <div class="column-heading">
+                            <p>Reason @svg('arrow-down' ,'#cdcdcd')</p>
                         </div>
 
                         <div class="column-heading">
