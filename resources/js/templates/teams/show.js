@@ -18,25 +18,25 @@ var addTeamMobile;
 var addTeammateBtn;
 
 
-for(var i = 0; i < btnActions.length; i++) {
+for (var i = 0; i < btnActions.length; i++) {
     btnActions[i].addEventListener('click', showUserAction);
 }
 
-function showUserAction(){
+function showUserAction() {
     this.previousElementSibling.classList.add("show");
     this.nextElementSibling.classList.add('show');
 }
 
-for(var i = 0; i < hideMenuBlock.length; i++){
+for (var i = 0; i < hideMenuBlock.length; i++) {
     hideMenuBlock[i].addEventListener('click', hideActions);
 }
 
-function hideActions(){
+function hideActions() {
     this.classList.remove('show');
     this.nextElementSibling.nextElementSibling.classList.remove('show');
 }
 
-if (addTeamMobile = document.querySelector('.add-team-mate-btn-mobile') ) {
+if (addTeamMobile = document.querySelector('.add-team-mate-btn-mobile')) {
     addTeamMobile.addEventListener('click', hideModalContainer);
 }
 
@@ -44,25 +44,25 @@ if (addTeammateBtn = document.querySelector('.add-team-mate-btn')) {
     addTeammateBtn.addEventListener('click', hideModalContainer);
 }
 
-function hideModalContainer(){
+function hideModalContainer() {
     modalContainer.classList.add('show');
 }
 
 clodeModal.addEventListener('click', hideAddTeamMateModalContainer);
 overlayContainer.addEventListener('click', hideAddTeamMateModalContainer);
 
-function hideAddTeamMateModalContainer(){
+function hideAddTeamMateModalContainer() {
     modalContainer.classList.remove('show');
 }
 
 // Show delete modal
 var userDeleteBtn = document.querySelectorAll('.user-delete');
 var deleteModalContainer = document.querySelector('.delete-modal-container')
-for(var d = 0; d < userDeleteBtn.length; d++){
+for (var d = 0; d < userDeleteBtn.length; d++) {
     userDeleteBtn[d].addEventListener('click', showUserDelete);
 }
 
-function showUserDelete(){
+function showUserDelete() {
     deleteModalContainer.classList.add('show');
     document.querySelector('.user-delete-name').innerHTML = this.dataset.usernamedelete;
     document.querySelector('.user-to-delete-name').innerHTML = this.dataset.usernamedelete;
@@ -71,7 +71,7 @@ function showUserDelete(){
     hiddenTeamUserId.value = this.dataset.teamuserid;
 }
 
-deleteClodeModal.addEventListener('click',hideDeleteUserModal);
+deleteClodeModal.addEventListener('click', hideDeleteUserModal);
 deleteOverlayContainer.addEventListener('click', hideDeleteUserModal);
 cancelRemoveUserBtn.addEventListener('click', hideDeleteUserModal);
 document.querySelector('.cancel-removal-btn').addEventListener('click', hideDeleteUserModal);
@@ -87,12 +87,12 @@ var ownershipModalShow = document.querySelector('.make-owner');
 
 
 var radiosList = document.querySelectorAll('input[name="transfer-ownership-check"]');
-for(var i = 0; i < radiosList.length; i++){
+for (var i = 0; i < radiosList.length; i++) {
     radiosList[i].addEventListener('click', checkedRadio);
 }
 
-function checkedRadio(){
-    if(this.checked){
+function checkedRadio() {
+    if (this.checked) {
         transferOwnsershipBtn.classList.remove('transfer-btn');
         transferOwnsershipBtn.setAttribute('data-useremail', this.value);
     }
@@ -112,7 +112,7 @@ if (revokeTransferBtn) {
     revokeTransferBtn.addEventListener('click', hideTransferBanner);
 }
 
-function hideTransferBanner(){
+function hideTransferBanner() {
     owneshipTransferBanner.classList.add('hide');
 }
 
@@ -125,12 +125,12 @@ var userModal = document.querySelector('.make-user-modal-container');
 var makeUserBtn = document.querySelector('.make-user-btn');
 var userModalShow = document.querySelectorAll('.make-user');
 
-for(var u = 0; u < userModalShow.length; u++) {
+for (var u = 0; u < userModalShow.length; u++) {
     userModalShow[u].addEventListener('click', showUserModalFunc);
 }
 
-if(makeUserBtn){
-    makeUserBtn.addEventListener('click', function(event){
+if (makeUserBtn) {
+    makeUserBtn.addEventListener('click', function (event) {
         var data = {
             'user_id': makeUserId.value,
             'team_id': makeTeamId.value,
@@ -144,9 +144,16 @@ if(makeUserBtn){
 }
 function handleMakeUserRole(url, data, event) {
     var xhr = new XMLHttpRequest();
+    var roleButton;
     var roleLookup = {
         'team_admin': 'Team Admin',
         'team_user': 'Team User',
+    };
+    var textLookup = {
+        'team_admin_header': 'Make User',
+        'team_user_header': 'Make Administrator',
+        'team_admin_role': 'team_user',
+        'team_user_role': 'team_admin',
     };
 
     event.preventDefault();
@@ -163,17 +170,23 @@ function handleMakeUserRole(url, data, event) {
 
     addLoading("Updating user's role.");
 
-    xhr.onload = function() {
+    xhr.onload = function () {
         if (xhr.status === 200) {
-           addAlert('success', "User's role has been updated");
-           document.getElementById('team-role-' + data.user_id).textContent = roleLookup[data.role];
-           hideUserModal();
+            roleButton = document.getElementById('change-role-' + data.user_id);
+
+            addAlert('success', "User's role has been updated");
+
+            document.getElementById('team-role-' + data.user_id).textContent = roleLookup[data.role];
+            roleButton.textContent = textLookup[data.role + '_header'];
+            roleButton.dataset.userrole = textLookup[data.role + '_role'];
+
+            hideUserModal();
         } else {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
-            if(result.errors) {
+            if (result.errors) {
                 result.message = [];
-                for(var error in result.errors){
+                for (var error in result.errors) {
                     result.message.push(result.errors[error]);
                 }
             }
@@ -184,7 +197,7 @@ function handleMakeUserRole(url, data, event) {
     };
 }
 
-function showUserModalFunc(){
+function showUserModalFunc() {
     var textLookup = {
         'team_admin_header': 'Make Administrator',
         'team_user_header': 'Make User',
@@ -206,7 +219,7 @@ document.querySelector('.user-close-modal').addEventListener('click', hideUserMo
 document.querySelector('.user-overlay-container').addEventListener('click', hideUserModal);
 document.querySelector('.user-admin-cancel-btn').addEventListener('click', hideUserModal);
 
-function hideUserModal(){
+function hideUserModal() {
     userModal.classList.remove('show');
 }
 
@@ -217,13 +230,13 @@ var confirmDeleteBlock = document.querySelector('.confirm-delete-block');
 
 /** Resolves an issue with removing user from team */
 if (confirmDeleteBtn !== null) {
-    confirmDeleteBtn.addEventListener('click', function(){
+    confirmDeleteBtn.addEventListener('click', function () {
         deleteUseBlock.classList.add('hide');
         confirmDeleteBlock.classList.add('show');
     });
 }
 
-function hideDeleteUserModal(){
+function hideDeleteUserModal() {
     deleteModalContainer.classList.remove('show');
     confirmDeleteBlock.classList.remove('show');
     deleteUseBlock.classList.remove('hide');
@@ -241,7 +254,7 @@ function handleHeadingClick(event) {
 }
 
 var buttons = document.querySelectorAll('.toggle-app');
-for (var j = 0; j < buttons.length; j ++) {
+for (var j = 0; j < buttons.length; j++) {
     buttons[j].addEventListener('click', handleButtonClick);
 }
 
@@ -250,7 +263,7 @@ function handleButtonClick(event) {
 }
 
 var actions = document.querySelectorAll('.actions');
-for (var k = 0; k < actions.length; k ++) {
+for (var k = 0; k < actions.length; k++) {
     actions[k].addEventListener('click', handleMenuClick);
 }
 
@@ -261,15 +274,15 @@ function handleMenuClick() {
 }
 
 var modals = document.querySelectorAll('.modal');
-for (var l = 0; l < modals.length; l ++) {
-    modals[l].addEventListener('click', function() {
+for (var l = 0; l < modals.length; l++) {
+    modals[l].addEventListener('click', function () {
         document.querySelector(".modal.show").classList.remove('show');
         document.querySelector(".menu.show").classList.remove('show');
     })
 }
 
 var deleteButtons = document.querySelectorAll('.app-delete');
-for (var m = 0; m < modals.length; m ++) {
+for (var m = 0; m < modals.length; m++) {
     deleteButtons[m].addEventListener('click', handleDeleteMenuClick);
 }
 
@@ -286,7 +299,7 @@ function handleDeleteMenuClick(event) {
     var url = '/apps/' + app.dataset.name;
     var xhr = new XMLHttpRequest();
 
-    if(!confirm('Are you sure you want to delete this app?')) {
+    if (!confirm('Are you sure you want to delete this app?')) {
         document.querySelector(".menu.show").classList.remove('show');
         return;
     }
@@ -297,20 +310,20 @@ function handleDeleteMenuClick(event) {
         document.getElementsByName("csrf-token")[0].content
     );
 
-        xhr.send(JSON.stringify(data));
+    xhr.send(JSON.stringify(data));
 
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                window.location.href = "{{ route('app.index') }}";
-                addAlert('success', 'Application deleted successfully');
-            }
-        };
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            window.location.href = "{{ route('app.index') }}";
+            addAlert('success', 'Application deleted successfully');
+        }
+    };
 
     document.querySelector(".menu.show").classList.remove('show');
 }
 
 var keys = document.querySelectorAll('.copy');
-for (var i = 0; i < keys.length; i ++) {
+for (var i = 0; i < keys.length; i++) {
     keys[i].addEventListener('click', copyText);
 }
 
@@ -331,14 +344,14 @@ function copyText() {
 
     xhr.send();
 
-    xhr.onload = function() {
-        if(xhr.status === 302 || /login/.test(xhr.responseURL)){
+    xhr.onload = function () {
+        if (xhr.status === 302 || /login/.test(xhr.responseURL)) {
             addAlert('info', ['You are currently logged out.', 'Refresh the page to login again.']);
             btn.className = 'copy';
         } else if (xhr.status === 200) {
             var response = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
-            if(response === null){
+            if (response === null) {
                 btn.className = 'copy';
                 return void addAlert('error', ['Sorry there was a problem getting the credentials', 'Please try again']);
             }
@@ -359,7 +372,7 @@ function copyToClipboard(text) {
     document.body.removeChild(dummy);
 }
 
-deleteUserActionBtn.addEventListener('click', function(event){
+deleteUserActionBtn.addEventListener('click', function (event) {
     var url = "/teams/leave";
     var xhr = new XMLHttpRequest();
     var data = {
@@ -381,9 +394,9 @@ deleteUserActionBtn.addEventListener('click', function(event){
 
     xhr.send(JSON.stringify(data));
 
-    xhr.onload = function() {
+    xhr.onload = function () {
         if (xhr.status === 200) {
-            addAlert('success', ['User successfully removed from team.', 'Please wait meanwhile the page refreshes.'], function(){
+            addAlert('success', ['User successfully removed from team.', 'Please wait meanwhile the page refreshes.'], function () {
                 if (window.history) {
                     history.back();
                 }
@@ -391,15 +404,15 @@ deleteUserActionBtn.addEventListener('click', function(event){
         } else {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
-            if(result.errors) {
+            if (result.errors) {
                 result.message = [];
-                for(var error in result.errors){
+                for (var error in result.errors) {
                     result.message.push(result.errors[error]);
                 }
             }
 
             addAlert('error', result.message || 'Sorry there was a problem removing team. Please try again.');
-            setTimeout(function(){
+            setTimeout(function () {
                 console.log("Hide the modal");
             }, 4000);
         }
@@ -414,17 +427,17 @@ var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 teamMateInvitEmail.value = "";
 
 teamMateInvitEmail.addEventListener('keyup', emailCheck);
-function emailCheck(){
-    if(this.value.match(mailformat)){
+function emailCheck() {
+    if (this.value.match(mailformat)) {
         inviteTeamMateError.classList.remove('show');
         teamInviteUserBtn.classList.add('active');
-    }else{
+    } else {
         inviteTeamMateError.classList.add('show');
         teamInviteUserBtn.classList.remove('active');
     }
 }
 
-teamInviteUserBtn.addEventListener('click', function(event){
+teamInviteUserBtn.addEventListener('click', function (event) {
     var url = "/teams/" + this.dataset.teamid + "/invite";
     var xhr = new XMLHttpRequest();
     var data = {
@@ -445,9 +458,9 @@ teamInviteUserBtn.addEventListener('click', function(event){
 
     xhr.send(JSON.stringify(data));
 
-    xhr.onload = function() {
+    xhr.onload = function () {
         if (xhr.status === 200) {
-            addAlert('success', ['User was successfully invited to the team.', 'Please wait meanwhile the page refreshes.'], function(){
+            addAlert('success', ['User was successfully invited to the team.', 'Please wait meanwhile the page refreshes.'], function () {
                 if (window.history) {
                     history.back();
                 }
@@ -455,9 +468,9 @@ teamInviteUserBtn.addEventListener('click', function(event){
         } else {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
-            if(result.errors) {
+            if (result.errors) {
                 result.message = [];
-                for(var error in result.errors){
+                for (var error in result.errors) {
                     result.message.push(result.errors[error]);
                 }
             }
@@ -473,7 +486,7 @@ teamInviteUserBtn.addEventListener('click', function(event){
 });
 
 if (document.querySelector('.transfer-ownership')) {
-    document.querySelector('.transfer-ownership').addEventListener('click', function (event){
+    document.querySelector('.transfer-ownership').addEventListener('click', function (event) {
         var url = "/teams/" + this.dataset.teamid + "/ownership";
         var xhr = new XMLHttpRequest();
         var data = {
@@ -493,15 +506,15 @@ if (document.querySelector('.transfer-ownership')) {
 
         xhr.send(JSON.stringify(data));
 
-        xhr.onload = function() {
+        xhr.onload = function () {
             if (xhr.status === 200) {
                 addAlert('success', 'Team transfer ownership requested to member.');
             } else {
                 var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
-                if(result.errors) {
+                if (result.errors) {
                     result.message = [];
-                    for(var error in result.errors){
+                    for (var error in result.errors) {
                         result.message.push(result.errors[error]);
                     }
                 }
@@ -513,8 +526,8 @@ if (document.querySelector('.transfer-ownership')) {
 }
 
 var btnAcceptOwnership = document.querySelector('.accept-team-ownership');
-if(btnAcceptOwnership){
-    btnAcceptOwnership.addEventListener('click', function (event){
+if (btnAcceptOwnership) {
+    btnAcceptOwnership.addEventListener('click', function (event) {
         var data = {
             token: this.dataset.invitetoken,
         };
@@ -525,8 +538,8 @@ if(btnAcceptOwnership){
 
 
 var btnRejectOwnership = document.querySelector('.reject-team-ownership');
-if(btnRejectOwnership){
-    btnRejectOwnership.addEventListener('click', function (event){
+if (btnRejectOwnership) {
+    btnRejectOwnership.addEventListener('click', function (event) {
         var data = {
             token: this.dataset.invitetoken,
         };
@@ -536,7 +549,7 @@ if(btnRejectOwnership){
 }
 
 
-transferOwnsershipBtn.addEventListener('click', function(event){
+transferOwnsershipBtn.addEventListener('click', function (event) {
     var data = {
         team_id: this.dataset.teamid,
         invitee: this.dataset.useremail
@@ -544,7 +557,7 @@ transferOwnsershipBtn.addEventListener('click', function(event){
     handleOwnershipTransfer('/teams/' + this.dataset.teamid + '/ownership', data, event);
 });
 
-makeOwnershipBtn.addEventListener('click', function(event){
+makeOwnershipBtn.addEventListener('click', function (event) {
     var data = {
         team_id: this.dataset.teamid,
         invitee: this.dataset.useremail
@@ -570,17 +583,17 @@ function handleOwnershipTransfer(url, data, event) {
 
     addLoading('Sending ownership request for team.');
 
-    xhr.onload = function() {
+    xhr.onload = function () {
         if (xhr.status === 200) {
-           addAlert('success', "Ownership trafer request sent successfully !");
-           hideOwnershipModal();
-           hideAdminModal();
+            addAlert('success', "Ownership trafer request sent successfully !");
+            hideOwnershipModal();
+            hideAdminModal();
         } else {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
-            if(result.errors) {
+            if (result.errors) {
                 result.message = [];
-                for(var error in result.errors){
+                for (var error in result.errors) {
                     result.message.push(result.errors[error]);
                 }
             }
@@ -598,23 +611,23 @@ if (ownershipModalShow !== null) {
     ownershipModalShow.addEventListener('click', showOwnershipModalFunc);
 }
 
-function showOwnershipModalFunc(){
+function showOwnershipModalFunc() {
     ownershipModal.classList.add('show');
 }
 
 document.querySelector('.ownweship-close-modal').addEventListener('click', hideOwnershipModal);
 document.querySelector('.ownweship-overlay-container').addEventListener('click', hideOwnershipModal);
 document.querySelector('.ownership-removal-btn').addEventListener('click', hideOwnershipModal);
-function hideOwnershipModal(){
+function hideOwnershipModal() {
     ownershipModal.classList.remove('show');
 }
 
 // This hides and shows the ownership modal from the user's list
-for(var i = 0; i < adminModalShow.length; i++){
+for (var i = 0; i < adminModalShow.length; i++) {
     adminModalShow[i].addEventListener('click', showAdminModalFunc);
 }
 
-function showAdminModalFunc(){
+function showAdminModalFunc() {
     var makeOwnerBtn = document.querySelector('#make-owner-btn');
 
     document.querySelector('.admin-user-name').innerHTML = this.dataset.adminname;
@@ -628,6 +641,6 @@ function showAdminModalFunc(){
 document.querySelector('.admin-close-modal').addEventListener('click', hideAdminModal);
 document.querySelector('.admin-overlay-container').addEventListener('click', hideAdminModal);
 document.querySelector('.make-admin-cancel-btn').addEventListener('click', hideAdminModal);
-function hideAdminModal(){
+function hideAdminModal() {
     adminModal.classList.remove('show');
 }

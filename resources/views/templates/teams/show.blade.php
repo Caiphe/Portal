@@ -283,6 +283,7 @@ Team
                                     {{---  Uses the invite endpoint--}}
                                     <li>
                                         <button
+                                            id="change-role-{{ $teamUser->id }}"
                                             class="make-user"
                                             data-username="{{ $teamUser->full_name }}"
                                             data-useremail="{{ $teamUser->email }}"
