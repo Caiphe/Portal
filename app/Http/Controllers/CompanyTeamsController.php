@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\App;
-use App\Http\Requests\Teams\RoleUpdateRequest;
+use App\Role;
+use App\TeamUser;
+use App\User;
 use App\Team;
 use App\Country;
 
@@ -11,15 +13,13 @@ use App\Concerns\Teams\InviteActions;
 use App\Concerns\Teams\InviteRequests;
 
 use App\Http\Requests\Teams\UpdateRequest;
+use App\Http\Requests\Teams\RoleUpdateRequest;
 use App\Http\Requests\Teams\Invites\InviteRequest;
 use App\Http\Requests\Teams\Invites\LeavingRequest;
 use App\Http\Requests\Teams\Request as TeamRequest;
-use App\Role;
-use App\User;
-use Illuminate\Http\Request;
 
+use Illuminate\Http\Request;
 use Mpociot\Teamwork\Facades\Teamwork;
-use Mpociot\Teamwork\Events\UserInvitedToTeam;
 
 /**
  * Class CompanyTeamsController
@@ -161,8 +161,8 @@ class CompanyTeamsController extends Controller
             $invite = Teamwork::hasPendingInvite($team, $user->email);
 
             if (!$invite) {
-                Teamwork::inviteToTeam($user->email, $team, function ($invite) use (&$inviteSent) {
-                    event(new UserInvitedToTeam($invite));
+                Teamwork::inviteToTeam($user->email, $team, function ($invite) use ($team, $user, &$inviteSent) {
+                    $this->sendInternalInvite($team, $user, $invite);
 
                     $inviteSent = $invite->exists;
                 });
@@ -195,6 +195,38 @@ class CompanyTeamsController extends Controller
         $team = $user->teams()->where('id', $id)->first();
         $isOwner = $user->isOwnerOfTeam($team);
 
+        $order = [
+                'asc' => 'ASC',
+                'desc' => 'DESC'
+            ][$request->get('order', 'ASC')] ?? 'ASC';
+
+        $team->load(['users' => function($q) use($request, $order, $team) {
+
+            $q->when($request->has('sort'), function ($q)  use ($request, $order, $team) {
+                switch ($request->get('sort')) {
+                    case 'name':
+                        $q->orderBy('first_name', $order);
+                    break;
+
+                    case 'role':
+                        $q->orderBy(TeamUser::select('role_id')
+                            ->whereColumn('team_user.user_id', 'users.id')
+                            ->where('team_id', $team->id)
+                            ->latest()
+                            ->take(1), $order);
+                    break;
+
+                    case '2fa':
+                        if ($order === 'DESC') {
+                            $q->orderByRaw('ISNULL(2fa), 2fa ASC');
+                        }
+                    break;
+                }
+            });
+        }]);
+
+        $order = ['ASC' => 'desc', 'DESC' => 'asc'][$order] ?? 'desc';
+
         $apps = App::with(['products.countries', 'country', 'developer', 'team'])
             ->whereHas('team', function ($q) use ($team) {
                 if ($team) {
@@ -215,6 +247,7 @@ class CompanyTeamsController extends Controller
             'userTeamOwnershipInvite' => $user->getTeamInvite($team, 'ownership'),
             'isOwner' => $isOwner,
             'isAdmin' => $user->hasTeamRole($team, 'team_admin'),
+            'order' => $order,
         ]);
     }
 

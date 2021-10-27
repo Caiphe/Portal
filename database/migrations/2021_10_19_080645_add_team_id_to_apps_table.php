@@ -14,11 +14,12 @@ class AddTeamIdToAppsTable extends Migration
     public function up()
     {
         Schema::table('apps', function (Blueprint $table) {
-            $table->integer('team_id')->after('country_code')->unsigned()->nullable(true);
+            $table->unsignedBigInteger('team_id')->after('country_code')->nullable(true);
 
             $table->foreign('team_id')
                 ->references('id')
-                ->on('teams');
+                ->on('teams')
+                ->nullOnDelete();
         });
     }
 
@@ -30,10 +31,8 @@ class AddTeamIdToAppsTable extends Migration
     public function down()
     {
         Schema::table('apps', function (Blueprint $table) {
-
+            $table->dropConstrainedForeignId('apps_team_id_foreign');
             $table->dropColumn('team_id');
-
-            $table->dropUnique(['team_id']);
         });
     }
 }
