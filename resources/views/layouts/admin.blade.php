@@ -39,7 +39,6 @@
                         <li @if(Request::is('admin/bundles') || Request::is('admin/bundles/*')) class="active" @endif><a href="{{ route('admin.bundle.index') }}">Bundles</a></li>
                         <li @if(Request::is('admin/products') || Request::is('admin/products/*')) class="active" @endif><a href="{{ route('admin.product.index') }}">Products</a></li>
                         @endif
-                        <li><a href="{{ route('teams.listing') }}">Teams</a></li>
                     </ul>
                 </li>
                 @endif

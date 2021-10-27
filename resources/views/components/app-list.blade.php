@@ -14,12 +14,6 @@
     if (isset($app['team_id'])) {
         $team = \App\Team::find($app['team_id']);
     }
-
-    $reason = "";
-    if (isset($attr['Notes'])) {
-        $noteParts = explode("\n", $attr['Notes']);
-        $reason = end($noteParts);
-    }
 @endphp
 
 @allowonce('card_link')
@@ -47,10 +41,6 @@
     @else
         <div class="column"></div>
     @endif
-
-    <div class="column">
-        <a href="#" target="_blank" class="bold">{{ $reason }}</a>
-    </div>
 
     {{-- Creatorn column--}}
     <div class="column flexed-column">

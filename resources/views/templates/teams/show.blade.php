@@ -426,10 +426,6 @@ Team
                         </div>
 
                         <div class="column-heading">
-                            <p>Reason @svg('arrow-down' ,'#cdcdcd')</p>
-                        </div>
-
-                        <div class="column-heading">
                             <p>Owner @svg('arrow-down' ,'#cdcdcd')</p>
                         </div>
 
