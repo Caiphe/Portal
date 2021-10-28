@@ -426,6 +426,7 @@ var inviteTeamMateError = document.querySelector('.teammate-error-message');
 var mailformat = /^[\w\.\-\+]+@[\w\.\-]+\.[a-z]{2,5}$/;
 teamMateInvitEmail.value = "";
 
+
 teamMateInvitEmail.addEventListener('keyup', emailCheck);
 function emailCheck() {
     if (this.value.match(mailformat)) {
