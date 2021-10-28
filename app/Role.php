@@ -13,7 +13,7 @@ class Role extends Model
      * @var array
      */
     protected $guarded = [];
-    
+
     /**
      * Indicates if the model should be timestamped.
      *

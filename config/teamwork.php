@@ -1,0 +1,95 @@
+<?php
+
+return [
+    /*
+    |--------------------------------------------------------------------------
+    | Auth Model
+    |--------------------------------------------------------------------------
+    |
+    | This is the Auth model used by Teamwork.
+    |
+    */
+    'user_model' => config('auth.providers.users.model', App\User::class),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Teamwork users Table
+    |--------------------------------------------------------------------------
+    |
+    | This is the users table name used by Teamwork.
+    |
+    */
+    'users_table' => 'users',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Teamwork Team Model
+    |--------------------------------------------------------------------------
+    |
+    | This is the Team model used by Teamwork to create correct relations.  Update
+    | the team if it is in a different namespace.
+    |
+    */
+    'team_model' => App\Team::class,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Teamwork teams Table
+    |--------------------------------------------------------------------------
+    |
+    | This is the teams table name used by Teamwork to save teams to the database.
+    |
+    */
+    'teams_table' => 'teams',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Teamwork team_user Table
+    |--------------------------------------------------------------------------
+    |
+    | This is the team_user table used by Teamwork to save assigned teams to the
+    | database.
+    |
+    */
+    'team_user_table' => 'team_user',
+
+    /*
+    |--------------------------------------------------------------------------
+    | User Foreign key on Teamwork's team_user Table (Pivot)
+    |--------------------------------------------------------------------------
+    */
+    'user_foreign_key' => 'id',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Teamwork Team Invite Model
+    |--------------------------------------------------------------------------
+    |
+    | This is the Team Invite model used by Teamwork to create correct relations.
+    | Update the team if it is in a different namespace.
+    |
+    */
+    'invite_model' => Mpociot\Teamwork\TeamInvite::class,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Teamwork team invites Table
+    |--------------------------------------------------------------------------
+    |
+    | This is the team invites table name used by Teamwork to save sent/pending
+    | invitation into teams to the database.
+    |
+    */
+    'team_invites_table' => 'team_invites',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Teamwork team invites supported types
+    |--------------------------------------------------------------------------
+    |
+    | Invite and Request being the default supported types, we have added ownership
+    | as well for when a Team Owner requests to transfer ownership
+    |
+    */
+    'team_invite_types' => ['invite', 'request', 'ownership', 'external']
+];

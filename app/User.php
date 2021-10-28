@@ -7,10 +7,13 @@ use App\Country;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Mpociot\Teamwork\TeamInvite;
+use Mpociot\Teamwork\Traits\UserHasTeams;
+
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-	use Notifiable;
+	use Notifiable, UserHasTeams;
 
 	/**
 	 * The attributes that are mass assignable.
@@ -61,6 +64,38 @@ class User extends Authenticatable implements MustVerifyEmail
 			->pluck('name')
 			->unique();
 	}
+
+	public function teamRole($team)
+    {
+        return $this->leftJoin('team_user', 'users.id', '=', 'team_user.user_id')
+            ->leftJoin('teams', 'teams.id', '=', 'team_user.team_id')
+            ->leftJoin('roles', 'roles.id', '=', 'team_user.role_id')
+            ->where('users.id', $this->id)
+            ->where('teams.id', $team->id)
+            ->select('roles.id', 'roles.label', 'roles.name')
+            ->first();
+    }
+
+    public function hasTeamRole($team, $role)
+    {
+        return $this->teamRole($team)->name === $role;
+    }
+
+    public function hasTeamPermissionTo($permission, $team)
+    {
+        $role = $this->teamRole($team);
+        $userPermissions = Role::with('permissions')->find($role->id)->permissions
+            ->flatten()
+            ->pluck('name')
+            ->unique()
+            ->toArray();
+
+        if (is_array($permission)) {
+            return !array_diff($permission, $userPermissions);
+        }
+
+        return in_array($permission, $userPermissions);
+    }
 
 	public function hasPermissionTo($permission)
 	{
@@ -137,6 +172,11 @@ class User extends Authenticatable implements MustVerifyEmail
 		return $this->roles->pluck('label')->implode(',');
 	}
 
+	public function twoFactorStatus()
+    {
+        return is_null($this['2fa']) ? 'Disabled' : 'Enabled';
+	}
+
 	public function getDeveloperAppsCount() {
 	    return App::where('developer_id', $this->developer_id)->get()->count();
     }
@@ -149,5 +189,52 @@ class User extends Authenticatable implements MustVerifyEmail
         })->orderBy($sort, $order);
 
         return $apps->get();
+    }
+
+    public function teams()
+    {
+    	return $this->belongsToMany(Team::class);
+    }
+
+    /**
+     * Wrapper method for "isOwner".
+     *
+     * @return bool
+     */
+    public function isTeamOwner(Team $team)
+    {
+        return $team->owner_id === $this->id;
+    }
+
+    /**
+     * Check if User has a Team invite
+     *
+     * @param Team $team
+     * @param string $type
+     * @return bool
+     */
+    public function hasTeamInvite(Team $team, $type = 'invite')
+    {
+        return TeamInvite::where([
+            'email' => $this->email,
+            'team_id' => $team->id,
+            'type' => $type
+        ])->exists();
+    }
+
+    /**
+     * Get a User's team invite
+     *
+     * @param Team $team
+     * @param string $type
+     * @return mixed
+     */
+    public function getTeamInvite(Team $team, $type = 'invite')
+    {
+        return TeamInvite::where([
+            'email' => $this->email,
+            'team_id' => $team->id,
+            'type' => $type
+        ])->first();
     }
 }

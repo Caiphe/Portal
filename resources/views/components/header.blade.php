@@ -11,7 +11,7 @@
           </button>
         <ul class="main-menu hidden" role="navigation" aria-label="Main">
             <li class="has-children">
-                <a href="/products">Products @svg("chevron-down")</a>
+                <a href="{{ route('product.index') }}">Products @svg("chevron-down")</a>
                 <div class="product-nav shadow">
                     <div class="nav-categories">
                         <h3>BROWSE BY CATEGORY</h3>
@@ -23,15 +23,15 @@
                         @endforeach
                     </div>
                     <div class="nav-pages">
-                        <a href="/products">Browse all our products</a>
-                        <a href="/bundles">Browse all our bundles</a>
-                        <a href="/getting-started">Working with our products</a>
+                        <a href="{{ route('product.index') }}">Browse all our products</a>
+                        <a href="{{ route('bundle.index') }}">Browse all our bundles</a>
+                        <a href="{{ route('doc.index') }}">Working with our products</a>
                     </div>
                 </div>
             </li>
-            <li><a href="/getting-started">Docs</a></li>
-            <li><a href="/faq">FAQ</a></li>
-            <li><a href="/contact">Contact us</a></li>
+            <li><a href="{{ route('doc.index') }}">Docs</a></li>
+            <li><a href="{{ route('faq.index') }}">FAQ</a></li>
+            <li><a href="{{ route('contact.index') }}">Contact us</a></li>
             @can('view-admin')
             <li><a href="{{ route('admin.home') }}">Admin</a></li>
             @endcan
@@ -41,12 +41,13 @@
             @svg('search')
         </form>
         @if(\Auth::check())
-            <a href="/apps/create" class="button dark hidden" role="button">Build app</a>
+            <a href="{{ route('app.create') }}" class="button dark hidden" role="button">Build app</a>
             <div id="profile-menu" class="hidden">
                 <div id="profile-menu-picture" class="hidden" style="background-image: url({{\Auth::user()->profile_picture}})"></div>
                 <ul class="profile-menu-options shadow">
-                    <li><a href="/profile">Profile</a></li>
-                    <li><a href="/apps">Apps</a></li>
+                    <li><a href="{{ route('user.profile') }}">Profile</a></li>
+                    <li><a href="{{ route('app.store') }}">Apps</a></li>
+                    <li><a href="{{ route('teams.listing') }}">Teams</a></li>
                     <li><form action="{{route('logout')}}" method="post">@csrf<button>Sign out</button></form></li>
                 </ul>
             </div>
@@ -58,29 +59,30 @@
     <!-- Mobile Menu -->
     <ul class="mobile-menu container">
         <li>
-            <a href="/products">Products @svg("chevron-down")</a>
+            <a href="{{ route('product.index') }}">Products @svg("chevron-down")</a>
         </li>
         <li>
-            <a href="/bundles">Bundles</a>
+            <a href="{{ route('bundle.index') }}">Bundles</a>
         </li>
         <li>
-            <a href="/getting-started">Docs</a>
+            <a href="{{ route('doc.index') }}">Docs</a>
         </li>
         <li>
-            <a href="/faq">FAQ</a>
+            <a href="{{ route('faq.index') }}">FAQ</a>
         </li>
         <li>
-            <a href="/contact">Contact us</a>
+            <a href="{{ route('contact.index') }}">Contact us</a>
         </li>
         @if(\Auth::check())
         <li>
-            <a href="/apps/create">Build app</a>
+            <a href="{{ route('app.create') }}">Build app</a>
         </li>
         <li>
-            <a href="/profile">Profile</a></li>
+            <a href="{{ route('user.profile') }}">Profile</a></li>
         <li>
-            <a href="/apps">Apps</a>
+            <a href="{{ route('app.store') }}">Apps</a>
         </li>
+            <li><a href="{{ route('teams.listing') }}">Teams</a></li>
         <li>
             <form action="{{route('logout')}}" method="post">@csrf<button>Sign out</button></form>
         </li>

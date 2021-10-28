@@ -1,0 +1,41 @@
+.radio-round,
+.checkbox-round {
+    padding-left: 26px;
+    cursor: pointer;
+    position: relative;
+    font-size: 13px;
+
+    .unchecked,
+    .checked {
+        position: absolute;
+        left: 0;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: block;
+        top: -1px;
+        border: solid 2px #000;
+        padding: 2px;
+        box-sizing: border-box;
+    }
+
+    .unchecked {
+        background-color: #fff;
+    }
+
+    .checked {
+        background-color: #000;
+        transition: transform 256ms, opacity 256ms;
+        transform: scale(0.1);
+        opacity: 0;
+    }
+
+    input {
+        display: none;
+    }
+
+    input:checked+span+span {
+        transform: scale(0.6);
+        opacity: 1;
+    }
+}

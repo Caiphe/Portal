@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\TeamAppCreated;
+use App\Team;
 use App\User;
 use App\App;
-use App\Features\UserSearch\IDeveloper;
 use App\Product;
 use App\Country;
 use App\Http\Requests\CreateAppRequest;
@@ -17,6 +18,7 @@ use App\Mail\UpdateApp;
 use App\Services\ApigeeService;
 use App\Services\Kyc\KycService;
 use App\Services\ProductLocationService;
+use DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
@@ -25,8 +27,25 @@ class AppController extends Controller
 {
     public function index()
     {
+        $user = auth()->user();
+
+        $ownershipInvite = DB::table('team_invites')->where([
+            'email' => $user->email,
+            'type' => 'ownership'
+        ])->first();
+        
+        $teamInvite = DB::table('team_invites')->where([
+            'email' => $user->email,
+            'type' => 'invite'
+        ])->first();
+
+        $team = null;
+        if ( $teamInvite ) {
+            $team = Team::find($teamInvite->team_id);
+        }
+
         $apps = App::with(['products.countries', 'country', 'developer'])
-            ->byUserEmail(\Auth::user()->email)
+            ->byUserEmail($user->email)
             ->orderBy('updated_at', 'desc')
             ->get()
             ->groupBy('status');
@@ -34,16 +53,24 @@ class AppController extends Controller
         return view('templates.apps.index', [
             'approvedApps' => $apps['approved'] ?? [],
             'revokedApps' => $apps['revoked'] ?? [],
+            'ownershipInvite' => $ownershipInvite,
+            'teamInvite' => $teamInvite,
+            'team' => $team,
         ]);
     }
 
     public function create(ProductLocationService $productLocationService)
     {
+        $user = request()->user();
+
+        $userOwnTeams = $user->teams;
+
         [$products, $countries] = $productLocationService->fetch();
 
         return view('templates.apps.create', [
             'products' => $products,
             'productCategories' => array_keys($products->toArray()),
+            'teams' => $userOwnTeams,
             'countries' => $countries ?? '',
         ]);
     }
@@ -58,6 +85,12 @@ class AppController extends Controller
         foreach ($products as $name => $attributes) {
             $attr = json_decode($attributes, true);
             $productIds[] = $attr['SandboxProduct'] ?? $name;
+        }
+
+        $teamExists = false;
+        if ($validated['team_id']) {
+            $team = Team::find($validated['team_id']);
+            $teamExists = $team->exists;
         }
 
         $data = [
@@ -80,6 +113,10 @@ class AppController extends Controller
                 [
                     'name' => 'location',
                     'value' => $countriesByCode[$validated['country']] ?? "",
+                ],
+                [
+                    'name' => 'TeamName',
+                    'value' => $team->name ?? "",
                 ],
             ],
             'callbackUrl' => $validated['url'],
@@ -115,6 +152,11 @@ class AppController extends Controller
             "updated_at" => date('Y-m-d H:i:s', $createdResponse['lastModifiedAt'] / 1000),
             "created_at" => date('Y-m-d H:i:s', $createdResponse['createdAt'] / 1000),
         ]);
+
+        if ($teamExists) {
+            $app->update(['team_id' => $team->id]);
+            event(new TeamAppCreated($team));
+        }
 
         $app->products()->sync(
             array_reduce(

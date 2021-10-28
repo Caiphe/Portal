@@ -10,6 +10,7 @@
         [
             [ 'label' => 'Profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
+            [ 'label' => 'Teams', 'link' => '/teams/create'],
         ],
         'Discover' =>
         [
