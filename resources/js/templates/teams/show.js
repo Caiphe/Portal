@@ -32,15 +32,8 @@ for (var i = 0; i < hideMenuBlock.length; i++) {
 }
 
 function hideActions() {
-    var blockHideMenuShow = document.querySelector('.block-hide-menu.show');
-    var blockActionsShow = document.querySelector('.block-actions.show');
-
-    if (blockHideMenuShow) {
-        blockHideMenuShow.classList.remove('show');
-    }
-    if (blockActionsShow) {
-        blockActionsShow.classList.remove('show');
-    }
+    this.classList.remove('show');
+    this.nextElementSibling.nextElementSibling.classList.remove('show');
 }
 
 if (addTeamMobile = document.querySelector('.add-team-mate-btn-mobile')) {
@@ -64,7 +57,7 @@ function hideAddTeamMateModalContainer() {
 
 // Show delete modal
 var userDeleteBtn = document.querySelectorAll('.user-delete');
-var deleteModalContainer = document.querySelector('.delete-modal-container');
+var deleteModalContainer = document.querySelector('.delete-modal-container')
 for (var d = 0; d < userDeleteBtn.length; d++) {
     userDeleteBtn[d].addEventListener('click', showUserDelete);
 }
@@ -105,6 +98,8 @@ function checkedRadio() {
     }
 }
 
+var owneshipTransferBanner = document.querySelector('.top-ownership-banner');
+
 /** Picking on the availability of this component */
 var acceptTransferBtn = document.querySelector('.accept-transfer');
 if (acceptTransferBtn) {
@@ -118,18 +113,7 @@ if (revokeTransferBtn) {
 }
 
 function hideTransferBanner() {
-    var owneshipTransferBanner = document.querySelector('.top-ownership-banner');
-
-    if (owneshipTransferBanner) { 
-        owneshipTransferBanner.classList.remove('show');
-    }
-}
-
-function changeOwnershipButton() {
-    var userId = document.querySelector('.accept-team-ownership').dataset.userId;
-    var ownerNode = document.querySelector('.owner-tag');
-
-    document.querySelector('#team-member-' + userId + ' .member-name-profile').appendChild(ownerNode)
+    owneshipTransferBanner.classList.add('hide');
 }
 
 // Show user modal
@@ -389,12 +373,12 @@ function copyToClipboard(text) {
 }
 
 deleteUserActionBtn.addEventListener('click', function (event) {
+    var url = "/teams/leave";
     var xhr = new XMLHttpRequest();
     var data = {
         team_id: hiddenTeamId.value,
         user_id: hiddenTeamUserId.value
     }
-    var url = "/teams/" + data.team_id + "/leave";
 
     event.preventDefault();
 
@@ -412,8 +396,10 @@ deleteUserActionBtn.addEventListener('click', function (event) {
 
     xhr.onload = function () {
         if (xhr.status === 200) {
-            addAlert('success', ['User successfully removed from team.', 'The page will refresh shortly.'], function () {
-                window.location.reload()
+            addAlert('success', ['User successfully removed from team.', 'Please wait meanwhile the page refreshes.'], function () {
+                if (window.history) {
+                    history.back();
+                }
             });
         } else {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
@@ -426,6 +412,9 @@ deleteUserActionBtn.addEventListener('click', function (event) {
             }
 
             addAlert('error', result.message || 'Sorry there was a problem removing team. Please try again.');
+            setTimeout(function () {
+                console.log("Hide the modal");
+            }, 4000);
         }
 
         removeLoading();
@@ -434,7 +423,7 @@ deleteUserActionBtn.addEventListener('click', function (event) {
 
 var teamMateInvitEmail = document.querySelector('.teammate-email');
 var inviteTeamMateError = document.querySelector('.teammate-error-message');
-var mailformat = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+var mailformat = /^[\w\.\-\+]+@[\w\.\-]+\.[a-z]{2,5}$/;
 teamMateInvitEmail.value = "";
 
 teamMateInvitEmail.addEventListener('keyup', emailCheck);
@@ -459,8 +448,6 @@ teamInviteUserBtn.addEventListener('click', function (event) {
 
     event.preventDefault();
 
-    addLoading('Inviting...');
-
     xhr.open('POST', url);
 
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
@@ -473,7 +460,11 @@ teamInviteUserBtn.addEventListener('click', function (event) {
 
     xhr.onload = function () {
         if (xhr.status === 200) {
-            addAlert('success', 'User was successfully invited to the team.');
+            addAlert('success', ['User was successfully invited to the team.', 'Please wait meanwhile the page refreshes.'], function () {
+                if (window.history) {
+                    history.back();
+                }
+            });
         } else {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
@@ -488,12 +479,51 @@ teamInviteUserBtn.addEventListener('click', function (event) {
         }
 
         hideUserModal();
-        removeLoading();
-        hideAddTeamMateModalContainer();
     };
 
     teamMateInvitEmail.value = "";
+    setTimeout(hideAddTeamMateModalContainer(), 2000);
 });
+
+if (document.querySelector('.transfer-ownership')) {
+    document.querySelector('.transfer-ownership').addEventListener('click', function (event) {
+        var url = "/teams/" + this.dataset.teamid + "/ownership";
+        var xhr = new XMLHttpRequest();
+        var data = {
+            type: 'ownership',
+            invitee: this.dataset.useremail,
+            team_id: this.dataset.teamid
+        };
+
+        event.preventDefault();
+
+        xhr.open('POST', url);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.setRequestHeader("X-CSRF-TOKEN",
+            document.getElementsByName("csrf-token")[0].content
+        );
+
+        xhr.send(JSON.stringify(data));
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                addAlert('success', 'Team transfer ownership requested to member.');
+            } else {
+                var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+                if (result.errors) {
+                    result.message = [];
+                    for (var error in result.errors) {
+                        result.message.push(result.errors[error]);
+                    }
+                }
+
+                addAlert('error', result.message || 'Sorry there was a problem requesting ownership from the team member. Please try again.');
+            }
+        };
+    });
+}
 
 var btnAcceptOwnership = document.querySelector('.accept-team-ownership');
 if (btnAcceptOwnership) {
@@ -502,7 +532,7 @@ if (btnAcceptOwnership) {
             token: this.dataset.invitetoken,
         };
 
-        handleAcceptOwnershipTransfer('/teams/accept', data, event);
+        handleOwnershipTransfer('/teams/accept', data, event);
     });
 }
 
@@ -514,7 +544,7 @@ if (btnRejectOwnership) {
             token: this.dataset.invitetoken,
         };
 
-        handleAcceptOwnershipTransfer('/teams/reject', data, event);
+        handleOwnershipTransfer('/teams/reject', data, event);
     });
 }
 
@@ -524,7 +554,7 @@ transferOwnsershipBtn.addEventListener('click', function (event) {
         team_id: this.dataset.teamid,
         invitee: this.dataset.useremail
     };
-    handleRequestOwnershipTransfer('/teams/' + this.dataset.teamid + '/ownership', data, event);
+    handleOwnershipTransfer('/teams/' + this.dataset.teamid + '/ownership', data, event);
 });
 
 makeOwnershipBtn.addEventListener('click', function (event) {
@@ -532,10 +562,11 @@ makeOwnershipBtn.addEventListener('click', function (event) {
         team_id: this.dataset.teamid,
         invitee: this.dataset.useremail
     };
-    handleRequestOwnershipTransfer('/teams/' + this.dataset.teamid + '/ownership', data, event);
+    handleOwnershipTransfer('/teams/' + this.dataset.teamid + '/ownership', data, event);
 });
 
-function handleRequestOwnershipTransfer(url, data, event) {
+
+function handleOwnershipTransfer(url, data, event) {
     var xhr = new XMLHttpRequest();
 
     event.preventDefault();
@@ -550,14 +581,13 @@ function handleRequestOwnershipTransfer(url, data, event) {
 
     xhr.send(JSON.stringify(data));
 
-    addLoading('Sending ownership request...');
+    addLoading('Sending ownership request for team.');
 
     xhr.onload = function () {
         if (xhr.status === 200) {
-            hideActions();
+            addAlert('success', "Ownership trafer request sent successfully !");
             hideOwnershipModal();
             hideAdminModal();
-            addAlert('success', "Ownership request sent.");
         } else {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
@@ -568,51 +598,7 @@ function handleRequestOwnershipTransfer(url, data, event) {
                 }
             }
 
-            addAlert('error', result.message || 'Sorry there was a problem. Please try again.');
-        }
-
-        removeLoading();
-    };
-}
-
-function handleAcceptOwnershipTransfer(url, data, event) {
-    var xhr = new XMLHttpRequest();
-    var isAccepting = url.indexOf('accept') !== -1;
-    var loadingMessage = isAccepting ? 'Accepting ownership request...' : 'Revoking ownership request...';
-    var successMessage = isAccepting ? 'Ownership request accepted.' : 'Ownership request revoked.';
-
-    event.preventDefault();
-
-    xhr.open('POST', url);
-    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    xhr.setRequestHeader(
-        "X-CSRF-TOKEN",
-        document.getElementsByName("csrf-token")[0].content
-    );
-
-    xhr.send(JSON.stringify(data));
-
-    addLoading(loadingMessage);
-
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            if (isAccepting) {
-                changeOwnershipButton();
-            }
-            hideTransferBanner();
-            addAlert('success', successMessage);
-        } else {
-            var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
-
-            if (result.errors) {
-                result.message = [];
-                for (var error in result.errors) {
-                    result.message.push(result.errors[error]);
-                }
-            }
-
-            addAlert('error', result.message || 'Sorry there was a problem. Please try again.');
+            addAlert('error', result.message || 'Sorry there was a problem requesting ownership from the team member. Please try again.');
         }
 
         removeLoading();
@@ -642,7 +628,7 @@ for (var i = 0; i < adminModalShow.length; i++) {
 }
 
 function showAdminModalFunc() {
-    makeOwnerBtn = document.querySelector('#make-owner-btn');
+    var makeOwnerBtn = document.querySelector('#make-owner-btn');
 
     document.querySelector('.admin-user-name').innerHTML = this.dataset.adminname;
 
