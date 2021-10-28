@@ -85,7 +85,7 @@
                     <select id="team-country" name="country" value="{{ old('country') }}" autocomplete="off">
                         <option value="">Select country</option>
                         @foreach($countries as $code => $name)
-                            <option value="{{ $code }}">{{ $name }}</option>
+                            <option value="{{ $code }}" @if(old('country') === $code) selected @endif>{{ $name }}</option>
                         @endforeach
                     </select>
                     @svg('chevron-down', '#000')

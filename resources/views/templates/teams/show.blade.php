@@ -45,8 +45,8 @@ Team
                 <button type="" class="invite-btn" data-teamid="{{ $team->id }}">INVITE</button>
             </div>
             <div class="radio-container">
-                <x-radio-round id="user-radio" name="role_name" value="Administrator">Administrator</x-radio-round>
-                <x-radio-round id="user-radio-two" name="role_name" checked value="user">User</x-radio-round>
+                <x-radio-round id="user-radio" name="role_name" value="team_admin">Administrator</x-radio-round>
+                <x-radio-round id="user-radio-two" name="role_name" checked value="team_user">User</x-radio-round>
             </div>
 
             <div class="teammate-error-message">Valid email required!</div>
@@ -184,16 +184,17 @@ Team
 
 <div class="mt-2 custom-margin">
     {{-- Top ownerhip block container --}}
-    <div class="top-ownership-banner @if ($userTeamOwnershipInvite) show @endif ">
+    @if($userTeamOwnershipInvite)
+    <div class="top-ownership-banner show">
         <div class="message-container">You have been requested to be the owner of this team.</div>
         <div class="btn-block-container">
             {{--  Use the accept endpoint --}}
-            <button type="button" class="btn blue-button dark-accept accept-team-ownership" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->accept_token : '' }}">Accept request</button>
+            <button type="button" class="btn blue-button dark-accept accept-team-ownership" data-user-id="{{ $user->id }}" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->accept_token : '' }}">Accept request</button>
             {{--  Use the revoke endpoint --}}
-            <button type="button" class="btn blue-button dark-revoked reject-team-ownership" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->deny_token : '' }}">Revoke request</button>
+            <button type="button" class="btn blue-button dark-revoked reject-team-ownership" data-user-id="{{ $user->id }}" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->deny_token : '' }}">Revoke request</button>
         </div>
     </div>
-    {{-- @endif --}}
+    @endif
 
     <div class="header-block team-name-logo">
         {{-- To replace with the team profile picture --}}
@@ -202,7 +203,7 @@ Team
             <h2>{{ $team->name }} </h2>
         </div>
 
-        @if ($team->users->count() > 0 && $isAdmin)
+        @if ($team->users->count() > 0 && $isOwner)
             <button class="btn dark make-owner">Select a new owner</button>
         @endif
     </div>
@@ -222,7 +223,7 @@ Team
 
         <div class="detail-row cols no-wrap">
             <div class="detail-item"><strong>Country</strong></div>
-            <div class="detail-item detail-item-description country-name-flag">@svg($country->code, '#000000', 'images/locations') {{ $team->name }}</div>
+            <div class="detail-item detail-item-description country-name-flag">@svg($country->code, '#000000', 'images/locations')</div>
         </div>
     </div>
     <div class="column">
@@ -246,7 +247,7 @@ Team
                 </tr>
 
                 @foreach($team->users as $teamUser)
-                    <tr>
+                    <tr id="team-member-{{ $teamUser->id }}">
                         <td class="member-name-profile">
                             <div class="member-thumbnail"  style="background-image: url({{ $teamUser->profile_picture }})"></div>
                             <p>
@@ -270,7 +271,7 @@ Team
                                     @if($isOwner)
                                     <li>
                                         <button
-                                            class="make-admin transfer-ownership make-owner-btn"
+                                            class="make-admin make-owner-btn"
                                             data-adminname="{{ $teamUser->full_name }}"
                                             data-invite=""
                                             data-teamid="{{ $team->id }}"
@@ -361,7 +362,7 @@ Team
                 <div class="updated-app">
                     <div class="head headings-container">
                         <div class="column-heading">
-                            <p>App Name @svg('arrow-down' ,'#cdcdcd')</p>
+                            <p>App Name {{-- @svg('arrow-down' ,'#cdcdcd') --}}</p>
                         </div>
 
                         <div class="column-heading">
@@ -369,15 +370,15 @@ Team
                         </div>
 
                         <div class="column-heading">
-                            <p>Country @svg('arrow-down' ,'#cdcdcd')</p>
+                            <p>Country {{-- @svg('arrow-down' ,'#cdcdcd') --}}</p>
                         </div>
 
                         <div class="column-heading">
-                            <p>Owner @svg('arrow-down' ,'#cdcdcd')</p>
+                            <p>Owner {{-- @svg('arrow-down' ,'#cdcdcd') --}}</p>
                         </div>
 
                         <div class="column-heading">
-                            <p>Date created @svg('arrow-down' ,'#cdcdcd')</p>
+                            <p>Date created {{-- @svg('arrow-down' ,'#cdcdcd') --}}</p>
                         </div>
                         <div class="column-heading">
                             <p></p>
@@ -415,7 +416,7 @@ Team
                 <div class="updated-app">
                     <div class="head">
                         <div class="column-heading">
-                            <p>App Name @svg('arrow-down' ,'#cdcdcd')</p>
+                            <p>App Name {{-- @svg('arrow-down' ,'#cdcdcd') --}}</p>
                         </div>
 
                         <div class="column-heading">
@@ -423,15 +424,15 @@ Team
                         </div>
 
                         <div class="column-heading">
-                            <p>Country @svg('arrow-down' ,'#cdcdcd')</p>
+                            <p>Country {{-- @svg('arrow-down' ,'#cdcdcd') --}}</p>
                         </div>
 
                         <div class="column-heading">
-                            <p>Owner @svg('arrow-down' ,'#cdcdcd')</p>
+                            <p>Owner {{-- @svg('arrow-down' ,'#cdcdcd') --}}</p>
                         </div>
 
                         <div class="column-heading">
-                            <p>Date created @svg('arrow-down' ,'#cdcdcd')</p>
+                            <p>Date created {{-- @svg('arrow-down' ,'#cdcdcd') --}}</p>
                         </div>
                         <div class="column-heading">
                             <p></p>

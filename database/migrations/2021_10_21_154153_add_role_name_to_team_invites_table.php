@@ -14,7 +14,7 @@ class AddRoleNameToTeamInvitesTable extends Migration
     public function up()
     {
         Schema::table('team_invites', function (Blueprint $table) {
-            $table->string('role')->after('deny_token')->default('user');
+            $table->string('role')->after('deny_token')->default('team_user');
         });
     }
 

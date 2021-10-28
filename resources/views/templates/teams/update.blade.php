@@ -59,7 +59,7 @@
                     <select id="country" name="country">
                         <option value="">Select country</option>
                         @foreach($countries as $code => $name)
-                            <option value="{{ $code }}" {{ (($name === $team->country) ? 'selected': '') }}>{{ $name }}</option>
+                            <option value="{{ $code }}" @if($code === $team->country) selected @endif>{{ $name }}</option>
                         @endforeach
                     </select>
                     @svg('chevron-down', '#000')

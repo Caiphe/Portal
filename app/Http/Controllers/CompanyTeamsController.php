@@ -20,6 +20,7 @@ use App\Http\Requests\Teams\Request as TeamRequest;
 
 use Illuminate\Http\Request;
 use Mpociot\Teamwork\Facades\Teamwork;
+use Mpociot\Teamwork\TeamInvite;
 
 /**
  * Class CompanyTeamsController
@@ -116,11 +117,17 @@ class CompanyTeamsController extends Controller
     public function ownership(InviteRequest $inviteRequest, Team $team)
     {
         $data = $inviteRequest->validated();
-
         $user = $this->getTeamUserByEmail($data['invitee']);
+        $isAlredyInvited = TeamInvite::where('email', $user->email)->where('team_id', $team->id)->exists();
+
+        if ($isAlredyInvited) {
+            return response()->json([
+                'success' => true,
+                'success:message' => $user->full_name . ' has been successfully requested to take ownership of ' . $team->name
+            ]);
+        }
 
         $invite = $this->createTeamInvite($team, $user->email, 'ownership');
-
         if ($invite) {
 
             $this->sendOwnershipInvite($team, $user, $invite);
@@ -147,17 +154,24 @@ class CompanyTeamsController extends Controller
         $team = $this->getTeam($data['team_id']);
         $user = $this->getTeamUserByEmail($invitedEmail);
         $inviteSent = false;
+        $isAlredyInvited = TeamInvite::where('email', $user->email)->where('team_id', $team->id)->exists();
 
-        if (!$user && $team) {
+        if ($isAlredyInvited) {
+            return response()->json([
+                'success' => true,
+                'success:message' => 'Invite successfully sent to prospective team member of ' . $team->name . '.'
+            ]);
+        }
 
-            $invite = $this->createTeamInvite($team, $invitedEmail, 'external');
+        if (!$isAlredyInvited && $team) {
+            $invite = $this->createTeamInvite($team, $invitedEmail, 'external', $data['role']);
 
             if ($invite) {
                 $this->sendExternalInvite($team, $invitedEmail);
 
                 $inviteSent = $invite->exists;
             }
-        } elseif ($user->exists) {
+        } elseif ($isAlredyInvited) {
             $invite = Teamwork::hasPendingInvite($team, $user->email);
 
             if (!$invite) {
@@ -196,17 +210,17 @@ class CompanyTeamsController extends Controller
         $isOwner = $user->isOwnerOfTeam($team);
 
         $order = [
-                'asc' => 'ASC',
-                'desc' => 'DESC'
-            ][$request->get('order', 'ASC')] ?? 'ASC';
+            'asc' => 'ASC',
+            'desc' => 'DESC'
+        ][$request->get('order', 'ASC')] ?? 'ASC';
 
-        $team->load(['users' => function($q) use($request, $order, $team) {
+        $team->load(['users' => function ($q) use ($request, $order, $team) {
 
             $q->when($request->has('sort'), function ($q)  use ($request, $order, $team) {
                 switch ($request->get('sort')) {
                     case 'name':
                         $q->orderBy('first_name', $order);
-                    break;
+                        break;
 
                     case 'role':
                         $q->orderBy(TeamUser::select('role_id')
@@ -214,13 +228,13 @@ class CompanyTeamsController extends Controller
                             ->where('team_id', $team->id)
                             ->latest()
                             ->take(1), $order);
-                    break;
+                        break;
 
                     case '2fa':
                         if ($order === 'DESC') {
                             $q->orderByRaw('ISNULL(2fa), 2fa ASC');
                         }
-                    break;
+                        break;
                 }
             });
         }]);
@@ -298,23 +312,17 @@ class CompanyTeamsController extends Controller
      */
     public function update(UpdateRequest $request, $id)
     {
-        $validated = $request->validated();
+        $data = $request->validated();
+        $team = Team::findOrFail($id);
 
-        $team = Team::find($id);
-
-        if ($request->post() && $team) {
-
-            $data = $this->prepareData($validated);
-
-            if (!$this->processLogoFile($request, $data)) {
-                abort(422, 'Could not process logo file upload for your team.');
-            }
-
-            if ($team->update($data)) {
-                return redirect()->route('team.show', $team->id)
-                    ->with('success: Your team was successfully updated.');
-            }
+        if ($request->hasFile('logo_file') && !$this->processLogoFile($request, $data)) {
+            abort(422, 'Could not process logo file upload for your team.');
         }
+
+        $team->update($data);
+
+        return redirect()->route('team.show', $team->id)
+            ->with('alert', 'success:Your team was successfully updated.');
     }
 
     /**
@@ -324,11 +332,9 @@ class CompanyTeamsController extends Controller
     {
         $invite = Teamwork::getInviteFromAcceptToken($request->get('token'));
         $inviteType = ucfirst($invite->type);
-
+        $team = $this->getTeam($invite->team_id);
 
         if ($invite->type === 'ownership') {
-
-            $team = $this->getTeam($invite->team_id);
             $owner = $this->getTeamUserByEmail($invite->email);
 
             $team->update(['owner_id' => $owner->id]);
@@ -337,10 +343,12 @@ class CompanyTeamsController extends Controller
             Teamwork::acceptInvite($invite);
         } else {
             Teamwork::acceptInvite($invite);
+            $roleId = Role::where('name', $invite->role)->first()->id ?? 8;
+            $team->users()->updateExistingPivot($invite->user, ['role_id' => $roleId]);
         }
 
         if (!$invite->exists) {
-            return redirect()->route('teams.listing')->with('success: ' . $inviteType . ' was successfully accepted.');
+            return redirect()->route('teams.listing')->with('alert', 'success:' . $inviteType . ' was successfully accepted.');
         }
     }
 
@@ -357,7 +365,7 @@ class CompanyTeamsController extends Controller
         }
 
         if (!$invite->exists) {
-            return redirect()->route('teams.listing')->with('success:' . $inviteType . ' successfully rejected.');
+            return redirect()->route('teams.listing')->with('alert', 'success:' . $inviteType . ' successfully rejected.');
         }
     }
 

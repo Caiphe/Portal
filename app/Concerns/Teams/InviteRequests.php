@@ -18,7 +18,7 @@ trait InviteRequests
      * @param Team $team
      * @param string $memberEmail
      */
-    public function createTeamInvite(Team $team, string $memberEmail, $type = 'invite')
+    public function createTeamInvite(Team $team, string $memberEmail, $type = 'invite', $role = 'team_user')
     {
         $createToken = function(){
             return md5(uniqid(microtime()));
@@ -32,6 +32,7 @@ trait InviteRequests
         $invite->email = $memberEmail;
         $invite->accept_token = $createToken();
         $invite->deny_token = $createToken();
+        $invite->role = $role;
 
         $invite->save();
 
