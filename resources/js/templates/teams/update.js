@@ -1,16 +1,17 @@
 var closeTagBtnn = document.querySelector('.close-tag');
-
 var logoFile = document.querySelector('.logo-file');
 var fileName = document.querySelector('.upload-file-name');
 var fileBtn = document.querySelector('.logo-add-icon');
+var acceptTeamInvite = document.querySelector('.accept-team-invite');
+var rejectTeamInvite = document.querySelector('.reject-team-invite');
 
 logoFile.addEventListener('change', chooseTeamPicture);
 function chooseTeamPicture() {
     var newFile = this.files[0].name.split('.');
     var extension = newFile[1];
     var filename = ''
-    if(newFile[0].length > 20){filename = newFile[0].substr(0, 20) + '...' + extension;}
-    else{filename = newFile[0] + '.'+ extension;}
+    if (newFile[0].length > 20) { filename = newFile[0].substr(0, 20) + '...' + extension; }
+    else { filename = newFile[0] + '.' + extension; }
     fileName.innerHTML = filename
     fileBtn.classList.add('active');
 
@@ -28,31 +29,32 @@ function chooseTeamPicture() {
         return void alert("You can only add one profile picture");
     }
 
-    if (allowedTypes[inputAccepts] !== undefined && allowedTypes[inputAccepts].indexOf(files[0].type) !== -1) {
-    console.log(allowedTypes);
-
-    } else {
+    if (allowedTypes[inputAccepts] === undefined || allowedTypes[inputAccepts].indexOf(files[0].type) === -1) {
         addAlert("error", "The type of image you have chosen isn't supported. Please choose a jpg or png to upload");
     }
 }
 
-document.querySelector('.accept-team-invite').addEventListener('click', function (event){
-    var data = {
-        token: this.dataset.invitetoken,
-        csrftoken: this.dataset.csrftoken
-    };
+if (acceptTeamInvite) {
+    acceptTeamInvite.addEventListener('click', function (event) {
+        var data = {
+            token: this.dataset.invitetoken,
+            csrftoken: this.dataset.csrftoken
+        };
 
-    handleTimeInvite('/teams/accept', data, event);
-});
+        handleTimeInvite('/teams/accept', data, event);
+    });
+}
 
-document.querySelector('.reject-team-invite').addEventListener('click', function (event){
-    var data = {
-        token: this.dataset.invitetoken,
-        csrftoken: this.dataset.csrftoken
-    };
+if (rejectTeamInvite) {
+    rejectTeamInvite.addEventListener('click', function (event) {
+        var data = {
+            token: this.dataset.invitetoken,
+            csrftoken: this.dataset.csrftoken
+        };
 
-    handleTimeInvite('/teams/reject', data, event);
-});
+        handleTimeInvite('/teams/reject', data, event);
+    });
+}
 
 function handleTimeInvite(url, data, event) {
     var xhr = new XMLHttpRequest();
@@ -69,15 +71,15 @@ function handleTimeInvite(url, data, event) {
 
     addLoading('Handling team invite response.');
 
-    xhr.onload = function() {
+    xhr.onload = function () {
         if (xhr.status === 200) {
             document.querySelector('.top-invite-banner').classList.remove('show');
         } else {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
-            if(result.errors) {
+            if (result.errors) {
                 result.message = [];
-                for(var error in result.errors){
+                for (var error in result.errors) {
                     result.message.push(result.errors[error]);
                 }
             }

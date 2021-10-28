@@ -57,7 +57,7 @@
                 <input type="hidden" value="" name="team_id" class="hidden-team-id"/>
                 <input type="hidden" value="" name="team_user_id" class="hidden-team-user-id"/>
                 <button type="button" class="btn primary mr-10 cancel-btn">CANCEL</button>
-                <button type="" class="btn dark leave-team-btn">LEAVE</button>
+                <button type="button" class="btn dark leave-team-btn">LEAVE</button>
             </form>
         </div>
     </div>
@@ -178,9 +178,10 @@
 
                     addAlert('error', result.message || 'Sorry there was a problem leaving team. Please try again.');
                 }
+
+                removeLoading();
             };
 
-            removeLoading();
         });
 
 
