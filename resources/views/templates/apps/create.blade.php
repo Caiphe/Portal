@@ -1,3 +1,6 @@
+@php
+    $user = auth()->user();
+@endphp
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/templates/apps/create.css') }}">
 @endpush
@@ -10,6 +13,7 @@
         [
             [ 'label' => 'Profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
+            [ 'label' => 'Teams', 'link' => '/teams'],
         ],
         'Discover' =>
         [
@@ -47,15 +51,53 @@
         <form id="form-create-app">
 
             <div class="active">
-                @svg('app-avatar', '#ffffff')
+                <div class="user-thumbnails">
+                    <div class="thumbail" style="background-image: url({{ $user->profile_picture }})"></div>
+                    <label for="user-thumb">
+                        <input type="file" name="user-thumb" class="user-thumb">
+                    </label>
+                </div>
+                {{-- @svg('app-avatar', '#ffffff') --}}
+
                 <div class="group">
                     <label for="name">Name your app *</label>
                     <input type="text" name="name" id="name" placeholder="Enter name" maxlength="100" required>
                 </div>
 
-                <div class="group">
-                    <label for="url">Callback url</label>
+                <div class="group group-info">
+                    <label for="url">Callback url @svg('info-icon', '#a5a5a5')</label>
                     <input type="url" name="url" id="url" placeholder="Enter callback url (eg. https://callback.com)">
+                </div>
+
+                <div class="group group-info team-field">
+                    <label for="team">Select team *</label>
+                    <div class="select_wrap">
+                        <input name="team" id="team" class="selected-data" value="">
+                        <ul class="default_option">
+                            <li>
+                                {{-- <div class="option"> --}}
+                                    <span class="select-default">Please select team to publish under</span>
+                                {{-- </div> --}}
+                            </li>
+                        </ul>
+
+                        <ul class="select_ul">
+                            <li>
+                                <div class="option">
+                                    <div class="icon" style="background-image: url({{ $user->profile_picture }})"></div>
+                                    <div class="select-data" data-createdby="" data-teamid="">{{ $user->full_name }} (You)</div>
+                                </div>
+                            </li>
+                            @foreach($teams as $team)
+                                <li>
+                                    <div class="option">
+                                        <div class="icon" style="background-image: url({{ $team['logo'] }})"></div>
+                                        <div class="select-data" data-createdby="{{ $user->email }}" data-teamid="{{ $team['id'] }}">{{ $team['name'] }}</div>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
 
                 <div class="group">
@@ -134,28 +176,43 @@
                     </button>
                 </div>
             </div>
-
         </form>
-
         <button type="reset">Cancel</button>
     </div>
-
 @endsection
 
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', init);
-
     var nav = document.querySelector('.content nav');
     var form = document.getElementById('form-create-app');
     var buttons = document.querySelectorAll('.next');
     var backButtons = document.querySelectorAll('.back');
     var checkedBoxes = document.querySelectorAll('input[name=country-checkbox]:checked');
+    var default_option = document.querySelector('.default_option');
+    var select_wrap = document.querySelector('.select_wrap');
+    var inputData = document.querySelector('.selected-data');
 
     function init() {
         handleButtonClick();
         handleBackButtonClick();
         clearCheckBoxes();
+    }
+
+    default_option.addEventListener('click', function(){
+        select_wrap.classList.toggle('active');
+    });
+
+    var select_ul = document.querySelectorAll('.select_ul li');
+    for(var i = 0; i < select_ul.length; i++){
+        select_ul[i].addEventListener('click', toggleSelectList);
+    }
+    function toggleSelectList(){
+        var selectedDataObject = this.querySelector('.select-data');
+        default_option.innerHTML = selectedDataObject.innerHTML;
+        inputData.setAttribute('value', selectedDataObject.dataset.createdby);
+        inputData.setAttribute('data-teamid', selectedDataObject.dataset.teamid);
+        select_wrap.classList.remove('active');
     }
 
     function handleButtonClick() {
@@ -340,7 +397,8 @@
             url: elements['url'].value,
             description: elements['description'].value,
             country: document.querySelector('.country-checkbox:checked').dataset.location,
-            products: []
+            products: [],
+            team_id: inputData.dataset.teamid
         };
         var selectedProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
         var button = document.getElementById('create');
@@ -348,7 +406,7 @@
         event.preventDefault();
 
         for(i = 0; i < selectedProducts.length; i++) {
-             app.products.push(selectedProducts[i].dataset.name);
+            app.products.push(selectedProducts[i].dataset.name);
         }
 
         if (app.products.length === 0) {

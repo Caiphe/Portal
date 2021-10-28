@@ -22,6 +22,77 @@
     }
 }
 
+.ownership-request{
+    background-color: #0C678F;
+    width: 560px;
+    position: absolute;
+    right: 38px;
+    top: -32px;
+    height: 83px;
+    box-sizing: border-box;
+    z-index: 5;
+    border-radius: 8px;
+    padding-top: 10px;
+    padding-left: 19px;
+    display: flex;
+    pointer-events: auto;
+
+    @media(max-width:768px){
+        position: absolute;
+        width: 90%;
+        height: auto;
+        top: 13px;
+        padding-bottom: 30px;
+        left: 5%;
+    }
+
+    svg{
+        &:nth-child(1){
+            width: 60px;
+        }
+    }
+
+    .message-container{
+        color: #fff;
+        margin-left: 13px;
+        margin-top: 8px;
+        width: 84%;
+
+        @media(max-width: 768px){
+            padding-right: 30px;
+        }
+
+        a{
+            text-decoration: underline;
+            color: #fff;
+            cursor: pointer;
+        }
+    }
+
+    .close-banner{
+        width: 19px;
+        height: 22px;
+        position: absolute;
+        right: 7px;
+        top: 3px;
+        border: none;
+        background-color: transparent;
+        padding: 0px;
+        cursor: pointer;
+
+        &:hover{
+            background-color: transparent;
+        }
+    }
+
+    &.hide{
+        opacity: 0;
+        z-index: -1;
+        transition: all 0.3s ease-in-out;
+        pointer-events: none;
+    }
+}
+
 // NO APPS
 #app-empty {
     height: 100%;
@@ -45,11 +116,26 @@
     }
 }
 
+.app-main-container{
+
+}
 
 #app-index {
     height: 100%;
     width: 100%;
     padding: 0;
+    overflow-y: hidden;
+    overflow-x: auto;
+
+    @media screen and (max-width: 768px) {
+        overflow-y: scroll;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
 
     .row {
         display: flex;
@@ -58,20 +144,14 @@
         border: 2px solid #F2F2F2;
         border-radius: 10px;
 
-        @media #{$small} {
+        @media(max-width: 768px) {
             overflow-x: auto;
             padding-bottom: 10px;
+            width: 1000px;
         }
 
         >div {
             padding: 10px 20px 10px;
-        }
-    }
-
-    .approved-apps,
-    .revoked-apps {
-        @media #{$small} {
-            width: 776px;
         }
     }
 
@@ -96,12 +176,6 @@
     }
 
     .my-apps {
-
-        .column {
-            div {
-                flex-grow: 1;
-            }
-        }
 
         .column:nth-of-type(1) {
             width: 30%;
@@ -276,4 +350,131 @@
             word-break: break-word;
         }
     }
+
 }
+
+.updated-app{
+    .head{
+        .column {
+            font-size: 14px;
+
+            &:nth-child(1){
+                width: 23%;
+            }
+
+            &:nth-child(2){
+                width: 25%;
+            }
+
+            &:nth-child(3){
+                width: 12%;
+            }
+
+            &:nth-child(4){
+                width: 10%;
+            }
+
+            &:nth-child(4){
+                width: 20%;
+            }
+
+            &:nth-child(5){
+                width: 10%;
+            }
+        }
+    }
+
+    .app-list-body{
+        .column {
+            position: relative;
+            word-wrap: break-word;
+           
+
+            &:nth-child(1){
+                width: 23%;
+            }
+
+            &:nth-child(2){
+                width: 25%;
+                padding-right: 10px;
+            }
+
+            &:nth-child(3){
+                width: 12%;
+            }
+
+            &:nth-child(4){
+                width: 10%;
+            }
+
+            &:nth-child(4){
+                width: 20%;
+            }
+
+            &:nth-child(5){
+                width: 10%;
+                display: flex;
+            }
+
+            .toggle-app-button{
+                margin-top: 10px;
+            }
+
+            .actions{
+                top: -10px;
+            }
+        }
+    }
+
+    .head {
+        border-bottom: 2px solid $grey300;
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0;
+
+        p {
+            white-space: nowrap;
+            font-weight: bold;
+            position: relative;
+
+            svg{
+                width: 16px;
+                margin-bottom: -7px;
+                margin-left: 2px;
+            }
+        }
+    }
+
+    .body {
+        display: flex;
+        flex-wrap: wrap;
+        padding-top: 10px;
+
+        p {
+            word-break: break-word;
+            padding-right: 20px;
+        }
+    }
+
+    &.collapse {
+        display: none;
+    }
+
+    .details-row-container{
+        display: flex;
+
+        .detail-item{
+            width: 30%;
+        }
+
+        .detail-item-description{
+            width: 284px;
+        }
+    }
+
+    .copy-btn{
+        position: absolute;
+        right: 46px;
+    }
+}
+

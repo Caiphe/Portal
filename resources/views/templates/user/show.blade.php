@@ -17,6 +17,7 @@ Update profile
                 [ 'label' => 'Profile', 'link' => '/profile'],
                 [ 'label' => '2FA', 'link' => '#twofa'],
                 [ 'label' => 'My apps', 'link' => '/apps'],
+                [ 'label' => 'My Teams', 'link' => '/teams'],
             ],
             'DISCOVER' =>
             [
@@ -29,6 +30,8 @@ Update profile
 
 @section("content")
     <x-heading heading="Profile"/>
+
+    <!--- Add team invite banner -->
 
     <x-twofa-warning class="tall"></x-twofa-warning>
 
