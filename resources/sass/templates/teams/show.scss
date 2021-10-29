@@ -27,6 +27,7 @@ button{
     position: relative;
     overflow-y: hidden;
     overflow-x: auto;
+    margin-right: -45px;
 
     @media screen and (max-width: 768px) {
         overflow-y: scroll;
