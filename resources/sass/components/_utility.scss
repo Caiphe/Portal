@@ -323,11 +323,13 @@
             }
 
             .toggle-app-button{
-                margin-top: 10px;
+                margin-top: 5px;
+                margin-left: 40px;
             }
 
             .actions{
-                top: -10px;
+                position: absolute;
+                top: 5px;
             }
         }
     }
