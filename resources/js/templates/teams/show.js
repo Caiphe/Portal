@@ -57,7 +57,7 @@ function hideAddTeamMateModalContainer() {
 
 // Show delete modal
 var userDeleteBtn = document.querySelectorAll('.user-delete');
-var deleteModalContainer = document.querySelector('.delete-modal-container')
+var deleteModalContainer = document.querySelector('.delete-modal-container');
 for (var d = 0; d < userDeleteBtn.length; d++) {
     userDeleteBtn[d].addEventListener('click', showUserDelete);
 }
