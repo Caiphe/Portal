@@ -11,7 +11,7 @@ invitationInput.addEventListener('input', function(){
 });
 
 function invitationEmailCheck() {
-    var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    var mailformat = /^[\w\.\-\+]+@[\w\.\-]+\.[a-z]{2,5}$/;
     var errorMsg = document.querySelector('.error-email');
 
     if (invitationInput.value.match(mailformat)) {
