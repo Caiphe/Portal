@@ -434,9 +434,9 @@ deleteUserActionBtn.addEventListener('click', function (event) {
 
 var teamMateInvitEmail = document.querySelector('.teammate-email');
 teamMateInvitEmail.value = "";
+var timer = null;
 
-teamMateInvitEmail.addEventListener('keyup', function(){
-    var timer = null;
+teamMateInvitEmail.addEventListener('input', function(){
     clearTimeout(timer); 
     timer = setTimeout(emailCheck, 1000);
 });

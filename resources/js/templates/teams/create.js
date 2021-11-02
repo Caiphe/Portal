@@ -3,9 +3,9 @@ var inviteBtn = document.querySelector('.invite-btn');
 var closeTagBtnn = document.querySelector('.close-tag');
 var teamForm = document.querySelector('#form-create-team');
 var tagList = [];
+var timer = null;
 
-invitationInput.addEventListener('keyup', function(){
-    var timer = null;
+invitationInput.addEventListener('input', function(){
     clearTimeout(timer); 
     timer = setTimeout(invitationEmailCheck, 1000);
 });
