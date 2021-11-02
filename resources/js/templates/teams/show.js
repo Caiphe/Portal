@@ -433,17 +433,18 @@ deleteUserActionBtn.addEventListener('click', function (event) {
 });
 
 var teamMateInvitEmail = document.querySelector('.teammate-email');
-var inviteTeamMateError = document.querySelector('.teammate-error-message');
-var mailformat = /^[\w\.\-\+]+@[\w\.\-]+\.[a-z]{2,5}$/;
 teamMateInvitEmail.value = "";
-var timer = null;
 
 teamMateInvitEmail.addEventListener('keyup', function(){
+    var timer = null;
     clearTimeout(timer); 
     timer = setTimeout(emailCheck, 1000);
 });
 
 function emailCheck() {
+    var inviteTeamMateError = document.querySelector('.teammate-error-message');
+    var mailformat = /^[\w\.\-\+]+@[\w\.\-]+\.[a-z]{2,5}$/;
+
     if (teamMateInvitEmail.value.match(mailformat)) {
         inviteTeamMateError.classList.remove('show');
         teamInviteUserBtn.classList.add('active');

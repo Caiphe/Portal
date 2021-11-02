@@ -1,19 +1,19 @@
 var invitationInput = document.querySelector('.invitation-field');
 var inviteBtn = document.querySelector('.invite-btn');
-var errorMsg = document.querySelector('.error-email');
 var closeTagBtnn = document.querySelector('.close-tag');
 var teamForm = document.querySelector('#form-create-team');
-var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 var tagList = [];
 
-var timer = null;
-
 invitationInput.addEventListener('keyup', function(){
+    var timer = null;
     clearTimeout(timer); 
     timer = setTimeout(invitationEmailCheck, 1000);
 });
 
 function invitationEmailCheck() {
+    var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    var errorMsg = document.querySelector('.error-email');
+
     if (invitationInput.value.match(mailformat)) {
         inviteBtn.classList.add('active');
         errorMsg.classList.remove('show');
