@@ -5,6 +5,8 @@
     $userResponsibleGroups = isset($user) ? $user->responsibleGroups()->pluck('group')->toArray() : [];
     $currentUser = auth()->user();
     $isAdminUser = $currentUser->hasRole('admin');
+    $duplicateCountries = [];
+    $userApps = $user->getApps($selectedCountryFilter, $order, $sort);
 @endphp
 
 @csrf
@@ -98,10 +100,6 @@
     </div>
 
 </div>
-@php
-    $duplicateCountries = [];
-    $userApps = $user->getApps($selectedCountryFilter, $order, $sort);
-@endphp
 
 <div class="flex-container bottom-section-container">
     <div class="each-container">
@@ -111,7 +109,7 @@
             <select name="country-filter" id="country-filter">
                 <option value="all">All</option>
                     @foreach($userApps->pluck('country')->unique('name') as $country)
-                        @if(!in_array($country->code, $userResponsibleCountries) && !$user->hasRole('admin')) @continue @endif
+                        @if(!$country || (!in_array($country->code, $userResponsibleCountries) && !$user->hasRole('admin'))) @continue @endif
                         <option value="{{ $country->code }}" {{ (($selectedCountryFilter === $country->code) ? 'selected': '') }}>{{ $country->name }}</option>
                     @endforeach
             </select>
@@ -141,7 +139,7 @@
                     <td><a href="{{ route('admin.dashboard.index', ['aid' => $app->aid]) }}" class="app-link">{{ $app->display_name }}</a></td>
                     <td>{{ count($app->products) }}</td>
                     <td>{{ $app->created_at->format('Y-m-d') }}</td>
-                    <td><div class="country-flag" style="background-image: url('/images/locations/{{ $app->country->code }}.svg')"></div></td>
+                    <td><div class="country-flag" style="background-image: url('/images/locations/{{ $app->country_code ?? 'globe' }}.svg')"></div></td>
                     <td><div class="status app-status-{{ $app->status }}"></div></td>
                 </tr>
             @endif

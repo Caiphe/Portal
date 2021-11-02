@@ -11,7 +11,7 @@
         [
             [ 'label' => 'Profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
-            [ 'label' => 'Teams', 'link' => '/teams']
+            [ 'label' => 'My Teams', 'link' => '/teams']
         ],
         'Discover' =>
         [
@@ -34,12 +34,16 @@
 
     <div class="content">
 
+        <div class="content-header mt-40">
+            <h2>Team Profile</h2>
+        </div>
+
         <form id="form-create-team" method="POST" action="{{ route('teams.update', $team->id) }}" enctype="multipart/form-data">
             @method('put')
             @csrf
 
             <div class="group">
-                <label for="name">Name your team</label>
+                <label for="name">Enter team Name </label>
                 <input type="text" name="name" id="name" placeholder="Enter team name" maxlength="100" value="{{ $team->name }}" required>
             </div>
 
