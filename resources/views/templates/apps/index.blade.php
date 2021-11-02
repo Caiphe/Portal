@@ -25,7 +25,7 @@
 @endsection
 
 @section('title')
-    Apps
+    My apps
 @endsection
 
 @section('content')
@@ -41,7 +41,7 @@
     </div>
     @endif
 
-    <x-heading heading="Apps" tags="DASHBOARD">
+    <x-heading heading="My apps" tags="DASHBOARD">
         <a href="{{route('app.create')}}" class="button outline dark create-new" id="create"></a>
     </x-heading>
 

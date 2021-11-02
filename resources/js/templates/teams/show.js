@@ -436,10 +436,15 @@ var teamMateInvitEmail = document.querySelector('.teammate-email');
 var inviteTeamMateError = document.querySelector('.teammate-error-message');
 var mailformat = /^[\w\.\-\+]+@[\w\.\-]+\.[a-z]{2,5}$/;
 teamMateInvitEmail.value = "";
+var timer = null;
 
-teamMateInvitEmail.addEventListener('keyup', emailCheck);
+teamMateInvitEmail.addEventListener('keyup', function(){
+    clearTimeout(timer); 
+    timer = setTimeout(emailCheck, 1000);
+});
+
 function emailCheck() {
-    if (this.value.match(mailformat)) {
+    if (teamMateInvitEmail.value.match(mailformat)) {
         inviteTeamMateError.classList.remove('show');
         teamInviteUserBtn.classList.add('active');
     } else {

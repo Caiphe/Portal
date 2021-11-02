@@ -6,10 +6,15 @@ var teamForm = document.querySelector('#form-create-team');
 var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 var tagList = [];
 
-invitationInput.addEventListener('input', invitationIsValid);
+var timer = null;
 
-function invitationIsValid() {
-    if (this.value.match(mailformat)) {
+invitationInput.addEventListener('keyup', function(){
+    clearTimeout(timer); 
+    timer = setTimeout(invitationEmailCheck, 1000);
+});
+
+function invitationEmailCheck() {
+    if (invitationInput.value.match(mailformat)) {
         inviteBtn.classList.add('active');
         errorMsg.classList.remove('show');
 

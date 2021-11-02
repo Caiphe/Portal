@@ -11,7 +11,7 @@
             <div id="profile-menu-picture" style="background-image: url({{\Auth::user()->profile_picture}})"></div>
             <ul class="profile-menu-options shadow">
                 <li><a href="/profile">Profile</a></li>
-                <li><a href="/apps">Apps</a></li>
+                <li><a href="/apps">My Apps</a></li>
                 <li><form action="{{route('logout')}}" method="post">@csrf<button>Sign out</button></form></li>
             </ul>
         </div>
