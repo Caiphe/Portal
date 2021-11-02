@@ -33,7 +33,7 @@ class AppController extends Controller
             'email' => $user->email,
             'type' => 'ownership'
         ])->first();
-        
+
         $teamInvite = DB::table('team_invites')->where([
             'email' => $user->email,
             'type' => 'invite'
@@ -42,6 +42,10 @@ class AppController extends Controller
         $team = null;
         if ( $teamInvite ) {
             $team = Team::find($teamInvite->team_id);
+        }
+
+        if ( $ownershipInvite ) {
+            $ownnershipTeam = Team::find($ownershipInvite->team_id);
         }
 
         $apps = App::with(['products.countries', 'country', 'developer'])
@@ -54,6 +58,7 @@ class AppController extends Controller
             'approvedApps' => $apps['approved'] ?? [],
             'revokedApps' => $apps['revoked'] ?? [],
             'ownershipInvite' => $ownershipInvite,
+            'ownershipTeam' => $ownnershipTeam,
             'teamInvite' => $teamInvite,
             'team' => $team,
         ]);

@@ -52,12 +52,12 @@
     <div class="content">
 
         <div class="content-header mt-40">
-            @if($user->teams)
+            @if(!$user->ownedTeams->isEmpty())
                 <h2>Create a New Team!</h2>
             @else
                 <h2>It looks like you don't have any teams yet!</h2>
+                <p>Fortunately, it's very easy to create one. Let's begin by filling out your teams details.</p>
             @endif
-            <p>Fortunately, it's very easy to create one. Let's begin by filling out your teams details.</p>
         </div>
 
         <form id="form-create-team" method="POST" action="{{ route('teams.store') }}" enctype="multipart/form-data" novalidate>

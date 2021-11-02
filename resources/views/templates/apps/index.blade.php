@@ -35,7 +35,7 @@
         @svg('info', '#fff')
         <div class="message-container">
             {{-- The link to be changed to dynamic --}}
-            You have been requested to be the new owner of PlusNarrative. Please visit your <a href="/teams/{{ $ownershipInvite->team_id }}/team">team's dashboard</a>
+            You have been requested to be the new owner of {{ $ownershipTeam->name }}. Please visit your <a href="/teams/{{ $ownershipInvite->team_id }}/team">team's dashboard</a>
         </div>
         <button class="close-banner">@svg('close', '#fff')</button>
     </div>
@@ -346,7 +346,7 @@
                 handleTimeInvite('/teams/accept', data, event);
             });
         }
-       
+
         var btnRejectInvite =  document.querySelector('.reject-team-invite')
         if(btnRejectInvite){
             btnRejectInvite.addEventListener('click', function (event){
@@ -357,7 +357,7 @@
             handleTimeInvite('/teams/reject', data, event);
             });
         }
-      
+
         function handleTimeInvite(url, data, event) {
             var xhr = new XMLHttpRequest();
 
