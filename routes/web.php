@@ -123,7 +123,7 @@ Route::post('profile/2fa/verify', 'UserController@verify2fa')->middleware('2fa')
 
 Route::get('products', 'ProductController@index')->name('product.index');
 Route::get('products/{product:slug}', 'ProductController@show')->name('product.show');
-Route::get('products/{product:slug}/download/postman', 'ProductController@downloadPostman')->name('product.download.postman');
+// Route::get('products/{product:slug}/download/postman', 'ProductController@downloadPostman')->name('product.download.postman');
 Route::get('products/{product:slug}/download/swagger', 'ProductController@downloadSwagger')->name('product.download.swagger');
 
 Route::get('categories/{category:slug}', 'CategoryController@show')->name('category.show');
