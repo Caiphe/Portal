@@ -9,7 +9,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Mpociot\Teamwork\TeamInvite;
 use Mpociot\Teamwork\Traits\UserHasTeams;
-
+use App\Notifications\ResetPasswordNotification;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -237,4 +237,15 @@ class User extends Authenticatable implements MustVerifyEmail
             'type' => $type
         ])->first();
     }
+
+	/**
+	 * Send a password reset notification to the user.
+	 *
+	 * @param  string  $token
+	 * @return void
+	 */
+	public function sendPasswordResetNotification($token)
+	{
+		$this->notify(new ResetPasswordNotification($token));
+	}
 }
