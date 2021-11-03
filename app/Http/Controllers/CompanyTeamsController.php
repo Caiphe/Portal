@@ -42,7 +42,7 @@ class CompanyTeamsController extends Controller
             'teams' => fn ($team) => $team->with('teamCountry')->withCount('users', 'apps')
         ])->teams;
 
-        if (!$teams) {
+        if ($teams->isEmpty()) {
             return redirect()->route('teams.create');
         }
 
@@ -154,7 +154,11 @@ class CompanyTeamsController extends Controller
         $team = $this->getTeam($data['team_id']);
         $user = $this->getTeamUserByEmail($invitedEmail);
         $inviteSent = false;
-        $isAlredyInvited = TeamInvite::where('email', $user->email)->where('team_id', $team->id)->exists();
+
+        $isAlredyInvited = false;
+        if ($user) {
+            $isAlredyInvited = TeamInvite::where('email', $user->email)->where('team_id', $team->id)->exists();
+        }
 
         if ($isAlredyInvited) {
             return response()->json([
