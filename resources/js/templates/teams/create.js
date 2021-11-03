@@ -6,7 +6,7 @@ var tagList = [];
 var timer = null;
 
 invitationInput.addEventListener('input', function(){
-    clearTimeout(timer); 
+    clearTimeout(timer);
     timer = setTimeout(invitationEmailCheck, 1000);
 });
 

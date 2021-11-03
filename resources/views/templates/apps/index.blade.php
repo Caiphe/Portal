@@ -13,7 +13,7 @@
         [
             [ 'label' => 'Profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
-            [ 'label' => 'My Teams', 'link' => '/teams'],
+            [ 'label' => 'My teams', 'link' => '/teams'],
         ],
         'Discover' =>
         [

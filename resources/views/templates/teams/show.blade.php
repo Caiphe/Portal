@@ -10,7 +10,7 @@
         [
             [ 'label' => 'Profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
-            [ 'label' => 'My Teams', 'link' => '/teams']
+            [ 'label' => 'My teams', 'link' => '/teams']
         ],
         'Discover' =>
         [
@@ -22,11 +22,11 @@
 @endsection
 
 @section('title')
-My Team
+My team
 @endsection
 
 @section('content')
-<x-heading heading="My Team" tags="Dashboard">
+<x-heading heading="My team" tags="Dashboard">
     @if($isAdmin)
         <a href="{{ route('teams.edit', $team->id) }}" class="button dark outline">Edit team profile</a>
     @endif
@@ -200,7 +200,7 @@ My Team
         {{-- To replace with the team profile picture --}}
         <div class="team-name-logo-container">
             <div class="team-logo"  style="background-image: url({{ $team['logo'] }})"></div>
-            <h2>{{ $team->name }} </h2>
+            <h2 class="team-name">{{ $team->name }} </h2>
         </div>
 
         @if ($team->users->count() > 0 && $isOwner)
