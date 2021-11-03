@@ -124,6 +124,7 @@
 
         @if(!empty($sandboxProducts))
         <div class="mt-2 sandbox-container">
+
             <div class="detail-left">
                
                 <div class="detail-row cols no-wrap">
@@ -164,6 +165,25 @@
                 </div>
             </div>
         </div>
+
+
+        @if(!$isAdminPage)
+        <div class="products-title">
+            <strong>Products</strong>
+            <form class="ml-1" action="{{ route('app.credentials.request-renew', ['app' => $app, 'type' => 'sandbox']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
+                @csrf
+                <button class="outline small">Renew credentials</button>
+            </form>
+        </div>
+        @else
+        <div class="products-title">
+            <strong>Products</strong>
+            <form class="ml-1" action="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'sandbox']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
+                @csrf
+                <button class="outline small">Renew credentials</button>
+            </form>
+        </div>
+        @endif
 
         <div class="products">
             <x-apps.products :app="$app" :products="$sandboxProducts['products']" for="staging" />
@@ -233,15 +253,28 @@
         </div>
         @endif
         <div class="detail-right"></div>
+
+
         @if(!$isAdminPage)
         <div class="products-title">
             <strong>Production products</strong>
+            <form class="ml-1" action="{{ route('app.credentials.request-renew', ['app' => $app, 'type' => 'production']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
+                @csrf
+                {{--- Please do not remove this button  --}}
+                <button class="outline small" href="">Renew credentials</button>
+            </form>
         </div>
         @else
         <div class="products-title">
             <strong>Production products</strong>
+            <form class="ml-1" action="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'production']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
+                @csrf
+                {{--- Please do not remove this button  --}}
+                <button class="outline small" href="">Renew credentials</button>
+            </form>
         </div>
         @endif
+
         <div class="products production-products kyc-status-{{ Str::slug($app->kyc_status ?? 'none') }}">
             <x-apps.products :app="$app" :products="$prodProducts['products']" for="production" />
         </div>
