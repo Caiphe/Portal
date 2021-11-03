@@ -4,7 +4,6 @@ var closeTagBtnn = document.querySelector('.close-tag');
 var teamForm = document.querySelector('#form-create-team');
 var tagList = [];
 var timer = null;
-var limitCount;
 
 invitationInput.addEventListener('input', function(){
     clearTimeout(timer);
@@ -165,25 +164,4 @@ function handleTimeInvite(url, data, event) {
         }
         removeLoading();
     };
-}
-
-function limitText(limitField, limitNum) {
-
-    if (limitField.value.length > limitNum) {
-        limitField.value = limitField.value.substring(0, limitNum);
-    } else {
-        if (limitField == '') {
-            limitCount = limitNum - 0;
-        } else {
-            limitCount = limitNum - limitField.value.length;
-        }
-    }
-
-    if (limitCount == 0) {
-        limitField.style.borderColor = "red";
-
-        addAlert('error', 'Sorry, you have reached the maximum number of character limits for team name.');
-    } else {
-        limitField.style.borderColor = "";
-    }
 }

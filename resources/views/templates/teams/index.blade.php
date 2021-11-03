@@ -76,7 +76,7 @@
                     </tr>
                     @foreach($teams as $team)
                         <tr class="team-app-list">
-                            <td class="company-logo-name">
+                            <td class="company-logo-name" style="word-break: break-word;">
                                 <div class="company-logo" style="background-image: url({{ $team->logo }})"></div>
                                 <a class="company-name-a bold" href="{{route('team.show', [ 'id' => $team->id ])}}">{{ $team->name }}</a>
                             </td>

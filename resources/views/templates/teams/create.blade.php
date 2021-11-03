@@ -66,7 +66,7 @@
 
             <div class="group">
                 <label for="name">Name your team</label>
-                <input type="text" name="name" value="{{ old('name') }}" id="team-name" class="form-field" placeholder="Enter team name" maxlength="100" required autofocus onkeyup="limitText(this,50);" onkeypress="limitText(this,50);" onkeydown="limitText(this,50);">
+                <input type="text" name="name" value="{{ old('name') }}" id="team-name" class="form-field" placeholder="Enter team name" maxlength="100" required autofocus>
             </div>
 
             <div class="group">
