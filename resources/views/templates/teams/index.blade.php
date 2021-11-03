@@ -10,7 +10,7 @@
         [
             [ 'label' => 'Profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
-            [ 'label' => 'My Teams', 'link' => '/teams']
+            [ 'label' => 'My teams', 'link' => '/teams']
         ],
         'Discover' =>
         [
@@ -114,7 +114,7 @@
         var hiddenTeamId = document.querySelector('.hidden-team-id');
         var hiddenTeamUserId = document.querySelector('.hidden-team-user-id');
 
-      
+
         for (var i = 0; i < leaveTeamBtn.length; i++) {
             leaveTeamBtn[i].addEventListener('click', showLeaveTeamModal);
         }
@@ -155,7 +155,7 @@
             xhr.setRequestHeader("X-CSRF-TOKEN",
                 document.getElementsByName("csrf-token")[0].content
             );
-            
+
             xhr.send(JSON.stringify(data));
 
             xhr.onload = function() {
@@ -187,7 +187,7 @@
 
         var btnAcceptInvite = document.querySelector('.accept-team-invite');
         if(btnAcceptInvite){
-           
+
             btnAcceptInvite.addEventListener('click', function (event){
                 var data = {
                     token: this.dataset.invitetoken,
@@ -207,7 +207,7 @@
                 handleInvite('/teams/reject', data, event);
             });
         }
-    
+
 
         function handleInvite(url, data, event) {
             var xhr = new XMLHttpRequest();
@@ -234,7 +234,7 @@
                     } else {
                        addAlert('success', ["Thanks, for your response", "The page will refresh shortly"], function(){
                             window.location.reload();
-                        }); 
+                        });
                     }
                 } else {
                     var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;

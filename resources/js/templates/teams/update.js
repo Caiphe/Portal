@@ -4,6 +4,7 @@ var fileName = document.querySelector('.upload-file-name');
 var fileBtn = document.querySelector('.logo-add-icon');
 var acceptTeamInvite = document.querySelector('.accept-team-invite');
 var rejectTeamInvite = document.querySelector('.reject-team-invite');
+var limitCount;
 
 logoFile.addEventListener('change', chooseTeamPicture);
 function chooseTeamPicture() {
@@ -88,4 +89,25 @@ function handleTimeInvite(url, data, event) {
         }
         removeLoading();
     };
+}
+
+function limitText(limitField, limitNum) {
+
+    if (limitField.value.length > limitNum) {
+        limitField.value = limitField.value.substring(0, limitNum);
+    } else {
+        if (limitField == '') {
+            limitCount = limitNum - 0;
+        } else {
+            limitCount = limitNum - limitField.value.length;
+        }
+    }
+
+    if (limitCount == 0) {
+        limitField.style.borderColor = "red";
+
+        addAlert('error', 'Sorry, you have reached the maximum number of character limits for team name.');
+    } else {
+        limitField.style.borderColor = "";
+    }
 }

@@ -14,7 +14,7 @@
         [
             [ 'label' => 'Profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
-            [ 'label' => 'My Teams', 'link' => '/teams']
+            [ 'label' => 'My teams', 'link' => '/teams']
         ],
         'Discover' =>
         [
@@ -26,7 +26,7 @@
 @endsection
 
 @section('title')
-   Create Team
+   Create team
 @endsection
 
 @section('content')
@@ -66,7 +66,7 @@
 
             <div class="group">
                 <label for="name">Name your team</label>
-                <input type="text" name="name" value="{{ old('name') }}" id="team-name" class="form-field" placeholder="Enter team name" maxlength="100" required autofocus>
+                <input type="text" name="name" value="{{ old('name') }}" id="team-name" class="form-field" placeholder="Enter team name" maxlength="100" required autofocus onkeyup="limitText(this,50);" onkeypress="limitText(this,50);" onkeydown="limitText(this,50);">
             </div>
 
             <div class="group">
