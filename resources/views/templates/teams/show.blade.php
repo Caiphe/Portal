@@ -200,7 +200,7 @@ My team
         {{-- To replace with the team profile picture --}}
         <div class="team-name-logo-container">
             <div class="team-logo"  style="background-image: url({{ $team['logo'] }})"></div>
-            <h2 style="word-break: break-word; margin-right: 230px;">{{ $team->name }} </h2>
+            <h2 class="team-name">{{ $team->name }} </h2>
         </div>
 
         @if ($team->users->count() > 0 && $isOwner)

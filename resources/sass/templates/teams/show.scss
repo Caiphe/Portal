@@ -767,6 +767,11 @@ button{
     width: 100%;
     position: relative;
 
+    .team-name {
+        word-break: break-word;
+        margin-right: 230px;
+    }
+
     .team-name-logo-container{
         display: flex;
     }
@@ -1179,4 +1184,8 @@ button{
 }
 .mb-20{
     margin-bottom: 20px;
+}
+
+.word-wrap-text {
+    word-break: break-word;
 }
