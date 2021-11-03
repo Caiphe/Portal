@@ -22,11 +22,11 @@
 @endsection
 
 @section('title')
-Team
+My Team
 @endsection
 
 @section('content')
-<x-heading heading="Team" tags="Dashboard">
+<x-heading heading="My Team" tags="Dashboard">
     @if($isAdmin)
         <a href="{{ route('teams.edit', $team->id) }}" class="button dark outline">Edit team profile</a>
     @endif
