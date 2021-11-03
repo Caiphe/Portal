@@ -58,7 +58,7 @@ class AppController extends Controller
             'approvedApps' => $apps['approved'] ?? [],
             'revokedApps' => $apps['revoked'] ?? [],
             'ownershipInvite' => $ownershipInvite,
-            'ownershipTeam' => $ownnershipTeam,
+            'ownershipTeam' => $ownnershipTeam ?? null,
             'teamInvite' => $teamInvite,
             'team' => $team,
         ]);
