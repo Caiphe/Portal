@@ -52,8 +52,8 @@
     <div class="content">
 
         <div class="content-header mt-40">
-            @if($user->teams)
-                <h2>Create A New Team!</h2>
+            @if(!$user->ownedTeams->isEmpty())
+                <h2>Create a New Team!</h2>
             @else
                 <h2>It looks like you don't have any teams yet!</h2>
                 <p>Fortunately, it's very easy to create one. Let's begin by filling out your teams details.</p>

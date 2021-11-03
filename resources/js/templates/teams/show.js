@@ -120,7 +120,7 @@ if (revokeTransferBtn) {
 function hideTransferBanner() {
     var owneshipTransferBanner = document.querySelector('.top-ownership-banner');
 
-    if (owneshipTransferBanner) { 
+    if (owneshipTransferBanner) {
         owneshipTransferBanner.classList.remove('show');
     }
 }
@@ -437,7 +437,7 @@ teamMateInvitEmail.value = "";
 var timer = null;
 
 teamMateInvitEmail.addEventListener('input', function(){
-    clearTimeout(timer); 
+    clearTimeout(timer);
     timer = setTimeout(emailCheck, 1000);
 });
 
