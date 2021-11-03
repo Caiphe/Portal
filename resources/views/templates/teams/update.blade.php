@@ -92,7 +92,7 @@
 
             <div class="form-actions">
                 <button class="dark next " id="create">
-                    UPDATE TEAM @svg('arrow-forward', '#ffffff')
+                    SAVE & SUBMIT @svg('arrow-forward', '#ffffff')
                 </button>
             </div>
         </form>
