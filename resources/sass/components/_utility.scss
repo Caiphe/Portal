@@ -405,10 +405,10 @@
 
     @media (max-width: 768px) {
         display: block;
+        width: 86%;
     }
 
     &.show{
-        height: 0px;
         pointer-events: auto;
         opacity: 4;
         height: 75px;
@@ -426,14 +426,20 @@
     }
 
     .message-container{
+        position: absolute;
         color: #fff;
-        margin-top: 26px;
-        margin-left: 20px;
+        transform: translateY(-50%);
+        width: 50%;
+        left: 30px;
+        top: 50%;
 
-        @media(max-width: 1290px){
-            margin-left: 0;
-            margin-top: 0px;
-            
+        @media(max-width: 768px){
+            position: relative;
+            width: 86%;
+            left: none;
+            transform: none;
+            top: none;
+            text-align: center;
         }
     }
 
@@ -443,7 +449,7 @@
         right: 20px;
         top: 20px;
         
-        @media(max-width: 1290px){
+        @media(max-width: 768px){
             position: relative;
             margin: 18px auto;
             top: auto;
