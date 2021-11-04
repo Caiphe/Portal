@@ -54,7 +54,7 @@
 
             <div class="group">
                 <label for="contact">Enter team contact number</label>
-                <input type="text" name="contact" id="contact" placeholder="Enter team contact number" maxlength="100" value="{{ $team->contact }}"  required>
+                <input type="text" name="contact" id="contact" placeholder="Enter team contact number" maxlength="15" value="{{ $team->contact }}"  required>
             </div>
 
             <div class="group countries">
