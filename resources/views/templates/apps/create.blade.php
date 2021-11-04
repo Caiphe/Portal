@@ -76,7 +76,7 @@
                         <ul class="default_option">
                             <li>
                                 {{-- <div class="option"> --}}
-                                    <span class="select-default">Please select team to publish under</span>
+                                    <div class="select-default">Please select team <span class="hide-mobi">to publish under</span></div>
                                 {{-- </div> --}}
                             </li>
                         </ul>
