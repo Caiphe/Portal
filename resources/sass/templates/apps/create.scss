@@ -359,13 +359,13 @@
             position: relative;
             cursor: pointer;
             z-index: 2;
-            padding: 0px;
             margin: 0px;
             border: solid 1px #cdcdcd;
-            padding-left: 15px;
-            padding-top: 8px;
+            padding: 8px 27px 0px 15px;
             box-sizing: border-box;
-            height: 40px;
+            margin-bottom: 0px;
+            min-height: 40px;
+            padding-bottom: 10px;
 
             li{
                 border-radius: 3px;
@@ -388,18 +388,18 @@
         }
 
         .select_ul{
-            position: absolute;
-            top: 46px;
+            position: relative;
             left: 0;
             width: 100%;
             background: #fff;
             border-radius: 5px;
             display: none;
+            margin-top: -1px;
             padding: 0px;
 
             li{
                 list-style: none;
-                border: solid 1px #A5A5A5;
+                border: solid 1px #C6C6C6;
                 border-top: none;
                 position: relative;
                 cursor: pointer;
@@ -437,7 +437,7 @@
                 background-size: cover;
                 background-color: $yellow;
                 position: absolute;
-                top: 2px;
+                top: 4px;
             }
         }
 
