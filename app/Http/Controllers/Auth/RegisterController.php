@@ -111,8 +111,8 @@ class RegisterController extends Controller
 
 		$this->guard()->login($user);
 
-		if ($response = $this->registered($request, $user)) {
-			return $response;
+		if (!$user->exists) {
+            return $this->registered($request, $user);
 		}
 
 		return $request->wantsJson()
