@@ -93,7 +93,7 @@ class AppController extends Controller
         }
 
         $teamExists = false;
-        if ($validated['team_id']) {
+        if (isset($validated['team_id']) && !empty($validated['team_id'])) {
             $team = Team::find($validated['team_id']);
             $teamExists = $team->exists;
         }
