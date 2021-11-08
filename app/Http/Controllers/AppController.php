@@ -139,9 +139,6 @@ class AppController extends Controller
 
         if (strpos($createdResponse, 'duplicate key') !== false) {
             return response()->json(['success' => false, 'message' => 'There is already an app with that name.'], 409);
-        } else if($createdResponse->failed()){
-            dd($createdResponse->json());
-            return response()->json(['success' => false, 'message' => 'There is already an app with that name.'], 409);
         }
 
         $attributes = ApigeeService::getAppAttributes($createdResponse['attributes']);
