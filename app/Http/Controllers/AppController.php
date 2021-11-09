@@ -99,7 +99,7 @@ class AppController extends Controller
             return response()->json(['success' => false, 'message' => 'There is already an app with that name.'], 409);
         }
 
-        if ($createdResponse->status() === 409) { // duplicate/conflict response
+        if ($createdResponse->failed()) {
             return response()->json(['success' => false, 'message' => 'There was a problem creating your App. Please try again.'], 409);
         }
 
