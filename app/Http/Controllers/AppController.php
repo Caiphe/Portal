@@ -99,10 +99,11 @@ class AppController extends Controller
             return response()->json(['success' => false, 'message' => 'There is already an app with that name.'], 409);
         }
 
-        $attributes = [];
-        if (isset($createdResponse['attributes'])) {
-            $attributes = ApigeeService::getAppAttributes($createdResponse['attributes']);
+        if ($createdResponse->status() === 409) { // duplicate/conflict response
+            return response()->json(['success' => false, 'message' => 'There was a problem creating your App. Please try again.'], 409);
         }
+
+        $attributes = ApigeeService::getAppAttributes($createdResponse['attributes']);
 
         $app = App::create([
             "aid" => $createdResponse['appId'],
@@ -138,12 +139,10 @@ class AppController extends Controller
 
         $opcoUserEmails = $app->country->opcoUser->pluck('email')->toArray();
 
-        if (!empty($opcoUserEmails)) {
-            $opcoEmail = $opcoUserEmails[$user->email];
-            Mail::to($opcoEmail)->send(new NewApp($app));
-        } elseif ($user->responsibleCountries) {
-            Mail::to($user->email)->send(new NewApp($app));
+        if (empty($opcoUserEmails)) {
+            $opcoUserEmails = env('MAIL_TO_ADDRESS');
         }
+        Mail::to($opcoUserEmails)->send(new NewApp($app));
 
         if ($request->ajax()) {
             return response()->json(['response' => $createdResponse]);
