@@ -44,8 +44,9 @@ class AppController extends Controller
             $team = Team::find($teamInvite->team_id);
         }
 
+        $ownershipTeam = null;
         if ( $ownershipInvite ) {
-            $ownnershipTeam = Team::find($ownershipInvite->team_id);
+            $ownershipTeam = Team::find($ownershipInvite->team_id);
         }
 
         $apps = App::with(['products.countries', 'country', 'developer'])
@@ -58,7 +59,7 @@ class AppController extends Controller
             'approvedApps' => $apps['approved'] ?? [],
             'revokedApps' => $apps['revoked'] ?? [],
             'ownershipInvite' => $ownershipInvite,
-            'ownershipTeam' => $ownnershipTeam ?? null,
+            'ownershipTeam' => $ownershipTeam ?? null,
             'teamInvite' => $teamInvite,
             'team' => $team,
         ]);
