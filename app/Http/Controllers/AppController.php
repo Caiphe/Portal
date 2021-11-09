@@ -85,12 +85,17 @@ class AppController extends Controller
     {
         $validated = $request->validated();
         $countriesByCode = Country::pluck('iso', 'code');
-        $products = Product::whereIn('name', $request->products)->pluck('attributes', 'name');
+        $products = Product::whereIn('name', $validated['products'])->pluck('attributes', 'name');
         $productIds = [];
         $attr = [];
+
         foreach ($products as $name => $attributes) {
             $attr = json_decode($attributes, true);
             $productIds[] = $attr['SandboxProduct'] ?? $name;
+        }
+
+        if (count($productIds) !== count($validated['products'])) {
+            return response()->json(['success' => false, 'message' => 'There was a problem finding your product(s). Please try again'], 417);
         }
 
         $teamExists = false;
