@@ -66,11 +66,13 @@
 
     function newTab() {
         var randId = rand();
-        document.getElementById('custom-tabs').insertAdjacentHTML('beforeend', '<div class="new-tab mt-3"><button class="dark outline" onclick="removeTab(this)">Remove</button><input class="custom-tab-title" type="text" name="tab[title][]" placeholder="Title"><input class="custom-tab-content" id="' + randId + '" type="hidden" name="tab[body][]"><trix-editor input="' + randId + '"></trix-editor></div>');
+        document.getElementById('custom-tabs').insertAdjacentHTML('beforeend', '<div class="new-tab mt-3"><button class="dark outline" onclick="removeTab(this)">Remove</button><input class="custom-tab-title" type="text" name="tab[title][]" placeholder="Title"><div id="' + randId +'" class="editor" data-input="' + randId + '" data-name="tab[body][]" data-class="custom-tab-content"></div></div>');
+
+        makeEditor(document.getElementById(randId));
     }
 
     function rand() {
-        return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        return 'q' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     }
 
     function upload(openApi, cb) {
@@ -123,8 +125,8 @@
 
         for (var i = customTabTitle.length - 1; i >= 0; i--) {
             if (
-                (customTabTitle[i].value !== '' && customTabContent[i].value === '') ||
-                (customTabTitle[i].value === '' && customTabContent[i].value !== '')
+                (customTabTitle[i].value !== '' && customTabContent[i].value === '<p><br></p>') ||
+                (customTabTitle[i].value === '' && customTabContent[i].value !== '<p><br></p>')
             ) {
                 errors.push('The custom tab is missing information');
                 break;

@@ -4,8 +4,7 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/admin/edit.css') }}">
-<link rel="stylesheet" href="{{ mix('/css/vendor/trix.css') }}">
-<script src="{{ mix('/js/vendor/trix.js') }}"></script>
+<link rel="stylesheet" href="{{ mix('/css/vendor/quill.css') }}">
 @endpush
 
 @section('page-info')
@@ -22,3 +21,7 @@
     @include('templates.admin.faqs.form', compact('faq'))
 </form>
 @endsection
+
+@push('scripts')
+<script src="{{ mix('/js/components/quill.js') }}" defer></script>
+@endpush

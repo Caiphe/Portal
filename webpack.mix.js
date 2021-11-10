@@ -33,7 +33,7 @@ mix.scripts(
     .scripts("resources/js/templates/auth/forgot-password.js", "public/js/templates/auth/forgot-password.js")
     .scripts("resources/js/templates/admin/edit.js", "public/js/templates/admin/edit.js")
     .scripts("resources/js/templates/apps/kyc.js", "public/js/templates/apps/kyc.js")
-    .scripts("resources/js/vendor/trix.js", "public/js/vendor/trix.js")
+    .scripts(["resources/js/vendor/quill.js", "resources/js/components/quill.js"], "public/js/components/quill.js")
     .scripts("resources/js/vendor/stoplight.js", "public/js/vendor/stoplight.js")
     .scripts("resources/js/templates/teams/create.js", "public/js/templates/teams/create.js")
     .scripts("resources/js/templates/teams/update.js", "public/js/templates/teams/update.js")
@@ -87,5 +87,5 @@ mix.scripts(
     .sass("resources/sass/components/_select.scss", "public/css/components")
     .sass("resources/sass/styles.scss", "public/css")
     .sass("resources/sass/vendor/stoplight.scss", "public/css/vendor")
-    .styles("resources/sass/vendor/trix.css", "public/css/vendor/trix.css")
+    .styles("resources/sass/vendor/quill.css", "public/css/vendor/quill.css")
     .version();

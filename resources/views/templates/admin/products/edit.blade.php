@@ -5,8 +5,7 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/admin/edit.css') }}">
-<link rel="stylesheet" href="{{ mix('/css/vendor/trix.css') }}">
-<script src="{{ mix('/js/vendor/trix.js') }}"></script>
+<link rel="stylesheet" href="{{ mix('/css/vendor/quill.css') }}">
 @endpush
 
 @section('page-info')
@@ -69,15 +68,13 @@
     <div id="overview" class="editor-field">
         <h2>Overview</h2>
         <input type="hidden" name="tab[title][]" value="Overview">
-        <input id="{{ $product->slug }}-overview-body" type="hidden" name="tab[body][]" value="{{ $content['Overview'][0]['body'] ?? '' }}">
-        <trix-editor input="{{ $product->slug }}-overview-body"></trix-editor>
+        <div class="editor" data-input="{{ $product->slug }}-overview-body" data-name="tab[body][]">{!! $content['Overview'][0]['body'] ?? '' !!}</div>
     </div>
 
     <div id="docs" class="editor-field">
         <h2>Docs</h2>
         <input type="hidden" name="tab[title][]" value="Docs">
-        <input id="{{ $product->slug }}-docs-body" type="hidden" name="tab[body][]" value="{{ $content['Docs'][0]['body'] ?? '' }}">
-        <trix-editor input="{{ $product->slug }}-docs-body"></trix-editor>
+        <div class="editor" data-input="{{ $product->slug }}-docs-body" data-name="tab[body][]">{!! $content['Docs'][0]['body'] ?? '' !!}</div>
     </div>
 
     <div id="custom-tabs" class="editor-field">
@@ -91,8 +88,7 @@
         <div class="old-tab mt-3">
             <button class="dark outline mt-1" onclick="removeTab(this)">Remove</button>
             <input class="custom-tab-title" type="text" name="tab[title][]" value="{{ $c[0]['title'] }}">
-            <input class="custom-tab-content" id="{{ $c[0]['slug'] }}" type="hidden" name="tab[body][]" value="{{ $c[0]['body'] ?? '' }}">
-            <trix-editor input="{{ $c[0]['slug'] }}"></trix-editor>
+            <div class="editor" data-input="{{ $c[0]['slug'] }}" data-name="tab[body][]">{!! $c[0]['body'] ?? '' !!}</div>
         </div>
         @endforeach
         @php
@@ -101,8 +97,7 @@
         <div class="new-tab mt-3">
             <button class="dark outline" onclick="removeTab(this)">Remove</button>
             <input class="custom-tab-title" type="text" name="tab[title][]" placeholder="Title">
-            <input class="custom-tab-content" id="{{ $randId }}" type="hidden" name="tab[body][]">
-            <trix-editor input="{{ $randId }}"></trix-editor>
+            <div class="editor" data-input="{{ $randId }}" data-name="tab[body][]" data-class="custom-tab-content"></div>
         </div>
     </div>
 
@@ -120,5 +115,6 @@
         }[key] || null;
     }
 </script>
+<script src="{{ mix('/js/components/quill.js') }}" defer></script>
 <script src="{{ mix('/js/templates/admin/products/edit.js') }}" defer></script>
 @endpush

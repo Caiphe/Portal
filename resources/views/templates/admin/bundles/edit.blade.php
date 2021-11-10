@@ -4,8 +4,7 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/admin/edit.css') }}">
-<link rel="stylesheet" href="{{ mix('/css/vendor/trix.css') }}">
-<script src="{{ mix('/js/vendor/trix.js') }}"></script>
+<link rel="stylesheet" href="{{ mix('/css/vendor/quill.css') }}">
 @endpush
 
 @section('page-info')
@@ -21,9 +20,12 @@
 
     <div class="editor-field">
         <h2>Overview</h2>
-        <input id="body" type="hidden" name="body" value="{{ $content['overview'][0]['body'] ?? '' }}">
-        <trix-editor input="body"></trix-editor>
+        <div class="editor" data-input="body">{!! $content['overview'][0]['body'] ?? old('body') !!}</div>
     </div>
 
 </form>
 @endsection
+
+@push('scripts')
+<script src="{{ mix('/js/components/quill.js') }}" defer></script>
+@endpush
