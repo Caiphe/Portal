@@ -99,6 +99,10 @@ class AppController extends Controller
             return response()->json(['success' => false, 'message' => 'There is already an app with that name.'], 409);
         }
 
+        if ($createdResponse->failed()) {
+            return response()->json(['success' => false, 'message' => 'There was a problem creating your App. Please try again.'], 409);
+        }
+
         $attributes = ApigeeService::getAppAttributes($createdResponse['attributes']);
 
         $app = App::create([
@@ -134,6 +138,7 @@ class AppController extends Controller
         );
 
         $opcoUserEmails = $app->country->opcoUser->pluck('email')->toArray();
+
         if (empty($opcoUserEmails)) {
             $opcoUserEmails = env('MAIL_TO_ADDRESS');
         }
