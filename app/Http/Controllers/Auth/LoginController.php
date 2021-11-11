@@ -64,7 +64,7 @@ class LoginController extends Controller
             ->where('drupal_users.email', $request->get($this->username()))->first();
 
         if ($drupalUserCheck === null || $drupalUserCheck->user_email !== null) {
-            throw ValidationException::withMessages([
+            return redirect('login')->withErrors([
                 $this->username() => [trans('auth.failed')],
             ]);
         }
@@ -87,27 +87,21 @@ class LoginController extends Controller
      * @param  array  $data
      * @return \App\User
      */
-    protected function create(array $data) {
-        $imageName = base64_encode('jsklaf88sfjdsfjl' . $data['email']) . '.svg';
+    protected function create(array $data)
+    {
         $user = User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
             'developer_id' => $data['developer_id'],
             'password' => Hash::make($data['password']),
-            'profile_picture' => '/storage/profile/' . $imageName,
+            'profile_picture' => '/storage/profile/profile-' . rand(1, 32) . '.svg',
         ]);
 
         if (isset($data['locations'])) {
             $countryIds = Country::whereIn('code', $data['locations'])->pluck('id');
             $user->countries()->sync($countryIds);
         }
-
-        $imagePath = 'public/profile/' . $imageName;
-        if (\Storage::exists($imagePath)) {
-            \Storage::delete($imagePath);
-        }
-        \Storage::copy('public/profile/profile-' . rand(1, 32) . '.svg', $imagePath);
 
         return $user;
     }
