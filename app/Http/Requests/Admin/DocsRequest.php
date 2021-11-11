@@ -38,7 +38,7 @@ class DocsRequest extends FormRequest
     {
         $this->merge([
             'title' => filter_var($this->title, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'body' => strip_tags($this->body, '<strong><a><em><del><img><ul><ol><li><pre><br><p><table><h2><h3><s><blockquote><u>'),
+            'body' => strip_tags($this->body, '<strong><a><em><i><del><img><ul><ol><li><pre><br><p><table><tbody><thead><tr><td><h2><h3><h4><s><blockquote><u>'),
         ]);
     }
 }

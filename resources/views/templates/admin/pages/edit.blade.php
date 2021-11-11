@@ -4,7 +4,6 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/admin/edit.css') }}">
-<link rel="stylesheet" href="{{ mix('/css/vendor/quill.css') }}">
 @endpush
 
 @section('page-info')
@@ -23,5 +22,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ mix('/js/components/quill.js') }}" defer></script>
+<script src="{{ mix('/js/components/ckeditor.js') }}" defer></script>
 @endpush

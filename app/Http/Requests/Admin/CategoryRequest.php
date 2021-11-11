@@ -37,7 +37,7 @@ class CategoryRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        $tags = '<strong><a><em><del><img><ul><ol><li><pre><br><p><table><h2><h3><s><blockquote><u>';
+        $tags = '<strong><a><em><i><del><img><ul><ol><li><pre><br><p><table><tbody><thead><tr><td><h2><h3><h4><s><blockquote><u>';
         $this->merge([
             'title' => filter_var($this->title, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'heading-title' => filter_var($this->get('heading-title'), FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),

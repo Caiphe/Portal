@@ -36,7 +36,7 @@ class ProductRequest extends FormRequest
     protected function prepareForValidation()
     {
         $tab = $this->tab;
-        $tab['body'] = array_map(fn ($body) => strip_tags($body, '<strong><a><em><del><img><ul><ol><li><pre><br><p><table><h2><h3><s><blockquote><u>'), $tab['body']);
+        $tab['body'] = array_map(fn ($body) => strip_tags($body, '<strong><a><em><i><del><img><ul><ol><li><pre><br><p><table><tbody><thead><tr><td><h2><h3><h4><s><blockquote><u>'), $tab['body']);
 
         $this->merge([
             'tab' => $tab,

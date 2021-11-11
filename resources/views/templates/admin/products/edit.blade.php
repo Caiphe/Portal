@@ -5,7 +5,6 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/admin/edit.css') }}">
-<link rel="stylesheet" href="{{ mix('/css/vendor/quill.css') }}">
 @endpush
 
 @section('page-info')
@@ -88,7 +87,7 @@
         <div class="old-tab mt-3">
             <button class="dark outline mt-1" onclick="removeTab(this)">Remove</button>
             <input class="custom-tab-title" type="text" name="tab[title][]" value="{{ $c[0]['title'] }}">
-            <div class="editor" data-input="{{ $c[0]['slug'] }}" data-name="tab[body][]">{!! $c[0]['body'] ?? '' !!}</div>
+            <div class="editor" data-input="{{ $c[0]['slug'] }}" data-name="tab[body][]" data-class="custom-tab-content">{!! $c[0]['body'] ?? '' !!}</div>
         </div>
         @endforeach
         @php
@@ -115,6 +114,6 @@
         }[key] || null;
     }
 </script>
-<script src="{{ mix('/js/components/quill.js') }}" defer></script>
+<script src="{{ mix('/js/components/ckeditor.js') }}" defer></script>
 <script src="{{ mix('/js/templates/admin/products/edit.js') }}" defer></script>
 @endpush
