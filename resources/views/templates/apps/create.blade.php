@@ -11,7 +11,7 @@
     <x-sidebar-accordion id="sidebar-accordion" active="/apps" :list="
     [ 'Manage' =>
         [
-            [ 'label' => 'Profile', 'link' => '/profile'],
+            [ 'label' => 'My profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
             [ 'label' => 'My teams', 'link' => '/teams'],
         ],
@@ -65,8 +65,9 @@
                 </div>
 
                 <div class="group group-info">
-                    <label for="url">Callback url @svg('info-icon', '#a5a5a5')</label>
+                    <label for="url">Callback url @svg('info-icon', '#a5a5a5')<small class="tooltip">The callback URL typically specifies the URL of an app that is designated to receive an authorization code on behalf of the client app. In addition, this URL string is used for validation.</small></label>
                     <input type="url" name="url" id="url" placeholder="Enter callback url (eg. https://callback.com)">
+                    <small>A callback URL is required only for 3-legged Oauth</small>
                 </div>
 
                 <div class="group group-info team-field">

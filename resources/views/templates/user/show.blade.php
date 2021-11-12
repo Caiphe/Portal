@@ -14,7 +14,7 @@ Update profile
         [
             'MANAGE' =>
             [
-                [ 'label' => 'Profile', 'link' => '/profile'],
+                [ 'label' => 'My profile', 'link' => '/profile'],
                 [ 'label' => '2FA', 'link' => '#twofa'],
                 [ 'label' => 'My apps', 'link' => '/apps'],
                 [ 'label' => 'My teams', 'link' => '/teams'],
@@ -29,7 +29,7 @@ Update profile
 @endsection
 
 @section("content")
-    <x-heading heading="Profile"/>
+    <x-heading heading="My profile"/>
 
     <!--- Add team invite banner -->
 
