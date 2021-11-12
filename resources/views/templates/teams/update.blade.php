@@ -86,7 +86,7 @@
             </div> --}}
 
             <div class="group">
-                <label for="description">Company description</label>
+                <label for="description">Team description</label>
                 <textarea name="description" id="description" placeholder="Write a short description about your team" >{{ $team->description }}</textarea>
             </div>
 

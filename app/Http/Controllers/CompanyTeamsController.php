@@ -274,6 +274,7 @@ class CompanyTeamsController extends Controller
      */
     public function store(TeamRequest $request)
     {
+        return $request->all();
         $user = $request->user();
         $data = $request->validated();
 

@@ -217,7 +217,7 @@ My team
         </div>
 
         <div class="detail-row cols no-wrap">
-            <div class="detail-item"><strong>Company URL</strong></div>
+            <div class="detail-item"><strong>Team URL</strong></div>
             <div class="detail-item detail-item-description">{{ $team->url }}</div>
         </div>
 
