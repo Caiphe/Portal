@@ -11,7 +11,7 @@
     <x-sidebar-accordion id="sidebar-accordion" active="/apps" :list="
     [ 'Manage' =>
         [
-            [ 'label' => 'Profile', 'link' => '/profile'],
+            [ 'label' => 'My profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
             [ 'label' => 'My teams', 'link' => '/teams'],
         ],

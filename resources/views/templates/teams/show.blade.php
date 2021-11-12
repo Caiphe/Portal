@@ -8,7 +8,7 @@
 <x-sidebar-accordion id="sidebar-accordion" active="/teams" :list="
     [ 'Manage' =>
         [
-            [ 'label' => 'Profile', 'link' => '/profile'],
+            [ 'label' => 'My profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
             [ 'label' => 'My teams', 'link' => '/teams']
         ],
@@ -203,7 +203,7 @@ My team
             <h2 class="team-name">{{ $team->name }} </h2>
         </div>
 
-        @if ($team->users->count() > 0 && $isOwner)
+        @if ($team->users->count() > 1 && $isOwner)
             <button class="btn dark make-owner">Select a new owner</button>
         @endif
     </div>
