@@ -33,7 +33,7 @@ class Request extends FormRequest
             'url' => 'required',
             'contact' => 'required',
             'country' => 'required',
-            'logo_file' => 'required|file',
+            'logo_file' => 'required|file|max:5120|dimensions:max_width=2000,max_height=2000',
             'team_members' => 'sometimes',
             'description' => 'required',
         ];
@@ -53,5 +53,13 @@ class Request extends FormRequest
             'country' => filter_var($this->country, FILTER_SANITIZE_STRING),
             'description' => filter_var($this->description, FILTER_SANITIZE_STRING),
         ]);
+    }
+
+    public function messages()
+    {
+        return [
+            'logo_file.max' => 'The logo file size is more than the allowed 5MB limit',
+            'logo_file.dimensions' => 'The logo dimentions are too large, please make sure the width and height are less than 2000'
+        ];
     }
 }

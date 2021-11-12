@@ -22,7 +22,6 @@ use DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Http\Request;
 
 class AppController extends Controller
 {
@@ -158,7 +157,7 @@ class AppController extends Controller
                     ]
                 ]
             );
-            return redirect()->back()->with('alert', "error:{$responseMsgs}");
+            return redirect()->back()->with('alert', "error:{$reasonMsg}");
         }
 
         $attributes = ApigeeService::getAppAttributes($createdResponse['attributes']);
@@ -408,7 +407,7 @@ class AppController extends Controller
                     ]
                 );
 
-            return redirect()->route('app.index')->with('alert', "error:{$responseMsgs}");
+            return redirect()->route('app.index')->with('alert', "error:{$reasonMsg}");
         }
 
         $app->update([
@@ -628,7 +627,7 @@ class AppController extends Controller
                     ]
                 ]
             );
-            return [ 'success' => false, 'message' => $responseMsgs ];
+            return [ 'success' => false, 'message' => $reasonMsg ];
         }
 
         $resp = $resp->json();

@@ -84,7 +84,7 @@ class UserController extends Controller
         return view(
             'templates.admin.users.create',
             [
-                'roles' => Role::all(),
+                'roles' => Role::where('name', 'not like', 'team%')->get(),
                 'countries' => Country::orderBy('name')->get(),
                 'groups' => $groups
             ]
@@ -154,7 +154,7 @@ class UserController extends Controller
         return view('templates.admin.users.edit', [
             'selectedCountryFilter' => $countrySelectFilterCode,
             'countries' => Country::orderBy('name')->get(),
-            'roles' => Role::all(),
+            'roles' => Role::where('name', 'not like', 'team%')->get(),
             'groups' => $groups,
             'user' => $user,
             'order' => $order,
@@ -197,7 +197,7 @@ class UserController extends Controller
             $user->roles()->sync($data['roles']);
         }
 
-        if (!$request->has('country')) {
+        if ($request->has('country')) {
             $user->countries()->sync([$data['country']]);
         }
 
