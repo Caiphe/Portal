@@ -84,7 +84,7 @@ class UserController extends Controller
         return view(
             'templates.admin.users.create',
             [
-                'roles' => Role::all(),
+                'roles' => Role::where('name', 'not like', 'team%')->get(),
                 'countries' => Country::orderBy('name')->get(),
                 'groups' => $groups
             ]
@@ -133,9 +133,7 @@ class UserController extends Controller
     public function edit(Request $request, User $user)
     {
         $countrySelectFilterCode = $request->get('country-filter', 'all');
-
         $order = 'desc';
-
         $defaultSortQuery = array_diff_key($request->query(), ['sort' => true, 'order' => true]);
 
         if (!empty($defaultSortQuery)) {
@@ -148,6 +146,7 @@ class UserController extends Controller
             $order = ['asc' => 'desc', 'desc' => 'asc'][$request->get('order', 'desc')] ?? 'desc';
         }
 
+        $currentUser = $request->user();
         $user->load('roles', 'countries', 'responsibleCountries', 'responsibleGroups');
         $groups = Product::select('group')->where('group', '!=', 'Partner')->where('group', '!=', 'MTN')->groupBy('group')->get()->pluck('group', 'group');
         $groups = array_merge(['MTN' => 'General'], $groups->toArray());
@@ -155,12 +154,19 @@ class UserController extends Controller
         return view('templates.admin.users.edit', [
             'selectedCountryFilter' => $countrySelectFilterCode,
             'countries' => Country::orderBy('name')->get(),
-            'roles' => Role::all(),
+            'roles' => Role::where('name', 'not like', 'team%')->get(),
             'groups' => $groups,
             'user' => $user,
             'order' => $order,
             'defaultSortQuery' => $defaultSortQuery,
-            'sort' => $request->get('sort', 'name'),
+            'userRoleIds' => isset($user) ? $user->roles->pluck('id')->toArray() : [],
+            'userCountryCode' => $user->countries[0]->pivot->country_code ?? 0,
+            'userResponsibleCountries' => isset($currentUser) ? $currentUser->responsibleCountries()->pluck('code')->toArray() : [],
+            'userResponsibleGroups' => isset($currentUser) ? $currentUser->responsibleGroups()->pluck('group')->toArray() : [],
+            'currentUser' => $currentUser,
+            'isAdminUser' => $currentUser->hasRole('admin'),
+            'duplicateCountries' => [],
+            'userApps' => $user->getApps($countrySelectFilterCode, $order, $request->get('sort', 'name')),
         ]);
     }
 
@@ -191,7 +197,7 @@ class UserController extends Controller
             $user->roles()->sync($data['roles']);
         }
 
-        if (!$request->has('country')) {
+        if ($request->has('country')) {
             $user->countries()->sync([$data['country']]);
         }
 

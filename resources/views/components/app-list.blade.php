@@ -123,15 +123,68 @@
         @endif
 
         @if(!empty($sandboxProducts))
+        <div class="mt-2 sandbox-container">
+
+            <div class="detail-left">
+               
+                <div class="detail-row cols no-wrap">
+                    <div class="detail-item"><strong>Sandbox key</strong></div>
+                    <div class="detail-item key">{{ $sandboxProducts['credentials']['consumerKey'] }}</div>
+                    <button class="copy copy-btn" data-reference="{{$app['aid']}}" data-type="consumerKey-sandbox">
+                        @svg('copy', '#000000')
+                        @svg('loading', '#000000')
+                        @svg('clipboard', '#000000')
+                    </button>
+                </div>
+
+                <div class="detail-row cols no-wrap">
+                    <div class="detail-item"><strong>Sandbox secret</strong></div>
+                    <div class="detail-item key">{{ $sandboxProducts['credentials']['consumerSecret'] }}</div>
+                    <button class="copy copy-btn" data-reference="{{$app['aid']}}" data-type="consumerSecret-sandbox">
+                        @svg('copy', '#000000')
+                        @svg('loading', '#000000')
+                        @svg('clipboard', '#000000')
+                    </button>
+                </div>
+
+                <div class="detail-row details-row-container">
+                    <div class="detail-item"><strong>Description:</strong></div>
+                    <div class="detail-item detail-item-description">{{ $app['description'] ?: 'No description' }}</div>
+                </div>
+            </div>
+            <div class="detail-right">
+               
+                <div class="detail-row cols">
+                    <div class="detail-item"><strong>Key issued:</strong></div>
+                    <div class="detail-item">{{ date('d M Y H:i:s', substr($sandboxProducts['credentials']['issuedAt'], 0, 10)) }}</div>
+                </div>
+
+                <div class="detail-row cols">
+                    <div class="detail-item"><strong>Expires:</strong></div>
+                    <div class="detail-item">Never</div>
+                </div>
+            </div>
+        </div>
+
+
         @if(!$isAdminPage)
         <div class="products-title">
             <strong>Products</strong>
+            <form class="ml-1" action="{{ route('app.credentials.request-renew', ['app' => $app, 'type' => 'sandbox']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
+                @csrf
+                <button class="outline small">Renew credentials</button>
+            </form>
         </div>
         @else
         <div class="products-title">
             <strong>Products</strong>
+            <form class="ml-1" action="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'sandbox']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
+                @csrf
+                <button class="outline small">Renew credentials</button>
+            </form>
         </div>
         @endif
+
         <div class="products">
             <x-apps.products :app="$app" :products="$sandboxProducts['products']" for="staging" />
         </div>
@@ -200,15 +253,28 @@
         </div>
         @endif
         <div class="detail-right"></div>
+
+
         @if(!$isAdminPage)
         <div class="products-title">
             <strong>Production products</strong>
+            <form class="ml-1" action="{{ route('app.credentials.request-renew', ['app' => $app, 'type' => 'production']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
+                @csrf
+                {{--- Please do not remove this button  --}}
+                <button class="outline small" href="">Renew credentials</button>
+            </form>
         </div>
         @else
         <div class="products-title">
             <strong>Production products</strong>
+            <form class="ml-1" action="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'production']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
+                @csrf
+                {{--- Please do not remove this button  --}}
+                <button class="outline small" href="">Renew credentials</button>
+            </form>
         </div>
         @endif
+
         <div class="products production-products kyc-status-{{ Str::slug($app->kyc_status ?? 'none') }}">
             <x-apps.products :app="$app" :products="$prodProducts['products']" for="production" />
         </div>
@@ -231,6 +297,7 @@
         </div>
         @endif
     </div>
+
     <nav class="menu">
         @if($isAdminPage)
             @can('administer-dashboard')

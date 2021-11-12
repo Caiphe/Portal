@@ -8,9 +8,9 @@
 <x-sidebar-accordion id="sidebar-accordion" active="/teams" :list="
     [ 'Manage' =>
         [
-            [ 'label' => 'Profile', 'link' => '/profile'],
+            [ 'label' => 'My profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
-            [ 'label' => 'Teams', 'link' => '/teams']
+            [ 'label' => 'My teams', 'link' => '/teams']
         ],
         'Discover' =>
         [
@@ -22,11 +22,11 @@
 @endsection
 
 @section('title')
-Team
+My team
 @endsection
 
 @section('content')
-<x-heading heading="Team" tags="Dashboard">
+<x-heading heading="My team" tags="Dashboard">
     @if($isAdmin)
         <a href="{{ route('teams.edit', $team->id) }}" class="button dark outline">Edit team profile</a>
     @endif
@@ -200,10 +200,10 @@ Team
         {{-- To replace with the team profile picture --}}
         <div class="team-name-logo-container">
             <div class="team-logo"  style="background-image: url({{ $team['logo'] }})"></div>
-            <h2>{{ $team->name }} </h2>
+            <h2 class="team-name">{{ $team->name }} </h2>
         </div>
 
-        @if ($team->users->count() > 0 && $isOwner)
+        @if ($team->users->count() > 1 && $isOwner)
             <button class="btn dark make-owner">Select a new owner</button>
         @endif
     </div>
@@ -217,7 +217,7 @@ Team
         </div>
 
         <div class="detail-row cols no-wrap">
-            <div class="detail-item"><strong>Company URL</strong></div>
+            <div class="detail-item"><strong>Team URL</strong></div>
             <div class="detail-item detail-item-description">{{ $team->url }}</div>
         </div>
 
@@ -347,6 +347,17 @@ Team
                     </div>
                 </div>
 
+        </div>
+    @elseif ($user->isOwnerOfTeam($team))
+        <div class="transfer-ownership-container" id="transfer-ownership">
+            <div class="transfer-owner-ship-heading">
+                <h2>Transfer ownership</h2>
+            </div>
+
+            <div class="trasfer-container">
+                <h4>Transfer requests</h4>
+                <div class="site-text">A transfer request must be accepted by the team member before the team ownership is confirmed.</div>
+            </div>
         </div>
     @endif
 

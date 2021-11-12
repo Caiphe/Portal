@@ -1,15 +1,20 @@
 var invitationInput = document.querySelector('.invitation-field');
 var inviteBtn = document.querySelector('.invite-btn');
-var errorMsg = document.querySelector('.error-email');
 var closeTagBtnn = document.querySelector('.close-tag');
 var teamForm = document.querySelector('#form-create-team');
-var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 var tagList = [];
+var timer = null;
 
-invitationInput.addEventListener('input', invitationIsValid);
+invitationInput.addEventListener('input', function () {
+    clearTimeout(timer);
+    timer = setTimeout(invitationEmailCheck, 1000);
+});
 
-function invitationIsValid() {
-    if (this.value.match(mailformat)) {
+function invitationEmailCheck() {
+    var mailformat = /^[\w\.\-\+]+@[\w\.\-]+\.[a-z]{2,5}$/;
+    var errorMsg = document.querySelector('.error-email');
+
+    if (invitationInput.value.match(mailformat)) {
         inviteBtn.classList.add('active');
         errorMsg.classList.remove('show');
 
@@ -74,17 +79,13 @@ var fileName = document.querySelector('.upload-file-name');
 var fileBtn = document.querySelector('.logo-add-icon');
 
 logoFile.addEventListener('change', chooseTeamPicture);
-function chooseTeamPicture() {
+async function chooseTeamPicture() {
     var newFile = this.files[0].name.split('.');
     var extension = newFile[1];
-    var filename = ''
-    if (newFile[0].length > 20) { filename = newFile[0].substr(0, 20) + '...' + extension; }
-    else { filename = newFile[0] + '.' + extension; }
-    fileName.innerHTML = filename
-    fileBtn.classList.add('active');
-
+    var filename = newFile[0].length > 20 ? newFile[0].substr(0, 20) + '...' + extension : newFile[0] + '.' + extension;
     var files = this.files;
     var inputAccepts = this.getAttribute("accept");
+    var imageDimentions = {};
     var allowedTypes = {
         "image/*": [
             "image/jpeg",
@@ -94,14 +95,42 @@ function chooseTeamPicture() {
     }
 
     if (files.length > 1) {
-        return void alert("You can only add one profile picture");
+        return void addAlert("error", "You can only add one profile picture");
     }
 
-    if (allowedTypes[inputAccepts] !== undefined && allowedTypes[inputAccepts].indexOf(files[0].type) !== -1) {
-
-    } else {
-        addAlert("error", "The type of image you have chosen isn't supported. Please choose a jpg or png to upload");
+    if (files[0].size > 5242880) {
+        return void addAlert("error", "Max file size is 5MB");
     }
+
+    await getImageDimentions(files[0]).then((dim) => imageDimentions = dim);
+    if (imageDimentions.width > 2000 || imageDimentions.height > 2000) {
+        return void addAlert("error", "The width and height have a max size of 2000");
+    }
+
+    if (!(allowedTypes[inputAccepts] !== undefined && allowedTypes[inputAccepts].indexOf(files[0].type) !== -1)) {
+        return void addAlert("error", "The type of image you have chosen isn't supported. Please choose a jpg or png to upload");
+    }
+
+    fileName.innerHTML = filename
+    fileBtn.classList.add('active');
+}
+
+function getImageDimentions(image) {
+    return new Promise(function (resolve) {
+        var fr = new FileReader;
+
+        fr.onload = function () {
+            var img = new Image;
+
+            img.onload = function () {
+                resolve({ width: img.width, height: img.height });
+            };
+
+            img.src = fr.result;
+        };
+
+        fr.readAsDataURL(image); 
+    });
 }
 
 var btnAcceptInvite = document.querySelector('.accept-team-invite');

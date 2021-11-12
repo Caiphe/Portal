@@ -9,9 +9,9 @@
     <x-sidebar-accordion id="sidebar-accordion" active="/teams" :list="
     [ 'Manage' =>
         [
-            [ 'label' => 'Profile', 'link' => '/profile'],
+            [ 'label' => 'My profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
-            [ 'label' => 'Teams', 'link' => '/teams']
+            [ 'label' => 'My teams', 'link' => '/teams']
         ],
         'Discover' =>
         [
@@ -23,7 +23,7 @@
 @endsection
 
 @section('title')
-    Update Team
+    Update team
 @endsection
 
 @section('content')
@@ -34,13 +34,17 @@
 
     <div class="content">
 
+        <div class="content-header mt-40">
+            <h2>Team Profile</h2>
+        </div>
+
         <form id="form-create-team" method="POST" action="{{ route('teams.update', $team->id) }}" enctype="multipart/form-data">
             @method('put')
             @csrf
 
             <div class="group">
-                <label for="name">Name your team</label>
-                <input type="text" name="name" id="name" placeholder="Enter team name" maxlength="100" value="{{ $team->name }}" required>
+                <label for="name">Enter team Name </label>
+                <input type="text" name="name" value="{{ old('name') }}" id="team-name" class="form-field" placeholder="Enter team name" maxlength="100" required autofocus>
             </div>
 
             <div class="group">
@@ -50,7 +54,7 @@
 
             <div class="group">
                 <label for="contact">Enter team contact number</label>
-                <input type="text" name="contact" id="contact" placeholder="Enter team contact number" maxlength="100" value="{{ $team->contact }}"  required>
+                <input type="text" name="contact" id="contact" placeholder="Enter team contact number" maxlength="15" value="{{ $team->contact }}"  required>
             </div>
 
             <div class="group countries">
@@ -82,13 +86,13 @@
             </div> --}}
 
             <div class="group">
-                <label for="description">Company description</label>
+                <label for="description">Team description</label>
                 <textarea name="description" id="description" placeholder="Write a short description about your team" >{{ $team->description }}</textarea>
             </div>
 
             <div class="form-actions">
                 <button class="dark next " id="create">
-                    UPDATE TEAM @svg('arrow-forward', '#ffffff')
+                    SAVE & SUBMIT @svg('arrow-forward', '#ffffff')
                 </button>
             </div>
         </form>

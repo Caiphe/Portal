@@ -19,9 +19,9 @@ use App\Services\ApigeeService;
 use App\Services\Kyc\KycService;
 use App\Services\ProductLocationService;
 use DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Http\Request;
 
 class AppController extends Controller
 {
@@ -33,7 +33,7 @@ class AppController extends Controller
             'email' => $user->email,
             'type' => 'ownership'
         ])->first();
-        
+
         $teamInvite = DB::table('team_invites')->where([
             'email' => $user->email,
             'type' => 'invite'
@@ -42,6 +42,11 @@ class AppController extends Controller
         $team = null;
         if ( $teamInvite ) {
             $team = Team::find($teamInvite->team_id);
+        }
+
+        $ownershipTeam = null;
+        if ( $ownershipInvite ) {
+            $ownershipTeam = Team::find($ownershipInvite->team_id);
         }
 
         $apps = App::with(['products.countries', 'country', 'developer'])
@@ -54,6 +59,7 @@ class AppController extends Controller
             'approvedApps' => $apps['approved'] ?? [],
             'revokedApps' => $apps['revoked'] ?? [],
             'ownershipInvite' => $ownershipInvite,
+            'ownershipTeam' => $ownershipTeam ?? null,
             'teamInvite' => $teamInvite,
             'team' => $team,
         ]);
@@ -79,16 +85,21 @@ class AppController extends Controller
     {
         $validated = $request->validated();
         $countriesByCode = Country::pluck('iso', 'code');
-        $products = Product::whereIn('name', $request->products)->pluck('attributes', 'name');
+        $products = Product::whereIn('name', $validated['products'])->pluck('attributes', 'name');
         $productIds = [];
         $attr = [];
+
         foreach ($products as $name => $attributes) {
             $attr = json_decode($attributes, true);
             $productIds[] = $attr['SandboxProduct'] ?? $name;
         }
 
+        if (count($productIds) !== count($validated['products'])) {
+            return response()->json(['success' => false, 'message' => 'There was a problem finding your product(s). Please try again'], 417);
+        }
+
         $teamExists = false;
-        if ($validated['team_id']) {
+        if (isset($validated['team_id']) && $validated['team_id']) {
             $team = Team::find($validated['team_id']);
             $teamExists = $team->exists;
         }
@@ -134,6 +145,19 @@ class AppController extends Controller
 
         if (strpos($createdResponse, 'duplicate key') !== false) {
             return response()->json(['success' => false, 'message' => 'There is already an app with that name.'], 409);
+        }
+
+        if ( $createdResponse->failed() ) {
+            $responseMsg = $createdResponse->toException()->getMessage();
+            $reasonMsg = $createdResponse->toPsrResponse()->getReasonPhrase();
+
+            Log::channel('apigee')->warning($responseMsg, [
+                    'context' => [
+                        'reason' => $reasonMsg,
+                    ]
+                ]
+            );
+            return redirect()->back()->with('alert', "error:{$reasonMsg}");
         }
 
         $attributes = ApigeeService::getAppAttributes($createdResponse['attributes']);
@@ -260,7 +284,14 @@ class AppController extends Controller
 
         if (empty($key)) {
             if ($request->ajax()) {
-                return response()->json(['message' => 'Could not find the Consumer Key. Please contact us if this happens again'], 500);
+                $reasonMsg = 'Could not find the Consumer Key. Please contact us if this happens again';
+                Log::channel('apigee')->warning('Failed locating App consumer Key(s)', [
+                        'context' => [
+                            'reason' => $reasonMsg,
+                        ]
+                    ]
+                );
+                return response()->json(['message' => $reasonMsg], 500);
             }
 
             return redirect()->route('app.index')->with('alert', 'error:Could not find the Consumer Key. Please contact us if this happens again');
@@ -365,8 +396,18 @@ class AppController extends Controller
 
         $updatedApp = ApigeeService::renewCredentials(auth()->user(), $app, $consumerKey);
 
-        if ($updatedApp->status() !== 200) {
-            return redirect()->route('app.index')->with('alert', 'error:Sorry there was an error renewing the credentials');
+        if ( $updatedApp->failed() ) {
+                $responseMsg = $updatedApp->toException()->getMessage();
+                $reasonMsg = $updatedApp->toPsrResponse()->getReasonPhrase();
+
+                Log::channel('apigee')->warning($responseMsg, [
+                        'context' => [
+                            'reason' => $reasonMsg,
+                        ]
+                    ]
+                );
+
+            return redirect()->route('app.index')->with('alert', "error:{$reasonMsg}");
         }
 
         $app->update([
@@ -399,6 +440,12 @@ class AppController extends Controller
             $resp = $this->addNewCredentials($app);
 
             if (!$resp['success']) {
+                Log::channel('apigee')->warning('Could not add new credentials.', [
+                        'context' => [
+                            'reason' => $resp['message'],
+                        ]
+                    ]
+                );
                 return redirect()->back()->with('alert', "error:{$resp['message']}");
             }
 
@@ -491,6 +538,12 @@ class AppController extends Controller
         $resp = $this->addNewCredentials($app);
 
         if (!$resp['success']) {
+            Log::channel('apigee')->warning('Could not add new credentials.', [
+                    'context' => [
+                        'reason' => $resp['message'],
+                    ]
+                ]
+            );
             return redirect()->back()->with('alert', "error:{$resp['message']}");
         }
 
@@ -561,15 +614,23 @@ class AppController extends Controller
                 ],
             ]
         ];
+
         $resp = ApigeeService::updateAppWithNewCredentials($data);
-        $status = $resp->status();
-        $resp = $resp->json();
-        if ($status !== 200 && $status !== 201) {
-            return [
-                'success' => false,
-                'message' => $resp['message']
-            ];
+
+        if ( $resp->failed() ) {
+            $responseMsg = $resp->toException()->getMessage();
+            $reasonMsg = $resp->toPsrResponse()->getReasonPhrase();
+
+            Log::channel('apigee')->warning($responseMsg, [
+                    'context' => [
+                        'reason' => $reasonMsg,
+                    ]
+                ]
+            );
+            return [ 'success' => false, 'message' => $reasonMsg ];
         }
+
+        $resp = $resp->json();
 
         $app->update([
             'attributes' => $data['attributes'],

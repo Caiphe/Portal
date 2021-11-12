@@ -11,9 +11,9 @@
     <x-sidebar-accordion id="sidebar-accordion" active="/apps" :list="
     [ 'Manage' =>
         [
-            [ 'label' => 'Profile', 'link' => '/profile'],
+            [ 'label' => 'My profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
-            [ 'label' => 'Teams', 'link' => '/teams'],
+            [ 'label' => 'My teams', 'link' => '/teams'],
         ],
         'Discover' =>
         [
@@ -25,7 +25,7 @@
 @endsection
 
 @section('title')
-    Apps
+    My apps
 @endsection
 
 @section('content')
@@ -35,13 +35,13 @@
         @svg('info', '#fff')
         <div class="message-container">
             {{-- The link to be changed to dynamic --}}
-            You have been requested to be the new owner of PlusNarrative. Please visit your <a href="/teams/{{ $ownershipInvite->team_id }}/team">team's dashboard</a>
+            You have been requested to be the new owner of {{ $ownershipTeam->name }}. Please visit your <a href="/teams/{{ $ownershipInvite->team_id }}/team">team's dashboard</a>
         </div>
         <button class="close-banner">@svg('close', '#fff')</button>
     </div>
     @endif
 
-    <x-heading heading="Apps" tags="DASHBOARD">
+    <x-heading heading="My apps" tags="DASHBOARD">
         <a href="{{route('app.create')}}" class="button outline dark create-new" id="create"></a>
     </x-heading>
 
@@ -346,7 +346,7 @@
                 handleTimeInvite('/teams/accept', data, event);
             });
         }
-       
+
         var btnRejectInvite =  document.querySelector('.reject-team-invite')
         if(btnRejectInvite){
             btnRejectInvite.addEventListener('click', function (event){
@@ -357,7 +357,7 @@
             handleTimeInvite('/teams/reject', data, event);
             });
         }
-      
+
         function handleTimeInvite(url, data, event) {
             var xhr = new XMLHttpRequest();
 

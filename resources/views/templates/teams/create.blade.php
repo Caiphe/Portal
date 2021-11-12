@@ -12,9 +12,9 @@
     <x-sidebar-accordion id="sidebar-accordion" active="/teams" :list="
     [ 'Manage' =>
         [
-            [ 'label' => 'Profile', 'link' => '/profile'],
+            [ 'label' => 'My profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
-            [ 'label' => 'Teams', 'link' => '/teams']
+            [ 'label' => 'My teams', 'link' => '/teams']
         ],
         'Discover' =>
         [
@@ -26,7 +26,7 @@
 @endsection
 
 @section('title')
-   Create Team
+   Create team
 @endsection
 
 @section('content')
@@ -52,12 +52,12 @@
     <div class="content">
 
         <div class="content-header mt-40">
-            @if($user->teams)
+            @if(!$user->ownedTeams->isEmpty())
                 <h2>Create a New Team!</h2>
             @else
                 <h2>It looks like you don't have any teams yet!</h2>
+                <p>Fortunately, it's very easy to create one. Let's begin by filling out your teams details.</p>
             @endif
-            <p>Fortunately, it's very easy to create one. Let's begin by filling out your teams details.</p>
         </div>
 
         <form id="form-create-team" method="POST" action="{{ route('teams.store') }}" enctype="multipart/form-data" novalidate>
@@ -76,7 +76,7 @@
 
             <div class="group">
                 <label for="contact">Enter team contact number</label>
-                <input type="text" name="contact" value="{{ old('contact') }}" id="team-contact" placeholder="Enter team contact number" maxlength="100" required>
+                <input type="text" name="contact" value="{{ old('contact') }}" id="team-contact" placeholder="Enter team contact number" maxlength="15" required>
             </div>
 
             <div class="group countries">
@@ -94,23 +94,24 @@
 
             <div class="group">
                 <label for="lfile-input">Upload team logo</label>
-                <label for="file-input" class="logo-file-container">
+                <label for="file-input" class="logo-file-container mb-0">
                     <span class="upload-file-name">Upload team logo</span>
                     <input type="file" name="logo_file" class="logo-file" id="logo-file" placeholder="Upload team logo" maxlength="100"  accept="image/*" required>
                     <button type="button" class="logo-add-icon">@svg('plus', '#fff')</button>
                 </label>
+                <small class="mb-3">*Max 5MB file size and Max Width of 2000 and Max Height of 2000.</small>
             </div>
 
             <div class="group">
                 <label for="invitations">Invite colleagues or other users</label>
-                <input type="email" class="invitation-field" name="invitations" id="invitations" placeholder="Add email to invite other users" maxlength="100" required autocomplete="off">
+                <input type="email" class="invitation-field" name="invitations" id="invitations" placeholder="Add one email at a time." maxlength="100" required autocomplete="off">
                 <button class="invite-btn" type="button">INVITE</button>
                 <span class="error-email">Valid Email required !</span>
                 <div class="invite-tags" id="invite-list"></div>
             </div>
 
             <div class="group">
-                <label for="description">Company description</label>
+                <label for="description">Team description</label>
                 <textarea name="description" id="description" placeholder="Write a short description about your team">{{ old('description') }}</textarea>
             </div>
 

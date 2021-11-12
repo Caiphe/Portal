@@ -8,9 +8,9 @@
     <x-sidebar-accordion id="sidebar-accordion" active="/teams" :list="
     [ 'Manage' =>
         [
-            [ 'label' => 'Profile', 'link' => '/profile'],
+            [ 'label' => 'My profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
-            [ 'label' => 'Teams', 'link' => '/teams']
+            [ 'label' => 'My teams', 'link' => '/teams']
         ],
         'Discover' =>
         [
@@ -51,7 +51,7 @@
             <button class="close-modal">@svg('close-popup', '#000')</button>
 
             <h2 class="team-head">Leave team</h2>
-            <p class="teammate-text">Are you sure you want to leave this company?</p>
+            <p class="teammate-text">Are you sure you want to leave this team?</p>
             <p class="app-name team-name mb-20"></p>
             <form class="form-team-leave">
                 <input type="hidden" value="" name="team_id" class="hidden-team-id"/>
@@ -76,7 +76,7 @@
                     </tr>
                     @foreach($teams as $team)
                         <tr class="team-app-list">
-                            <td class="company-logo-name">
+                            <td class="company-logo-name word-wrap-text">
                                 <div class="company-logo" style="background-image: url({{ $team->logo }})"></div>
                                 <a class="company-name-a bold" href="{{route('team.show', [ 'id' => $team->id ])}}">{{ $team->name }}</a>
                             </td>
@@ -114,7 +114,7 @@
         var hiddenTeamId = document.querySelector('.hidden-team-id');
         var hiddenTeamUserId = document.querySelector('.hidden-team-user-id');
 
-      
+
         for (var i = 0; i < leaveTeamBtn.length; i++) {
             leaveTeamBtn[i].addEventListener('click', showLeaveTeamModal);
         }
@@ -155,7 +155,7 @@
             xhr.setRequestHeader("X-CSRF-TOKEN",
                 document.getElementsByName("csrf-token")[0].content
             );
-            
+
             xhr.send(JSON.stringify(data));
 
             xhr.onload = function() {
@@ -187,7 +187,7 @@
 
         var btnAcceptInvite = document.querySelector('.accept-team-invite');
         if(btnAcceptInvite){
-           
+
             btnAcceptInvite.addEventListener('click', function (event){
                 var data = {
                     token: this.dataset.invitetoken,
@@ -207,7 +207,7 @@
                 handleInvite('/teams/reject', data, event);
             });
         }
-    
+
 
         function handleInvite(url, data, event) {
             var xhr = new XMLHttpRequest();
@@ -234,7 +234,7 @@
                     } else {
                        addAlert('success', ["Thanks, for your response", "The page will refresh shortly"], function(){
                             window.location.reload();
-                        }); 
+                        });
                     }
                 } else {
                     var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;

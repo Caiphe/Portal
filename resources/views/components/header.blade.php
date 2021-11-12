@@ -45,9 +45,9 @@
             <div id="profile-menu" class="hidden">
                 <div id="profile-menu-picture" class="hidden" style="background-image: url({{\Auth::user()->profile_picture}})"></div>
                 <ul class="profile-menu-options shadow">
-                    <li><a href="{{ route('user.profile') }}">Profile</a></li>
-                    <li><a href="{{ route('app.store') }}">Apps</a></li>
-                    <li><a href="{{ route('teams.listing') }}">Teams</a></li>
+                    <li><a href="{{ route('user.profile') }}">My profile</a></li>
+                    <li><a href="{{ route('app.store') }}">My apps</a></li>
+                    <li><a href="{{ route('teams.listing') }}">My teams</a></li>
                     <li><form action="{{route('logout')}}" method="post">@csrf<button>Sign out</button></form></li>
                 </ul>
             </div>
@@ -78,11 +78,11 @@
             <a href="{{ route('app.create') }}">Build app</a>
         </li>
         <li>
-            <a href="{{ route('user.profile') }}">Profile</a></li>
+            <a href="{{ route('user.profile') }}">My profile</a></li>
         <li>
-            <a href="{{ route('app.store') }}">Apps</a>
+            <a href="{{ route('app.store') }}">My Apps</a>
         </li>
-            <li><a href="{{ route('teams.listing') }}">Teams</a></li>
+            <li><a href="{{ route('teams.listing') }}">My Teams</a></li>
         <li>
             <form action="{{route('logout')}}" method="post">@csrf<button>Sign out</button></form>
         </li>

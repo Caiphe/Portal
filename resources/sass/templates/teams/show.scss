@@ -183,7 +183,7 @@ button{
                         width: 0;
                     }
                   }
-                                    
+
                   .checkmark {
                     position: absolute;
                     top: 0;
@@ -198,17 +198,17 @@ button{
                   .container input:checked ~ .checkmark {
                     background-color: #000000;
                   }
-                  
+
                   .checkmark:after {
                     content: "";
                     position: absolute;
                     display: none;
                   }
-                  
+
                   .container input:checked ~ .checkmark:after {
                     display: block;
                   }
-                  
+
                   .container .checkmark:after {
                     left: 6px;
                     top: 1px;
@@ -767,6 +767,11 @@ button{
     width: 100%;
     position: relative;
 
+    .team-name {
+        word-break: break-word;
+        margin-right: 230px;
+    }
+
     .team-name-logo-container{
         display: flex;
     }
@@ -780,6 +785,7 @@ button{
         background-color: $red;
         border-radius: 50%;
         margin-right: 15px;
+        flex-shrink: 0;
 
         @media(max-width: 768px){
             margin-top: 7px;
@@ -788,9 +794,14 @@ button{
 
     h2{
         margin-top: 8px;
+        width: 70%;
+
+        @media(max-width: 960px){
+            width: 50%;
+        }
 
         @media(max-width: 768px){
-            width: 70%;
+            width: 80%;
         }
     }
 
@@ -985,97 +996,6 @@ button{
     margin-top: 40px;
 }
 
-// Top ownership container
-.top-ownership-banner{
-    width: 100%;
-    background-color: #0C678F;
-    margin-bottom: 30px;
-    display: flex;
-    position: relative;
-    transition: all 0.3s ease;
-    opacity: -1;
-    pointer-events: none;
-    z-index: 0;
-    padding: 0px;
-    height: 0px;
-
-    @media (max-width: 768px) {
-        display: block;
-    }
-
-    &.show{
-        height: 0px;
-        pointer-events: auto;
-        opacity: 4;
-        height: 75px;
-        z-index: 2;
-
-        @media(max-width: 768px){
-            height: auto;
-            padding: 12px;
-            text-align: center;
-
-            button{
-                margin-bottom: 10px;
-            }
-
-        }
-    }
-
-    .message-container{
-        color: #fff;
-        margin-top: 26px;
-        margin-left: 30px;
-
-        @media(max-width: 1290px){
-            margin-left: 0;
-            margin-top: 0px;
-            
-        }
-    }
-
-    .btn-block-container{
-        position: absolute;
-        width: 360px;
-        right: 20px;
-        top: 20px;
-        
-        @media(max-width: 1290px){
-            position: relative;
-            margin: 18px auto;
-            top: auto;
-            right: auto;
-        }
-
-        @media(max-width: 400px){
-            width: 177px;
-        }
-
-        .blue-button{
-            border: 2px solid #fff;
-            color: #fff;
-            background-color: transparent;
-            transition: all 0.3s ease;
-            width: 166px;
-
-            &:hover{
-                background-color: #fff;
-                color: #0C678F;
-                transition: all 0.3s ease;
-            }
-
-            &:nth-child(1){
-                margin-right: 10px;
-
-                @media(max-width: 400px){
-                    margin-right: 0;
-                    margin-bottom: 8px;
-                }
-            }
-        }
-    }
-}
-
 .transfer-ownership-container{
     position: relative;
     width: 100%;
@@ -1178,4 +1098,8 @@ button{
 }
 .mb-20{
     margin-bottom: 20px;
+}
+
+.word-wrap-text {
+    word-break: break-word;
 }
