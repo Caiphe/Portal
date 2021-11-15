@@ -263,6 +263,7 @@ class CompanyTeamsController extends Controller
             'userTeamInvite' => $user->getTeamInvite($team),
             'country' => Country::where('code', $team->country)->first(),
             'userTeamOwnershipInvite' => $user->getTeamInvite($team, 'ownership'),
+            'userTeamOwnershipRequest' => $user->getTeamOwernerRequest($team) ?: false,
             'isOwner' => $isOwner,
             'isAdmin' => $user->hasTeamRole($team, 'team_admin'),
             'order' => $order,

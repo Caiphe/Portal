@@ -17,7 +17,6 @@ var makeOwnershipBtn = document.querySelector('#make-owner-btn');
 var addTeamMobile;
 var addTeammateBtn;
 
-
 for (var i = 0; i < btnActions.length; i++) {
     btnActions[i].addEventListener('click', showUserAction);
 }
@@ -92,7 +91,6 @@ var adminModalShow = document.querySelectorAll('.make-admin');
 var ownershipModal = document.querySelector('.ownweship-modal-container');
 var ownershipModalShow = document.querySelector('.make-owner');
 
-
 var radiosList = document.querySelectorAll('input[name="transfer-ownership-check"]');
 for (var i = 0; i < radiosList.length; i++) {
     radiosList[i].addEventListener('click', checkedRadio);
@@ -119,9 +117,14 @@ if (revokeTransferBtn) {
 
 function hideTransferBanner() {
     var owneshipTransferBanner = document.querySelector('.top-ownership-banner');
+    var transferOwnership = document.getElementById('transfer-ownership');
 
     if (owneshipTransferBanner) {
         owneshipTransferBanner.classList.remove('show');
+    }
+
+    if (transferOwnership) {
+        transferOwnership.remove();
     }
 }
 
@@ -158,6 +161,7 @@ if (makeUserBtn) {
         handleMakeUserRole('/teams/' + data.team_id + '/user/role', data, event);
     })
 }
+
 function handleMakeUserRole(url, data, event) {
     var xhr = new XMLHttpRequest();
     var roleButton;
@@ -501,27 +505,27 @@ teamInviteUserBtn.addEventListener('click', function (event) {
     teamMateInvitEmail.value = "";
 });
 
-var btnAcceptOwnership = document.querySelector('.accept-team-ownership');
-if (btnAcceptOwnership) {
-    btnAcceptOwnership.addEventListener('click', function (event) {
-        var data = {
-            token: this.dataset.invitetoken,
-        };
-
-        handleAcceptOwnershipTransfer('/teams/accept', data, event);
-    });
+var btnAcceptOwnership = document.querySelectorAll('.accept-team-ownership');
+if (btnAcceptOwnership.length !== undefined && btnAcceptOwnership.length > 0) {
+    for (var i = btnAcceptOwnership.length - 1; i >= 0; i--) {
+        btnAcceptOwnership[i].addEventListener('click', function (event) {
+            handleAcceptOwnershipTransfer('/teams/accept', {
+                token: this.dataset.invitetoken,
+            }, event);
+        });
+    }
 }
 
 
-var btnRejectOwnership = document.querySelector('.reject-team-ownership');
-if (btnRejectOwnership) {
-    btnRejectOwnership.addEventListener('click', function (event) {
-        var data = {
-            token: this.dataset.invitetoken,
-        };
-
-        handleAcceptOwnershipTransfer('/teams/reject', data, event);
-    });
+var btnRejectOwnership = document.querySelectorAll('.reject-team-ownership');
+if (btnRejectOwnership.length !== undefined && btnRejectOwnership.length > 0) {
+    for (var i = btnRejectOwnership.length - 1; i >= 0; i--) {
+        btnRejectOwnership[i].addEventListener('click', function (event) {
+            handleAcceptOwnershipTransfer('/teams/reject', {
+                token: this.dataset.invitetoken,
+            }, event);
+        });
+    }
 }
 
 
