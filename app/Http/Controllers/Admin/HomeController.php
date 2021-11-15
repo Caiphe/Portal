@@ -27,7 +27,7 @@ class HomeController extends Controller
         }
 
         if(Gate::allows('administer-content')){
-            return redirect()->route('admin.content.index');
+            return redirect()->route('admin.faq.index');
         }
     }
 }
