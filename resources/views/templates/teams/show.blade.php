@@ -344,6 +344,17 @@ My team
             </div>
         </div>
     </div>
+    @elseif ($userTeamOwnershipRequest)
+    <div class="transfer-ownership-container" id="transfer-ownership">
+        <div class="transfer-owner-ship-heading">
+            <h2>Transfer ownership</h2>
+        </div>
+
+        <div class="trasfer-container">
+            <h4>Transfer requests sent</h4>
+            <div class="site-text">A transfer request must be accepted by the team member before the team ownership is confirmed.</div>
+        </div>
+    </div>
     @endif
 
     <div class="column" id="app-index">
