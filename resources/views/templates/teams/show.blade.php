@@ -313,52 +313,37 @@ My team
                         </td>
                     </tr>
                 @endforeach
-
             </table>
 
             @if ($user->hasTeamRole($team, 'team_admin'))
                 <button class="outline dark add-team-mate-btn-mobile">Add a teammate</button>
             @endif
-
         </div>
     </div>
 
     @if($userTeamOwnershipInvite && $userTeamOwnershipInvite->type === 'ownership' && !$user->isOwnerOfTeam($team))
-        {{---  Only show team transfer if team has members --}}
-        <div class="transfer-ownership-container" id="transfer-ownership">
-            {{-- Transfer ownership container --}}
-            <div class="transfer-owner-ship-heading">
-                <h2>Transfer ownership</h2>
-                {{-- You can add non-active to make--}}
-            </div>
-
-                {{-- Transfer request --}}
-
-                <div class="trasfer-container">
-                    <h4>Transfer requests</h4>
-                    <div class="site-text">You have been requested to be the new owner of this team. please choose if you would like to accept or revoke the request</div>
-                    <div class="site-text">You are not the owner of this team, you cannot modify ownership of this team </div>
-
-                    <div class="transfer-btn-block">
-                        {{--  Use the accept endpoint --}}
-                        <button type="button" class="btn dark dark-accept accept-team-ownership" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->accept_token : '' }}">Accept request</button>
-                        {{--  Use the revoke endpoint --}}
-                        <button type="button" class="btn dark dark-revoked reject-team-ownership" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->deny_token : '' }}">Revoke request</button>
-                    </div>
-                </div>
-
+    {{---  Only show team transfer if team has members --}}
+    <div class="transfer-ownership-container" id="transfer-ownership">
+        {{-- Transfer ownership container --}}
+        <div class="transfer-owner-ship-heading">
+            <h2>Transfer ownership</h2>
+            {{-- You can add non-active to make--}}
         </div>
-    @elseif ($user->isOwnerOfTeam($team))
-        <div class="transfer-ownership-container" id="transfer-ownership">
-            <div class="transfer-owner-ship-heading">
-                <h2>Transfer ownership</h2>
-            </div>
 
-            <div class="trasfer-container">
-                <h4>Transfer requests</h4>
-                <div class="site-text">A transfer request must be accepted by the team member before the team ownership is confirmed.</div>
+        {{-- Transfer request --}}
+        <div class="trasfer-container">
+            <h4>Transfer requests</h4>
+            <div class="site-text">You have been requested to be the new owner of this team. please choose if you would like to accept or revoke the request</div>
+            <div class="site-text">You are not the owner of this team, you cannot modify ownership of this team </div>
+
+            <div class="transfer-btn-block">
+                {{--  Use the accept endpoint --}}
+                <button type="button" class="btn dark dark-accept accept-team-ownership" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->accept_token : '' }}">Accept request</button>
+                {{--  Use the revoke endpoint --}}
+                <button type="button" class="btn dark dark-revoked reject-team-ownership" data-invitetoken="{{ $userTeamOwnershipInvite ? $userTeamOwnershipInvite->deny_token : '' }}">Revoke request</button>
             </div>
         </div>
+    </div>
     @endif
 
     <div class="column" id="app-index">
