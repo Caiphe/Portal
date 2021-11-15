@@ -30,12 +30,6 @@
         <div class="field-container wrap">
             <label class="control-label">Countries of operation</label>
             <x-multiselect id="country" name="country" label="Select country" :options="$countries->pluck('name', 'code')->toArray()" :selected="$userCountryCodes"/>
-            {{-- <select name="country" autocomplete="off">
-                <option value="">Select country</option>
-                @foreach($countries as $country)
-                    <option @if($userCountryCode === $country->code) selected @endif value="{{ $country->code }}">{{ $country->name }}</option>
-                @endforeach
-            </select> --}}
         </div>
 
     </div>
