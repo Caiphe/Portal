@@ -52,7 +52,7 @@ class UserRequest extends FormRequest
             'first_name' => filter_var($this->first_name, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'last_name' => filter_var($this->last_name, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'email' => filter_var($this->email, FILTER_SANITIZE_EMAIL),
-            'locations' => array_map(fn ($location) => filter_var($location, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES), $this->locations),
+            'locations' => array_map(fn ($location) => filter_var($location, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES), $this->locations ?? []),
         ]);
     }
 }
