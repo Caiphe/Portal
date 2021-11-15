@@ -10,8 +10,9 @@
         <div id="profile-menu">
             <div id="profile-menu-picture" style="background-image: url({{\Auth::user()->profile_picture}})"></div>
             <ul class="profile-menu-options shadow">
-                <li><a href="/profile">Profile</a></li>
-                <li><a href="/apps">My Apps</a></li>
+                <li><a href="{{ route('user.profile') }}">My profile</a></li>
+                <li><a href="{{ route('app.store') }}">My apps</a></li>
+                <li><a href="{{ route('teams.listing') }}">My teams</a></li>
                 <li><form action="{{route('logout')}}" method="post">@csrf<button>Sign out</button></form></li>
             </ul>
         </div>
