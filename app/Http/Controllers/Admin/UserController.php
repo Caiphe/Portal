@@ -197,10 +197,7 @@ class UserController extends Controller
             $user->roles()->sync($data['roles']);
         }
 
-        if ($request->has('country')) {
-            $user->countries()->sync($data['country']);
-        }
-
+        $user->countries()->sync($data['country'] ?? []);
         $user->responsibleCountries()->sync($data['responsible_countries'] ?? []);
         $user->responsibleGroups()->sync($data['responsible_groups'] ?? []);
 
