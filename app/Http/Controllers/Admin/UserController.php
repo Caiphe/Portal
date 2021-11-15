@@ -160,7 +160,7 @@ class UserController extends Controller
             'order' => $order,
             'defaultSortQuery' => $defaultSortQuery,
             'userRoleIds' => isset($user) ? $user->roles->pluck('id')->toArray() : [],
-            'userCountryCode' => $user->countries[0]->pivot->country_code ?? 0,
+            'userCountryCodes' => $user->countries->pluck('code')->toArray() ?? [],
             'userResponsibleCountries' => isset($currentUser) ? $currentUser->responsibleCountries()->pluck('code')->toArray() : [],
             'userResponsibleGroups' => isset($currentUser) ? $currentUser->responsibleGroups()->pluck('group')->toArray() : [],
             'currentUser' => $currentUser,
@@ -198,7 +198,7 @@ class UserController extends Controller
         }
 
         if ($request->has('country')) {
-            $user->countries()->sync([$data['country']]);
+            $user->countries()->sync($data['country']);
         }
 
         $user->responsibleCountries()->sync($data['responsible_countries'] ?? []);
