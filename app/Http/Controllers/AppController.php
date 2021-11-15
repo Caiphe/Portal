@@ -40,12 +40,12 @@ class AppController extends Controller
         ])->first();
 
         $team = null;
-        if ( $teamInvite ) {
+        if ($teamInvite) {
             $team = Team::find($teamInvite->team_id);
         }
 
         $ownershipTeam = null;
-        if ( $ownershipInvite ) {
+        if ($ownershipInvite) {
             $ownershipTeam = Team::find($ownershipInvite->team_id);
         }
 
@@ -147,11 +147,13 @@ class AppController extends Controller
             return response()->json(['success' => false, 'message' => 'There is already an app with that name.'], 409);
         }
 
-        if ( $createdResponse->failed() ) {
+        if ($createdResponse->failed()) {
             $responseMsg = $createdResponse->toException()->getMessage();
             $reasonMsg = $createdResponse->toPsrResponse()->getReasonPhrase();
 
-            Log::channel('apigee')->warning($responseMsg, [
+            Log::channel('apigee')->warning(
+                $responseMsg,
+                [
                     'context' => [
                         'reason' => $reasonMsg,
                     ]
@@ -214,7 +216,12 @@ class AppController extends Controller
 
     public function edit($app)
     {
-        $app = App::where('slug', $app)->where('developer_id', auth()->user()->developer_id)->firstOrFail();
+        $user = auth()->user();
+        $userTeams = $user->teams()->pluck('id')->toArray();
+        $app = App::where('slug', $app)->where(
+            fn ($q) => $q->where('developer_id', auth()->user()->developer_id)
+                ->orWhereIn('team_id', $userTeams)
+        )->firstOrFail();
         $products = Product::with('category')
             ->where('category_cid', '!=', 'misc')
             ->where(fn ($q) => $q->basedOnUser(auth()->user())->orWhereIn('pid', $app->products->pluck('pid')->toArray()))
@@ -285,7 +292,9 @@ class AppController extends Controller
         if (empty($key)) {
             if ($request->ajax()) {
                 $reasonMsg = 'Could not find the Consumer Key. Please contact us if this happens again';
-                Log::channel('apigee')->warning('Failed locating App consumer Key(s)', [
+                Log::channel('apigee')->warning(
+                    'Failed locating App consumer Key(s)',
+                    [
                         'context' => [
                             'reason' => $reasonMsg,
                         ]
@@ -396,16 +405,18 @@ class AppController extends Controller
 
         $updatedApp = ApigeeService::renewCredentials(auth()->user(), $app, $consumerKey);
 
-        if ( $updatedApp->failed() ) {
-                $responseMsg = $updatedApp->toException()->getMessage();
-                $reasonMsg = $updatedApp->toPsrResponse()->getReasonPhrase();
+        if ($updatedApp->failed()) {
+            $responseMsg = $updatedApp->toException()->getMessage();
+            $reasonMsg = $updatedApp->toPsrResponse()->getReasonPhrase();
 
-                Log::channel('apigee')->warning($responseMsg, [
-                        'context' => [
-                            'reason' => $reasonMsg,
-                        ]
+            Log::channel('apigee')->warning(
+                $responseMsg,
+                [
+                    'context' => [
+                        'reason' => $reasonMsg,
                     ]
-                );
+                ]
+            );
 
             return redirect()->route('app.index')->with('alert', "error:{$reasonMsg}");
         }
@@ -440,7 +451,9 @@ class AppController extends Controller
             $resp = $this->addNewCredentials($app);
 
             if (!$resp['success']) {
-                Log::channel('apigee')->warning('Could not add new credentials.', [
+                Log::channel('apigee')->warning(
+                    'Could not add new credentials.',
+                    [
                         'context' => [
                             'reason' => $resp['message'],
                         ]
@@ -538,7 +551,9 @@ class AppController extends Controller
         $resp = $this->addNewCredentials($app);
 
         if (!$resp['success']) {
-            Log::channel('apigee')->warning('Could not add new credentials.', [
+            Log::channel('apigee')->warning(
+                'Could not add new credentials.',
+                [
                     'context' => [
                         'reason' => $resp['message'],
                     ]
@@ -617,17 +632,19 @@ class AppController extends Controller
 
         $resp = ApigeeService::updateAppWithNewCredentials($data);
 
-        if ( $resp->failed() ) {
+        if ($resp->failed()) {
             $responseMsg = $resp->toException()->getMessage();
             $reasonMsg = $resp->toPsrResponse()->getReasonPhrase();
 
-            Log::channel('apigee')->warning($responseMsg, [
+            Log::channel('apigee')->warning(
+                $responseMsg,
+                [
                     'context' => [
                         'reason' => $reasonMsg,
                     ]
                 ]
             );
-            return [ 'success' => false, 'message' => $reasonMsg ];
+            return ['success' => false, 'message' => $reasonMsg];
         }
 
         $resp = $resp->json();
