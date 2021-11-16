@@ -467,7 +467,7 @@ class ApigeeService
      */
     public static function updateCompany(Team $team, ?User $user = null)
     {
-        $user ??= $team->users->first(fn ($user) => $user->hasRole('team_admin'));
+        $user ??= $team->owner ?? $team->users->first(fn ($user) => $user->hasRole('team_admin'));
 
         if (!$user) {
             return null;
