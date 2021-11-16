@@ -329,7 +329,29 @@ class AppController extends Controller
             'callbackUrl' => $validated['url'] ?? '',
         ];
 
-        $updatedResponse = ApigeeService::updateApp($data)->json();
+        $updatedResponse = ApigeeService::updateApp($data);
+
+        if ($updatedResponse->failed()) {
+            $responseMsg = $updatedResponse->toException()->getMessage();
+            $reasonMsg = $updatedResponse->toPsrResponse()->getReasonPhrase();
+
+            Log::channel('apigee')->warning(
+                $responseMsg,
+                [
+                    'context' => [
+                        'reason' => $reasonMsg,
+                    ]
+                ]
+            );
+
+            if ($request->ajax()) {
+                return response()->json(['response' => "error:{$reasonMsg}"], $updatedResponse->status());
+            }
+
+            return redirect()->back()->with('alert', "error:{$reasonMsg}");
+        }
+
+        $updatedResponse = $updatedResponse->json();
 
         $app->update([
             'display_name' => $appAttributes['DisplayName'],
