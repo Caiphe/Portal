@@ -251,7 +251,12 @@ class AppController extends Controller
 
     public function update($app, CreateAppRequest $request)
     {
-        $app = App::where('slug', $app)->where('developer_id', $request->user()->developer_id)->firstOrFail();
+        $user = auth()->user();
+        $userTeams = $user->teams()->pluck('id')->toArray();
+        $app = App::where('slug', $app)->where(
+            fn ($q) => $q->where('developer_id', $user->developer_id)
+                ->orWhereIn('team_id', $userTeams)
+        )->firstOrFail();
         $validated = $request->validated();
         $app->load('products');
         $credentials = $app->credentials;
@@ -352,8 +357,12 @@ class AppController extends Controller
 
     public function destroy($app, DeleteAppRequest $request)
     {
-        $user = $request->user();
-        $app = App::where('slug', $app)->where('developer_id', $user->developer_id)->firstOrFail();
+        $user = auth()->user();
+        $userTeams = $user->teams()->pluck('id')->toArray();
+        $app = App::where('slug', $app)->where(
+            fn ($q) => $q->where('developer_id', $user->developer_id)
+                ->orWhereIn('team_id', $userTeams)
+        )->firstOrFail();
         $validated = $request->validated();
 
         ApigeeService::delete("developers/{$user->email}/apps/{$validated['name']}");
