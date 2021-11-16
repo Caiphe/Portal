@@ -8,11 +8,23 @@
     }
 }
 
+
+
 .layout-sidebar {
     .wrapper {
         display: flex;
         flex: 1 0 auto;
         padding-left: 0;
+
+        @media(max-width:768px) {
+            display: block;
+        }
+
+        &.container{
+            @media(max-width: 768px){
+                padding: 0px 0px;
+            }
+        }
 
         #sidebar {
             flex: 1;
@@ -21,6 +33,10 @@
             max-width: 270px;
             background-color: $grey200;
             height: 100%;
+
+            @media(max-width: 768px){
+                display: none;
+            }
 
             input[type='text'],
             select {
@@ -40,6 +56,7 @@
             padding: 20px;
             margin-top: 80px;
             margin-bottom: 40px;
+            overflow: hidden;
             width: 100%;
         }
     }

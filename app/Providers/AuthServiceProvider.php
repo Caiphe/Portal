@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\App;
+use App\Team;
 use App\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -66,5 +67,18 @@ class AuthServiceProvider extends ServiceProvider
 		Gate::define('access-private-products', function ($user) {
 			return $user->hasPermissionTo('view_private_products');
 		});
+
+        Gate::define('administer-team', function ($user, $teamId) {
+			$team = Team::find($teamId);
+            return $user->hasTeamRole($team, 'team_admin') || $user->isOwnerOfTeam($team);
+        });
+
+        Gate::define('administer-team-by-owner', function ($user, Team $team) {
+            return $user->isOwnerOfTeam($team);
+        });
+
+        Gate::define('administer-own-team', function ($user, Team $team) {
+            return $team->hasUser($user) || $user->hasTeamRole($team, 'team_admin') || $user->isOwnerOfTeam($team);
+        });
 	}
 }

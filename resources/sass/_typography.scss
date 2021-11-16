@@ -119,9 +119,9 @@ a {
     text-decoration: none;
     color: initial;
 
-    #main &:not(.button) {
-        color: $blue;
-    }
+    // #main &:not(.button) {
+    //     color: $blue;
+    // }
 }
 
 .t {
@@ -164,7 +164,8 @@ a {
 p,
 ol,
 li {
-    font-family: "Montserrat-Light";
+    // font-family: "Montserrat-Light";
+    font-family: "mtn-regular", sans-serif;
 }
 
 strong,

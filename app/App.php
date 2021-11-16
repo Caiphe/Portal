@@ -99,6 +99,11 @@ class App extends Model
         return $this->hasOne(Country::class, "code", "country_code");
     }
 
+    public function team()
+    {
+        return $this->hasOne(Team::class, "id", "team_id");
+    }
+
     /**
      * Redact parts of the keys
      *
