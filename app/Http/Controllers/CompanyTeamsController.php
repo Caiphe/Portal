@@ -167,7 +167,7 @@ class CompanyTeamsController extends Controller
             ]);
         }
 
-        if (!$isAlredyInvited && $team) {
+        if (!$isAlredyInvited && $team && !$user) {
             $invite = $this->createTeamInvite($team, $invitedEmail, 'external', $data['role']);
 
             if ($invite) {
@@ -175,7 +175,7 @@ class CompanyTeamsController extends Controller
 
                 $inviteSent = $invite->exists;
             }
-        } elseif ($isAlredyInvited) {
+        } elseif (!$isAlredyInvited) {
             $invite = Teamwork::hasPendingInvite($team, $user->email);
 
             if (!$invite) {
@@ -191,7 +191,6 @@ class CompanyTeamsController extends Controller
         }
 
         if ($inviteSent) {
-
             return response()->json([
                 'success' => true,
                 'success:message' => 'Invite successfully sent to prospective team member of ' . $team->name . '.'
