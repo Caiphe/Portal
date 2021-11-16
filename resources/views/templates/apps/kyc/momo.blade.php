@@ -8,8 +8,9 @@
     <x-sidebar-accordion id="sidebar-accordion" :list="
     [ 'Manage' =>
         [
-            [ 'label' => 'Profile', 'link' => '/profile'],
+            [ 'label' => 'My profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
+            [ 'label' => 'My teams', 'link' => '/teams'],
         ],
         'Discover' =>
         [

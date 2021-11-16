@@ -35,14 +35,8 @@
 </div>
 
 <div class="editor-field">
-    <h2>Country of residence</h2>
-    <select name="country" autocomplete="off">
-        <option value="">Select country</option>
-        @foreach($countries as $country)
-            @if(!in_array($country->code, $userResponsibleCountries) && !$isAdminUser) @continue @endif
-        <option value="{{ $country->code }}">{{ $country->name }}</option>
-        @endforeach
-    </select>
+    <h2>Countries of operation</h2>
+    <x-multiselect id="country" name="country" label="Select country" :options="$countries->pluck('name', 'code')->toArray()"/>
 </div>
 
 @if($isAdminUser)

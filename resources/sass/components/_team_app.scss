@@ -1,0 +1,361 @@
+@import '../variables';
+
+.app {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+
+    @media #{$small} {
+        overflow: hidden;
+    }
+
+    .status-icon {
+        width: 24px;
+        min-width: 24px;
+        height: 24px;
+        display: inline-block;
+        margin-right: 15px;
+    }
+
+    &.app-status-approved .status-icon {
+        background: url('/images/icons/status-approved.svg') no-repeat center center / contain;
+    }
+
+    &.app-status-revoked .status-icon {
+        background: url('/images/icons/status-revoked.svg') no-repeat center center / contain;
+    }
+
+    &.app-status-pending .status-icon {
+        background: url('/images/icons/status-pending.svg') no-repeat center center / contain;
+    }
+
+
+    .column:first-of-type {
+        font-size: 14px;
+    }
+
+    .column {
+        font-size: 12px;
+    }
+
+    .actions {
+        background: url('../images/icons/more-vert.svg') no-repeat transparent center / 24px;
+        border: none;
+        display: inline-block;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        padding: 0;
+    }
+
+    .toggle-app-button {
+        background: none;
+        padding: 0;
+        transition: transform 512ms;
+        border: none;
+        width: 34px;
+        height: 34px;
+        margin-left: 10px;
+    }
+
+    &.show {
+        .toggle-app-button {
+            transform: rotate(180deg);
+        }
+    }
+
+    .name {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        @media #{$small} {
+            margin-right: 10px;
+        }
+    }
+
+    .countries {
+        display: flex;
+        align-items: center;
+
+        svg {
+            margin-right: 5px;
+            width: 20px;
+            height: 20px;
+        }
+    }
+
+    .dashboard-countries {
+        margin-left: 80px;
+        margin-right: 20px;
+    }
+
+    .menu {
+        background-color: $grey900;
+        border-radius: 10px;
+        padding: 10px;
+        position: absolute;
+        text-align: left;
+        right: -5px;
+        top: 40px;
+        z-index: 1;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.18s ease-in, transform 0.18s ease-in;
+
+        a {
+            color: #ffffff !important;
+            cursor: pointer;
+            display: block;
+            font-size: 12px;
+        }
+
+        button {
+            background-color: transparent;
+            color: #ffffff;
+            display: block;
+            font-size: 12px;
+            border: transparent;
+            padding: 0;
+        }
+
+        &.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translate(0, 10px);
+            z-index: 3;
+        }
+    }
+
+    .menu.show+.modal {
+        display: block;
+    }
+
+    .modal {
+        position: fixed;
+        background-color: transparent;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 2;
+        display: none;
+    }
+
+    .detail {
+        display: none;
+        background-color: $grey200;
+        border-radius: 24px;
+        width: 100%;
+        padding: 20px;
+
+        p {
+            font-size: 12px;
+            margin: 0;
+        }
+
+        svg {
+            margin: 0 5px 5px 0;
+            width: 20px;
+        }
+
+        .country-flags {
+            flex-wrap: wrap;
+            display: flex;
+        }
+
+        >div {
+            display: flex;
+            flex-wrap: nowrap;
+
+            .detail-left {
+                width: 60%;
+            }
+
+            .detail-right {
+                width: 40%;
+            }
+
+            .detail-row {
+
+                .detail-item:first-child {
+                    width: 30%;
+                }
+
+                .detail-item-description {
+                    word-break: break-word;
+                    padding-right: 20px;
+                }
+
+                .copy {
+                    align-items: baseline;
+                    background-color: transparent;
+                    border: transparent;
+                    height: auto;
+                    width: 16px;
+                    height: 20px;
+
+                    svg {
+                        width: 15px;
+                        position: absolute;
+                    }
+
+                    svg+svg,
+                    svg+svg+svg {
+                        display: none;
+                    }
+
+                    &.loading {
+                        svg {
+                            display: none;
+                        }
+
+                        svg+svg {
+                            display: block;
+                            margin-top: -10px;
+                        }
+
+                        svg+svg+svg {
+                            display: none;
+                        }
+                    }
+
+                    &.copied {
+                        svg {
+                            display: none;
+                        }
+
+                        svg+svg+svg {
+                            display: block;
+                        }
+                    }
+                }
+            }
+
+            .no-wrap {
+                flex-wrap: nowrap;
+            }
+        }
+
+        .go-live,
+        .kyc-status {
+            border-top: 1px solid $grey900;
+            padding-top: 14px;
+            margin-top: 14px;
+
+            svg {
+                width: 16px;
+                margin: 0 0 0 6px;
+            }
+        }
+
+        .products-title {
+            margin-top: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+
+            .product {
+                background-color: $grey300;
+                border-radius: 5px;
+                display: flex;
+                color: $grey900 !important;
+                justify-content: space-between;
+                align-items: stretch;
+                font-size: 12px;
+                padding: 8px;
+                max-width: 250px;
+                margin-right: 10px;
+                margin-bottom: 10px;
+                height: 100%;
+
+                &.product-status-approved .product-approve {
+                    display: none;
+                }
+
+                &.product-status-revoked .product-revoke {
+                    display: none;
+                }
+
+                &.product-status-approved .status-bar {
+                    background-color: $success;
+                }
+
+                &.product-status-pending .status-bar {
+                    background-color: $warning;
+                }
+
+                &.product-status-revoked .status-bar {
+                    background-color: $error;
+                }
+
+                span[class^="status-"],
+                span[class*="status-"] {
+                    height: auto;
+                    width: 10px;
+                    border-radius: 7px;
+                    opacity: 1;
+                    margin-right: 10px;
+                }
+
+                .name {
+                    margin-right: 40px;
+                    max-width: 120px;
+                }
+
+                .description {
+                    margin-bottom: 10px;
+                }
+
+                button[class^="product-"],
+                button[class*="product-"] {
+                    background-color: transparent;
+                    border-color: transparent;
+                    padding: 0;
+                }
+
+                svg {
+                    width: 15px;
+                }
+            }
+
+            .product-approve,
+            .product-revoke {
+                opacity: 0.4;
+                pointer-events: none;
+            }
+
+            .product-status-pending .product-approve,
+            .product-status-pending .product-revoke,
+            .product-status-revoked .product-approve,
+            .product-status-approved .product-revoke {
+                opacity: 1;
+                pointer-events: auto;
+            }
+        }
+
+        .kyc-status {
+            justify-content: end;
+            align-items: center;
+        }
+    }
+
+    &.show {
+        .detail {
+            display: block;
+        }
+    }
+
+    input[readonly] {
+        border: 0;
+        background-color: transparent;
+        padding: 0;
+        height: auto;
+    }
+}
