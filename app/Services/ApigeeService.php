@@ -48,7 +48,7 @@ class ApigeeService
         $user ??= auth()->user();
 
         if ($team) {
-            return self::post("companies/{$team->name}/apps", $data);
+            return self::post("companies/{$team->username}/apps", $data);
         }
 
         return self::post("developers/{$user->email}/apps", $data);
@@ -62,7 +62,7 @@ class ApigeeService
         $apiProducts = $data['apiProducts'];
         $originalProducts = $data['originalProducts'];
         $removedProducts = array_diff($originalProducts, $apiProducts);
-        $accessUrl = $team ? "companies/{$team->name}" : "developers/{$user->email}";
+        $accessUrl = $team ? "companies/{$team->username}" : "developers/{$user->email}";
 
         self::post("{$accessUrl}/apps/{$name}/keys/{$key}", ["apiProducts" => $apiProducts]);
 
@@ -437,7 +437,7 @@ class ApigeeService
     public static function createCompany(Team $team, User $user)
     {
         return self::post("companies", [
-            "name" => $team->name,
+            "name" => $team->username,
             "displayName" => $team->name,
             "attributes" => [
                 [
@@ -473,8 +473,8 @@ class ApigeeService
             return null;
         }
 
-        return self::put("companies/{$team->name}", [
-            "name" => $team->name,
+        return self::put("companies/{$team->username}", [
+            "name" => $team->username,
             "displayName" => $team->name,
             "attributes" => [
                 [
@@ -506,7 +506,7 @@ class ApigeeService
      */
     public static function addDeveloperToCompany(Team $team, User $user, string $role)
     {
-        return self::post("companies/{$team->name}/developers", [
+        return self::post("companies/{$team->username}/developers", [
             "developer" => [
                 [
                     "email" => $user->email,
@@ -526,7 +526,7 @@ class ApigeeService
      */
     public static function removeDeveloperFromCompany(Team $team, User $user)
     {
-        return self::delete("companies/{$team->name}/developers/{$user->email}");
+        return self::delete("companies/{$team->username}/developers/{$user->email}");
     }
 
     /**
