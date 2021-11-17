@@ -26,7 +26,7 @@ function makeEditorInit(editor) {
 
     el.insertAdjacentElement('afterend', Object.assign(document.createElement('input'), {
         type: 'hidden',
-        name: el.dataset.name ?? el.dataset.input,
+        name: el.dataset.name || el.dataset.input,
         id: 'editor-' + el.dataset.input,
         className: el.dataset.class || '',
         value: editor.getData()
