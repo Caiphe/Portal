@@ -84,7 +84,7 @@ class UserController extends Controller
         return view(
             'templates.admin.users.create',
             [
-                'roles' => Role::all(),
+                'roles' => Role::where('name', 'not like', 'team%')->get(),
                 'countries' => Country::orderBy('name')->get(),
                 'groups' => $groups
             ]
@@ -154,13 +154,13 @@ class UserController extends Controller
         return view('templates.admin.users.edit', [
             'selectedCountryFilter' => $countrySelectFilterCode,
             'countries' => Country::orderBy('name')->get(),
-            'roles' => Role::all(),
+            'roles' => Role::where('name', 'not like', 'team%')->get(),
             'groups' => $groups,
             'user' => $user,
             'order' => $order,
             'defaultSortQuery' => $defaultSortQuery,
             'userRoleIds' => isset($user) ? $user->roles->pluck('id')->toArray() : [],
-            'userCountryCode' => $user->countries[0]->pivot->country_code ?? 0,
+            'userCountryCodes' => $user->countries->pluck('code')->toArray() ?? [],
             'userResponsibleCountries' => isset($currentUser) ? $currentUser->responsibleCountries()->pluck('code')->toArray() : [],
             'userResponsibleGroups' => isset($currentUser) ? $currentUser->responsibleGroups()->pluck('group')->toArray() : [],
             'currentUser' => $currentUser,
@@ -197,10 +197,7 @@ class UserController extends Controller
             $user->roles()->sync($data['roles']);
         }
 
-        if (!$request->has('country')) {
-            $user->countries()->sync([$data['country']]);
-        }
-
+        $user->countries()->sync($data['country'] ?? []);
         $user->responsibleCountries()->sync($data['responsible_countries'] ?? []);
         $user->responsibleGroups()->sync($data['responsible_groups'] ?? []);
 

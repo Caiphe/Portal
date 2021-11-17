@@ -9,7 +9,7 @@
     <x-sidebar-accordion id="sidebar-accordion" active="/teams" :list="
     [ 'Manage' =>
         [
-            [ 'label' => 'Profile', 'link' => '/profile'],
+            [ 'label' => 'My profile', 'link' => '/profile'],
             [ 'label' => 'My apps', 'link' => '/apps'],
             [ 'label' => 'My teams', 'link' => '/teams']
         ],
@@ -43,8 +43,8 @@
             @csrf
 
             <div class="group">
-                <label for="name">Enter team Name </label>
-                <input type="text" name="name" value="{{ old('name') }}" id="team-name" class="form-field" placeholder="Enter team name" maxlength="100" required autofocus>
+                <label for="name">Enter team Name</label>
+                <input type="text" name="name" value="{{ $team->name }}" id="team-name" class="form-field" placeholder="Enter team name" maxlength="100" required autofocus>
             </div>
 
             <div class="group">
@@ -86,7 +86,7 @@
             </div> --}}
 
             <div class="group">
-                <label for="description">Company description</label>
+                <label for="description">Team description</label>
                 <textarea name="description" id="description" placeholder="Write a short description about your team" >{{ $team->description }}</textarea>
             </div>
 

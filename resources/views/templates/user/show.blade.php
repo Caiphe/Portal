@@ -14,7 +14,7 @@ Update profile
         [
             'MANAGE' =>
             [
-                [ 'label' => 'Profile', 'link' => '/profile'],
+                [ 'label' => 'My profile', 'link' => '/profile'],
                 [ 'label' => '2FA', 'link' => '#twofa'],
                 [ 'label' => 'My apps', 'link' => '/apps'],
                 [ 'label' => 'My teams', 'link' => '/teams'],
@@ -29,7 +29,7 @@ Update profile
 @endsection
 
 @section("content")
-    <x-heading heading="Profile"/>
+    <x-heading heading="My profile"/>
 
     <!--- Add team invite banner -->
 
@@ -53,9 +53,9 @@ Update profile
             @csrf
             @method('put')
             <h2>Personal details</h2>
-            <input type="text" name="first_name" value="{{$user['first_name']}}" placeholder="First name" autocomplete="first_name">
-            <input type="text" name="last_name" value="{{$user['last_name']}}" placeholder="Last name" autocomplete="last_name">
-            <input type="email" name="email" value="{{$user['email']}}" placeholder="Email" autocomplete="email">
+            <input type="text" name="first_name" value="{{ old('first_name') ?: $user['first_name'] }}" placeholder="First name" autocomplete="first_name">
+            <input type="text" name="last_name" value="{{ old('last_name') ?: $user['last_name'] }}" placeholder="Last name" autocomplete="last_name">
+            <input type="email" name="email" value="{{ old('email') ?: $user['email'] }}" placeholder="Email" autocomplete="email">
             <small class="email-warning">*If you change your email, it will need to be verified again.</small>
             <h2>Password</h2>
             <label class="password-label" for="password">
