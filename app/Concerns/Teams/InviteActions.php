@@ -10,7 +10,7 @@ use App\Mail\Teams\OwnershipInvite;
 use App\Mail\Teams\PendingInvite;
 use App\Mail\Teams\LeavingInvite;
 use App\Mail\Teams\ExternalInvite;
-
+use App\Services\ApigeeService;
 use Illuminate\Support\Facades\Mail;
 use Mpociot\Teamwork\TeamInvite;
 use Mpociot\Teamwork\Facades\Teamwork;
@@ -80,6 +80,8 @@ trait InviteActions
             'logo' => $data['logo'],
             'owner_id' => $owner->getKey()
         ]);
+
+        ApigeeService::createCompany($team, $owner);
 
         $owner->attachTeam($team, ['role_id' => 7, 'created_at' => $now, 'updated_at' => $now]);
 

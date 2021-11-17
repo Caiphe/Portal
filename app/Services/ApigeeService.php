@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\App;
 use App\Country;
+use App\Team;
 use App\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
@@ -42,13 +43,18 @@ class ApigeeService
         return self::HttpWithBasicAuth()->delete(config('apigee.base') . $url);
     }
 
-    public static function createApp(array $data, User $user = null)
+    public static function createApp(array $data, $user = null, $team = null)
     {
         $user ??= auth()->user();
+
+        if ($team) {
+            return self::post("companies/{$team->username}/apps", $data);
+        }
+
         return self::post("developers/{$user->email}/apps", $data);
     }
 
-    public static function updateApp(array $data)
+    public static function updateApp(array $data, Team $team = null)
     {
         $user = auth()->user();
         $name = $data['name'];
@@ -56,14 +62,15 @@ class ApigeeService
         $apiProducts = $data['apiProducts'];
         $originalProducts = $data['originalProducts'];
         $removedProducts = array_diff($originalProducts, $apiProducts);
+        $accessUrl = $team ? "companies/{$team->username}" : "developers/{$user->email}";
 
-        self::post("developers/{$user->email}/apps/{$name}/keys/{$key}", ["apiProducts" => $apiProducts]);
+        self::post("{$accessUrl}/apps/{$name}/keys/{$key}", ["apiProducts" => $apiProducts]);
 
         foreach ($removedProducts as $product) {
-            self::delete("developers/{$user->email}/apps/{$name}/keys/{$key}/apiproducts/{$product}");
+            self::delete("{$accessUrl}/apps/{$name}/keys/{$key}/apiproducts/{$product}");
         }
 
-        $updatedDetails = self::put("developers/{$user->email}/apps/{$name}", [
+        $updatedDetails = self::put("{$accessUrl}/apps/{$name}", [
             "name" => $name,
             "attributes" => $data['attributes'],
             "callbackUrl" => $data['callbackUrl'],
@@ -416,6 +423,110 @@ class ApigeeService
     protected static function HttpWithBasicAuth()
     {
         return Http::withBasicAuth(config('apigee.username'), config('apigee.password'));
+    }
+
+    // Companies
+
+    /**
+     * Creates a company.
+     *
+     * @param      \App\Company  $company  The company
+     *
+     * @return     mixed         The response from the post
+     */
+    public static function createCompany(Team $team, User $user)
+    {
+        return self::post("companies", [
+            "name" => $team->username,
+            "displayName" => $team->name,
+            "attributes" => [
+                [
+                    "name" => "ADMIN_EMAIL",
+                    "value" => $user->email
+                ], [
+                    "name" => "MINT_DEVELOPER_LEGAL_NAME",
+                    "value" => $team->name
+                ], [
+                    "name" => "MINT_DEVELOPER_ADDRESS",
+                    "value" => "{\"address1\":\"{$team['name']}\",\"city\":\"{$team['name']}\",\"country\":\"{$team['country']}\",\"isPrimary\":true,\"state\":\"{$team['name']}\",\"zip\":\"{$team['name']}\"}"
+                ],
+                [
+                    "name" => "MINT_BILLING_TYPE",
+                    "value" => "PREPAID"
+                ]
+            ]
+        ]);
+    }
+
+    /**
+     * Updates a company.
+     *
+     * @param      \App\Company  $company  The company
+     *
+     * @return     mixed         The response from the post
+     */
+    public static function updateCompany(Team $team, ?User $user = null)
+    {
+        $user ??= $team->owner ?? $team->users->first(fn ($user) => $user->hasRole('team_admin'));
+
+        if (!$user) {
+            return null;
+        }
+
+        return self::put("companies/{$team->username}", [
+            "name" => $team->username,
+            "displayName" => $team->name,
+            "attributes" => [
+                [
+                    "name" => "ADMIN_EMAIL",
+                    "value" => $user->email
+                ], [
+                    "name" => "MINT_DEVELOPER_LEGAL_NAME",
+                    "value" => $team->name
+                ], [
+                    "name" => "MINT_DEVELOPER_ADDRESS",
+                    "value" => "{\"address1\":\"{$team['name']}\",\"city\":\"{$team['name']}\",\"country\":\"{$team['country']}\",\"isPrimary\":true,\"state\":\"{$team['state']}\",\"zip\":\"{$team['zip']}\"}"
+                ],
+                [
+                    "name" => "MINT_BILLING_TYPE",
+                    "value" => $team->billing_type ?? "PREPAID"
+                ]
+            ]
+        ]);
+    }
+
+    /**
+     * Adds a developer to company.
+     *
+     * @param      \App\Company  $company  The company
+     * @param      \App\User     $user     The user
+     * @param      string        $role     The role
+     *
+     * @return     mixed         The response from the post
+     */
+    public static function addDeveloperToCompany(Team $team, User $user, string $role)
+    {
+        return self::post("companies/{$team->username}/developers", [
+            "developer" => [
+                [
+                    "email" => $user->email,
+                    "role" => $role
+                ]
+            ]
+        ]);
+    }
+
+    /**
+     * Adds a developer to company.
+     *
+     * @param      \App\Company  $company  The company
+     * @param      \App\User     $user     The user
+     *
+     * @return     mixed         The response from the post
+     */
+    public static function removeDeveloperFromCompany(Team $team, User $user)
+    {
+        return self::delete("companies/{$team->username}/developers/{$user->email}");
     }
 
     /**

@@ -54,7 +54,8 @@ class CategoryController extends Controller
     {
         $request->validate([
             'title' => ['required', Rule::unique('categories', 'cid')->ignore($category->cid, 'cid')],
-            'heading-title' => 'required'
+            'heading-title' => 'required',
+            'heading-body' => 'required',
         ]);
 
         $now = date('Y-m-d H:i:s');
