@@ -22,5 +22,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ mix('/js/components/ckeditor.js') }}"></script>
+<script src="{{ mix('/js/components/ckeditor.js') }}" defer></script>
 @endpush

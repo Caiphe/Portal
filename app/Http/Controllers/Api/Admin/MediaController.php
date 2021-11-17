@@ -9,7 +9,8 @@ class MediaController extends Controller
 {
     public function upload(Request $request)
     {
-        $path = $request->file('upload')->store('editor', 'public');
+        $filename = date('Y/m/') . uniqid() . '.' . $request->file('upload')->extension();
+        $path = $request->file('upload')->storeAs('editor', $filename, 'public');
 
         return response()->json([
             'success' => true,
