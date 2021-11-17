@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Category;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\CategoryRequest;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
@@ -50,14 +50,8 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function update(Category $category, Request $request)
+    public function update(Category $category, CategoryRequest $request)
     {
-        $request->validate([
-            'title' => ['required', Rule::unique('categories', 'cid')->ignore($category->cid, 'cid')],
-            'heading-title' => 'required',
-            'heading-body' => 'required',
-        ]);
-
         $now = date('Y-m-d H:i:s');
         $categoryData = $request->only(['title', 'theme']);
         $categoryData['description'] = $request->input('heading-title', '');
@@ -77,38 +71,38 @@ class CategoryController extends Controller
         $category->content()->delete();
         $category->content()->createMany([
             [
-                'title' => $request->input('heading-title', '') ?? '',
+                'title' => $request->get('heading-title', '') ?? '',
                 'slug' => $category->slug . '-heading',
                 'type' => 'heading',
-                'body' => $request->input('heading-body', '') ?? '',
+                'body' => $request->get('heading-body', '') ?? '',
                 'published_at' => $now
             ],
             [
-                'title' => $request->input('benefits-title', '') ?? '',
+                'title' => $request->get('benefits-title', '') ?? '',
                 'slug' => $category->slug . '-benefits',
                 'type' => 'benefits',
-                'body' => $request->input('benefits-body', '') ?? '',
+                'body' => $request->get('benefits-body', '') ?? '',
                 'published_at' => $now
             ],
             [
-                'title' => $request->input('developer-centric-title', '') ?? '',
+                'title' => $request->get('developer-centric-title', '') ?? '',
                 'slug' => $category->slug . '-developer-centric',
                 'type' => 'developer-centric',
-                'body' => $request->input('developer-centric-body', '') ?? '',
+                'body' => $request->get('developer-centric-body', '') ?? '',
                 'published_at' => $now
             ],
             [
-                'title' => $request->input('bundles-title', '') ?? '',
+                'title' => $request->get('bundles-title', '') ?? '',
                 'slug' => $category->slug . '-bundles',
                 'type' => 'bundles',
-                'body' => $request->input('bundles-body', '') ?? '',
+                'body' => $request->get('bundles-body', '') ?? '',
                 'published_at' => $now
             ],
             [
-                'title' => $request->input('products-title', '') ?? '',
+                'title' => $request->get('products-title', '') ?? '',
                 'slug' => $category->slug . '-products',
                 'type' => 'products',
-                'body' => $request->input('products-body', '') ?? '',
+                'body' => $request->get('products-body', '') ?? '',
                 'published_at' => $now
             ],
         ]);
@@ -129,13 +123,8 @@ class CategoryController extends Controller
         return view('templates.admin.categories.create');
     }
 
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        $request->validate([
-            'title' => 'required|unique:categories',
-            'heading-title' => 'required'
-        ]);
-
         $now = date('Y-m-d H:i:s');
         $categoryData = $request->only(['title', 'theme']);
         $categoryData['description'] = $request->input('heading-title', '');
