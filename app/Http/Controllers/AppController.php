@@ -84,10 +84,12 @@ class AppController extends Controller
     public function store(CreateAppRequest $request)
     {
         $validated = $request->validated();
+        $user = $request->user();
         $countriesByCode = Country::pluck('iso', 'code');
         $products = Product::whereIn('name', $validated['products'])->pluck('attributes', 'name');
         $productIds = [];
         $attr = [];
+        $team = null;
 
         foreach ($products as $name => $attributes) {
             $attr = json_decode($attributes, true);
@@ -98,10 +100,8 @@ class AppController extends Controller
             return response()->json(['success' => false, 'message' => 'There was a problem finding your product(s). Please try again'], 417);
         }
 
-        $teamExists = false;
         if (isset($validated['team_id']) && $validated['team_id']) {
             $team = Team::find($validated['team_id']);
-            $teamExists = $team->exists;
         }
 
         $data = [
@@ -133,15 +133,13 @@ class AppController extends Controller
             'callbackUrl' => $validated['url'],
         ];
 
-        $user = $request->user();
-
         if (($user->hasRole('admin') || $user->hasRole('opco')) && $request->has('app_owner')) {
             $appOwner = User::where('email', $request->get('app_owner'))->first();
         } else {
             $appOwner = $user;
         }
 
-        $createdResponse = ApigeeService::createApp($data, $appOwner);
+        $createdResponse = ApigeeService::createApp($data, $appOwner, $team);
 
         if (strpos($createdResponse, 'duplicate key') !== false) {
             return response()->json(['success' => false, 'message' => 'There is already an app with that name.'], 409);
@@ -171,7 +169,8 @@ class AppController extends Controller
             "callback_url" => $createdResponse['callbackUrl'],
             "attributes" => $attributes,
             "credentials" => $createdResponse['credentials'],
-            "developer_id" => $createdResponse['developerId'],
+            "developer_id" => $user['developer_id'],
+            "team_id" => $team->id ?? null,
             "status" => $createdResponse['status'],
             "description" => $validated['description'],
             "country_code" => $validated['country'],
@@ -179,8 +178,7 @@ class AppController extends Controller
             "created_at" => date('Y-m-d H:i:s', $createdResponse['createdAt'] / 1000),
         ]);
 
-        if ($teamExists) {
-            $app->update(['team_id' => $team->id]);
+        if ($team) {
             event(new TeamAppCreated($team));
         }
 
@@ -202,6 +200,7 @@ class AppController extends Controller
         );
 
         $opcoUserEmails = $app->country->opcoUser->pluck('email')->toArray();
+
         if (empty($opcoUserEmails)) {
             $opcoUserEmails = env('MAIL_TO_ADDRESS');
         }
@@ -250,9 +249,15 @@ class AppController extends Controller
 
     public function update($app, CreateAppRequest $request)
     {
-        $app = App::where('slug', $app)->where('developer_id', $request->user()->developer_id)->firstOrFail();
+        $user = auth()->user();
+        $userTeams = $user->teams()->pluck('id')->toArray();
+        $app = App::where('slug', $app)->where(
+            fn ($q) => $q->where('developer_id', $user->developer_id)
+                ->orWhereIn('team_id', $userTeams)
+        )->firstOrFail();
         $validated = $request->validated();
-        $app->load('products');
+        $app->load('products', 'team');
+        $appTeam = $app->team ?? null;
         $credentials = $app->credentials;
         $sandboxProducts = $app->products->filter(function ($prod) {
             $envArr = explode(',', $prod->environments);
@@ -323,7 +328,29 @@ class AppController extends Controller
             'callbackUrl' => $validated['url'] ?? '',
         ];
 
-        $updatedResponse = ApigeeService::updateApp($data)->json();
+        $updatedResponse = ApigeeService::updateApp($data, $appTeam);
+
+        if ($updatedResponse->failed()) {
+            $responseMsg = $updatedResponse->toException()->getMessage();
+            $reasonMsg = $updatedResponse->toPsrResponse()->getReasonPhrase();
+
+            Log::channel('apigee')->warning(
+                $responseMsg,
+                [
+                    'context' => [
+                        'reason' => $reasonMsg,
+                    ]
+                ]
+            );
+
+            if ($request->ajax()) {
+                return response()->json(['response' => "error:{$reasonMsg}"], $updatedResponse->status());
+            }
+
+            return redirect()->back()->with('alert', "error:{$reasonMsg}");
+        }
+
+        $updatedResponse = $updatedResponse->json();
 
         $app->update([
             'display_name' => $appAttributes['DisplayName'],
@@ -351,8 +378,12 @@ class AppController extends Controller
 
     public function destroy($app, DeleteAppRequest $request)
     {
-        $user = $request->user();
-        $app = App::where('slug', $app)->where('developer_id', $user->developer_id)->firstOrFail();
+        $user = auth()->user();
+        $userTeams = $user->teams()->pluck('id')->toArray();
+        $app = App::where('slug', $app)->where(
+            fn ($q) => $q->where('developer_id', $user->developer_id)
+                ->orWhereIn('team_id', $userTeams)
+        )->firstOrFail();
         $validated = $request->validated();
 
         ApigeeService::delete("developers/{$user->email}/apps/{$validated['name']}");
