@@ -4,8 +4,6 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/admin/edit.css') }}">
-<link rel="stylesheet" href="{{ mix('/css/vendor/trix.css') }}">
-<script src="{{ mix('/js/vendor/trix.js') }}"></script>
 @endpush
 
 @section('page-info')
@@ -21,3 +19,7 @@
 
 </form>
 @endsection
+
+@push('scripts')
+<script src="{{ mix('/js/components/ckeditor.js') }}" defer></script>
+@endpush

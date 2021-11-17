@@ -123,6 +123,7 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 Route::namespace('Api\Admin')->prefix('api/admin')->group(function () {
 	Route::post('/products/{product:slug}/openapi', 'ProductController@openapiUpload')->middleware('can:administer-content')->name('api.product.openapi.upload');
 	Route::post('/products/{product:slug}/image', 'ProductController@imageUpload')->middleware('can:administer-content')->name('api.product.image.upload');
+	Route::post('/editor/upload', 'MediaController@upload')->middleware('can:administer-content')->name('api.editor.upload');
 
 	Route::post('sync', 'SyncController@sync')->middleware('can:administer-dashboard')->name('api.sync');
 	Route::post('sync/products', 'SyncController@syncProducts')->middleware('can:administer-dashboard')->name('api.sync.products');
