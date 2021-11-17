@@ -66,11 +66,13 @@
 
     function newTab() {
         var randId = rand();
-        document.getElementById('custom-tabs').insertAdjacentHTML('beforeend', '<div class="new-tab mt-3"><button class="dark outline" onclick="removeTab(this)">Remove</button><input class="custom-tab-title" type="text" name="tab[title][]" placeholder="Title"><input class="custom-tab-content" id="' + randId + '" type="hidden" name="tab[body][]"><trix-editor input="' + randId + '"></trix-editor></div>');
+        document.getElementById('custom-tabs').insertAdjacentHTML('beforeend', '<div class="new-tab mt-3"><button class="dark outline" onclick="removeTab(this)">Remove</button><input class="custom-tab-title" type="text" name="tab[title][]" placeholder="Title"><div id="' + randId +'" class="editor" data-input="' + randId + '" data-name="tab[body][]" data-class="custom-tab-content"></div></div>');
+
+        makeEditor(document.getElementById(randId));
     }
 
     function rand() {
-        return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        return 'q' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     }
 
     function upload(openApi, cb) {
@@ -142,68 +144,4 @@
 
 function removeTab(el) {
     el.parentNode.remove();
-}
-
-addEventListener("trix-attachment-add", verifyUpload);
-
-function verifyUpload(event) {
-    if (!event.attachment.file) return;
-
-    uploadFileAttachment(event.attachment);
-}
-
-function uploadFileAttachment(attachment) {
-    uploadFile(attachment.file, setProgress, setAttributes);
-
-    function setProgress(progress) {
-        attachment.setUploadProgress(progress);
-    }
-
-    function setAttributes(attributes) {
-        attachment.setAttributes(attributes);
-    }
-}
-
-function uploadFile(file, progressCallback, successCallback) {
-    var key = createStorageKey(file);
-    var formData = createFormData(key, file);
-    var xhr = new XMLHttpRequest();
-    var host = bladeLookup('uploadImageUrl');
-
-    xhr.open("POST", host, true);
-    xhr.setRequestHeader('X-CSRF-TOKEN', document.getElementsByName("csrf-token")[0].content);
-
-    xhr.upload.addEventListener("progress", function(event) {
-        var progress = event.loaded / event.total * 100;
-        progressCallback(progress);
-    })
-
-    xhr.addEventListener("load", function() {
-        if (xhr.status === 201) {
-            result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
-
-            var attributes = {
-                url: result.body,
-                href: result.body + "?content-disposition=attachment"
-            };
-            successCallback(attributes);
-        }
-    })
-
-    xhr.send(formData);
-}
-
-function createStorageKey(file) {
-    var date = new Date();
-    var day = date.toISOString().slice(0, 10);
-    var name = date.getTime() + "-" + file.name;
-    return [day, name].join("/");
-}
-
-function createFormData(key, file) {
-    var data = new FormData();
-    data.append("key", key);
-    data.append("Content-Type", file.type);
-    data.append("file", file);
-    return data;
 }

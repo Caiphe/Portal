@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Support\Facades\Config;
 use Mpociot\Teamwork\TeamworkTeam;
+use Illuminate\Support\Str;
 
 /**
  * Class Team
@@ -40,5 +41,10 @@ class Team extends TeamworkTeam
     public function users()
     {
         return $this->belongsToMany(Config::get('teamwork.user_model'), Config::get('teamwork.team_user_table'), 'team_id', 'user_id')->withPivot('role_id')->withTimestamps();
+    }
+
+    public function getUsernameAttribute()
+    {
+        return Str::slug($this->name);
     }
 }

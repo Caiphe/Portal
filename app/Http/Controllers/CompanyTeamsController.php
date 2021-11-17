@@ -17,7 +17,7 @@ use App\Http\Requests\Teams\RoleUpdateRequest;
 use App\Http\Requests\Teams\Invites\InviteRequest;
 use App\Http\Requests\Teams\Invites\LeavingRequest;
 use App\Http\Requests\Teams\Request as TeamRequest;
-
+use App\Services\ApigeeService;
 use Illuminate\Http\Request;
 use Mpociot\Teamwork\Facades\Teamwork;
 use Mpociot\Teamwork\TeamInvite;
@@ -72,6 +72,7 @@ class CompanyTeamsController extends Controller
         $user = $this->getTeamUser($data['user_id']);
 
         if ($team->hasUser($user) && $this->memberLeavesTeam($team, $user)) {
+            ApigeeService::removeDeveloperFromCompany($team, $user);
             return response()->json([
                 'success' => true,
                 'success:message' => $user->full_name . ' has successfully left ' . $team->name
@@ -167,7 +168,7 @@ class CompanyTeamsController extends Controller
             ]);
         }
 
-        if (!$isAlredyInvited && $team) {
+        if ($team && !$user) {
             $invite = $this->createTeamInvite($team, $invitedEmail, 'external', $data['role']);
 
             if ($invite) {
@@ -175,7 +176,7 @@ class CompanyTeamsController extends Controller
 
                 $inviteSent = $invite->exists;
             }
-        } elseif ($isAlredyInvited) {
+        } elseif ($team) {
             $invite = Teamwork::hasPendingInvite($team, $user->email);
 
             if (!$invite) {
@@ -191,7 +192,6 @@ class CompanyTeamsController extends Controller
         }
 
         if ($inviteSent) {
-
             return response()->json([
                 'success' => true,
                 'success:message' => 'Invite successfully sent to prospective team member of ' . $team->name . '.'
@@ -200,7 +200,7 @@ class CompanyTeamsController extends Controller
 
         return response()->json([
             'success' => false,
-            'error:message' => $user->full_name . ' could not be successfully send ' . $team->name . ' prospective member invite.'
+            'error:message' => $invitedEmail . ' could not be successfully send ' . $team->name . ' prospective member invite.'
         ]);
     }
 
@@ -263,6 +263,7 @@ class CompanyTeamsController extends Controller
             'userTeamInvite' => $user->getTeamInvite($team),
             'country' => Country::where('code', $team->country)->first(),
             'userTeamOwnershipInvite' => $user->getTeamInvite($team, 'ownership'),
+            'userTeamOwnershipRequest' => $user->getTeamOwernerRequest($team) ?: false,
             'isOwner' => $isOwner,
             'isAdmin' => $user->hasTeamRole($team, 'team_admin'),
             'order' => $order,
@@ -324,6 +325,7 @@ class CompanyTeamsController extends Controller
         }
 
         $team->update($data);
+        ApigeeService::updateCompany($team);
 
         return redirect()->route('team.show', $team->id)
             ->with('alert', 'success:Your team was successfully updated.');
@@ -349,6 +351,12 @@ class CompanyTeamsController extends Controller
             Teamwork::acceptInvite($invite);
             $roleId = Role::where('name', $invite->role)->first()->id ?? 8;
             $team->users()->updateExistingPivot($invite->user, ['role_id' => $roleId]);
+            $resp = ApigeeService::addDeveloperToCompany($team, $invite->user, $invite->role);
+            if ($resp->failed()) {
+                return response()->json([
+                    'success' => false,
+                ], $resp->status());
+            }
         }
 
         if (!$invite->exists) {
