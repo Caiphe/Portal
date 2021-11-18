@@ -14,19 +14,23 @@ class HomeController extends Controller
      */
     public function __invoke()
     {
-        if(Gate::allows('administer-products')){
-            return redirect()->route('admin.product.index');
-        }
-
-        if(Gate::allows('administer-users')){
-            return redirect()->route('admin.user.index');
-        }
-        
-        if(Gate::allows('administer-dashboard')){
+        if (auth()->user()->hasRole('opco')) {
             return redirect()->route('admin.dashboard.index');
         }
 
-        if(Gate::allows('administer-content')){
+        if (Gate::allows('administer-products')) {
+            return redirect()->route('admin.product.index');
+        }
+
+        if (Gate::allows('administer-users')) {
+            return redirect()->route('admin.user.index');
+        }
+
+        if (Gate::allows('administer-dashboard')) {
+            return redirect()->route('admin.dashboard.index');
+        }
+
+        if (Gate::allows('administer-content')) {
             return redirect()->route('admin.faq.index');
         }
     }
