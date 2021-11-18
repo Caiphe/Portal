@@ -83,14 +83,14 @@ class ResetPasswordNotification extends Notification
      */
     protected function buildMailMessage($url)
     {
-        // $ip = $_SERVER['REMOTE_ADDR'];
-        $ip = '102.249.3.52';
-        $location = json_decode( file_get_contents("http://ip-api.com/json/{$ip}"), true);
-        $locationLine = '';
+        $ip = $_SERVER['REMOTE_ADDR'];
+        // $location = json_decode( file_get_contents("http://ip-api.com/json/{$ip}"), true);
+        // $locationLine = '';
+        $locationLine = "The password reset request is from the IP **{$ip}**";
 
-        if(isset($location['status']) && $location['status'] === 'success'){
-            $locationLine = "The password reset request is from the IP **{$ip}**, and the location is from **{$location['city']}**, **{$location['country']}**.";
-        }
+        // if(isset($location['status']) && $location['status'] === 'success'){
+        //     $locationLine = "The password reset request is from the IP **{$ip}**, and the location is from **{$location['city']}**, **{$location['country']}**.";
+        // }
 
         return (new MailMessage)
             ->subject(Lang::get('Reset Password Notification'))
