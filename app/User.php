@@ -254,6 +254,11 @@ class User extends Authenticatable implements MustVerifyEmail
 		])->first();
 	}
 
+	public function authentications()
+    {
+        return $this->hasMany(AuthenticationLog::class)->latest('login_at');
+    }
+
 	/**
 	 * Send a password reset notification to the user.
 	 *
