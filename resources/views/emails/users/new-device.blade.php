@@ -1,7 +1,7 @@
 @component('mail::message')
 # @lang('Hello')!
 
-@lang('Your :app account logged in from a new device.', ['app' => config('app.name')])
+@lang('Your :app account logged in from a new device/browser.', ['app' => config('app.name')])
 
 > **@lang('Account'):** {{ $account->email }}<br/>
 > **@lang('Time'):** {{ $time->toCookieString() }}<br/>
