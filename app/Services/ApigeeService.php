@@ -601,14 +601,15 @@ class ApigeeService
 
     public static function pushAppNote(App $app, array $attributes, string $status = 'approved'): Response
     {
+        $accessUrl = !is_null($app->team) ? "companies/{$app->team->username}" : "developers/{$app->developer->email}";
         $action = [
             'approved' => 'approve',
             'revoked' => 'revoke'
         ][$status] ?? 'approve';
 
-        self::post("developers/{$app->developer->email}/apps/{$app->name}?action={$action}", [], ['Content-Type' => 'application/octet-stream']);
+        self::post("{$accessUrl}/apps/{$app->name}?action={$action}", [], ['Content-Type' => 'application/octet-stream']);
 
-        return self::put("developers/{$app->developer->email}/apps/{$app->name}", [
+        return self::put("{$accessUrl}/apps/{$app->name}", [
             "name" => $app->name,
             "attributes" => $attributes,
             "callbackUrl" => $app->callbackUrl ?? '',
