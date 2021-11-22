@@ -125,7 +125,8 @@ class DashboardController extends Controller
     public function update(UpdateStatusRequest $request)
     {
         $validated = $request->validated();
-        $app = App::with(['developer', 'products'])->find($validated['app']);
+        $app = App::with(['developer', 'products', 'team'])->find($validated['app']);
+        $isTeamApp = !is_null($app->team);
         $product = $app->products()->where('name', $validated['product'])->first();
         $currentUser = $request->user();
         $status = [
@@ -141,9 +142,9 @@ class DashboardController extends Controller
         $credentials = ApigeeService::getAppCredentials($app);
         $credentials = $validated['for'] === 'staging' ? $credentials[0] : end($credentials);
 
-        $developerId = $app->developer->email ?? $app->developer_id;
+        $updateId = $isTeamApp ? $app->team->username : $app->developer->email ?? $app->developer_id;
 
-        $response = ApigeeService::updateProductStatus($developerId, $app->name, $credentials['consumerKey'], $validated['product'], $validated['action']);
+        $response = ApigeeService::updateProductStatus($updateId, $app->name, $credentials['consumerKey'], $validated['product'], $validated['action'], $isTeamApp);
         $responseStatus = $response->status();
         if (preg_match('/^2/', $responseStatus)) {
             $app->products()->updateExistingPivot(
