@@ -355,9 +355,11 @@ class ApigeeService
         return Country::whereIn('code', $countryCodes)->pluck('name', 'code')->toArray();
     }
 
-    public static function updateProductStatus(string $id, string $app, string $key, string $product, string $action)
+    public static function updateProductStatus(string $id, string $app, string $key, string $product, string $action, bool $isTeam = false)
     {
-        return self::post("developers/{$id}/apps/{$app}/keys/{$key}/apiproducts/{$product}?action={$action}", [], ['Content-Type' => 'application/octet-stream']);
+        $accessUrl = $isTeam ? "companies/{$id}" : "developers/{$id}";
+
+        return self::post("{$accessUrl}/apps/{$app}/keys/{$key}/apiproducts/{$product}?action={$action}", [], ['Content-Type' => 'application/octet-stream']);
     }
 
     /**
