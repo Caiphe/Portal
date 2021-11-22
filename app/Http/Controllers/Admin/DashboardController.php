@@ -222,7 +222,6 @@ class DashboardController extends Controller
         $status = $request->get('status');
         $statusNote = $request->get('status-note', 'No note given.') ?: 'No note given';
         $currentUser = $request->user();
-
         $attr = $app->attributes;
         $attributes = [];
         $timestamp = date('d F Y');
