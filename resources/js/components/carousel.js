@@ -1,16 +1,16 @@
-(function() {
+(function () {
     var carousels = document.querySelectorAll(".carousel");
     var transitionTimer = {};
 
     for (var i = carousels.length - 1; i >= 0; i--) {
-        if(+carousels[i].dataset.wait < (+carousels[i].dataset.duration * 1000)){
-            alert('The carousel should not have a wait period less than the duration.');
+        if (+carousels[i].dataset.wait < (+carousels[i].dataset.duration * 1000)) {
+            console.log('The carousel should not have a wait period less than the duration.');
             continue;
         }
         
         setupCarousel(carousels[i], i);
 
-        if(carousels[i].dataset.autoScroll === 'false') continue;
+        if (carousels[i].dataset.autoScroll === 'false') continue;
 
         carousels[i].addEventListener('mouseenter', transitionStop);
         carousels[i].addEventListener('mouseleave', transitionStart);
@@ -72,7 +72,7 @@
         if (ev.target.dataset.index === undefined) return;
 
         parent = this.parentNode;
-        parent.querySelectorAll('.active').forEach(function(el){
+        parent.querySelectorAll('.active').forEach(function (el) {
             el.classList.remove('active');
         });
         parent.querySelectorAll('.carousel-item')[ev.target.dataset.index].classList.add('active');
@@ -86,7 +86,7 @@
         carouselActive.classList.remove('active');
         pagerActive.classList.remove('active');
 
-        if(carouselActive.nextElementSibling.className === "carousel-pager"){
+        if (carouselActive.nextElementSibling.className === "carousel-pager") {
             carousel.querySelector('.carousel-item').classList.add('active');
             carousel.querySelector('.carousel-pager-item').classList.add('active');
         } else {
@@ -94,7 +94,10 @@
             pagerActive.nextElementSibling.classList.add('active');
         }
 
-        if(carousel.dataset.autoScroll === 'false') return;
+        carouselActive = null;
+        pagerActive = null;
+
+        if (carousel.dataset.autoScroll === 'false') return;
 
         transitionTimer[carousel.dataset.name] = window.setTimeout(transitionCarousel.bind(null, carousel), +carousel.dataset.wait);
     }
@@ -105,7 +108,7 @@
     }
 
     function transitionStart() {
-        if(transitionTimer[this.dataset.name] !== null) return;
+        if (transitionTimer[this.dataset.name] === undefined || transitionTimer[this.dataset.name] !== null) return;
 
         transitionTimer[this.dataset.name] = window.setTimeout(transitionCarousel.bind(null, this), +this.dataset.wait);
     }
