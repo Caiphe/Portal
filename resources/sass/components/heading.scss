@@ -49,6 +49,10 @@
     overflow: hidden;
     z-index: 1;
 
+    span{
+        font-family: $MTN-Regular;
+    }
+
     @media screen and (min-width: 768px) {
         padding: 30px 40px 30px 80px;
     }
@@ -76,6 +80,12 @@
 
     .tag:first-child {
         margin-left: 10px;
+        text-transform: uppercase;
+        color: #1d1d1d;
+
+        @media(max-width: 768px){
+            display: none;
+        }
     }
 
     .tag {
@@ -103,7 +113,7 @@
         align-items: center;
 
         @media screen and (min-width: 768px) {
-            right: 40px;
+            right: 75px;
         }
 
         @media screen and (max-width: 768px) {

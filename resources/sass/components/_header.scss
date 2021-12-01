@@ -3,7 +3,7 @@
     height: 80px;
     background-color: $yellow;
     position: relative;
-    z-index: 99;
+    z-index: 3;
 
     .header-inner {
         height: 80px;
@@ -15,7 +15,7 @@
         max-width: initial;
 
         @media screen and (min-width: 768px) {
-            margin: 0 40px;
+            margin: 0 70px 0px 40px;
         }
 
         @media screen and (max-width: 768px) {
@@ -272,7 +272,7 @@
     position: absolute;
     list-style: none;
     padding: 20px;
-    width: 64px;
+    width: 70px;
     background-color: #fff;
     top: 36px;
     margin-left: -26px;
@@ -290,6 +290,7 @@
     font-size: 1.5rem;
     opacity: 0;
     pointer-events: none;
+    transition: all .3s ease-in-out;
 
     li {
         margin-bottom: 1.5rem;
@@ -297,6 +298,7 @@
 
     &.active {
         opacity: 1;
+        transition: all .3s ease-in-out;
         pointer-events: auto;
     }
 
@@ -344,6 +346,7 @@
 
         #search {
             width: 492px;
+            margin-top: 6px;
         }
 
         .profile-menu-options {
@@ -369,11 +372,12 @@
             margin-left: auto;
         }
 
+
         button:hover,
         .button:hover {
-            border: 2px solid $blue;
-            background-color: $blue;
+            transition: all .3s ease-in-out;
         }
+
     }
 }
 

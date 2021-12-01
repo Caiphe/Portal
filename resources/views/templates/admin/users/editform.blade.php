@@ -1,10 +1,3 @@
-@php
-    $userRoleIds = isset($user) ? $user->roles->pluck('id')->toArray() : [];
-    $userCountryCode = $user->countries[0]->pivot->country_code ?? 0;
-    $userResponsibleCountries = isset($user) ? $user->responsibleCountries()->pluck('code')->toArray() : [];
-    $userResponsibleGroups = isset($user) ? $user->responsibleGroups()->pluck('group')->toArray() : [];
-@endphp
-
 @csrf
 
 <div class="flex-container">
@@ -34,35 +27,35 @@
             </div>
         </div>
 
-        <div class="field-container">
-            <label class="control-label">Country of residence</label>
-            <select name="country" autocomplete="off">
-                <option value="">Select country</option>
-                @foreach($countries as $country)
-                    <option @if($userCountryCode === $country->code) selected @endif value="{{ $country->code }}">{{ $country->name }}</option>
-                @endforeach
-            </select>
+        <div class="field-container wrap">
+            <label class="control-label">Countries of operation</label>
+            <x-multiselect id="country" name="country" label="Select country" :options="$countries->pluck('name', 'code')->toArray()" :selected="$userCountryCodes"/>
         </div>
 
     </div>
 
-    <div class="each-container">
-        <h2>Groups & Roles</h2>
+    <div class="each-container roles-groups">
+        @if($isAdminUser)
+        <h2>Groups</h2>
 
         <div class="form-control mb">
             <label class="control-label">Groups this user is responsible for</label>
             <x-multiselect id="responsible_groups" name="responsible_groups" label="Select groups" :options="$groups" :selected="$userResponsibleGroups"/>
         </div>
 
-        <div class="form-control mb">
+        <h2 class="role-heading">Roles</h2>
+
+        <div class="form-control">
             <label class="control-label">Role this user is responsible for</label>
             <x-multiselect id="roles" name="roles" label="Select role" :options="$roles->pluck('label', 'id')->toArray()" :selected="$userRoleIds"/>
         </div>
 
-        <div class="form-control mb">
+        <div class="form-control">
             <label class="control-label">Countries this user is responsible for</label>
             <x-multiselect id="responsible_countries" name="responsible_countries" label="Select country" :options="$countries->pluck('name', 'code')->toArray()" :selected="$userResponsibleCountries"/>
         </div>
+        @endif
+
     </div>
 
 </div>
@@ -99,11 +92,10 @@
             <label>Country</label>
             <select name="country-filter" id="country-filter">
                 <option value="all">All</option>
-                @foreach($countries as $country)
-                    @if(in_array($country->code, $userResponsibleCountries))
+                    @foreach($userApps->pluck('country')->unique('name') as $country)
+                        @if(!$country || (!in_array($country->code, $userResponsibleCountries) && !$isAdminUser)) @continue @endif
                         <option value="{{ $country->code }}" {{ (($selectedCountryFilter === $country->code) ? 'selected': '') }}>{{ $country->name }}</option>
-                    @endif
-                @endforeach
+                    @endforeach
             </select>
         </div>
     </div>
@@ -114,26 +106,31 @@
 
 {{-- apps list --}}
 <table id="dev-apps">
-    <tr>
-        <th>Name</th>
-        <th>Products</th>
-        <th>Created</th>
-        <th>Country</th>
-        <th>Status</th>
-    </tr>
+    <thead>
+        <tr>
+            <th><a style="color: #ffffff" href="?sort=name&order={{ $order . $defaultSortQuery }}">Name @svg('chevron-sorter', '#fff')</a></th>
+            <th>Products</th>
+            <th><a style="color: #ffffff" href="?sort=created_at&order={{ $order . $defaultSortQuery }}">Registered @svg('chevron-sorter', '#fff')</a></th>
+            <th>Country</th>
+            <th>Status</th>
+        </tr>
+    </thead>
 
-    @if(!$user->getApps()->isEmpty())
-        @foreach($user->getApps() as $app)
-            @if(in_array($app->country_code, $userResponsibleCountries))
-                <tr class="user-app" data-country="{{ $app->country_code }}">
-                    <td><a href="{{ route('admin.dashboard.index', ['q' => $app->display_name, 'product-status' => 'all']) }}" class="app-link">{{ $app->display_name }}</a></td>
-                    <td>{{ count($app->products) }}</td>
-                    <td>{{ $app->created_at }}</td>
-                    <td><div class="country-flag" style="background-image: url('/images/locations/{{ $app->country->code }}.svg')"></div></td>
-                    <td><div class="status {{ ('approved' === $app->status)  ? 'active' : 'non-active' }}"></div></td>
-                </tr>
-            @endif
+    @if(!$userApps->isEmpty())
+        @foreach($userApps as $app)
+        @if(!(in_array($app->country_code, $userResponsibleCountries) || $isAdminUser)) @continue @endif
+        <tr class="user-app" data-country="{{ $app->country_code }}">
+            <td><a href="{{ route('admin.dashboard.index', ['aid' => $app->aid]) }}" class="app-link">{{ $app->display_name }}</a></td>
+            <td>{{ count($app->products) }}</td>
+            <td>{{ $app->created_at->format('Y-m-d') }}</td>
+            <td><div class="country-flag" style="background-image: url('/images/locations/{{ $app->country_code ?? 'globe' }}.svg')"></div></td>
+            <td><div class="status app-status-{{ $app->status }}"></div></td>
+        </tr>
         @endforeach
+    @else
+    <tr>
+        <td>Developer currently has no apps</td>
+    </tr>
     @endif
 </table>
 

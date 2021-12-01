@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
+use App\Mail\UpdateUser;
 use App\Product;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use App\Services\TwofaService;
 use Google2FA;
 use PragmaRX\Google2FALaravel\Support\Authenticator;
+use Illuminate\Support\Facades\Mail;
+use Mpociot\Teamwork\TeamInvite;
 
 class UserController extends Controller
 {
@@ -36,12 +40,16 @@ class UserController extends Controller
 			->get()
 			->implode('locations', ',');
 
+        $teamInvite = TeamInvite::where('email', $user->email)
+            ->first();
+
 		return view('templates.user.show', [
 			'user' => $user,
 			'userLocations' => $user->countries->pluck('code')->toArray(),
 			'locations' => array_unique(explode(',', $productLocations)),
 			'key' => $key,
 			'inlineUrl' => $inlineUrl,
+            'teamInvite' => $teamInvite,
 		]);
 	}
 
@@ -52,56 +60,37 @@ class UserController extends Controller
 	 * @param  int  $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request)
+	public function update(UserRequest $request)
 	{
-		$validateOn = [
-			'first_name' => 'required',
-			'last_name' => 'required',
-		];
-
+		$validated = $request->validated();
 		$user = $request->user();
+		$emails = [$user->email];
+		$hasNewEmail = $request->email !== $user->email;
 
-		if ($request->email !== $user->email) {
-			$validateOn = array_merge($validateOn, ['email' => 'email:filter|required|unique:users,email']);
+		if ($hasNewEmail) {
+			$emails[] = $validated['email'];
+			$validated['email_verified_at'] = null;
 		}
 
-		if ($request->password !== null) {
-			$validateOn = array_merge($validateOn, ['password' => [
-				'confirmed',
-				'min:12',
-				'regex:/[A-Z]/',
-				'regex:/[a-z]/',
-				'regex:/[0-9]/',
-				'regex:/\p{Z}|\p{S}|\p{P}/u'
-			]]);
+		if(!is_null($validated['password'])) {
+			$validated['password'] = bcrypt($validated['password']);
+		} else {
+			unset($validated['password']);
 		}
 
-		$validatedData = $request->validate($validateOn);
+		$user->update($validated);
 
-		if (isset($validatedData['password'])) {
-			$validatedData['password'] = bcrypt($validatedData['password']);
+		if ($request->has('locations')) {
+			$user->countries()->sync($validated['locations']);
 		}
 
-		$validatedData['first_name'] = filter_var($validatedData['first_name'], FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		$validatedData['last_name'] = filter_var($validatedData['last_name'], FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if (isset($validatedData['email'])) {
-			$validatedData['email'] = filter_var($validatedData['email'], FILTER_SANITIZE_EMAIL);
-			$validatedData['email_verified_at'] = null;
-		}
-
-		$user->update($validatedData);
-
-		if (isset($validatedData['email'])) {
+		if ($hasNewEmail) {
 			$user->sendEmailVerificationNotification();
 		}
 
-		if ($request->has('locations')) {
-			$user->countries()->sync($request->locations);
-		}
+		Mail::to($emails)->send(new UpdateUser($user));
 
-		\Session::flash('alert', 'Success:Your profile has been updated.');
-
-		return redirect()->back();
+		return redirect()->back()->with('alert', 'Success:Your profile has been updated.');
 	}
 
 	public function updateProfilePicture(Request $request)
@@ -109,8 +98,17 @@ class UserController extends Controller
 		$request->validate([
 			'profile' => 'required|mimes:jpeg,jpg,png|max:5120',
 		]);
+		$disk = \Storage::disk('public');
+		$user = $request->user();
+		$currentImageName = basename($user->profile_picture);
+		$isDefaultImage = strpos($currentImageName, 'profile-') !== false;
+		$imageName = $isDefaultImage || strlen($currentImageName) > 20 ? base64_encode(date('iYHs') . rand(1, 24)) . '.png' : $currentImageName;
+		$imageName = 'profile/' . $imageName;
+		$currentImageName = 'profile/' . $currentImageName;
 
-		$imageName = 'profile/' . base64_encode(date('iYHs') . rand(1, 24)) . '.png';
+		if (!$isDefaultImage && $disk->exists($currentImageName)) {
+			$disk->delete($currentImageName);
+		}
 
 		$image = Image::make($request->file('profile'))
 			->fit(452, 452, function ($constraint) {
@@ -118,8 +116,7 @@ class UserController extends Controller
 				$constraint->upsize();
 			});
 
-		$success = \Storage::disk('public')->put($imageName, (string) $image->encode('png', 95));
-
+		$success = $disk->put($imageName, (string) $image->encode('png', 95));
 		$request->user()->update(['profile_picture' => '/storage/' . $imageName]);
 
 		return response()->json([

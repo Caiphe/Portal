@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Bundle;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\BundleRequest;
 use Illuminate\Http\Request;
 
 class BundleController extends Controller
@@ -30,6 +31,7 @@ class BundleController extends Controller
                     'fields' => ['display_name', 'category.title'],
                     'modelName' => 'bundle'
                 ], 200)
+                ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         }
 
@@ -48,9 +50,10 @@ class BundleController extends Controller
         ]);
     }
 
-    public function update(Bundle $bundle, Request $request)
+    public function update(Bundle $bundle, BundleRequest $request)
     {
         $content = $bundle->content()->whereType('overview')->first();
+
         if ($content) {
             $content->update($request->only(['body']));
         } else {

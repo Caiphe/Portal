@@ -37,7 +37,7 @@ class FaqRequest extends FormRequest {
     {
         $this->merge([
             'question' => filter_var($this->question, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'answer' => filter_var($this->answer, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'answer' => strip_tags($this->answer, '<strong><a><em><i><del><img><ul><ol><li><pre><br><p><table><tbody><thead><tr><td><h2><h3><h4><s><blockquote><u>'),
             'category_cid' => filter_var($this->category_cid, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
         ]);
     }

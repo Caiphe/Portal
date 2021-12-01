@@ -19,7 +19,7 @@
     }
 
     &.app-status-approved .status-icon {
-        background: url('/images/icons/approved.svg') no-repeat center center / contain;
+        background: url('/images/icons/status-approved.svg') no-repeat center center / contain;
     }
 
     &.app-status-revoked .status-icon {
@@ -27,7 +27,7 @@
     }
 
     &.app-status-pending .status-icon {
-        background: url('/images/icons/pending.svg') no-repeat center center / contain;
+        background: url('/images/icons/status-pending.svg') no-repeat center center / contain;
     }
 
     .column:first-of-type {
@@ -104,13 +104,14 @@
         top: 40px;
         z-index: 1;
         opacity: 0;
+        transform: translate(10px);
         pointer-events: none;
         transition: opacity 0.18s ease-in, transform 0.18s ease-in;
 
         &.custom-menu{
-            right: 26px;
-            padding-top: 2px;
-            top: 19px;
+            right: 76px;
+            padding-top: 4px;
+            top: 14px;
         }
 
         a {
@@ -132,7 +133,7 @@
         &.show {
             opacity: 1;
             pointer-events: auto;
-            transform: translate(0, 10px);
+            transform: translate(0);
             z-index: 3;
         }
     }
@@ -400,6 +401,14 @@
     }
 }
 
+#app-index .my-apps .column:nth-of-type(3) {
+    margin-right: auto;
+}
+
+#app-index .my-apps .column:nth-of-type(4) {
+    width: 182px;
+}
+
 .log-notes{
     width: 201px;
 }
@@ -410,6 +419,7 @@
 
 .custom-app-last-block{
     display: flex;
+    justify-content: right;
     position: relative;
     width: 20% !important;
 
@@ -432,3 +442,6 @@
     }
 }
 
+.ml-15{
+    margin-left: 15px;
+}

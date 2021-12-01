@@ -38,6 +38,7 @@ class DashboardController extends Controller
                     'apps' => App::where('country_code', 'none')->paginate(),
                     'countries' => Country::all(),
                 ], 200)
+                ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         } else if ($notAdminNoResponsibleCountries) {
             return view('templates.admin.dashboard.index', [
@@ -51,6 +52,7 @@ class DashboardController extends Controller
 
         $apps = App::with(['developer', 'country', 'products.countries'])
             ->whereNotNull('country_code')
+            ->when($request->has('aid'), fn ($q) => $q->where('aid', $request->get('aid')))
             ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes) {
                 $query->whereIn('country_code', $responsibleCountriesCodes);
             })
@@ -68,7 +70,7 @@ class DashboardController extends Controller
             ->when($appStatus !== 'all', function ($q) use ($appStatus) {
                 $q->where('status', $appStatus);
             })
-            ->when($productStatus !== 'all', function ($q) use ($productStatus) {
+            ->when($productStatus !== 'all' && !$request->has('aid'), function ($q) use ($productStatus) {
                 switch ($productStatus) {
                     case 'pending':
                         $q->whereHas('products', fn ($q) => $q->where('status', 'pending'));
@@ -107,6 +109,7 @@ class DashboardController extends Controller
                     'apps' => $apps,
                     'countries' => Country::orderBy('name')->pluck('name', 'code'),
                 ], 200)
+                ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         }
 
@@ -122,7 +125,8 @@ class DashboardController extends Controller
     public function update(UpdateStatusRequest $request)
     {
         $validated = $request->validated();
-        $app = App::with(['developer', 'products'])->find($validated['app']);
+        $app = App::with(['developer', 'products', 'team'])->find($validated['app']);
+        $isTeamApp = !is_null($app->team);
         $product = $app->products()->where('name', $validated['product'])->first();
         $currentUser = $request->user();
         $status = [
@@ -138,9 +142,9 @@ class DashboardController extends Controller
         $credentials = ApigeeService::getAppCredentials($app);
         $credentials = $validated['for'] === 'staging' ? $credentials[0] : end($credentials);
 
-        $developerId = $app->developer->email ?? $app->developer_id;
+        $updateId = $isTeamApp ? $app->team->username : $app->developer->email ?? $app->developer_id;
 
-        $response = ApigeeService::updateProductStatus($developerId, $app->name, $credentials['consumerKey'], $validated['product'], $validated['action']);
+        $response = ApigeeService::updateProductStatus($updateId, $app->name, $credentials['consumerKey'], $validated['product'], $validated['action'], $isTeamApp);
         $responseStatus = $response->status();
         if (preg_match('/^2/', $responseStatus)) {
             $app->products()->updateExistingPivot(
@@ -160,7 +164,8 @@ class DashboardController extends Controller
         Mail::to(env('MAIL_TO_ADDRESS'))->send(new ProductAction($app, $validated, $currentUser));
 
         if ($request->ajax()) {
-            return response()->json(['success' => true]);
+            $product = $app->products()->where('name', $validated['product'])->first();
+            return response()->json(['success' => true, 'body' => $product->notes]);
         }
 
         return redirect()->back();
@@ -217,7 +222,6 @@ class DashboardController extends Controller
         $status = $request->get('status');
         $statusNote = $request->get('status-note', 'No note given.') ?: 'No note given';
         $currentUser = $request->user();
-
         $attr = $app->attributes;
         $attributes = [];
         $timestamp = date('d F Y');

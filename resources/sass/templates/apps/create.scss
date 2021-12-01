@@ -298,3 +298,185 @@
         }
     }
 }
+
+.group-info {
+    svg {
+        margin-bottom: -2px;
+        margin-left: 2px;
+        cursor: pointer;
+    }
+
+    .tooltip {
+        display: block;
+        position: absolute;
+        width: 200px;
+        z-index: 2;
+        background: #000;
+        color: #FFF;
+        border-radius: 10px;
+        padding: 18px;
+        margin-top: -20px;
+        margin-left: 130px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 256ms, transform 256ms;
+        transform: translateX(-10px);
+    }
+
+    svg:hover+.tooltip {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+}
+
+.user-thumbnails {
+    width: 98px;
+    height: 98px;
+    margin: 40px auto;
+
+    .thumbail {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+    }
+
+    label {
+        input {
+            opacity: 0;
+        }
+    }
+}
+
+.team-field {
+    position: relative;
+
+    .select-default {
+        position: absolute;
+        top: 9px;
+
+        .hide-mobi {
+            @media(max-width: 768px) {
+                display: none;
+            }
+        }
+    }
+
+    .selected-data {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .select_wrap {
+        width: 100%;
+        position: relative;
+        user-select: none;
+        margin-top: -14px;
+        z-index: 1;
+
+        .default_option {
+            background: #fff;
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+            z-index: 2;
+            margin: 0px;
+            border: solid 1px #cdcdcd;
+            padding: 8px 27px 0px 15px;
+            box-sizing: border-box;
+            margin-bottom: 0px;
+            min-height: 40px;
+            padding-bottom: 10px;
+
+            li {
+                border-radius: 3px;
+                padding: 4px 0 !important;
+                list-style: none;
+            }
+
+            &:before {
+                content: "";
+                position: absolute;
+                top: 13px;
+                right: 18px;
+                width: 6px;
+                height: 6px;
+                border: 2px solid;
+                border-color: transparent transparent #4A4A4A #4A4A4A;
+                transform: rotate(-45deg);
+                transition: all .3s ease-in-out;
+            }
+        }
+
+        .select_ul {
+            position: relative;
+            left: 0;
+            width: 100%;
+            background: #fff;
+            border-radius: 5px;
+            display: none;
+            margin-top: -1px;
+            padding: 0px;
+
+            li {
+                list-style: none;
+                border: solid 1px #C6C6C6;
+                border-top: none;
+                position: relative;
+                cursor: pointer;
+                padding: 3px 0;
+                box-sizing: border-box;
+                transition: all 0.3s ease-in-out;
+
+                .select-default {
+                    padding-left: 15px;
+                }
+
+                &:hover {
+                    background-color: #eeeeee;
+                    transition: all 0.3s ease-in-out;
+                }
+            }
+
+            .option {
+                margin-top: 2px;
+            }
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+
+            .icon {
+                width: 20px;
+                height: 20px;
+                margin-right: 9px;
+                border-radius: 50%;
+                margin-left: 18px;
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-size: cover;
+                background-color: $yellow;
+                position: absolute;
+                top: 4px;
+            }
+        }
+
+        &.active {
+            .select_ul {
+                display: block;
+            }
+
+            .default_option:before {
+                transform: rotate(-225deg);
+                top: 19px;
+            }
+        }
+    }
+}
+
+.select-data {
+    margin: 1px 9px 0px 50px;
+}

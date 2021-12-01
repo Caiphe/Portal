@@ -60,7 +60,24 @@ table {
     }
 
     td {
-        vertical-align: top;
+        // vertical-align: top;
+    }
+    .table-title{
+        td{
+            font-weight: 800;
+            color: black;
+            position: relative;
+            font-size: 15px;
+            font-family: "mtn-bold";
+
+            svg{
+                width: 17px;
+                margin-bottom: -4px;
+                height: 16px;
+                margin-left: 2px;
+            }
+
+        }
     }
 }
 
@@ -101,6 +118,7 @@ table {
     }
 }
 
-trix-editor {
+.editor {
     word-break: break-word;
 }
+

@@ -11,6 +11,7 @@
     border: solid 1px #d2d2d2;
 
     svg {
+        width: 24px;
         position: absolute;
         bottom: 20px;
         right: 20px;
@@ -20,7 +21,6 @@
         margin: 5px 0;
         display: flex;
         align-items: center;
-        font-family: "Montserrat-Light";
         font-size: 18px;
     }
 

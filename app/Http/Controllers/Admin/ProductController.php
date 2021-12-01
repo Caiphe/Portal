@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Category;
 use App\Country;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ProductRequest;
 use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -13,6 +14,7 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
+        $access = $request->get('access', "");
         $products = Product::with('category')
             ->byResponsibleCountry($request->user())
             ->when($request->has('q'), function ($q) use ($request) {
@@ -26,7 +28,7 @@ class ProductController extends Controller
                         });
                 });
             })
-            ->when($request->has('access'), function($q) use ($request) {
+            ->when($access !== "" && !is_null($access), function($q) use ($request) {
                 $q->where('access', $request->get('access'));
             });
 
@@ -37,6 +39,7 @@ class ProductController extends Controller
                     'fields' => ['display_name', 'access', 'environments', 'category.title'],
                     'modelName' => 'product'
                 ], 200)
+                ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         }
 
@@ -57,7 +60,7 @@ class ProductController extends Controller
         ]);
     }
 
-    public function update(Product $product, Request $request)
+    public function update(Product $product, ProductRequest $request)
     {
         $now = date('Y-m-d H:i:s');
         $contents = [];

@@ -1,0 +1,270 @@
+@import '../../variables';
+
+#main {
+    .content {
+        width: 100%;
+        margin: 0 auto;
+        max-width: 500px;
+
+        h2 {
+            font-size: 30px;
+            line-height: 30px;
+        }
+    }
+
+    #form-create-team {
+
+        #create{
+            svg{
+                width: 16px;
+                margin-left: 7px;
+            }
+        }
+
+        .group{
+            position: relative;
+
+            .logo-file-container{
+                border: 1px solid #cdcdcd;
+                border-radius: 7px;
+                height: 49px;
+                box-sizing: border-box;
+                width: 100%;
+                margin-bottom: 28px;
+
+                .upload-file-name{
+                    padding-left: 15px;
+                    margin-top: 13px;
+                    position: absolute;
+                    cursor: pointer;
+                    color: #1D1D1D;
+                    font-size: 14px;
+                }
+
+                .logo-file{
+                    z-index: 2;
+                    cursor: pointer;
+                    opacity: 0;
+                }
+            }
+
+            .logo-add-icon{
+                width: 28px;
+                height: 28px;
+                border-radius: 50%;
+                background-color: #0C678F;
+                border: none;
+                padding: 0px;
+                position: absolute;
+                right: 19px;
+                text-align: center;
+                cursor: pointer;
+                top: 40px;
+                z-index: 1;
+
+                svg{
+                    margin-top: 2px;
+                    width: 25px;
+                    font-weight: bold;
+                }
+
+                &.active{
+                    background-color: #BB1E4F;
+                }
+            }
+
+            .invite-btn{
+                background-color: #000000;
+                position: absolute;
+                right: 0;
+                color: #fff;
+                border: none;
+                font-size: 17px;
+                top: 31px;
+                height: 49px;
+                width: 105px;
+                border-radius: 0px 5px 5px 0px;
+                transition: all 0.3s ease-in-out;
+                pointer-events: none;
+                cursor: none;
+
+                &.active{
+                    pointer-events: auto;
+                    cursor: pointer;
+                }
+
+                @media(max-width:767px){
+                    font-size: 14px;
+                    width: 70px;
+                }
+
+                &:hover{
+                    cursor: pointer;
+                    background-color: #1D1D1D;
+                    transition: all 0.3s ease-in-out;
+                }
+            }
+
+            .error-email{
+                position: absolute;
+                top: 84px;
+                right: 0;
+                color: $error;
+                font-size: 12px;
+                display: none;
+
+                &.show{
+                    display: block;
+                }
+            }
+
+            .invite-tags{
+                position: relative;
+                display: flex;
+                flex-wrap: wrap;
+                margin-top: -10px;
+                transition: all 0.3s ease-in-out;
+
+                &.m-40{
+                    margin-bottom: 20px;
+                }
+    
+                .each-tag{
+                    background-color: #000;
+                    color: #fff;
+                    border-radius: 4px;
+                    padding: 4px 6px;
+                    padding: 4px 16px 4px 6px;
+                    font-size: 13px;
+                    margin-right: 3px;
+                    margin-bottom: 3px;
+                    position: relative;
+
+                    .close-tag{
+                        border: none;
+                        background-color: transparent;
+                        position: absolute;
+                        right: 3px;
+                        width: 10px;
+                        height: 23px;
+                        top: 5px;
+                        padding: 0px;
+                        border-radius: 0px;
+                        text-align: center;
+
+                        &:after{
+                            content: "\D7";
+                            margin-left: 6px;
+                            font-size: 1.4rem;
+                            position: absolute;
+                            right: 1px;
+                            color: #fff;
+                            top: 4px;
+                        }
+                    }
+                }
+            }
+
+            .mb-0 {
+                margin-bottom: 0;
+            }
+
+            small {
+                display: inline-block;
+            }
+        }
+
+        .countries{
+            position: relative;
+            appearance: none;
+            margin-bottom: 20px;
+
+            .country-block-container{
+                height: 45px;
+                position: relative;
+            }
+
+            &:after{
+                position: absolute;
+                content: "";
+                width: 15px;
+                height: 20px;
+                background-color: #fff;
+                right: 4px;
+                top: 42px;
+            }
+
+           svg{
+                position: absolute;
+                right: 13px;
+                top: 14px;
+                width: 35px;
+            }
+        }
+
+        #description{
+            height: 100px;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
+        label {
+            display: block;
+            padding-bottom: 10px;
+            font-family: $Montserrat-regular;
+            font-weight: 500;
+            color: #000000;
+        }
+
+        input, select {
+            width: 100%;
+            margin-bottom: 30px;
+            min-height: 49px;
+            font-size: 14px;
+            padding-left: 15px;
+        }
+
+        input#logo {
+            &::-webkit-file-upload-button {
+                display: none;
+            }
+
+            &:after {
+                content: "+";
+                background: #0700ff;
+                width: 15px;
+                height: 15px;
+                position: absolute;
+                right: 5px;
+                top: 6px;
+                border-radius: 50%;
+                color: white;
+                padding: 0 5px 12px 6px;
+                font-size: 25px;
+            }
+        }
+    }
+}
+
+
+.custom-manage-team{
+    margin-bottom: 20px;
+    
+    a{
+        color: #0C678F;
+        text-decoration: underline;
+    }
+}
+
+.team-logo-container{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    background-color: $yellow;
+    margin-bottom: 10px;
+    margin-top: -10px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}

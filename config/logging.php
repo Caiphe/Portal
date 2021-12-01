@@ -35,6 +35,23 @@ return [
     */
 
     'channels' => [
+        'apigee' => [
+            'driver' => 'stack',
+            'channels' => ['apigee_file_log', 'sentry'],
+            'name' => 'apigee'
+        ],
+
+        'apigee_file_log' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/apigee.log'),
+            'level' => 'debug',
+            'days' => 30,
+        ],
+
+        'sentry' => [
+            'driver' => 'sentry',
+        ],
+
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],

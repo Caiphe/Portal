@@ -31,6 +31,7 @@ class CreateAppRequest extends FormRequest {
 			'description' => 'sometimes',
 			'country' => 'sometimes',
 			'products' => 'required|array|min:1',
+            'team_id' => 'sometimes'
 		];
 	}
 
@@ -51,7 +52,8 @@ class CreateAppRequest extends FormRequest {
     public function messages()
     {
         return [
-            'products.required' => 'Please select at least one product.'
+            'products.required' => 'Please select at least one product.',
+            'team_id.sometimes' => 'Please provide a team for your app.'
         ];
     }
 }

@@ -130,7 +130,7 @@
             <div class="select-products">
                 <div class="apps-heading-container">
                     <span class="apps-top-text">Create a new app</span>
-                    <h1 class="app-create-heading">Select countries</h1>
+                    <h1 class="app-create-heading">Select products</h1>
                     <span class="gray-text">Select the products you would like to add to your app.</span>
                 </div>
 
@@ -216,6 +216,8 @@
         var removeThumbnail = document.getElementById('remove-assignee');
         var ownerAvatar = document.querySelector(".owner-avatar");
 
+        var buttonsContainer =  document.querySelector(".apps-button-container");
+
         function init() {
             handleButtonClick();
             handleBackButtonClick();
@@ -242,10 +244,6 @@
 
                         if(inputBox.value === '') {
                             return void addAlert('error', 'Please add a valid email');
-                        }
-
-                        if (inputBox.value === 'No user found try again') {
-                            return void addAlert('error', 'To assign the App ownership to yourself, please select "Assign to me" from below.');
                         }
 
                         nav.querySelector('a').nextElementSibling.classList.add('active');
@@ -518,6 +516,10 @@
                 for (let i = 0; i < allList.length; i++) {
                     //adding onclick attribute in all li tag
                     allList[i].setAttribute("onclick", "select(this)");
+                    allList[i].addEventListener('click', function(){
+                        removeThumbnail.style.display = "block";
+                        buttonsContainer.classList.add("on-show");
+                    })
                 }
             }else{
                 searchWrapper.classList.remove("active"); //hide autocomplete box
@@ -541,6 +543,7 @@
                 inputBox.value = '';
                 ownerAvatar.style.backgroundImage = "url(/images/yellow-vector.svg)";
                 this.style.display = 'none';
+                buttonsContainer.classList.remove("on-show");
             });
         }
 
@@ -548,7 +551,7 @@
             let listData;
             if(!list.length){
                 // userValue = inputBox.value;
-                listData = `<li class="non-cursor">No user found try again</li>`;
+                listData = `<li class="non-cursor"><div class="hide-cursor">No user found try again</div></li>`;
             }else{
                 listData = list.join('');
             }

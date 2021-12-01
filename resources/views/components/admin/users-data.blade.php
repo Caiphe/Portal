@@ -1,7 +1,7 @@
 <table>
     <thead>
         <tr>
-            <th><a style="color: #ffffff" href="?sort=first_name&order={{ $order . $defaultSortQuery }}">Fist Name @svg('chevron-sorter', '#fff')</a></th>
+            <th><a style="color: #ffffff" href="?sort=first_name&order={{ $order . $defaultSortQuery }}">First Name @svg('chevron-sorter', '#fff')</a></th>
             <th><a style="color: #ffffff" href="?sort=last_name&order={{  $order . $defaultSortQuery  }}">Last Name @svg('chevron-sorter', '#fff')</a></th>
             <th><a style="color: #ffffff" href="?sort=email&order={{  $order . $defaultSortQuery  }}">Email @svg('chevron-sorter', '#fff')</a></th>
             <th>Member Since</th>
@@ -16,7 +16,7 @@
             @foreach($fields as $field)
                 @if($field === 'member_since')
                     <td align="left">
-                        {{ \Carbon\Carbon::parse($model->created_at)->diffForHumans() }}
+                        {{ $model->created_at->format('Y-m-d') }}
                     </td>
                 @elseif($field === 'status')
                     <td align="left">
@@ -28,7 +28,7 @@
                     </td>
                 @elseif($field === 'apps')
                     <td align="left">
-                        <a href="{{ route("admin.dashboard.index", ['q' => $model->email]) }}">{{ $model->getDeveloperAppsCount() }}</a>
+                        <a href="{{ route("admin.dashboard.index", ['q' => $model->email, 'product-status' => 'all']) }}">{{ $model->getDeveloperAppsCount() }}</a>
                     </td>
                 @else
                     <td align="left">

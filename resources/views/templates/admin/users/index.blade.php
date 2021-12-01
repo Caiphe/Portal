@@ -26,7 +26,20 @@
         document.querySelector('.show-per-page').addEventListener('change', handleChangedFilter);
 
         function handleChangedFilter() {
-            document.getElementById('users-search-form').dispatchEvent(new Event('submit'));
+            var filterForm = document.getElementById('users-search-form');
+
+            if(filterForm.requestSubmit !== undefined) {
+                filterForm.requestSubmit();
+            }else{
+                filterForm.submit();
+            }
+        }
+        
+        ajaxifyOnPopState = updateFilters;
+        function updateFilters(params) {
+            document.getElementById('search-page').value = params['q'] || '';
+            document.querySelector('.users-status').value = params['verified'] || '';
+            document.querySelector('.show-per-page').value = params['per-page'] || '10';
         }
     </script>
 @endpush

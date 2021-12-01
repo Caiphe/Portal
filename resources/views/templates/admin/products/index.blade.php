@@ -15,7 +15,20 @@
     document.getElementById('access-level').addEventListener('change', accessChangedFilter);
 
     function accessChangedFilter() {
-        document.getElementById('product-search-form').dispatchEvent(new Event('submit'));
+        var filterForm = document.getElementById('product-search-form');
+
+        if(filterForm.requestSubmit !== undefined) {
+            filterForm.requestSubmit();
+        }else{
+            filterForm.submit();
+        }
     }
+
+    ajaxifyOnPopState = updateFilters;
+    function updateFilters(params) {
+        document.getElementById('search-page').value = params['q'] || '';
+        document.querySelector('#access-level').value = params['access'] || '';
+    }
+
 </script>
 @endpush

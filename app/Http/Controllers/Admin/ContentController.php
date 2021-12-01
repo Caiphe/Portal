@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Content;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\DocsRequest;
+use App\Http\Requests\Admin\PageRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -30,6 +32,7 @@ class ContentController extends Controller
                     'fields' => ['title'],
                     'modelName' => 'page'
                 ], 200)
+                ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         }
 
@@ -45,12 +48,8 @@ class ContentController extends Controller
         ]);
     }
 
-    public function updatePage(Content $content, Request $request)
+    public function updatePage(Content $content, PageRequest $request)
     {
-        $request->validate([
-            'title' => ['required', Rule::unique('contents')->ignore($content->id),]
-        ]);
-
         $content->update($request->only(['title', 'body']));
 
         return redirect()->route('admin.page.index')->with('alert', 'success:The content has been updated.');
@@ -61,12 +60,8 @@ class ContentController extends Controller
         return view('templates.admin.pages.create');
     }
 
-    public function storePage(Request $request)
+    public function storePage(PageRequest $request)
     {
-        $request->validate([
-            'title' => 'required|unique:contents'
-        ]);
-
         Content::create([
             'title' => $request->title,
             'body' => $request->body,
@@ -104,6 +99,7 @@ class ContentController extends Controller
                     'fields' => ['title'],
                     'modelName' => 'doc'
                 ], 200)
+                ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         }
 
@@ -119,12 +115,8 @@ class ContentController extends Controller
         ]);
     }
 
-    public function updateDoc(Content $content, Request $request)
+    public function updateDoc(Content $content, DocsRequest $request)
     {
-        $request->validate([
-            'title' => ['required', Rule::unique('contents')->ignore($content->id)]
-        ]);
-
         $content->update($request->only(['title', 'body']));
 
         return redirect()->route('admin.doc.index')->with('alert', 'success:The content has been created.');
@@ -135,12 +127,8 @@ class ContentController extends Controller
         return view('templates.admin.docs.create');
     }
 
-    public function storeDoc(Request $request)
+    public function storeDoc(DocsRequest $request)
     {
-        $request->validate([
-            'title' => 'required|unique:contents'
-        ]);
-
         Content::create([
             'title' => $request->title,
             'body' => $request->body,

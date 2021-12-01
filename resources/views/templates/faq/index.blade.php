@@ -238,5 +238,10 @@
         }
     });
 }());
+
+    ajaxifyOnPopState = updateFilters;
+    function updateFilters(params) {
+        document.getElementById('search-page').value = params['q'] || '';
+    }
 </script>
 @endpushscript

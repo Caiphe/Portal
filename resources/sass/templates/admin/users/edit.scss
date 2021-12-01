@@ -32,22 +32,46 @@
     .each-container{
         flex: 1;
 
+        &.roles-groups{
+
+            h2{
+                margin-bottom: 2px;
+            }
+
+            .form-control{
+                display: flex;
+                flex-direction: column;
+
+                select{
+                    margin-bottom: 4px;
+                }
+            }
+
+            .role-heading{
+                margin-top: -4px;
+            }
+        }
+
         .users-password-check{
             color: #bb1e4f;
             padding-top: 58px;
         }
 
         #password-strength {
-            height: 34px;
+            height: 40px;
             line-height: 1;
             background-color: $grey500;
             border-radius: 5px;
             padding-top: 5px;
-            padding-top: 8px;
+            padding-top: 13px;
             padding-left: 13px;
             color: #000;
             transition: background-color 0.356s;
             width: 320px;
+
+            @media(max-width: 1300px){
+                width: 280px;
+            }
 
             &.password-score-0,
             &.password-score-1,
@@ -80,6 +104,10 @@
 
             label{
                 margin-top: 9px;
+
+                @media(max-width: 1400px){
+                    width: 120px;
+                }
             }
 
             select,
@@ -87,6 +115,10 @@
                 width: 320px;
                 border: 1px solid #707070;
                 border-radius: 4px;
+
+                @media(max-width: 1300px){
+                    width: 280px;
+                }
             }
 
             .block-membership{
@@ -97,6 +129,10 @@
                 box-sizing: border-box;
                 font-size: 14px;
                 padding: 10px 13px;
+
+                @media(max-width: 1300px){
+                    width: 280px;
+                }
             }
         }
 
@@ -124,7 +160,13 @@
                 margin-right: 3px;
             }
         }
+
     }
+}
+
+#country-tags {
+    width: 320px;
+    margin-left: auto;
 }
 
 .create-btn{
@@ -136,18 +178,9 @@
 
 .bottom-section-container{
     margin-top: 30px;
-}
-
-.select-container{
-    display: flex;
-    position: relative;
-    padding-right: 50px;
-    margin-top: 30px;
 
     .each-select-block{
-        width: 50%;
         display: flex;
-        justify-content: space-between;
 
         &:nth-child(1){
             margin-right: 30px;
@@ -158,10 +191,20 @@
         }
 
         select{
-            width: 135px;
+            width: 200px;
             border: 1px solid #707070;
+            margin-left: 20px;
         }
     }
+}
+
+.select-container{
+    display: flex;
+    position: relative;
+    padding-right: 50px;
+    margin-top: 30px;
+
+
 }
 
 
@@ -247,14 +290,17 @@
         height: 24px;
         border-radius: 50%;
 
-        &.active{
-            background-color: #00BE3F;
+        &.app-status-approved{
+            background: url('/images/icons/status-approved.svg') no-repeat center center / contain;
         }
 
-        &.non-active{
-            background-color: #FF7700;
+        &.app-status-pending{
+            background: url('/images/icons/status-pending.svg') no-repeat center center / contain;
         }
 
+        &.app-status-revoked{
+            background: url('/images/icons/status-revoked.svg') no-repeat center center / contain;
+        }
     }
 }
 
