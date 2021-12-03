@@ -13,7 +13,7 @@
         </div>
 
         <div class="column">
-            <p>Developer email</p>
+            <p>Developer/company</p>
         </div>
 
         <div class="column">
@@ -39,7 +39,7 @@
                 <x-app-new
                     :app="$app"
                     :attr="$app->attributes"
-                    :details="$app->developer"
+                    :details="$app->team ?? $app->developer"
                     :countries="$productCountries ?: ['all' => 'Global']"
                     type="approved">
                 </x-app-new>
