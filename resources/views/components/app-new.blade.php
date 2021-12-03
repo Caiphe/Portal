@@ -32,7 +32,7 @@
 
     <div class="column">
         @if($isAdminPage)
-            {{ $details['email'] ?? '' }}
+            {{ $details['email'] ?? $details['name'] ?? '' }}
         @else
            <a class="bold" href="" target="_blank"> @subStr($app['callback_url'], 30)</a>
         @endif
