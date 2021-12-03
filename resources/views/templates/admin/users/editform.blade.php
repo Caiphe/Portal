@@ -93,7 +93,7 @@
             <select name="country-filter" id="country-filter">
                 <option value="all">All</option>
                     @foreach($userApps->pluck('country')->unique('name') as $country)
-                        @if(!$country || (!in_array($country->code, $userResponsibleCountries) && !$isAdminUser)) @continue @endif
+                        @if(!$country || (!in_array($country->code, $currentUserResponsibleCountries) && !$isAdminUser)) @continue @endif
                         <option value="{{ $country->code }}" {{ (($selectedCountryFilter === $country->code) ? 'selected': '') }}>{{ $country->name }}</option>
                     @endforeach
             </select>
@@ -118,7 +118,7 @@
 
     @if(!$userApps->isEmpty())
         @foreach($userApps as $app)
-        @if(!(in_array($app->country_code, $userResponsibleCountries) || $isAdminUser)) @continue @endif
+        @if(!(in_array($app->country_code, $currentUserResponsibleCountries) || $isAdminUser)) @continue @endif
         <tr class="user-app" data-country="{{ $app->country_code }}">
             <td><a href="{{ route('admin.dashboard.index', ['aid' => $app->aid]) }}" class="app-link">{{ $app->display_name }}</a></td>
             <td>{{ count($app->products) }}</td>
