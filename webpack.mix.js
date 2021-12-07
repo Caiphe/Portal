@@ -40,6 +40,7 @@ mix.scripts(
     .scripts(["resources/js/vendor/ckeditor.js", "resources/js/components/ckeditor.js"], "public/js/components/ckeditor.js")
     .copy("resources/js/vendor/ckeditor.js.map", "public/js/components/ckeditor.js.map")
     .copyDirectory("resources/js/vendor/translations", "public/js/components/translations")
+    .sass("resources/sass/layouts/admin.scss", "public/css/layouts")
     .sass("resources/sass/auth/login.scss", "public/css/auth")
     .sass("resources/sass/auth/register.scss", "public/css/auth")
     .sass("resources/sass/auth/verify.scss", "public/css/auth")

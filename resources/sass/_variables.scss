@@ -42,6 +42,7 @@ $purple: #7121ea;
 $white: #ffffff;
 
 $black: #000000;
+$dark: #1D1D1D;
 
 $success: $green;
 $success900: mix(#ffffff, $success, 20%);
@@ -100,10 +101,10 @@ $large-portrait: '(min-width: 1024px) and (orientation: portrait)';
 $xlarge: '(min-width: 1200px)';
 
 // Font Family
-$MTN-Regular : "mtn-regular";
-$MTN-Bold : "mtn-bold";
-$MTN-Medium : "mtn-medium";
-$MTN-italic : "mtn-italic";
-$Montserrat-regular : "Montserrat";
-$Montserrat-Light : "Montserrat-Light";
-$Montserrat-Bold : "Montserrat-Bold";
+$MTN-Regular : "mtn-regular", sans-serif;
+$MTN-Bold : "mtn-bold", sans-serif;
+$MTN-Medium : "mtn-medium", sans-serif;
+$MTN-italic : "mtn-italic", sans-serif;
+$Montserrat-regular : "Montserrat", sans-serif;
+$Montserrat-Light : "Montserrat-Light", sans-serif;
+$Montserrat-Bold : "Montserrat-Bold", sans-serif;

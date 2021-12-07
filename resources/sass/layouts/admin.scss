@@ -1,0 +1,116 @@
+@import "../variables";
+@import "../normalize";
+@import "../typography";
+@import "../components/alert";
+
+#sidebar {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    width: 320px;
+    padding: 32px;
+    top: 0;
+    bottom: 0;
+    background-color: $dark;
+
+    .main-menu {
+        margin: 0;
+        padding: 0;
+
+        li {
+            a {
+
+                &.active,
+                &:hover {
+                    background-color: $yellow;
+                    color: $dark;
+
+                    svg {
+                        fill: $dark;
+                    }
+                }
+            }
+        }
+    }
+
+    li {
+        margin: 8px 0;
+
+        a,
+        button {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-family: $MTN-Regular;
+            cursor: pointer;
+        }
+
+        svg {
+            fill: #fff;
+            margin-right: 12px;
+            width: 32px;
+        }
+    }
+
+    .secondary-menu {
+        margin: auto 0 0;
+        padding: 0;
+
+        button {
+            background-color: transparent;
+            border: none;
+        }
+    }
+
+    .profile-picture {
+        width: 32px;
+        height: 32px;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: 50%;
+        margin-right: 8px;
+    }
+
+    .admin-search {
+        border-radius: 56px;
+        height: 40px;
+        border: 1px solid #000;
+        padding-left: 42px;
+        background: url('/images/icons/search.svg') no-repeat 16px center / 18px;
+        color: #000;
+        filter: invert(100%);
+    }
+
+    #sync {
+        background-color: $yellow;
+        border-radius: 64px;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        color: $dark;
+        margin-top: 18px;
+    }
+}
+
+.logo {
+    color: #FFF;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-family: $MTN-Regular;
+    margin-bottom: 48px;
+
+    img {
+        margin-right: 8px;
+    }
+}
+
+#main {
+    background-color: #F0F0F0;
+    margin-left: 320px;
+    padding: 32px;
+}
