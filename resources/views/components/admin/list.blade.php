@@ -12,7 +12,7 @@
         <tr class="{{ $model->slug }}">
             @foreach($fields as $field)
             <td align="left">
-                @listFunc($field)
+                @listFunc($field, $model)
             </td>
             @endforeach
             <td class="action-row">

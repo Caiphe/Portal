@@ -24,7 +24,7 @@
     <div id="table-data">
         @include('components.admin.list', [
             'collection' => $products,
-            'fields' => ['Name' => 'display_name', 'Access' => 'access', 'Environments' => 'environments,split', 'Category' => 'category.title'],
+            'fields' => ['Name' => 'display_name', 'Access' => 'access', 'Environments' => 'environments,splitToTag:,', 'Category' => 'category.title'],
             'modelName' => 'product'
         ])
     </div>

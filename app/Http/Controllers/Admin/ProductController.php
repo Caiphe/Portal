@@ -36,7 +36,7 @@ class ProductController extends Controller
             return response()
                 ->view('components.admin.list', [
                     'collection' => $products->orderBy('display_name')->paginate(),
-                    'fields' => ['Name' => 'display_name', 'Access' => 'access', 'Environments' => 'environments,split', 'Category' => 'category.title'],
+                    'fields' => ['Name' => 'display_name', 'Access' => 'access', 'Environments' => 'environments,splitToTag:,', 'Category' => 'category.title'],
                     'modelName' => 'product'
                 ], 200)
                 ->header('Vary', 'X-Requested-With')

@@ -66,10 +66,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Blade::directive('listFunc', function ($expression) {
-            return '<?php 
-                $__args = ['. $expression . '];
-                dd($__args);
-            ?>';
+            return "<?php echo \App\BladeHelpers::listFunc({$expression}); ?>";
         });
 
         Blade::directive('svg', function ($expression) {
@@ -109,10 +106,4 @@ class AppServiceProvider extends ServiceProvider
             return '<?php $__env->stopPush(); endif; ?>';
         });
     }
-
-    // public function listFuncSplit($str, $model)
-    // {
-    //     $item = Arr::get($model, $f[0]);
-    //     $action = count($f) > 1 ? explode(':', $f[1]) : null;
-    // }
 }
