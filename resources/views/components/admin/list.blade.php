@@ -11,19 +11,8 @@
         @foreach($collection as $model)
         <tr class="{{ $model->slug }}">
             @foreach($fields as $field)
-            @php
-                $f = explode(',', $field);
-                $item = Arr::get($model, $f[0]);
-                $action = count($f) > 1 ? explode(':', $f[1]) : null;
-            @endphp
             <td align="left">
-                @if(!is_null($action))
-                @foreach(explode(',', $item) as $g)
-                <span class="{{ Str::slug($g) }}">{{ $g }}</span>
-                @endforeach
-                @else
-                <a href="{{ route("admin.{$modelName}.edit", $model->slug) }}">{{ $item }}</a>
-                @endif
+                @listFunc($field)
             </td>
             @endforeach
             <td class="action-row">

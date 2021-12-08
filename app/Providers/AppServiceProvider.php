@@ -65,23 +65,11 @@ class AppServiceProvider extends ServiceProvider
             RTE;
         });
 
-        Blade::directive('subStr', function ($expression) {
-            $options = explode(',', $expression);
-            $str = trim($options[0], " '\"");
-            $limit = 50;
-            if (isset($options[1])) {
-                $limit = +trim($options[1]);
-            }
-
-            return <<<SUB
-            <?php
-                if(strlen($str) > $limit){
-                    echo substr($str, 0, ($limit - 3)) . '...';
-                } else {
-                    echo $str;
-                }
-            ?>
-            SUB;
+        Blade::directive('listFunc', function ($expression) {
+            return '<?php 
+                $__args = ['. $expression . '];
+                dd($__args);
+            ?>';
         });
 
         Blade::directive('svg', function ($expression) {
@@ -121,4 +109,10 @@ class AppServiceProvider extends ServiceProvider
             return '<?php $__env->stopPush(); endif; ?>';
         });
     }
+
+    // public function listFuncSplit($str, $model)
+    // {
+    //     $item = Arr::get($model, $f[0]);
+    //     $action = count($f) > 1 ? explode(':', $f[1]) : null;
+    // }
 }

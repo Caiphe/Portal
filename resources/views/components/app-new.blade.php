@@ -34,7 +34,7 @@
         @if($isAdminPage)
             {{ $details['email'] ?? $details['name'] ?? '' }}
         @else
-           <a class="bold" href="" target="_blank"> @subStr($app['callback_url'], 30)</a>
+           <a class="bold" href="" target="_blank">{{ Str::substr($app['callback_url'], 30) }}</a>
         @endif
     </div>
 
