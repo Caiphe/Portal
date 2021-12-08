@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
@@ -40,5 +41,20 @@ class BladeHelpers
         }
 
         return $tags;
+    }
+
+    public static function date($date, ?string $format): string
+    {
+        return date($format ?? 'Y-m-d', strtotime($date));
+    }
+
+    public static function implode($arr, ?string $options): string
+    {
+        $options = explode('|', $options);
+        if ($arr instanceof Collection) {
+            return $arr->implode($options[1], $options[0]);
+        }
+
+        return implode($options[0], $arr);
     }
 }

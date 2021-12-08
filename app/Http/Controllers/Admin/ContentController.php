@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\DocsRequest;
 use App\Http\Requests\Admin\PageRequest;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class ContentController extends Controller
 {

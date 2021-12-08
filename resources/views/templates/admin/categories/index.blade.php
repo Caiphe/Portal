@@ -6,15 +6,25 @@
 
 @section('title', 'Categories')
 
-@section('page-info')
-    <a href="{{ route('admin.category.create') }}" class="button dark outline">Create</a>
-@endsection
-
 @section('content')
-    <x-admin.table :collection="$categories" :fields="['title', 'theme']"></x-admin.table>
+<h1>Categories</h1>
+    <x-admin.filter searchTitle="Category name"></x-admin.filter>
+
+    <div class="page-actions">
+        <a href="{{ route('admin.category.create') }}" class="button primary">Create</a>
+    </div>
+
+    <div id="table-data">
+        @include('components.admin.list', [
+            'collection' => $categories,
+            'fields' => ['title', 'theme'],
+            'modelName' => 'category'
+        ])
+    </div>
 @endsection
 
 @push('scripts')
+<script src="{{ mix('/js/templates/admin/index.js') }}" defer></script>
 <script>
     ajaxifyOnPopState = updateFilters;
     function updateFilters(params) {

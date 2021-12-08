@@ -58,21 +58,17 @@ class UserController extends Controller
 
         if ($request->ajax()) {
             return response()
-                ->view('components.admin.users-data', [
+                ->view('components.admin.list', [
                     'collection' => $users->orderBy('first_name')->paginate($request->get('per-page', 10)),
-                    'fields' => ['first_name', 'last_name', 'email', 'member_since', 'roles_list', 'status', 'apps'],
-                    'defaultSortQuery' => $defaultSortQuery,
+                    'fields' => ['First name' => 'first_name', 'Last name' => 'last_name', 'Email' => 'email', 'Member since' => 'created_at,date:d M Y', 'Role' => 'roles,implode:, |label'],
                     'modelName' => 'user',
-                    'order' => $order,
                 ], 200)
                 ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         }
 
         return view('templates.admin.users.index', [
-            'users' => $users->orderBy('first_name')->paginate($request->get('per-page', 10)),
-            'defaultSortQuery' => $defaultSortQuery,
-            'order' => $order,
+            'users' => $users->orderBy('first_name')->paginate($request->get('per-page', 10))
         ]);
     }
 
