@@ -34,9 +34,9 @@ class ProductController extends Controller
 
         if ($request->ajax()) {
             return response()
-                ->view('components.admin.table-data', [
+                ->view('components.admin.list', [
                     'collection' => $products->orderBy('display_name')->paginate(),
-                    'fields' => ['display_name', 'access', 'environments', 'category.title'],
+                    'fields' => ['Name' => 'display_name', 'Access' => 'access', 'Environments' => 'environments,split', 'Category' => 'category.title'],
                     'modelName' => 'product'
                 ], 200)
                 ->header('Vary', 'X-Requested-With')

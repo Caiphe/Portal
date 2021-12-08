@@ -27,7 +27,7 @@
         var formData = new FormData();
         var el = this;
         var method = (this.method || 'GET').toUpperCase();
-        var url = el.action || el.href;
+        var url = el.action.replace(/\?.*/, '') || el.href;
         var isPager = el.classList.contains('page-link');
 
         if (el.dataset.confirm !== undefined && !confirm(el.dataset.confirm)) return;
@@ -99,7 +99,6 @@
                 formData.append(el.elements[i].name, encodeURIComponent(el.elements[i].value));
             }
         }
-
 
         xhr.open(method, url);
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');

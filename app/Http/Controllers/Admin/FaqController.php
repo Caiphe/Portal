@@ -16,17 +16,14 @@ class FaqController extends Controller
 
         if ($request->has('q')) {
             $query = "%" . $request->q . "%";
-            $faq->where(function ($q) use ($query) {
-                $q->where('question', 'like', $query)
-                    ->orWhere('answer', 'like', $query);
-            });
+            $faq->where('question', 'like', $query)->orWhere('answer', 'like', $query);
         }
 
         if ($request->ajax()) {
             return response()
-                ->view('components.admin.table-data', [
+                ->view('components.admin.list', [
                     'collection' => $faq->paginate(),
-                    'fields' => ['question', 'category.title'],
+                    'fields' => ['Question' => 'question', 'Category' => 'category.title'],
                     'modelName' => 'faq'
                 ], 200)
                 ->header('Vary', 'X-Requested-With')

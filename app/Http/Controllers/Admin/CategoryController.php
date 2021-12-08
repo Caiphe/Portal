@@ -26,7 +26,7 @@ class CategoryController extends Controller
 
         if ($request->ajax()) {
             return response()
-                ->view('components.admin.table-data', [
+                ->view('components.admin.list', [
                     'collection' => $categories->paginate(),
                     'fields' => ['title', 'theme'],
                     'modelName' => 'category'

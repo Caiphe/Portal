@@ -1,0 +1,63 @@
+@import "../../../variables";
+
+.prod,
+.preprod,
+.testing,
+.dev,
+.staging,
+.rejected,
+.draft,
+.sandbox,
+.review{
+    border-radius: 16px;
+    border-width: 1px;
+    border-style: solid;
+    font-size: 13px;
+    padding: 4px 8px;
+    text-transform: capitalize;
+}
+
+.prod{
+    color: $green;
+    border-color: $green;
+}
+
+.preprod{
+    color: $orange;
+    border-color: $orange;
+}
+
+.staging {
+    color: $blue;
+    border-color: $blue;
+}
+
+.sandbox {
+    color: $purple;
+    border-color: $purple;
+}
+
+.testing {
+    color: $yellow;
+    border-color: $yellow;
+}
+
+.dev {
+    color: $blue;
+    border-color: $blue;
+}
+
+.rejected {
+    color: $red;
+    border-color: $red;
+}
+
+.draft {
+    color: $yellow;
+    border-color: $yellow;
+}
+
+.review {
+    color: $yellow;
+    border-color: $yellow;
+}

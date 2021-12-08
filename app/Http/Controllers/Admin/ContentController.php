@@ -27,7 +27,7 @@ class ContentController extends Controller
 
         if ($request->ajax()) {
             return response()
-                ->view('components.admin.table-data', [
+                ->view('components.admin.list', [
                     'collection' => $pages->paginate(),
                     'fields' => ['title'],
                     'modelName' => 'page'
@@ -94,7 +94,7 @@ class ContentController extends Controller
 
         if ($request->ajax()) {
             return response()
-                ->view('components.admin.table-data', [
+                ->view('components.admin.list', [
                     'collection' => $docs->paginate(),
                     'fields' => ['title'],
                     'modelName' => 'doc'

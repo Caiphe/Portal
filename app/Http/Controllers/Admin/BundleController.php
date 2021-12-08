@@ -26,7 +26,7 @@ class BundleController extends Controller
 
         if ($request->ajax()) {
             return response()
-                ->view('components.admin.table-data', [
+                ->view('components.admin.list', [
                     'collection' => $bundles->orderBy('display_name')->paginate(),
                     'fields' => ['display_name', 'category.title'],
                     'modelName' => 'bundle'
