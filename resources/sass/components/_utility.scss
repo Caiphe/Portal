@@ -257,6 +257,10 @@
     margin-right: auto;
 }
 
+.align-left {
+    text-align: left;
+}
+
 .red-button{
     background-color: $red;
 }
@@ -495,3 +499,4 @@
 .wrap {
     flex-wrap: wrap;
 }
+
