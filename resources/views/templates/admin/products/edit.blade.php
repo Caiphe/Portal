@@ -5,39 +5,30 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/admin/edit.css') }}">
+<link rel="stylesheet" href="{{ mix('/css/templates/admin/products/edit.css') }}">
 @endpush
 
-@section('page-info')
-    <a href="#overview" class="button outline dark">OVERVIEW</a>
-    <a href="#docs" class="button outline dark ml-1">DOCS</a>
-    <a href="#custom-tabs" class="button outline dark ml-1">CUSTOM TABS</a>
-    <a href="{{ route('product.show', $product->slug) }}" target="_blank" rel="noreferrer" class="button outline dark ml-1">VIEW</a>
-    <button id="save" class="outline dark ml-1" form="admin-form">SAVE</button>
-@endsection
-
 @section('content')
+<a href="{{ url()->previous() }}" class="go-back">@svg('chevron-left') Back to Products</a>
+<h1>{{ $product->display_name }}</h1>
 
-<label id="uploader">
-   @svg('plus-circle-filled')
-   @svg('loading-blue')
-   <span>Upload Swagger</span>
-   <div class="errors"></div>
-   <input id="uploader-input" type="file" name="uploader" hidden accept=".yaml,yml">
-</label>
+<div class="page-actions">
+    <a href="{{ route('product.show', $product->slug) }}" target="_blank" rel="noreferrer" class="button outline dark ml-1">View Product</a>
+    @if($product->swagger)
+        <a class="button outline dark" href="/openapi/{{ $product->swagger }}" download>Download Swagger</a>
+    @endif
+    <label id="uploader">
+        @svg('loading-blue')
+        <span>Upload Swagger</span>
+        <input id="uploader-input" type="file" name="uploader" hidden accept=".yaml,yml">
+    </label>
+    <button id="save" class="button primary ml-1" form="admin-form">Save</button>
+</div>
+
 
 <form id="admin-form" action="{{ route('admin.product.update', $product->slug) }}" method="POST">
-
     @method('PUT')
     @csrf
-
-    <div class="editor-field">
-        <h2>Swagger</h2>
-        @if(!$product->swagger)
-        <p class="mb-0">No Swagger uploaded yet.</p>
-        @else
-        <a class="button" href="/openapi/{{ $product->swagger }}" download>Download</a>
-        @endif
-    </div>
 
     <div class="editor-field">
         <h2>Display name</h2>

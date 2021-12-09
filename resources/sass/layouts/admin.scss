@@ -129,4 +129,17 @@ body {
     position: absolute;
     top: 32px;
     right: 32px;
+    display: flex;
+
+    a+button,
+    a+a,
+    a+label,
+    label+button,
+    label+a,
+    label+label,
+    button+button,
+    button+label,
+    button+a {
+        margin-left: 8px;
+    }
 }

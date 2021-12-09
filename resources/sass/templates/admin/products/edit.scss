@@ -1,0 +1,33 @@
+@import "../../../variables";
+
+#uploader {
+    background-color: $dark;
+    padding: 8px 16px;
+    color: #FFF;
+    border-radius: 22px;
+    text-align: center;
+    display: inline-flex;
+
+    &.uploading {
+        span {
+            display: none;
+        }
+
+        svg {
+            display: inline-block;
+        }
+    }
+
+    svg {
+        display: none;
+        height: 20px;
+
+        circle {
+            stroke: #FFF;
+
+            &+path {
+                stroke: #FFF;
+            }
+        }
+    }
+}
