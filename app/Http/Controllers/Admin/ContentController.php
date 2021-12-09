@@ -14,21 +14,29 @@ class ContentController extends Controller
 
     public function indexPage(Request $request)
     {
-        $pages = Content::whereType('page');
-
-        if ($request->has('q')) {
-            $query = "%" . $request->q . "%";
-            $pages->where(function ($q) use ($query) {
-                $q->where('title', 'like', $query)
-                    ->orWhere('body', 'like', $query);
+        $sort = '';
+        $order = $request->get('order', 'desc');
+        $pages = Content::whereType('page')
+            ->when($request->has('q'), function ($q) use ($request) {
+                $query = "%" . $request->q . "%";
+                $q->where(function ($q) use ($query) {
+                    $q->where('title', 'like', $query)
+                        ->orWhere('body', 'like', $query);
+                });
             });
+
+        if ($request->has('sort')) {
+            $sort = $request->get('sort');
+            $pages->orderBy($sort, $order);
+            $order = ['asc' => 'desc', 'desc' => 'asc'][$order] ?? 'desc';
         }
 
         if ($request->ajax()) {
             return response()
                 ->view('components.admin.list', [
                     'collection' => $pages->paginate(),
-                    'fields' => ['title'],
+                    'order' => $order,
+                    'fields' => ['Title' => 'title', 'Published' => 'published_at,date:d M Y'],
                     'modelName' => 'page'
                 ], 200)
                 ->header('Vary', 'X-Requested-With')
@@ -36,7 +44,8 @@ class ContentController extends Controller
         }
 
         return view('templates.admin.pages.index', [
-            'pages' => $pages->paginate()
+            'pages' => $pages->paginate(),
+            'order' => $order,
         ]);
     }
 
@@ -81,21 +90,30 @@ class ContentController extends Controller
     // Administer documentation content type
     public function indexDoc(Request $request)
     {
-        $docs = Content::whereType('general_docs');
-
-        if ($request->has('q')) {
-            $query = "%" . $request->q . "%";
-            $docs->where(function ($q) use ($query) {
-                $q->where('title', 'like', $query)
-                    ->orWhere('body', 'like', $query);
+        $sort = '';
+        $order = $request->get('order', 'desc');
+        $docs = Content::whereType('general_docs')
+            ->when($request->has('q'), function ($q) use ($request) {
+                $query = "%" . $request->q . "%";
+                $q->where(function ($q) use ($query) {
+                    $q->where('title', 'like', $query)
+                        ->orWhere('body', 'like', $query);
+                });
             });
+
+
+        if ($request->has('sort')) {
+            $sort = $request->get('sort');
+            $docs->orderBy($sort, $order);
+            $order = ['asc' => 'desc', 'desc' => 'asc'][$order] ?? 'desc';
         }
 
         if ($request->ajax()) {
             return response()
                 ->view('components.admin.list', [
                     'collection' => $docs->paginate(),
-                    'fields' => ['title'],
+                    'order' => $order,
+                    'fields' => ['Title' => 'title', 'Published' => 'published_at,date:d M Y'],
                     'modelName' => 'doc'
                 ], 200)
                 ->header('Vary', 'X-Requested-With')
@@ -103,7 +121,8 @@ class ContentController extends Controller
         }
 
         return view('templates.admin.docs.index', [
-            'docs' => $docs->paginate()
+            'docs' => $docs->paginate(),
+            'order' => $order,
         ]);
     }
 

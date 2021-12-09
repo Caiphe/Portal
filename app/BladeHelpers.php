@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
  */
 class BladeHelpers
 {
-    public static function listFunc(string $field, mixed $model): string
+    public static function listFunc(string $field, $model): string
     {
         $options = explode(',', $field, 2);
         $value = Arr::get($model, $options[0]);

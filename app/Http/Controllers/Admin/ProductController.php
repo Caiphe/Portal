@@ -16,26 +16,45 @@ class ProductController extends Controller
     {
         $access = $request->get('access', "");
         $products = Product::with('category')
+            ->select([
+                'products.*',
+                'categories.title AS category_title'
+            ])->join('categories', 'products.category_cid', '=', 'categories.cid')
             ->byResponsibleCountry($request->user())
             ->when($request->has('q'), function ($q) use ($request) {
                 $query = "%" . $request->get('q') . "%";
 
                 $q->where(function ($q) use ($query) {
-                    $q->where('display_name', 'like', $query)
+                    $q->where('parent', 'like', $query)
                         ->orWhereHas('content', function ($q) use ($query) {
                             $q->where('title', 'like', $query)
                                 ->orWhere('body', 'like', $query);
                         });
                 });
             })
-            ->when($access !== "" && !is_null($access), function($q) use ($request) {
+            ->when($access !== "" && !is_null($access), function ($q) use ($request) {
                 $q->where('access', $request->get('access'));
             });
+        $order = $request->get('order', 'desc');
+        $sort = '';
+
+        if ($request->has('sort')) {
+            $sort = $request->get('sort');
+
+            if ($sort === 'category.title') {
+                $products->orderBy('category_title', $order);
+            } else {
+                $products->orderBy($sort, $order);
+            }
+
+            $order = ['asc' => 'desc', 'desc' => 'asc'][$order] ?? 'desc';
+        }
 
         if ($request->ajax()) {
             return response()
                 ->view('components.admin.list', [
                     'collection' => $products->orderBy('display_name')->paginate(),
+                    'order' => $order,
                     'fields' => ['Name' => 'display_name', 'Access' => 'access', 'Environments' => 'environments,splitToTag:,', 'Category' => 'category.title'],
                     'modelName' => 'product'
                 ], 200)
@@ -45,6 +64,7 @@ class ProductController extends Controller
 
         return view('templates.admin.products.index', [
             'products' => $products->orderBy('display_name')->paginate(),
+            'order' => $order,
         ]);
     }
 

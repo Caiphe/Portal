@@ -6,32 +6,33 @@ use App\Country;
 use App\Http\Controllers\Controller;
 use App\Product;
 use App\Role;
+use App\RoleUser;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use App\App;
 
 class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $currentUser = auth()->user();
+        $currentUser = $request->user();
+        $order = $request->get('order', 'desc');
+        $sort = '';
 
         $users = User::with('roles', 'countries')
-            ->when($currentUser->hasRole('opco'), function($query) use($currentUser) {
+            ->when($currentUser->hasRole('opco'), function ($query) use ($currentUser) {
                 $query->whereHas('countries', fn ($q) => $q->whereIn('code', $currentUser->responsibleCountries()->pluck('code')->toArray()));
-            });
+            })
+            ->when($request->has('q'), function ($q) use ($request) {
+                $query = "%" . $request->q . "%";
 
-        $users->when($request->has('q'), function($q) use($request) {
-            $query = "%" . $request->q . "%";
-
-            $q->where(function ($q) use($query) {
-                $q->where('first_name', 'like', $query)
-                    ->orWhere('last_name', 'like', $query)
-                    ->orWhere('email', 'like', $query);
-            });
-        })
-            ->when(!empty($request->get('verified', '')), function($q) use($request) {
+                $q->where(function ($q) use ($query) {
+                    $q->where('first_name', 'like', $query)
+                        ->orWhere('last_name', 'like', $query)
+                        ->orWhere('email', 'like', $query);
+                });
+            })
+            ->when(!empty($request->get('verified', '')), function ($q) use ($request) {
                 $verified = $request->get('verified');
                 if ($verified === 'verified') {
                     $q->whereNotNull('email_verified_at');
@@ -40,26 +41,29 @@ class UserController extends Controller
                 }
             });
 
-        $order = 'desc';
-
-        $defaultSortQuery = array_diff_key($request->query(), ['sort' => true, 'order' => true]);
-
-        if (!empty($defaultSortQuery)) {
-            $defaultSortQuery = '&' . http_build_query($defaultSortQuery);
-        } else {
-            $defaultSortQuery = '';
-        }
-
         if ($request->has('sort')) {
-            $order = $request->get('order', 'desc');
-            $users->orderBy($request->get('sort', $order));
+            $sort = $request->get('sort');
+
+            if ($sort === 'roles') {
+                $users->orderBy(
+                    RoleUser::select('role_id')
+                        ->whereColumn('role_user.user_id', 'users.id')
+                        ->latest()
+                        ->take(1),
+                    $order
+                );
+            } else {
+                $users->orderBy($sort, $order);
+            }
+
             $order = ['asc' => 'desc', 'desc' => 'asc'][$order] ?? 'desc';
         }
 
         if ($request->ajax()) {
             return response()
                 ->view('components.admin.list', [
-                    'collection' => $users->orderBy('first_name')->paginate($request->get('per-page', 10)),
+                    'collection' => $users->paginate(),
+                    'order' => $order,
                     'fields' => ['First name' => 'first_name', 'Last name' => 'last_name', 'Email' => 'email', 'Member since' => 'created_at,date:d M Y', 'Role' => 'roles,implode:, |label'],
                     'modelName' => 'user',
                 ], 200)
@@ -68,7 +72,8 @@ class UserController extends Controller
         }
 
         return view('templates.admin.users.index', [
-            'users' => $users->orderBy('first_name')->paginate($request->get('per-page', 10))
+            'users' => $users->paginate(),
+            'order' => $order,
         ]);
     }
 

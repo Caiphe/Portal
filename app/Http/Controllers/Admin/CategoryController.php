@@ -11,23 +11,30 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $categories = Category::query();
-
-        if ($request->has('q')) {
+        $sort = '';
+        $order = $request->get('order', 'desc');
+        $categories = Category::when($request->has('q'), function ($q) use ($request) {
             $query = "%" . $request->q . "%";
-            $categories->where(function ($q) use ($query) {
+            $q->where(function ($q) use ($query) {
                 $q->where('title', 'like', $query)
                     ->orWhereHas('content', function ($q) use ($query) {
                         $q->where('title', 'like', $query)
                             ->orWhere('body', 'like', $query);
                     });
             });
+        });
+
+        if ($request->has('sort')) {
+            $sort = $request->get('sort');
+            $categories->orderBy($sort, $order);
+            $order = ['asc' => 'desc', 'desc' => 'asc'][$order] ?? 'desc';
         }
 
         if ($request->ajax()) {
             return response()
                 ->view('components.admin.list', [
                     'collection' => $categories->paginate(),
+                    'order' => $order,
                     'fields' => ['title', 'theme'],
                     'modelName' => 'category'
                 ], 200)
@@ -36,7 +43,8 @@ class CategoryController extends Controller
         }
 
         return view('templates.admin.categories.index', [
-            'categories' => $categories->paginate()
+            'categories' => $categories->paginate(),
+            'order' => $order,
         ]);
     }
 
