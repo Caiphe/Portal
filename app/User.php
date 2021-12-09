@@ -20,7 +20,7 @@ class User extends Authenticatable implements MustVerifyEmail
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['first_name', 'last_name', 'email', 'password', 'developer_id', 'email_verified_at', 'profile_picture', '2fa'];
+	protected $fillable = ['first_name', 'last_name', 'email', 'password', 'developer_id', 'email_verified_at', 'profile_picture', '2fa', 'recovery_codes'];
 
 	/**
 	 * The attributes that should be hidden for arrays.
@@ -36,6 +36,7 @@ class User extends Authenticatable implements MustVerifyEmail
 	 */
 	protected $casts = [
 		'email_verified_at' => 'datetime',
+		'recovery_codes' => 'array'
 	];
 
 	public function roles()

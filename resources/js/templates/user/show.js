@@ -1,3 +1,5 @@
+var recoveryCodes = [];
+
 document.getElementById('profile-picture').addEventListener('change', chooseProfilePicture);
 
 function chooseProfilePicture() {
@@ -16,17 +18,17 @@ function chooseProfilePicture() {
     }
 
     if (allowedTypes[inputAccepts] !== undefined && allowedTypes[inputAccepts].indexOf(files[0].type) !== -1) {
-    changeProfilePicture(files[0]);
-    uploadProfilePicture(files[0]);
+        changeProfilePicture(files[0]);
+        uploadProfilePicture(files[0]);
     } else {
-    addAlert("error", "The type of image you have chosen isn't supported. Please choose a jpg or png to upload");
+        addAlert("error", "The type of image you have chosen isn't supported. Please choose a jpg or png to upload");
     }
 }
 
 function changeProfilePicture(file) {
     var reader = new FileReader();
 
-    reader.onload = function(e) {
+    reader.onload = function (e) {
         document.getElementById('profile-picture-label').style.backgroundImage = "url(" + e.target.result + ")";
         document.getElementById('profile-menu-picture').style.backgroundImage = "url(" + e.target.result + ")";
     }
@@ -37,7 +39,7 @@ function changeProfilePicture(file) {
 function uploadProfilePicture(file) {
     var xhr = new XMLHttpRequest();
 
-    xhr.onreadystatechange = function() {
+    xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
             var message = [];
@@ -49,7 +51,7 @@ function uploadProfilePicture(file) {
                 } else {
                     message = [result.message || 'There was an error uploading your profile picture.'];
                 }
-                
+
                 addAlert('error', message);
             }
         }
@@ -73,11 +75,23 @@ function togglePasswordVisibility(that) {
     that.previousElementSibling.setAttribute('type', that.parentNode.classList.contains('password-visible') ? "text" : "password");
 }
 
-(function() {
+function copyCodes() {
+    var dummy = document.createElement("textarea");
+    dummy.style.position = 'absolute';
+    document.body.appendChild(dummy);
+    dummy.value = recoveryCodes.join("\n");
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
+    addAlert('success', 'Copied')
+}
+
+(function () {
     var passwordScore = 0;
 
     document.getElementById('password').addEventListener('input', checkPassword);
     document.getElementById('profile-form').addEventListener('submit', validateSubmit);
+    document.getElementById('recovery-codes').addEventListener('click', showRecoveryCodes);
 
     function checkPassword() {
         var value = this.value;
@@ -138,5 +152,26 @@ function togglePasswordVisibility(that) {
         }
 
         addLoading('Updating your profile.');
+    }
+
+    function showRecoveryCodes() {
+        addLoading('Fetching recovery codes...');
+
+        ajax('/api/recovery-codes', 'get', null, showRecoveryCodesResponse);
+    }
+
+    function showRecoveryCodesResponse(resp) {
+        recoveryCodes = resp.message;
+        var codes = '<div class="recovery-codes">';
+
+        for (var i = 0; i < recoveryCodes.length; i++) {
+            codes += resp.message[i] + '<br>';
+        }
+
+        codes += '</div><button type="button" class="dark outline recovery-code-action" onclick="copyCodes()">Copy codes</button><a href="data:text/plain;charset=utf-8,' + encodeURIComponent(recoveryCodes.join("\n")) + '" download="mtn-developer-portal-recovery-codes.txt" class="button blue outline recovery-code-action" onclick="downloadCodes()">Download codes</a>';
+
+        document.getElementById('show-recovery-codes').innerHTML = codes;
+
+        removeLoading();
     }
 }());

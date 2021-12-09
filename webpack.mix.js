@@ -19,8 +19,9 @@ mix.scripts(
     "public/js/templates/admin/scripts.js"
 )
     .scripts(["resources/js/templates/admin/products/edit.js", "resources/js/templates/admin/edit.js"], "public/js/templates/admin/products/edit.js")
+    .scripts("resources/js/utilities/ajax.js", "public/js/utilities/ajax.js")
     .scripts("resources/js/templates/admin/users/scripts.js", "public/js/templates/admin/users/scripts.js")
-    .scripts("resources/js/templates/user/show.js", "public/js/templates/user/show.js")
+    .scripts(["resources/js/utilities/ajax.js", "resources/js/templates/user/show.js"], "public/js/templates/user/show.js")
     .scripts("resources/js/components/carousel.js", "public/js/components/carousel.js")
     .scripts("resources/js/components/dialog.js", "public/js/components/dialog.js")
     .scripts("resources/js/components/sidebar-accordion.js", "public/js/components/sidebar-accordion.js")
