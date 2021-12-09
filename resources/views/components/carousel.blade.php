@@ -15,9 +15,9 @@
 --}}
 @props(['wait', 'duration', 'autoScroll'])
 
-@allowonce
+@once
 <link rel="stylesheet" href="{{ mix('/css/components/carousel.css') }}">
-@endallowonce
+@endonce
 
 <div 
     {{$attributes->merge(['class' => 'carousel'])}}
@@ -28,6 +28,8 @@
     {{$slot}}
 </div>
 
-@pushscript('carousel')
+@once
+@push('scripts')
 <script src="{{ mix('/js/components/carousel.js') }}" defer></script>
-@endpushscript
+@endpush
+@endonce

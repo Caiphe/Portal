@@ -169,7 +169,7 @@ class AppController extends Controller
             "callback_url" => $createdResponse['callbackUrl'],
             "attributes" => $attributes,
             "credentials" => $createdResponse['credentials'],
-            "developer_id" => $user['developer_id'],
+            "developer_id" => $appOwner['developer_id'],
             "team_id" => $team->id ?? null,
             "status" => $createdResponse['status'],
             "description" => $validated['description'],
