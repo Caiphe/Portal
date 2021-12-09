@@ -41,6 +41,14 @@
     }
 }
 
+.page-actions {
+    button,
+    .button {
+        font-size: 16px;
+        font-family: $MTN-Regular;
+    }
+}
+
 .filter-item+.filter-item {
     margin-left: 16px;
 }

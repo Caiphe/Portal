@@ -4,175 +4,62 @@ h1 {
     word-break: break-word;
 }
 
-#admin-form {
-    input[type=text],
-    input[type=password],
-    h2 {
-        margin: 0 0 10px 0;
-    }
-
-    label {
-        margin: 0 0 20px 0;
-    }
-
-    label,
-    textarea {
-        display: block;
-    }
-
-    .long {
-        width: 100%;
-    }
-
-    .editor-field {
-        padding: 30px;
-        border: 2px solid $grey500;
-        border-radius: 10px;
-        margin-bottom: 30px;
-        scroll-margin-top: 102px;
-    }
-
-    .show-password {
-        margin: -46px 36px 0 0;
-        position: absolute;
-        right: 0;
-        background-image: url("/images/icons/visible.svg");
-        background-size: 20px;
-        background-color: #FFF;
-        background-repeat: no-repeat;
-        background-position: center;
-        border: none;
-        width: 30px;
-        height: 30px;
-        z-index: 1;
-        display: block;
-
-        &:hover {
-            background-color: $yellow700;
-        }
-    }
-
-    .password-visible {
-        background-image: url('/images/icons/hidden.svg');
-    }
-
-    #password-strength {
-        margin-top: 10px;
-        height: 34px;
-        line-height: 1;
-        background-color: $grey500;
-        border-radius: 5px;
-        padding: 0 20px;
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        color: $grey600;
-        transition: background-color 0.356s;
-
-        &.password-score-0,
-        &.password-score-1,
-        &.password-score-2 {
-            background-color: $error;
-            color: #FFF;
-        }
-
-        &.password-score-3,
-        &.password-score-4,
-        &.password-score-5 {
-            background-color: $warning;
-            color: #FFF;
-        }
-
-        &.password-score-6 {
-            background-color: $success;
-            color: #FFF;
-        }
-    }
-}
-
-#custom-tabs {
-    .new-tab button.dark.outline,
-    .old-tab button.dark.outline {
-        position: absolute;
-        top: 0;
-        right: 0;
-    }
-}
-
-#new-tab {
-    background: none;
-    position: relative;
-    display: block;
-    margin: 0 auto 40px;
-    border: none;
-    color: $blue;
-    font-size: 12px;
+.go-back {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-family: $MTN-Regular;
+    color: $grey750;
+    margin: 0 0 16px -5px;
 
     svg {
-        fill: $blue;
-        margin-bottom: 4px;
-        width: 50px;
-        height: 50px;
+        fill: $grey750;
     }
 }
 
-#main {
-    #uploader {
-        height: 160px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        border-radius: 30px;
-        border: 2px dashed $blue;
-        font-size: 15px;
-        color: $blue;
-        cursor: pointer;
-        margin-bottom: 30px;
+#main .editor-field {
+    background-color: #FFF;
+    border-radius: 8px;
+    margin-bottom: 32px;
+    display: flex;
+    flex-direction: column;
 
-        &:hover {
-            background-color: $blue600;
-        }
+    >h2 {
+        margin: 0;
+        background-color: #FFF;
+        border-radius: 8px;
+        box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.04);
+        padding: 24px;
+        font-size: 20px;
+        font-family: $MTN-Regular;
+    }
 
-        svg,
-        span {
-            pointer-events: none;
-        }
+    >.ck-editor,
+    >div,
+    input,
+    select,
+    textarea {
+        margin: 24px;
+    }
 
-        svg {
-            fill: $blue;
-            margin-bottom: 4px;
-            width: 50px;
-            height: 50px;
-        }
+    input,
+    textarea,
+    select {
+        background-color: transparent;
+        border: none;
+        border-bottom: 1px solid $grey800;
+        font-size: 14px;
+        font-family: $MTN-Regular;
+        padding: 8px 0;
+    }
 
-        svg+svg {
-            width: 44px;
-            height: 44px;
-            margin-bottom: 10px;
-            display: none;
-        }
-
-        input {
-            display: none;
-        }
-
-        &.uploading svg {
-            display: none;
-
-            &+svg {
-                display: block;
-            }
-        }
-
-        &.highlight {
-            background-color: $blue800;
-            border: 2px dashed #FFF;
-            color: #FFF;
-
-            svg {
-                fill: #FFF;
-            }
-        }
+    select {
+        background-image: url('/images/icons/chevron-down.svg');
+        background-repeat: no-repeat;
+        background-size: 24px;
+        background-position: calc(100% - 16px) center;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        appearance: none;
     }
 }

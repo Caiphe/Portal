@@ -10,7 +10,7 @@
     <h1>FAQs</h1>
 
     <div class="page-actions">
-        <a href="{{ route('admin.faq.create') }}" class="button primary">Create</a>
+        <a href="{{ route('admin.faq.create') }}" class="button primary">Create FAQ</a>
     </div>
 
     <x-admin.filter searchTitle="Questions"></x-admin.filter>

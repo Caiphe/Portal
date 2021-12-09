@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 class ContentController extends Controller
 {
     // Admininster page content type
-
     public function indexPage(Request $request)
     {
         $sort = '';
