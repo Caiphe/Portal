@@ -1,11 +1,16 @@
 @import '../../variables';
 
+#admin-form {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 h1 {
     word-break: break-word;
 }
 
 .go-back {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     font-size: 14px;
     font-family: $MTN-Regular;
@@ -18,11 +23,22 @@ h1 {
 }
 
 #main .editor-field {
+    align-self: flex-start;
     background-color: #FFF;
     border-radius: 8px;
     margin-bottom: 32px;
     display: flex;
     flex-direction: column;
+    width: 100%;
+
+    &.one-third {
+        width: calc(33% - 12px);
+        margin-right: 24px;
+    }
+
+    &.two-thirds {
+        width: 66%;
+    }
 
     >h2 {
         margin: 0;
@@ -32,14 +48,32 @@ h1 {
         padding: 24px;
         font-size: 20px;
         font-family: $MTN-Regular;
+
+        &+h3 {
+            margin-top: 24px;
+        }
     }
 
-    >.ck-editor,
+    >h3 {
+        margin: 0 24px 12px;
+        font-size: 16px;
+        font-family: $MTN-Regular;
+    }
+
     >div,
+    .ck-editor,
     input,
     select,
     textarea {
         margin: 24px;
+    }
+
+    h3~div,
+    h3~.ck-editor,
+    h3+input,
+    h3+select,
+    h3+textarea {
+        margin: 0 24px 24px;
     }
 
     input,

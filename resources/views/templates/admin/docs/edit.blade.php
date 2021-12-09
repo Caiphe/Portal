@@ -6,18 +6,18 @@
 <link rel="stylesheet" href="{{ mix('/css/templates/admin/edit.css') }}">
 @endpush
 
-@section('page-info')
-    <a class="button outline dark" href="{{ route('doc.show', $doc->slug) }}" target="_blank" rel="noreferrer">View</a>
-    <button id="save" class="outline dark ml-1" form="admin-form">Save</button>
-@endsection
-
 @section('content')
+<a href="{{ url()->previous() }}" class="go-back">@svg('chevron-left') Back to Documentation</a>
+<h1>{{ $doc->title }}</h1>
+
+<div class="page-actions">
+    <a class="button outline dark" href="{{ route('doc.show', $doc->slug) }}" target="_blank" rel="noreferrer">View</a>
+    <button id="save" class="button primary ml-1" form="admin-form">Save</button>
+</div>
+
 <form id="admin-form" action="{{ route('admin.doc.update', $doc->slug) }}" method="POST">
-
     @method('PUT')
-    
     @include('templates.admin.docs.form', compact('doc'))
-
 </form>
 @endsection
 
