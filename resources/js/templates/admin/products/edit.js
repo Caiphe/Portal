@@ -1,9 +1,11 @@
-(function() {
+(function () {
     var uploader = document.getElementById('uploader');
+    var newTabClone = document.querySelector('.new-tab').cloneNode(true);
+    var addCustomTab = document.getElementById('add-custom-tab');
 
-    document.getElementById('new-tab').addEventListener('click', newTab);
     document.getElementById('uploader-input').addEventListener('change', chooseSwagger);
     document.getElementById('admin-form').addEventListener('submit', validateForm);
+    addCustomTab.addEventListener('click', newTab);
 
     ["dragenter", "dragover", "dragleave", "drop"].forEach(preventDefaultsListeners);
     ["dragenter", "dragover"].forEach(highlightListeners);
@@ -46,7 +48,6 @@
         var errors = [];
 
         unhighlight();
-        uploader.querySelector('.errors').innerHTML = "";
 
         if (files.length > 1) {
             errors.push("You can only add one file.");
@@ -57,8 +58,7 @@
         }
 
         if (errors.length > 0) {
-            uploader.querySelector('.errors').innerHTML = errors.join('<br>');
-            return;
+            return void addAlert(errors);
         }
 
         upload(files[0], markAsUploaded);
@@ -66,9 +66,13 @@
 
     function newTab() {
         var randId = rand();
-        document.getElementById('custom-tabs').insertAdjacentHTML('beforeend', '<div class="new-tab mt-3"><button class="dark outline" onclick="removeTab(this)">Remove</button><input class="custom-tab-title" type="text" name="tab[title][]" placeholder="Title"><div id="' + randId +'" class="editor" data-input="' + randId + '" data-name="tab[body][]" data-class="custom-tab-content"></div></div>');
+        var newTabNode = newTabClone.cloneNode(true);
+        var newTabNodeEditor = newTabNode.querySelector('.editor');
 
-        makeEditor(document.getElementById(randId));
+        newTabNodeEditor.dataset.input = randId;
+        addCustomTab.insertAdjacentElement('beforebegin', newTabNode);
+
+        makeEditor(newTabNodeEditor);
     }
 
     function rand() {
@@ -93,7 +97,7 @@
 
         xhr.send(formData);
 
-        xhr.onload = function() {
+        xhr.onload = function () {
             if (/^2/.test(xhr.status)) {
                 result = xhr.responseText ? JSON.parse(xhr.responseText) : { message: "Success" };
 
@@ -123,12 +127,14 @@
         var customTabContent = document.querySelectorAll('.custom-tab-content');
         var errors = [];
 
+        addContents();
+
         for (var i = customTabTitle.length - 1; i >= 0; i--) {
             if (
                 (customTabTitle[i].value !== '' && customTabContent[i].value === '') ||
                 (customTabTitle[i].value === '' && customTabContent[i].value !== '')
             ) {
-                errors.push('The custom tab is missing information');
+                errors.push('A custom tab is missing information');
                 break;
             }
         }

@@ -25,73 +25,64 @@
     <button id="save" class="button primary ml-1" form="admin-form">Save</button>
 </div>
 
-
 <form id="admin-form" action="{{ route('admin.product.update', $product->slug) }}" method="POST">
     @method('PUT')
     @csrf
 
-    <div class="editor-field">
-        <h2>Display name</h2>
-        <input type="text" name="display_name" value="{{ $product->display_name }}" maxlength="140">
-    </div>
+    <div class="editor-field one-third">
+        <h2>Product Details</h2>
 
-    <div class="editor-field">
-        <h2>Category</h2>
+        <h3>Display name</h3>
+        <input type="text" name="display_name" value="{{ $product->display_name }}" maxlength="140">
+
+        <h3>Category</h3>
         <select name="category_cid" id="category_cid" class="mb-1" autocomplete="off">
             <option value="" selected disabled="">Select category</option>
             @foreach($categories as $cid => $category)
             <option value="{{ $cid }}" @if($cid === $product->category_cid) selected @endif>{{ $category }}</option>
             @endforeach
         </select>
-    </div>
 
-    <div class="editor-field">
-        <h2>Group</h2>
+        <h3>Group</h3>
         <input type="text" name="group" value="{{ $product->group ?? 'MTN' }}">
-    </div>
 
-    <div class="editor-field">
-        <h2>Locations</h2>
+        <h3>Locations</h3>
         <x-multiselect id="locations" name="locations" label="Select location" :options="$countries->pluck('name', 'code')->toArray()" :selected="$product->locations === 'all' ? [] : $product->countries()->pluck('code')->toArray()"/>
     </div>
 
-    <div id="overview" class="editor-field">
-        <h2>Overview</h2>
+    <div id="custom-tabs" class="editor-field two-thirds">
+        <h2>Content Details</h2>
+
+        <h3>Overview</h3>
         <input type="hidden" name="tab[title][]" value="Overview">
         <div class="editor" data-input="{{ $product->slug }}-overview-body" data-name="tab[body][]">{!! $content['Overview'][0]['body'] ?? '' !!}</div>
-    </div>
 
-    <div id="docs" class="editor-field">
-        <h2>Docs</h2>
+        <h3>Docs</h3>
         <input type="hidden" name="tab[title][]" value="Docs">
         <div class="editor" data-input="{{ $product->slug }}-docs-body" data-name="tab[body][]">{!! $content['Docs'][0]['body'] ?? '' !!}</div>
-    </div>
 
-    <div id="custom-tabs" class="editor-field">
-        <h2>Custom Tabs</h2>
-        <p class="mb-0">Add custom tabs to the product.</p>
-
+        <h3>Custom Tabs</h3>
         @foreach($content as $title => $c)
         @if($title === 'Overview' || $title === 'Docs')
             @continue
         @endif
-        <div class="old-tab mt-3">
-            <button class="dark outline mt-1" onclick="removeTab(this)">Remove</button>
-            <input class="custom-tab-title" type="text" name="tab[title][]" value="{{ $c[0]['title'] }}">
+        <div class="custom-tab old-tab">
+            <input class="custom-tab-title" type="text" name="tab[title][]" value="{{ $c[0]['title'] }}" placeholder="Custom Tab Title">
             <div class="editor" data-input="{{ $c[0]['slug'] }}" data-name="tab[body][]" data-class="custom-tab-content">{!! $c[0]['body'] ?? '' !!}</div>
+            <button type="button" class="remove-custom-tab sl-button" onclick="removeTab(this)">@svg('minus-circle-outline') Remove Custom Tab</button>
         </div>
         @endforeach
-        @php
-            $randId = Str::random(8);
-        @endphp
-        <div class="new-tab mt-3">
-            <button class="dark outline" onclick="removeTab(this)">Remove</button>
-            <input class="custom-tab-title" type="text" name="tab[title][]" placeholder="Title">
-            <div class="editor" data-input="{{ $randId }}" data-name="tab[body][]" data-class="custom-tab-content"></div>
+
+        <div class="custom-tab new-tab">
+            <input class="custom-tab-title" type="text" name="tab[title][]" placeholder="Custom Tab Title" autocomplete="off">
+            <div class="editor" data-input="{{ Str::random(8) }}" data-name="tab[body][]" data-class="custom-tab-content"></div>
+            <button type="button" class="remove-custom-tab sl-button" onclick="removeTab(this)">@svg('minus-circle-outline') Remove Custom Tab</button>
         </div>
+        
+        <button id="add-custom-tab" type="button" class="add-custom-tab sl-button">@svg('add-circle-outline') Add New Custom Tab</button>
     </div>
 
-    <button id="new-tab" type="button">@svg('plus-circle-filled')<br>NEW CUSTOM TAB</button>
+    {{-- <button id="new-tab" type="button">@svg('plus-circle-filled')<br>NEW CUSTOM TAB</button> --}}
 
 </form>
 @endsection
@@ -105,6 +96,6 @@
         }[key] || null;
     }
 </script>
-<script src="{{ mix('/js/components/ckeditor.js') }}" defer></script>
 <script src="{{ mix('/js/templates/admin/products/edit.js') }}" defer></script>
+<script src="{{ mix('/js/components/ckeditor.js') }}" defer></script>
 @endpush

@@ -1,4 +1,5 @@
 @import '../../variables';
+@import '../../components/tag';
 
 #admin-form {
     display: flex;
@@ -61,10 +62,10 @@ h1 {
     }
 
     >div,
-    .ck-editor,
-    input,
-    select,
-    textarea {
+    >.ck-editor,
+    >input,
+    >select,
+    >textarea {
         margin: 24px;
     }
 
@@ -72,6 +73,7 @@ h1 {
     h3~.ck-editor,
     h3+input,
     h3+select,
+    h3+link+select,
     h3+textarea {
         margin: 0 24px 24px;
     }

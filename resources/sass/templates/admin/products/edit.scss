@@ -7,6 +7,7 @@
     border-radius: 22px;
     text-align: center;
     display: inline-flex;
+    cursor: pointer;
 
     &.uploading {
         span {
@@ -16,6 +17,10 @@
         svg {
             display: inline-block;
         }
+    }
+
+    &.highlight {
+        background-color: $blue;
     }
 
     svg {
@@ -29,5 +34,48 @@
                 stroke: #FFF;
             }
         }
+    }
+}
+
+#main {
+    .custom-tab input {
+        margin-bottom: 24px;
+        width: 100%;
+    }
+
+    #add-custom-tab {
+        margin: 0 24px 24px;
+        align-self: flex-start;
+    }
+
+    .custom-tab+#add-custom-tab {
+        margin: -42px 24px 24px;
+    }
+
+    .add-custom-tab,
+    .remove-custom-tab {
+        background: none;
+        border: none;
+        color: $blue;
+        padding: 0;
+        margin-top: 16px;
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+
+        svg {
+            fill: $blue;
+            stroke: $blue;
+            margin-right: 4px;
+        }
+    }
+
+    .remove-custom-tab {
+        display: flex;
+        margin-left: auto;
+    }
+
+    #locations-tags {
+        margin-top: -16px;
     }
 }
