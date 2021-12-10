@@ -2,57 +2,35 @@
     $countryList = $countries->pluck('name', 'code')->toArray();
 @endphp
 
-<div class="my-apps">
-    <div class="head">
-        <div class="column">
-            <p>App name</p>
-        </div>
+<div class="head">
+    <p class="column-app-name">App name</p>
+    <p class="column-country">Country</p>
+    <p class="column-developer-company">Developer/company</p>
+    <p class="column-go-live">Go live</p>
+    <p class="column-status">Status</p>
+</div>
 
-        <div class="column">
-            <p>Countries</p>
-        </div>
+<div class="body">
+    @forelse($apps as $app)
+        @if(empty($app['attributes'])) @continue @endif
+        @php
+            $productCountries = [];
+            if(!is_null($app->country_code)){
+                $productCountries = $app->country()->pluck('name', 'code')->toArray();
+            }
+        @endphp
+        <x-dashboard
+            :app="$app"
+            :attr="$app->attributes"
+            :details="$app->team ?? $app->developer"
+            :countries="$productCountries ?: ['all' => 'Global']"
+            type="approved">
+        </x-dashboard>
+    @empty
+        <p>No apps to approve. You can still search for apps to view.</p>
+    @endforelse
 
-        <div class="column">
-            <p>Developer/company</p>
-        </div>
-
-        <div class="column">
-            <p>Requested go live on</p>
-        </div>
-
-    </div>
-    <div class="body">
-        @forelse($apps as $app)
-            @if(!empty($app['attributes']))
-                @php
-                    $productCountries = [];
-                    if(!is_null($app->country_code)){
-                        $productCountries = $app->country()->pluck('name', 'code')->toArray();
-                    } else {
-                        $productCountries = $app->products->reduce(function($carry, $product) use ($countryList) {
-                            $locationArray = explode(',', $product->locations);
-                            $carry = array_merge($carry, array_intersect_key($countryList, array_combine($locationArray, $locationArray)));
-                            return $carry;
-                        }, []);
-                    }
-                @endphp
-                <x-app-new
-                    :app="$app"
-                    :attr="$app->attributes"
-                    :details="$app->team ?? $app->developer"
-                    :countries="$productCountries ?: ['all' => 'Global']"
-                    type="approved">
-                </x-app-new>
-            @endif
-        @empty
-            @if(Request::is('admin/*'))
-                <p>No apps to approve. You can still search for apps to view.</p>
-            @else
-                <p>No apps.</p>
-            @endif
-        @endforelse
-        {{ $apps->withQueryString()->links() }}
-    </div>
+    {{ $apps->withQueryString()->links() }}
 </div>
 
 @foreach($apps as $app)

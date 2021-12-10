@@ -1,373 +1,147 @@
 @import '../../../variables';
 
-#sidebar {
-    @media screen and (max-width: 768px) {
-        display: none;
-    }
+.app {
+    background-color: #FFF;
+    border-radius: 8px;
+    margin-bottom: 8px;
 }
 
-#heading {
-    .create-new {
-        @media screen and (min-width: 768px) {
-            &::before {
-                content: "Create new";
-            }
-        }
-
-        @media screen and (max-width: 768px) {
-            &::before {
-                content: "New";
-            }
-        }
-    }
+.head {
+    display: flex;
+    padding: 0 24px;
 }
 
-// NO APPS
-#app-empty {
-    height: 100%;
-    width: 100%;
-    padding: 0;
-
-    .row {
+.body {
+    .columns {
+        padding: 16px 24px;
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        border: 2px solid #F2F2F2;
-        border-radius: 10px;
-        margin-top: 20px;
-        padding: 40px;
-
-        button {
-            margin: auto;
-        }
-    }
-}
-
-
-#app-index {
-    height: 100%;
-    width: 100%;
-    padding: 0;
-
-    .row {
-        display: flex;
-        flex-direction: column;
-        margin-top: 20px;
-        border-radius: 10px;
-
-        @media #{$small} {
-            overflow-x: auto;
-            padding-bottom: 10px;
-        }
-
-        >div {
-            padding: 10px 0px 0px;
-        }
+        border-radius: 8px;
     }
 
-    .approved-apps,
-    .revoked-apps {
-        @media #{$small} {
-            width: 776px;
-        }
+    & .show .columns {
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.04);
     }
 
-    .heading-app {
+    .column {
         display: flex;
         align-items: center;
-        cursor: pointer;
 
-        h3 {
-            margin-left: 10px
+        p {
+            margin: 0;
+            line-height: 1;
         }
+    }
+
+    .column-country svg {
+        width: 24px;
+    }
+
+    .toggle-app-button {
+        margin-left: auto;
+    }
+}
+
+.app-status-approved {
+    .app-status {
+        color: $green;
+        border: 1px solid $green;
+    }
+}
+
+.app-status-pending {
+    .app-status {
+        color: $orange;
+        border: 1px solid $orange;
+    }
+}
+
+.app-status-revoked {
+    .app-status {
+        color: $red;
+        border: 1px solid $red;
+    }
+}
+
+.app-status {
+    box-sizing: border-box;
+    border-radius: 64px;
+    padding: 4px 12px;
+}
+
+.toggle-app {
+    cursor: pointer;
+}
+
+.column-app-name {
+    flex: 1 1 40%;
+}
+
+.column-country {
+    flex: 1 1 10%;
+}
+
+.column-developer-company {
+    flex: 1 1 30%;
+}
+
+.column-go-live {
+    flex: 1 1 10%;
+}
+
+.column-status {
+    flex: 1 1 10%;
+}
+
+.detail {
+    display: none;
+    padding: 16px 24px;
+
+    .show>& {
+        display: block;
+    }
+
+    h2 {
+        font-size: 15px;
+        font-family: $MTN-Bold;
+        margin-top: 0;
+        line-height: 1;
+    }
+}
+
+.detail-items {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.detail-left,
+.detail-right {
+    margin-top: 32px;
+    flex: 1 0 50%;
+
+    p {
+        margin: 4px 0;
+    }
+}
+
+.detail-actions {
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+
+    button {
+        display: flex;
+        color: $blue;
+        align-items: center;
+        margin-right: 16px;
 
         svg {
-            transform: rotate(0deg);
-            transition: transform .1s linear;
-
-            &.active {
-                transform: rotate(180deg);
-                transition: transform .1s linear;
-            }
-        }
-    }
-
-    .my-apps {
-
-        .column {
-            font-size: 14px;
-            div {
-                flex-grow: 1;
-            }
-        }
-
-        .column:nth-of-type(1) {
-            width: 30%;
-        }
-
-        .column:nth-of-type(2) {
-            width: 20%;
-        }
-
-        .column:nth-of-type(3) {
-            width: 25%;
-        }
-
-        .column:nth-of-type(4) {
-            width: 15%;
-        }
-
-        .column:nth-of-type(5) {
-            width: 10%;
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .head {
-            display: flex;
-            flex-wrap: wrap;
-            padding: 0;
-            background-color: #fff;
-            padding-left: 15px;
-            border-bottom: 1px solid #cdcdcd;
-
-            p {
-                white-space: nowrap;
-                font-size: 15px;
-                font-weight: bold;
-                font-family: $MTN-Bold;
-                color: #000;
-
-                svg{
-                    width: 13px;
-                    margin-bottom: -2px;
-                    margin-left: 5px;
-                }
-            }
-        }
-
-        .body {
-            display: flex;
-            flex-wrap: wrap;
-            padding-top: 10px;
-
-            p {
-                word-break: break-word;
-                padding-right: 20px;
-            }
-        }
-
-        &.collapse {
-            display: none;
-        }
-    }
-
-    .loading .status-bar {
-        background-image:
-            repeating-linear-gradient(-45deg,
-                transparent,
-                transparent 1rem,
-                #FFFFFF4D 1rem,
-                #FFFFFF4D 2rem);
-        background-size: 200% 200%;
-        animation: barberpole 4s linear infinite;
-    }
-
-    @keyframes barberpole {
-        100% {
-            background-position: 100% 100%;
+            fill: $blue;
+            margin-right: 8px;
+            height: 18px;
         }
     }
 }
 
-#status-dialog {
-    .dialog-content {
-        width: 400px;
-    }
-
-    .status-dialog-textarea {
-        width: 100%;
-    }
-
-    .status-dialog-button {
-        margin-top: 20px;
-    }
-}
-
-#filter-form {
-    display: flex;
-    width: 100%;
-
-    @media screen and (max-width: 768px) {
-        flex-direction: column;
-
-        select,
-        input {
-            width: 100%;
-        }
-    }
-
-    .product-filter{
-        &:nth-child(1){
-            width: 40%;
-        }
-
-        select, input {
-            width: 100%;
-            border: solid 1px #707070;
-        }
-
-        &:nth-child(2),
-        &:nth-child(3),
-        &:nth-child(4){
-            width: 20%;
-            margin-left: 20px;
-        }
-    }
-}
-
-.status-separator {
-    width: 100%;
-    height: 1px;
-    background-color: #FFF;
-    margin: 5px auto;
-}
-
-.product-filters {
-    display: flex;
-
-    &.hidden{
-        display: none;
-        pointer-events: none;
-    }
-
-    @media screen and (min-width: 768px) {
-        align-items: flex-end;
-    }
-
-    @media screen and (max-width: 768px) {
-        flex-direction: column;
-    }
-
-    h3 {
-        font-size: 16px;
-        margin: 0 0 10px 0;
-    }
-}
-
-.prodict-filter {
-    display: flex;
-    flex-direction: column;
-    margin-right: 10px;
-
-    @media screen and (max-width: 768px) {
-        margin-top: 20px;
-    }
-}
-
-#clearFilter {
-    margin-bottom: 2px;
-
-    @media screen and (max-width: 768px) {
-        width: 100%;
-        margin: 20px 0 10px;
-    }
-}
-
-.admin #main {
-    .app .detail .products .product {
-        // padding: 8px 8px 26px 26px;
-
-        .status-bar {
-            position: absolute;
-            height: calc(100% - 15px);
-            left: 8px;
-        }
-    }
-
-    .product .log-notes {
-        bottom: 0;
-        color: #000;
-        background: none;
-        border: none;
-        padding: 0;
-    }
-
-    .mdp-dialog.note-dialog .dialog-content {
-        padding-right: 0;
-
-        h3 {
-            margin-top: 0;
-        }
-
-        .note {
-            max-height: 420px;
-            width: 360px;
-            overflow-y: auto;
-            padding-right: 40px;
-            word-break: break-word;
-        }
-    }
-}
-
-.approved-app-popup{
-    border-radius: 5px;
-    height: 0px;
-    margin-top: -12px;
-    color: #fff;
-    font-size: 16px;
-    padding-left: 20px;
-    box-sizing: border-box;
-    opacity: 0;
-
-    span{
-        font-weight: lighter;
-    }
-
-    &.show{
-        opacity: 1;
-        pointer-events: auto;
-        height: 60px;
-        margin-bottom: 20px;
-        padding-top: 19px;
-    }
-
-    &.approved {
-        background-color: $green;
-    }
-
-    &.revoked {
-        background-color: $red;
-    }
-
-    &.approved {
-        background-color: $green;
-    }
-
-    &.revoked {
-        background-color: $red;
-    }
-}
-
-.admin{
-    .my-apps {
-        .column:nth-of-type(1) {
-            width: 35% !important;
-        }
-    }
-
-    .head {
-        background-color: #053241 !important;
-        border-bottom: none !important;
-
-        p{
-            color: #fff !important;
-        }
-    }
-}
-
-#alert-loading {
-    text-transform: capitalize;
+.detail-text {
+    color: #787878;
 }
