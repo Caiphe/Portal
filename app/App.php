@@ -162,4 +162,15 @@ class App extends Model
 
         return $notes;
     }
+
+    public function getProductStatusAttribute()
+    {
+        $pending = $this->products->filter(fn($prod) => $prod->pivot->status === 'pending')->count();
+
+        if($pending > 0){
+            return ['status' => 'pending', 'label' => $pending . ' Pending products'];
+        }
+
+        return ['status' => $this->status, 'label' => 'All ' . $this->status];
+    }
 }

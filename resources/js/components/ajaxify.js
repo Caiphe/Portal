@@ -27,7 +27,7 @@
         var formData = new FormData();
         var el = this;
         var method = (this.method || 'GET').toUpperCase();
-        var url = el.action.replace(/\?.*/, '') || el.href;
+        var url = el.href || el.action.replace(/\?.*/, '');
         var isPager = el.classList.contains('page-link');
 
         if (el.dataset.confirm !== undefined && !confirm(el.dataset.confirm)) return;

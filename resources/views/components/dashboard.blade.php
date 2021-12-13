@@ -3,12 +3,12 @@
 @php
     $credentials = $app['credentials'];
     [$sandboxProducts, $prodProducts] = $app->getProductsByCredentials();
-    $appStatus = $app->products->filter(fn($prod) => $prod->pivot->status === 'pending')->count() > 0 ? 'pending' : $app['status'];
+    $productStatus = $app->product_status;
     $countryCode = array_keys($countries)[0];
     $countryName = array_values($countries)[0];
 @endphp
 
-<div class="app app-status-{{ $appStatus }} @if(request()->has('aid')) show  @endif" data-status="{{ $app['status'] }}" data-id="{{ $app['aid'] }}"  id="wrapper-{{ $app['aid'] }}">
+<div class="app app-status-{{ $productStatus['status'] }} @if(request()->has('aid')) show  @endif" data-status="{{ $app['status'] }}" data-id="{{ $app['aid'] }}"  id="wrapper-{{ $app['aid'] }}">
     <div class="columns">
         <div class="column column-app-name">
             <p class="name toggle-app">
@@ -29,12 +29,13 @@
         </div>
 
         <div class="column column-status">
-            <span class="app-status">{{ $appStatus }}</span>
+            <span class="app-status">{{ $productStatus['label'] }}</span>
             <button class="toggle-app-button toggle-app reset">@svg('chevron-down', '#000000')</button>
         </div>
     </div>
 
     <div class="detail">
+        <h2>Product details</h2>
         {{-- @if(!empty($sandboxProducts))
         <div class="products-title">
             <strong>Products</strong>
@@ -64,7 +65,7 @@
 
         <div class="detail-items">
             <div class="detail-left">
-                <h2>Developer Details</h2>
+                <h3>Developer details</h3>
                 <p>Name: <span class="detail-text">{{ ($details['first_name'] ?? $details['name'] ?? 'Not registered')  . ' ' . ($details['last_name'] ?? '') }}</span></p>
                 <p>Email: <a href="mailto:{{ $details['email'] ?? $details['owner']['email'] ?? '' }}">{{ $details['email'] ?? $details['owner']['email'] ?? '' }}</a></p>
                 <div class="detail-actions">
@@ -75,16 +76,16 @@
                 </div>
             </div>
             <div class="detail-right">
-                <h2>Application Details</h2>
+                <h3>Application details</h3>
                 <p>Callback URL: <span class="detail-text">{{ $app['callback_url'] ?: 'No callback url' }}</span></p>
                 <p>Description: <span class="detail-text">{{ $app['description'] ?: 'No description' }}</span></p>
                 <div class="detail-actions">
                     @if($app['status'] === 'approved')
-                    <button class="log-notes reset" data-id="{{ $app['aid'] }}">@svg('revoke') Revoke Application</button>
+                    <button class="log-notes reset" data-id="{{ $app['aid'] }}">@svg('revoke') Revoke application</button>
                     @else
-                    <button class="log-notes reset" data-id="{{ $app['aid'] }}">@svg('approve') Approve Application</button>
+                    <button class="log-notes reset" data-id="{{ $app['aid'] }}">@svg('approve') Approve application</button>
                     @endif
-                    <button class="log-notes reset" data-id="{{ $app['aid'] }}">@svg('view') View Application Log Notes</button>
+                    <button class="log-notes reset" data-id="{{ $app['aid'] }}">@svg('view') View application log notes</button>
                 </div>
             </div>
         </div>
@@ -93,9 +94,9 @@
         <div class="kyc-status">
             <strong class="mr-2">Update the KYC status</strong>
             <select name="kyc_status" class="kyc-status-select" data-aid="{{ $app['aid'] }}" autocomplete="off">
-                <option @if($app['kyc_status'] === 'Documents Received') selected @endif value="Documents Received">Documents Received</option>
-                <option @if($app['kyc_status'] === 'In Review') selected @endif value="In Review">In Review</option>
-                <option @if($app['kyc_status'] === 'KYC Approved') selected @endif value="KYC Approved">KYC Approved</option>
+                <option @if($app['kyc_status'] === 'Documents Received') selected @endif value="Documents Received">Documents received</option>
+                <option @if($app['kyc_status'] === 'In Review') selected @endif value="In Review">In review</option>
+                <option @if($app['kyc_status'] === 'KYC Approved') selected @endif value="KYC Approved">KYC approved</option>
             </select>
         </div>
         @endif

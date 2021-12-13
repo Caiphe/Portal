@@ -19,7 +19,7 @@ mix.scripts(
     "public/js/templates/admin/scripts.js"
 )
     .scripts(["resources/js/templates/admin/products/edit.js", "resources/js/templates/admin/edit.js"], "public/js/templates/admin/products/edit.js")
-    .scripts(["resources/js/templates/admin/dashboard/index.js", "resources/js/templates/admin/edit.js"], "public/js/templates/admin/dashboard/index.js")
+    .scripts(["resources/js/templates/admin/dashboard/index.js", "resources/js/templates/admin/index.js"], "public/js/templates/admin/dashboard/index.js")
     .scripts("resources/js/utilities/ajax.js", "public/js/utilities/ajax.js")
     .scripts("resources/js/templates/admin/users/scripts.js", "public/js/templates/admin/users/scripts.js")
     .scripts(["resources/js/utilities/ajax.js", "resources/js/templates/user/show.js"], "public/js/templates/user/show.js")
