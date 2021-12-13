@@ -1,9 +1,8 @@
 @import "../../../variables";
 
 #uploader {
-    background-color: $dark;
+    background-color: $yellow;
     padding: 8px 16px;
-    color: #FFF;
     border-radius: 22px;
     text-align: center;
     display: inline-flex;
@@ -21,6 +20,7 @@
 
     &.highlight {
         background-color: $blue;
+        color: #FFF;
     }
 
     svg {
@@ -48,12 +48,13 @@
     }
 
     #add-custom-tab {
-        margin: 0 24px 24px;
+        margin-top: 24px;
         align-self: flex-start;
     }
 
     .custom-tab+#add-custom-tab {
-        margin: -42px 24px 24px;
+        margin-top: -18px;
+        position: absolute;
     }
 
     .add-custom-tab,

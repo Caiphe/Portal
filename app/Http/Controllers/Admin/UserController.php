@@ -137,13 +137,6 @@ class UserController extends Controller
     {
         $countrySelectFilterCode = $request->get('country-filter', 'all');
         $order = 'desc';
-        $defaultSortQuery = array_diff_key($request->query(), ['sort' => true, 'order' => true]);
-
-        if (!empty($defaultSortQuery)) {
-            $defaultSortQuery = '&' . http_build_query($defaultSortQuery);
-        } else {
-            $defaultSortQuery = '';
-        }
 
         if ($request->has('sort')) {
             $order = ['asc' => 'desc', 'desc' => 'asc'][$request->get('order', 'desc')] ?? 'desc';
@@ -161,7 +154,6 @@ class UserController extends Controller
             'groups' => $groups,
             'user' => $user,
             'order' => $order,
-            'defaultSortQuery' => $defaultSortQuery,
             'userRoleIds' => isset($user) ? $user->roles->pluck('id')->toArray() : [],
             'userCountryCodes' => $user->countries->pluck('code')->toArray() ?? [],
             'userResponsibleCountries' => $user->responsibleCountries()->pluck('code')->toArray(),

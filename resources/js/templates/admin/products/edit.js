@@ -123,6 +123,7 @@
 
         if(alertType === 'success'){
             document.querySelector('.no-swagger').classList.remove('no-swagger');
+            uploader.querySelector('span').textContent = 'Replace swagger';
         }
     }
 

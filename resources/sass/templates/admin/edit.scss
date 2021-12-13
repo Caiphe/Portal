@@ -146,12 +146,12 @@ h1 {
 
 #main #admin-form {
     .one-third {
-        width: calc(33% - 12px);
-        margin-right: 24px;
+        width: calc(33% - 24px);
     }
 
     .two-thirds {
         width: 66%;
+        margin-left: 24px;
     }
 
     .half {
@@ -167,7 +167,7 @@ h1 {
         margin-right: 24px;
 
         &.editor-field-label {
-            margin-right: 24px;
+            margin-right: 0;
         }
     }
 
@@ -175,5 +175,17 @@ h1 {
         &.editor-field-label {
             margin-right: 0;
         }
+    }
+}
+
+#main .save-button{
+    color: $blue;
+    margin-left: 24px;
+    margin-bottom: 24px;
+    height: 32px;
+    line-height: 1;
+
+    &:hover {
+        color: #FFF;
     }
 }

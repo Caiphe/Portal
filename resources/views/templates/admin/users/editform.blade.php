@@ -21,9 +21,9 @@
     <thead>
         <tr>
             <th><a href="?sort=name&order={{ $order }}">Name @svg('chevron-sorter')</a></th>
-            <th><a href="?sort=products&order={{ $order }}">Products @svg('chevron-sorter')</a></th>
-            <th><a href="?sort=registered&order={{ $order }}">Registered @svg('chevron-sorter')</a></th>
-            <th><a href="?sort=country&order={{ $order }}">Country @svg('chevron-sorter')</a></th>
+            <th><a href="?sort=products_count&order={{ $order }}">Products @svg('chevron-sorter')</a></th>
+            <th><a href="?sort=created_at&order={{ $order }}">Registered @svg('chevron-sorter')</a></th>
+            <th><a href="?sort=country_code&order={{ $order }}">Country @svg('chevron-sorter')</a></th>
             <th><a href="?sort=status&order={{ $order }}">Status @svg('chevron-sorter')</a></th>
         </tr>
     </thead>
@@ -38,7 +38,7 @@
             <td><a href="{{ route('admin.dashboard.index', ['aid' => $app]) }}" class="app-link">{{ $app->display_name }}</a></td>
             <td>{{ $app->products_count }}</td>
             <td>{{ $app->created_at->format('d M Y') }}</td>
-            <td><img class="country-flag" src="/images/locations/{{ $app->country_code }}.svg" alt="Country flag"></td>
+            <td><img class="country-flag" src="/images/locations/{{ $app->country_code ?? 'globe' }}.svg" alt="Country flag"></td>
             <td>
                 <div class="status app-status-{{ $productStatus['status'] }}">{{ $productStatus['label'] }}</div>
                 <a class="go-to-app" href="{{ route('admin.dashboard.index', ['aid' => $app]) }}">@svg('chevron-right')</a>

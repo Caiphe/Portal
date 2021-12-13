@@ -46,9 +46,11 @@
     </label>
 
     <label class="editor-field-label password-strength">
-        <div id="password-strength">Password strength</div>
+        <div id="password-strength"></div>
         <div id="password-still-needs" role="alert"></div>
     </label>
+
+    <button class="button outline blue save-button">Apply changes</button>
 </div>
 
 @if($isAdminUser)
@@ -69,6 +71,8 @@
         <h3><b>Countries</b> this user is responsible for</h3>
         <x-multiselect id="responsible_countries" name="responsible_countries" label="Select country" :options="$countries->pluck('name', 'code')->toArray()" :selected="$userResponsibleCountries ?? []"/>
     </label>
+
+    <button class="button outline blue save-button">Apply changes</button>
 </div>
 @endif
 

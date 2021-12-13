@@ -13,7 +13,6 @@
 
 <div class="page-actions">
     <a class="button primary" href="{{ route('admin.app.create', $user->id) }}">Create an app for this user</a>
-    <button id="save" class="button primary" form="admin-form">Save</button>
 </div>
 
 <form id="admin-form" action="{{ route('admin.user.update', $user->slug) }}" method="POST">

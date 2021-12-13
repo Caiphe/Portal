@@ -28,7 +28,6 @@ button.password-visible {
 }
 
 #password-still-needs {
-    color: #bb1e4f;
     font-size: 12px;
     font-family: $MTN-Regular;
 }
@@ -40,6 +39,11 @@ button.password-visible {
     padding: 8px;
     transition: background-color 0.356s;
     font-size: 12px;
+    width: calc(50% - 12px);
+
+    &:before {
+        content: 'Password strength';
+    }
 
     &.password-score-0,
     &.password-score-1,
@@ -47,8 +51,12 @@ button.password-visible {
         background-color: $error;
         color: #FFF;
 
+        &:before {
+            content: 'Password strength weak';
+        }
+
         &+#password-still-needs {
-            margin-top: 16px;
+            margin-top: 8px;
         }
     }
 
@@ -57,8 +65,12 @@ button.password-visible {
         background-color: $warning;
         color: #FFF;
 
+        &:before {
+            content: 'Password strength stronger';
+        }
+
         &+#password-still-needs {
-            margin-top: 16px;
+            margin-top: 8px;
         }
     }
 
@@ -66,8 +78,12 @@ button.password-visible {
         background-color: $success;
         color: #FFF;
 
+        &:before {
+            content: 'Password strength strong';
+        }
+
         &+#password-still-needs {
-            margin-top: 16px;
+            margin-top: 8px;
         }
     }
 }
