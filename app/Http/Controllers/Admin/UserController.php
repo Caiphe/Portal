@@ -20,6 +20,7 @@ class UserController extends Controller
         $sort = '';
 
         $users = User::with('roles', 'countries')
+            ->withCount('apps')
             ->when($currentUser->hasRole('opco'), function ($query) use ($currentUser) {
                 $query->whereHas('countries', fn ($q) => $q->whereIn('code', $currentUser->responsibleCountries()->pluck('code')->toArray()));
             })
@@ -64,7 +65,7 @@ class UserController extends Controller
                 ->view('components.admin.list', [
                     'collection' => $users->paginate(),
                     'order' => $order,
-                    'fields' => ['First name' => 'first_name', 'Last name' => 'last_name', 'Email' => 'email', 'Member since' => 'created_at,date:d M Y', 'Role' => 'roles,implode:, |label'],
+                    'fields' => ['First name' => 'first_name', 'Last name' => 'last_name', 'Email' => 'email', 'Member since' => 'created_at,date:d M Y', 'Role' => 'roles,implode:, |label', 'status' => 'status,splitToTag:,', 'apps' => 'apps_count'],
                     'modelName' => 'user',
                 ], 200)
                 ->header('Vary', 'X-Requested-With')
@@ -87,7 +88,8 @@ class UserController extends Controller
             [
                 'roles' => Role::where('name', 'not like', 'team%')->get(),
                 'countries' => Country::orderBy('name')->get(),
-                'groups' => $groups
+                'groups' => $groups,
+                'isAdminUser' => auth()->user()->hasRole('admin'),
             ]
         );
     }

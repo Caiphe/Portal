@@ -80,6 +80,7 @@ mix.scripts(
     .sass("resources/sass/templates/home.scss", "public/css/templates")
     .sass("resources/sass/templates/admin/edit.scss", "public/css/templates/admin/edit.css")
     .sass("resources/sass/templates/admin/index.scss", "public/css/templates/admin/index.css")
+    .sass("resources/sass/templates/admin/users/index.scss", "public/css/templates/admin/users/index.css")
     .sass("resources/sass/templates/admin/products/index.scss", "public/css/templates/admin/products/index.css")
     .sass("resources/sass/templates/admin/products/edit.scss", "public/css/templates/admin/products/edit.css")
     .sass("resources/sass/templates/teams/create.scss", "public/css/templates/teams/create.css")

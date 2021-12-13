@@ -23,79 +23,157 @@ h1 {
     }
 }
 
-#main .editor-field {
-    align-self: flex-start;
-    background-color: #FFF;
-    border-radius: 8px;
-    margin-bottom: 32px;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+#main {
+    table {
+        width: 100%;
+        border: none;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+    }
 
-    &.one-third {
+    thead {
+        background-color: transparent;
+
+        a {
+            display: flex;
+            align-items: center;
+        }
+
+        svg {
+            width: 16px;
+            fill: $grey500;
+            margin-left: 8px;
+        }
+
+        th:first-child {
+            padding-left: 24px;
+        }
+    }
+
+    tbody tr {
+        border-radius: 8px;
+
+        td {
+            background-color: #FFF;
+            height: 48px;
+            max-height: 48px;
+            text-transform: capitalize;
+            position: relative;
+        }
+
+        td:first-child {
+            border-radius: 10px 0 0 10px;
+            padding-left: 24px;
+        }
+
+        td:last-child {
+            border-radius: 0 10px 10px 0;
+        }
+    }
+
+    .editor-field {
+        display: flex;
+        flex-wrap: wrap;
+        align-self: flex-start;
+        background-color: #FFF;
+        border-radius: 8px;
+        margin-bottom: 32px;
+        width: 100%;
+
+        >h2 {
+            margin: 0;
+            background-color: #FFF;
+            border-radius: 8px;
+            box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.04);
+            padding: 24px;
+            font-size: 20px;
+            font-family: $MTN-Regular;
+            font-weight: normal;
+            flex: 1 1 100%;
+
+            &+h3,
+            &+.editor-field-label,
+            &+.editor-field-label+.half {
+                margin-top: 24px;
+            }
+        }
+
+        h3,
+        .editor-field-label {
+            font-size: 16px;
+            font-family: $MTN-Regular;
+            display: block;
+            font-weight: normal;
+            width: 100%;
+        }
+
+        .editor-field-label {
+            margin: 0 24px 24px;
+            position: relative;
+
+            h3 {
+                margin: 0;
+            }
+        }
+
+        input,
+        textarea,
+        select:not(.multiselect),
+        .editor-field-copy {
+            background-color: transparent;
+            border: none;
+            border-bottom: 1px solid $grey800;
+            font-size: 14px;
+            font-family: $MTN-Regular;
+            padding: 8px 0;
+            display: block;
+            width: 100%;
+            height: 36px;
+            line-height: 1;
+        }
+
+        select {
+            background-image: url('/images/icons/chevron-down.svg');
+            background-repeat: no-repeat;
+            background-size: 24px;
+            background-position: calc(100% - 8px) center;
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+    }
+}
+
+#main #admin-form {
+    .one-third {
         width: calc(33% - 12px);
         margin-right: 24px;
     }
 
-    &.two-thirds {
+    .two-thirds {
         width: 66%;
     }
 
-    >h2 {
-        margin: 0;
-        background-color: #FFF;
-        border-radius: 8px;
-        box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.04);
-        padding: 24px;
-        font-size: 20px;
-        font-family: $MTN-Regular;
+    .half {
+        width: calc(50% - 12px);
+        margin-right: 0;
 
-        &+h3 {
-            margin-top: 24px;
+        &.editor-field-label {
+            width: calc(50% - 36px);
         }
     }
 
-    >h3 {
-        margin: 0 24px 12px;
-        font-size: 16px;
-        font-family: $MTN-Regular;
+    .half:nth-child(even) {
+        margin-right: 24px;
+
+        &.editor-field-label {
+            margin-right: 24px;
+        }
     }
 
-    >div,
-    >.ck-editor,
-    >input,
-    >select,
-    >textarea {
-        margin: 24px;
-    }
-
-    h3~div,
-    h3~.ck-editor,
-    h3+input,
-    h3+select,
-    h3+link+select,
-    h3+textarea {
-        margin: 0 24px 24px;
-    }
-
-    input,
-    textarea,
-    select {
-        background-color: transparent;
-        border: none;
-        border-bottom: 1px solid $grey800;
-        font-size: 14px;
-        font-family: $MTN-Regular;
-        padding: 8px 0;
-    }
-
-    select {
-        background-image: url('/images/icons/chevron-down.svg');
-        background-repeat: no-repeat;
-        background-size: 24px;
-        background-position: calc(100% - 16px) center;
-        -moz-appearance: none;
-        -webkit-appearance: none;
-        appearance: none;
+    .half:first-of-type {
+        &.editor-field-label {
+            margin-right: 0;
+        }
     }
 }

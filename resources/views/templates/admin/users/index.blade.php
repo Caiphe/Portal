@@ -2,6 +2,7 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/admin/index.css') }}">
+<link rel="stylesheet" href="{{ mix('/css/templates/admin/users/index.css') }}">
 @endpush
 
 @section('title', 'Users')
@@ -27,7 +28,7 @@
     <div id="table-data">
         @include('components.admin.list', [
             'collection' => $users,
-            'fields' => ['First name' => 'first_name', 'Last name' => 'last_name', 'Email' => 'email', 'Member since' => 'created_at,date:d M Y', 'Role' => 'roles,implode:, |label'],
+            'fields' => ['First name' => 'first_name', 'Last name' => 'last_name', 'Email' => 'email', 'Member since' => 'created_at,date:d M Y', 'Role' => 'roles,implode:, |label', 'status' => 'status,splitToTag:,', 'apps' => 'apps_count'],
             'modelName' => 'user'
         ])
     </div>
