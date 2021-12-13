@@ -38,6 +38,10 @@
 }
 
 #main {
+    .no-swagger {
+        display: none;
+    }
+
     .custom-tab input {
         margin-bottom: 24px;
         width: 100%;

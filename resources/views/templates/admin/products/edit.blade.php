@@ -9,17 +9,20 @@
 @endpush
 
 @section('content')
-<a href="{{ url()->previous() }}" class="go-back">@svg('chevron-left') Back to Products</a>
+<a href="{{ url()->previous() }}" class="go-back">@svg('chevron-left') Back to products</a>
 <h1>{{ $product->display_name }}</h1>
 
 <div class="page-actions">
-    <a href="{{ route('product.show', $product->slug) }}" target="_blank" rel="noreferrer" class="button outline dark ml-1">View Product</a>
-    @if($product->swagger)
-        <a class="button outline dark" href="/openapi/{{ $product->swagger }}" download>Download Swagger</a>
-    @endif
+    <a href="{{ route('product.show', $product->slug) }}" target="_blank" rel="noreferrer" class="button outline dark ml-1">View product</a>
+    <a @class([
+        'button',
+        'outline',
+        'dark',
+        'no-swagger' => !$hasSwagger
+    ]) href="/openapi/{{ $product->swagger }}" download>Download swagger</a>
     <label id="uploader">
         @svg('loading-blue')
-        <span>Upload Swagger</span>
+        <span>{{ $hasSwagger ? 'Replace' : 'Upload' }} swagger</span>
         <input id="uploader-input" type="file" name="uploader" hidden accept=".yaml,yml">
     </label>
     <button id="save" class="button primary ml-1" form="admin-form">Save</button>

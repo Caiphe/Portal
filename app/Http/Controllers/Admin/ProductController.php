@@ -71,12 +71,14 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $product->load('content', 'countries');
+        $hasSwagger = $product->swagger !== null && \Storage::disk('app')->exists("openapi/{$product->swagger}");
 
         return view('templates.admin.products.edit', [
             'product' => $product,
             'content' => $product->content->groupBy('title'),
             'countries' => Country::get(),
             'categories' => Category::pluck('title', 'cid'),
+            'hasSwagger' => $hasSwagger,
         ]);
     }
 

@@ -120,6 +120,10 @@
         addAlert(alertType, response.message);
 
         uploader.classList.remove('uploading');
+
+        if(alertType === 'success'){
+            document.querySelector('.no-swagger').classList.remove('no-swagger');
+        }
     }
 
     function validateForm(ev) {
