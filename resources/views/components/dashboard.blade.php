@@ -80,9 +80,9 @@
                 <p>Description: <span class="detail-text">{{ $app['description'] ?: 'No description' }}</span></p>
                 <div class="detail-actions">
                     @if($app['status'] === 'approved')
-                    <button class="log-notes reset" data-id="{{ $app['aid'] }}">@svg('revoke') Revoke application</button>
+                    <button class="reset" data-id="{{ $app['aid'] }}">@svg('revoke') Revoke application</button>
                     @else
-                    <button class="log-notes reset" data-id="{{ $app['aid'] }}">@svg('approve') Approve application</button>
+                    <button class="reset" data-id="{{ $app['aid'] }}">@svg('approve') Approve application</button>
                     @endif
                     <button class="log-notes reset" data-id="{{ $app['aid'] }}">@svg('view') View application log notes</button>
                 </div>

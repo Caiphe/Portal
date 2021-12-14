@@ -34,8 +34,8 @@
 </div>
 
 @foreach($apps as $app)
-    <x-dialog id="admin-{{ $app->aid }}-note-dialog" class="note-dialog">
-        <h3>Profile Log Notes</h3>
+    <x-dialog id="admin-{{ $app->aid }}" class="note-dialog">
+        <h3>App Log Notes</h3>
         <div class="note">{!! $app['notes'] !!}</div>
     </x-dialog>
 @endforeach

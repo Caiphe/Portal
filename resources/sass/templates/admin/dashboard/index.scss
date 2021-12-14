@@ -170,6 +170,7 @@
     display: flex;
     align-items: center;
     margin: 32px 0;
+    padding-left: 96px;
 
     button {
         color: $blue;
@@ -181,30 +182,52 @@
         }
     }
 
-    .status {
-        padding: 4px 8px;
-        border-radius: 35px;
-        color: #FFF;
-        margin-right: 16px;
-        text-transform: capitalize;
+    &.product-status-approved .product-approve,
+    &.product-status-revoked .product-revoke {
+        color: $grey400;
+        pointer-events: none;
 
-        &.status-pending {
-            background-color: $orange;
-        }
-
-        &.status-approved {
-            background-color: $green;
-        }
-
-        &.status-revoked {
-            background-color: $red;
+        svg,
+        path {
+            fill: $grey400;
         }
     }
 
-    &.product-status-approved .product-approve,
-    &.product-status-revoked .product-revoke {
-        opacity: 0;
-        pointer-events: none;
+    .status {
+        position: absolute;
+        left: 0;
+        padding: 4px 8px;
+        border-radius: 35px;
+        color: #FFF;
+        background-color: $grey400;
+
+        &:before {
+            content: '...';
+        }
+    }
+
+    &.product-status-pending .status {
+        background-color: $orange;
+
+        &:before {
+            content: 'Pending';
+        }
+    }
+
+    &.product-status-approved .status {
+        background-color: $green;
+
+        &:before {
+            content: 'Approved';
+        }
+    }
+
+    &.product-status-revoked .status {
+        background-color: $red;
+
+        &:before {
+            content: 'Revoked';
+        }
     }
 
     .name {
@@ -290,4 +313,25 @@
 
 .detail-text {
     color: #787878;
+}
+
+#status-dialog {
+    .dialog-content {
+        width: 400px;
+    }
+
+    .status-dialog-textarea {
+        width: 100%;
+        border-radius: 5px;
+        border: 1px solid $grey400;
+        padding: 8px;
+        appearance: none;
+        outline: none;
+        box-shadow: none;
+        resize: vertical;
+    }
+
+    .status-dialog-button {
+        margin-top: 20px;
+    }
 }

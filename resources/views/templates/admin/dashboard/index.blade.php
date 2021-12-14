@@ -67,6 +67,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ mix('/js/components/dialog.js') }}" defer></script>
 <script src="{{ mix('/js/templates/admin/dashboard/index.js') }}" defer></script>
 @endpush

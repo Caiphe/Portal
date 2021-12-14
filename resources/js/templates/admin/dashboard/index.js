@@ -3,6 +3,8 @@
         var toggleAppEls = document.querySelectorAll('.toggle-app');
         var renewCredentials = document.querySelectorAll('.renew-credentials');
         var environment = document.querySelectorAll('.environment');
+        var logNotes = document.querySelectorAll('.log-notes');
+        var productStatusButtons = document.querySelectorAll('.product-status-action');
 
         for (var i = toggleAppEls.length - 1; i >= 0; i--) {
             toggleAppEls[i].addEventListener('click', toggleApp);
@@ -14,6 +16,14 @@
 
         for (var i = environment.length - 1; i >= 0; i--) {
             environment[i].addEventListener('click', switchEnvironment);
+        }
+
+        for (var m = 0; m < logNotes.length; m++) {
+            logNotes[m].addEventListener('click', viewNote);
+        }
+
+        for (var m = 0; m < productStatusButtons.length; m++) {
+            productStatusButtons[m].addEventListener('click', showProductNoteDialog);
         }
     }
 
@@ -40,5 +50,70 @@
 
     function switchEnvironment() {
         this.closest('.detail').className = 'detail active-' + this.dataset.environment;
+    }
+
+    function viewNote(e) {
+        var id = this.dataset.id;
+        var noteDialog = document.getElementById('admin-' + id);
+
+        if (!noteDialog) return;
+
+        noteDialog.classList.add('show');
+    }
+
+    function showProductNoteDialog() {
+        var dialog = document.getElementById('status-dialog');
+        var productStatusAction = this;
+
+        dialog.querySelector('.status-dialog-form').addEventListener('submit', function (ev) {
+            var product = productStatusAction.parentNode;
+            ev.preventDefault();
+
+            document.getElementById('status-dialog').classList.remove('show');
+
+            handleUpdateStatus({
+                action: productStatusAction.dataset.action,
+                for: productStatusAction.dataset.for,
+                app: product.dataset.aid,
+                product: product.dataset.pid,
+                displayName: product.dataset.productDisplayName,
+                statusNote: this.elements['status-note'].value
+            }, product);
+
+            dialog.querySelector('.status-dialog-textarea').value = '';
+        }, {
+            once: true
+        });
+
+        dialog.classList.add('show');
+    }
+
+    function handleUpdateStatus(data, card) {
+        var xhr = new XMLHttpRequest();
+        var lookup = {
+            approve: 'approved',
+            revoke: 'revoked'
+        };
+
+        addLoading('Updating status...');
+
+        xhr.open('POST', '/admin/apps/' + data.product + '/' + data.action);
+        xhr.setRequestHeader('X-CSRF-TOKEN', document.getElementsByName("csrf-token")[0].content);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+        xhr.send(JSON.stringify(data));
+
+        xhr.onload = function () {
+            var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+            removeLoading();
+
+            if (xhr.status === 200) {
+                card.className = 'product product-status-' + lookup[data.action];
+            } else {
+                addAlert('error', result.body || 'There was an error updating the product.');
+            }
+        };
     }
 }());
