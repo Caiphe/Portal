@@ -59,7 +59,7 @@
     <form class="status-dialog-form" name="status-note-form" method="POST" action="">
         @csrf
         <h3>Add note:</h3>
-        <input class="status-dialog-status" type="hidden" value="approved" name="status">
+        <input class="app-dialog-status" type="hidden" value="approved" name="status">
         <textarea class="status-dialog-textarea" name="status-note" rows="5" placeholder="Optional product status change note" autocomplete="off"></textarea>
         <button class="status-dialog-button">Submit</button>
     </form>
