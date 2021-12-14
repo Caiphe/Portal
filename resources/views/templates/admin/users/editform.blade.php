@@ -17,7 +17,7 @@
 </div>
 
 {{-- apps list --}}
-<table id="apps-list">
+<table id="apps-list" class="table-list">
     <thead>
         <tr>
             <th><a href="?sort=name&order={{ $order }}">Name @svg('chevron-sorter')</a></th>

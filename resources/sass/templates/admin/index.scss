@@ -5,6 +5,19 @@
     margin-bottom: 32px;
 }
 
+.go-back {
+    display: inline-flex;
+    align-items: center;
+    font-size: 14px;
+    font-family: $MTN-Regular;
+    color: $grey750;
+    margin: 0 0 16px -5px;
+
+    svg {
+        fill: $grey750;
+    }
+}
+
 .filter-item {
     display: flex;
     flex-direction: column;
@@ -42,7 +55,6 @@
 }
 
 .page-actions {
-
     button,
     .button {
         font-size: 16px;

@@ -1,9 +1,19 @@
 (function () {
     function init() {
         var toggleAppEls = document.querySelectorAll('.toggle-app');
+        var renewCredentials = document.querySelectorAll('.renew-credentials');
+        var environment = document.querySelectorAll('.environment');
 
         for (var i = toggleAppEls.length - 1; i >= 0; i--) {
-            toggleAppEls[i].addEventListener('click', toggleApp)
+            toggleAppEls[i].addEventListener('click', toggleApp);
+        }
+
+        for (var i = renewCredentials.length - 1; i >= 0; i--) {
+            renewCredentials[i].addEventListener('submit', confirmRenewCredentials);
+        }
+
+        for (var i = environment.length - 1; i >= 0; i--) {
+            environment[i].addEventListener('click', switchEnvironment);
         }
     }
 
@@ -20,5 +30,15 @@
 
     function toggleApp() {
         this.closest('.app').classList.toggle('show');
+    }
+
+    function confirmRenewCredentials() {
+        if (!confirm('Renewing the credentials will revoke the current credentials, do you want to continue?')) return;
+
+        addLoading('Renewing credentials...');
+    }
+
+    function switchEnvironment() {
+        this.closest('.detail').className = 'detail active-' + this.dataset.environment;
     }
 }());

@@ -26,7 +26,7 @@
 </head>
 <body class="admin">
     <nav id="sidebar">
-        <a class="logo" href="/"><img src="/images/mtn-logo.svg" alt="MTN logo"> Admin Portal</a>
+        <a class="logo" href="/"><img width="39px" height="42px" src="/images/mtn-logo.svg" alt="MTN logo"> Admin Portal</a>
 
         <ul class="main-menu">
             <li @if(Request::is('admin/dashboard')) class="active" @endif><a href="{{ route('admin.dashboard.index') }}">@svg('applications') Applications</a></li>

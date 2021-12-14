@@ -8,7 +8,7 @@
 @endpush
 
 @section('content')
-<a href="{{ url()->previous() }}" class="go-back">@svg('chevron-left') Back to users</a>
+<a href="{{ route('admin.user.index') }}" class="go-back">@svg('chevron-left') Back to users</a>
 <h1>{{ $user->full_name }}</h1>
 
 <div class="page-actions">

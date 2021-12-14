@@ -7,12 +7,11 @@
 @endpush
 
 @section('content')
-<a href="{{ url()->previous() }}" class="go-back">@svg('chevron-left') Back to Categories</a>
+<a href="{{ route('admin.category.index') }}" class="go-back">@svg('chevron-left') Back to categories</a>
 <h1>{{ $category->title }}</h1>
 
 <div class="page-actions">
-    <a class="button outline dark" href="{{ route('category.show', $category->slug) }}" target="_blank" rel="noreferrer">View</a>
-    <button id="save" class="button primary ml-1" form="admin-form">Save</button>
+    <a class="button primary" href="{{ route('category.show', $category->slug) }}" target="_blank" rel="noreferrer">View category</a>
 </div>
 
 <form id="admin-form" action="{{ route('admin.category.update', $category->slug) }}" method="POST">

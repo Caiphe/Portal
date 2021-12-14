@@ -3,6 +3,8 @@
 @php
     $credentials = $app['credentials'];
     [$sandboxProducts, $prodProducts] = $app->getProductsByCredentials();
+    $hasSandboxProducts = !empty($sandboxProducts);
+    $hasProdProducts = !empty($prodProducts) && !empty($prodProducts['products']);
     $productStatus = $app->product_status;
     $countryCode = array_keys($countries)[0];
     $countryName = array_values($countries)[0];
@@ -11,7 +13,7 @@
 <div class="app app-status-{{ $productStatus['status'] }} @if(request()->has('aid')) show  @endif" data-status="{{ $app['status'] }}" data-id="{{ $app['aid'] }}"  id="wrapper-{{ $app['aid'] }}">
     <div class="columns">
         <div class="column column-app-name">
-            <p class="name toggle-app">
+            <p class="name elipsise toggle-app">
                 {{ $app['display_name'] }}
             </p>
         </div>
@@ -21,7 +23,7 @@
         </div>
 
         <div class="column column-developer-company">
-            {{ $details['email'] ?? $details['name'] ?? '' }}
+            <p class="elipsise">{{ isset($details['developer_id']) ? $details['email'] : $details['name'] ?? '' }}</p>
         </div>
 
         <div class="column column-go-live">
@@ -34,50 +36,47 @@
         </div>
     </div>
 
-    <div class="detail">
+    <div @class([
+        'detail',
+        'active-production' => $hasProdProducts,
+        'active-sandbox' => !$hasProdProducts,
+    ])>
         <h2>Product details</h2>
-        {{-- @if(!empty($sandboxProducts))
-        <div class="products-title">
-            <strong>Products</strong>
-            <form class="ml-1" action="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'sandbox']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
-                @csrf
-                <button class="outline small">Renew credentials</button>
-            </form>
+        <div class="environments">
+            @if($hasProdProducts)
+            <button class="reset environment environment-production" data-environment="production">Production</button>
+            @endif
+            @if($hasSandboxProducts)
+            <button class="reset environment environment-sandbox" data-environment="sandbox">Sandbox</button>
+            @endif
         </div>
-        <div class="products">
-            <x-apps.products :app="$app" :products="$sandboxProducts['products']" for="staging" />
+
+        @if($hasProdProducts)
+        <div class="app-products production-products active">
+            <form class="renew-credentials" action="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'production']) }}" method="POST">
+                @csrf
+                <button class="reset renew">@svg('renew') Renew production credentials</button>
+            </form>
+
+            <x-admin.dashboard.products :app="$app" :products="$prodProducts['products']" for="production" />
         </div>
         @endif
 
-        @if(!empty($prodProducts['products']))
-        <div class="detail-right"></div>
-        <div class="products-title">
-            <strong>Production products</strong>
-            <form class="ml-1" action="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'production']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
+        @if($hasSandboxProducts)
+        <div class="app-products sandbox-products">
+            <form class="renew-credentials" action="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'sandbox']) }}" method="POST">
                 @csrf
-                <button class="outline small" href="">Renew credentials</button>
+                <button class="reset renew">@svg('renew') Renew sandbox credentials</button>
             </form>
+
+            <x-admin.dashboard.products :app="$app" :products="$sandboxProducts['products']" for="staging" />
         </div>
-        <div class="products production-products kyc-status-{{ Str::slug($app->kyc_status ?? 'none') }}">
-            <x-apps.products :app="$app" :products="$prodProducts['products']" for="production" />
-        </div>
-        @endif --}}
+        @endif
 
         <div class="detail-items">
             <div class="detail-left">
-                <h3>Developer details</h3>
-                <p>Name: <span class="detail-text">{{ ($details['first_name'] ?? $details['name'] ?? 'Not registered')  . ' ' . ($details['last_name'] ?? '') }}</span></p>
-                <p>Email: <a href="mailto:{{ $details['email'] ?? $details['owner']['email'] ?? '' }}">{{ $details['email'] ?? $details['owner']['email'] ?? '' }}</a></p>
-                <div class="detail-actions">
-                    <form action="{{ route('admin.credentials.renew', ['app' => $app, 'type' => 'sandbox']) }}" method="POST" onsubmit="if(confirm('Renewing the credentials will revoke the current ones, do you want to continue?')){addLoading('Renewing credentials...')}else{return false};">
-                        @csrf
-                        <button class="reset">@svg('renew') Renew credentials</button>
-                    </form>
-                </div>
-            </div>
-            <div class="detail-right">
                 <h3>Application details</h3>
-                <p>Callback URL: <span class="detail-text">{{ $app['callback_url'] ?: 'No callback url' }}</span></p>
+                <p>Callback URL: @if($app['callback_url']) <a href="{{ $app['callback_url'] }}" target="_blank" rel="noopener noreferrer">{{ $app['callback_url'] }}</a> @else <span class="detail-text"> No callback url</span> @endif</p>
                 <p>Description: <span class="detail-text">{{ $app['description'] ?: 'No description' }}</span></p>
                 <div class="detail-actions">
                     @if($app['status'] === 'approved')
@@ -88,9 +87,18 @@
                     <button class="log-notes reset" data-id="{{ $app['aid'] }}">@svg('view') View application log notes</button>
                 </div>
             </div>
+            <div class="detail-right">
+                <h3>Developer details</h3>
+                @if(isset($details['developer_id']))
+                <p>Name: <a href="{{ route('admin.user.edit', $details) }}" target="_blank" rel="noopener noreferrer">{{ $details->full_name ?? 'User not in portal' }}</a></p>
+                @else
+                <p>Name: <span class="detail-text">{{ $details->full_name ?? 'User not in portal' }}</span></p>
+                @endif
+                <p>Email: @if(isset($details->email))<a href="mailto:{{ $details->email }}">{{ $details->email }}</a>@endif</p>
+            </div>
         </div>
 
-        @if(!is_null($app['kyc_status']))
+        {{-- @if(!is_null($app['kyc_status']))
         <div class="kyc-status">
             <strong class="mr-2">Update the KYC status</strong>
             <select name="kyc_status" class="kyc-status-select" data-aid="{{ $app['aid'] }}" autocomplete="off">
@@ -99,6 +107,6 @@
                 <option @if($app['kyc_status'] === 'KYC Approved') selected @endif value="KYC Approved">KYC approved</option>
             </select>
         </div>
-        @endif
+        @endif --}}
     </div>
 </div>

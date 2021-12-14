@@ -7,12 +7,8 @@
 @endpush
 
 @section('content')
-<a href="{{ url()->previous() }}" class="go-back">@svg('chevron-left') Back to Pages</a>
+<a href="{{ url()->previous() }}" class="go-back">@svg('chevron-left') Back to pages</a>
 <h1>Create Page</h1>
-
-<div class="page-actions">
-    <button id="save" class="button primary" form="admin-form">Save</button>
-</div>
 
 <form id="admin-form" action="{{ route('admin.page.store') }}" method="POST">
     @include('templates.admin.pages.form')

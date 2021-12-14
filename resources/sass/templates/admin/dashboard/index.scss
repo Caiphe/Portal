@@ -25,6 +25,7 @@
     .column {
         display: flex;
         align-items: center;
+        min-width: 0;
 
         p {
             margin: 0;
@@ -74,6 +75,7 @@
 
 .column-app-name {
     flex: 0 1 100%;
+    margin-right: 16px;
 }
 
 .column-country {
@@ -83,7 +85,8 @@
 }
 
 .column-developer-company {
-    flex: 0 0 20%;
+    flex: 0 0 200px;
+    margin-right: 16px;
 }
 
 .column-go-live {
@@ -94,9 +97,14 @@
     flex: 0 0 20%;
 }
 
+.elipsise {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .detail {
     display: none;
-    padding: 16px 24px;
 
     .show>& {
         display: block;
@@ -105,8 +113,8 @@
     h2 {
         font-size: 18px;
         font-family: $MTN-Bold;
-        margin-top: 0;
         line-height: 1;
+        margin: 16px 24px;
     }
 
     h3 {
@@ -117,23 +125,148 @@
     }
 }
 
+.environments {
+    margin-bottom: 8px;
+    margin: 0 24px;
+
+    .reset {
+        font-size: 14px;
+        font-family: $MTN-Regular;
+        font-weight: normal;
+        color: $grey850;
+        padding-bottom: 4px;
+        margin-right: 12px;
+    }
+}
+
+.app-products {
+    display: none;
+    margin: 0 24px;
+}
+
+.active-production {
+    .environment-production {
+        color: $orange;
+        border-bottom: 2px solid $orange;
+    }
+
+    .production-products {
+        display: block;
+    }
+}
+
+.active-sandbox {
+    .environment-sandbox {
+        color: $orange;
+        border-bottom: 2px solid $orange;
+    }
+
+    .sandbox-products {
+        display: block;
+    }
+}
+
+.product {
+    display: flex;
+    align-items: center;
+    margin: 32px 0;
+
+    button {
+        color: $blue;
+        display: flex;
+        align-items: center;
+
+        svg {
+            fill: $blue;
+        }
+    }
+
+    .status {
+        padding: 4px 8px;
+        border-radius: 35px;
+        color: #FFF;
+        margin-right: 16px;
+        text-transform: capitalize;
+
+        &.status-pending {
+            background-color: $orange;
+        }
+
+        &.status-approved {
+            background-color: $green;
+        }
+
+        &.status-revoked {
+            background-color: $red;
+        }
+    }
+
+    &.product-status-approved .product-approve,
+    &.product-status-revoked .product-revoke {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .name {
+        margin-right: auto;
+        color: $blue;
+    }
+
+    .product-status-action {
+        padding: 0 32px;
+
+        svg {
+            margin-right: 8px;
+            height: 18px;
+        }
+    }
+}
+
+.renew-credentials {
+    position: absolute;
+    right: 0;
+    margin-top: -52px;
+
+    .renew {
+        display: flex;
+        align-items: center;
+        color: $blue;
+
+        svg {
+            fill: $blue;
+            margin-right: 4px;
+        }
+    }
+}
+
 .detail-items {
     display: flex;
     flex-wrap: wrap;
+    background-color: $grey200;
+    padding: 0 24px 24px;
+    border-radius: 0 0 8px 8px;
 }
 
 .detail-left,
 .detail-right {
     margin-top: 32px;
-    flex: 1 0 50%;
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: calc(50% - 32px);
 
     p {
         margin: 4px 0;
+        word-break: break-word;
     }
 
     a {
         color: $blue;
+        word-break: break-word;
     }
+}
+
+.detail-left {
+    margin-right: 32px;
 }
 
 .detail-actions {

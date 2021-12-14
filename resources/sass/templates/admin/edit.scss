@@ -24,50 +24,50 @@ h1 {
 }
 
 #main {
-    table {
+    .table-list {
         width: 100%;
         border: none;
         border-collapse: separate;
         border-spacing: 0 8px;
-    }
 
-    thead {
-        background-color: transparent;
+        thead {
+            background-color: transparent;
 
-        a {
-            display: flex;
-            align-items: center;
+            a {
+                display: flex;
+                align-items: center;
+            }
+
+            svg {
+                width: 16px;
+                fill: $grey500;
+                margin-left: 8px;
+            }
+
+            th:first-child {
+                padding-left: 24px;
+            }
         }
 
-        svg {
-            width: 16px;
-            fill: $grey500;
-            margin-left: 8px;
-        }
+        tbody tr {
+            border-radius: 8px;
 
-        th:first-child {
-            padding-left: 24px;
-        }
-    }
+            td {
+                background-color: #FFF;
+                height: 48px;
+                max-height: 48px;
+                text-transform: capitalize;
+                position: relative;
+            }
 
-    tbody tr {
-        border-radius: 8px;
+            td:first-child {
+                border-radius: 10px 0 0 10px;
+                padding-left: 24px;
+            }
 
-        td {
-            background-color: #FFF;
-            height: 48px;
-            max-height: 48px;
-            text-transform: capitalize;
-            position: relative;
-        }
-
-        td:first-child {
-            border-radius: 10px 0 0 10px;
-            padding-left: 24px;
-        }
-
-        td:last-child {
-            border-radius: 0 10px 10px 0;
+            td:last-child {
+                border-radius: 0 10px 10px 0;
+            }
         }
     }
 
@@ -141,6 +141,11 @@ h1 {
             -webkit-appearance: none;
             appearance: none;
         }
+
+        .ck-editor {
+            width: calc(100% - 2px);
+            margin-top: 16px;
+        }
     }
 }
 
@@ -178,7 +183,7 @@ h1 {
     }
 }
 
-#main .save-button{
+#main .save-button {
     color: $blue;
     margin-left: 24px;
     margin-bottom: 24px;

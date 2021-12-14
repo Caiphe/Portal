@@ -7,12 +7,8 @@
 @endpush
 
 @section('content')
-<a href="{{ url()->previous() }}" class="go-back">@svg('chevron-left') Back to Documentation</a>
-<h1>Create Documentation</h1>
-
-<div class="page-actions">
-    <button id="save" class="button primary" form="admin-form">Save</button>
-</div>
+<a href="{{ url()->previous() }}" class="go-back">@svg('chevron-left') Back to documentation</a>
+<h1>Create documentation</h1>
 
 <form id="admin-form" action="{{ route('admin.doc.store') }}" method="POST">
     @include('templates.admin.docs.form')

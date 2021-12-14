@@ -8,7 +8,7 @@
 @endpush
 
 @section('content')
-<a href="{{ url()->previous() }}" class="go-back">@svg('chevron-left') Back to products</a>
+<a href="{{ route('admin.product.index') }}" class="go-back">@svg('chevron-left') Back to products</a>
 <h1>{{ $product->display_name }}</h1>
 
 <div class="page-actions">

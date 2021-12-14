@@ -8,6 +8,9 @@
 @section('title', 'Applications')
 
 @section('content')
+@if(!is_null($previous))
+<a href="{{ $previous }}" class="go-back">@svg('chevron-left') Back to user</a>
+@endif
 <h1>Applications</h1>
 
 <div class="page-actions">
@@ -64,5 +67,6 @@
 @endsection
 
 @push('scripts')
+<script src="{{ mix('/js/components/dialog.js') }}" defer></script>
 <script src="{{ mix('/js/templates/admin/dashboard/index.js') }}" defer></script>
 @endpush

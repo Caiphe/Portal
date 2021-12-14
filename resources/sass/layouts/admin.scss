@@ -23,16 +23,13 @@ body {
         padding: 0;
 
         li {
-            a {
+            &.active a,
+            a:hover {
+                background-color: $yellow;
+                color: $dark;
 
-                &.active,
-                &:hover {
-                    background-color: $yellow;
-                    color: $dark;
-
-                    svg {
-                        fill: $dark;
-                    }
+                svg {
+                    fill: $dark;
                 }
             }
         }
@@ -122,6 +119,7 @@ body {
         margin-top: 0;
         font-size: 40px;
         font-family: $MTN-Bold;
+        margin-bottom: 36px;
     }
 }
 
