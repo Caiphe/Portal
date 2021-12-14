@@ -80,9 +80,9 @@
         <li>
             <a href="{{ route('user.profile') }}">My profile</a></li>
         <li>
-            <a href="{{ route('app.store') }}">My Apps</a>
+            <a href="{{ route('app.store') }}">My apps</a>
         </li>
-            <li><a href="{{ route('teams.listing') }}">My Teams</a></li>
+            <li><a href="{{ route('teams.listing') }}">My teams</a></li>
         <li>
             <form action="{{route('logout')}}" method="post">@csrf<button>Sign out</button></form>
         </li>
