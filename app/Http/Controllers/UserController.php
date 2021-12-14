@@ -166,11 +166,13 @@ class UserController extends Controller
 			$oneTimePassword = $request->get('one_time_password', '');
 
 			if (!$authenticator->isAuthenticated()) {
-				if (!in_array($oneTimePassword, $user->recovery_codes, true)) {
+				$recoveryCodes = $user->recovery_codes ?? [];
+
+				if (!in_array($oneTimePassword, $recoveryCodes, true)) {
 					return back()->with('alert', "Error:Your one time password didn't match;Please try again.");
 				}
 
-				$recoveryCodes = array_values(array_filter($user->recovery_codes, fn ($code) => $code !== $oneTimePassword));
+				$recoveryCodes = array_values(array_filter($recoveryCodes, fn ($code) => $code !== $oneTimePassword));
 
 				$user->update([
 					'recovery_codes' => $recoveryCodes ?: null
