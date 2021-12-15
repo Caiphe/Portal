@@ -48,13 +48,13 @@
                 </form>
             </li>
             <li>
-                <form action="{{ route('admin.search') }}">
+                <form action="{{ route('admin.search') }}" class="admin-search-form">
                     <input class="admin-search" type="text" name="q" placeholder="Search site">
                 </form>
             </li>
             <li>
                 @if($user->can('administer-products'))
-                <button id="sync" class="button yellow outline" onclick="sync(this)">Sync All</button>
+                <button id="sync" class="button yellow outline" onclick="syncProductsThenApps()">Sync All</button>
                 @endif
             </li>
         </ul>

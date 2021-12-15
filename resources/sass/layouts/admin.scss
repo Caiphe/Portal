@@ -17,6 +17,7 @@ body {
     top: 0;
     bottom: 0;
     background-color: $dark;
+    overflow-y: auto;
 
     .main-menu {
         margin: 0;
@@ -104,11 +105,15 @@ body {
     align-items: center;
     font-size: 18px;
     font-family: $MTN-Regular;
-    margin-bottom: 48px;
+    margin-bottom: 24px;
 
     img {
-        margin-right: 8px;
+        margin-right: 12px;
     }
+}
+
+.admin-search-form {
+    margin-top: 16px;
 }
 
 #main {

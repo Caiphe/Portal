@@ -171,6 +171,6 @@ class App extends Model
             return ['status' => 'pending', 'label' => $pending . ' Pending products'];
         }
 
-        return ['status' => $this->status, 'label' => 'All ' . $this->status];
+        return ['status' => $this->status, 'label' => ucfirst($this->status)];
     }
 }

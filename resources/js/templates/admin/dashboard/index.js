@@ -81,6 +81,7 @@
                 for: productStatusAction.dataset.for,
                 app: product.dataset.aid,
                 product: product.dataset.pid,
+                productSlug: product.dataset.productSlug,
                 displayName: product.dataset.productDisplayName,
                 statusNote: this.elements['status-note'].value
             }, product);
@@ -93,7 +94,7 @@
         dialog.classList.add('show');
     }
 
-    function updateProductStatus(data, card) {
+    function updateProductStatus(data, product) {
         var xhr = new XMLHttpRequest();
         var lookup = {
             approve: 'approved',
@@ -111,11 +112,16 @@
 
         xhr.onload = function () {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+            var noteDialogContent;
 
             removeLoading();
 
             if (xhr.status === 200) {
-                card.className = 'product product-status-' + lookup[data.action];
+                noteDialogContent = document.querySelector('#admin-' + data.app + data.productSlug + ' .note');
+                noteDialogContent.innerHTML = result.body;
+
+                product.className = 'product product-status-' + lookup[data.action];
+                addAlert('success', '<strong>Product ' + lookup[data.action] + '.</strong> The product <em>' + data.displayName + '</em> has been ' + lookup[data.action]);
             } else {
                 addAlert('error', result.body || 'There was an error updating the product.');
             }

@@ -1,27 +1,15 @@
-function sync(el) {
-    el.classList.add('syncing');
-
-    syncProductsThenApps(function () {
-        el.classList.remove('syncing');
-        el = null;
-    })
+function syncProductsThenApps() {
+    syncProducts(syncApps);
 }
 
-function syncProductsThenApps(cb) {
-    syncProducts(function(){
-        window.setTimeout(syncApps.bind(null, cb), 256);
-    });
-}
-
-function syncApps(cb) {
+function syncApps() {
     var xhr = new XMLHttpRequest();
 
-    addLoading('Syncing apps');
+    addLoading('Syncing apps...');
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             removeLoading();
-            cb && cb();
 
             if (xhr.status === 200) {
                 addAlert('success', ['Syncing complete!', 'Refresh the page to see if there is anything new.']);
@@ -49,7 +37,7 @@ function syncProducts(cb) {
 
             if (xhr.status === 200) {
                 if (cb !== undefined) {
-                    cb();
+                    window.setTimeout(cb, 264);
                 } else {
                     addAlert('success', ['Syncing complete!', 'Refresh the page to see if there is anything new.']);
                 }
