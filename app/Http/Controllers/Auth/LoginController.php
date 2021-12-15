@@ -49,39 +49,6 @@ class LoginController extends Controller
     }
 
     /**
-     * Get the failed login response instance.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    protected function sendFailedLoginResponse(Request $request)
-    {
-        $drupalUserCheck = DB::table('drupal_users')
-            ->leftJoin('users', 'drupal_users.email', '=', 'users.email')
-            ->select('users.email as user_email', 'drupal_users.email', 'drupal_users.first_name', 'drupal_users.last_name')
-            ->where('drupal_users.email', $request->get($this->username()))->first();
-
-        if ($drupalUserCheck === null || $drupalUserCheck->user_email !== null) {
-            return redirect('login')->withErrors([
-                $this->username() => [trans('auth.failed')],
-            ]);
-        }
-
-        $data = ApigeeUserService::setupUser((array)$drupalUserCheck);
-
-        $data['password'] = date("imsYdH");
-        $user = $this->create($data);
-        $user->assignRole("developer");
-
-        $token = Password::createToken($user);
-        $user->sendPasswordResetNotification($token);
-
-        return redirect()->route('password.reset', ['token' => $token])->with('type', 'drupal');
-    }
-
-    /**
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
@@ -117,27 +84,6 @@ class LoginController extends Controller
     {
         if (!is_null($user->developer_id)) return;
 
-        $apigeeDeveloper = ApigeeService::post('developers', [
-            "email" => $user->email,
-            "firstName" => $user->first_name,
-            "lastName" => $user->last_name,
-            "userName" => $user->first_name . $user->last_name,
-            "attributes" => [
-                [
-                    "name" => "MINT_DEVELOPER_LEGAL_NAME",
-                    "value" => $user->first_name . " " . $user->last_name
-                ],
-                [
-                    "name" => "MINT_BILLING_TYPE",
-                    "value" => "PREPAID"
-                ]
-            ]
-        ])->json();
-
-        if (isset($apigeeDeveloper['code'])) {
-            $apigeeDeveloper = ApigeeService::get('developers/' . $user->email);
-        }
-
-        $user->update(['developer_id' => $apigeeDeveloper['developerId']]);
+        ApigeeUserService::setupUser($user);
     }
 }
