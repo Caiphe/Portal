@@ -55,6 +55,7 @@
 }
 
 .page-actions {
+
     button,
     .button {
         font-size: 16px;
@@ -96,8 +97,13 @@
         background-color: transparent;
 
         th {
-            padding-top: 0;
-            padding-bottom: 0;
+            padding: 0 16px;
+            white-space: nowrap;
+            font-weight: normal;
+        }
+
+        th:first-child {
+            padding-left: 24px;
         }
 
         a {
@@ -120,6 +126,10 @@
             height: 48px;
             max-height: 48px;
             text-transform: capitalize;
+            padding: 0 16px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         td:first-child {
@@ -129,31 +139,40 @@
 
         td:last-child {
             border-radius: 0 10px 10px 0;
+            padding-right: 24px;
         }
     }
-}
 
-.action-row {
-    display: flex;
+    .action-row {
+        width: 1%;
+        max-width: 100%;
 
-    .sl-button {
-        background-color: transparent;
-        border: none;
-        padding: 0;
-    }
+        .sl-button {
+            background-color: transparent;
+            border: none;
+            padding: 0;
+        }
 
-    a,
-    form,
-    button {
-        display: inline-flex;
-        align-items: center;
-        margin-right: 16px;
-        color: $blue;
-    }
+        a,
+        form,
+        button,
+            {
+            display: inline-flex;
+            align-items: center;
+            color: $blue;
+        }
 
-    svg {
-        fill: $blue;
-        height: 16px;
-        margin-right: 4px;
+        a+*,
+        form+*,
+        button+*,
+            {
+            margin-left: 16px;
+        }
+
+        svg {
+            fill: $blue;
+            height: 16px;
+            margin-right: 4px;
+        }
     }
 }
