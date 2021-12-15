@@ -8,8 +8,8 @@
         <input type="text" class="long" name="title" placeholder="Title" value="{{ $doc['title'] ?? old('title') }}">
     </label>
 
-    <label class="editor-field-label">
+    <div class="editor-field-label">
         <h3>Content</h3>
         <div class="editor" data-input="body">{!! $doc['body'] ?? old('body') !!}</div>
-    </label>
+    </div>
 </div>

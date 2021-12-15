@@ -64,19 +64,19 @@
     <div id="custom-tabs" class="editor-field two-thirds">
         <h2>Content Details</h2>
 
-        <label class="editor-field-label">
+        <div class="editor-field-label">
             <h3>Overview</h3>
             <input type="hidden" name="tab[title][]" value="Overview">
             <div class="editor" data-input="{{ $product->slug }}-overview-body" data-name="tab[body][]">{!! $content['Overview'][0]['body'] ?? '' !!}</div>
-        </label>
+        </div>
 
-        <label class="editor-field-label">
+        <div class="editor-field-label">
             <h3>Docs</h3>
             <input type="hidden" name="tab[title][]" value="Docs">
             <div class="editor" data-input="{{ $product->slug }}-docs-body" data-name="tab[body][]">{!! $content['Docs'][0]['body'] ?? '' !!}</div>
-        </label>
+        </div>
 
-        <label class="editor-field-label">
+        <div class="editor-field-label">
             <h3>Custom Tabs</h3>
             @foreach($content as $title => $c)
             @if($title === 'Overview' || $title === 'Docs')
@@ -96,7 +96,7 @@
             </div>
 
             <button id="add-custom-tab" type="button" class="add-custom-tab sl-button">@svg('add-circle-outline') Add New Custom Tab</button>
-        </label>
+        </div>
 
         <button class="button outline blue save-button">Apply changes</button>
     </div>

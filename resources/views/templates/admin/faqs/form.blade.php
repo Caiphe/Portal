@@ -18,10 +18,10 @@
         <input type="text" name="question" class="long" value="{{ $faq['question'] ?? old('question') }}">
     </label>
 
-    <label class="editor-field-label">
+    <div class="editor-field-label">
         <h3>Answer</h3>
         <div class="editor" data-input="answer">{!! $faq['answer'] ?? old('answer') !!}</div>
-    </label>
+    </div>
 
     <button class="button outline blue save-button">Apply changes</button>
 </div>

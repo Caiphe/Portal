@@ -8,10 +8,10 @@
         <input type="text" class="long" name="title" placeholder="Title" value="{{ $page['title'] ?? old('title') }}">
     </label>
 
-    <label class="editor-field-label">
+    <div class="editor-field-label">
         <h3>Content</h3>
         <div class="editor" data-input="body">{!! $page['body'] ?? old('body') !!}</div>
-    </label>
+    </div>
 
     <button class="button outline blue save-button">Apply changes</button>
 </div>

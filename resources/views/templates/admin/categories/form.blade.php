@@ -30,34 +30,34 @@
 <div class="editor-field two-thirds">
     <h2>Content</h2>
 
-    <label class="editor-field-label">
+    <div class="editor-field-label">
         <h3>Description</h3>
         <div class="editor" data-input="heading-body">{!! $content['heading'][0]['body'] ?? old('heading-body') !!}</div>
-    </label>
+    </div>
 
-    <label class="editor-field-label">
+    <div class="editor-field-label">
         <h3>Benefits</h3>
         <input type="hidden" name="benefits-title" value="Benefits">
         <div class="editor" data-input="benefits-body">{!! $content['benefits'][0]['body'] ?? old('benefits-body') ?: 'Read the developer guides to get started on your integration. Find specific information about the different features of all MTN APIs. Access the community and support team to ensure your success' !!}</div>
-    </label>
+    </div>
 
-    <label class="editor-field-label">
+    <div class="editor-field-label">
         <h3>Developer centric</h3>
         <input type="hidden" name="developer-centric-title" value="Developer centric">
         <div class="editor" data-input="developer-centric-body">{!! $content['developer-centric'][0]['body'] ?? old('developer-centric-body') ?: 'All MTN APIs are built to ease the developer journey. Stay connected to find out ways to make your integration projects seamless with our growing catalog of SDKs, widgets and other develeper tools.' !!}</div>
-    </label>
+    </div>
 
-    <label class="editor-field-label">
+    <div class="editor-field-label">
         <h3>Bundles</h3>
         <input type="hidden" name="bundles-title" value="Bundles">
         <div class="editor" data-input="bundles-body">{!! $content['bundles'][0]['body'] ?? old('bundles-body') !!}</div>
-    </label>
+    </div>
 
-    <label class="editor-field-label">
+    <div class="editor-field-label">
         <h3>Products</h3>
         <input type="hidden" name="products-title" value="Products">
         <div class="editor" data-input="products-body">{!! $content['products'][0]['body'] ?? old('products-body') ?: 'Ready to build? Browse our catalog of Mobile Advertising APIs to get started. And remember, our team of API experts are always available to provide valuable tips on how to accelerate your project.' !!}</div>
-    </label>
+    </div>
 
     <button class="button outline blue save-button">Apply changes</button>
 </div>

@@ -20,10 +20,10 @@
     <div class="editor-field">
         <h2>Content</h2>
 
-        <label class="editor-field-label">
+        <div class="editor-field-label">
             <h3>Overview</h3>
             <div class="editor" data-input="body">{!! $content['overview'][0]['body'] ?? old('body') !!}</div>
-        </label>
+        </div>
 
         <button class="button outline blue save-button">Apply changes</button>
     </div>
