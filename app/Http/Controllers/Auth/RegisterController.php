@@ -70,6 +70,11 @@ class RegisterController extends Controller
 	 */
 	protected function validator(array $data)
 	{
+		$data['first_name'] = htmlspecialchars($data['first_name'], ENT_QUOTES);
+		$data['last_name'] = htmlspecialchars($data['last_name'], ENT_QUOTES);
+		$data['email'] = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
+		$data['locations'] = array_map(fn ($location) => htmlspecialchars($location, ENT_QUOTES), $data['locations'] ?? []);
+
 		return Validator::make($data, [
 			'first_name' => ['required', 'string', 'max:255'],
 			'last_name' => ['required', 'string', 'max:255'],
