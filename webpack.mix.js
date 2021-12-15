@@ -64,6 +64,7 @@ mix.scripts(
     .sass("resources/sass/components/pricing.scss", "public/css/components")
     .sass("resources/sass/components/checkbox-round.scss", "public/css/components")
     .sass("resources/sass/templates/search.scss", "public/css/templates")
+    .sass("resources/sass/templates/admin/search.scss", "public/css/templates/admin")
     .sass("resources/sass/templates/apps/index.scss", "public/css/templates/apps")
     .sass("resources/sass/templates/apps/create.scss", "public/css/templates/apps")
     .sass("resources/sass/templates/apps/kyc.scss", "public/css/templates/apps")

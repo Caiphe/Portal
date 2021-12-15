@@ -62,15 +62,16 @@ table {
     td {
         // vertical-align: top;
     }
-    .table-title{
-        td{
+
+    .table-title {
+        td {
             font-weight: 800;
             color: black;
             position: relative;
             font-size: 15px;
             font-family: "mtn-bold";
 
-            svg{
+            svg {
                 width: 17px;
                 margin-bottom: -4px;
                 height: 16px;
@@ -94,6 +95,22 @@ table {
         padding: 0;
     }
 
+    li:first-of-type {
+        background: url('/images/icons/chevron-left.svg') no-repeat #FFF center center / 24px;
+
+        a, span {
+            color: transparent;
+        }
+    }
+
+    li:last-of-type {
+        background: url('/images/icons/chevron-right.svg') no-repeat #FFF center center / 24px;
+
+        a, span {
+            color: transparent;
+        }
+    }
+
     .page-link {
         width: 40px;
         height: 40px;
@@ -101,35 +118,44 @@ table {
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 2px;
         color: $grey900;
         box-sizing: border-box;
-        background-color: #FFF;
-        border: 1px solid $grey900;
-        border-radius: 6px;
+        font-size: 14px;
+        font-family: $MTN-Regular;
     }
 
     .page-item {
         width: 40px;
         height: 40px;
-        font-size: 14px;
-        font-family: $MTN-Regular;
+        background-color: #FFF;
+        border: 1px solid $grey900;
+        border-radius: 6px;
     }
 
-    .page-item+.page-item{
+    .page-item+.page-item {
         margin-left: 8px;
     }
 
-    .active .page-link,
-    .page-link:active,
-    .page-link:hover,
-    .page-link:focus {
+    .active.page-item,
+    .page-item:active,
+    .page-item:hover,
+    .page-item:focus {
         background-color: $yellow;
         border: 1px solid $yellow;
+    }
+
+    .disabled {
+        &.page-item:hover {
+            background-color: $grey400;
+            border: 1px solid $grey900;
+        }
+
+        a {
+            pointer-events: none;
+        }
     }
 }
 
 .editor {
     word-break: break-word;
 }
-

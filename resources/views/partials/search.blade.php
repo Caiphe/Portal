@@ -11,14 +11,19 @@
 </div>
 @if($pages > 1)
 <ul class="pagination">
-    @if($page !== 0)
-    <li><a href="?q={{$searchTerm}}&page={{$page}}">@svg('chevron-left')</a></li>
-    @endif
+    <li @class([
+        'page-item',
+        'disabled' => $page === 0
+    ])><a class="page-link" href="?q={{$searchTerm}}&page={{$page}}" rel="prev" aria-label="« Previous">‹</a></li>
     @for ($i = 0; $i < $pages; $i++)
-    <li><a @if($page === $i) class="current" @endif href="?q={{$searchTerm}}&page={{$i+1}}">{{$i+1}}</a></li>
+    <li @class([
+        'page-item',
+        'active' => $page === $i
+    ])><a class="page-link" href="?q={{$searchTerm}}&page={{$i+1}}">{{$i+1}}</a></li>
     @endfor
-    @if($page + 1 !== $pages)
-    <li><a href="?q={{$searchTerm}}&page={{$page+2}}">@svg('chevron-right')</a></li>
-    @endif
+    <li @class([
+        'page-item',
+        'disabled' => $page + 1 === $pages
+    ])><a class="page-link" href="?q={{$searchTerm}}&page={{$page+2}}" rel="next" aria-label="Next »">›</a></li>
 </ul>
 @endif
