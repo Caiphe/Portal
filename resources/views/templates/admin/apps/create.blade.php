@@ -1,15 +1,13 @@
+@extends('layouts.admin')
+
+@section('title', 'Create app')
+
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/templates/admin/apps/create.css') }}">
 @endpush
 
-@extends('layouts.admin')
-
-@section('title')
-    Create app
-@endsection
-
 @section('content')
-
+    <h1>Create app</h1>
     {{-- <x-heading heading="Apps" tags="CREATE NEW"></x-heading> --}}
 
     <x-twofa-warning class="tall"></x-twofa-warning>
@@ -35,7 +33,6 @@
         </nav>
 
         <form id="form-create-app">
-
             <div class="app-owner-container @if(!isset($chosenUser)) active @endif">
                 <span class="apps-top-text">Create a new app</span>
                 <h1 class="app-create-heading">App owner</h1>
