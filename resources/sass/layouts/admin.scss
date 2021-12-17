@@ -17,13 +17,13 @@ body {
     top: 0;
     bottom: 0;
     background-color: $dark;
-    overflow-y: auto;
 
     .main-menu {
         margin: 0;
         padding: 0;
 
         li {
+
             &.active a,
             a:hover {
                 background-color: $yellow;
@@ -54,7 +54,15 @@ body {
         svg {
             fill: #fff;
             margin-right: 12px;
-            width: 32px;
+
+            @media screen and (min-height: 815px) {
+                width: 32px;
+            }
+
+            @media screen and (max-height: 814px) {
+                width: 28px;
+                height: 28px;
+            }
         }
     }
 
@@ -106,7 +114,14 @@ body {
     align-items: center;
     font-size: 18px;
     font-family: $MTN-Regular;
-    margin-bottom: 24px;
+
+    @media screen and (min-height: 815px) {
+        margin-bottom: 32px;
+    }
+
+    @media screen and (max-height: 814px) {
+        margin-bottom: 24px;
+    }
 
     img {
         margin-right: 12px;
