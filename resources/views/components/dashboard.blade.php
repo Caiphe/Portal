@@ -78,6 +78,16 @@
                 <h3>Application details</h3>
                 <p>Callback URL: @if($app['callback_url']) <a href="{{ $app['callback_url'] }}" target="_blank" rel="noopener noreferrer">{{ $app['callback_url'] }}</a> @else <span class="detail-text"> No callback url</span> @endif</p>
                 <p>Description: <span class="detail-text">{{ $app['description'] ?: 'No description' }}</span></p>
+                @if(!is_null($app['kyc_status']))
+                <p>
+                    Update the KYC status:
+                    <select name="kyc_status" class="kyc-status-select" data-aid="{{ $app['aid'] }}" autocomplete="off">
+                        <option @if($app['kyc_status'] === 'Documents Received') selected @endif value="Documents Received">Documents received</option>
+                        <option @if($app['kyc_status'] === 'In Review') selected @endif value="In Review">In review</option>
+                        <option @if($app['kyc_status'] === 'KYC Approved') selected @endif value="KYC Approved">KYC approved</option>
+                    </select>
+                </p>
+                @endif
                 <div class="detail-actions">
                     @if($app['status'] === 'approved')
                     <button class="reset app-status-action" data-id="{{ $app['aid'] }}" data-status="revoked" data-action="{{ route('admin.app.status-update', $app) }}">@svg('revoke') Revoke application</button>
@@ -97,16 +107,5 @@
                 <p>Email: @if(isset($details->email))<a href="mailto:{{ $details->email }}">{{ $details->email }}</a>@endif</p>
             </div>
         </div>
-
-        {{-- @if(!is_null($app['kyc_status']))
-        <div class="kyc-status">
-            <strong class="mr-2">Update the KYC status</strong>
-            <select name="kyc_status" class="kyc-status-select" data-aid="{{ $app['aid'] }}" autocomplete="off">
-                <option @if($app['kyc_status'] === 'Documents Received') selected @endif value="Documents Received">Documents received</option>
-                <option @if($app['kyc_status'] === 'In Review') selected @endif value="In Review">In review</option>
-                <option @if($app['kyc_status'] === 'KYC Approved') selected @endif value="KYC Approved">KYC approved</option>
-            </select>
-        </div>
-        @endif --}}
     </div>
 </div>

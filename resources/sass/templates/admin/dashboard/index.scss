@@ -335,3 +335,18 @@
         margin-top: 20px;
     }
 }
+
+.kyc-status-select {
+    background-image: url("/images/icons/chevron-down.svg"), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="0" x2="0" y2="50" stroke="%23e9e9ed" /></svg>');
+    background-repeat: no-repeat, no-repeat;
+    background-size: 24px, 1px;
+    background-position: calc(100% - 8px) center, calc(100% - 40px) top;
+    background-color: #FFF;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    margin-left: 8px;
+}

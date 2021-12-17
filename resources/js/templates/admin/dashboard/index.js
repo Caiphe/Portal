@@ -6,6 +6,7 @@
         var logNotes = document.querySelectorAll('.log-notes');
         var productStatusButtons = document.querySelectorAll('.product-status-action');
         var appStatusAction = document.querySelectorAll('.app-status-action');
+        var kycStatus = document.querySelectorAll(".kyc-status-select");
 
         for (var i = toggleAppEls.length - 1; i >= 0; i--) {
             toggleAppEls[i].addEventListener('click', toggleApp);
@@ -29,6 +30,10 @@
 
         for (var i = appStatusAction.length - 1; i >= 0; i--) {
             appStatusAction[i].addEventListener('click', updateAppStatus);
+        }
+
+        for (var i = kycStatus.length - 1; i >= 0; i--) {
+            kycStatus[i].addEventListener('change', handleKycUpdateStatus);
         }
     }
 
@@ -142,5 +147,33 @@
 
         dialog.querySelector('.app-dialog-status').value = this.dataset.status;
         dialog.classList.add('show');
+    }
+
+    function handleKycUpdateStatus() {
+        var xhr = new XMLHttpRequest();
+        var kycSelect = this;
+
+        xhr.open('POST', '/admin/apps/' + kycSelect.dataset.aid + '/kyc-status');
+        xhr.setRequestHeader('X-CSRF-TOKEN', document.getElementsByName("csrf-token")[0].content);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+        addLoading('Updating KYC status');
+
+        xhr.send(JSON.stringify({
+            kyc_status: kycSelect.value
+        }));
+
+        xhr.onload = function () {
+            var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+            removeLoading();
+
+            if (xhr.status === 200) {
+                addAlert('success', result.body || 'Success.');
+            } else {
+                addAlert('error', result.body || 'There was an error updating the product.');
+            }
+        };
     }
 }());
