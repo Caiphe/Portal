@@ -20,8 +20,7 @@ class DashboardController extends Controller
 
     public function index(Request $request)
     {
-        $user = $request->user();
-        $user->load(['responsibleCountries']);
+        $user = $request->user()->load(['responsibleCountries']);
         $isAdmin = $user->hasRole('admin');
         $responsibleCountriesCodes = $user->responsibleCountries->pluck('code')->toArray();
         $searchTerm = "%" . $request->get('q', '') . "%";
@@ -31,6 +30,8 @@ class DashboardController extends Controller
         $notAdminNoResponsibleCountries = !$isAdmin && empty($responsibleCountriesCodes);
         $appStatus = $request->get('app-status', 'all');
         $productStatus = $request->get('product-status', 'pending');
+        $hasAid = $request->has('aid');
+        $previous = url()->previous();
 
         if (($notAdminNoResponsibleCountries) && $request->ajax()) {
             return response()
@@ -50,9 +51,11 @@ class DashboardController extends Controller
             ]);
         }
 
-        $apps = App::with(['developer', 'country', 'products.countries'])
+        $apps = App::with(['developer', 'team.owner', 'country', 'products' => function ($q) {
+            $q->orderByRaw("FIELD (app_product.status, 'pending', 'approved', 'revoked') ASC");
+        }, 'products.countries'])
             ->whereNotNull('country_code')
-            ->when($request->has('aid'), fn ($q) => $q->where('aid', $request->get('aid')))
+            ->when($hasAid, fn ($q) => $q->where('aid', $request->get('aid')))
             ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes) {
                 $query->whereIn('country_code', $responsibleCountriesCodes);
             })
@@ -70,7 +73,7 @@ class DashboardController extends Controller
             ->when($appStatus !== 'all', function ($q) use ($appStatus) {
                 $q->where('status', $appStatus);
             })
-            ->when($productStatus !== 'all' && !$request->has('aid'), function ($q) use ($productStatus) {
+            ->when($productStatus !== 'all' && !$hasAid, function ($q) use ($productStatus) {
                 switch ($productStatus) {
                     case 'pending':
                         $q->whereHas('products', fn ($q) => $q->where('status', 'pending'));
@@ -118,7 +121,8 @@ class DashboardController extends Controller
             'countries' => Country::orderBy('name')->pluck('name', 'code'),
             'selectedCountry' => $request->get('countries', ''),
             'appStatus' => $request->get('app-status', 'pending'),
-            'productStatus' => $request->get('product-status', 'pending')
+            'productStatus' => $request->get('product-status', 'pending'),
+            'previous' => $hasAid && strpos($previous, 'admin/user') !== false ? $previous : null
         ]);
     }
 
@@ -259,10 +263,10 @@ class DashboardController extends Controller
         $users = User::whereNotNull(['email_verified_at'])->select(['profile_picture', 'email'])->get();
 
         $emails = $profiles = [];
-        foreach($users as $u){
+        foreach ($users as $u) {
             $profiles[$u->email] = $u->profile_picture;
             if ($u->email === $appCreator->email) continue;
-            array_push($emails, $u->email );
+            array_push($emails, $u->email);
         }
 
         [$products, $countries] = $productLocationService->fetch();

@@ -10,7 +10,7 @@
     <button class="fab plus"></button>
 */
 
-button:not(.sl-button),
+button:not(.sl-button, .reset),
 .button {
     height: 37px;
     line-height: 1;
@@ -240,6 +240,13 @@ button:not(.sl-button),
         background-color: mix(#ffffff, $yellow, 20%);
         border-color: mix(#ffffff, $yellow, 20%);
     }
+}
+
+button.reset {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
 }
 
 button[disabled] {

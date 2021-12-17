@@ -6,10 +6,24 @@
 
 @section('title', 'FAQs')
 
-@section('page-info')
-    <a href="{{ route('admin.faq.create') }}" class="button dark outline">Create</a>
+@section('content')
+    <h1>FAQs</h1>
+
+    <div class="page-actions">
+        <a href="{{ route('admin.faq.create') }}" class="button primary">Create FAQ</a>
+    </div>
+
+    <x-admin.filter searchTitle="Questions"></x-admin.filter>
+
+    <div id="table-data">
+        @include('components.admin.list', [
+            'collection' => $faqs,
+            'fields' => ['Question' => 'question', 'Category' => 'category.title'],
+            'modelName' => 'faq'
+        ])
+    </div>
 @endsection
 
-@section('content')
-    <x-admin.table :collection="$faqs" model-name="faq" :fields="['question', 'category.title']"></x-admin.table>
-@endsection
+@push('scripts')
+<script src="{{ mix('/js/templates/admin/index.js') }}" defer></script>
+@endpush
