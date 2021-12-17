@@ -2,7 +2,7 @@
     <thead>
         <tr>
             @foreach($fields as $specifiedName => $field)
-            <th align="left"><a href="?sort={{ strtok($field, ',') }}&order={{ $order ?? 'desc' }}">{{ is_string($specifiedName) ? $specifiedName : preg_replace('/[_\.]/', ' ', $field) }} @svg('chevron-sorter')</a></th>
+            <th align="left"><a href="?sort={{ strtok($field, '|') }}&order={{ $order ?? 'desc' }}">{{ is_string($specifiedName) ? $specifiedName : preg_replace('/[_\.]/', ' ', $field) }} @svg('chevron-sorter')</a></th>
             @endforeach
             <th align="left" class="action-row">Actions</th>
         </tr>
