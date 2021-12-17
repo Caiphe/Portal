@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Listeners\VerifiedListener;
+use App\Observers\UserObserver;
+use App\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
@@ -49,6 +51,6 @@ class EventServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        //
+        User::observe(UserObserver::class);
     }
 }
