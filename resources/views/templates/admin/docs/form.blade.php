@@ -12,4 +12,6 @@
         <h3>Content</h3>
         <div class="editor" data-input="body">{!! $doc['body'] ?? old('body') !!}</div>
     </div>
+
+    <button class="button outline blue save-button">Apply changes</button>
 </div>

@@ -11,7 +11,7 @@
     <h1>Users</h1>
 
     <div class="page-actions">
-        <a href="{{ route('admin.user.create') }}" class="button primary">Create New User</a>
+        <a href="{{ route('admin.user.create') }}" class="button primary">Create new user</a>
     </div>
 
     <x-admin.filter searchTitle="Product name">
