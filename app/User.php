@@ -40,6 +40,11 @@ class User extends Authenticatable implements MustVerifyEmail
 		'recovery_codes' => 'array'
 	];
 
+	public function apps()
+	{
+		return $this->hasMany(App::class, 'developer_id', 'developer_id');
+	}
+
 	/**
 	 * The "booted" method of the model.
 	 *
