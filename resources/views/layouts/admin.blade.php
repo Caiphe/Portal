@@ -44,7 +44,7 @@
             <li>
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button>@svg('signout') Sign Out</button>
+                    <button>@svg('signout') Sign out</button>
                 </form>
             </li>
             <li>
@@ -54,7 +54,7 @@
             </li>
             <li>
                 @if($user->can('administer-products'))
-                <button id="sync" class="button yellow outline" onclick="syncProductsThenApps()">Sync All</button>
+                <button id="sync" class="button yellow outline" onclick="syncProductsThenApps()">Sync all</button>
                 @endif
             </li>
         </ul>

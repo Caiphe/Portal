@@ -25,7 +25,7 @@ class ProductController extends Controller
                 $query = "%" . $request->get('q') . "%";
 
                 $q->where(function ($q) use ($query) {
-                    $q->where('parent', 'like', $query)
+                    $q->where('display_name', 'like', $query)
                         ->orWhereHas('content', function ($q) use ($query) {
                             $q->where('title', 'like', $query)
                                 ->orWhere('body', 'like', $query);
