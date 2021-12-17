@@ -10,7 +10,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Mpociot\Teamwork\TeamInvite;
 use Mpociot\Teamwork\Traits\UserHasTeams;
 use App\Notifications\ResetPasswordNotification;
-use App\Services\ApigeeService;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -40,11 +39,6 @@ class User extends Authenticatable implements MustVerifyEmail
 		'recovery_codes' => 'array'
 	];
 
-	public function apps()
-	{
-		return $this->hasMany(App::class, 'developer_id', 'developer_id');
-	}
-
 	/**
 	 * The "booted" method of the model.
 	 *
@@ -70,6 +64,11 @@ class User extends Authenticatable implements MustVerifyEmail
 				]
 			]);
 		});
+	}
+
+	public function apps()
+	{
+		return $this->hasMany(App::class, 'developer_id', 'developer_id');
 	}
 
 	public function roles()
@@ -219,6 +218,7 @@ class User extends Authenticatable implements MustVerifyEmail
 	public function getApps($countryCodeFilter = '', $order = 'DESC', $sort = 'name')
 	{
 		$apps = App::where('developer_id', $this->developer_id)
+			->withCount('products')
 			->when(!empty($countryCodeFilter) && $countryCodeFilter !== 'all', function ($q) use ($countryCodeFilter) {
 				$q->where('country_code', $countryCodeFilter);
 			})->orderBy($sort, $order);
@@ -289,9 +289,9 @@ class User extends Authenticatable implements MustVerifyEmail
 	}
 
 	public function authentications()
-	{
-		return $this->hasMany(AuthenticationLog::class)->latest('login_at');
-	}
+    {
+        return $this->hasMany(AuthenticationLog::class)->latest('login_at');
+    }
 
 	/**
 	 * Send a password reset notification to the user.
@@ -302,5 +302,10 @@ class User extends Authenticatable implements MustVerifyEmail
 	public function sendPasswordResetNotification($token)
 	{
 		$this->notify(new ResetPasswordNotification($token));
+	}
+
+	public function getStatusAttribute()
+	{
+		return $this->email_verified_at ? 'Verified' : 'Not verified';
 	}
 }
