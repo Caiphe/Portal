@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Mpociot\Teamwork\TeamInvite;
 use Mpociot\Teamwork\Traits\UserHasTeams;
 use App\Notifications\ResetPasswordNotification;
+use App\Services\ApigeeService;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -38,6 +39,33 @@ class User extends Authenticatable implements MustVerifyEmail
 		'email_verified_at' => 'datetime',
 		'recovery_codes' => 'array'
 	];
+
+	/**
+	 * The "booted" method of the model.
+	 *
+	 * @return void
+	 */
+	protected static function booted()
+	{
+		static::updated(function ($user) {
+			ApigeeService::post("developers/{$user->email}", [
+				"email" => $user->email,
+				"firstName" => $user->first_name,
+				"lastName" => $user->last_name,
+				"userName" => $user->first_name . $user->last_name,
+				"attributes" => [
+					[
+						"name" => "MINT_DEVELOPER_LEGAL_NAME",
+						"value" => $user->first_name . " " . $user->last_name
+					],
+					[
+						"name" => "MINT_BILLING_TYPE",
+						"value" => "PREPAID"
+					]
+				]
+			]);
+		});
+	}
 
 	public function roles()
 	{
@@ -256,9 +284,9 @@ class User extends Authenticatable implements MustVerifyEmail
 	}
 
 	public function authentications()
-    {
-        return $this->hasMany(AuthenticationLog::class)->latest('login_at');
-    }
+	{
+		return $this->hasMany(AuthenticationLog::class)->latest('login_at');
+	}
 
 	/**
 	 * Send a password reset notification to the user.
