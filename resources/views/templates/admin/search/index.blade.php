@@ -4,11 +4,14 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/search.css') }}">
+<link rel="stylesheet" href="{{ mix('/css/templates/admin/search.css') }}">
 @endpush
 
 @section('content')
-    @include('partials.search', [
-        'action' => route('admin.search'),
-        'results' => $results
-    ])
+<h1>Search</h1>
+
+@include('partials.search', [
+    'action' => route('admin.search'),
+    'results' => $results
+])
 @endsection

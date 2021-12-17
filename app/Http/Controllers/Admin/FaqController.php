@@ -12,21 +12,36 @@ class FaqController extends Controller
 {
     public function index(Request $request)
     {
-        $faq = Faq::with('category');
-
-        if ($request->has('q')) {
-            $query = "%" . $request->q . "%";
-            $faq->where(function ($q) use ($query) {
-                $q->where('question', 'like', $query)
-                    ->orWhere('answer', 'like', $query);
+        $sort = '';
+        $order = $request->get('order', 'desc');
+        $faq = Faq::with('category')
+            ->select([
+                'faqs.*',
+                'categories.title as category_title'
+            ])->join('categories', 'faqs.category_cid', '=', 'categories.cid')
+            ->when($request->has('q'), function ($q) use ($request) {
+                $query = "%" . $request->q . "%";
+                $q->where('question', 'like', $query)->orWhere('answer', 'like', $query);
             });
+
+        if ($request->has('sort')) {
+            $sort = $request->get('sort');
+
+            if ($sort === 'category.title') {
+                $faq->orderBy('category_title', $order);
+            } else {
+                $faq->orderBy($sort, $order);
+            }
+
+            $order = ['asc' => 'desc', 'desc' => 'asc'][$order] ?? 'desc';
         }
 
         if ($request->ajax()) {
             return response()
-                ->view('components.admin.table-data', [
+                ->view('components.admin.list', [
                     'collection' => $faq->paginate(),
-                    'fields' => ['question', 'category.title'],
+                    'order' => $order,
+                    'fields' => ['Question' => 'question', 'Category' => 'category.title'],
                     'modelName' => 'faq'
                 ], 200)
                 ->header('Vary', 'X-Requested-With')
@@ -34,7 +49,8 @@ class FaqController extends Controller
         }
 
         return view('templates.admin.faqs.index', [
-            'faqs' => $faq->paginate()
+            'faqs' => $faq->paginate(),
+            'order' => $order,
         ]);
     }
 

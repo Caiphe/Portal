@@ -2,9 +2,9 @@
     <thead>
         <tr>
             @foreach($fields as $specifiedName => $field)
-            <th align="left">{{ gettype($specifiedName) === 'string' ? $specifiedName : preg_replace('/[_\.]/', ' ', $field) }}</th>
+            <th align="left"><a href="?sort={{ strtok($field, ',') }}&order={{ $order ?? 'desc' }}">{{ is_string($specifiedName) ? $specifiedName : preg_replace('/[_\.]/', ' ', $field) }} @svg('chevron-sorter')</a></th>
             @endforeach
-            <th class="action-row" width="92">Actions</th>
+            <th align="left" class="action-row">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -12,19 +12,19 @@
         <tr class="{{ $model->slug }}">
             @foreach($fields as $field)
             <td align="left">
-                <a href="{{ route("admin.{$modelName}.edit", $model->slug) }}">{{ Arr::get($model, $field) }}</a>
+                @listFunc($field, $model)
             </td>
             @endforeach
-            <td align="center" class="action-row">
-                <a href="{{ route("admin.{$modelName}.edit", $model->slug) }}">@svg('edit', '#053241')</a>
-                @if(Route::has("admin.{$modelName}.show"))
-                <a href="{{ route("{$modelName}.show", $model->slug) }}" target="_blank" rel="noreferrer">@svg('eye', '#053241')</a>
+            <td class="action-row">
+                @if(Route::has("{$modelName}.show"))
+                <a href="{{ route("{$modelName}.show", $model->slug) }}" target="_blank" rel="noreferrer">@svg('eye') View</a>
                 @endif
+                <a href="{{ route("admin.{$modelName}.edit", $model->slug) }}">@svg('pencil') Edit</a>
                 @if(Route::has("admin.{$modelName}.delete"))
                 <form class="delete-form ajaxify" action="{{ route("admin.{$modelName}.delete", $model->slug) }}" method="POST" data-func="removeRow({{ $model->slug }})" data-confirm="Are you sure you want to delete this?">
                     @method('DELETE')
                     @csrf
-                    <button>@svg('delete', '#053241')</button>
+                    <button class="sl-button">@svg('trash') Delete</button>
                 </form>
                 @endif
             </td>

@@ -1,8 +1,9 @@
-(function() {
+(function () {
     var countryAppFilter = document.getElementById('country-filter');
     var passwordEl = document.getElementById('password');
     var confirmEl = document.getElementById('password-confirm');
     var passwordScore = 0;
+
     passwordEl.addEventListener('input', checkPassword);
     confirmEl.addEventListener('input', checkPassword);
     document.getElementById('admin-form').addEventListener('submit', validateForm);
@@ -36,7 +37,7 @@
     }
 
     function validateForm(e) {
-        if((passwordEl.value !== "" || confirmEl.value !== "") && passwordScore !== 6){
+        if ((passwordEl.value !== "" || confirmEl.value !== "") && passwordScore !== 6) {
             addAlert('error', 'Please make sure your password is correct.');
             e.preventDefault();
         }
@@ -46,7 +47,7 @@
         var userApps = document.querySelectorAll('.user-app');
         var chosenCountry = this.value;
 
-        for(var i=0;i<userApps.length;i++) {
+        for (var i = 0; i < userApps.length; i++) {
             if ('all' === chosenCountry || userApps[i].dataset.country === chosenCountry) {
                 userApps[i].style.display = 'table-row';
             } else {

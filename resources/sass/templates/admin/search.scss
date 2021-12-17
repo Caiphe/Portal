@@ -1,0 +1,27 @@
+.admin {
+    .search {
+        border-radius: 8px;
+        padding: 0 16px;
+        height: 40px;
+        background-color: #FFF;
+        background-image:
+            url('/images/icons/search.svg'),
+            url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="0" x2="0" y2="50" stroke="%23F0F0F0" /></svg>');
+        background-repeat:
+            no-repeat,
+            no-repeat;
+        background-size:
+            24px,
+            1px;
+        background-position:
+            calc(100% - 16px) center,
+            calc(100% - 54px) top;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+
+    .search-card {
+        border-radius: 8px;
+    }
+}

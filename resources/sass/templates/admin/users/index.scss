@@ -1,0 +1,23 @@
+@import "../../../variables";
+
+.verified,
+.not-verified {
+    border-radius: 16px;
+    border-width: 1px;
+    border-style: solid;
+    font-size: 13px;
+    padding: 4px 8px;
+    text-transform: capitalize;
+    margin-right: 4px;
+    display: inline-flex;
+}
+
+.verified {
+    color: $green;
+    border-color: $green;
+}
+
+.not-verified {
+    color: $orange;
+    border-color: $orange;
+}
