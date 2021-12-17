@@ -18,7 +18,7 @@
     <div id="table-data">
         @include('components.admin.list', [
             'collection' => $pages,
-            'fields' => ['Title' => 'title', 'Published' => 'published_at,date:d M Y'],
+            'fields' => ['Title' => 'title', 'Published' => 'published_at|date:d M Y'],
             'modelName' => 'page'
         ])
     </div>

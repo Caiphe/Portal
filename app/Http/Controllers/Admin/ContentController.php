@@ -35,7 +35,7 @@ class ContentController extends Controller
                 ->view('components.admin.list', [
                     'collection' => $pages->paginate(),
                     'order' => $order,
-                    'fields' => ['Title' => 'title', 'Published' => 'published_at,date:d M Y'],
+                    'fields' => ['Title' => 'title', 'Published' => 'published_at|date:d M Y'],
                     'modelName' => 'page'
                 ], 200)
                 ->header('Vary', 'X-Requested-With')
@@ -112,7 +112,7 @@ class ContentController extends Controller
                 ->view('components.admin.list', [
                     'collection' => $docs->paginate(),
                     'order' => $order,
-                    'fields' => ['Title' => 'title', 'Published' => 'published_at,date:d M Y'],
+                    'fields' => ['Title' => 'title', 'Published' => 'published_at|date:d M Y'],
                     'modelName' => 'doc'
                 ], 200)
                 ->header('Vary', 'X-Requested-With')

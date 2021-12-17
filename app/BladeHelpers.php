@@ -13,17 +13,24 @@ class BladeHelpers
 {
     public static function listFunc(string $field, $model): string
     {
-        $options = explode(',', $field, 2);
+        $options = explode('|', $field);
         $value = Arr::get($model, $options[0]);
 
         if (count($options) === 1) {
             return $value;
         }
 
-        $actions = explode(':', $options[1]);
-        $methodName = $actions[0];
+        foreach (array_slice($options, 1) as $option) {
+            $actions = explode(':', $option);
+            $methodName = $actions[0];
+            if (isset($actions[1])) {
+                $value = self::$methodName($value, $actions[1]);
+            } else {
+                $value = self::$methodName($value);
+            }
+        }
 
-        return self::$methodName($value, $actions[1] ?? null);
+        return $value;
     }
 
     public static function splitToTag($values, ?string $delimiter = ','): string
@@ -50,11 +57,16 @@ class BladeHelpers
 
     public static function implode($arr, ?string $options): string
     {
-        $options = explode('|', $options);
+        $options = explode('>', $options);
         if ($arr instanceof Collection) {
             return $arr->implode($options[1], $options[0]);
         }
 
         return implode($options[0], $arr);
+    }
+
+    public static function strToUpper(string $str): string
+    {
+        return strtoupper($str);
     }
 }
