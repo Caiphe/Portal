@@ -39,38 +39,6 @@ class User extends Authenticatable implements MustVerifyEmail
 		'recovery_codes' => 'array'
 	];
 
-	/**
-	 * The "booted" method of the model.
-	 *
-	 * @return void
-	 */
-	protected static function booted()
-	{
-		static::updated(function ($user) {
-			ApigeeService::post("developers/{$user->email}", [
-				"email" => $user->email,
-				"firstName" => $user->first_name,
-				"lastName" => $user->last_name,
-				"userName" => $user->first_name . $user->last_name,
-				"attributes" => [
-					[
-						"name" => "MINT_DEVELOPER_LEGAL_NAME",
-						"value" => $user->first_name . " " . $user->last_name
-					],
-					[
-						"name" => "MINT_BILLING_TYPE",
-						"value" => "PREPAID"
-					]
-				]
-			]);
-		});
-	}
-
-	public function apps()
-	{
-		return $this->hasMany(App::class, 'developer_id', 'developer_id');
-	}
-
 	public function roles()
 	{
 		return $this->belongsToMany(Role::class);
@@ -218,7 +186,6 @@ class User extends Authenticatable implements MustVerifyEmail
 	public function getApps($countryCodeFilter = '', $order = 'DESC', $sort = 'name')
 	{
 		$apps = App::where('developer_id', $this->developer_id)
-			->withCount('products')
 			->when(!empty($countryCodeFilter) && $countryCodeFilter !== 'all', function ($q) use ($countryCodeFilter) {
 				$q->where('country_code', $countryCodeFilter);
 			})->orderBy($sort, $order);
@@ -302,10 +269,5 @@ class User extends Authenticatable implements MustVerifyEmail
 	public function sendPasswordResetNotification($token)
 	{
 		$this->notify(new ResetPasswordNotification($token));
-	}
-
-	public function getStatusAttribute()
-	{
-		return $this->email_verified_at ? 'Verified' : 'Not verified';
 	}
 }
