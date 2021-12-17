@@ -43,9 +43,9 @@ class BladeHelpers
         return $tags;
     }
 
-    public static function date($date, ?string $format): string
+    public static function date($date, ?string $format = 'Y-m-d'): string
     {
-        return date($format ?? 'Y-m-d', strtotime($date));
+        return date($format, strtotime($date));
     }
 
     public static function implode($arr, ?string $options): string
