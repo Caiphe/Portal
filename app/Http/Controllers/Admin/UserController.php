@@ -17,6 +17,7 @@ class UserController extends Controller
     {
         $currentUser = $request->user();
         $order = $request->get('order', 'desc');
+        $numberPerPage = (int)$request->get('number_per_page', '15');
         $sort = '';
 
         $users = User::with('roles', 'countries')
@@ -63,7 +64,7 @@ class UserController extends Controller
         if ($request->ajax()) {
             return response()
                 ->view('components.admin.list', [
-                    'collection' => $users->paginate(),
+                    'collection' => $users->paginate($numberPerPage),
                     'order' => $order,
                     'fields' => ['First name' => 'first_name', 'Last name' => 'last_name', 'Email' => 'email', 'Member since' => 'created_at|date:d M Y', 'Role' => 'roles|implode:, >label', 'status' => 'status|splitToTag:,', 'apps' => 'apps_count'],
                     'modelName' => 'user',
@@ -73,7 +74,7 @@ class UserController extends Controller
         }
 
         return view('templates.admin.users.index', [
-            'users' => $users->paginate(),
+            'users' => $users->paginate($numberPerPage),
             'order' => $order,
         ]);
     }

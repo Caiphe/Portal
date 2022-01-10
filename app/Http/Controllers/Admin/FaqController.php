@@ -14,6 +14,7 @@ class FaqController extends Controller
     {
         $sort = '';
         $order = $request->get('order', 'desc');
+        $numberPerPage = (int)$request->get('number_per_page', '15');
         $faq = Faq::with('category')
             ->select([
                 'faqs.*',
@@ -39,7 +40,7 @@ class FaqController extends Controller
         if ($request->ajax()) {
             return response()
                 ->view('components.admin.list', [
-                    'collection' => $faq->paginate(),
+                    'collection' => $faq->paginate($numberPerPage),
                     'order' => $order,
                     'fields' => ['Question' => 'question', 'Category' => 'category.title'],
                     'modelName' => 'faq'
@@ -49,7 +50,7 @@ class FaqController extends Controller
         }
 
         return view('templates.admin.faqs.index', [
-            'faqs' => $faq->paginate(),
+            'faqs' => $faq->paginate($numberPerPage),
             'order' => $order,
         ]);
     }

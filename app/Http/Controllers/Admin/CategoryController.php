@@ -13,6 +13,7 @@ class CategoryController extends Controller
     {
         $sort = '';
         $order = $request->get('order', 'desc');
+        $numberPerPage = (int)$request->get('number_per_page', '15');
         $categories = Category::when($request->has('q'), function ($q) use ($request) {
             $query = "%" . $request->q . "%";
             $q->where(function ($q) use ($query) {
@@ -33,7 +34,7 @@ class CategoryController extends Controller
         if ($request->ajax()) {
             return response()
                 ->view('components.admin.list', [
-                    'collection' => $categories->paginate(),
+                    'collection' => $categories->paginate($numberPerPage),
                     'order' => $order,
                     'fields' => ['title', 'theme'],
                     'modelName' => 'category'
@@ -43,7 +44,7 @@ class CategoryController extends Controller
         }
 
         return view('templates.admin.categories.index', [
-            'categories' => $categories->paginate(),
+            'categories' => $categories->paginate($numberPerPage),
             'order' => $order,
         ]);
     }

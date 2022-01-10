@@ -9,7 +9,7 @@
     </thead>
     <tbody>
         @foreach($collection as $model)
-        <tr class="{{ $model->slug }}">
+        <tr>
             @foreach($fields as $field)
             <td align="left">
                 @listFunc($field, $model)
