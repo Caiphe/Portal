@@ -12,7 +12,7 @@
 
     <x-admin.filter searchTitle="Product name">
         <label class="filter-item" for="access">
-            Access
+            Access level
             <select name="access" class="access-level" id="access-level">
                 <option value="">All access levels</option>
                 <option value="public" @if(request()->get('access') === 'public') selected @endif>Public</option>
@@ -24,7 +24,7 @@
     <div id="table-data">
         @include('components.admin.list', [
             'collection' => $products,
-            'fields' => ['Name' => 'display_name', 'Access' => 'access', 'Environments' => 'environments|splitToTag:,', 'Category' => 'category.title'],
+            'fields' => ['Name' => 'display_name', 'Access level' => 'access', 'Environments' => 'environments|splitToTag:,', 'Category' => 'category.title'],
             'modelName' => 'product'
         ])
     </div>

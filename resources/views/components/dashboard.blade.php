@@ -104,7 +104,7 @@
                 @else
                 <p>Name: <span class="detail-text">{{ $details->full_name ?? 'User not in portal' }}</span></p>
                 @endif
-                <p>Email: @if(isset($details->email))<a href="mailto:{{ $details->email }}">{{ $details->email }}</a>@endif</p>
+                <p>Email address: @if(isset($details->email))<a href="mailto:{{ $details->email }}">{{ $details->email }}</a>@endif</p>
             </div>
         </div>
     </div>

@@ -10,7 +10,7 @@
     <h1>Documentation</h1>
 
     <div class="page-actions">
-        <a href="{{ route('admin.doc.create') }}" class="button primary">Create</a>
+        <a href="{{ route('admin.doc.create') }}" class="button primary">Create documentation</a>
     </div>
 
     <x-admin.filter searchTitle="Documentation name"></x-admin.filter>
