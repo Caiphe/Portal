@@ -15,6 +15,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $access = $request->get('access', "");
+        $numberPerPage = (int)$request->get('number_per_page', '15');
         $products = Product::with('category')
             ->select([
                 'products.*',
@@ -53,7 +54,7 @@ class ProductController extends Controller
         if ($request->ajax()) {
             return response()
                 ->view('components.admin.list', [
-                    'collection' => $products->orderBy('display_name')->paginate(),
+                    'collection' => $products->orderBy('display_name')->paginate($numberPerPage),
                     'order' => $order,
                     'fields' => ['Name' => 'display_name', 'Access level' => 'access', 'Environments' => 'environments|splitToTag:,', 'Category' => 'category.title'],
                     'modelName' => 'product'
@@ -63,7 +64,7 @@ class ProductController extends Controller
         }
 
         return view('templates.admin.products.index', [
-            'products' => $products->orderBy('display_name')->paginate(),
+            'products' => $products->orderBy('display_name')->paginate($numberPerPage),
             'order' => $order,
         ]);
     }

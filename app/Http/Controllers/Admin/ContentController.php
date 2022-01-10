@@ -15,6 +15,7 @@ class ContentController extends Controller
     {
         $sort = '';
         $order = $request->get('order', 'desc');
+        $numberPerPage = (int)$request->get('number_per_page', '15');
         $pages = Content::whereType('page')
             ->when($request->has('q'), function ($q) use ($request) {
                 $query = "%" . $request->q . "%";
@@ -33,7 +34,7 @@ class ContentController extends Controller
         if ($request->ajax()) {
             return response()
                 ->view('components.admin.list', [
-                    'collection' => $pages->paginate(),
+                    'collection' => $pages->paginate($numberPerPage),
                     'order' => $order,
                     'fields' => ['Title' => 'title', 'Published' => 'published_at|date:d M Y'],
                     'modelName' => 'page'
@@ -43,7 +44,7 @@ class ContentController extends Controller
         }
 
         return view('templates.admin.pages.index', [
-            'pages' => $pages->paginate(),
+            'pages' => $pages->paginate($numberPerPage),
             'order' => $order,
         ]);
     }
@@ -91,6 +92,7 @@ class ContentController extends Controller
     {
         $sort = '';
         $order = $request->get('order', 'desc');
+        $numberPerPage = (int)$request->get('number_per_page', '15');
         $docs = Content::whereType('general_docs')
             ->when($request->has('q'), function ($q) use ($request) {
                 $query = "%" . $request->q . "%";
@@ -110,7 +112,7 @@ class ContentController extends Controller
         if ($request->ajax()) {
             return response()
                 ->view('components.admin.list', [
-                    'collection' => $docs->paginate(),
+                    'collection' => $docs->paginate($numberPerPage),
                     'order' => $order,
                     'fields' => ['Title' => 'title', 'Published' => 'published_at|date:d M Y'],
                     'modelName' => 'doc'
@@ -120,7 +122,7 @@ class ContentController extends Controller
         }
 
         return view('templates.admin.docs.index', [
-            'docs' => $docs->paginate(),
+            'docs' => $docs->paginate($numberPerPage),
             'order' => $order,
         ]);
     }

@@ -32,18 +32,19 @@ class DashboardController extends Controller
         $productStatus = $request->get('product-status', 'pending');
         $hasAid = $request->has('aid');
         $previous = url()->previous();
+        $numberPerPage = (int)$request->get('number_per_page', '15');
 
         if (($notAdminNoResponsibleCountries) && $request->ajax()) {
             return response()
                 ->view('templates.admin.dashboard.data', [
-                    'apps' => App::where('country_code', 'none')->paginate(),
+                    'apps' => App::where('country_code', 'none')->paginate($numberPerPage),
                     'countries' => Country::all(),
                 ], 200)
                 ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         } else if ($notAdminNoResponsibleCountries) {
             return view('templates.admin.dashboard.index', [
-                'apps' => App::where('country_code', 'none')->paginate(),
+                'apps' => App::where('country_code', 'none')->paginate($numberPerPage),
                 'countries' => Country::all(),
                 'selectedCountry' => $request->get('countries', ''),
                 'appStatus' => $request->get('app-status', 'pending'),
@@ -104,7 +105,7 @@ class DashboardController extends Controller
                 $q->where('country_code', $searchCountries);
             })
             ->orderBy('updated_at', 'desc')
-            ->paginate();
+            ->paginate($numberPerPage);
 
         if ($request->ajax()) {
             return response()
