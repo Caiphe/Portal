@@ -11,7 +11,7 @@
     <x-admin.filter searchTitle="Category name"></x-admin.filter>
 
     <div class="page-actions">
-        <a href="{{ route('admin.category.create') }}" class="button primary">Create</a>
+        <a href="{{ route('admin.category.create') }}" class="button primary">Create category</a>
     </div>
 
     <div id="table-data">

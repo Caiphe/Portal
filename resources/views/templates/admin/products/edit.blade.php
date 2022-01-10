@@ -31,7 +31,7 @@
     @csrf
 
     <div class="editor-field one-third">
-        <h2>Product Details</h2>
+        <h2>Product details</h2>
 
         <label class="editor-field-label">
             <h3>Display name</h3>
@@ -62,7 +62,7 @@
     </div>
 
     <div id="custom-tabs" class="editor-field two-thirds">
-        <h2>Content Details</h2>
+        <h2>Content details</h2>
 
         <div class="editor-field-label">
             <h3>Overview</h3>
@@ -77,25 +77,25 @@
         </div>
 
         <div class="editor-field-label">
-            <h3>Custom Tabs</h3>
+            <h3>Custom tabs</h3>
             @foreach($content as $title => $c)
             @if($title === 'Overview' || $title === 'Docs')
                 @continue
             @endif
             <div class="custom-tab old-tab">
-                <input class="custom-tab-title" type="text" name="tab[title][]" value="{{ $c[0]['title'] }}" placeholder="Custom Tab Title">
+                <input class="custom-tab-title" type="text" name="tab[title][]" value="{{ $c[0]['title'] }}" placeholder="Custom tab title">
                 <div class="editor" data-input="{{ $c[0]['slug'] }}" data-name="tab[body][]" data-class="custom-tab-content">{!! $c[0]['body'] ?? '' !!}</div>
-                <button type="button" class="remove-custom-tab sl-button" onclick="removeTab(this)">@svg('minus-circle-outline') Remove Custom Tab</button>
+                <button type="button" class="remove-custom-tab sl-button" onclick="removeTab(this)">@svg('minus-circle-outline') Remove custom tab</button>
             </div>
             @endforeach
 
             <div class="custom-tab new-tab">
-                <input class="custom-tab-title" type="text" name="tab[title][]" placeholder="Custom Tab Title" autocomplete="off">
+                <input class="custom-tab-title" type="text" name="tab[title][]" placeholder="Custom tab title" autocomplete="off">
                 <div class="editor" data-input="{{ Str::random(8) }}" data-name="tab[body][]" data-class="custom-tab-content"></div>
-                <button type="button" class="remove-custom-tab sl-button" onclick="removeTab(this)">@svg('minus-circle-outline') Remove Custom Tab</button>
+                <button type="button" class="remove-custom-tab sl-button" onclick="removeTab(this)">@svg('minus-circle-outline') Remove custom tab</button>
             </div>
 
-            <button id="add-custom-tab" type="button" class="add-custom-tab sl-button">@svg('add-circle-outline') Add New Custom Tab</button>
+            <button id="add-custom-tab" type="button" class="add-custom-tab sl-button">@svg('add-circle-outline') Add new custom tab</button>
         </div>
 
         <button class="button outline blue save-button">Apply changes</button>

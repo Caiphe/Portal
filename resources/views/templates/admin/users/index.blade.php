@@ -14,7 +14,7 @@
         <a href="{{ route('admin.user.create') }}" class="button primary">Create new user</a>
     </div>
 
-    <x-admin.filter searchTitle="Product name">
+    <x-admin.filter searchTitle="User's name / email address">
         <label class="filter-item" for="status">
             User status
             <select name="status" class="users-status">
