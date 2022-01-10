@@ -30,7 +30,7 @@ class BladeHelpers
         $value = Arr::get($model, $options[0]);
 
         if (count($options) === 1) {
-            return $value;
+            return htmlspecialchars($value);
         }
 
         foreach (array_slice($options, 1) as $option) {
@@ -43,7 +43,7 @@ class BladeHelpers
             }
         }
 
-        return $value;
+        return htmlspecialchars($value);
     }
 
     /**
