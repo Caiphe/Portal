@@ -28,7 +28,7 @@
     <div id="table-data">
         @include('components.admin.list', [
             'collection' => $users,
-            'fields' => ['First name' => 'first_name', 'Last name' => 'last_name', 'Email' => 'email', 'Member since' => 'created_at|date:d M Y', 'Role' => 'roles|implode:, >label', 'status' => 'status|splitToTag:,', 'apps' => 'apps_count'],
+            'fields' => ['First name' => 'first_name', 'Last name' => 'last_name', 'Email' => 'email', 'Member since' => 'created_at|date:d M Y', 'Role' => 'roles|implode:, >label', 'Status' => 'status|splitToTag:,', 'Apps' => 'apps_count'],
             'modelName' => 'user'
         ])
     </div>
