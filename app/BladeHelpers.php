@@ -43,7 +43,7 @@ class BladeHelpers
             }
         }
 
-        return htmlspecialchars($value);
+        return $value;
     }
 
     /**
@@ -64,8 +64,9 @@ class BladeHelpers
         }
 
         foreach ($values as $value) {
-            $className = Str::slug($value);
-            $tags .= "<span class=\"$className\">{$value}</span>";
+            $v = htmlspecialchars($value);
+            $className = Str::slug($v);
+            $tags .= "<span class=\"$className\">{$v}</span>";
         }
 
         return $tags;
@@ -111,6 +112,6 @@ class BladeHelpers
      */
     public static function strToUpper(string $str): string
     {
-        return strtoupper($str);
+        return htmlspecialchars(strtoupper($str));
     }
 }
