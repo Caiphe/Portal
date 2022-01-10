@@ -13,6 +13,7 @@ class BundleController extends Controller
     {
         $sort = '';
         $order = $request->get('order', 'desc');
+        $numberPerPage = (int)$request->get('number_per_page', '15');
         $bundles = Bundle::with('category')
             ->byResponsibleCountry($request->user())
             ->select([
@@ -45,7 +46,7 @@ class BundleController extends Controller
         if ($request->ajax()) {
             return response()
                 ->view('components.admin.list', [
-                    'collection' => $bundles->orderBy('display_name')->paginate(),
+                    'collection' => $bundles->orderBy('display_name')->paginate($numberPerPage),
                     'order' => $order,
                     'fields' => ['display_name', 'category.title'],
                     'modelName' => 'bundle'
@@ -55,7 +56,7 @@ class BundleController extends Controller
         }
 
         return view('templates.admin.bundles.index', [
-            'bundles' => $bundles->orderBy('display_name')->paginate(),
+            'bundles' => $bundles->orderBy('display_name')->paginate($numberPerPage),
             'order' => $order,
         ]);
     }
