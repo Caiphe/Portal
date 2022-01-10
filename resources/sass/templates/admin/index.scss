@@ -24,6 +24,7 @@
     flex-grow: 1;
     font-size: 14px;
     font-family: $MTN-Regular;
+    width: 100px;
 
     input,
     select {
@@ -85,6 +86,10 @@
 #table-data {
     font-size: 14px;
     font-family: $MTN-Regular;
+
+    .table-data-list {
+        overflow-x: auto;
+    }
 
     table {
         width: 100%;
