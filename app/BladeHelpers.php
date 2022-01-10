@@ -29,8 +29,12 @@ class BladeHelpers
         $options = explode('|', $field);
         $value = Arr::get($model, $options[0]);
 
+        if (is_string($value)) {
+            $value = htmlspecialchars($value, ENT_QUOTES);
+        }
+
         if (count($options) === 1) {
-            return htmlspecialchars($value);
+            return $value;
         }
 
         foreach (array_slice($options, 1) as $option) {
@@ -43,7 +47,7 @@ class BladeHelpers
             }
         }
 
-        return htmlspecialchars($value);
+        return $value;
     }
 
     /**
