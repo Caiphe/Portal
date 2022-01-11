@@ -122,9 +122,10 @@ class CompanyTeamsController extends Controller
     {
         $data = $inviteRequest->validated();
         $user = $this->getTeamUserByEmail($data['invitee']);
-        $isAlredyInvited = TeamInvite::where('email', $user->email)->where('team_id', $team->id)->exists();
+        abort_if(!$user, 404, 'User was not found');
+        $isAlreadyInvited = TeamInvite::where('email', $user->email)->where('team_id', $team->id)->exists();
 
-        if ($isAlredyInvited) {
+        if ($isAlreadyInvited) {
             return response()->json([
                 'success' => true,
                 'success:message' => $user->full_name . ' has been successfully requested to take ownership of ' . $team->name
