@@ -340,6 +340,8 @@ class CompanyTeamsController extends Controller
     public function accept(Request $request)
     {
         $invite = Teamwork::getInviteFromAcceptToken($request->get('token'));
+        abort_if(!$invite, 404, 'Invite was not found');
+
         $inviteType = ucfirst($invite->type);
         $team = $this->getTeam($invite->team_id);
 
@@ -351,15 +353,18 @@ class CompanyTeamsController extends Controller
 
             Teamwork::acceptInvite($invite);
         } else {
-            Teamwork::acceptInvite($invite);
-            $roleId = Role::where('name', $invite->role)->first()->id ?? 8;
-            $team->users()->updateExistingPivot($invite->user, ['role_id' => $roleId]);
             $resp = ApigeeService::addDeveloperToCompany($team, $invite->user, $invite->role);
+
             if ($resp->failed()) {
                 return response()->json([
                     'success' => false,
+                    'message' => $resp['message'] ?? 'There was a problem syncing the team'
                 ], $resp->status());
             }
+
+            Teamwork::acceptInvite($invite);
+            $roleId = Role::where('name', $invite->role)->first()->id ?? 8;
+            $team->users()->updateExistingPivot($invite->user, ['role_id' => $roleId]);
         }
 
         if (!$invite->exists) {
