@@ -41,10 +41,15 @@ function changeProfilePicture(file) {
 function uploadProfilePicture(file) {
     var xhr = new XMLHttpRequest();
 
+    addLoading('Uploading image...');
+
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
             var message = [];
+
+            removeLoading();
+
             if (xhr.status !== 200) {
                 if (result.errors !== undefined) {
                     for (var field in result.errors) {
