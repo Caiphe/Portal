@@ -69,7 +69,10 @@ class CompanyTeamsController extends Controller
         $data = $teamRequest->validated();
 
         $team = $this->getTeam($data['team_id']);
+        abort_if(!$team, 424, 'The team could not be found');
+
         $user = $this->getTeamUser($data['user_id']);
+        abort_if(!$user, 424, 'Your user could not be found');
 
         if ($team->hasUser($user) && $this->memberLeavesTeam($team, $user)) {
             ApigeeService::removeDeveloperFromCompany($team, $user);
