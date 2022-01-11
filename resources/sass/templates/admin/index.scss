@@ -39,7 +39,7 @@
     select {
         background-image:
             url('/images/icons/chevron-down.svg'),
-            url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="0" x2="0" y2="50" stroke="%23F0F0F0" /></svg>');
+            url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"><path stroke="%23F0F0F0" d="M0 0L0 50"/></svg>');
         background-repeat:
             no-repeat,
             no-repeat;
@@ -71,7 +71,7 @@
 #search-page {
     background-image:
         url('/images/icons/search.svg'),
-        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="0" x2="0" y2="50" stroke="%23F0F0F0" /></svg>');
+        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"><path stroke="%23F0F0F0" d="M0 0L0 50"/></svg>');
     background-repeat:
         no-repeat,
         no-repeat;
