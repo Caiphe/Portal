@@ -155,16 +155,20 @@ class CompanyTeamsController extends Controller
     {
         $data = $inviteRequest->validated();
         $invitedEmail = $data['invitee'];
-        $team = $this->getTeam($data['team_id']);
-        $user = $this->getTeamUserByEmail($invitedEmail);
         $inviteSent = false;
 
-        $isAlredyInvited = false;
+        $team = $this->getTeam($data['team_id']);
+        abort_if(!$team, 404, 'Team was not found');
+
+        $user = $this->getTeamUserByEmail($invitedEmail);
+        abort_if(!$user, 404, 'User was not found');
+
+        $isAlreadyInvited = false;
         if ($user) {
-            $isAlredyInvited = TeamInvite::where('email', $user->email)->where('team_id', $team->id)->exists();
+            $isAlreadyInvited = TeamInvite::where('email', $user->email)->where('team_id', $team->id)->exists();
         }
 
-        if ($isAlredyInvited) {
+        if ($isAlreadyInvited) {
             return response()->json([
                 'success' => true,
                 'success:message' => 'Invite successfully sent to prospective team member of ' . $team->name . '.'
