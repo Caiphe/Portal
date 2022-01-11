@@ -383,6 +383,8 @@ class CompanyTeamsController extends Controller
     public function reject(Request $request)
     {
         $invite = Teamwork::getInviteFromDenyToken($request->get('token'));
+        abort_if(!$invite, 404, 'Invite was not found');
+
         $inviteType = ucfirst($invite->type);
 
         if ($invite) {
