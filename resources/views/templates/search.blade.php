@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'Searching for "' . Request::get('q', '') . '"')
+@section('title', "Searching for '{$searchTerm}'")
 
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/search.css') }}">
