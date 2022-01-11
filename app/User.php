@@ -84,7 +84,9 @@ class User extends Authenticatable implements MustVerifyEmail
 
 	public function hasTeamRole($team, $role)
 	{
-		return $this->teamRole($team)->name === $role;
+		$teamRole = $this->teamRole($team);
+
+		return $teamRole !== null && $teamRole->name === $role;
 	}
 
 	public function hasTeamPermissionTo($permission, $team)
