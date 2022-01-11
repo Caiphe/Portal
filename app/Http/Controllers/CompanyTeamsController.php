@@ -219,8 +219,9 @@ class CompanyTeamsController extends Controller
     {
         $user = $request->user();
         $team = $user->teams()->where('id', $id)->first();
-        $isOwner = $user->isOwnerOfTeam($team);
+        abort_if(!$team, 404, 'Team was not found');
 
+        $isOwner = $user->isOwnerOfTeam($team);
         $order = [
             'asc' => 'ASC',
             'desc' => 'DESC'
