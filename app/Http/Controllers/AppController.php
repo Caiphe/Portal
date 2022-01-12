@@ -145,7 +145,8 @@ class AppController extends Controller
         }
 
         if ($createdResponse->failed()) {
-            $reasonMsg = $createdResponse->body();
+            $reasonMsg = $createdResponse['message'] ?? 'There was a problem creating your app. Please try again later.';
+
             return redirect()->back()->with('alert', "error:{$reasonMsg}");
         }
 
@@ -314,7 +315,7 @@ class AppController extends Controller
         $updatedResponse = ApigeeService::updateApp($data, $appTeam);
 
         if ($updatedResponse->failed()) {
-            $reasonMsg = $updatedResponse->body();
+            $reasonMsg = $updatedResponse['message'] ?? 'There was a problem updating your app. Please try again later.';
 
             if ($request->ajax()) {
                 return response()->json(['response' => "error:{$reasonMsg}"], $updatedResponse->status());
@@ -410,7 +411,7 @@ class AppController extends Controller
         $updatedApp = ApigeeService::renewCredentials(auth()->user(), $app, $consumerKey);
 
         if ($updatedApp->failed()) {
-            $reasonMsg = $updatedApp->body();
+            $reasonMsg = $updatedApp['message'] ?? 'There was a problem renewing the credentials. Please try again later.';
 
             return redirect()->route('app.index')->with('alert', "error:{$reasonMsg}");
         }
@@ -611,7 +612,9 @@ class AppController extends Controller
         $resp = ApigeeService::updateAppWithNewCredentials($data);
 
         if ($resp->failed()) {
-            return ['success' => false, 'message' => $resp->body()];
+            $reasonMsg = $resp['message'] ?? 'There was a problem creating your app. Please try again later.';
+
+            return ['success' => false, 'message' => $reasonMsg];
         }
 
         $resp = $resp->json();

@@ -59,8 +59,9 @@ class AppController extends Controller
 
         $resp = ApigeeService::updateAppWithNewCredentials($data);
 
-        if ( $resp->failed() ) {
-            $reasonMsg = $resp->body();
+        if ($resp->failed()) {
+            $reasonMsg = $resp['message'] ?? 'There was a problem updating the app. Please try again later.';
+
             return redirect()->back()->with('alert', "error:{$reasonMsg}");
         }
 
