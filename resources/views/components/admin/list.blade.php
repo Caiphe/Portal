@@ -11,7 +11,7 @@
         @foreach($collection as $model)
         <tr>
             @foreach($fields as $field)
-            <td align="left" class="elipsise">
+            <td align="left">
                 @listFunc($field, $model)
             </td>
             @endforeach
