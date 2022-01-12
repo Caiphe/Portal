@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\App;
 use App\Product;
 use App\Services\ApigeeService;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 
 class AppController extends Controller
@@ -61,16 +60,8 @@ class AppController extends Controller
         $resp = ApigeeService::updateAppWithNewCredentials($data);
 
         if ( $resp->failed() ) {
-            $responseMsg = $resp->toException()->getMessage();
-            $reasonMsg = $resp->toPsrResponse()->getReasonPhrase();
-
-            Log::channel('apigee')->warning($responseMsg, [
-                    'context' => [
-                        'reason' => $reasonMsg,
-                    ]
-                ]
-            );
-            return redirect()->back()->with('alert', "error:{$responseMsgs}");
+            $reasonMsg = $resp->body();
+            return redirect()->back()->with('alert', "error:{$reasonMsg}");
         }
 
         $resp = $resp->json();

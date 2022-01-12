@@ -9,6 +9,7 @@ use App\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Log;
 
 /**
  * This is a helper service to connect to Apigee.
@@ -19,7 +20,11 @@ class ApigeeService
 {
     public static function get(string $url)
     {
-        return self::HttpWithBasicAuth()->get(config('apigee.base') . $url)->json();
+        $resp = self::HttpWithBasicAuth()->get(config('apigee.base') . $url);
+
+        self::checkForErrors($resp, $url);
+
+        return $resp->json();
     }
 
     public static function post(string $url, array $data, array $headers = [])
@@ -28,19 +33,55 @@ class ApigeeService
             'Content-Type' => 'application/json'
         ], $headers);
 
-        return self::HttpWithBasicAuth()
+        $resp = self::HttpWithBasicAuth()
             ->withHeaders($h)
             ->post(config('apigee.base') . $url, $data);
+
+        self::checkForErrors($resp, $url);
+
+        return $resp;
     }
 
     public static function put(string $url, array $data)
     {
-        return self::HttpWithBasicAuth()->put(config('apigee.base') . $url, $data);
+        $resp = self::HttpWithBasicAuth()->put(config('apigee.base') . $url, $data);
+
+        self::checkForErrors($resp, $url);
+
+        return $resp;
     }
 
     public static function delete(string $url)
     {
-        return self::HttpWithBasicAuth()->delete(config('apigee.base') . $url);
+        $resp = self::HttpWithBasicAuth()->delete(config('apigee.base') . $url);
+
+        self::checkForErrors($resp, $url);
+
+        return $resp;
+    }
+
+    /**
+     * @param  string $url
+     *
+     * @return mixed
+     */
+    public static function getMint(string $url)
+    {
+        $resp = self::HttpWithBasicAuth()->get(config('apigee.base_mint') . $url);
+
+        self::checkForErrors($resp, $url);
+
+        return $resp->json();
+    }
+
+    protected static function checkForErrors(Response $resp, string $url): void
+    {
+        if ($resp->failed()) {
+            Log::error('Error with Apigee call.', [
+                'url' => $url,
+                'response' => $resp->json() ?? 'No response'
+            ]);
+        };
     }
 
     public static function createApp(array $data, $user = null, $team = null)
@@ -541,20 +582,6 @@ class ApigeeService
     public static function removeDeveloperFromCompany(Team $team, User $user)
     {
         return self::delete("companies/{$team->username}/developers/{$user->email}");
-    }
-
-    /**
-     * Monitisation
-     */
-
-    /**
-     * @param  string $url
-     *
-     * @return mixed
-     */
-    public static function getMint(string $url)
-    {
-        return self::HttpWithBasicAuth()->get(config('apigee.base_mint') . $url)->json();
     }
 
     /**

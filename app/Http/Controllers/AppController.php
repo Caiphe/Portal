@@ -19,7 +19,6 @@ use App\Services\ApigeeService;
 use App\Services\Kyc\KycService;
 use App\Services\ProductLocationService;
 use DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
 
@@ -146,17 +145,7 @@ class AppController extends Controller
         }
 
         if ($createdResponse->failed()) {
-            $responseMsg = $createdResponse->toException()->getMessage();
-            $reasonMsg = $createdResponse->toPsrResponse()->getReasonPhrase();
-
-            Log::channel('apigee')->warning(
-                $responseMsg,
-                [
-                    'context' => [
-                        'reason' => $reasonMsg,
-                    ]
-                ]
-            );
+            $reasonMsg = $createdResponse->body();
             return redirect()->back()->with('alert', "error:{$reasonMsg}");
         }
 
@@ -296,20 +285,13 @@ class AppController extends Controller
         $key = $this->getCredentials($app, $credentialsType, 'string');
 
         if (empty($key)) {
+            $reasonMsg = 'Could not find the Consumer Key. Please contact us if this happens again';
+
             if ($request->ajax()) {
-                $reasonMsg = 'Could not find the Consumer Key. Please contact us if this happens again';
-                Log::channel('apigee')->warning(
-                    'Failed locating App consumer Key(s)',
-                    [
-                        'context' => [
-                            'reason' => $reasonMsg,
-                        ]
-                    ]
-                );
-                return response()->json(['message' => $reasonMsg], 500);
+                return response()->json(['message' => $reasonMsg], 424);
             }
 
-            return redirect()->route('app.index')->with('alert', 'error:Could not find the Consumer Key. Please contact us if this happens again');
+            return redirect()->route('app.index')->with('alert', "error:{$reasonMsg}");
         }
 
         $appAttributes = array_merge($appAttributes, [
@@ -332,17 +314,7 @@ class AppController extends Controller
         $updatedResponse = ApigeeService::updateApp($data, $appTeam);
 
         if ($updatedResponse->failed()) {
-            $responseMsg = $updatedResponse->toException()->getMessage();
-            $reasonMsg = $updatedResponse->toPsrResponse()->getReasonPhrase();
-
-            Log::channel('apigee')->warning(
-                $responseMsg,
-                [
-                    'context' => [
-                        'reason' => $reasonMsg,
-                    ]
-                ]
-            );
+            $reasonMsg = $updatedResponse->body();
 
             if ($request->ajax()) {
                 return response()->json(['response' => "error:{$reasonMsg}"], $updatedResponse->status());
@@ -438,17 +410,7 @@ class AppController extends Controller
         $updatedApp = ApigeeService::renewCredentials(auth()->user(), $app, $consumerKey);
 
         if ($updatedApp->failed()) {
-            $responseMsg = $updatedApp->toException()->getMessage();
-            $reasonMsg = $updatedApp->toPsrResponse()->getReasonPhrase();
-
-            Log::channel('apigee')->warning(
-                $responseMsg,
-                [
-                    'context' => [
-                        'reason' => $reasonMsg,
-                    ]
-                ]
-            );
+            $reasonMsg = $updatedApp->body();
 
             return redirect()->route('app.index')->with('alert', "error:{$reasonMsg}");
         }
@@ -483,14 +445,6 @@ class AppController extends Controller
             $resp = $this->addNewCredentials($app);
 
             if (!$resp['success']) {
-                Log::channel('apigee')->warning(
-                    'Could not add new credentials.',
-                    [
-                        'context' => [
-                            'reason' => $resp['message'],
-                        ]
-                    ]
-                );
                 return redirect()->back()->with('alert', "error:{$resp['message']}");
             }
 
@@ -583,14 +537,6 @@ class AppController extends Controller
         $resp = $this->addNewCredentials($app);
 
         if (!$resp['success']) {
-            Log::channel('apigee')->warning(
-                'Could not add new credentials.',
-                [
-                    'context' => [
-                        'reason' => $resp['message'],
-                    ]
-                ]
-            );
             return redirect()->back()->with('alert', "error:{$resp['message']}");
         }
 
@@ -665,18 +611,7 @@ class AppController extends Controller
         $resp = ApigeeService::updateAppWithNewCredentials($data);
 
         if ($resp->failed()) {
-            $responseMsg = $resp->toException()->getMessage();
-            $reasonMsg = $resp->toPsrResponse()->getReasonPhrase();
-
-            Log::channel('apigee')->warning(
-                $responseMsg,
-                [
-                    'context' => [
-                        'reason' => $reasonMsg,
-                    ]
-                ]
-            );
-            return ['success' => false, 'message' => $reasonMsg];
+            return ['success' => false, 'message' => $resp->body()];
         }
 
         $resp = $resp->json();
