@@ -266,7 +266,8 @@ class AppController extends Controller
         $hasSandboxProducts = $sandboxProducts->count() > 0;
         $products = Product::whereIn('name', $validated['products'])->pluck('attributes', 'name');
         $countriesByCode = Country::pluck('iso', 'code');
-        $appAttributes = $app->attributes;
+        $apigeeAttributes = ApigeeService::getApigeeAppAttributes($app);
+        $appAttributes = array_merge($apigeeAttributes, $app->attributes);
 
         if (count($credentials) === 1 && $hasSandboxProducts) {
             $credentialsType = 'consumerKey-sandbox';
