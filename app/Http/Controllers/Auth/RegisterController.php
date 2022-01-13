@@ -113,8 +113,6 @@ class RegisterController extends Controller
 			$user->assignRole("developer");
 		}
 
-		$this->guard()->login($user);
-
 		if ($response = $this->registered($request, $user)) {
             return $response;
 		}
