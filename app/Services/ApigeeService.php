@@ -9,6 +9,7 @@ use App\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -18,9 +19,71 @@ use Illuminate\Support\Facades\Log;
  */
 class ApigeeService
 {
+    protected static function HttpWithBasicAuth()
+    {
+        return Http::withBasicAuth(config('apigee.username'), config('apigee.password'));
+    }
+
+    public static function HttpWithToken(string $grantType = 'password')
+    {
+        if ($grantType === 'refresh_token') {
+            Cache::forget('apigeeToken');
+        }
+
+        // Cache for 30 days
+        $token = Cache::remember('apigeeToken', 2592000, function () use ($grantType) {
+            return $grantType === 'refresh_token' ? self::HttpWithTokenRefreshToken() : self::HttpWithTokenPassword();
+        });
+
+        return Http::withToken($token['access_token']);
+    }
+
+    protected static function HttpWithTokenPassword()
+    {
+        return Http::withHeaders([
+            'Accept' => 'application/json;charset=utf-8',
+            'Authorization' => 'Basic ZWRnZWNsaTplZGdlY2xpc2VjcmV0'
+        ])
+            ->asForm()
+            ->post('https://login.apigee.com/oauth/token', [
+                'grant_type' => 'password',
+                'username' => config('apigee.username'),
+                'password' => config('apigee.password')
+            ])->json();
+    }
+
+    protected static function HttpWithTokenRefreshToken()
+    {
+        $token = Cache::pull('apigeeToken');
+
+        if (is_null($token)) {
+            return self::HttpWithTokenPassword();
+        };
+
+        $resp = Http::withHeaders([
+            'Accept' => 'application/json;charset=utf-8',
+            'Authorization' => 'Basic ZWRnZWNsaTplZGdlY2xpc2VjcmV0'
+        ])
+            ->asForm()
+            ->post('https://login.apigee.com/oauth/token', [
+                'grant_type' => 'refresh_token',
+                'refresh_token' => $token['refresh_token']
+            ]);
+
+        if ($resp->failed()) {
+            return self::HttpWithTokenPassword();
+        }
+
+        return $resp->json();
+    }
+
     public static function get(string $url)
     {
-        $resp = self::HttpWithBasicAuth()->get(config('apigee.base') . $url);
+        $resp = self::HttpWithToken()->get(config('apigee.base') . $url);
+
+        if ($resp->status() === 401 || $resp->status() === 403) {
+            $resp = self::HttpWithToken('refresh_token')->get(config('apigee.base') . $url);
+        }
 
         self::checkForErrors($resp, $url);
 
@@ -33,9 +96,15 @@ class ApigeeService
             'Content-Type' => 'application/json'
         ], $headers);
 
-        $resp = self::HttpWithBasicAuth()
+        $resp = self::HttpWithToken()
             ->withHeaders($h)
             ->post(config('apigee.base') . $url, $data);
+
+        if ($resp->status() === 401 || $resp->status() === 403) {
+            $resp = self::HttpWithToken('refresh_token')
+                ->withHeaders($h)
+                ->post(config('apigee.base') . $url, $data);
+        }
 
         self::checkForErrors($resp, $url);
 
@@ -44,7 +113,11 @@ class ApigeeService
 
     public static function put(string $url, array $data)
     {
-        $resp = self::HttpWithBasicAuth()->put(config('apigee.base') . $url, $data);
+        $resp = self::HttpWithToken()->put(config('apigee.base') . $url, $data);
+
+        if ($resp->status() === 401 || $resp->status() === 403) {
+            $resp = self::HttpWithToken('refresh_token')->put(config('apigee.base') . $url, $data);
+        }
 
         self::checkForErrors($resp, $url);
 
@@ -53,7 +126,11 @@ class ApigeeService
 
     public static function delete(string $url)
     {
-        $resp = self::HttpWithBasicAuth()->delete(config('apigee.base') . $url);
+        $resp = self::HttpWithToken()->delete(config('apigee.base') . $url);
+
+        if ($resp->status() === 401 || $resp->status() === 403) {
+            $resp = self::HttpWithToken('refresh_token')->delete(config('apigee.base') . $url);
+        }
 
         self::checkForErrors($resp, $url);
 
@@ -67,7 +144,11 @@ class ApigeeService
      */
     public static function getMint(string $url)
     {
-        $resp = self::HttpWithBasicAuth()->get(config('apigee.base_mint') . $url);
+        $resp = self::HttpWithToken()->get(config('apigee.base_mint') . $url);
+
+        if ($resp->status() === 401 || $resp->status() === 403) {
+            $resp = self::HttpWithToken('refresh_token')->get(config('apigee.base_mint') . $url);
+        }
 
         self::checkForErrors($resp, $url);
 
@@ -473,11 +554,6 @@ class ApigeeService
         }
 
         return $credentials;
-    }
-
-    protected static function HttpWithBasicAuth()
-    {
-        return Http::withBasicAuth(config('apigee.username'), config('apigee.password'));
     }
 
     // Companies
