@@ -9,6 +9,9 @@
 @section('content')
 	<x-auth.header/>
 	<form method="POST" action="{{ route('login') }}">
+		@if(Session::has('verify'))
+			<p class="verify">{{ Session::get('verify') }}</p>
+		@endif
 		@csrf
 		<h1 class="t-large">Login</h1>
 		<input class="@error('email') invalid @enderror" type="text" id="email" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="Email address" autofocus />
