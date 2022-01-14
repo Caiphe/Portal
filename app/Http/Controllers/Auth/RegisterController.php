@@ -113,15 +113,13 @@ class RegisterController extends Controller
 			$user->assignRole("developer");
 		}
 
-		$this->guard()->login($user);
-
 		if ($response = $this->registered($request, $user)) {
             return $response;
 		}
 
 		return $request->wantsJson()
 			? new Response('', 201)
-			: redirect($this->redirectPath());
+			: redirect()->route('login')->with('verify', 'A confirmation email has been sent to your email address. Please click on the link in the email and login to verify your email address.');
 	}
 
 	/**

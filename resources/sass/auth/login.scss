@@ -1,3 +1,11 @@
 @import "../variables";
 @import "../components/utility";
 @import "auth";
+
+.verify {
+    background-color: $green;
+    padding: 10px;
+    color: #fff;
+    border-radius: 8px;
+    margin: 0;
+}
