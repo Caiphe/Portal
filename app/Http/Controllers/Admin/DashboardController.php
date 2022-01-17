@@ -166,7 +166,7 @@ class DashboardController extends Controller
             return response()->json(['success' => false, 'body' => $body->message], $responseStatus);
         }
 
-        Mail::to(env('MAIL_TO_ADDRESS'))->send(new ProductAction($app, $validated, $currentUser));
+        Mail::to(config('mail.mail_to_address'))->send(new ProductAction($app, $validated, $currentUser));
 
         if ($request->ajax()) {
             $product = $app->products()->where('name', $validated['product'])->first();

@@ -192,7 +192,7 @@ class AppController extends Controller
         $opcoUserEmails = $app->country->opcoUser->pluck('email')->toArray();
 
         if (empty($opcoUserEmails)) {
-            $opcoUserEmails = env('MAIL_TO_ADDRESS');
+            $opcoUserEmails = config('mail.mail_to_address');
         }
         Mail::to($opcoUserEmails)->send(new NewApp($app));
 
@@ -339,7 +339,7 @@ class AppController extends Controller
 
         $opcoUserEmails = $app->country->opcoUser->pluck('email')->toArray();
         if (empty($opcoUserEmails)) {
-            $opcoUserEmails = env('MAIL_TO_ADDRESS');
+            $opcoUserEmails = config('mail.mail_to_address');
         }
         Mail::to($opcoUserEmails)->send(new UpdateApp($app));
 
@@ -548,7 +548,7 @@ class AppController extends Controller
 
         $opcoUserEmails = $app->country->opcoUser->pluck('email')->toArray();
         if (empty($opcoUserEmails)) {
-            $opcoUserEmails = env('MAIL_TO_ADDRESS');
+            $opcoUserEmails = config('mail.mail_to_address');
         }
         Mail::to($opcoUserEmails)->send(new GoLiveMail($data));
 
