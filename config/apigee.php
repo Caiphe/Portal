@@ -56,7 +56,7 @@ return [
     |
     */
 
-    'apigee_allow_prefix' => env('APIGEE_ALLOW_PREFIX'),
+    'apigee_allow_prefix' => env('APIGEE_ALLOW_PREFIX', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -67,6 +67,6 @@ return [
     |
     */
 
-    'apigee_deny_prefix' => env('APIGEE_DENY_PREFIX'),
+    'apigee_deny_prefix' => env('APIGEE_DENY_PREFIX', ''),
 
 ];
