@@ -529,19 +529,14 @@ class OpenApiService
 			switch ($type) {
 				case 'string':
 					return $value;
-					break;
 				case 'integer':
 					return (int)$value;
-					break;
 				case 'float':
 					return (float)$value;
-					break;
 				case 'boolean':
 					return $value === 'true' ? 'true' : 'false';
-					break;
 				default:
 					return $value;
-					break;
 			}
 		} else {
 			return [
