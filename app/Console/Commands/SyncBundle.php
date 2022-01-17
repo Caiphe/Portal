@@ -42,8 +42,8 @@ class SyncBundle extends Command
     {
         $this->info("Getting bundles from Apigee");
         $bundles = ApigeeService::getBundles();
-        $allow = env('APIGEE_ALLOW_PREFIX');
-        $deny = explode(',', env('APIGEE_DENY_PREFIX'));
+        $allow = config('apigee.apigee_allow_prefix');
+        $deny = explode(',', config('apigee.apigee_deny_prefix'));
 
         if(is_null($bundles)) return;
 

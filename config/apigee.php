@@ -47,4 +47,26 @@ return [
 
     'password' => env('APIGEE_PASSWORD'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Apigee allow prefix
+    |--------------------------------------------------------------------------
+    |
+    | The prefixes that are allowed in the Apigee name
+    |
+    */
+
+    'apigee_allow_prefix' => env('APIGEE_ALLOW_PREFIX'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Apigee deny prefix
+    |--------------------------------------------------------------------------
+    |
+    | The prefixes that are not allowed in the Apigee name
+    |
+    */
+
+    'apigee_deny_prefix' => env('APIGEE_DENY_PREFIX'),
+
 ];

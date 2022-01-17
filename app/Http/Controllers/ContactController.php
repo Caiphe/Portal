@@ -21,7 +21,7 @@ class ContactController extends Controller
 			return redirect()->back();
 		}
 
-		Mail::to(env('MAIL_TO_ADDRESS'))
+		Mail::to(config('mail.mail_to_address'))
 			->send(new ContactMail($validated));
 
 		\Session::flash('alert', 'Success:Thank you for contacting us');
