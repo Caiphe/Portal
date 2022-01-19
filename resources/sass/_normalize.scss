@@ -56,11 +56,10 @@ table {
     }
 
     th {
-        text-transform: capitalize;
-    }
-
-    td {
-        // vertical-align: top;
+        &::first-letter,
+        a::first-letter {
+            text-transform: uppercase;
+        }
     }
 
     .table-title {
