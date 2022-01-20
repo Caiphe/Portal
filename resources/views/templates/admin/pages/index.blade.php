@@ -10,7 +10,7 @@
     <h1>Pages</h1>
 
     <div class="page-actions">
-        <a href="{{ route('admin.page.create') }}" class="button primary">Create Page</a>
+        <a href="{{ route('admin.page.create') }}" class="button primary">Create page</a>
     </div>
 
     <x-admin.filter searchTitle="Page name"></x-admin.filter>
