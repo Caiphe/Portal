@@ -8,7 +8,7 @@
 
 @section('content')
 <a href="{{ url()->previous() }}" class="go-back">@svg('chevron-left') Back to pages</a>
-<h1>Create Page</h1>
+<h1>Create page</h1>
 
 <form id="admin-form" action="{{ route('admin.page.store') }}" method="POST">
     @include('templates.admin.pages.form')
