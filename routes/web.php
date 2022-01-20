@@ -130,7 +130,7 @@ Route::namespace('Api\Admin')->prefix('api/admin')->group(function () {
 	Route::post('sync/apps', 'SyncController@syncApps')->middleware('can:administer-dashboard')->name('api.sync.apps');
 });
 
-Route::post('profile/2fa/verify', 'UserController@verify2fa')->name('user.2fa.verify');
+Route::post('profile/2fa/verify', 'UserController@verify2fa')->middleware('throttle:3,5')->name('user.2fa.verify');
 
 Route::get('products', 'ProductController@index')->name('product.index');
 Route::get('products/{product:slug}', 'ProductController@show')->name('product.show');
