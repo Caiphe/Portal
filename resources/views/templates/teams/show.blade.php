@@ -228,7 +228,7 @@ My team
     </div>
     <div class="column">
         <div class="team-members-header">
-            <h2>Team membership </h2>
+            <h2>Team membership</h2>
 
             @if($isAdmin)
                 <button class="outline dark add-team-mate-btn">Add a teammate</button>
