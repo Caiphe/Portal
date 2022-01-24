@@ -1,16 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    @production
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-EESWEBL5F7"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-
-          gtag('config', 'G-EESWEBL5F7');
-        </script>
-    @endproduction
+    @include('partials.google-analytics')
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -30,6 +21,7 @@
     <main id="main" class="@yield('main-class', 'default')">
         @yield("content")
     </main>
+    <x-cookie/>
     <x-footer/>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
     <script src="{{ mix('/js/scripts.js') }}"></script>
