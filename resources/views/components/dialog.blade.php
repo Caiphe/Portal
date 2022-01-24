@@ -1,7 +1,5 @@
 @once
-@push('styles')
 <link rel="stylesheet" href="{{ mix('/css/components/dialog.css') }}">
-@endpush
 @endonce
 
 <div {{ $attributes->merge(['class' => 'mdp-dialog']) }}>
