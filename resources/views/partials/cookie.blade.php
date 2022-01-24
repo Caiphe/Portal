@@ -1,4 +1,3 @@
-@if(!isset($_COOKIE['shownCookiePolicy']))
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/components/cookie.css') }}">
 @endpush
@@ -39,4 +38,3 @@
 
 <script src="{{ mix('/js/components/cookie.js') }}" defer></script>
 @endpush
-@endif
