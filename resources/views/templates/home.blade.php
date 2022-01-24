@@ -1,16 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    @production
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-EESWEBL5F7"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-
-          gtag('config', 'G-EESWEBL5F7');
-        </script>
-    @endproduction
+    @include('partials.google-analytics')
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MTN Developer Portal</title>
@@ -213,6 +204,7 @@
         </div>
     </section>
 
+    <x-cookie/>
     <x-footer/>
     @stack("scripts")
 </body>

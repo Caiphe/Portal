@@ -158,3 +158,8 @@ table {
 .editor {
     word-break: break-word;
 }
+
+[transparent] {
+    opacity: 0;
+    pointer-events: none;
+}

@@ -163,3 +163,77 @@ body {
         margin-left: 8px;
     }
 }
+
+.switch {
+    border-radius: 12px;
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+
+    .ball {
+        position: absolute;
+        left: 2px;
+        top: 2px;
+        border-radius: 50%;
+        transition: transform 0.128s ease-out;
+    }
+
+    .track {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: $grey700;
+        border-radius: 12px;
+        transition: background-color 0.128s ease-out;
+    }
+
+    .swatch-label {
+        font-family: Montserrat-Light;
+        font-size: 1.4rem;
+        margin-left: 50px;
+    }
+
+    &.dark .ball {
+        background-color: $grey800;
+    }
+
+    &.light .ball {
+        background-color: #FFF;
+    }
+
+    &.big {
+        height: 24px;
+        width: 40px;
+
+        .ball {
+            width: 20px;
+            height: 20px;
+        }
+    }
+
+    &.small {
+        height: 20px;
+        width: 32px;
+
+        .ball {
+            height: 16px;
+            width: 16px;
+        }
+    }
+
+    input {
+        display: none;
+    }
+
+    input:checked+.track {
+        background-color: $yellow;
+    }
+
+    &.big input:checked+.track+.ball {
+        transform: translate(16px, 0);
+    }
+
+    &.small input:checked+.track+.ball {
+        transform: translate(12px, 0);
+    }
+}
