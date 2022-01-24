@@ -19,7 +19,7 @@
         var agreeType = document.getElementById('cookie-policy-analytics-switch').checked ? 'all' : 'necessary';
         document.cookie = "shownCookiePolicy=" + agreeType + ";path=/"
 
-        togglePreferences();
+        document.getElementById('cookie-policy-preferences').classList.remove('show');
         cookiePolicy.className = '';
     }
 
