@@ -1,5 +1,8 @@
+@push('styles')
 <link rel="stylesheet" href="{{ mix('/css/components/cookie.css') }}">
+@endpush
 
+@push('scripts')
 <div id="cookie-policy" transparent>
     <div class="cookie-policy-content">
         <h3>Your Privacy</h3>
@@ -33,6 +36,5 @@
     <button id="cookie-policy-accept" class="button outline">SAVE & ACCEPT</button>
 </x-dialog>
 
-@push('scripts')
 <script src="{{ mix('/js/components/cookie.js') }}" defer></script>
 @endpush

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     @include('partials.google-analytics')
+    @includeWhen(!isset($_COOKIE['shownCookiePolicy']), 'partials.cookie')
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@yield("title", '{"MTN":"Developer Portal"}')</title>
@@ -19,7 +20,6 @@
     <main id="auth-main">
         @yield("content")
     </main>
-    <x-cookie/>
     @stack("scripts")
 </body>
 </html>
