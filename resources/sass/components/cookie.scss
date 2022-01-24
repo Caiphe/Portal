@@ -1,0 +1,181 @@
+@import '../variables';
+
+#cookie-policy {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: $yellow;
+    color: $dark;
+    z-index: 2;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(40px);
+    transition: opacity 512ms, transform 512ms;
+
+    @media screen and (min-width: 768px) {
+        padding: 20px;
+
+    }
+
+    @media screen and (max-width: 767px) {
+        padding: 20px;
+        flex-direction: column;
+    }
+
+    &.show {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
+
+    .cookie-policy-content {
+        @media screen and (min-width: 768px) {
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 1440px;
+            margin: 0 auto;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        @media screen and (max-width: 767px) {
+            text-align: center;
+        }
+    }
+
+    h3 {
+        font-size: 18px;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    p {
+        text-align: left;
+        margin: 0;
+        line-height: 1.4;
+
+        @media screen and (max-width: 767px) {
+            text-align: center;
+        }
+
+        @media screen and (max-width: 1310px) {
+            width: 100%
+        }
+    }
+
+    a {
+        text-decoration: underline;
+    }
+
+    button {
+        @media screen and (max-width: 1310px) {
+            margin-top: 10px;
+        }
+
+        @media screen and (max-width: 767px) {
+            width: 100%;
+        }
+    }
+
+    #cookie-policy-preferences-button {
+        border-color: #000;
+        color: #000;
+
+        &::before {
+            background-color: #000;
+        }
+
+        &:hover {
+            color: #FFF;
+        }
+
+        @media screen and (min-width: 1310px) {
+            margin-left: auto;
+        }
+    }
+
+    #cookie-policy-accept-button {
+        flex-shrink: 0;
+
+        @media screen and (min-width: 768px) {
+            margin-left: 20px;
+        }
+    }
+}
+
+#cookie-policy-preferences {
+    .dialog-content {
+        max-width: 720px;
+        font-size: 16px;
+
+        >h2 {
+            font-size: 16px;
+            font-weight: 700;
+            position: relative;
+        }
+    }
+
+    .cookie-policy-option {
+        background-color: $accentBlue;
+        padding: 16px;
+        position: relative;
+
+        &::after {
+            content: '';
+            height: 1px;
+            width: calc(100% - 16px);
+            display: block;
+            position: absolute;
+            bottom: 0;
+            left: 8px;
+            background-color: #D1E4F2;
+        }
+
+        &:last-of-type:after {
+            display: none;
+        }
+
+        &.open {
+            p {
+                max-height: 80px;
+            }
+
+            svg {
+                transform: rotate(180deg);
+            }
+        }
+
+        .switch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        h3 {
+            font-size: 16px;
+            font-weight: normal;
+            display: flex;
+            align-items: center;
+            margin: 0;
+            cursor: pointer;
+
+            svg {
+                margin-right: 10px;
+                transition: transform 256ms;
+            }
+        }
+
+        p {
+            margin: 0 0 0 34px;
+            max-height: 0;
+            transition: max-height 0.256s ease-out;
+            overflow: hidden;
+            font-size: 13px;
+        }
+    }
+}
+
+#cookie-policy-accept {
+    margin-top: 20px;
+}
