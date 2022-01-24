@@ -17,7 +17,7 @@
 
     function agreeToCookiePolicy() {
         var agreeType = document.getElementById('cookie-policy-analytics-switch').checked ? 'all' : 'necessary';
-        document.cookie = "shownCookiePolicy=" + agreeType + ";"
+        document.cookie = "shownCookiePolicy=" + agreeType + ";path=/"
 
         togglePreferences();
         cookiePolicy.className = '';

@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="{{ mix('/css/components/cookie.css') }}">
 
-<div id="cookie-policy">
+<div id="cookie-policy" transparent>
     <div class="cookie-policy-content">
         <h3>Your Privacy</h3>
         <p>
