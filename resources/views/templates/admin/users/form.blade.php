@@ -50,6 +50,13 @@
         <div id="password-still-needs" role="alert"></div>
     </label>
 
+    <label @class([
+        'editor-field-label'
+    ])>
+        <h3>Assigned private products</h3>
+        <x-multiselect id="private_products" name="private_products" label="Select private product" :options="$privateProducts" :selected="old('private_products') ?: $userAssignedProducts ?? []"/>
+    </label>
+
     <button class="button outline blue save-button">Apply changes</button>
 </div>
 
