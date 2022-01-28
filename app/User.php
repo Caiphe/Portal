@@ -63,6 +63,11 @@ class User extends Authenticatable implements MustVerifyEmail
 		$this->roles()->sync($role, false);
 	}
 
+	public function assignedProducts()
+	{
+		return $this->belongsToMany(Product::class);
+	}
+
 	public function permissions()
 	{
 		return $this->roles->map->permissions

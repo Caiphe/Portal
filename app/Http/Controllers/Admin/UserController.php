@@ -83,6 +83,7 @@ class UserController extends Controller
     {
         $groups = Product::select('group')->where('group', '!=', 'Partner')->where('group', '!=', 'MTN')->groupBy('group')->get()->pluck('group');
         $groups = array_merge(['MTN' => 'General'], $groups->toArray());
+        $privateProducts = Product::where('access', 'private')->pluck('display_name', 'pid');
 
         return view(
             'templates.admin.users.create',
@@ -91,6 +92,7 @@ class UserController extends Controller
                 'countries' => Country::orderBy('name')->get(),
                 'groups' => $groups,
                 'isAdminUser' => auth()->user()->hasRole('admin'),
+                'privateProducts' => $privateProducts,
             ]
         );
     }
@@ -98,14 +100,15 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
+            'first_name' => 'required|max:140',
+            'last_name' => 'required|max:140',
             'email' => 'email:rfc,dns|unique:users,email',
             'password' => 'required|confirmed',
             'roles' => 'nullable',
             'country' => 'nullable',
             'responsible_countries' => 'nullable',
             'responsible_groups' => 'nullable',
+            'private_products' => 'nullable',
         ]);
 
         $data['profile_picture'] = '/storage/profile/profile-' . rand(1, 32) . '.svg';
@@ -129,6 +132,8 @@ class UserController extends Controller
             $user->responsibleGroups()->sync($data['responsible_groups']);
         }
 
+        $user->assignedProducts()->sync($data['private_products'] ?? []);
+
         $user->sendEmailVerificationNotification();
 
         return redirect()->route('admin.user.index')->with('alert', 'success:The user has been created');
@@ -137,16 +142,16 @@ class UserController extends Controller
     public function edit(Request $request, User $user)
     {
         $countrySelectFilterCode = $request->get('country-filter', 'all');
+        $currentUser = $request->user();
+        $user->load('roles', 'countries', 'responsibleCountries', 'responsibleGroups', 'assignedProducts');
+        $groups = Product::select('group')->where('group', '!=', 'Partner')->where('group', '!=', 'MTN')->groupBy('group')->get()->pluck('group', 'group');
+        $groups = array_merge(['MTN' => 'General'], $groups->toArray());
+        $privateProducts = Product::where('access', 'private')->pluck('display_name', 'pid');
         $order = 'desc';
 
         if ($request->has('sort')) {
             $order = ['asc' => 'desc', 'desc' => 'asc'][$request->get('order', 'desc')] ?? 'desc';
         }
-
-        $currentUser = $request->user();
-        $user->load('roles', 'countries', 'responsibleCountries', 'responsibleGroups');
-        $groups = Product::select('group')->where('group', '!=', 'Partner')->where('group', '!=', 'MTN')->groupBy('group')->get()->pluck('group', 'group');
-        $groups = array_merge(['MTN' => 'General'], $groups->toArray());
 
         return view('templates.admin.users.edit', [
             'selectedCountryFilter' => $countrySelectFilterCode,
@@ -165,6 +170,8 @@ class UserController extends Controller
             'isAdminUser' => $currentUser->hasRole('admin'),
             'duplicateCountries' => [],
             'userApps' => $user->getApps($countrySelectFilterCode, $order, $request->get('sort', 'name')),
+            'privateProducts' => $privateProducts,
+            'userAssignedProducts' => $user->assignedProducts->pluck('pid')->toArray()
         ]);
     }
 
@@ -182,6 +189,7 @@ class UserController extends Controller
             'country' => 'nullable',
             'responsible_countries' => 'nullable',
             'responsible_groups' => 'nullable',
+            'private_products' => 'nullable',
         ]);
 
         if (is_null($data['password'])) {
@@ -198,6 +206,7 @@ class UserController extends Controller
         $user->countries()->sync($data['country'] ?? []);
         $user->responsibleCountries()->sync($data['responsible_countries'] ?? []);
         $user->responsibleGroups()->sync($data['responsible_groups'] ?? []);
+        $user->assignedProducts()->sync($data['private_products'] ?? []);
 
         return redirect()->route('admin.user.index')->with('alert', 'success:The user has been updated');
     }

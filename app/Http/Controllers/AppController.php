@@ -17,7 +17,6 @@ use App\Mail\NewApp;
 use App\Mail\UpdateApp;
 use App\Services\ApigeeService;
 use App\Services\Kyc\KycService;
-use App\Services\ProductLocationService;
 use DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Mail;
@@ -64,13 +63,19 @@ class AppController extends Controller
         ]);
     }
 
-    public function create(ProductLocationService $productLocationService)
+    public function create()
     {
         $user = request()->user();
-
         $userOwnTeams = $user->teams;
-
-        [$products, $countries] = $productLocationService->fetch();
+        $assignedProducts = $user->assignedProducts()->with('category')->get();
+        $products = Product::with(['category', 'countries'])
+            ->where('category_cid', '!=', 'misc')
+            ->basedOnUser($user)
+            ->get()
+            ->merge($assignedProducts);
+        $locations = array_unique(explode(',', $products->pluck('locations')->implode(',')));
+        $countries = Country::whereIn('code', $locations)->pluck('name', 'code');
+        $products = $products->sortBy('display_name')->groupBy('category.title')->sortKeys();
 
         return view('templates.apps.create', [
             'products' => $products,
@@ -215,11 +220,12 @@ class AppController extends Controller
             ->where('category_cid', '!=', 'misc')
             ->where(fn ($q) => $q->basedOnUser(auth()->user())->orWhereIn('pid', $app->products->pluck('pid')->toArray()))
             ->get();
+        $assignedProducts = $user->assignedProducts()->with('category')->get();
 
         $countryCodes = $products->pluck('locations')->implode(',');
         $countries = Country::whereIn('code', explode(',', $countryCodes))->pluck('name', 'code');
 
-        $products = $products->sortBy('category.title')->groupBy('category.title');
+        $products = $products->merge($assignedProducts)->sortBy('category.title')->groupBy('category.title');
 
         $app->load('products', 'country');
         $credentials = $app->credentials;
