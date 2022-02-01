@@ -12,23 +12,30 @@ class AuthTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
 
+
+    /**
+     * Setup the test environment.
+     *
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->seed(['CountrySeeder', 'ContentSeeder', 'CategorySeeder', 'RoleSeeder', 'UserSeeder']);
+    }
+
     /** @test */
     public function auth_routes_are_visable()
     {
-        $this->seed(['CountrySeeder', 'ContentSeeder', 'CategorySeeder']);
-
         $this->get(route('login'))->assertStatus(200);
         $this->get(route('password.request'))->assertStatus(200);
-
-        // Can not run this at the moment due to sqlite not having the find_in_set mysql function
-        // $this->get(route('register'))->assertStatus(200);
+        $this->get(route('register'))->assertStatus(200);
     }
 
     /** @test */
     public function a_user_can_register()
     {
-        $this->seed(['CountrySeeder', 'RoleSeeder']);
-
         $attributes = User::factory()->raw();
 
         $this->post(route('register'), $attributes)->assertRedirect(route('login'));
@@ -44,8 +51,6 @@ class AuthTest extends TestCase
     /** @test */
     public function registering_must_have_a_valid_first_name()
     {
-        $this->seed(['CountrySeeder', 'RoleSeeder']);
-
         $attributes = User::factory()->raw(['first_name' => '']);
 
         $this->post(route('register'), $attributes)->assertSessionHasErrors();
@@ -54,8 +59,6 @@ class AuthTest extends TestCase
     /** @test */
     public function registering_must_have_a_valid_last_name()
     {
-        $this->seed(['CountrySeeder', 'RoleSeeder']);
-
         $attributes = User::factory()->raw(['last_name' => '']);
 
         $this->post(route('register'), $attributes)->assertSessionHasErrors();
@@ -64,8 +67,6 @@ class AuthTest extends TestCase
     /** @test */
     public function registering_must_have_a_valid_email()
     {
-        $this->seed(['CountrySeeder', 'RoleSeeder']);
-
         $attributes = User::factory()->raw(['email' => '']);
 
         $this->post(route('register'), $attributes)->assertSessionHasErrors();
@@ -74,8 +75,6 @@ class AuthTest extends TestCase
     /** @test */
     public function user_registering_must_agree_to_terms()
     {
-        $this->seed(['CountrySeeder', 'RoleSeeder']);
-
         $attributes = User::factory()->raw();
         unset($attributes['terms']);
 
@@ -85,8 +84,6 @@ class AuthTest extends TestCase
     /** @test */
     public function user_can_log_in()
     {
-        $this->seed('UserSeeder');
-
         $this->post(route('login'), [
             'email' => 'wes@plusnarrative.com',
             'password' => '&jklfFI9@bI!'
@@ -96,10 +93,8 @@ class AuthTest extends TestCase
     /** @test */
     public function two_fa_user_is_shown_2fa_page()
     {
-        $this->seed('UserSeeder');
-
         $response = $this->post(route('login'), [
-            'email' => 'wes@plusnarrative.com',
+            'email' => 'wes+2fa@plusnarrative.com',
             'password' => '&jklfFI9@bI!'
         ]);
 
@@ -112,8 +107,6 @@ class AuthTest extends TestCase
     /** @test */
     public function user_login_is_valid()
     {
-        $this->seed('UserSeeder');
-
         $this->post(route('login'), [
             'email' => 'wess@plusnarrative.com',
             'password' => '&jklfFI9@bI!'
