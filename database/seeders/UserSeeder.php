@@ -16,34 +16,25 @@ class UserSeeder extends Seeder {
 	public function run() {
 		$now = date('Y-m-d H:i:s');
 
-		$adminUser1 = User::create([
+		$adminUser = User::create([
 			'first_name' => 'Wesley',
 			'last_name' => 'Martin',
 			'email' => 'wes@plusnarrative.com',
-			'password' => bcrypt('devport'),
+			'password' => bcrypt('&jklfFI9@bI!'),
 			'email_verified_at' => $now,
 			'developer_id' => '2a940d6f-22ce-4d58-9844-a5b4bd7fc689',
 			'profile_picture' => '/storage/profile/profile-1.svg',
 		]);
 
-		$adminUser2 = User::create([
-			'first_name' => 'Lliam',
-			'last_name' => 'Scholtz',
-			'email' => 'lliam@plusnarrative.com',
-			'password' => bcrypt('K*fjksjF890#'),
-			'email_verified_at' => $now,
-			'developer_id' => 'b673c570-4865-4039-b494-ccaad2f17013',
-			'profile_picture' => '/storage/profile/profile-2.svg',
-		]);
-
-		$adminUser3 = User::create([
-			'first_name' => 'Oluseye',
-			'last_name' => 'Farodoye',
-			'email' => 'Oluseye.Farodoye@mtn.com',
+		$twoFAUser = User::create([
+			'first_name' => 'Wesley',
+			'last_name' => 'Martin',
+			'email' => 'wes+2fa@plusnarrative.com',
 			'password' => bcrypt('&jklfFI9@bI!'),
 			'email_verified_at' => $now,
-			'developer_id' => '26795666-6fee-443b-bd23-b5bbb07c7669',
-			'profile_picture' => '/storage/profile/profile-3.svg',
+			'2fa' => 'VHRDUGYWGZZXWRSJTVM72XDH2GY6PKMX',
+			'developer_id' => '2a940d6f-22ce-4d58-9844-a5b4bd7fc689',
+			'profile_picture' => '/storage/profile/profile-1.svg',
 		]);
 
 		Permission::create([
@@ -92,9 +83,7 @@ class UserSeeder extends Seeder {
 		]);
 
 		$adminRole->allowTo(Permission::all());
-		$adminUser1->assignRole($adminRole);
-		$adminUser2->assignRole($adminRole);
-		$adminUser3->assignRole($adminRole);
+		$adminUser->assignRole($adminRole);
 
 		$developerRole = Role::create([
 			'name' => "developer",
@@ -102,6 +91,7 @@ class UserSeeder extends Seeder {
 		]);
 
 		$developerRole->allowTo('create_app');
+		$twoFAUser->assignRole($developerRole);
 
 		$opcoRole = Role::create([
 			'name' => "opco",
