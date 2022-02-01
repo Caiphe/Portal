@@ -14,6 +14,7 @@ use App\Services\ApigeeService;
 use Illuminate\Support\Facades\Mail;
 use Mpociot\Teamwork\TeamInvite;
 use Mpociot\Teamwork\Facades\Teamwork;
+use Illuminate\Support\Str;
 
 /**
  * Trait InviteActions
@@ -71,18 +72,24 @@ trait InviteActions
     public function createTeam(User $owner, array $data)
     {
         $now = date('Y-m-d H:i:s');
-        $team = Team::create([
+        $teamOptions = [
             'name' => $data['name'],
+            'username' => Str::slug($data['name']),
             'url' => $data['url'],
             'contact' => $data['contact'],
             'country' => $data['country'],
             'description' => $data['description'],
             'logo' => $data['logo'],
             'owner_id' => $owner->getKey()
-        ]);
+        ];
 
-        ApigeeService::createCompany($team, $owner);
+        $resp = ApigeeService::createCompany($teamOptions, $owner);
 
+        if ($resp->failed()) {
+            return null;
+        }
+
+        $team = Team::create($teamOptions);
         $owner->attachTeam($team, ['role_id' => 7, 'created_at' => $now, 'updated_at' => $now]);
 
         return $team;
