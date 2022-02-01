@@ -565,18 +565,18 @@ class ApigeeService
      *
      * @return     mixed         The response from the post
      */
-    public static function createCompany(Team $team, User $user)
+    public static function createCompany(array $team, User $user)
     {
         return self::post("companies", [
-            "name" => $team->username,
-            "displayName" => $team->name,
+            "name" => $team['username'],
+            "displayName" => $team['name'],
             "attributes" => [
                 [
                     "name" => "ADMIN_EMAIL",
                     "value" => $user->email
                 ], [
                     "name" => "MINT_DEVELOPER_LEGAL_NAME",
-                    "value" => $team->name
+                    "value" => $team['name']
                 ], [
                     "name" => "MINT_DEVELOPER_ADDRESS",
                     "value" => "{\"address1\":\"{$team['name']}\",\"city\":\"{$team['name']}\",\"country\":\"{$team['country']}\",\"isPrimary\":true,\"state\":\"{$team['name']}\",\"zip\":\"{$team['name']}\"}"
