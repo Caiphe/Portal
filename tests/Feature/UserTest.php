@@ -102,6 +102,62 @@ class UserTest extends TestCase
     }
 
     /** @test */
+    public function updating_password_must_have_be_min_12_chars()
+    {
+        $this->actingAs(User::first())
+            ->put(route('user.profile.update'), [
+                'first_name' => 'Wesley',
+                'last_name' => 'Martin',
+                'email' => 'wes@plusnarrative.com',
+                'password' => 'jklfFI9@bI!',
+                'password_confirmation' => 'jklfFI9@bI!',
+                'locations' => ['za'],
+            ])->assertSessionHasErrors();
+    }
+
+    /** @test */
+    public function updating_password_must_have_mixed_case()
+    {
+        $this->actingAs(User::first())
+            ->put(route('user.profile.update'), [
+                'first_name' => 'Wesley',
+                'last_name' => 'Martin',
+                'email' => 'wes@plusnarrative.com',
+                'password' => '&jklffi9@bi!',
+                'password_confirmation' => '&jklffi9@bi!',
+                'locations' => ['za'],
+            ])->assertSessionHasErrors();
+    }
+
+    /** @test */
+    public function updating_password_must_have_numbers()
+    {
+        $this->actingAs(User::first())
+            ->put(route('user.profile.update'), [
+                'first_name' => 'Wesley',
+                'last_name' => 'Martin',
+                'email' => 'wes@plusnarrative.com',
+                'password' => '&jklfFIn@bI!',
+                'password_confirmation' => '&jklfFIn@bI!',
+                'locations' => ['za'],
+            ])->assertSessionHasErrors();
+    }
+
+    /** @test */
+    public function updating_password_must_have_special_chars()
+    {
+        $this->actingAs(User::first())
+            ->put(route('user.profile.update'), [
+                'first_name' => 'Wesley',
+                'last_name' => 'Martin',
+                'email' => 'wes@plusnarrative.com',
+                'password' => '1jklfFI92bId',
+                'password_confirmation' => '1jklfFI92bId',
+                'locations' => ['za'],
+            ])->assertSessionHasErrors();
+    }
+
+    /** @test */
     public function can_update_a_profile_picture()
     {
         $file = UploadedFile::fake()->image('avatar.jpg');
