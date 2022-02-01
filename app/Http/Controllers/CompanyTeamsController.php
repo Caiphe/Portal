@@ -293,6 +293,10 @@ class CompanyTeamsController extends Controller
 
         $team = $this->createTeam($user, $data);
 
+        if(!$team) {
+            return back()->with('alert', 'error:There was a problem creating your team;Please try again.');
+        }
+
         if (!empty($data['team_members'])) {
             $this->sendInvites($data['team_members'], $team);
         }
