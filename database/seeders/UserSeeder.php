@@ -84,6 +84,7 @@ class UserSeeder extends Seeder {
 
 		$adminRole->allowTo(Permission::all());
 		$adminUser->assignRole($adminRole);
+		$twoFAUser->assignRole($adminRole);
 
 		$developerRole = Role::create([
 			'name' => "developer",
@@ -91,7 +92,6 @@ class UserSeeder extends Seeder {
 		]);
 
 		$developerRole->allowTo('create_app');
-		$twoFAUser->assignRole($developerRole);
 
 		$opcoRole = Role::create([
 			'name' => "opco",

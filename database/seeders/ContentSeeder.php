@@ -22,8 +22,16 @@ class ContentSeeder extends Seeder
             'published_at' => '2020-04-02 11:31:39',
             'contentable_id' => null,
             'contentable_type' => null,
-            'created_at' => '2020-04-02 11:31:39',
-            'updated_at' => '2020-04-02 11:31:39',
+        ]);
+
+        Content::create([
+            'title' => 'Understanding OAuth 2.0',
+            'slug' => 'understanding-oauth-2-0',
+            'type' => 'general_docs',
+            'body' => '<h1>Understanding</h1>',
+            'published_at' => '2020-04-02 11:31:39',
+            'contentable_id' => null,
+            'contentable_type' => null,
         ]);
     }
 }
