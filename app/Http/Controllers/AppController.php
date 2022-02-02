@@ -28,6 +28,7 @@ class AppController extends Controller
     public function index()
     {
         $user = auth()->user();
+        $userTeams = $user->teams;
 
         $ownershipInvite = DB::table('team_invites')->where([
             'email' => $user->email,
@@ -51,6 +52,7 @@ class AppController extends Controller
 
         $apps = App::with(['products.countries', 'country', 'developer'])
             ->byUserEmail($user->email)
+            ->when($userTeams, fn($q) => $q->orWhereIn('team_id', $userTeams->pluck('id')))
             ->orderBy('updated_at', 'desc')
             ->get()
             ->groupBy('status');
