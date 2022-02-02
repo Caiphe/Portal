@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\App;
+use App\Services\ApigeeService;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -43,19 +45,38 @@ class AppTest extends TestCase
     }
 
     /** @test */
-    public function can_create_an_app()
+    public function can_create_and_edit_an_app()
     {
-        $this->actingAs($this->user)
-            ->postJson(route('app.store'), [
-                'country' => "za",
-                'description' => "Test case description",
-                'display_name' => "App test case",
-                'products' => ["helloworld"],
-                'team_id' => "",
-                'url' => ""
-            ],[
-                'X-Requested-With' => 'XMLHttpRequest'
-            ])
+        $this->be($this->user);
+
+        $this->postJson(route('app.store'), [
+            'country' => "za",
+            'description' => "Test case description",
+            'display_name' => "PlusNarrative App test case",
+            'products' => ["helloworld"],
+            'team_id' => "",
+            'url' => ""
+        ], [
+            'X-Requested-With' => 'XMLHttpRequest'
+        ])
             ->assertOk();
+
+        $app = App::where('display_name', 'PlusNarrative App test case')->first();
+
+        $this->putJson(route('app.update', $app), [
+            'country' => "za",
+            'description' => "Test case description updated",
+            'display_name' => "PlusNarrative App test case",
+            'products' => ["helloworld"],
+            'team_id' => "",
+            'url' => ""
+        ], [
+            'X-Requested-With' => 'XMLHttpRequest'
+        ])
+            ->assertOk();
+
+        // Cleanup
+        $resp = ApigeeService::delete("developers/{$this->user->email}/apps/plusnarrative-app-test-case");
+        $this->assertTrue($resp->successful());
     }
 }
