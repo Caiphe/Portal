@@ -38,7 +38,9 @@ class AuthTest extends TestCase
     {
         $attributes = User::factory()->raw();
 
-        $this->post(route('register'), $attributes)->assertRedirect(route('login'));
+        $this->post(route('register'), $attributes)
+            ->assertSessionHasNoErrors()
+            ->assertRedirect(route('login'));
 
         $this->assertDatabaseHas('users', array_diff_key($attributes, ['locations' => 1, 'terms' => 1, 'password' => 1, 'password_confirmation' => 1]));
 
@@ -87,7 +89,9 @@ class AuthTest extends TestCase
         $this->post(route('login'), [
             'email' => 'wes@plusnarrative.com',
             'password' => '&jklfFI9@bI!'
-        ])->assertRedirect(route('app.index'));
+        ])
+            ->assertSessionHasNoErrors()
+            ->assertRedirect(route('app.index'));
     }
 
     /** @test */
