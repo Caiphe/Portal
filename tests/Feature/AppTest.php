@@ -53,7 +53,7 @@ class AppTest extends TestCase
             'country' => "za",
             'description' => "Test case description",
             'display_name' => "PlusNarrative App test case",
-            'products' => ["helloworld"],
+            'products' => ["helloworld-prodonly"],
             'team_id' => "",
             'url' => ""
         ], [
@@ -67,7 +67,7 @@ class AppTest extends TestCase
             'country' => "za",
             'description' => "Test case description updated",
             'display_name' => "PlusNarrative App test case",
-            'products' => ["helloworld"],
+            'products' => ["helloworld-prodonly"],
             'team_id' => "",
             'url' => ""
         ], [
