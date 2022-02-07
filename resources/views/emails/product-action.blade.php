@@ -5,7 +5,7 @@
 |                   |    |           |
 |:------------------|:---|:----------|
 | **App** | | {{ $app->display_name }} |
-| **Developer** | | {{ $app->developer->full_name }} |
+| **Developer** | | {{ $app->developer->full_name ?? $app->team->name }} |
 
 <br>
 Thanks,<br>
