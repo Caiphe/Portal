@@ -213,7 +213,7 @@ class DashboardController extends Controller
             'kyc_status' => $data['kyc_status']
         ]);
 
-        Mail::to($app->developer->email)->send(new KycStatusUpdate($app->developer, $app));
+        Mail::to($app->developer->email ?? $app->team->owner->email)->send(new KycStatusUpdate($app->developer, $app));
 
         if ($request->ajax()) {
             return response()->json(['success' => true, 'body' => "The KYC status was updated to {$data['kyc_status']}"]);
