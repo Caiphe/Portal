@@ -3,6 +3,13 @@
 #search-form {
     display: flex;
     margin-bottom: 32px;
+
+    @media screen and (max-width: 767px) {
+        flex-direction: column;
+        background-color: #FFF;
+        border-radius: 8px;
+        padding: 10px;
+    }
 }
 
 .go-back {
@@ -18,13 +25,60 @@
     }
 }
 
+#search-form-toggle {
+    @media screen and (min-width: 768px) {
+        display: none;
+    }
+
+    @media screen and (max-width: 767px) {
+        font-size: 14px;
+        font-family: $MTN-Regular;
+        height: 30px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+        svg {
+            margin-right: 8px;
+        }
+
+        svg+svg {
+            display: none;
+        }
+
+        .show & {
+            margin-bottom: 15px;
+
+            svg {
+                display: none;
+            }
+
+            svg+svg {
+                display: inline-block;
+            }
+        }
+    }
+}
+
 .filter-item {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     font-size: 14px;
     font-family: $MTN-Regular;
-    width: 100px;
+
+    @media screen and (min-width: 768px) {
+        width: 100px;
+    }
+
+    @media screen and (max-width: 767px) {
+        margin-bottom: 15px;
+        display: none;
+
+        .show & {
+            display: flex;
+        }
+    }
 
     input,
     select {
@@ -32,26 +86,46 @@
         background-color: #fff;
         border-radius: 8px;
         border: none;
-        padding: 0 16px;
         height: 40px;
+
+        @media screen and (min-width: 768px) {
+            padding: 0 16px;
+        }
+
+        @media screen and (max-width: 767px) {
+            border: 1px solid #F0F0F0;
+            padding: 0 10px;
+        }
     }
 
     select {
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        appearance: none;
         background-image:
             url('/images/icons/chevron-down.svg'),
             url('/images/icons/filter-line.svg');
         background-repeat:
             no-repeat,
             no-repeat;
-        background-size:
-            24px,
-            1px;
-        background-position:
-            calc(100% - 16px) center,
-            calc(100% - 54px) top;
-        -moz-appearance: none;
-        -webkit-appearance: none;
-        appearance: none;
+
+        @media screen and (min-width: 768px) {
+            background-size:
+                24px,
+                1px;
+            background-position:
+                calc(100% - 16px) center,
+                calc(100% - 54px) top;
+        }
+
+        @media screen and (max-width: 767px) {
+            background-size:
+                18px,
+                1px;
+            background-position:
+                calc(100% - 11px) center,
+                calc(100% - 38px) top;
+        }
     }
 }
 
@@ -64,8 +138,10 @@
     }
 }
 
-.filter-item+.filter-item {
-    margin-left: 16px;
+@media screen and (min-width: 768px) {
+    .filter-item+.filter-item {
+        margin-left: 16px;
+    }
 }
 
 #search-page {
@@ -75,12 +151,24 @@
     background-repeat:
         no-repeat,
         no-repeat;
-    background-size:
-        24px,
-        1px;
-    background-position:
-        calc(100% - 16px) center,
-        calc(100% - 54px) top;
+
+    @media screen and (min-width: 768px) {
+        background-size:
+            24px,
+            1px;
+        background-position:
+            calc(100% - 16px) center,
+            calc(100% - 54px) top;
+    }
+
+    @media screen and (max-width: 767px) {
+        background-size:
+            18px,
+            1px;
+        background-position:
+            calc(100% - 10px) center,
+            calc(100% - 38px) top;
+    }
 }
 
 #table-data {
@@ -96,6 +184,10 @@
 
     thead {
         background-color: transparent;
+
+        @media screen and (max-width: 768px) {
+            display: none;
+        }
 
         th {
             padding: 0 16px;
@@ -116,6 +208,12 @@
             width: 16px;
             fill: $grey500;
             margin-left: 8px;
+        }
+
+        @media screen and (max-width: 767px) {
+            .action-row {
+                visibility: hidden;
+            }
         }
     }
 
@@ -140,7 +238,18 @@
 
         td:last-child {
             border-radius: 0 10px 10px 0;
-            padding-right: 24px;
+
+            @media screen and (min-width: 768px) {
+                padding-right: 24px;
+            }
+        }
+    }
+
+    @media screen and (max-width: 767px) {
+
+        td.not-on-mobile,
+        th.not-on-mobile {
+            display: none;
         }
     }
 
@@ -161,6 +270,10 @@
             display: inline-flex;
             align-items: center;
             color: $blue;
+
+            @media screen and (max-width: 768px) {
+                display: none;
+            }
         }
 
         a+*,
@@ -174,6 +287,64 @@
             fill: $blue;
             height: 16px;
             margin-right: 4px;
+        }
+
+        @media screen and (min-width: 768px) {
+            .mobile-action {
+                display: none;
+            }
+        }
+
+        @media screen and (max-width: 767px) {
+            text-align: right;
+            line-height: 1;
+
+            .mobile-action {
+                display: inline-block;
+                margin-right: -10px;
+
+                svg {
+                    height: 24px;
+                }
+
+                svg+svg {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    .show-actions {
+        td {
+            visibility: hidden;
+        }
+
+        .action-row {
+            visibility: visible;
+            border-radius: 10px;
+            min-height: 48px;
+            position: absolute;
+            width: calc(100vw - 50px);
+            left: 0;
+            text-overflow: unset;
+            display: flex;
+            justify-content: flex-end;
+
+            a,
+            button,
+            form {
+                display: inline-flex;
+            }
+        }
+
+        .mobile-action {
+            svg {
+                display: none;
+            }
+
+            svg+svg {
+                display: initial;
+            }
         }
     }
 }

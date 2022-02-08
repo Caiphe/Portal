@@ -51,6 +51,11 @@
             </li>
         </ul>
     </nav>
+    <header id="mobile-header">
+        <a class="logo" href="/"><img width="39px" height="42px" src="/images/mtn-logo.svg" alt="MTN logo"> Admin Portal</a>
+        <button id="search-button" class="sl-button reset">@svg('search')</button>
+        <button id="menu-button" class="sl-button reset">@svg('menu')</button>
+    </header>
     <main id="main">
         @yield("content")
     </main>

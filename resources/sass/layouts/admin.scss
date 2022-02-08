@@ -12,11 +12,32 @@ body {
     position: fixed;
     display: flex;
     flex-direction: column;
-    width: 320px;
-    padding: 32px;
     top: 0;
-    bottom: 0;
     background-color: $dark;
+
+    @media screen and (min-width: 767px) {
+        width: 320px;
+        padding: 32px;
+        bottom: 0;
+    }
+
+    @media screen and (max-width: 767px) {
+        width: 100vw;
+        height: 100vh;
+        padding: 10px;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        overflow-y: auto;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 256ms ease-in;
+
+        &.show {
+            pointer-events: auto;
+            opacity: 1;
+        }
+    }
 
     .main-menu {
         margin: 0;
@@ -123,6 +144,11 @@ body {
         margin-bottom: 24px;
     }
 
+    @media screen and (max-width: 767px) {
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+
     img {
         margin-right: 12px;
     }
@@ -132,16 +158,59 @@ body {
     margin-top: 16px;
 }
 
+#mobile-header {
+    @media screen and (min-width: 768px) {
+        display: none;
+    }
+
+    @media screen and (max-width: 767px) {
+        background-color: $dark;
+        display: flex;
+        align-items: center;
+    }
+
+    .logo {
+        margin-right: auto;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .sl-button {
+        width: 40px;
+        height: 40px;
+
+        svg {
+            fill: #FFF;
+        }
+    }
+}
+
 #main {
-    margin-left: 320px;
-    padding: 32px;
+    @media screen and (min-width: 768px) {
+        margin-left: 320px;
+        padding: 32px;
+    }
+
+    @media screen and (max-width: 767px) {
+        width: 100%;
+        padding: 10px;
+    }
 
     h1 {
         margin-top: 0;
-        font-size: 40px;
         line-height: 1.2;
         font-family: $MTN-Bold;
-        margin-bottom: 36px;
+
+        @media screen and (min-width: 768px) {
+            font-size: 40px;
+            margin-bottom: 36px;
+        }
+
+        @media screen and (max-width: 767px) {
+            font-size: 24px;
+            margin-bottom: 25px;
+            margin-top: 20px;
+        }
     }
 }
 
