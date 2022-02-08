@@ -87,6 +87,15 @@ class User extends Authenticatable implements MustVerifyEmail
 			->first();
 	}
 
+	public function belongsToTeam($team)
+	{
+		if (is_string($team)) {
+			$team = Team::find($team);
+		}
+
+		return $this->teams->contains($team);
+	}
+
 	public function hasTeamRole($team, $role)
 	{
 		$teamRole = $this->teamRole($team);
@@ -269,9 +278,9 @@ class User extends Authenticatable implements MustVerifyEmail
 	}
 
 	public function authentications()
-    {
-        return $this->hasMany(AuthenticationLog::class)->latest('login_at');
-    }
+	{
+		return $this->hasMany(AuthenticationLog::class)->latest('login_at');
+	}
 
 	/**
 	 * Send a password reset notification to the user.

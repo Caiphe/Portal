@@ -53,7 +53,7 @@ class AuthServiceProvider extends ServiceProvider
 		});
 
 		Gate::define('access-own-app', function ($user, App $app) {
-			return $app->developer_id === $user->developer_id;
+			return $app->developer_id === $user->developer_id || $user->belongsToTeam($app->team_id);
 		});
 
 		Gate::define('access-hidden-products', function ($user) {
