@@ -218,9 +218,17 @@ body {
 
 .page-actions {
     position: absolute;
-    top: 32px;
-    right: 32px;
     display: flex;
+
+    @media screen and (min-width: 768px) {
+        top: 32px;
+        right: 32px;
+    }
+
+    @media screen and (max-width: 767px) {
+        top: 28px;
+        right: 10px;
+    }
 
     a+button,
     a+a,
@@ -232,6 +240,20 @@ body {
     button+label,
     button+a {
         margin-left: 8px;
+    }
+}
+
+.page-actions-create {
+    @media screen and (min-width: 768px) {
+        &::before {
+            content: attr(aria-label);
+        }
+    }
+
+    @media screen and (max-width: 767px) {
+        width: 37px;
+        background: url('/images/icons/plus.svg') no-repeat center center / 18px;
+        background-color: $yellow;
     }
 }
 
