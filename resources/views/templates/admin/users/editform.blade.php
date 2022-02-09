@@ -36,11 +36,11 @@
         @if(!(in_array($app->country_code, $currentUserResponsibleCountries) || $isAdminUser)) @continue @endif
         <tr class="user-app" data-country="{{ $app->country_code }}">
             <td><a href="{{ route('admin.dashboard.index', ['aid' => $app]) }}" class="app-link">{{ $app->display_name }}</a></td>
-            <td>{{ $app->products_count }}</td>
-            <td>{{ $app->created_at->format('d M Y') }}</td>
-            <td><img class="country-flag" src="/images/locations/{{ $app->country_code ?? 'globe' }}.svg" alt="Country flag"></td>
+            <td class="not-on-mobile">{{ $app->products_count }}</td>
+            <td class="not-on-mobile">{{ $app->created_at->format('d M Y') }}</td>
+            <td class="not-on-mobile"><img class="country-flag" src="/images/locations/{{ $app->country_code ?? 'globe' }}.svg" alt="Country flag"></td>
             <td>
-                <div class="status app-status-{{ $productStatus['status'] }}">{{ $productStatus['label'] }}</div>
+                <div class="status app-status-{{ $productStatus['status'] }}" aria-label="{{ $productStatus['label'] }}" data-pending="{{ $productStatus['pending'] }}"></div>
                 <a class="go-to-app" href="{{ route('admin.dashboard.index', ['aid' => $app]) }}">@svg('chevron-right')</a>
             </td>
         </tr>

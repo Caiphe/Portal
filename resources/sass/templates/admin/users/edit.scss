@@ -91,14 +91,29 @@ button.password-visible {
 .apps-filter {
     display: flex;
     width: 100%;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 32px;
+
+    @media screen and (min-width: 768px) {
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+    }
+
+    @media screen and (max-width: 767px) {
+        flex-direction: column;
+        margin-bottom: 15px;
+    }
 
     h2 {
-        font-size: 30px;
         font-family: $MTN-Regular;
         font-weight: normal;
+
+        @media screen and (min-width: 768px) {
+            font-size: 30px;
+        }
+
+        @media screen and (max-width: 767px) {
+            font-size: 20px;
+        }
     }
 
     h3 {
@@ -135,9 +150,31 @@ button.password-visible {
 }
 
 #apps-list {
+    thead {
+        @media screen and (max-width: 767px) {
+            display: none;
+        }
+    }
+
+    .not-on-mobile {
+        @media screen and (max-width: 767px) {
+            display: none;
+        }
+    }
+
     .app-status-approved {
         color: $green;
         border: 1px solid $green;
+
+        @media screen and (max-width: 767px) {
+            &::before {
+                background: url("/images/icons/done.svg") no-repeat center center / 16px;
+                width: 12px;
+                display: inline-block;
+                color: transparent;
+                filter: invert(56%) sepia(94%) saturate(2964%) hue-rotate(104deg) brightness(92%) contrast(80%);
+            }
+        }
     }
 
     .app-status-pending {
@@ -148,6 +185,16 @@ button.password-visible {
     .app-status-revoked {
         color: $red;
         border: 1px solid $red;
+
+        @media screen and (max-width: 767px) {
+            &::before {
+                background: url("/images/icons/close.svg") no-repeat center center / 16px;
+                width: 12px;
+                display: inline-block;
+                color: transparent;
+                filter: invert(16%) sepia(62%) saturate(4069%) hue-rotate(327deg) brightness(95%) contrast(91%);
+            }
+        }
     }
 
     .status {
@@ -155,6 +202,20 @@ button.password-visible {
         border-radius: 64px;
         padding: 4px 12px;
         display: inline-flex;
+
+        @media screen and (min-width: 768px) {
+            &::before {
+                content: attr(aria-label);
+            }
+        }
+
+        @media screen and (max-width: 767px) {
+            margin-right: 36px;
+
+            &::before {
+                content: attr(data-pending);
+            }
+        }
     }
 }
 

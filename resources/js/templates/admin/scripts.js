@@ -1,10 +1,16 @@
+(function(){
+    var searchFormToggle = document.getElementById('search-form-toggle');
+
+    if(searchFormToggle){
+        searchFormToggle.addEventListener('click', toggleFilter);
+    }
+}());
+
 function init() {
     var mobileActions = document.querySelectorAll('.mobile-action');
 
-    if(mobileActions) {
-        for (var i = mobileActions.length - 1; i >= 0; i--) {
-            mobileActions[i].addEventListener('click', toggleMobileAction);
-        }
+    for (var i = mobileActions.length - 1; i >= 0; i--) {
+        mobileActions[i].addEventListener('click', toggleMobileAction);
     }
 
     function toggleMobileAction() {
@@ -17,7 +23,6 @@ ajaxifyComplete = init;
 
 document.getElementById('menu-button').addEventListener('click', toggleMenu);
 document.getElementById('hide-menu').addEventListener('click', toggleMenu);
-document.getElementById('search-form-toggle').addEventListener('click', toggleFilter);
 
 function toggleMenu() {
     document.getElementById('sidebar').classList.toggle('show');
