@@ -22,10 +22,21 @@ init();
 ajaxifyComplete = init;
 
 document.getElementById('menu-button').addEventListener('click', toggleMenu);
+document.getElementById('search-button').addEventListener('click', toggleSearch);
+document.getElementById('admin-search-close').addEventListener('click', toggleSearch);
 document.getElementById('hide-menu').addEventListener('click', toggleMenu);
 
 function toggleMenu() {
     document.getElementById('sidebar').classList.toggle('show');
+}
+
+function toggleSearch() {
+    var mobileHeaderSearchForm = document.getElementById('mobile-header-search-form');
+    mobileHeaderSearchForm.classList.toggle('show');
+
+    if(mobileHeaderSearchForm.classList.contains('show')){
+        document.querySelector('.mobile-admin-search').focus();
+    }
 }
 
 function toggleFilter() {
