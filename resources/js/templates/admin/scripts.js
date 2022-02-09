@@ -16,6 +16,7 @@ init();
 ajaxifyComplete = init;
 
 document.getElementById('menu-button').addEventListener('click', toggleMenu);
+document.getElementById('hide-menu').addEventListener('click', toggleMenu);
 document.getElementById('search-form-toggle').addEventListener('click', toggleFilter);
 
 function toggleMenu() {

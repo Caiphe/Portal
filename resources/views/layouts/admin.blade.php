@@ -19,6 +19,7 @@
 <body class="admin">
     <nav id="sidebar">
         <a class="logo" href="/">@svg('mtn-logo', '', '/images/') Admin Portal</a>
+        <button id="hide-menu" class="reset">@svg('close')</button>
 
         <ul class="main-menu">
             <li @if(Request::is('admin/dashboard')) class="active" @endif><a href="{{ route('admin.dashboard.index') }}">@svg('applications') Applications</a></li>

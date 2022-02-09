@@ -31,12 +31,17 @@ body {
         overflow-y: auto;
         pointer-events: none;
         opacity: 0;
-        transition: opacity 256ms ease-in;
+        transition: opacity 128ms ease-out;
 
         &.show {
             pointer-events: auto;
             opacity: 1;
         }
+    }
+
+    .logo {
+        margin-top: 5px;
+        margin-left: 0;
     }
 
     .main-menu {
@@ -65,11 +70,18 @@ body {
             display: flex;
             align-items: center;
             color: #fff;
-            padding: 8px;
             border-radius: 8px;
             font-size: 18px;
             font-family: $MTN-Regular;
             cursor: pointer;
+
+            @media screen and (min-width: 768px) {
+                padding: 8px;
+            }
+
+            @media screen and (max-width: 767px) {
+                padding: 8px 0;
+            }
         }
 
         svg {
@@ -153,6 +165,19 @@ body {
         width: 39px;
         height: 42px;
         margin-right: 12px;
+    }
+}
+
+#hide-menu {
+    @media screen and (min-width: 768px) {
+        display: none;
+    }
+
+    @media screen and (max-width: 767px) {
+        position: absolute;
+        top: 22px;
+        right: 8px;
+        filter: invert(100%);
     }
 }
 
