@@ -1,11 +1,5 @@
 @import '../../../variables';
 
-#sidebar {
-    @media #{$small} {
-        display: none;
-    }
-}
-
 #main {
     @media(min-width: 768px) {
         margin-right: 0px;
