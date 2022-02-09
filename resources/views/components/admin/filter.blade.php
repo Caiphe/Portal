@@ -5,7 +5,7 @@
 @endphp
 
 <form id="search-form" action="" method="GET" class="ajaxify" data-replace="#table-data">
-    <button id="search-form-toggle" class="sl-button reset">@svg('filter')@svg('close') Filters</button>
+    <button type="button" id="search-form-toggle" class="sl-button reset">@svg('filter')@svg('close') Filters</button>
 
     <label class="filter-item" for="search-page">
         {{ $searchTitle }}

@@ -1,4 +1,4 @@
-(function(){
+function init() {
     var mobileActions = document.querySelectorAll('.mobile-action');
 
     if(mobileActions) {
@@ -10,7 +10,10 @@
     function toggleMobileAction() {
         this.parentNode.parentNode.classList.toggle('show-actions');
     }
-}());
+}
+
+init();
+ajaxifyComplete = init;
 
 document.getElementById('menu-button').addEventListener('click', toggleMenu);
 document.getElementById('search-form-toggle').addEventListener('click', toggleFilter);
