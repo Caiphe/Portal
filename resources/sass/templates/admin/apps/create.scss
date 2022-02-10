@@ -1,18 +1,38 @@
-@import '../../../variables';
+@use '../../../variables'as *;
 
 #main {
-    @media(min-width: 768px) {
-        margin-right: 0px;
+    h1 {
+        @media screen and (max-width: 767px) {
+            margin-bottom: 0;
+        }
     }
 
     .actions-btn-container {
-        width: 500px;
         position: relative;
         margin: 0 auto;
         display: flex;
-        margin-bottom: 70px;
+
+        @media screen and (min-width: 768px) {
+            width: 500px;
+        }
+
+        @media screen and (max-width: 767px) {
+            width: 100%;
+            flex-direction: column;
+        }
 
         button {
+            text-align: center;
+
+            @media screen and (min-width: 768px) {
+                width: 230px;
+                margin: 40px auto 20px;
+            }
+
+            @media screen and (max-width: 767px) {
+                width: 100%;
+                margin: 5px auto;
+            }
 
             &.outline {
                 border: solid 2px #000;
@@ -22,53 +42,54 @@
                     transition: all 0.3s ease-in-out;
                 }
             }
+        }
+    }
 
-            width: 230px;
-            text-align: center;
-            margin: 40px auto 20px;
+    .app-details-step {
+        .apps-heading-container {
+            @media screen and (max-width: 767px) {
+                margin-bottom: 20px;
+            }
         }
     }
 
     .content {
         height: 100%;
         width: 100%;
-        padding: 0 40px 0 0;
 
-        @media #{$small} {
-            margin: 0;
-            padding: 0;
+        @media screen and (min-width: 768px) {
+            padding: 0 40px 0 0;
         }
+
+
 
         nav {
             display: flex;
-            justify-content: center;
             font-size: 16px;
             padding: 10px 0px;
             border: 2px solid #f2f2f2;
             border-radius: 10px;
 
-            @media #{$small} {
-                flex-direction: column;
+            @media screen and (min-width: 768px) {
+                justify-content: center;
             }
 
-            a {
+            button {
                 display: flex;
                 align-items: center;
                 margin-right: 40px;
                 font-size: 14px;
 
-                @media #{$small} {
-                    margin-right: 0;
-                }
-
-                &:not(:last-of-type) {
-                    @media #{$small} {
-                        margin-bottom: 20px;
-                    }
+                @media screen and (max-width: 767px) {
+                    display: none;
                 }
 
                 &.active {
                     color: $blue900;
+
+                    @media screen and (max-width: 767px) {
+                        display: flex;
+                    }
 
                     span {
                         border: 2px solid $blue900;
@@ -94,12 +115,12 @@
             }
         }
 
-        form {
+        #form-create-app {
             display: flex;
             flex-direction: column;
             align-items: center;
             border-radius: 10px;
-            margin-top: 20px;
+            margin-top: 40px;
 
             .showing-product-for {
                 text-transform: uppercase;
@@ -113,11 +134,18 @@
             }
 
             .apps-create-btn {
-                width: 234px;
                 height: 37px;
                 font-family: $MTN-Regular;
                 font-size: 14px;
                 font-weight: 300;
+
+                @media screen and (min-width: 768px) {
+                    width: 234px;
+                }
+
+                @media screen and (max-width: 767px) {
+                    width: 100%;
+                }
             }
 
             .app-owner-container {
@@ -126,8 +154,16 @@
                 .owner-avatar-container {
                     width: 89px;
                     height: 89px;
-                    margin-top: 40px;
-                    margin-bottom: 40px;
+
+                    @media screen and (min-width: 768px) {
+                        margin-top: 40px;
+                        margin-bottom: 40px;
+                    }
+
+                    @media screen and (max-width: 767px) {
+                        margin-top: 20px;
+                        margin-bottom: 20px;
+                    }
 
                     .owner-avatar {
                         width: 100%;
@@ -183,12 +219,20 @@
                     font-family: $MTN-Bold;
                     color: #000;
                     margin-top: 5px;
+                    word-break: break-word;
                 }
 
                 .owners-list-container {
-                    width: 340px;
                     position: relative;
                     margin-top: 15px;
+
+                    @media screen and (min-width: 768px) {
+                        width: 340px;
+                    }
+
+                    @media screen and (max-width: 767px) {
+                        width: 100%;
+                    }
 
                     .apps-button-container {
                         text-align: center;
@@ -210,23 +254,33 @@
                         text-align: center;
                         margin: 0px auto;
                         position: relative;
-                        height: 41px;
-                        width: 160px;
+                        height: 40px;
                         display: inline-block;
 
-                        &:nth-child(1) {
-                            margin-right: 5px;
+                        @media screen and (min-width: 768px) {
+                            width: 160px;
+                        }
+
+                        @media screen and (max-width: 767px) {
+                            width: 100%;
+                            margin-bottom: 10px;
                         }
                     }
 
                     .wrapper {
-                        margin: 0px auto 40px;
                         position: relative;
+
+                        @media screen and (min-width: 768px) {
+                            margin: 0px auto 40px;
+                        }
+
+                        @media screen and (max-width: 767px) {
+                            margin: 0px auto 20px;
+                        }
 
                         .search-input {
                             background: #fff;
-                            width: 100%;
-                            border-radius: 5px;
+                            border-radius: 8px;
                             position: relative;
 
                             input {
@@ -296,17 +350,32 @@
             }
 
             .apps-top-text {
-                font-size: 14px;
+                @media screen and (min-width: 768px) {
+                    font-size: 14px;
+                }
+
+                @media screen and (max-width: 767px) {
+                    font-size: 12px;
+                }
             }
 
             .app-create-heading {
-                font-size: 36px;
                 font-family: $MTN-Regular;
+
+                @media screen and (min-width: 768px) {
+                    font-size: 36px;
+                }
+
+                @media screen and (max-width: 767px) {
+                    font-size: 24px;
+                    margin: 8px 0;
+                }
             }
 
             .gray-text {
                 color: #707070;
-                font-size: 14px;
+                font-size: 16px;
+                text-align: center;
             }
 
             .success-message-container {
@@ -362,14 +431,6 @@
                 }
             }
 
-            @media screen and (min-width: 768px) {
-                padding: 40px;
-            }
-
-            @media screen and (max-width: 768px) {
-                padding: 20px;
-            }
-
             >div {
                 width: 100%;
                 display: none;
@@ -416,9 +477,12 @@
                 display: flex;
                 flex-direction: column;
                 margin-bottom: 3rem;
-                width: 50%;
 
-                @media #{$small} {
+                @media screen and (min-width: 768px) {
+                    width: 50%;
+                }
+
+                @media screen and (max-width: 767px) {
                     width: 100%;
                 }
             }
@@ -446,17 +510,20 @@
                     cursor: pointer;
                     position: relative;
 
-                    @media screen and (min-width: 768px) {
-                        width: 13%;
-                    }
-
-                    @media screen and (max-width: 768px) {
-                        width: calc(50% - 60px);
+                    @media screen and (max-width: 767px) {
+                        width: 100%;
                     }
 
                     svg {
                         margin-bottom: 15px;
-                        width: 60%;
+
+                        @media screen and (min-width: 768px) {
+                            width: 60%;
+                        }
+
+                        @media screen and (max-width: 767px) {
+                            width: 32px;
+                        }
                     }
 
                     .country-checked {
@@ -526,10 +593,6 @@
                     flex-flow: row wrap;
                     width: 100%;
 
-                    @media #{$small} {
-                        flex-direction: column;
-                    }
-
                     .category {
                         display: flex;
                         flex-flow: row wrap;
@@ -541,12 +604,15 @@
                         }
 
                         .card {
-                            margin-bottom: 30px;
-                            margin-right: 20px;
-                            width: 30%;
                             border-radius: 8px;
+                            margin-bottom: 30px;
 
-                            @media #{$small} {
+                            @media screen and (min-width: 768px) {
+                                width: 30%;
+                                margin-right: 20px;
+                            }
+
+                            @media screen and (max-width: 767px) {
                                 width: 100%;
                             }
 
@@ -571,12 +637,6 @@
             display: block;
             background-color: transparent;
             border: transparent;
-            font-size: 16px;
-            margin: 40px auto 20px;
-
-            @media #{$small} {
-                width: 100%;
-            }
         }
     }
 
@@ -592,7 +652,8 @@
         filter: invert(100%);
     }
 
-    input, textarea {
+    input,
+    textarea {
         padding: 8px;
         border-radius: 8px;
         border: 1px solid $grey850;

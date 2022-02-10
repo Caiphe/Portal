@@ -15,25 +15,15 @@
     <div class="content">
 
         <nav>
-            <a href="#" class="active">
-                <span>1</span> App owner
-            </a>
-            <a href="#" class="@if(isset($chosenUser)) active @endif">
-                <span>2</span> App details
-            </a>
-            <a href="#" class="">
-                <span>3</span> Select countries
-            </a>
-            <a href="#" class="">
-                <span>4</span> Select products
-            </a>
-            <a href="#" class="">
-                <span>5</span> Complete
-            </a>
+            <button type="button" class="reset active"><span>1</span> App owner</button>
+            <button type="button" @class(['reset', 'active' => isset($chosenUser)])><span>2</span> App details</button>
+            <button type="button" class="reset "><span>3</span> Select countries</button>
+            <button type="button" class="reset "><span>4</span> Select products</button>
+            <button type="button" class="reset "><span>5</span> Complete</button>
         </nav>
 
         <form id="form-create-app">
-            <div class="app-owner-container @if(!isset($chosenUser)) active @endif">
+            <div class="app-owner-container create-app-section @if(!isset($chosenUser)) active @endif">
                 <span class="apps-top-text">Create a new app</span>
                 <h1 class="app-create-heading">App owner</h1>
                 <span class="gray-text">Modify or continue with the assigned app creator</span>
@@ -47,7 +37,7 @@
                 <div class="group owners-list-container">
                     <div class="wrapper">
                         <div class="search-input">
-                            <input type="text" class="searchField" name="app-owner" value="{{ $chosenUser->email ?? '' }}" placeholder="Search for email address..." autocomplete="off">
+                            <input type="text" class="search-field" name="app-owner" value="{{ $chosenUser->email ?? '' }}" placeholder="Search for email address..." autocomplete="off">
                             <div class="autocom-box">
                                 <!-- here list are inserted from javascript -->
                             </div>
@@ -62,10 +52,11 @@
 
                 <div class="actions-btn-container">
                     <button class="btn dark outline" type="reset">Cancel</button>
-                    <button class="btn dark next" type="button">Next</button>
+                    <button id="next-app-owner" class="btn dark next" type="button">Next</button>
                 </div>
             </div>
-            <div class="app-details-step @if(isset($chosenUser)) active @endif" >
+
+            <div class="app-details-step create-app-section @if(isset($chosenUser)) active @endif" >
                 {{-- @svg('app-avatar', '#ffffff') --}}
                 {{-- Section Heading --}}
                 <div class="apps-heading-container">
@@ -89,10 +80,14 @@
                     <label for="description">Description</label>
                     <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>
                 </div>
-                <button class="dark next apps-create-btn">Select countries</button>
+
+                <div class="actions-btn-container">
+                    <button type="button" class="btn dark outline back">Back</button>
+                    <button type="button" id="next-app-details" class="dark next apps-create-btn">Select countries</button>
+                </div>
             </div>
 
-            <div class="select-countries ">
+            <div class="select-countries create-app-section">
                 <div class="apps-heading-container">
                     <span class="apps-top-text">Create a new app</span>
                     <h1 class="app-create-heading">Select countries</h1>
@@ -103,7 +98,7 @@
                     @foreach($countries as $key => $country)
                         <label class="country" for="country-{{ $loop->index + 1 }}" data-location="{{ $key }}">
                             @svg('$key', '#000000', 'images/locations')
-                            <input type="radio" id="country-{{ $loop->index + 1 }}" class="country-checkbox" name="country-checkbox" value="{{ $key }}" data-location="{{ $key }}">
+                            <input type="radio" id="country-{{ $loop->index + 1 }}" class="country-checkbox" name="country-checkbox" value="{{ $key }}" data-location="{{ $key }}" autocomplete="off">
                             <div class="country-checked"></div>
                             {{ $country }}
                         </label>
@@ -111,20 +106,12 @@
                 </div>
 
                 <div class="actions-btn-container">
-                    <button class="btn dark outline back">Back</button>
-                    <button class="btn dark next" type="button"  id="select-products-button"> Select products</button>
+                    <button type="button" class="btn dark outline back">Back</button>
+                    <button type="button" id="next-select-products" class="btn dark next" id="select-products-button"> Select products</button>
                 </div>
-
-                {{-- <div class="form-actions">
-                    <button class="dark outline back">Back</button>
-                    <button class="dark next" id="select-products-button">
-                        Select products
-                        @svg('arrow-forward', '#ffffff')
-                    </button>
-                </div> --}}
             </div>
 
-            <div class="select-products">
+            <div class="select-products create-app-section">
                 <div class="apps-heading-container">
                     <span class="apps-top-text">Create a new app</span>
                     <h1 class="app-create-heading">Select products</h1>
@@ -140,7 +127,7 @@
 
                 <div class="products">
                     @foreach ($products as $category=>$products)
-                        <div class="category" data-category="{{ $category }}">
+                        <div class="category" data-category="{{ $products[0]->category_cid }}">
                             <h3>{{ $category }}</h3>
                             @foreach ($products as $product)
                                 @php
@@ -155,6 +142,7 @@
                                                 :addButtonId="$product->slug"
                                                 :data-title="$product->name"
                                                 :data-group="$product->group"
+                                                :data-category="$product->category_cid"
                                                 :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}
                                 </x-card-product>
                             @endforeach
@@ -163,12 +151,12 @@
                 </div>
 
                 <div class="actions-btn-container">
-                    <button class="btn dark outline back">Back</button>
-                    <button class="btn dark next" id="create">Next</button>
+                    <button type="button" class="btn dark outline back">Back</button>
+                    <button type="button" id="next-create-app" class="btn dark next" id="create">Create app</button>
                 </div>
             </div>
 
-            <div class="complete-container">
+            <div class="complete-container create-app-section">
                 <div class="apps-heading-container">
                     <span class="apps-top-text">Create a new app</span>
                     <h1 class="app-create-heading">Complete</h1>

@@ -118,7 +118,7 @@ class BladeHelpers
         return strtoupper($str);
     }
 
-    public function addClass(string $str): string
+    public static function addClass(string $str): string
     {
         return $str;        
     }

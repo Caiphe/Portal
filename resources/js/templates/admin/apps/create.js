@@ -1,26 +1,27 @@
 (function () {
-    document.addEventListener('DOMContentLoaded', init);
-
     var nav = document.querySelector('.content nav');
     var form = document.getElementById('form-create-app');
-    var buttons = document.querySelectorAll('.next');
     var backButtons = document.querySelectorAll('.back');
-    var checkedBoxes = document.querySelectorAll('input[name=country-checkbox]:checked');
     var appCreatorEmail = adminAppsCreateLookup('appCreatorEmail');
     var suggestions = adminAppsCreateLookup('userEmails');
     var profiles = adminAppsCreateLookup('userProfiles');
     var searchWrapper = document.querySelector(".search-input");
-    var inputBox = searchWrapper.querySelector(".searchField");
+    var searchField = searchWrapper.querySelector(".search-field");
     var suggBox = searchWrapper.querySelector(".autocom-box");
     var creatorEmail = document.querySelector(".creator-email");
     var removeThumbnail = document.getElementById('remove-assignee');
     var ownerAvatar = document.querySelector(".owner-avatar");
     var buttonsContainer = document.querySelector(".apps-button-container");
+    var addProductButtons = document.querySelectorAll('[data-title] a');
 
-    function init() {
-        handleButtonClick();
-        handleBackButtonClick();
-        clearCheckBoxes();
+    document.getElementById('next-app-owner').addEventListener('click', nextAppOwner);
+    document.getElementById('next-app-details').addEventListener('click', nextAppDetails);
+    document.getElementById('next-select-products').addEventListener('click', nextSelectProducts);
+    document.getElementById('next-create-app').addEventListener('click', nextCreateApp);
+    searchField.addEventListener('keyup', searchFieldSuggestions);
+
+    for (var j = 0; j < backButtons.length; j++) {
+        backButtons[j].addEventListener('click', back);
     }
 
     document.getElementById('assign-to-me').addEventListener('click', assignToMe);
@@ -32,101 +33,66 @@
         removeThumbnail.style.display = '';
     }
 
-    function handleButtonClick() {
-        for (var i = 0; i < buttons.length; i++) {
-
-            buttons[i].addEventListener('click', function (event) {
-                var urlValue = document.getElementById('url').value;
-                event.preventDefault();
-
-                if (form.firstElementChild.classList.contains('active')) {
-
-                    if (inputBox.value === '') {
-                        return void addAlert('error', 'Please add a valid email');
-                    }
-
-                    nav.querySelector('a').nextElementSibling.classList.add('active');
-
-                    form.firstElementChild.classList.remove('active');
-                    form.firstElementChild.style.display = 'none';
-                    form.firstElementChild.nextElementSibling.classList.add('active');
-
-                } else if (form.firstElementChild.nextElementSibling.classList.contains('active')) {
-                    if (document.getElementById('name').value === '') {
-                        return void addAlert('error', 'Please add a name for your app');
-                    }
-
-                    if (urlValue !== '' && !/https?:\/\/.*\..*/.test(urlValue)) {
-                        return void addAlert('error', ['Please add a valid url', 'Eg. https://callback.com']);
-                    }
-
-                    nav.querySelector('a').nextElementSibling.nextElementSibling.classList.add('active');
-
-                    form.firstElementChild.nextElementSibling.classList.remove('active');
-                    form.firstElementChild.nextElementSibling.style.display = 'none';
-                    form.firstElementChild.nextElementSibling.nextElementSibling.classList.add('active');
-                } else if (form.firstElementChild.nextElementSibling.nextElementSibling.classList.contains('active')) {
-                    if (document.querySelectorAll('.country-checkbox:checked').length === 0) {
-                        return void addAlert('error', 'Please select a country');
-                    }
-
-                    nav.querySelector('a').nextElementSibling.nextElementSibling.nextElementSibling.classList.add('active');
-
-                    form.firstElementChild.nextElementSibling.nextElementSibling.classList.remove('active');
-                    form.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.classList.add('active');
-                } else {
-                    if (document.querySelectorAll('.products .selected .buttons .done').length === 0) {
-                        return void addAlert('error', 'Please select at least one product');
-                    }
-                    handleCreate();
-                }
-            });
+    function nextAppOwner() {
+        if (searchField.value === '') {
+            return void addAlert('error', 'Please add a valid email');
         }
+
+        next();
     }
 
-    function handleBackButtonClick() {
-        var selectedProducts = null;
+    function nextAppDetails() {
+        var urlValue = null;
 
-        for (var j = 0; j < backButtons.length; j++) {
-
-            backButtons[j].addEventListener('click', function (event) {
-                var activeSection = document.querySelector('#form-create-app > .active');
-                var activeSectionClass = activeSection.className;
-
-                var activeNav = nav.querySelectorAll('.active');
-                activeNav = activeNav[activeNav.length - 1];
-
-                event.preventDefault();
-
-                if (activeSectionClass === 'select-countries active') {
-                    var countryCheckboxChecked = document.querySelector('.country-checkbox:checked');
-
-                    activeSection.classList.remove('active');
-                    activeSection.previousElementSibling.classList.add('active');
-                    activeSection.previousElementSibling.style.display = 'flex';
-
-                    activeNav.classList.remove('active');
-
-                    if (countryCheckboxChecked) {
-                        countryCheckboxChecked.checked = false;
-                    }
-
-                } else if (activeSectionClass === 'select-products active') {
-                    activeSection.classList.remove('active');
-                    activeSection.previousElementSibling.classList.add('active');
-
-                    activeNav.classList.remove('active');
-
-                    selectedProducts = document.querySelectorAll('.products .selected .buttons .done');
-
-                    for (var i = selectedProducts.length - 1; i >= 0; i--) {
-                        selectedProducts[i].classList.toggle('done');
-                        selectedProducts[i].classList.toggle('plus');
-                        selectedProducts[i].parentNode.parentNode.classList.remove('selected');
-                    }
-                }
-            });
+        if (document.getElementById('name').value === '') {
+            return void addAlert('error', 'Please add a name for your app');
         }
+
+        urlValue = document.getElementById('url').value;
+
+        if (urlValue !== '' && !/https?:\/\/.*\..*/.test(urlValue)) {
+            return void addAlert('error', ['Please add a valid url', 'Eg. https://callback.com']);
+        }
+
+        next();
+    }
+
+    function nextSelectProducts() {
+        if (document.querySelectorAll('.country-checkbox:checked').length === 0) {
+            return void addAlert('error', 'Please select a country');
+        }
+
+        next();
+    }
+
+    function nextCreateApp() {
+        if (document.querySelectorAll('.products .selected .buttons .done').length === 0) {
+            return void addAlert('error', 'Please select at least one product');
+        }
+
+        handleCreate();
+    }
+
+    function next() {
+        var navActive = nav.querySelector('.active');
+        var sectionActive = form.querySelector('.create-app-section.active');
+
+        navActive.classList.remove('active');
+        navActive.nextElementSibling.classList.add('active');
+
+        sectionActive.classList.remove('active');
+        sectionActive.nextElementSibling.classList.add('active');
+    }
+
+    function back() {
+        var navActive = nav.querySelector('.active');
+        var sectionActive = form.querySelector('.create-app-section.active');
+
+        navActive.classList.remove('active');
+        navActive.previousElementSibling.classList.add('active');
+
+        sectionActive.classList.remove('active');
+        sectionActive.previousElementSibling.classList.add('active');
     }
 
     document.querySelector('[type="reset"]').addEventListener('click', function () {
@@ -158,7 +124,7 @@
             buttons[w].classList.add('plus');
         }
 
-        nav.querySelector('a').classList.add('active');
+        nav.querySelector('button').classList.add('active');
 
         form.reset();
     });
@@ -175,7 +141,7 @@
         filterLocations(selected);
         filterProducts(selected);
 
-        document.getElementById('select-products-button').click();
+        nextSelectProducts();
     }
 
     function filterLocations(selected) {
@@ -193,31 +159,30 @@
 
     function filterProducts(selectedCountry) {
         var products = document.querySelectorAll(".card--product");
+        var categories = document.querySelectorAll(".category");
+        var availabelCategories = [];
+        var locations = null;
 
         for (var i = products.length - 1; i >= 0; i--) {
             products[i].style.display = "none";
 
-            var locations =
-                products[i].dataset.locations !== undefined
-                    ? products[i].dataset.locations.split(",")
-                    : ["all"];
+            locations = products[i].dataset.locations !== undefined ? products[i].dataset.locations.split(",") : ["all"];
 
             if (locations[0] === 'all' || locations.indexOf(selectedCountry) !== -1) {
                 products[i].style.display = "flex";
+                availabelCategories.push(products[i].dataset.category);
+            }
+        }
+
+        for (var i = categories.length - 1; i >= 0; i--) {
+            if (availabelCategories.indexOf(categories[i].dataset.category) !== -1) {
+                categories[i].style.display = 'flex';
+            } else {
+                categories[i].style.display = 'none';
             }
         }
     }
 
-    /**
-     *  Clear checkboxes on page load, otherwise some checkboxes persist checked state.
-     */
-    function clearCheckBoxes() {
-        for (var n = 0; n < checkedBoxes.length; ++n) {
-            checkedBoxes[n].checked = false;
-        }
-    }
-
-    var addProductButtons = document.querySelectorAll('[data-title] a');
     for (var o = 0; o < addProductButtons.length; ++o) {
 
         addProductButtons[o].addEventListener('click', function (event) {
@@ -233,8 +198,6 @@
             }
         });
     }
-
-    //var submit = document.getElementById('form-create-app').addEventListener('submit', handleCreate);
 
     function handleCreate() {
         var elements = form.elements;
@@ -274,32 +237,29 @@
 
         xhr.onload = function () {
             if (xhr.status === 200) {
-                nav.querySelector('a').nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.classList.add('active');
-
-                form.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.classList.remove('active');
-                form.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.classList.add('active');
-            } else {
-                var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
-
-                if (result.errors) {
-                    result.message = [];
-                    for (var error in result.errors) {
-                        result.message.push(result.errors[error]);
-                    }
-                }
-
-                addAlert('error', result.message || 'Sorry there was a problem creating your app. Please try again.');
-
-                button.removeAttribute('disabled');
-                button.textContent = 'Create';
+                return void next();
             }
+
+            var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+            if (result.errors) {
+                result.message = [];
+                for (var error in result.errors) {
+                    result.message.push(result.errors[error]);
+                }
+            }
+
+            addAlert('error', result.message || 'Sorry there was a problem creating your app. Please try again.');
+
+            button.removeAttribute('disabled');
+            button.textContent = 'Create';
         };
     }
 
     // if user press any key and release
-    inputBox.onkeyup = (e) => {
-        let userData = e.target.value; //user enetered data
-        let emptyArray = [];
+    function searchFieldSuggestions(e) {
+        var userData = e.target.value; //user enetered data
+        var emptyArray = [];
         if (userData) {
             emptyArray = suggestions.filter((data) => {
                 //filtering array value and user characters to lowercase and return only those words which are start with user enetered chars
@@ -311,13 +271,14 @@
             });
             searchWrapper.classList.add("active"); //show autocomplete box
             showSuggestions(emptyArray);
-            let allList = suggBox.querySelectorAll("li");
-            for (let i = 0; i < allList.length; i++) {
+            var allList = suggBox.querySelectorAll("li");
+            for (var i = 0; i < allList.length; i++) {
                 //adding onclick attribute in all li tag
-                allList[i].setAttribute("onclick", "select(this)");
                 allList[i].addEventListener('click', function () {
                     removeThumbnail.style.display = "block";
                     buttonsContainer.classList.add("on-show");
+
+                    select(this);
                 })
             }
         } else {
@@ -326,9 +287,9 @@
     }
 
     function select(element) {
-        let selectData = element.textContent || element;
+        var selectData = element.textContent || element;
 
-        inputBox.value = selectData;
+        searchField.value = selectData;
         creatorEmail.innerHTML = selectData;
         removeThumbnail.classList.add("active")
         searchWrapper.classList.remove("active");
@@ -339,7 +300,7 @@
         removeThumbnail.addEventListener('click', function () {
             this.classList.remove("active");
             creatorEmail.innerHTML = 'No creator assigned';
-            inputBox.value = '';
+            searchField.value = '';
             ownerAvatar.style.backgroundImage = "url(/images/yellow-vector.svg)";
             this.style.display = 'none';
             buttonsContainer.classList.remove("on-show");
@@ -347,13 +308,14 @@
     }
 
     function showSuggestions(list) {
-        let listData;
+        var listData;
+
         if (!list.length) {
-            // userValue = inputBox.value;
             listData = `<li class="non-cursor"><div class="hide-cursor">No user found try again</div></li>`;
         } else {
             listData = list.join('');
         }
+
         suggBox.innerHTML = listData;
     }
 }());
