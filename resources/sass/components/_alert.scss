@@ -4,8 +4,6 @@
     transition: transform 256ms, opacity 256ms;
     z-index: 100;
     position: fixed;
-    top: 40px;
-    max-width: 256px;
     right: 0;
     pointer-events: none;
     padding-left: 76px;
@@ -17,10 +15,27 @@
     background-repeat: no-repeat;
     min-height: 80px;
 
+    @media screen and (min-width: 768px) {
+        max-width: 256px;
+        top: 40px;
+    }
+
+    @media screen and (max-width: 767px) {
+        max-width: calc(100% - 20px);
+        top: 10px;
+    }
+
     &.open {
-        transform: translateX(-40px);
         opacity: 1;
         pointer-events: auto;
+
+        @media screen and (min-width: 768px) {
+            transform: translateX(-40px);
+        }
+
+        @media screen and (max-width: 767px) {
+            transform: translateX(-10px);
+        }
     }
 }
 
@@ -83,5 +98,6 @@
         margin-left: 10px;
         width: 18px;
         filter: invert(100%);
+        flex-shrink: 0;
     }
 }

@@ -201,6 +201,8 @@
 
     function handleCreate() {
         var elements = form.elements;
+        var selectedProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
+        var button = document.getElementById('next-create-app');
         var app = {
             app_owner: elements['app-owner'].value,
             display_name: elements['name'].value,
@@ -209,10 +211,6 @@
             country: document.querySelector('.country-checkbox:checked').dataset.location,
             products: [],
         };
-
-        var selectedProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
-
-        var button = document.getElementById('create');
 
         for (i = 0; i < selectedProducts.length; i++) {
             app.products.push(selectedProducts[i].dataset.name);
@@ -223,7 +221,8 @@
         }
 
         button.disabled = true;
-        button.textContent = 'Creating...';
+        
+        addLoading('Creating app...');
 
         var url = adminAppsCreateLookup('appStoreUrl');
         var xhr = new XMLHttpRequest();
@@ -236,6 +235,9 @@
         xhr.send(JSON.stringify(app));
 
         xhr.onload = function () {
+            button.removeAttribute('disabled');
+            removeLoading();
+
             if (xhr.status === 200) {
                 return void next();
             }
@@ -250,9 +252,6 @@
             }
 
             addAlert('error', result.message || 'Sorry there was a problem creating your app. Please try again.');
-
-            button.removeAttribute('disabled');
-            button.textContent = 'Create';
         };
     }
 

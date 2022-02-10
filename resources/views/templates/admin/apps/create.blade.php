@@ -15,7 +15,7 @@
     <div class="content">
 
         <nav>
-            <button type="button" class="reset active"><span>1</span> App owner</button>
+            <button type="button" @class(['reset', 'active' => !isset($chosenUser)])><span>1</span> App owner</button>
             <button type="button" @class(['reset', 'active' => isset($chosenUser)])><span>2</span> App details</button>
             <button type="button" class="reset "><span>3</span> Select countries</button>
             <button type="button" class="reset "><span>4</span> Select products</button>
@@ -152,7 +152,7 @@
 
                 <div class="actions-btn-container">
                     <button type="button" class="btn dark outline back">Back</button>
-                    <button type="button" id="next-create-app" class="btn dark next" id="create">Create app</button>
+                    <button type="button" id="next-create-app" class="btn dark next">Create app</button>
                 </div>
             </div>
 

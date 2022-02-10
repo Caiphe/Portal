@@ -423,11 +423,18 @@
                 font-family: $MTN-Bold;
 
                 h1 {
-                    margin-bottom: 40px;
+                    @media screen and (min-width: 768px) {
+                        margin-bottom: 40px;
+                    }
+
+                    @media screen and (max-width: 767px) {
+                        margin-bottom: 20px;
+                    }
                 }
 
                 svg {
-                    width: 40px;
+                    width: 60px;
+                    height: 60px;
                 }
             }
 
@@ -509,6 +516,10 @@
                     text-align: center;
                     cursor: pointer;
                     position: relative;
+
+                    @media screen and (min-width: 768px) {
+                        width: 13%;
+                    }
 
                     @media screen and (max-width: 767px) {
                         width: 100%;
