@@ -7,11 +7,21 @@
 }
 
 .head {
-    display: flex;
-    padding: 0 24px;
+    @media screen and (min-width: 768px) {
+        display: flex;
+        padding: 0 24px;
+    }
+
+    @media screen and (max-width: 767px) {
+        display: none;
+    }
 }
 
 .body {
+    @media screen and (max-width: 767px) {
+        margin-top: 15px;
+    }
+
     .columns {
         padding: 16px 24px;
         display: flex;
@@ -40,26 +50,99 @@
     .toggle-app-button {
         margin-left: auto;
     }
-}
 
-.app-status-approved {
-    .app-status {
-        color: $green;
-        border: 1px solid $green;
+    .column-country {
+        @media screen and (min-width: 768px) {
+            flex: 0 0 56px;
+            justify-content: center;
+            margin-right: 20px;
+        }
+
+        @media screen and (max-width: 767px) {
+            display: none;
+        }
     }
-}
 
-.app-status-pending {
-    .app-status {
-        color: $orange;
-        border: 1px solid $orange;
+    .column-developer-company {
+        @media screen and (min-width: 768px) {
+            flex: 0 0 200px;
+            margin-right: 16px;
+        }
+
+        @media screen and (max-width: 767px) {
+            display: none;
+        }
     }
-}
 
-.app-status-revoked {
-    .app-status {
-        color: $red;
-        border: 1px solid $red;
+    .column-go-live {
+        @media screen and (min-width: 768px) {
+            flex: 0 0 10%;
+        }
+
+        @media screen and (max-width: 767px) {
+            display: none;
+        }
+    }
+
+    .column-status {
+        @media screen and (min-width: 768px) {
+            flex: 0 0 20%;
+
+            .app-status {
+                &::before {
+                    content: attr(aria-label);
+                }
+            }
+        }
+
+        @media screen and (max-width: 767px) {
+            .app-status {
+                &::before {
+                    content: attr(data-pending);
+                }
+            }
+        }
+    }
+
+    .app-status-approved {
+        .app-status {
+            color: $green;
+            border: 1px solid $green;
+
+            @media screen and (max-width: 767px) {
+                &::before {
+                    background: url("/images/icons/done.svg") no-repeat center center / 16px;
+                    width: 12px;
+                    display: inline-block;
+                    color: transparent;
+                    filter: invert(56%) sepia(94%) saturate(2964%) hue-rotate(104deg) brightness(92%) contrast(80%);
+                }
+            }
+        }
+    }
+
+    .app-status-pending {
+        .app-status {
+            color: $orange;
+            border: 1px solid $orange;
+        }
+    }
+
+    .app-status-revoked {
+        .app-status {
+            color: $red;
+            border: 1px solid $red;
+
+            @media screen and (max-width: 767px) {
+                &::before {
+                    background: url("/images/icons/close.svg") no-repeat center center / 16px;
+                    width: 12px;
+                    display: inline-block;
+                    color: transparent;
+                    filter: invert(16%) sepia(62%) saturate(4069%) hue-rotate(327deg) brightness(95%) contrast(91%);
+                }
+            }
+        }
     }
 }
 
@@ -67,6 +150,10 @@
     box-sizing: border-box;
     border-radius: 64px;
     padding: 4px 12px;
+
+    @media screen and (max-width: 767px) {
+        margin-right: 8px;
+    }
 }
 
 .toggle-app {
@@ -76,25 +163,6 @@
 .column-app-name {
     flex: 0 1 100%;
     margin-right: 16px;
-}
-
-.column-country {
-    flex: 0 0 56px;
-    justify-content: center;
-    margin-right: 20px;
-}
-
-.column-developer-company {
-    flex: 0 0 200px;
-    margin-right: 16px;
-}
-
-.column-go-live {
-    flex: 0 0 10%;
-}
-
-.column-status {
-    flex: 0 0 20%;
 }
 
 .elipsise {
@@ -169,8 +237,16 @@
 .product {
     display: flex;
     align-items: center;
-    margin: 32px 0;
-    padding-left: 96px;
+
+    @media screen and (min-width: 768px) {
+        margin: 32px 0;
+        padding-left: 96px;
+    }
+
+    @media screen and (max-width: 767px) {
+        margin: 24px 0;
+        margin-left: 0;
+    }
 
     button {
         color: $blue;
@@ -233,22 +309,55 @@
     .name {
         margin-right: auto;
         color: $blue;
+
+        @media screen and (max-width: 767px) {
+            margin-left: 90px;
+        }
     }
 
     .product-status-action {
-        padding: 0 32px;
+        @media screen and (min-width: 768px) {
+            padding: 0 32px;
+
+            &::after {
+                content: attr(aria-label);
+            }
+        }
+
+        @media screen and (max-width: 767px) {
+            margin-right: 8px;
+        }
 
         svg {
             margin-right: 8px;
             height: 18px;
         }
     }
+
+    .product-action {
+        @media screen and (min-width: 768px) {
+            display: none;
+        }
+
+        @media screen and (max-width: 767px) {
+            svg+svg {
+                display: none;
+            }
+        }
+    }
 }
 
 .renew-credentials {
-    position: absolute;
-    right: 0;
-    margin-top: -52px;
+
+    @media screen and (min-width: 768px) {
+        position: absolute;
+        right: 0;
+        margin-top: -52px;
+    }
+
+    @media screen and (max-width: 767px) {
+        margin-top: 24px;
+    }
 
     .renew {
         display: flex;
@@ -275,7 +384,14 @@
     margin-top: 32px;
     flex-grow: 1;
     flex-shrink: 0;
-    flex-basis: calc(50% - 32px);
+
+    @media screen and (min-width: 768px) {
+        flex-basis: calc(50% - 32px);
+    }
+
+    @media screen and (max-width: 767px) {
+        flex-basis: 100%;
+    }
 
     p {
         margin: 4px 0;
@@ -289,13 +405,39 @@
 }
 
 .detail-left {
-    margin-right: 32px;
+    @media screen and (min-width: 768px) {
+        margin-right: 32px;
+    }
+
+    @media screen and (max-width: 767px) {
+        order: 2;
+    }
+}
+
+.detail-right {
+    @media screen and (max-width: 767px) {
+        order: 1;
+    }
 }
 
 .detail-actions {
     display: flex;
-    align-items: center;
-    margin-top: 16px;
+
+    @media screen and (min-width: 768px) {
+        margin-top: 16px;
+    }
+
+    @media screen and (max-width: 767px) {
+        margin-top: 24px;
+    }
+
+    @media screen and (min-width: 768px) {
+        align-items: center;
+    }
+
+    @media screen and (max-width: 767px) {
+        flex-direction: column;
+    }
 
     button {
         display: flex;
@@ -307,6 +449,12 @@
             fill: $blue;
             margin-right: 8px;
             height: 18px;
+        }
+    }
+
+    .app-status-action {
+        @media screen and (max-width: 767px) {
+            margin-bottom: 24px;
         }
     }
 }
@@ -349,4 +497,54 @@
     padding: 8px 16px;
     border-radius: 8px;
     margin-left: 8px;
+}
+
+@media screen and (max-width: 768px) {
+    .product {
+        .product-status-action {
+            display: none;
+        }
+
+        .product-status-action {
+            display: none;
+        }
+
+        .log-notes {
+            display: none;
+            margin-right: 8px;
+            margin-left: auto;
+        }
+
+        &.show-actions {
+            .name {
+                display: none;
+            }
+
+            .status {
+                display: none;
+            }
+
+            .product-status-action {
+                display: flex;
+            }
+
+            .product-status-action {
+                display: flex;
+            }
+
+            .log-notes {
+                display: flex;
+            }
+
+            .product-action {
+                svg {
+                    display: none;
+                }
+
+                svg+svg {
+                    display: initial;
+                }
+            }
+        }
+    }
 }

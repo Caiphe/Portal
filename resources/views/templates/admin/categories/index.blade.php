@@ -11,13 +11,13 @@
     <x-admin.filter searchTitle="Category name"></x-admin.filter>
 
     <div class="page-actions">
-        <a href="{{ route('admin.category.create') }}" class="button primary">Create category</a>
+        <a href="{{ route('admin.category.create') }}" class="button primary page-actions-create" aria-label="Create category"></a>
     </div>
 
     <div id="table-data">
         @include('components.admin.list', [
             'collection' => $categories,
-            'fields' => ['title', 'theme'],
+            'fields' => ['Title' => 'title', 'Theme' => 'theme|addClass:not-on-mobile'],
             'modelName' => 'category'
         ])
     </div>

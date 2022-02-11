@@ -12,11 +12,37 @@ body {
     position: fixed;
     display: flex;
     flex-direction: column;
-    width: 320px;
-    padding: 32px;
     top: 0;
-    bottom: 0;
     background-color: $dark;
+
+    @media screen and (min-width: 767px) {
+        width: 320px;
+        padding: 32px;
+        bottom: 0;
+    }
+
+    @media screen and (max-width: 767px) {
+        width: 100vw;
+        height: 100vh;
+        padding: 10px;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        overflow-y: auto;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 128ms ease-out;
+
+        &.show {
+            pointer-events: auto;
+            opacity: 1;
+        }
+    }
+
+    .logo {
+        margin-top: 5px;
+        margin-left: 0;
+    }
 
     .main-menu {
         margin: 0;
@@ -44,11 +70,18 @@ body {
             display: flex;
             align-items: center;
             color: #fff;
-            padding: 8px;
             border-radius: 8px;
             font-size: 18px;
             font-family: $MTN-Regular;
             cursor: pointer;
+
+            @media screen and (min-width: 768px) {
+                padding: 8px;
+            }
+
+            @media screen and (max-width: 767px) {
+                padding: 8px 0;
+            }
         }
 
         svg {
@@ -123,8 +156,28 @@ body {
         margin-bottom: 24px;
     }
 
-    img {
+    @media screen and (max-width: 767px) {
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+
+    svg {
+        width: 39px;
+        height: 42px;
         margin-right: 12px;
+    }
+}
+
+#hide-menu {
+    @media screen and (min-width: 768px) {
+        display: none;
+    }
+
+    @media screen and (max-width: 767px) {
+        position: absolute;
+        top: 22px;
+        right: 8px;
+        filter: invert(100%);
     }
 }
 
@@ -132,24 +185,75 @@ body {
     margin-top: 16px;
 }
 
+#mobile-header {
+    @media screen and (min-width: 768px) {
+        display: none;
+    }
+
+    @media screen and (max-width: 767px) {
+        background-color: $dark;
+        display: flex;
+        align-items: center;
+    }
+
+    .logo {
+        margin-right: auto;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .reset {
+        width: 40px;
+        height: 40px;
+
+        svg {
+            fill: #FFF;
+        }
+    }
+}
+
 #main {
-    margin-left: 320px;
-    padding: 32px;
+    @media screen and (min-width: 768px) {
+        margin-left: 320px;
+        padding: 32px;
+    }
+
+    @media screen and (max-width: 767px) {
+        width: 100%;
+        padding: 10px;
+    }
 
     h1 {
         margin-top: 0;
-        font-size: 40px;
         line-height: 1.2;
         font-family: $MTN-Bold;
-        margin-bottom: 36px;
+
+        @media screen and (min-width: 768px) {
+            font-size: 40px;
+            margin-bottom: 36px;
+        }
+
+        @media screen and (max-width: 767px) {
+            font-size: 24px;
+            margin-bottom: 25px;
+            margin-top: 20px;
+        }
     }
 }
 
 .page-actions {
     position: absolute;
-    top: 32px;
-    right: 32px;
     display: flex;
+
+    @media screen and (min-width: 768px) {
+        top: 32px;
+        right: 32px;
+    }
+
+    @media screen and (max-width: 767px) {
+        top: 28px;
+        right: 10px;
+    }
 
     a+button,
     a+a,
@@ -161,6 +265,37 @@ body {
     button+label,
     button+a {
         margin-left: 8px;
+    }
+}
+
+.go-back~.page-actions {
+    @media screen and (max-width: 767px) {
+        position: relative;
+        flex-direction: column;
+        top: initial;
+        right: initial;
+        margin-bottom: 5px;
+
+        a,
+        button,
+        form,
+        label {
+            margin: 0 0 10px;
+        }
+    }
+}
+
+.page-actions-create {
+    @media screen and (min-width: 768px) {
+        &::before {
+            content: attr(aria-label);
+        }
+    }
+
+    @media screen and (max-width: 767px) {
+        width: 37px;
+        background: url('/images/icons/plus.svg') no-repeat center center / 18px;
+        background-color: $yellow;
     }
 }
 

@@ -48,7 +48,7 @@ class BundleController extends Controller
                 ->view('components.admin.list', [
                     'collection' => $bundles->orderBy('display_name')->paginate($numberPerPage),
                     'order' => $order,
-                    'fields' => ['display_name', 'category.title'],
+                    'fields' => ['Name' => 'display_name', 'Category' => 'category.title|addClass:not-on-mobile'],
                     'modelName' => 'bundle'
                 ], 200)
                 ->header('Vary', 'X-Requested-With')

@@ -42,7 +42,7 @@ class FaqController extends Controller
                 ->view('components.admin.list', [
                     'collection' => $faq->paginate($numberPerPage),
                     'order' => $order,
-                    'fields' => ['Question' => 'question', 'Category' => 'category.title'],
+                    'fields' => ['Question' => 'question', 'Category' => 'category.title|addClass:not-on-mobile'],
                     'modelName' => 'faq'
                 ], 200)
                 ->header('Vary', 'X-Requested-With')
