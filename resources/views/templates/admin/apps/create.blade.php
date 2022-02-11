@@ -25,7 +25,7 @@
         <form id="form-create-app">
             <div class="app-owner-container create-app-section @if(!isset($chosenUser)) active @endif">
                 <span class="apps-top-text">Create a new app</span>
-                <h1 class="app-create-heading">App owner</h1>
+                <h2 class="app-create-heading">App owner</h2>
                 <span class="gray-text">Modify or continue with the assigned app creator</span>
                 <div class="owner-avatar-container">
                     <div class="owner-avatar"></div>
@@ -61,7 +61,7 @@
                 {{-- Section Heading --}}
                 <div class="apps-heading-container">
                     <span class="apps-top-text">Create a new app</span>
-                    <h1 class="app-create-heading">App details</h1>
+                    <h2 class="app-create-heading">App details</h2>
                     <span class="gray-text">Edit basic details of the app</span>
                 </div>
                 {{-- Section Heading ends --}}
@@ -90,7 +90,7 @@
             <div class="select-countries create-app-section">
                 <div class="apps-heading-container">
                     <span class="apps-top-text">Create a new app</span>
-                    <h1 class="app-create-heading">Select countries</h1>
+                    <h2 class="app-create-heading">Select countries</h2>
                     <span class="gray-text">Select the countries you would like to associate with your app *</span>
                 </div>
 
@@ -114,7 +114,7 @@
             <div class="select-products create-app-section">
                 <div class="apps-heading-container">
                     <span class="apps-top-text">Create a new app</span>
-                    <h1 class="app-create-heading">Select products</h1>
+                    <h2 class="app-create-heading">Select products</h2>
                     <span class="gray-text">Select the products you would like to add to your app.</span>
                 </div>
 
@@ -159,7 +159,7 @@
             <div class="complete-container create-app-section">
                 <div class="apps-heading-container">
                     <span class="apps-top-text">Create a new app</span>
-                    <h1 class="app-create-heading">Complete</h1>
+                    <h2 class="app-create-heading">Complete</h2>
                     @svg('check-complete', '#FFCC00')
                 </div>
 
