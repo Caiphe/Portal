@@ -3,11 +3,11 @@
 #search-form {
     display: flex;
 
-    @media screen and (min-width: 768px) {
+    @media screen and (min-width: 1100px) {
         margin-bottom: 32px;
     }
 
-    @media screen and (max-width: 767px) {
+    @media screen and (max-width: 1099px) {
         flex-direction: column;
         background-color: #FFF;
         border-radius: 8px;
@@ -30,11 +30,11 @@
 }
 
 #search-form-toggle {
-    @media screen and (min-width: 768px) {
+    @media screen and (min-width: 1100px) {
         display: none;
     }
 
-    @media screen and (max-width: 767px) {
+    @media screen and (max-width: 1099px) {
         font-size: 14px;
         font-family: $MTN-Regular;
         height: 30px;
@@ -71,11 +71,14 @@
     font-size: 14px;
     font-family: $MTN-Regular;
 
-    @media screen and (min-width: 768px) {
+    @media screen and (min-width: 1100px) {
         width: 100px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
-    @media screen and (max-width: 767px) {
+    @media screen and (max-width: 1099px) {
         margin-bottom: 15px;
         display: none;
 
@@ -92,11 +95,11 @@
         border: none;
         height: 40px;
 
-        @media screen and (min-width: 768px) {
+        @media screen and (min-width: 1100px) {
             padding: 0 16px;
         }
 
-        @media screen and (max-width: 767px) {
+        @media screen and (max-width: 1099px) {
             border: 1px solid #F0F0F0;
             padding: 0 10px;
         }
@@ -113,7 +116,7 @@
             no-repeat,
             no-repeat;
 
-        @media screen and (min-width: 768px) {
+        @media screen and (min-width: 1100px) {
             background-size:
                 24px,
                 1px;
@@ -122,7 +125,7 @@
                 calc(100% - 54px) top;
         }
 
-        @media screen and (max-width: 767px) {
+        @media screen and (max-width: 1099px) {
             background-size:
                 18px,
                 1px;
@@ -142,7 +145,7 @@
     }
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 1100px) {
     .filter-item+.filter-item {
         margin-left: 16px;
     }
@@ -156,7 +159,7 @@
         no-repeat,
         no-repeat;
 
-    @media screen and (min-width: 768px) {
+    @media screen and (min-width: 1100px) {
         background-size:
             24px,
             1px;
@@ -165,7 +168,7 @@
             calc(100% - 54px) top;
     }
 
-    @media screen and (max-width: 767px) {
+    @media screen and (max-width: 1099px) {
         background-size:
             18px,
             1px;
@@ -194,11 +197,11 @@
         border: none;
         border-collapse: separate;
 
-        @media screen and (min-width: 768px) {
+        @media screen and (min-width: 1100px) {
             border-spacing: 0 8px;
         }
 
-        @media screen and (max-width: 767px) {
+        @media screen and (max-width: 1099px) {
             border-spacing: 0 15px;
         }
     }
@@ -206,7 +209,7 @@
     thead {
         background-color: transparent;
 
-        @media screen and (max-width: 768px) {
+        @media screen and (max-width: 1099px) {
             display: none;
         }
 
@@ -244,11 +247,11 @@
             overflow: hidden;
             text-overflow: ellipsis;
 
-            @media screen and (min-width: 768px) {
+            @media screen and (min-width: 1100px) {
                 max-width: 100px;
             }
 
-            @media screen and (max-width: 767px) {
+            @media screen and (max-width: 1099px) {
                 max-width: 72px;
             }
         }
@@ -261,13 +264,13 @@
         td:last-child {
             border-radius: 0 10px 10px 0;
 
-            @media screen and (min-width: 768px) {
+            @media screen and (min-width: 1100px) {
                 padding-right: 24px;
             }
         }
     }
 
-    @media screen and (max-width: 767px) {
+    @media screen and (max-width: 1099px) {
 
         td.not-on-mobile,
         th.not-on-mobile {
@@ -293,7 +296,7 @@
             align-items: center;
             color: $blue;
 
-            @media screen and (max-width: 768px) {
+            @media screen and (max-width: 1099px) {
                 display: none;
             }
         }
@@ -311,13 +314,13 @@
             margin-right: 4px;
         }
 
-        @media screen and (min-width: 768px) {
+        @media screen and (min-width: 1100px) {
             .mobile-action {
                 display: none;
             }
         }
 
-        @media screen and (max-width: 767px) {
+        @media screen and (max-width: 1099px) {
             text-align: right;
             line-height: 1;
 
@@ -346,11 +349,11 @@
             border-radius: 10px;
             min-height: 48px;
             position: absolute;
-            width: calc(100vw - 50px);
             left: 0;
             text-overflow: unset;
             display: flex;
             justify-content: flex-end;
+            width: calc(100vw - 50px);
 
             a,
             button,

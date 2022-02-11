@@ -25,13 +25,13 @@ body {
     top: 0;
     background-color: $dark;
 
-    @media screen and (min-width: 767px) {
+    @media screen and (min-width: 1100px) {
         width: 320px;
         padding: 32px;
         bottom: 0;
     }
 
-    @media screen and (max-width: 767px) {
+    @media screen and (max-width: 1099px) {
         width: 100vw;
         height: 100vh;
         padding: 10px;
@@ -97,7 +97,7 @@ body {
         padding: 0;
 
         li {
-            @media screen and (max-width: 767px) {
+            @media screen and (max-width: 1099px) {
                 transform: translateX(-16px);
             }
 
@@ -130,11 +130,11 @@ body {
             font-family: $MTN-Regular;
             cursor: pointer;
 
-            @media screen and (min-width: 768px) {
+            @media screen and (min-width: 1100px) {
                 padding: 8px;
             }
 
-            @media screen and (max-width: 767px) {
+            @media screen and (max-width: 1099px) {
                 padding: 8px 0;
             }
         }
@@ -211,7 +211,7 @@ body {
         margin-bottom: 24px;
     }
 
-    @media screen and (max-width: 767px) {
+    @media screen and (max-width: 1099px) {
         margin-top: 10px;
         margin-left: 10px;
         margin-right: 40px;
@@ -225,11 +225,11 @@ body {
 }
 
 #hide-menu {
-    @media screen and (min-width: 768px) {
+    @media screen and (min-width: 1100px) {
         display: none;
     }
 
-    @media screen and (max-width: 767px) {
+    @media screen and (max-width: 1099px) {
         position: absolute;
         top: 22px;
         right: 8px;
@@ -242,11 +242,11 @@ body {
 }
 
 #mobile-header {
-    @media screen and (min-width: 768px) {
+    @media screen and (min-width: 1100px) {
         display: none;
     }
 
-    @media screen and (max-width: 767px) {
+    @media screen and (max-width: 1099px) {
         background-color: $dark;
         display: flex;
         align-items: center;
@@ -269,12 +269,12 @@ body {
 }
 
 #main {
-    @media screen and (min-width: 768px) {
+    @media screen and (min-width: 1100px) {
         margin-left: 320px;
         padding: 32px;
     }
 
-    @media screen and (max-width: 767px) {
+    @media screen and (max-width: 1099px) {
         width: 100%;
         padding: 10px;
     }
@@ -284,12 +284,12 @@ body {
         line-height: 1.2;
         font-family: $MTN-Bold;
 
-        @media screen and (min-width: 768px) {
+        @media screen and (min-width: 1100px) {
             font-size: 40px;
             margin-bottom: 36px;
         }
 
-        @media screen and (max-width: 767px) {
+        @media screen and (max-width: 1099px) {
             font-size: 24px;
             background: #F0F0F0;
             box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.04);
@@ -304,12 +304,12 @@ body {
     position: absolute;
     display: flex;
 
-    @media screen and (min-width: 768px) {
+    @media screen and (min-width: 1100px) {
         top: 32px;
         right: 32px;
     }
 
-    @media screen and (max-width: 767px) {
+    @media screen and (max-width: 1099px) {
         top: 28px;
         right: 10px;
     }
@@ -328,7 +328,7 @@ body {
 }
 
 .go-back~.page-actions {
-    @media screen and (max-width: 767px) {
+    @media screen and (max-width: 1099px) {
         position: relative;
         flex-direction: column;
         top: initial;
@@ -345,13 +345,13 @@ body {
 }
 
 .page-actions-create {
-    @media screen and (min-width: 768px) {
+    @media screen and (min-width: 1100px) {
         &::before {
             content: attr(aria-label);
         }
     }
 
-    @media screen and (max-width: 767px) {
+    @media screen and (max-width: 1099px) {
         width: 37px;
         background: url('/images/icons/plus.svg') no-repeat center center / 18px;
         background-color: $yellow;
