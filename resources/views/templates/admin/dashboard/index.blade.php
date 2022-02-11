@@ -14,7 +14,7 @@
 <h1>Applications</h1>
 
 <div class="page-actions">
-    <a class="button primary" href="{{ route('admin.app.create') }}">Create new application</a>
+    <a class="button primary page-actions-create" href="{{ route('admin.app.create') }}" aria-label="Create new application"></a>
 </div>
 
 <x-admin.filter searchTitle="App or developer name">

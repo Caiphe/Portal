@@ -85,17 +85,17 @@
             <div class="custom-tab old-tab">
                 <input class="custom-tab-title" type="text" name="tab[title][]" value="{{ $c[0]['title'] }}" placeholder="Custom tab title">
                 <div class="editor" data-input="{{ $c[0]['slug'] }}" data-name="tab[body][]" data-class="custom-tab-content">{!! $c[0]['body'] ?? '' !!}</div>
-                <button type="button" class="remove-custom-tab sl-button" onclick="removeTab(this)">@svg('minus-circle-outline') Remove custom tab</button>
+                <button type="button" class="remove-custom-tab sl-button" onclick="removeTab(this)" aria-label="Remove custom tab">@svg('minus-circle-outline')</button>
             </div>
             @endforeach
 
             <div class="custom-tab new-tab">
                 <input class="custom-tab-title" type="text" name="tab[title][]" placeholder="Custom tab title" autocomplete="off">
                 <div class="editor" data-input="{{ Str::random(8) }}" data-name="tab[body][]" data-class="custom-tab-content"></div>
-                <button type="button" class="remove-custom-tab sl-button" onclick="removeTab(this)">@svg('minus-circle-outline') Remove custom tab</button>
+                <button type="button" class="remove-custom-tab sl-button" onclick="removeTab(this)" aria-label="Remove custom tab">@svg('minus-circle-outline')</button>
             </div>
 
-            <button id="add-custom-tab" type="button" class="add-custom-tab sl-button">@svg('add-circle-outline') Add new custom tab</button>
+            <button id="add-custom-tab" type="button" class="add-custom-tab sl-button" aria-label="Add new custom tab">@svg('add-circle-outline')</button>
         </div>
 
         <button class="button outline blue save-button">Apply changes</button>

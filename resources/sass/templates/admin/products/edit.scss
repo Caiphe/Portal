@@ -4,7 +4,7 @@
     background-color: $yellow;
     padding: 8px 16px;
     border-radius: 22px;
-    text-align: center;
+    justify-content: center;
     display: inline-flex;
     cursor: pointer;
 
@@ -67,6 +67,12 @@
         display: inline-flex;
         align-items: center;
         cursor: pointer;
+
+        @media screen and (min-width: 768px) {
+            &::after {
+                content: attr(aria-label);
+            }
+        }
 
         svg {
             fill: $blue;

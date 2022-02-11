@@ -18,7 +18,8 @@
 </head>
 <body class="admin">
     <nav id="sidebar">
-        <a class="logo" href="/"><img width="39px" height="42px" src="/images/mtn-logo.svg" alt="MTN logo"> Admin Portal</a>
+        <a class="logo" href="/">@svg('mtn-logo', '', '/images/') Admin Portal</a>
+        <button id="hide-menu" class="reset">@svg('close')</button>
 
         <ul class="main-menu">
             <li @if(Request::is('admin/dashboard')) class="active" @endif><a href="{{ route('admin.dashboard.index') }}">@svg('applications') Applications</a></li>
@@ -51,6 +52,10 @@
             </li>
         </ul>
     </nav>
+    <header id="mobile-header">
+        <a class="logo" href="/">@svg('mtn-logo', '', '/images/') Admin Portal</a>
+        <button id="menu-button" class="reset">@svg('menu')</button>
+    </header>
     <main id="main">
         @yield("content")
     </main>
