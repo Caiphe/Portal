@@ -230,12 +230,6 @@
             fill: $grey500;
             margin-left: 8px;
         }
-
-        @media screen and (max-width: 767px) {
-            .action-row {
-                visibility: hidden;
-            }
-        }
     }
 
     tbody tr {
