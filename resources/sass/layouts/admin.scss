@@ -8,6 +8,16 @@ body {
     background-color: #F0F0F0;
 }
 
+@keyframes slide {
+    0% {
+        transform: translateY(-16px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
 #sidebar {
     position: fixed;
     display: flex;
@@ -36,6 +46,44 @@ body {
         &.show {
             pointer-events: auto;
             opacity: 1;
+
+            .main-menu li {
+                animation-name: slide;
+                animation-duration: 256ms;
+                animation-fill-mode: forwards;
+            }
+
+            .menu-applications {
+                animation-delay: 16ms;
+            }
+
+            .menu-products {
+                animation-delay: 32ms;
+            }
+
+            .menu-users {
+                animation-delay: 64ms;
+            }
+
+            .menu-faq {
+                animation-delay: 96ms;
+            }
+
+            .menu-pages {
+                animation-delay: 128ms;
+            }
+
+            .menu-categories {
+                animation-delay: 160ms;
+            }
+
+            .menu-documentation {
+                animation-delay: 192ms;
+            }
+
+            .menu-bundles {
+                animation-delay: 224ms;
+            }
         }
     }
 
@@ -49,6 +97,13 @@ body {
         padding: 0;
 
         li {
+            @media screen and (max-width: 767px) {
+                transform: translateY(-16px);
+            }
+
+            a {
+                padding: 8px;
+            }
 
             &.active a,
             a:hover {
