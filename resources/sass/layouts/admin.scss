@@ -10,11 +10,11 @@ body {
 
 @keyframes slide {
     0% {
-        transform: translateY(-16px);
+        transform: translateX(-16px);
     }
 
     100% {
-        transform: translateY(0);
+        transform: translateX(0);
     }
 }
 
@@ -54,35 +54,35 @@ body {
             }
 
             .menu-applications {
-                animation-delay: 16ms;
-            }
-
-            .menu-products {
                 animation-delay: 32ms;
             }
 
-            .menu-users {
+            .menu-products {
                 animation-delay: 64ms;
             }
 
-            .menu-faq {
+            .menu-users {
                 animation-delay: 96ms;
             }
 
-            .menu-pages {
+            .menu-faq {
                 animation-delay: 128ms;
             }
 
-            .menu-categories {
+            .menu-pages {
                 animation-delay: 160ms;
             }
 
-            .menu-documentation {
+            .menu-categories {
                 animation-delay: 192ms;
             }
 
-            .menu-bundles {
+            .menu-documentation {
                 animation-delay: 224ms;
+            }
+
+            .menu-bundles {
+                animation-delay: 256ms;
             }
         }
     }
@@ -98,7 +98,7 @@ body {
 
         li {
             @media screen and (max-width: 767px) {
-                transform: translateY(-16px);
+                transform: translateX(-16px);
             }
 
             a {
@@ -214,6 +214,7 @@ body {
     @media screen and (max-width: 767px) {
         margin-top: 10px;
         margin-left: 10px;
+        margin-right: 40px;
     }
 
     svg {
