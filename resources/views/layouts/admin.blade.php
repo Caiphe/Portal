@@ -54,13 +54,7 @@
     </nav>
     <header id="mobile-header">
         <a class="logo" href="/">@svg('mtn-logo', '', '/images/') Admin Portal</a>
-        <button id="search-button" class="reset">@svg('search')</button>
         <button id="menu-button" class="reset">@svg('menu')</button>
-        <form action="{{ route('admin.search') }}" id="mobile-header-search-form">
-            <input class="mobile-admin-search" type="text" name="q" placeholder="Search site">
-            <button>Go</button>
-            <button id="admin-search-close" type="button" class="button outline">@svg('close')</button>
-        </form>
     </header>
     <main id="main">
         @yield("content")

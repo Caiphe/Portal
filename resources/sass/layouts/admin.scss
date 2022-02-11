@@ -212,51 +212,6 @@ body {
     }
 }
 
-#mobile-header-search-form {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: $dark;
-    height: 70px;
-    margin-top: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 0 10px 10px;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 128ms ease-in;
-
-    &.show {
-        opacity: 1;
-        pointer-events: auto;
-    }
-
-    button {
-        padding: 0;
-        width: 37px;
-        margin-left: 4px;
-    }
-}
-
-#admin-search-close {
-    border-color: transparent;
-    background-color: transparent;
-
-    svg {
-        fill: #FFF;
-    }
-}
-
-.mobile-admin-search {
-    padding: 5px 10px;
-    border-radius: 8px;
-    height: 37px;
-    border: none;
-    margin-right: 4px;
-}
-
 #main {
     @media screen and (min-width: 768px) {
         margin-left: 320px;
