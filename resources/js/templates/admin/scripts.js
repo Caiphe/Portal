@@ -1,3 +1,37 @@
+(function(){
+    var searchFormToggle = document.getElementById('search-form-toggle');
+
+    if(searchFormToggle){
+        searchFormToggle.addEventListener('click', toggleFilter);
+    }
+}());
+
+function init() {
+    var mobileActions = document.querySelectorAll('.mobile-action');
+
+    for (var i = mobileActions.length - 1; i >= 0; i--) {
+        mobileActions[i].addEventListener('click', toggleMobileAction);
+    }
+
+    function toggleMobileAction() {
+        this.parentNode.parentNode.classList.toggle('show-actions');
+    }
+}
+
+init();
+ajaxifyComplete = init;
+
+document.getElementById('menu-button').addEventListener('click', toggleMenu);
+document.getElementById('hide-menu').addEventListener('click', toggleMenu);
+
+function toggleMenu() {
+    document.getElementById('sidebar').classList.toggle('show');
+}
+
+function toggleFilter() {
+    document.getElementById('search-form').classList.toggle('show');
+}
+
 function syncProductsThenApps() {
     syncProducts(syncApps);
 }

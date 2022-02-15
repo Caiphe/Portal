@@ -36,7 +36,7 @@ class ContentController extends Controller
                 ->view('components.admin.list', [
                     'collection' => $pages->paginate($numberPerPage),
                     'order' => $order,
-                    'fields' => ['Title' => 'title', 'Published' => 'published_at|date:d M Y'],
+                    'fields' => ['Title' => 'title', 'Published' => 'published_at|date:d M Y|addClass:not-on-mobile'],
                     'modelName' => 'page'
                 ], 200)
                 ->header('Vary', 'X-Requested-With')
@@ -114,7 +114,7 @@ class ContentController extends Controller
                 ->view('components.admin.list', [
                     'collection' => $docs->paginate($numberPerPage),
                     'order' => $order,
-                    'fields' => ['Title' => 'title', 'Published' => 'published_at|date:d M Y'],
+                    'fields' => ['Title' => 'title', 'Published' => 'published_at|date:d M Y|addClass:not-on-mobile'],
                     'modelName' => 'doc'
                 ], 200)
                 ->header('Vary', 'X-Requested-With')

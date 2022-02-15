@@ -129,10 +129,11 @@ table {
         background-color: #FFF;
         border: 1px solid $grey900;
         border-radius: 6px;
+        margin-right: 8px;
     }
 
-    .page-item+.page-item {
-        margin-left: 8px;
+    .page-item::last-of-type {
+        margin-right: 0;
     }
 
     .active.page-item,

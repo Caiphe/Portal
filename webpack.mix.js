@@ -18,6 +18,7 @@ mix.scripts(
     ["resources/js/scripts.js", "resources/js/components/alert.js", "resources/js/components/ajaxify.js", "resources/js/templates/admin/scripts.js"],
     "public/js/templates/admin/scripts.js"
 )
+    .scripts("resources/js/templates/admin/apps/create.js", "public/js/templates/admin/apps/create.js")
     .scripts("resources/js/templates/admin/products/edit.js", "public/js/templates/admin/products/edit.js")
     .scripts(["resources/js/templates/admin/dashboard/index.js", "resources/js/templates/admin/index.js"], "public/js/templates/admin/dashboard/index.js")
     .scripts("resources/js/utilities/ajax.js", "public/js/utilities/ajax.js")

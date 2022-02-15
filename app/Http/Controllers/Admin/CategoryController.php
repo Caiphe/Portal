@@ -36,7 +36,7 @@ class CategoryController extends Controller
                 ->view('components.admin.list', [
                     'collection' => $categories->paginate($numberPerPage),
                     'order' => $order,
-                    'fields' => ['title', 'theme'],
+                    'fields' => ['Title' => 'title', 'Theme' => 'theme|addClass:not-on-mobile'],
                     'modelName' => 'category'
                 ], 200)
                 ->header('Vary', 'X-Requested-With')

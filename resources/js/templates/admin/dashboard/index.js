@@ -6,6 +6,7 @@
         var logNotes = document.querySelectorAll('.log-notes');
         var productStatusButtons = document.querySelectorAll('.product-status-action');
         var appStatusAction = document.querySelectorAll('.app-status-action');
+        var productAction = document.querySelectorAll(".product-action");
         var kycStatus = document.querySelectorAll(".kyc-status-select");
 
         for (var i = toggleAppEls.length - 1; i >= 0; i--) {
@@ -30,6 +31,10 @@
 
         for (var i = appStatusAction.length - 1; i >= 0; i--) {
             appStatusAction[i].addEventListener('click', updateAppStatus);
+        }
+
+        for (var i = productAction.length - 1; i >= 0; i--) {
+            productAction[i].addEventListener('click', showProductActions);
         }
 
         for (var i = kycStatus.length - 1; i >= 0; i--) {
@@ -175,5 +180,9 @@
                 addAlert('error', result.body || 'There was an error updating the product.');
             }
         };
+    }
+
+    function showProductActions() {
+        this.parentNode.classList.toggle('show-actions');
     }
 }());

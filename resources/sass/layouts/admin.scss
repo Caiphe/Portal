@@ -8,21 +8,114 @@ body {
     background-color: #F0F0F0;
 }
 
+@keyframes slide {
+    0% {
+        transform: translateX(-16px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
 #sidebar {
     position: fixed;
     display: flex;
     flex-direction: column;
-    width: 320px;
-    padding: 32px;
     top: 0;
-    bottom: 0;
     background-color: $dark;
+
+    @media screen and (min-width: 1100px) {
+        width: 320px;
+        padding: 32px;
+        bottom: 0;
+    }
+
+    @media screen and (max-width: 1099px) {
+        width: 100vw;
+        height: 100vh;
+        padding: 10px;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        overflow-y: auto;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 128ms ease-out;
+
+        &.show {
+            pointer-events: auto;
+            opacity: 1;
+
+            .main-menu li {
+                animation-name: slide;
+                animation-duration: 256ms;
+                animation-fill-mode: forwards;
+            }
+
+            .menu-applications {
+                animation-delay: 32ms;
+            }
+
+            .menu-products {
+                animation-delay: 64ms;
+            }
+
+            .menu-users {
+                animation-delay: 96ms;
+            }
+
+            .menu-faq {
+                animation-delay: 128ms;
+            }
+
+            .menu-pages {
+                animation-delay: 160ms;
+            }
+
+            .menu-categories {
+                animation-delay: 192ms;
+            }
+
+            .menu-documentation {
+                animation-delay: 224ms;
+            }
+
+            .menu-bundles {
+                animation-delay: 256ms;
+            }
+        }
+    }
+
+    @media screen and (min-width: 768px) and (max-width: 1099px) {
+        width: 384px;
+        height: initial;
+        left: initial;
+
+        .logo {
+            opacity: 0;
+            pointer-events: none;
+            margin-bottom: 7px;
+        }
+    }
+
+    .logo {
+        margin-top: 5px;
+        margin-left: 0;
+    }
 
     .main-menu {
         margin: 0;
         padding: 0;
 
         li {
+            @media screen and (max-width: 1099px) {
+                transform: translateX(-16px);
+            }
+
+            a {
+                padding: 8px;
+            }
 
             &.active a,
             a:hover {
@@ -44,11 +137,18 @@ body {
             display: flex;
             align-items: center;
             color: #fff;
-            padding: 8px;
             border-radius: 8px;
             font-size: 18px;
             font-family: $MTN-Regular;
             cursor: pointer;
+
+            @media screen and (min-width: 1100px) {
+                padding: 8px;
+            }
+
+            @media screen and (max-width: 1099px) {
+                padding: 8px 0;
+            }
         }
 
         svg {
@@ -123,8 +223,29 @@ body {
         margin-bottom: 24px;
     }
 
-    img {
+    @media screen and (max-width: 1099px) {
+        margin-top: 10px;
+        margin-left: 10px;
+        margin-right: 40px;
+    }
+
+    svg {
+        width: 39px;
+        height: 42px;
         margin-right: 12px;
+    }
+}
+
+#hide-menu {
+    @media screen and (min-width: 1100px) {
+        display: none;
+    }
+
+    @media screen and (max-width: 1099px) {
+        position: absolute;
+        top: 22px;
+        right: 8px;
+        filter: invert(100%);
     }
 }
 
@@ -132,24 +253,78 @@ body {
     margin-top: 16px;
 }
 
+#mobile-header {
+    @media screen and (min-width: 1100px) {
+        display: none;
+    }
+
+    @media screen and (max-width: 1099px) {
+        background-color: $dark;
+        display: flex;
+        align-items: center;
+    }
+
+    .logo {
+        margin-right: auto;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .reset {
+        width: 40px;
+        height: 40px;
+
+        svg {
+            fill: #FFF;
+        }
+    }
+}
+
 #main {
-    margin-left: 320px;
-    padding: 32px;
+    @media screen and (min-width: 1100px) {
+        margin-left: 320px;
+        padding: 32px;
+    }
+
+    @media screen and (max-width: 1099px) {
+        width: 100%;
+        padding: 10px;
+    }
 
     h1 {
         margin-top: 0;
-        font-size: 40px;
         line-height: 1.2;
         font-family: $MTN-Bold;
-        margin-bottom: 36px;
+
+        @media screen and (min-width: 1100px) {
+            font-size: 40px;
+            margin-bottom: 36px;
+        }
+
+        @media screen and (max-width: 1099px) {
+            font-size: 24px;
+            background: #F0F0F0;
+            box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.04);
+            margin: -10px 0 10px -10px;
+            padding: 35px 0 20px 10px;
+            width: calc(100% + 10px);
+        }
     }
 }
 
 .page-actions {
     position: absolute;
-    top: 32px;
-    right: 32px;
     display: flex;
+
+    @media screen and (min-width: 1100px) {
+        top: 32px;
+        right: 32px;
+    }
+
+    @media screen and (max-width: 1099px) {
+        top: 28px;
+        right: 10px;
+    }
 
     a+button,
     a+a,
@@ -161,6 +336,37 @@ body {
     button+label,
     button+a {
         margin-left: 8px;
+    }
+}
+
+.go-back~.page-actions {
+    @media screen and (max-width: 1099px) {
+        position: relative;
+        flex-direction: column;
+        top: initial;
+        right: initial;
+        margin-bottom: 5px;
+
+        a,
+        button,
+        form,
+        label {
+            margin: 0 0 10px;
+        }
+    }
+}
+
+.page-actions-create {
+    @media screen and (min-width: 1100px) {
+        &::before {
+            content: attr(aria-label);
+        }
+    }
+
+    @media screen and (max-width: 1099px) {
+        width: 37px;
+        background: url('/images/icons/plus.svg') no-repeat center center / 18px;
+        background-color: $yellow;
     }
 }
 

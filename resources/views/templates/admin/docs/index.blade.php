@@ -10,7 +10,7 @@
     <h1>Documentation</h1>
 
     <div class="page-actions">
-        <a href="{{ route('admin.doc.create') }}" class="button primary">Create documentation</a>
+        <a href="{{ route('admin.doc.create') }}" class="button primary page-actions-create" aria-label="Create documentation"></a>
     </div>
 
     <x-admin.filter searchTitle="Documentation name"></x-admin.filter>
@@ -18,7 +18,7 @@
     <div id="table-data">
         @include('components.admin.list', [
             'collection' => $docs,
-            'fields' => ['Title' => 'title', 'Published' => 'published_at|date:d M Y'],
+            'fields' => ['Title' => 'title', 'Published' => 'published_at|date:d M Y|addClass:not-on-mobile'],
             'modelName' => 'doc'
         ])
     </div>

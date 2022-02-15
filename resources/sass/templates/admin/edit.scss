@@ -16,7 +16,14 @@ h1 {
     font-size: 14px;
     font-family: $MTN-Regular;
     color: $grey750;
-    margin: 0 0 16px -5px;
+
+    @media screen and (min-width: 768px) {
+        margin: 0 0 16px -5px;
+    }
+
+    @media screen and (max-width: 767px) {
+        margin: 0 0 0 -5px;
+    }
 
     svg {
         fill: $grey750;
@@ -28,7 +35,14 @@ h1 {
         width: 100%;
         border: none;
         border-collapse: separate;
-        border-spacing: 0 8px;
+
+        @media screen and (min-width: 768px) {
+            border-spacing: 0 8px;
+        }
+
+        @media screen and (max-width: 767px) {
+            border-spacing: 0 15px;
+        }
 
         thead {
             background-color: transparent;
@@ -77,8 +91,15 @@ h1 {
         align-self: flex-start;
         background-color: #FFF;
         border-radius: 8px;
-        margin-bottom: 32px;
         width: 100%;
+
+        @media screen and (min-width: 768px) {
+            margin-bottom: 32px;
+        }
+
+        @media screen and (max-width: 767px) {
+            margin-bottom: 15px;
+        }
 
         >h2 {
             margin: 0;
@@ -108,8 +129,15 @@ h1 {
         }
 
         .editor-field-label {
-            margin: 0 24px 24px;
             position: relative;
+
+            @media screen and (min-width: 768px) {
+                margin: 0 24px 24px;
+            }
+
+            @media screen and (max-width: 767px) {
+                margin: 0 10px 10px;
+            }
 
             h3 {
                 margin: 0;
@@ -147,32 +175,45 @@ h1 {
             margin-top: 16px;
         }
     }
+
+    .tag {
+        display: flex;
+        align-items: center;
+    }
 }
 
 #main #admin-form {
     .one-third {
-        width: calc(33% - 24px);
+        @media screen and (min-width: 768px) {
+            width: calc(33% - 24px);
+        }
     }
 
     .two-thirds {
-        width: 66%;
-        margin-left: 24px;
+        @media screen and (min-width: 768px) {
+            width: 66%;
+            margin-left: 24px;
+        }
     }
 
     .half {
-        width: calc(50% - 12px);
-        margin-right: 0;
+        @media screen and (min-width: 768px) {
+            width: calc(50% - 12px);
+            margin-right: 0;
 
-        &.editor-field-label {
-            width: calc(50% - 36px);
+            &.editor-field-label {
+                width: calc(50% - 36px);
+            }
         }
     }
 
     .half:nth-child(even) {
-        margin-right: 24px;
+        @media screen and (min-width: 768px) {
+            margin-right: 24px;
 
-        &.editor-field-label {
-            margin-right: 0;
+            &.editor-field-label {
+                margin-right: 0;
+            }
         }
     }
 
@@ -185,10 +226,19 @@ h1 {
 
 #main .save-button {
     color: $blue;
-    margin-left: 24px;
-    margin-bottom: 24px;
     height: 32px;
     line-height: 1;
+
+    @media screen and (min-width: 768px) {
+        margin-left: 24px;
+        margin-bottom: 24px;
+    }
+
+    @media screen and (max-width: 767px) {
+        margin-left: 10px;
+        margin-bottom: 15px;
+        width: calc(100% - 20px);
+    }
 
     &:hover {
         color: #FFF;

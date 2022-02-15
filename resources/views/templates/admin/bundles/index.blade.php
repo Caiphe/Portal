@@ -14,7 +14,7 @@
     <div id="table-data">
         @include('components.admin.list', [
             'collection' => $bundles,
-            'fields' => ['Name' => 'display_name', 'Category' => 'category.title'],
+            'fields' => ['Name' => 'display_name', 'Category' => 'category.title|addClass:not-on-mobile'],
             'modelName' => 'bundle'
         ])
     </div>

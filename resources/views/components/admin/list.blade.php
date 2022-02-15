@@ -2,7 +2,7 @@
     <thead>
         <tr>
             @foreach($fields as $specifiedName => $field)
-            <th align="left"><a href="?sort={{ strtok($field, '|') }}&order={{ $order ?? 'desc' }}">{{ is_string($specifiedName) ? $specifiedName : preg_replace('/[_\.]/', ' ', ucfirst($field)) }} @svg('chevron-sorter')</a></th>
+            <th align="left" class="{{ preg_replace('/.*?addClass:(.*?)\|?/', '$1', $field) }}"><a href="?sort={{ strtok($field, '|') }}&order={{ $order ?? 'desc' }}">{{ is_string($specifiedName) ? $specifiedName : preg_replace('/[_\.]/', ' ', ucfirst($field)) }} @svg('chevron-sorter')</a></th>
             @endforeach
             <th align="left" class="action-row">Actions</th>
         </tr>
@@ -11,7 +11,7 @@
         @foreach($collection as $model)
         <tr>
             @foreach($fields as $field)
-            <td align="left">
+            <td align="left" class="{{ preg_replace('/.*?addClass:(.*?)\|?/', '$1', $field) }}">
                 @listFunc($field, $model)
             </td>
             @endforeach
@@ -27,6 +27,7 @@
                     <button class="sl-button">@svg('trash') Delete</button>
                 </form>
                 @endif
+                <button class="sl-button reset mobile-action">@svg('more-vert')@svg('chevron-right')</button>
             </td>
         </tr>
         @endforeach

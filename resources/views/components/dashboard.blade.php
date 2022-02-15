@@ -31,7 +31,7 @@
         </div>
 
         <div class="column column-status">
-            <span class="app-status">{{ $productStatus['label'] }}</span>
+            <span class="app-status" aria-label="{{ $productStatus['label'] }}" data-pending="{{ $productStatus['pending'] }}"></span>
             <button class="toggle-app-button toggle-app reset">@svg('chevron-down', '#000000')</button>
         </div>
     </div>
