@@ -51,7 +51,7 @@
                 </div>
 
                 <div class="actions-btn-container">
-                    <button class="btn dark outline" type="reset">Cancel</button>
+                    <a class="btn dark outline" href="{{ url()->previous() }}">Cancel</a>
                     <button id="next-app-owner" class="btn dark next" type="button">Next</button>
                 </div>
             </div>
