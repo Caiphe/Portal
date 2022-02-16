@@ -21,8 +21,13 @@
             flex-direction: column;
         }
 
-        button {
+        button,
+        a {
             text-align: center;
+            border-radius: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
 
             @media screen and (min-width: 768px) {
                 width: 230px;
@@ -40,6 +45,7 @@
                 &:hover {
                     background-color: #000;
                     transition: all 0.3s ease-in-out;
+                    color: #FFF;
                 }
             }
         }
