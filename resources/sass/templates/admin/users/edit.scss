@@ -24,7 +24,9 @@ button.password-visible {
 }
 
 #main .editor-field .password-strength {
-    margin-top: -16px;
+    @media screen and (min-width: 768px) {
+        margin-top: -16px;
+    }
 }
 
 #password-still-needs {
@@ -39,7 +41,10 @@ button.password-visible {
     padding: 8px;
     transition: background-color 0.356s;
     font-size: 12px;
-    width: calc(50% - 12px);
+
+    @media screen and (min-width: 768px) {
+        width: calc(50% - 12px);
+    }
 
     &:before {
         content: 'Password strength';
