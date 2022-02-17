@@ -27,8 +27,9 @@
             display: flex;
             align-items: center;
 
-            img {
+            svg {
                 margin-right: $gutterSmall;
+                width: 72px;
             }
         }
 
