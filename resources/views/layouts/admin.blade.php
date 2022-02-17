@@ -18,7 +18,7 @@
 </head>
 <body class="admin">
     <nav id="sidebar">
-        <a class="logo" href="/">@svg('mtn-logo', '', '/images/') Admin Portal</a>
+        <a class="logo" href="/">@svg('logo', '', '/images/') Admin Portal</a>
         <button id="hide-menu" class="reset">@svg('close')</button>
 
         <ul class="main-menu">
@@ -53,7 +53,7 @@
         </ul>
     </nav>
     <header id="mobile-header">
-        <a class="logo" href="/">@svg('mtn-logo', '', '/images/') Admin Portal</a>
+        <a class="logo" href="/">@svg('logo', '', '/images/') Admin Portal</a>
         <button id="menu-button" class="reset">@svg('menu')</button>
     </header>
     <main id="main">

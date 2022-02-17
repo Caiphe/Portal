@@ -8,7 +8,7 @@
         <a href="{{route('page.show', ['privacy-policy'])}}" class="link-to">Privacy policy</a>
         <a href="{{route('page.show', ['terms-and-conditions'])}}" class="link-to">Terms and conditions</a>
 
-        <a class="logo" href="https://www.mtn.com"><img src="/images/mtn-logo.svg" alt="MTN logo"></a>
+        <a class="logo" href="https://www.mtn.com">@svg('logo', '', '/images')</a>
         <div class="social">
             <a href="https://twitter.com/MTNGroup" target="_blank" rel="noopener">@svg('twitter', '#FFFFFF')</a>
             <a href="https://www.linkedin.com/company/mtn/" target="_blank" rel="noopener">@svg('linkedin', '#FFFFFF')</a>
