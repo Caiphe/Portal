@@ -89,6 +89,7 @@ table {
     list-style: none;
     display: flex;
     padding: 0;
+    flex-wrap: wrap;
 
     li {
         padding: 0;
@@ -130,6 +131,10 @@ table {
         border: 1px solid $grey900;
         border-radius: 6px;
         margin-right: 8px;
+
+        @media screen and (max-width: 767px) {
+            margin-bottom: 10px;
+        }
     }
 
     .page-item::last-of-type {
