@@ -79,8 +79,26 @@
     function showProductNoteDialog() {
         var dialog = document.getElementById('status-dialog');
         var productStatusAction = this;
+        var actionSibling = { revoke: 'approve', approve: 'revoke' }[productStatusAction.dataset.action] || '';
+        var productStatusActionSibling = productStatusAction.parentNode.querySelector('.product-' + actionSibling);
 
-        dialog.querySelector('.status-dialog-form').addEventListener('submit', function (ev) {
+        productStatusAction.disabled = true;
+        productStatusActionSibling.disabled = true;
+
+        dialog.addEventListener('dialog-closed', function () {
+            if (productStatusAction) productStatusAction.disabled = false;
+            if (productStatusActionSibling) productStatusActionSibling.disabled = false;
+
+            this.querySelector('.status-dialog-form').removeEventListener('submit', submitStatusDialog, { once: true });
+
+            dialog = null;
+            productStatusAction = null;
+            productStatusActionSibling = null;
+        }, { once: true });
+
+        dialog.querySelector('.status-dialog-form').addEventListener('submit', submitStatusDialog, { once: true });
+
+        function submitStatusDialog(ev) {
             var product = productStatusAction.parentNode;
             ev.preventDefault();
 
@@ -97,9 +115,10 @@
             }, product);
 
             dialog.querySelector('.status-dialog-textarea').value = '';
-        }, {
-            once: true
-        });
+
+            dialog = null;
+            productStatusAction = null;
+        }
 
         dialog.classList.add('show');
     }
@@ -122,9 +141,14 @@
 
         xhr.onload = function () {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+            var productActionButtons = product.querySelectorAll('.product-status-action');
             var noteDialogContent;
 
             removeLoading();
+
+            for (var i = productActionButtons.length - 1; i >= 0; i--) {
+                productActionButtons[i].disabled = false;
+            }
 
             if (xhr.status === 200) {
                 noteDialogContent = document.querySelector('#admin-' + data.app + data.productSlug + ' .note');
@@ -135,6 +159,8 @@
             } else {
                 addAlert('error', result.body || 'There was an error updating the product.');
             }
+
+            product = null;
         };
     }
 

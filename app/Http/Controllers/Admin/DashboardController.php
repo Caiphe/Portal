@@ -150,8 +150,7 @@ class DashboardController extends Controller
         $updateId = $isTeamApp ? $app->team->username : $app->developer->email ?? $app->developer_id;
 
         $response = ApigeeService::updateProductStatus($updateId, $app->name, $credentials['consumerKey'], $validated['product'], $validated['action'], $isTeamApp);
-        $responseStatus = $response->status();
-        if (preg_match('/^2/', $responseStatus)) {
+        if ($response->successful()) {
             $app->products()->updateExistingPivot(
                 $validated['product'],
                 [
@@ -163,7 +162,10 @@ class DashboardController extends Controller
             );
         } else if ($request->ajax()) {
             $body = json_decode($response->body());
-            return response()->json(['success' => false, 'body' => $body->message], $responseStatus);
+            return response()->json(['success' => false, 'body' => $body->message], $response->status());
+        } else {
+            $body = json_decode($response->body());
+            return back()->with('alert', "error:{$body->message}");
         }
 
         Mail::to(config('mail.mail_to_address'))->send(new ProductAction($app, $validated, $currentUser));
@@ -173,7 +175,7 @@ class DashboardController extends Controller
             return response()->json(['success' => true, 'body' => $product->notes]);
         }
 
-        return redirect()->back();
+        return back()->with('alert', 'success:The product has been updated.');
     }
 
     /**
