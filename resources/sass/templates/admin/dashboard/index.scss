@@ -328,6 +328,18 @@
             margin-right: 8px;
         }
 
+        &[disabled] {
+            background: none;
+
+            &::after {
+                color: $grey400;
+            }
+
+            path {
+                fill: $grey400;
+            }
+        }
+
         svg {
             margin-right: 8px;
             height: 18px;
