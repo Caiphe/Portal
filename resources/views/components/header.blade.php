@@ -1,6 +1,6 @@
 <header id="header">
     <nav class="header-inner container">
-        <a class="site-name" href="/"><img src="/images/mtn-logo.svg" alt="MTN logo"> Developer Portal</a>
+        <a class="site-name" href="/">@svg('logo', '', '/images') Developer Portal</a>
         <button type="button" class="menu-button">
             <svg id="open" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>

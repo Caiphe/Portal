@@ -1,4 +1,4 @@
 <a href="/"	class="header">
-	<img src="/images/mtn-logo.svg" alt="MTN logo">
+	@svg('logo', '', '/images')
 	<div>Developer Portal</div>
 </a>

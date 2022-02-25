@@ -2,7 +2,7 @@
 
 <header id="header">
     <nav class="header-inner container">
-        <a class="logo" href="/"><img src="/images/mtn-logo.svg" alt="MTN logo"> Developer Portal</a>
+        <a class="site-name" href="/">@svg('logo', '', '/images') Developer Portal</a>
         <div class="spacer"></div>
         <form action="{{route('admin.search')}}">
             <input type="search" name="q" id="search" class="thin" placeholder="Search whole site...">
