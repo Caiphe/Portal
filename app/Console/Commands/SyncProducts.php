@@ -43,8 +43,8 @@ class SyncProducts extends Command
 	{
 		$this->info("Getting products from Apigee");
 
-		$allow = env('APIGEE_ALLOW_PREFIX');
-		$deny = explode(',', env('APIGEE_DENY_PREFIX'));
+		$allow = config('apigee.apigee_allow_prefix');
+		$deny = explode(',', config('apigee.apigee_deny_prefix'));
 
 		$products = ApigeeService::get('apiproducts?expand=true')['apiProduct'];
 

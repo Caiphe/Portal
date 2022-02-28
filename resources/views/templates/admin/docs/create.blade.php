@@ -6,15 +6,12 @@
 <link rel="stylesheet" href="{{ mix('/css/templates/admin/edit.css') }}">
 @endpush
 
-@section('page-info')
-    <button id="save" class="outline dark" form="admin-form">Save</button>
-@endsection
-
 @section('content')
+<a href="{{ url()->previous() }}" class="go-back">@svg('chevron-left') Back to documentation</a>
+<h1>Create documentation</h1>
+
 <form id="admin-form" action="{{ route('admin.doc.store') }}" method="POST">
-
     @include('templates.admin.docs.form')
-
 </form>
 @endsection
 

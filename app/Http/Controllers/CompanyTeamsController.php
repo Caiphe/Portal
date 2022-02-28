@@ -69,7 +69,10 @@ class CompanyTeamsController extends Controller
         $data = $teamRequest->validated();
 
         $team = $this->getTeam($data['team_id']);
+        abort_if(!$team, 424, 'The team could not be found');
+
         $user = $this->getTeamUser($data['user_id']);
+        abort_if(!$user, 424, 'Your user could not be found');
 
         if ($team->hasUser($user) && $this->memberLeavesTeam($team, $user)) {
             ApigeeService::removeDeveloperFromCompany($team, $user);
@@ -119,9 +122,10 @@ class CompanyTeamsController extends Controller
     {
         $data = $inviteRequest->validated();
         $user = $this->getTeamUserByEmail($data['invitee']);
-        $isAlredyInvited = TeamInvite::where('email', $user->email)->where('team_id', $team->id)->exists();
+        abort_if(!$user, 404, 'User was not found');
+        $isAlreadyInvited = TeamInvite::where('email', $user->email)->where('team_id', $team->id)->exists();
 
-        if ($isAlredyInvited) {
+        if ($isAlreadyInvited) {
             return response()->json([
                 'success' => true,
                 'success:message' => $user->full_name . ' has been successfully requested to take ownership of ' . $team->name
@@ -152,16 +156,20 @@ class CompanyTeamsController extends Controller
     {
         $data = $inviteRequest->validated();
         $invitedEmail = $data['invitee'];
-        $team = $this->getTeam($data['team_id']);
-        $user = $this->getTeamUserByEmail($invitedEmail);
         $inviteSent = false;
 
-        $isAlredyInvited = false;
+        $team = $this->getTeam($data['team_id']);
+        abort_if(!$team, 404, 'Team was not found');
+
+        $user = $this->getTeamUserByEmail($invitedEmail);
+        abort_if(!$user, 404, 'User was not found');
+
+        $isAlreadyInvited = false;
         if ($user) {
-            $isAlredyInvited = TeamInvite::where('email', $user->email)->where('team_id', $team->id)->exists();
+            $isAlreadyInvited = TeamInvite::where('email', $user->email)->where('team_id', $team->id)->exists();
         }
 
-        if ($isAlredyInvited) {
+        if ($isAlreadyInvited) {
             return response()->json([
                 'success' => true,
                 'success:message' => 'Invite successfully sent to prospective team member of ' . $team->name . '.'
@@ -211,8 +219,9 @@ class CompanyTeamsController extends Controller
     {
         $user = $request->user();
         $team = $user->teams()->where('id', $id)->first();
-        $isOwner = $user->isOwnerOfTeam($team);
+        abort_if(!$team, 404, 'Team was not found');
 
+        $isOwner = $user->isOwnerOfTeam($team);
         $order = [
             'asc' => 'ASC',
             'desc' => 'DESC'
@@ -284,6 +293,10 @@ class CompanyTeamsController extends Controller
 
         $team = $this->createTeam($user, $data);
 
+        if(!$team) {
+            return back()->with('alert', 'error:There was a problem creating your team;Please try again.');
+        }
+
         if (!empty($data['team_members'])) {
             $this->sendInvites($data['team_members'], $team);
         }
@@ -337,6 +350,8 @@ class CompanyTeamsController extends Controller
     public function accept(Request $request)
     {
         $invite = Teamwork::getInviteFromAcceptToken($request->get('token'));
+        abort_if(!$invite, 404, 'Invite was not found');
+
         $inviteType = ucfirst($invite->type);
         $team = $this->getTeam($invite->team_id);
 
@@ -348,15 +363,18 @@ class CompanyTeamsController extends Controller
 
             Teamwork::acceptInvite($invite);
         } else {
-            Teamwork::acceptInvite($invite);
-            $roleId = Role::where('name', $invite->role)->first()->id ?? 8;
-            $team->users()->updateExistingPivot($invite->user, ['role_id' => $roleId]);
             $resp = ApigeeService::addDeveloperToCompany($team, $invite->user, $invite->role);
+
             if ($resp->failed()) {
                 return response()->json([
                     'success' => false,
+                    'message' => $resp['message'] ?? 'There was a problem syncing the team'
                 ], $resp->status());
             }
+
+            Teamwork::acceptInvite($invite);
+            $roleId = Role::where('name', $invite->role)->first()->id ?? 8;
+            $team->users()->updateExistingPivot($invite->user, ['role_id' => $roleId]);
         }
 
         if (!$invite->exists) {
@@ -370,6 +388,8 @@ class CompanyTeamsController extends Controller
     public function reject(Request $request)
     {
         $invite = Teamwork::getInviteFromDenyToken($request->get('token'));
+        abort_if(!$invite, 404, 'Invite was not found');
+
         $inviteType = ucfirst($invite->type);
 
         if ($invite) {

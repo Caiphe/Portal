@@ -17,7 +17,7 @@
     </div>
     @endif
 	<p>A confirmation email has been sent to your email address. Please click on the link in the email to verify your email address.</p>
-	<p>If you are not receiving the confirmation email, please read out FAQ article <a href="/faq">here.</a></p>
+	<p>If you are not receiving the confirmation email, please read our <a class="bold" href="/faq">FAQ article.</a></p>
     <button type="submit">Resend verification</button>
 </form>
 <x-auth.carousel />

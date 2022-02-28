@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Content;
+use App\Country;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
-use App\Services\ApigeeUserService;
 use App\Services\ProductLocationService;
 use App\User;
 use Illuminate\Auth\Events\Registered;
@@ -53,7 +53,7 @@ class RegisterController extends Controller
 	 */
 	public function showRegistrationForm(ProductLocationService $productLocationService)
 	{
-		[$products, $locations] = $productLocationService->fetch();
+		$locations = $productLocationService->fetch([], 'countries');
 		$terms = Content::where('slug', 'terms-and-conditions')->first();
 
 		return view('auth.register', [
@@ -73,12 +73,13 @@ class RegisterController extends Controller
 		$data['first_name'] = htmlspecialchars($data['first_name'], ENT_QUOTES);
 		$data['last_name'] = htmlspecialchars($data['last_name'], ENT_QUOTES);
 		$data['email'] = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
-		$data['locations'] = array_map(fn ($location) => htmlspecialchars($location, ENT_QUOTES), $data['locations'] ?? []);
+		$data['locations'] = Country::pluck('code')->intersect($data['locations'] ?? [])->values()->all();
 
 		return Validator::make($data, [
 			'first_name' => ['required', 'string', 'max:255'],
 			'last_name' => ['required', 'string', 'max:255'],
 			'email' => ['required', 'string', 'email:rfc,dns', 'max:255', 'unique:users,email'],
+			'terms' => ['required'],
 			'password' => [
 				'required',
 				'string',
@@ -104,8 +105,6 @@ class RegisterController extends Controller
 
 		$this->validator($data)->validate();
 
-		$data = ApigeeUserService::setupUser($data);
-
 		event(new Registered($user = $this->create($data)));
 
 		if (preg_match('/@mtn\.com$/', $user['email'])) {
@@ -114,15 +113,13 @@ class RegisterController extends Controller
 			$user->assignRole("developer");
 		}
 
-		$this->guard()->login($user);
-
 		if ($response = $this->registered($request, $user)) {
             return $response;
 		}
 
 		return $request->wantsJson()
 			? new Response('', 201)
-			: redirect($this->redirectPath());
+			: redirect()->route('login')->with('verify', 'A confirmation email has been sent to your email address. Please click on the link in the email and login to verify your email address.');
 	}
 
 	/**
@@ -137,7 +134,6 @@ class RegisterController extends Controller
 			'first_name' => $data['first_name'],
 			'last_name' => $data['last_name'],
 			'email' => $data['email'],
-			'developer_id' => $data['developer_id'],
 			'password' => Hash::make($data['password']),
 			'profile_picture' => '/storage/profile/profile-' . rand(1, 32) . '.svg',
 		]);

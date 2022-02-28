@@ -147,22 +147,20 @@
                 </div>
 
                 <div class="products">
-                    @foreach ($products as $category=>$products)
+                    @foreach ($products as $category => $prods)
                         <div class="category" data-category="{{ $category }}">
-                            <h3>{{ $category }}</h3>
-                            @foreach ($products as $product)
-                                @php
-                                    $tags = array($product->group, $product->category->title);
-                                    $href = route('product.show', $product->slug);
-                                @endphp
+                            <h3 class="category-heading" data-category="{{ $prods[0]->category_cid }}">{{ $category }}</h3>
+                            @foreach ($prods as $product)
                                 <x-card-product :title="$product->display_name"
                                                 class="product-block"
-                                                :href="$href"
+                                                :href="route('product.show', $product->slug)"
                                                 target="_blank"
-                                                :tags="$tags"
+                                                :tags="[$product->group, $product->category->title]"
                                                 :addButtonId="$product->slug"
                                                 :data-title="$product->name"
                                                 :data-group="$product->group"
+                                                :data-access="$product->access"
+                                                :data-category="$product->category_cid"
                                                 :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}
                                 </x-card-product>
                             @endforeach
@@ -348,18 +346,28 @@
 
     function filterProducts(selectedCountry) {
         var products = document.querySelectorAll(".card--product");
+        var categoryHeadings = document.querySelectorAll(".category-heading");
+        var showCategories = [];
 
         for (var i = products.length - 1; i >= 0; i--) {
             products[i].style.display = "none";
 
             var locations =
-                products[i].dataset.locations !== undefined
-                    ? products[i].dataset.locations.split(",")
-                    : ["all"];
+            products[i].dataset.locations !== undefined
+            ? products[i].dataset.locations.split(",")
+            : ["all"];
 
             if(locations[0] === 'all' || locations.indexOf(selectedCountry) !== -1){
                 products[i].style.display = "flex";
+
+                if(showCategories.indexOf(products[i].dataset.category) === -1){
+                    showCategories.push(products[i].dataset.category);
+                }
             }
+        }
+
+        for (var i = categoryHeadings.length - 1; i >= 0; i--) {
+            categoryHeadings[i].style.display = showCategories.indexOf(categoryHeadings[i].dataset.category) === -1 ? "none" : "inherit";
         }
     }
 

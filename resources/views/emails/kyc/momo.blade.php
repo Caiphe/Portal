@@ -1,7 +1,7 @@
 @component('mail::message')
 # New go live for **MoMo**
 
-App: [{{ $data['app']->display_name }}]({{ env('APP_URL') }}/admin/dashboard?q={{ $data['app']->aid }})
+App: [{{ $data['app']->display_name }}]({{ config('app.url') }}/admin/dashboard?q={{ $data['app']->aid }})
 
 ## User details
 
@@ -17,7 +17,7 @@ App: [{{ $data['app']->display_name }}]({{ env('APP_URL') }}/admin/dashboard?q={
 ## Products
 
 @foreach($data['app']->products as $product)
-[{{ $product->display_name }}]({{ env('APP_URL') }}/products/{{ $product->slug }})<br>
+[{{ $product->display_name }}]({{ config('app.url') }}/products/{{ $product->slug }})<br>
 @endforeach
 
 Thanks,<br>

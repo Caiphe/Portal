@@ -11,24 +11,44 @@ class BundleController extends Controller
 {
     public function index(Request $request)
     {
-        $bundles = Bundle::with('category')->byResponsibleCountry($request->user());
-
-        if ($request->has('q')) {
-            $query = "%" . $request->q . "%";
-            $bundles->where(function ($q) use ($query) {
-                $q->where('display_name', 'like', $query)
-                    ->orWhereHas('content', function ($q) use ($query) {
-                        $q->where('title', 'like', $query)
-                            ->orWhere('body', 'like', $query);
-                    });
+        $sort = '';
+        $order = $request->get('order', 'desc');
+        $numberPerPage = (int)$request->get('number_per_page', '15');
+        $bundles = Bundle::with('category')
+            ->byResponsibleCountry($request->user())
+            ->select([
+                'bundles.*',
+                'categories.title AS category_title'
+            ])->join('categories', 'bundles.category_cid', '=', 'categories.cid')
+            ->when($request->has('q'), function ($q) use ($request) {
+                $query = "%" . $request->q . "%";
+                $q->where(function ($q) use ($query) {
+                    $q->where('display_name', 'like', $query)
+                        ->orWhereHas('content', function ($q) use ($query) {
+                            $q->where('title', 'like', $query)
+                                ->orWhere('body', 'like', $query);
+                        });
+                });
             });
+
+        if ($request->has('sort')) {
+            $sort = $request->get('sort');
+
+            if ($sort === 'category.title') {
+                $bundles->orderBy('category_title', $order);
+            } else {
+                $bundles->orderBy($sort, $order);
+            }
+
+            $order = ['asc' => 'desc', 'desc' => 'asc'][$order] ?? 'desc';
         }
 
         if ($request->ajax()) {
             return response()
-                ->view('components.admin.table-data', [
-                    'collection' => $bundles->orderBy('display_name')->paginate(),
-                    'fields' => ['display_name', 'category.title'],
+                ->view('components.admin.list', [
+                    'collection' => $bundles->orderBy('display_name')->paginate($numberPerPage),
+                    'order' => $order,
+                    'fields' => ['Name' => 'display_name', 'Category' => 'category.title|addClass:not-on-mobile'],
                     'modelName' => 'bundle'
                 ], 200)
                 ->header('Vary', 'X-Requested-With')
@@ -36,7 +56,8 @@ class BundleController extends Controller
         }
 
         return view('templates.admin.bundles.index', [
-            'bundles' => $bundles->orderBy('display_name')->paginate()
+            'bundles' => $bundles->orderBy('display_name')->paginate($numberPerPage),
+            'order' => $order,
         ]);
     }
 

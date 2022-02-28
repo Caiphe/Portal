@@ -49,7 +49,7 @@
             :data-description="$bundle->description ?? ''"
             :data-category="$bundle->category->cid ?? ''"
         >
-            @subStr(($bundle->description ?: 'View the bundle'))
+            {{ Str::substr(($bundle->description ?: 'View the bundle')) }}
         </x-card-link>
         @endforeach
     </div> --}}

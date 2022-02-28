@@ -166,12 +166,12 @@ function handleMakeUserRole(url, data, event) {
     var xhr = new XMLHttpRequest();
     var roleButton;
     var roleLookup = {
-        'team_admin': 'Team Admin',
-        'team_user': 'Team User',
+        'team_admin': 'Team admin',
+        'team_user': 'Team user',
     };
     var textLookup = {
-        'team_admin_header': 'Make User',
-        'team_user_header': 'Make Administrator',
+        'team_admin_header': 'Make user',
+        'team_user_header': 'Make administrator',
         'team_admin_role': 'team_user',
         'team_user_role': 'team_admin',
     };

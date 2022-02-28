@@ -20,8 +20,7 @@ class DashboardController extends Controller
 
     public function index(Request $request)
     {
-        $user = $request->user();
-        $user->load(['responsibleCountries']);
+        $user = $request->user()->load(['responsibleCountries']);
         $isAdmin = $user->hasRole('admin');
         $responsibleCountriesCodes = $user->responsibleCountries->pluck('code')->toArray();
         $searchTerm = "%" . $request->get('q', '') . "%";
@@ -31,18 +30,21 @@ class DashboardController extends Controller
         $notAdminNoResponsibleCountries = !$isAdmin && empty($responsibleCountriesCodes);
         $appStatus = $request->get('app-status', 'all');
         $productStatus = $request->get('product-status', 'pending');
+        $hasAid = $request->has('aid');
+        $previous = url()->previous();
+        $numberPerPage = (int)$request->get('number_per_page', '15');
 
         if (($notAdminNoResponsibleCountries) && $request->ajax()) {
             return response()
                 ->view('templates.admin.dashboard.data', [
-                    'apps' => App::where('country_code', 'none')->paginate(),
+                    'apps' => App::where('country_code', 'none')->paginate($numberPerPage),
                     'countries' => Country::all(),
                 ], 200)
                 ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         } else if ($notAdminNoResponsibleCountries) {
             return view('templates.admin.dashboard.index', [
-                'apps' => App::where('country_code', 'none')->paginate(),
+                'apps' => App::where('country_code', 'none')->paginate($numberPerPage),
                 'countries' => Country::all(),
                 'selectedCountry' => $request->get('countries', ''),
                 'appStatus' => $request->get('app-status', 'pending'),
@@ -50,9 +52,11 @@ class DashboardController extends Controller
             ]);
         }
 
-        $apps = App::with(['developer', 'country', 'products.countries'])
+        $apps = App::with(['developer', 'team.owner', 'country', 'products' => function ($q) {
+            $q->orderByRaw("FIELD (app_product.status, 'pending', 'approved', 'revoked') ASC");
+        }, 'products.countries'])
             ->whereNotNull('country_code')
-            ->when($request->has('aid'), fn ($q) => $q->where('aid', $request->get('aid')))
+            ->when($hasAid, fn ($q) => $q->where('aid', $request->get('aid')))
             ->when(!$isAdmin, function ($query) use ($responsibleCountriesCodes) {
                 $query->whereIn('country_code', $responsibleCountriesCodes);
             })
@@ -70,7 +74,7 @@ class DashboardController extends Controller
             ->when($appStatus !== 'all', function ($q) use ($appStatus) {
                 $q->where('status', $appStatus);
             })
-            ->when($productStatus !== 'all' && !$request->has('aid'), function ($q) use ($productStatus) {
+            ->when($productStatus !== 'all' && !$hasAid, function ($q) use ($productStatus) {
                 switch ($productStatus) {
                     case 'pending':
                         $q->whereHas('products', fn ($q) => $q->where('status', 'pending'));
@@ -101,7 +105,7 @@ class DashboardController extends Controller
                 $q->where('country_code', $searchCountries);
             })
             ->orderBy('updated_at', 'desc')
-            ->paginate();
+            ->paginate($numberPerPage);
 
         if ($request->ajax()) {
             return response()
@@ -118,7 +122,8 @@ class DashboardController extends Controller
             'countries' => Country::orderBy('name')->pluck('name', 'code'),
             'selectedCountry' => $request->get('countries', ''),
             'appStatus' => $request->get('app-status', 'pending'),
-            'productStatus' => $request->get('product-status', 'pending')
+            'productStatus' => $request->get('product-status', 'pending'),
+            'previous' => $hasAid && strpos($previous, 'admin/user') !== false ? $previous : null
         ]);
     }
 
@@ -145,8 +150,7 @@ class DashboardController extends Controller
         $updateId = $isTeamApp ? $app->team->username : $app->developer->email ?? $app->developer_id;
 
         $response = ApigeeService::updateProductStatus($updateId, $app->name, $credentials['consumerKey'], $validated['product'], $validated['action'], $isTeamApp);
-        $responseStatus = $response->status();
-        if (preg_match('/^2/', $responseStatus)) {
+        if ($response->successful()) {
             $app->products()->updateExistingPivot(
                 $validated['product'],
                 [
@@ -158,17 +162,20 @@ class DashboardController extends Controller
             );
         } else if ($request->ajax()) {
             $body = json_decode($response->body());
-            return response()->json(['success' => false, 'body' => $body->message], $responseStatus);
+            return response()->json(['success' => false, 'body' => $body->message], $response->status());
+        } else {
+            $body = json_decode($response->body());
+            return back()->with('alert', "error:{$body->message}");
         }
 
-        Mail::to(env('MAIL_TO_ADDRESS'))->send(new ProductAction($app, $validated, $currentUser));
+        Mail::to(config('mail.mail_to_address'))->send(new ProductAction($app, $validated, $currentUser));
 
         if ($request->ajax()) {
             $product = $app->products()->where('name', $validated['product'])->first();
             return response()->json(['success' => true, 'body' => $product->notes]);
         }
 
-        return redirect()->back();
+        return back()->with('alert', 'success:The product has been updated.');
     }
 
     /**
@@ -259,10 +266,10 @@ class DashboardController extends Controller
         $users = User::whereNotNull(['email_verified_at'])->select(['profile_picture', 'email'])->get();
 
         $emails = $profiles = [];
-        foreach($users as $u){
+        foreach ($users as $u) {
             $profiles[$u->email] = $u->profile_picture;
             if ($u->email === $appCreator->email) continue;
-            array_push($emails, $u->email );
+            array_push($emails, $u->email);
         }
 
         [$products, $countries] = $productLocationService->fetch();

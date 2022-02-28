@@ -1,80 +1,99 @@
-@import '../../../variables';
-
-#sidebar {
-    @media #{$small} {
-        display: none;
-    }
-}
+@use '../../../variables'as *;
 
 #main {
-    @media(min-width: 768px){
-        margin-right: 0px;
+    h1 {
+        @media screen and (max-width: 767px) {
+            margin-bottom: 0;
+        }
     }
 
-    .actions-btn-container{
-        width: 500px;
+    .actions-btn-container {
         position: relative;
         margin: 0 auto;
         display: flex;
-        margin-bottom: 70px;
 
-        button{
+        @media screen and (min-width: 768px) {
+            width: 500px;
+        }
 
-            &.outline{
-                border: solid 2px #000;
+        @media screen and (max-width: 767px) {
+            width: 100%;
+            flex-direction: column;
+        }
 
-                &:hover{
-                    background-color: #000;
-                    transition: all 0.3s ease-in-out;
-                }
+        button,
+        a {
+            text-align: center;
+            border-radius: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            @media screen and (min-width: 768px) {
+                width: 230px;
+                margin: 40px auto 20px;
             }
 
-            width: 230px;
-            text-align: center;
-            margin: 40px auto 20px;
+            @media screen and (max-width: 767px) {
+                width: 100%;
+                margin: 5px auto;
+            }
+
+            &.outline {
+                border: solid 2px #000;
+
+                &:hover {
+                    background-color: #000;
+                    transition: all 0.3s ease-in-out;
+                    color: #FFF;
+                }
+            }
+        }
+    }
+
+    .app-details-step {
+        .apps-heading-container {
+            @media screen and (max-width: 767px) {
+                margin-bottom: 20px;
+            }
         }
     }
 
     .content {
         height: 100%;
         width: 100%;
-        padding: 0 40px 0 0;
 
-        @media #{$small} {
-            margin: 0;
-            padding: 0;
+        @media screen and (min-width: 768px) {
+            padding: 0 40px 0 0;
         }
+
+
 
         nav {
             display: flex;
-            justify-content: center;
             font-size: 16px;
             padding: 10px 0px;
-            border: 2px solid #f2f2f2;
-            border-radius: 10px;
 
-            @media #{$small} {
-                flex-direction: column;
+            @media screen and (min-width: 768px) {
+                justify-content: center;
             }
 
-            a {
+            button {
                 display: flex;
                 align-items: center;
                 margin-right: 40px;
                 font-size: 14px;
 
-                @media #{$small} {
-                    margin-right: 0;
-                }
-
-                &:not(:last-of-type) {
-                    @media #{$small} {
-                        margin-bottom: 20px;
-                    }
+                @media screen and (max-width: 767px) {
+                    display: none;
                 }
 
                 &.active {
                     color: $blue900;
+
+                    @media screen and (max-width: 767px) {
+                        display: flex;
+                    }
 
                     span {
                         border: 2px solid $blue900;
@@ -100,42 +119,57 @@
             }
         }
 
-        form {
+        #form-create-app {
             display: flex;
             flex-direction: column;
             align-items: center;
             border-radius: 10px;
-            margin-top: 20px;
+            margin-top: 40px;
 
-            .showing-product-for{
+            .showing-product-for {
                 text-transform: uppercase;
                 font-size: 14px;
                 color: #707070;
             }
 
-            .apps-heading-container{
+            .apps-heading-container {
                 text-align: center;
                 margin-top: -20px;
             }
 
-            .apps-create-btn{
-                width: 234px;
+            .apps-create-btn {
                 height: 37px;
                 font-family: $MTN-Regular;
                 font-size: 14px;
                 font-weight: 300;
+
+                @media screen and (min-width: 768px) {
+                    width: 234px;
+                }
+
+                @media screen and (max-width: 767px) {
+                    width: 100%;
+                }
             }
 
-            .app-owner-container{
+            .app-owner-container {
                 position: relative;
 
-                .owner-avatar-container{
+                .owner-avatar-container {
                     width: 89px;
                     height: 89px;
-                    margin-top: 40px;
-                    margin-bottom: 40px;
 
-                    .owner-avatar{
+                    @media screen and (min-width: 768px) {
+                        margin-top: 40px;
+                        margin-bottom: 40px;
+                    }
+
+                    @media screen and (max-width: 767px) {
+                        margin-top: 20px;
+                        margin-bottom: 20px;
+                    }
+
+                    .owner-avatar {
                         width: 100%;
                         height: 100%;
                         position: relative;
@@ -146,7 +180,7 @@
                         background-position: center center;
                     }
 
-                    .remove-thumbnail{
+                    .remove-thumbnail {
                         position: absolute;
                         width: 33px;
                         height: 33px;
@@ -161,22 +195,22 @@
                         opacity: 0;
                         pointer-events: none;
 
-                        &.active{
+                        &.active {
                             opacity: 2;
                             pointer-events: auto;
                             transition: all 0.2s ease-in-out;
                             display: block;
                         }
 
-                        svg{
+                        svg {
                             z-index: 2;
                             position: absolute;
                             left: 2px;
                             transition: all 0.3s ease-in-out;
                         }
 
-                        &:hover{
-                            svg{
+                        &:hover {
+                            svg {
                                 transform: rotate(90deg);
                                 transition: all 0.3s ease-in-out;
                             }
@@ -184,66 +218,84 @@
                     }
                 }
 
-                .creator-email{
+                .creator-email {
                     font-size: 20px;
                     font-family: $MTN-Bold;
                     color: #000;
                     margin-top: 5px;
+                    word-break: break-word;
                 }
 
-                .owners-list-container{
-                    width: 340px;
+                .owners-list-container {
                     position: relative;
                     margin-top: 15px;
+
+                    @media screen and (min-width: 768px) {
+                        width: 340px;
+                    }
+
+                    @media screen and (max-width: 767px) {
+                        width: 100%;
+                    }
 
                     .apps-button-container {
                         text-align: center;
                         font-size: 13px;
 
-                        &.on-show{
+                        &.on-show {
                             display: flex;
                         }
                     }
 
-                    input{
+                    input {
                         height: 40px;
                         appearance: none;
                         width: 100%;
                         border: solid 1px #707070;
                     }
 
-                    button{
+                    button {
                         text-align: center;
                         margin: 0px auto;
                         position: relative;
-                        height: 41px;
-                        width: 160px;
+                        height: 40px;
                         display: inline-block;
 
-                        &:nth-child(1){
-                            margin-right: 5px;
+                        @media screen and (min-width: 768px) {
+                            width: 160px;
+                        }
+
+                        @media screen and (max-width: 767px) {
+                            width: 100%;
+                            margin-bottom: 10px;
                         }
                     }
 
-                    .wrapper{
-                        margin: 0px auto 40px;
+                    .wrapper {
                         position: relative;
 
-                        .search-input{
+                        @media screen and (min-width: 768px) {
+                            margin: 0px auto 40px;
+                        }
+
+                        @media screen and (max-width: 767px) {
+                            margin: 0px auto 20px;
+                        }
+
+                        .search-input {
                             background: #fff;
-                            width: 100%;
-                            border-radius: 5px;
+                            border-radius: 8px;
                             position: relative;
 
-                            input{
-                                height:40px;
+                            input {
+                                height: 40px;
                                 width: 304px;
                                 outline: none;
                                 border-radius: 5px;
                                 font-size: 14px;
                             }
 
-                            .autocom-box{
+                            .autocom-box {
                                 padding: 0;
                                 opacity: 0;
                                 pointer-events: none;
@@ -251,9 +303,9 @@
                                 overflow-y: auto;
                             }
 
-                            &.active{
+                            &.active {
 
-                                input{
+                                input {
                                     border-radius: 5px 5px 0 0;
                                 }
 
@@ -272,10 +324,10 @@
                                     border-top: none;
 
 
-                                    li{
+                                    li {
                                         display: block;
 
-                                        &.non-cursor{
+                                        &.non-cursor {
                                             pointer-events: none;
                                             cursor: none;
                                         }
@@ -285,7 +337,7 @@
                         }
                     }
 
-                    .autocom-box li{
+                    .autocom-box li {
                         list-style: none;
                         padding: 8px 12px;
                         display: none;
@@ -293,7 +345,7 @@
                         border-radius: 3px;
                     }
 
-                    .autocom-box li:hover{
+                    .autocom-box li:hover {
                         background: #efefef;
                         cursor: pointer;
                         transition: all 0.3s ease-in-out;
@@ -301,34 +353,49 @@
                 }
             }
 
-            .apps-top-text{
-                font-size: 14px;
+            .apps-top-text {
+                @media screen and (min-width: 768px) {
+                    font-size: 14px;
+                }
+
+                @media screen and (max-width: 767px) {
+                    font-size: 12px;
+                }
             }
 
-            .app-create-heading{
-                font-size: 36px;
+            .app-create-heading {
                 font-family: $MTN-Regular;
+
+                @media screen and (min-width: 768px) {
+                    font-size: 36px;
+                }
+
+                @media screen and (max-width: 767px) {
+                    font-size: 24px;
+                    margin: 8px 0;
+                }
             }
 
-            .gray-text{
+            .gray-text {
                 color: #707070;
-                font-size: 14px;
+                font-size: 16px;
+                text-align: center;
             }
 
-            .success-message-container{
+            .success-message-container {
                 margin-top: 5px;
                 text-align: center;
 
-                .success-message{
+                .success-message {
                     margin-bottom: 5px;
                 }
 
-                .success-message-text{
+                .success-message-text {
                     font-size: 15px;
                     font-family: $MTN-Regular;
                 }
 
-                .back-btn{
+                .back-btn {
                     display: flex;
                     justify-content: center;
                     width: 235px;
@@ -345,7 +412,7 @@
                     cursor: pointer;
                     transition: all 0.3s ease-in-out;
 
-                    &:hover{
+                    &:hover {
                         background-color: #fff;
                         color: #000;
                         border: solid 2px #000;
@@ -354,26 +421,25 @@
                 }
             }
 
-            .complete-container{
+            .complete-container {
                 font-size: 20px;
                 color: #000;
                 font-family: $MTN-Bold;
 
-                h1{
-                    margin-bottom: 40px;
+                h1 {
+                    @media screen and (min-width: 768px) {
+                        margin-bottom: 40px;
+                    }
+
+                    @media screen and (max-width: 767px) {
+                        margin-bottom: 20px;
+                    }
                 }
 
-                svg{
-                    width: 40px;
+                svg {
+                    width: 60px;
+                    height: 60px;
                 }
-            }
-
-            @media screen and (min-width: 768px) {
-                padding: 40px;
-            }
-
-            @media screen and (max-width: 768px) {
-                padding: 20px;
             }
 
             >div {
@@ -422,9 +488,12 @@
                 display: flex;
                 flex-direction: column;
                 margin-bottom: 3rem;
-                width: 50%;
 
-                @media #{$small} {
+                @media screen and (min-width: 768px) {
+                    width: 50%;
+                }
+
+                @media screen and (max-width: 767px) {
                     width: 100%;
                 }
             }
@@ -441,8 +510,9 @@
                     flex-direction: column;
                     align-items: center;
                     justify-content: flex-start;
-                    border: 2px solid $grey400;
-                    border-radius: 5px;
+                    background-color: #FFF;
+                    border: 1px solid $grey850;
+                    border-radius: 8px;
                     padding: 20px;
                     margin-right: 10px;
                     margin-bottom: 20px;
@@ -455,13 +525,20 @@
                         width: 13%;
                     }
 
-                    @media screen and (max-width: 768px) {
-                        width: calc(50% - 60px);
+                    @media screen and (max-width: 767px) {
+                        width: 100%;
                     }
 
                     svg {
                         margin-bottom: 15px;
-                        width: 60%;
+
+                        @media screen and (min-width: 768px) {
+                            width: 60%;
+                        }
+
+                        @media screen and (max-width: 767px) {
+                            width: 32px;
+                        }
                     }
 
                     .country-checked {
@@ -478,6 +555,10 @@
 
                     .country-checkbox:checked+.country-checked {
                         opacity: 1;
+                    }
+
+                    input {
+                        display: none;
                     }
                 }
 
@@ -527,10 +608,6 @@
                     flex-flow: row wrap;
                     width: 100%;
 
-                    @media #{$small} {
-                        flex-direction: column;
-                    }
-
                     .category {
                         display: flex;
                         flex-flow: row wrap;
@@ -542,11 +619,15 @@
                         }
 
                         .card {
+                            border-radius: 8px;
                             margin-bottom: 30px;
-                            margin-right: 20px;
-                            width: 30%;
 
-                            @media #{$small} {
+                            @media screen and (min-width: 768px) {
+                                width: 30%;
+                                margin-right: 20px;
+                            }
+
+                            @media screen and (max-width: 767px) {
                                 width: 100%;
                             }
 
@@ -571,20 +652,33 @@
             display: block;
             background-color: transparent;
             border: transparent;
-            font-size: 16px;
-            margin: 40px auto 20px;
-
-            @media #{$small} {
-                width: 100%;
-            }
         }
+    }
+
+    .button.plus {
+        background: url('/images/icons/plus.svg') no-repeat #FFF center center / 24px;
+        border: 2px solid #FFF;
+        filter: invert(100%);
+    }
+
+    .button.done {
+        background: url('/images/icons/done.svg') no-repeat #FFF center center / 24px;
+        border: 2px solid #FFF;
+        filter: invert(100%);
+    }
+
+    input,
+    textarea {
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid $grey850;
     }
 }
 
 
-.page-info{
-    .primary{
-        &:hover{
+.page-info {
+    .primary {
+        &:hover {
             background-color: #fc0;
             transition: all 0.3s ease-in-out;
         }

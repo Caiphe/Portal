@@ -228,7 +228,7 @@ My team
     </div>
     <div class="column">
         <div class="team-members-header">
-            <h2>Team membership </h2>
+            <h2>Team membership</h2>
 
             @if($isAdmin)
                 <button class="outline dark add-team-mate-btn">Add a teammate</button>
@@ -260,7 +260,8 @@ My team
                             @endif
                         </td>
                         <td id="team-role-{{ $teamUser->id }}">{{ $teamUser->teamRole($team)->label }}</td>
-                        <td class="column-container">{{ $teamUser->twoFactorStatus() }}
+                        <td class="column-container">
+                            <span class="twofa-status twofa-{{ strtolower($teamUser->twoFactorStatus()) }}">{{ $teamUser->twoFactorStatus() }}</span>
                             <div class="block-hide-menu"></div>
                             @if($isAdmin && $teamUser->id !== $user->id && $teamUser->id !== $team->owner_id)
                             <button class="btn-actions"></button>

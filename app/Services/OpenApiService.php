@@ -525,25 +525,7 @@ class OpenApiService
 	 */
 	protected function getValue($value, $type)
 	{
-		if ($value !== '') {
-			switch ($type) {
-				case 'string':
-					return $value;
-					break;
-				case 'integer':
-					return (int)$value;
-					break;
-				case 'float':
-					return (float)$value;
-					break;
-				case 'boolean':
-					return $value === 'true' ? 'true' : 'false';
-					break;
-				default:
-					return $value;
-					break;
-			}
-		} else {
+		if ($value === '') {
 			return [
 				'string' => "string",
 				'integer' => 1,
@@ -552,6 +534,19 @@ class OpenApiService
 				'object' => '{}',
 				'boolean' => true,
 			][$type] ?? "string";
+		}
+
+		switch ($type) {
+			case 'string':
+				return $value;
+			case 'integer':
+				return (int)$value;
+			case 'float':
+				return (float)$value;
+			case 'boolean':
+				return $value === 'true' ? 'true' : 'false';
+			default:
+				return $value;
 		}
 	}
 

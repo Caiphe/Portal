@@ -15,7 +15,12 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $access = $request->get('access', "");
+        $numberPerPage = (int)$request->get('number_per_page', '15');
         $products = Product::with('category')
+            ->select([
+                'products.*',
+                'categories.title AS category_title'
+            ])->join('categories', 'products.category_cid', '=', 'categories.cid')
             ->byResponsibleCountry($request->user())
             ->when($request->has('q'), function ($q) use ($request) {
                 $query = "%" . $request->get('q') . "%";
@@ -28,15 +33,30 @@ class ProductController extends Controller
                         });
                 });
             })
-            ->when($access !== "" && !is_null($access), function($q) use ($request) {
+            ->when($access !== "" && !is_null($access), function ($q) use ($request) {
                 $q->where('access', $request->get('access'));
             });
+        $order = $request->get('order', 'desc');
+        $sort = '';
+
+        if ($request->has('sort')) {
+            $sort = $request->get('sort');
+
+            if ($sort === 'category.title') {
+                $products->orderBy('category_title', $order);
+            } else {
+                $products->orderBy($sort, $order);
+            }
+
+            $order = ['asc' => 'desc', 'desc' => 'asc'][$order] ?? 'desc';
+        }
 
         if ($request->ajax()) {
             return response()
-                ->view('components.admin.table-data', [
-                    'collection' => $products->orderBy('display_name')->paginate(),
-                    'fields' => ['display_name', 'access', 'environments', 'category.title'],
+                ->view('components.admin.list', [
+                    'collection' => $products->orderBy('display_name')->paginate($numberPerPage),
+                    'order' => $order,
+                    'fields' => ['Name' => 'display_name', 'Access level' => 'access|addClass:not-on-mobile', 'Environments' => 'environments|splitToTag:,|addClass:not-on-mobile', 'Category' => 'category.title|addClass:not-on-mobile'],
                     'modelName' => 'product'
                 ], 200)
                 ->header('Vary', 'X-Requested-With')
@@ -44,19 +64,22 @@ class ProductController extends Controller
         }
 
         return view('templates.admin.products.index', [
-            'products' => $products->orderBy('display_name')->paginate(),
+            'products' => $products->orderBy('display_name')->paginate($numberPerPage),
+            'order' => $order,
         ]);
     }
 
     public function edit(Product $product)
     {
         $product->load('content', 'countries');
+        $hasSwagger = $product->swagger !== null && \Storage::disk('app')->exists("openapi/{$product->swagger}");
 
         return view('templates.admin.products.edit', [
             'product' => $product,
             'content' => $product->content->groupBy('title'),
             'countries' => Country::get(),
             'categories' => Category::pluck('title', 'cid'),
+            'hasSwagger' => $hasSwagger,
         ]);
     }
 

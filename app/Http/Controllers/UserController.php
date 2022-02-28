@@ -40,8 +40,8 @@ class UserController extends Controller
 			->get()
 			->implode('locations', ',');
 
-        $teamInvite = TeamInvite::where('email', $user->email)
-            ->first();
+		$teamInvite = TeamInvite::where('email', $user->email)
+			->first();
 
 		return view('templates.user.show', [
 			'user' => $user,
@@ -49,7 +49,7 @@ class UserController extends Controller
 			'locations' => array_unique(explode(',', $productLocations)),
 			'key' => $key,
 			'inlineUrl' => $inlineUrl,
-            'teamInvite' => $teamInvite,
+			'teamInvite' => $teamInvite,
 		]);
 	}
 
@@ -72,7 +72,7 @@ class UserController extends Controller
 			$validated['email_verified_at'] = null;
 		}
 
-		if(!is_null($validated['password'])) {
+		if (!is_null($validated['password'])) {
 			$validated['password'] = bcrypt($validated['password']);
 		} else {
 			unset($validated['password']);
@@ -95,9 +95,16 @@ class UserController extends Controller
 
 	public function updateProfilePicture(Request $request)
 	{
-		$request->validate([
-			'profile' => 'required|mimes:jpeg,jpg,png|max:5120',
-		]);
+		$this->validate(
+			$request,
+			[
+				'profile' => 'required|mimes:jpeg,jpg,png|dimensions:max_width=2000,max_height=2000|max:5120',
+			],
+			[
+				'dimensions' => 'Image width and height should be less than 2000px'
+			]
+		);
+
 		$disk = \Storage::disk('public');
 		$user = $request->user();
 		$currentImageName = basename($user->profile_picture);

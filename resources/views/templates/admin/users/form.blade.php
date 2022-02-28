@@ -1,60 +1,87 @@
-@php
-    $currentUser = auth()->user();
-    $userResponsibleCountries = $currentUser->responsibleCountries()->pluck('code')->toArray();
-    $isAdminUser = $currentUser->hasRole('admin');
-    $defaultUserRole = [2 => 'Developer'];
-@endphp
-
 @csrf
 
-<div class="editor-field">
-    <h2>First name</h2>
-    <input type="text" class="long" name="first_name" placeholder="First name" value="{{ old('first_name') }}" autocomplete="off" maxlength="140">
-</div>
+<div class="editor-field half">
+    <h2>User details</h2>
 
-<div class="editor-field">
-    <h2>Last name</h2>
-    <input type="text" class="long" name="last_name" placeholder="Last name" value="{{ old('last_name') }}" autocomplete="off" maxlength="140">
-</div>
+    <label class="editor-field-label half">
+        <h3>First name</h3>
+        <input type="text" name="first_name" placeholder="First name" value="{{ $user->first_name ?? old('first_name') }}" autocomplete="off" maxlength="140">
+    </label>
 
-<div class="editor-field">
-    <h2>Email</h2>
-    <input type="text" class="long" name="email" placeholder="Email" value="{{ old('email') }}" autocomplete="off" maxlength="140">
-</div>
+    <label class="editor-field-label half">
+        <h3>Last name</h3>
+        <input type="text" name="last_name" placeholder="Last name" value="{{ $user->last_name ?? old('last_name') }}" autocomplete="off" maxlength="140">
+    </label>
 
-<div class="editor-field">
-    <h2>Password</h2>
-    <input id="password" type="password" class="long" name="password" placeholder="Password" autocomplete="new-password">
-    <button type="button" class="fab show-password" onclick="togglePasswordVisibility(this)"></button>
-    <br><br>
-    <h2>Confirm password</h2>
-    <input id="password-confirm" type="password" class="long" name="password_confirmation" placeholder="Confirm password" autocomplete="new-password">
-    <button type="button" class="fab show-password" onclick="togglePasswordVisibility(this)"></button>
-    <div id="password-strength">Password strength</div>
-    <div id="password-still-needs" class="invalid-feedback" role="alert"></div>
-</div>
+    <label class="editor-field-label">
+        <h3>Email address</h3>
+        <input type="text" name="email" placeholder="Email" value="{{ $user->email ?? old('email') }}" autocomplete="off" maxlength="140">
+    </label>
 
-<div class="editor-field">
-    <h2>Countries of operation</h2>
-    <x-multiselect id="country" name="country" label="Select country" :options="$countries->pluck('name', 'code')->toArray()"/>
+    @if(isset($user))
+    <div class="editor-field-label half">
+        <h3>Member since</h3>
+        <div class="editor-field-copy">{{ $user->created_at->diffForHumans() }}</div>
+    </div>
+    @endif
+
+    <label @class([
+        'editor-field-label',
+        'half' => isset($user)
+    ])>
+        <h3>Countries of operation</h3>
+        <x-multiselect id="country" name="country" label="Select country" :options="$countries->pluck('name', 'code')->toArray()" :selected="$userCountryCodes ?? []"/>
+    </label>
+
+    <label class="editor-field-label half">
+        <h3>Password</h3>
+        <input id="password" type="password" name="password" placeholder="Password" autocomplete="new-password">
+        <button type="button" class="reset show-password" onclick="togglePasswordVisibility(this)"></button>
+    </label>
+
+    <label class="editor-field-label half">
+        <h3>Confirm Password</h3>
+        <input id="password-confirm" type="password" name="password_confirmation" placeholder="Confirm password" autocomplete="new-password">
+        <button type="button" class="reset show-password" onclick="togglePasswordVisibility(this)"></button>
+    </label>
+
+    <label class="editor-field-label password-strength">
+        <div id="password-strength"></div>
+        <div id="password-still-needs" role="alert"></div>
+    </label>
+
+    <label @class([
+        'editor-field-label'
+    ])>
+        <h3>Assigned private products</h3>
+        <x-multiselect id="private_products" name="private_products" label="Select private product" :options="$privateProducts" :selected="old('private_products') ?: $userAssignedProducts ?? []"/>
+    </label>
+
+    <button class="button outline blue save-button">Apply changes</button>
 </div>
 
 @if($isAdminUser)
-<div class="editor-field">
-    <h2>Roles</h2>
-    <x-multiselect id="roles" name="roles" label="Select role" :options="$roles->pluck('label', 'id')->toArray()" :selected="$defaultUserRole"/>
-</div>
+<div class="editor-field half">
+    <h2>Groups and roles</h2>
 
-<div class="editor-field">
-    <h2>Countries the user is responsible for</h2>
-    <x-multiselect id="responsible_countries" name="responsible_countries" label="Select country" :options="$countries->pluck('name', 'code')->toArray()"/>
+    <label class="editor-field-label">
+        <h3><b>Groups</b> this user is responsible for</h3>
+        <x-multiselect id="responsible_groups" name="responsible_groups" label="Select groups" :options="$groups" :selected="$userResponsibleGroups ?? []"/>
+    </label>
+
+    <label class="editor-field-label">
+        <h3><b>Role</b> this user is responsible for</h3>
+        <x-multiselect id="roles" name="roles" label="Select role" :options="$roles->pluck('label', 'id')->toArray()" :selected="$userRoleIds ?? []"/>
+    </label>
+
+    <label class="editor-field-label">
+        <h3><b>Countries</b> this user is responsible for</h3>
+        <x-multiselect id="responsible_countries" name="responsible_countries" label="Select country" :options="$countries->pluck('name', 'code')->toArray()" :selected="$userResponsibleCountries ?? []"/>
+    </label>
+
+    <button class="button outline blue save-button">Apply changes</button>
 </div>
 @endif
-
-<div class="editor-field">
-    <h2>Groups the user is responsible for</h2>
-    <x-multiselect id="responsible_groups" name="responsible_groups" label="Select groups" :options="$groups"/>
-</div>
 
 @push('scripts')
 <script src="{{ mix('/js/templates/admin/users/scripts.js') }}"></script>

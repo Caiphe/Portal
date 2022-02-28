@@ -17,20 +17,30 @@ class ProductController extends Controller
 	 */
 	public function index(Request $request)
 	{
-		$products = Product::with(['category', 'countries'])->where('category_cid', '!=', 'misc')->basedOnUser($request->user())->get();
-		$productsCollection = $products->sortBy('category.title')->groupBy('category.title');
+		$user = $request->user();
+		$assignedProducts = $user ? $user->assignedProducts()->with('category')->get() : [];
+		$products = Product::with(['category', 'countries'])
+			->where('category_cid', '!=', 'misc')
+			->basedOnUser($request->user())
+			->get()
+			->merge($assignedProducts);
+		$productCategories = $products->pluck('category.title', 'category.slug');
+		$productsCollection = $products->sortBy('display_name')->groupBy('category.title')->sortKeys();
 		$productLocations = $products->pluck('locations')->implode(',');
 		$locations = array_unique(explode(',', $productLocations));
 		$countries = Country::whereIn('code', $locations)->pluck('name', 'code');
 		$content = Content::where('contentable_type', 'Products')->get();
+		$hasPrivateProduct = $products->contains('access', 'private');
+		$hasInternalProduct = $products->contains('access', 'internal');
 
 		return view('templates.products.index', [
 			'productsCollection' => $productsCollection,
-			'productCategories' => array_keys($productsCollection->toArray()),
+			'productCategories' => $productCategories,
 			'countries' => $countries,
 			'selectedCategory' => $request['category'],
-			'groups' => $products->pluck('group')->unique(),
-			'content' => $content
+			'content' => $content,
+			'hasPrivateProduct' => $hasPrivateProduct,
+			'hasInternalProduct' => $hasInternalProduct,
 		]);
 	}
 
@@ -42,11 +52,10 @@ class ProductController extends Controller
 	 */
 	public function show(Request $request, Product $product)
 	{
-		$user = $request->user();
+		$user = $request->user()->load('assignedProducts');
+		$assignedProducts = $user->assignedProducts->pluck('pid');
 
-		if ($product->access === 'private' && (!$user || !$user->hasRole('private'))) {
-			abort(403);
-		}
+		abort_if($product->access === 'private' && (!$user || (!$assignedProducts->contains($product->pid) && !$user->hasRole('private'))), 403);
 
 		$product->load(['content', 'keyFeatures', 'category', 'countries']);
 

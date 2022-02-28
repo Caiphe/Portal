@@ -78,11 +78,17 @@
             <a href="{{ route('app.create') }}">Build app</a>
         </li>
         <li>
-            <a href="{{ route('user.profile') }}">My profile</a></li>
+            <a href="{{ route('user.profile') }}">My profile</a>
+        </li>
         <li>
             <a href="{{ route('app.store') }}">My apps</a>
         </li>
-            <li><a href="{{ route('teams.listing') }}">My teams</a></li>
+        <li>
+            <a href="{{ route('teams.listing') }}">My teams</a>
+        </li>
+        @can('view-admin')
+            <li><a href="{{ route('admin.home') }}">Admin</a></li>
+        @endcan
         <li>
             <form action="{{route('logout')}}" method="post">@csrf<button>Sign out</button></form>
         </li>

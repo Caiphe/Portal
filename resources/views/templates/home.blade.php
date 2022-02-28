@@ -1,16 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    @production
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-EESWEBL5F7"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-
-          gtag('config', 'G-EESWEBL5F7');
-        </script>
-    @endproduction
+    @include('partials.google-analytics')
+    @includeWhen(!isset($_COOKIE['shownCookiePolicy']), 'partials.cookie')
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MTN Developer Portal</title>
@@ -18,6 +10,7 @@
     <link rel="icon" href="/images/favicon.png" type="image/png">
     <link rel="stylesheet" href="{{ mix('/css/styles.css') }}">
     <link rel="stylesheet" href="{{ mix('/css/templates/home.css') }}">
+    @stack('styles')
     <link rel="preload" href="/fonts/MTNBrighterSans-Regular.woff2" as="font" type="font/woff2">
     <link rel="preload" href="/fonts/MTNBrighterSans-Bold.woff2" as="font" type="font/woff2">
     <link rel="preload" href="/fonts/MTNBrighterSans-Medium.woff2" as="font" type="font/woff2">

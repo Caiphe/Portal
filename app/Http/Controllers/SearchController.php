@@ -25,6 +25,7 @@ class SearchController extends Controller
         }
         $page -= 1;
         $searchTerm = $request->get('q', '');
+        if(!is_string($searchTerm)) $searchTerm = '';
         $query = '%' . $searchTerm . '%';
         $length = 12;
 

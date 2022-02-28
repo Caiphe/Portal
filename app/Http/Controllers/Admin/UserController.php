@@ -6,32 +6,35 @@ use App\Country;
 use App\Http\Controllers\Controller;
 use App\Product;
 use App\Role;
+use App\RoleUser;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use App\App;
 
 class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $currentUser = auth()->user();
+        $currentUser = $request->user();
+        $order = $request->get('order', 'desc');
+        $numberPerPage = (int)$request->get('number_per_page', '15');
+        $sort = '';
 
         $users = User::with('roles', 'countries')
-            ->when($currentUser->hasRole('opco'), function($query) use($currentUser) {
+            ->withCount('apps')
+            ->when($currentUser->hasRole('opco'), function ($query) use ($currentUser) {
                 $query->whereHas('countries', fn ($q) => $q->whereIn('code', $currentUser->responsibleCountries()->pluck('code')->toArray()));
-            });
+            })
+            ->when($request->has('q'), function ($q) use ($request) {
+                $query = "%" . $request->q . "%";
 
-        $users->when($request->has('q'), function($q) use($request) {
-            $query = "%" . $request->q . "%";
-
-            $q->where(function ($q) use($query) {
-                $q->where('first_name', 'like', $query)
-                    ->orWhere('last_name', 'like', $query)
-                    ->orWhere('email', 'like', $query);
-            });
-        })
-            ->when(!empty($request->get('verified', '')), function($q) use($request) {
+                $q->where(function ($q) use ($query) {
+                    $q->where('first_name', 'like', $query)
+                        ->orWhere('last_name', 'like', $query)
+                        ->orWhere('email', 'like', $query);
+                });
+            })
+            ->when(!empty($request->get('verified', '')), function ($q) use ($request) {
                 $verified = $request->get('verified');
                 if ($verified === 'verified') {
                     $q->whereNotNull('email_verified_at');
@@ -40,38 +43,38 @@ class UserController extends Controller
                 }
             });
 
-        $order = 'desc';
-
-        $defaultSortQuery = array_diff_key($request->query(), ['sort' => true, 'order' => true]);
-
-        if (!empty($defaultSortQuery)) {
-            $defaultSortQuery = '&' . http_build_query($defaultSortQuery);
-        } else {
-            $defaultSortQuery = '';
-        }
-
         if ($request->has('sort')) {
-            $order = $request->get('order', 'desc');
-            $users->orderBy($request->get('sort', $order));
+            $sort = $request->get('sort');
+
+            if ($sort === 'roles') {
+                $users->orderBy(
+                    RoleUser::select('role_id')
+                        ->whereColumn('role_user.user_id', 'users.id')
+                        ->latest()
+                        ->take(1),
+                    $order
+                );
+            } else {
+                $users->orderBy($sort, $order);
+            }
+
             $order = ['asc' => 'desc', 'desc' => 'asc'][$order] ?? 'desc';
         }
 
         if ($request->ajax()) {
             return response()
-                ->view('components.admin.users-data', [
-                    'collection' => $users->orderBy('first_name')->paginate($request->get('per-page', 10)),
-                    'fields' => ['first_name', 'last_name', 'email', 'member_since', 'roles_list', 'status', 'apps'],
-                    'defaultSortQuery' => $defaultSortQuery,
-                    'modelName' => 'user',
+                ->view('components.admin.list', [
+                    'collection' => $users->paginate($numberPerPage),
                     'order' => $order,
+                    'fields' => ['First name' => 'first_name', 'Last name' => 'last_name|addClass:not-on-mobile', 'Email' => 'email', 'Member since' => 'created_at|date:d M Y|addClass:not-on-mobile', 'Role' => 'roles|implode:, >label|addClass:not-on-mobile', 'status' => 'status|splitToTag:,|addClass:not-on-mobile', 'apps' => 'apps_count|addClass:not-on-mobile'],
+                    'modelName' => 'user',
                 ], 200)
                 ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         }
 
         return view('templates.admin.users.index', [
-            'users' => $users->orderBy('first_name')->paginate($request->get('per-page', 10)),
-            'defaultSortQuery' => $defaultSortQuery,
+            'users' => $users->paginate($numberPerPage),
             'order' => $order,
         ]);
     }
@@ -80,13 +83,16 @@ class UserController extends Controller
     {
         $groups = Product::select('group')->where('group', '!=', 'Partner')->where('group', '!=', 'MTN')->groupBy('group')->get()->pluck('group');
         $groups = array_merge(['MTN' => 'General'], $groups->toArray());
+        $privateProducts = Product::where('access', 'private')->pluck('display_name', 'pid');
 
         return view(
             'templates.admin.users.create',
             [
                 'roles' => Role::where('name', 'not like', 'team%')->get(),
                 'countries' => Country::orderBy('name')->get(),
-                'groups' => $groups
+                'groups' => $groups,
+                'isAdminUser' => auth()->user()->hasRole('admin'),
+                'privateProducts' => $privateProducts,
             ]
         );
     }
@@ -94,14 +100,15 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
+            'first_name' => 'required|max:140',
+            'last_name' => 'required|max:140',
             'email' => 'email:rfc,dns|unique:users,email',
             'password' => 'required|confirmed',
             'roles' => 'nullable',
             'country' => 'nullable',
             'responsible_countries' => 'nullable',
             'responsible_groups' => 'nullable',
+            'private_products' => 'nullable',
         ]);
 
         $data['profile_picture'] = '/storage/profile/profile-' . rand(1, 32) . '.svg';
@@ -125,6 +132,8 @@ class UserController extends Controller
             $user->responsibleGroups()->sync($data['responsible_groups']);
         }
 
+        $user->assignedProducts()->sync($data['private_products'] ?? []);
+
         $user->sendEmailVerificationNotification();
 
         return redirect()->route('admin.user.index')->with('alert', 'success:The user has been created');
@@ -133,23 +142,16 @@ class UserController extends Controller
     public function edit(Request $request, User $user)
     {
         $countrySelectFilterCode = $request->get('country-filter', 'all');
+        $currentUser = $request->user();
+        $user->load('roles', 'countries', 'responsibleCountries', 'responsibleGroups', 'assignedProducts');
+        $groups = Product::select('group')->where('group', '!=', 'Partner')->where('group', '!=', 'MTN')->groupBy('group')->get()->pluck('group', 'group');
+        $groups = array_merge(['MTN' => 'General'], $groups->toArray());
+        $privateProducts = Product::where('access', 'private')->pluck('display_name', 'pid');
         $order = 'desc';
-        $defaultSortQuery = array_diff_key($request->query(), ['sort' => true, 'order' => true]);
-
-        if (!empty($defaultSortQuery)) {
-            $defaultSortQuery = '&' . http_build_query($defaultSortQuery);
-        } else {
-            $defaultSortQuery = '';
-        }
 
         if ($request->has('sort')) {
             $order = ['asc' => 'desc', 'desc' => 'asc'][$request->get('order', 'desc')] ?? 'desc';
         }
-
-        $currentUser = $request->user();
-        $user->load('roles', 'countries', 'responsibleCountries', 'responsibleGroups');
-        $groups = Product::select('group')->where('group', '!=', 'Partner')->where('group', '!=', 'MTN')->groupBy('group')->get()->pluck('group', 'group');
-        $groups = array_merge(['MTN' => 'General'], $groups->toArray());
 
         return view('templates.admin.users.edit', [
             'selectedCountryFilter' => $countrySelectFilterCode,
@@ -158,7 +160,6 @@ class UserController extends Controller
             'groups' => $groups,
             'user' => $user,
             'order' => $order,
-            'defaultSortQuery' => $defaultSortQuery,
             'userRoleIds' => isset($user) ? $user->roles->pluck('id')->toArray() : [],
             'userCountryCodes' => $user->countries->pluck('code')->toArray() ?? [],
             'userResponsibleCountries' => $user->responsibleCountries()->pluck('code')->toArray(),
@@ -169,6 +170,8 @@ class UserController extends Controller
             'isAdminUser' => $currentUser->hasRole('admin'),
             'duplicateCountries' => [],
             'userApps' => $user->getApps($countrySelectFilterCode, $order, $request->get('sort', 'name')),
+            'privateProducts' => $privateProducts,
+            'userAssignedProducts' => $user->assignedProducts->pluck('pid')->toArray()
         ]);
     }
 
@@ -186,6 +189,7 @@ class UserController extends Controller
             'country' => 'nullable',
             'responsible_countries' => 'nullable',
             'responsible_groups' => 'nullable',
+            'private_products' => 'nullable',
         ]);
 
         if (is_null($data['password'])) {
@@ -202,6 +206,7 @@ class UserController extends Controller
         $user->countries()->sync($data['country'] ?? []);
         $user->responsibleCountries()->sync($data['responsible_countries'] ?? []);
         $user->responsibleGroups()->sync($data['responsible_groups'] ?? []);
+        $user->assignedProducts()->sync($data['private_products'] ?? []);
 
         return redirect()->route('admin.user.index')->with('alert', 'success:The user has been updated');
     }

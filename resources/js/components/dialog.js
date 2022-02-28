@@ -7,4 +7,6 @@ function closeDialog(node) {
             break;
         }
     }
+
+    node.dispatchEvent(new Event('dialog-closed'));
 }
