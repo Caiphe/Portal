@@ -1,8 +1,16 @@
+@php
+    $query = request()->query();
+    unset($query['supportsWebp']);
+    $query['order'] = $order ?? 'desc';
+@endphp
 <table>
     <thead>
         <tr>
             @foreach($fields as $specifiedName => $field)
-            <th align="left" class="{{ preg_replace('/.*?addClass:(.*?)\|?/', '$1', $field) }}"><a href="?sort={{ strtok($field, '|') }}&order={{ $order ?? 'desc' }}">{{ is_string($specifiedName) ? $specifiedName : preg_replace('/[_\.]/', ' ', ucfirst($field)) }} @svg('chevron-sorter')</a></th>
+            @php
+                $query['sort'] = strtok($field, '|');
+            @endphp
+            <th align="left" class="{{ preg_replace('/.*?addClass:(.*?)\|?/', '$1', $field) }}"><a href="?{{ http_build_query($query) }}">{{ is_string($specifiedName) ? $specifiedName : preg_replace('/[_\.]/', ' ', ucfirst($field)) }} @svg('chevron-sorter')</a></th>
             @endforeach
             <th align="left" class="action-row">Actions</th>
         </tr>
