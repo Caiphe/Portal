@@ -54,6 +54,8 @@ class UserController extends Controller
                         ->take(1),
                     $order
                 );
+            } else if($sort === 'status') {
+                $users->orderBy('email_verified_at', $order);
             } else {
                 $users->orderBy($sort, $order);
             }
