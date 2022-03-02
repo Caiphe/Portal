@@ -34,8 +34,8 @@ class UserController extends Controller
                         ->orWhere('email', 'like', $query);
                 });
             })
-            ->when(!empty($request->get('verified', '')), function ($q) use ($request) {
-                $verified = $request->get('verified');
+            ->when(!empty($request->get('status', '')), function ($q) use ($request) {
+                $verified = $request->get('status');
                 if ($verified === 'verified') {
                     $q->whereNotNull('email_verified_at');
                 } else {
@@ -68,7 +68,7 @@ class UserController extends Controller
                 ->view('components.admin.list', [
                     'collection' => $users->paginate($numberPerPage),
                     'order' => $order,
-                    'fields' => ['First name' => 'first_name', 'Last name' => 'last_name|addClass:not-on-mobile', 'Email' => 'email', 'Member since' => 'created_at|date:d M Y|addClass:not-on-mobile', 'Role' => 'roles|implode:, >label|addClass:not-on-mobile', 'status' => 'status|splitToTag:,|addClass:not-on-mobile', 'apps' => 'apps_count|addClass:not-on-mobile'],
+                    'fields' => ['First name' => 'first_name', 'Last name' => 'last_name|addClass:not-on-mobile', 'Email' => 'email', 'Member since' => 'created_at|date:d M Y|addClass:not-on-mobile', 'Role' => 'roles|implode:, >label|addClass:not-on-mobile', 'Status' => 'status|splitToTag:,|addClass:not-on-mobile', 'apps' => 'apps_count|addClass:not-on-mobile'],
                     'modelName' => 'user',
                 ], 200)
                 ->header('Vary', 'X-Requested-With')
