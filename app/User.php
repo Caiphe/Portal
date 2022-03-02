@@ -39,6 +39,11 @@ class User extends Authenticatable implements MustVerifyEmail
 		'recovery_codes' => 'array'
 	];
 
+	public function apps()
+	{
+		return $this->hasMany(App::class, 'developer_id', 'developer_id');
+	}
+
 	public function roles()
 	{
 		return $this->belongsToMany(Role::class);
@@ -56,6 +61,11 @@ class User extends Authenticatable implements MustVerifyEmail
 		}
 
 		$this->roles()->sync($role, false);
+	}
+
+	public function assignedProducts()
+	{
+		return $this->belongsToMany(Product::class);
 	}
 
 	public function permissions()
@@ -88,7 +98,9 @@ class User extends Authenticatable implements MustVerifyEmail
 
 	public function hasTeamRole($team, $role)
 	{
-		return $this->teamRole($team)->name === $role;
+		$teamRole = $this->teamRole($team);
+
+		return $teamRole !== null && $teamRole->name === $role;
 	}
 
 	public function hasTeamPermissionTo($permission, $team)
@@ -195,6 +207,7 @@ class User extends Authenticatable implements MustVerifyEmail
 	public function getApps($countryCodeFilter = '', $order = 'DESC', $sort = 'name')
 	{
 		$apps = App::where('developer_id', $this->developer_id)
+			->withCount('products')
 			->when(!empty($countryCodeFilter) && $countryCodeFilter !== 'all', function ($q) use ($countryCodeFilter) {
 				$q->where('country_code', $countryCodeFilter);
 			})->orderBy($sort, $order);
@@ -278,5 +291,10 @@ class User extends Authenticatable implements MustVerifyEmail
 	public function sendPasswordResetNotification($token)
 	{
 		$this->notify(new ResetPasswordNotification($token));
+	}
+
+	public function getStatusAttribute()
+	{
+		return $this->email_verified_at ? 'Verified' : 'Not verified';
 	}
 }

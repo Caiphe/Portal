@@ -47,4 +47,14 @@ class Team extends TeamworkTeam
     {
         return Str::slug($this->name);
     }
+
+    public function getFullNameAttribute()
+    {
+        return $this->name;
+    }
+
+    public function getEmailAttribute()
+    {
+        return $this->owner->email;
+    }
 }

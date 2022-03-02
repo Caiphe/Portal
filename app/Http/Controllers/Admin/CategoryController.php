@@ -11,24 +11,32 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $categories = Category::query();
-
-        if ($request->has('q')) {
+        $sort = '';
+        $order = $request->get('order', 'desc');
+        $numberPerPage = (int)$request->get('number_per_page', '15');
+        $categories = Category::when($request->has('q'), function ($q) use ($request) {
             $query = "%" . $request->q . "%";
-            $categories->where(function ($q) use ($query) {
+            $q->where(function ($q) use ($query) {
                 $q->where('title', 'like', $query)
                     ->orWhereHas('content', function ($q) use ($query) {
                         $q->where('title', 'like', $query)
                             ->orWhere('body', 'like', $query);
                     });
             });
+        });
+
+        if ($request->has('sort')) {
+            $sort = $request->get('sort');
+            $categories->orderBy($sort, $order);
+            $order = ['asc' => 'desc', 'desc' => 'asc'][$order] ?? 'desc';
         }
 
         if ($request->ajax()) {
             return response()
-                ->view('components.admin.table-data', [
-                    'collection' => $categories->paginate(),
-                    'fields' => ['title', 'theme'],
+                ->view('components.admin.list', [
+                    'collection' => $categories->paginate($numberPerPage),
+                    'order' => $order,
+                    'fields' => ['Title' => 'title', 'Theme' => 'theme|addClass:not-on-mobile'],
                     'modelName' => 'category'
                 ], 200)
                 ->header('Vary', 'X-Requested-With')
@@ -36,7 +44,8 @@ class CategoryController extends Controller
         }
 
         return view('templates.admin.categories.index', [
-            'categories' => $categories->paginate()
+            'categories' => $categories->paginate($numberPerPage),
+            'order' => $order,
         ]);
     }
 

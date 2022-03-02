@@ -25,7 +25,7 @@
 <form id="form-2fa" action="{{ route('user.2fa.verify') }}" method="POST">
     <img src="/images/illustrations/2fa.svg" alt="2FA Illustration" width="256" height="354">
     @csrf
-    <input name="one_time_password" type="text" placeholder="Add authenticator code" autocomplete="off" autofocus>
+    <input name="one_time_password" type="text" placeholder="Add authenticator code" required autocomplete="off" autofocus>
     <button type="submit">Authenticate</button>
 </form>
 @endsection

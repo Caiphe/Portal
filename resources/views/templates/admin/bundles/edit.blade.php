@@ -6,22 +6,27 @@
 <link rel="stylesheet" href="{{ mix('/css/templates/admin/edit.css') }}">
 @endpush
 
-@section('page-info')
-    <a class="button outline dark" href="{{ route('bundle.show', $bundle->slug) }}" target="_blank" rel="noreferrer">View</a>
-    <button id="save" class="outline dark ml-1" form="admin-form">Save</button>
-@endsection
-
 @section('content')
-<form id="admin-form" action="{{ route('admin.bundle.update', $bundle->slug) }}" method="POST">
+<a href="{{ route('admin.bundle.index') }}" class="go-back">@svg('chevron-left') Back to bundles</a>
+<h1>{{ $bundle->display_name }}</h1>
 
+<div class="page-actions">
+    <a class="button primary" href="{{ route('bundle.show', $bundle->slug) }}" target="_blank" rel="noreferrer">View bundle</a>
+</div>
+
+<form id="admin-form" action="{{ route('admin.bundle.update', $bundle->slug) }}" method="POST">
     @method('PUT')
     @csrf
-
     <div class="editor-field">
-        <h2>Overview</h2>
-        <div class="editor" data-input="body">{!! $content['overview'][0]['body'] ?? old('body') !!}</div>
-    </div>
+        <h2>Content</h2>
 
+        <div class="editor-field-label">
+            <h3>Overview</h3>
+            <div class="editor" data-input="body">{!! $content['overview'][0]['body'] ?? old('body') !!}</div>
+        </div>
+
+        <button class="button outline blue save-button">Apply changes</button>
+    </div>
 </form>
 @endsection
 

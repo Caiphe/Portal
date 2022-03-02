@@ -1,15 +1,13 @@
 @import '../../../variables';
 
-.show-password {
+button.show-password {
     position: absolute;
     right: 4px;
-    top: 2px;
+    top: 24px;
     background-image: url("/images/icons/visible.svg");
     background-size: 20px;
-    background-color: transparent !important;
     background-repeat: no-repeat;
     background-position: center;
-    border: none !important;
     width: 30px;
     height: 30px;
     z-index: 1;
@@ -21,300 +19,220 @@
     }
 }
 
-.password-visible {
-    background-image: url('/images/icons/hidden.svg') !important;
+button.password-visible {
+    background-image: url('/images/icons/hidden.svg');
 }
 
-.flex-container{
-    display: flex;
-    justify-content: space-between;
-
-    .each-container{
-        flex: 1;
-
-        &.roles-groups{
-
-            h2{
-                margin-bottom: 2px;
-            }
-
-            .form-control{
-                display: flex;
-                flex-direction: column;
-
-                select{
-                    margin-bottom: 4px;
-                }
-            }
-
-            .role-heading{
-                margin-top: -4px;
-            }
-        }
-
-        .users-password-check{
-            color: #bb1e4f;
-            padding-top: 58px;
-        }
-
-        #password-strength {
-            height: 40px;
-            line-height: 1;
-            background-color: $grey500;
-            border-radius: 5px;
-            padding-top: 5px;
-            padding-top: 13px;
-            padding-left: 13px;
-            color: #000;
-            transition: background-color 0.356s;
-            width: 320px;
-
-            @media(max-width: 1300px){
-                width: 280px;
-            }
-
-            &.password-score-0,
-            &.password-score-1,
-            &.password-score-2 {
-                background-color: $error;
-                color: #FFF;
-            }
-
-            &.password-score-3,
-            &.password-score-4 {
-                background-color: $warning;
-                color: #FFF;
-            }
-
-            &.password-score-5 {
-                background-color: $success;
-                color: #FFF;
-            }
-        }
-
-        &:nth-child(1){
-            margin-right: 70px;
-        }
-
-        .field-container{
-            margin-bottom: 6px;
-            position: relative;
-            display: flex;
-            justify-content: space-between;
-
-            label{
-                margin-top: 9px;
-
-                @media(max-width: 1400px){
-                    width: 120px;
-                }
-            }
-
-            select,
-            input{
-                width: 320px;
-                border: 1px solid #707070;
-                border-radius: 4px;
-
-                @media(max-width: 1300px){
-                    width: 280px;
-                }
-            }
-
-            .block-membership{
-                width: 320px;
-                height: 40px;
-                border-radius: 5px;
-                background-color: #C7C7C7;
-                box-sizing: border-box;
-                font-size: 14px;
-                padding: 10px 13px;
-
-                @media(max-width: 1300px){
-                    width: 280px;
-                }
-            }
-        }
-
-        .form-control{
-            select{
-                width: 320px;
-                border: 1px solid #707070;
-                border-radius: 4px;
-                margin-top: 10px;
-            }
-        }
-
-        .country-tags-container{
-            position: relative;
-            display: flex;
-            flex-wrap: wrap;
-            margin-top: 10px;
-
-            .country-tag{
-                background-color: #000;
-                color: #fff;
-                font-size: 13px;
-                padding: 2px 6px;
-                border-radius: 4px;
-                margin-right: 3px;
-            }
-        }
-
+#main .editor-field .password-strength {
+    @media screen and (min-width: 768px) {
+        margin-top: -16px;
     }
 }
 
-#country-tags {
-    width: 320px;
-    margin-left: auto;
+#password-still-needs {
+    font-size: 12px;
+    font-family: $MTN-Regular;
 }
 
-.create-btn{
-    padding: 10px 30px;
-    position: absolute;
-    right: 0;
-    top: 15px;
-}
+#password-strength {
+    line-height: 1;
+    background-color: $grey500;
+    border-radius: 8px;
+    padding: 8px;
+    transition: background-color 0.356s;
+    font-size: 12px;
 
-.bottom-section-container{
-    margin-top: 30px;
+    @media screen and (min-width: 768px) {
+        width: calc(50% - 12px);
+    }
 
-    .each-select-block{
-        display: flex;
+    &:before {
+        content: 'Password strength';
+    }
 
-        &:nth-child(1){
-            margin-right: 30px;
+    &.password-score-0,
+    &.password-score-1,
+    &.password-score-2 {
+        background-color: $error;
+        color: #FFF;
+
+        &:before {
+            content: 'Password strength weak';
         }
 
-        label{
+        &+#password-still-needs {
             margin-top: 8px;
         }
+    }
 
-        select{
-            width: 200px;
-            border: 1px solid #707070;
-            margin-left: 20px;
+    &.password-score-3,
+    &.password-score-4 {
+        background-color: $warning;
+        color: #FFF;
+
+        &:before {
+            content: 'Password strength stronger';
+        }
+
+        &+#password-still-needs {
+            margin-top: 8px;
+        }
+    }
+
+    &.password-score-5 {
+        background-color: $success;
+        color: #FFF;
+
+        &:before {
+            content: 'Password strength strong';
+        }
+
+        &+#password-still-needs {
+            margin-top: 8px;
         }
     }
 }
 
-.select-container{
+.apps-filter {
     display: flex;
-    position: relative;
-    padding-right: 50px;
-    margin-top: 30px;
-
-
-}
-
-
-#dev-apps {
-    border-collapse: collapse;
     width: 100%;
-    margin-top: 40px;
 
-    .app-link{
-        color: #5FAEE9;
+    @media screen and (min-width: 768px) {
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
     }
 
-    tr{
-        svg{
-            width: 14px;
-            margin-bottom: -3px;
-            margin-right: 4px;
+    @media screen and (max-width: 767px) {
+        flex-direction: column;
+        margin-bottom: 15px;
+    }
+
+    h2 {
+        font-family: $MTN-Regular;
+        font-weight: normal;
+
+        @media screen and (min-width: 768px) {
+            font-size: 30px;
         }
 
-        td{
-            a{
-                color: #5FAEE9 !important;
+        @media screen and (max-width: 767px) {
+            font-size: 20px;
+        }
+    }
+
+    h3 {
+        font-size: 14px;
+        font-family: $MTN-Regular;
+        font-weight: normal;
+        margin-top: 0;
+        margin-bottom: 8px;
+    }
+
+    select {
+        background-image:
+            url('/images/icons/chevron-down.svg'),
+            url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg"><line x1="0" y1="0" x2="0" y2="50" stroke="%23F0F0F0" /></svg>');
+        background-repeat:
+            no-repeat,
+            no-repeat;
+        background-size:
+            24px,
+            1px;
+        background-position:
+            calc(100% - 16px) center,
+            calc(100% - 54px) top;
+        background-color: #FFF;
+        border-radius: 8px;
+        border: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        appearance: none;
+        width: 196px;
+        height: 40px;
+        padding-left: 16px;
+    }
+}
+
+#apps-list {
+    thead {
+        @media screen and (max-width: 767px) {
+            display: none;
+        }
+    }
+
+    .not-on-mobile {
+        @media screen and (max-width: 767px) {
+            display: none;
+        }
+    }
+
+    .app-status-approved {
+        color: $green;
+        border: 1px solid $green;
+
+        @media screen and (max-width: 767px) {
+            &::before {
+                background: url("/images/icons/done.svg") no-repeat center center / 16px;
+                width: 12px;
+                display: inline-block;
+                color: transparent;
+                filter: invert(56%) sepia(94%) saturate(2964%) hue-rotate(104deg) brightness(92%) contrast(80%);
             }
         }
     }
 
-    th{
-        transition: all 0.3s ease-in-out;
+    .app-status-pending {
+        color: $orange;
+        border: 1px solid $orange;
+    }
 
-        &:nth-child(1){
-            width: 35%;
-        }
+    .app-status-revoked {
+        color: $red;
+        border: 1px solid $red;
 
-        &:nth-child(2){
-            width: 15%;
-        }
-
-        &:nth-child(3){
-            width: 20%;
-        }
-
-        &:nth-child(4){
-            width: 15%;
-        }
-        &:nth-child(5){
-            width: 15%;
+        @media screen and (max-width: 767px) {
+            &::before {
+                background: url("/images/icons/close.svg") no-repeat center center / 16px;
+                width: 12px;
+                display: inline-block;
+                color: transparent;
+                filter: invert(16%) sepia(62%) saturate(4069%) hue-rotate(327deg) brightness(95%) contrast(91%);
+            }
         }
     }
 
-    td, th{
-        border: none;
-        padding: 12px;
-    }
+    .status {
+        box-sizing: border-box;
+        border-radius: 64px;
+        padding: 4px 12px;
+        display: inline-flex;
 
-    tr:nth-child(even){
-        background-color: #f2f2f2;
-    }
-
-    tr:hover {
-        background-color: #ddd;
-        transition: all 0.3s ease-in-out;
-    }
-
-    th {
-        padding-top: 12px;
-        padding-bottom: 12px;
-        text-align: left;
-        background-color: #053241;
-        color: white;
-    }
-
-    .country-flag{
-        width: 24px;
-        height: 24px;
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-color: $yellow;
-        border-radius: 50%;
-    }
-
-    .status{
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-
-        &.app-status-approved{
-            background: url('/images/icons/status-approved.svg') no-repeat center center / contain;
+        @media screen and (min-width: 768px) {
+            &::before {
+                content: attr(aria-label);
+            }
         }
 
-        &.app-status-pending{
-            background: url('/images/icons/status-pending.svg') no-repeat center center / contain;
-        }
+        @media screen and (max-width: 767px) {
+            margin-right: 36px;
 
-        &.app-status-revoked{
-            background: url('/images/icons/status-revoked.svg') no-repeat center center / contain;
+            &::before {
+                content: attr(data-pending);
+            }
         }
     }
 }
 
-.page-header-title{
-    font-size: 20px;
-
-    .outline{
-        font-size: 15px;
-        font-weight: normal;
-        font-family: $MTN-Regular;
-        margin-left: 10px;
-    }
+.country-flag {
+    width: 24px;
+    height: 24px;
 }
 
-.mb{
-    margin-bottom: 10px;
+.go-to-app {
+    position: absolute;
+    top: 24px;
+    right: 16px;
+    display: flex;
+    align-items: center;
 }

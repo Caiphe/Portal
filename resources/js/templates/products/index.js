@@ -1,213 +1,113 @@
-//eventlisteners for the multiselect and filter text search
-document
-    .getElementById("filter-country-select")
-    .addEventListener("change", filterProducts);
-document
-    .getElementById("filter-country-tags")
-    .addEventListener("click", filterProducts);
-document
-    .getElementById("filter-text")
-    .addEventListener("keyup", filterProducts);
+(function () {
+    var filterProductsEls = document.querySelectorAll('.filter-products');
+    var timeout = null;
 
-//Filters products - if category hides the category row and displays categories that are checked. Otherwise it checks the filter of the textsearch, countries and group and if all are valid will display product
-function filterProducts(filterGroup) {
-    if (filterGroup === "Categories") {
-        var categoriesChecked = document.querySelectorAll(
-            "input[name=Categories]:checked"
-        );
-        var categories = document.querySelectorAll(".category");
-        for (var i = categories.length - 1; i >= 0; i--) {
-            if (
-                categoriesChecked.length === 0 ||
-                inCheckedArray(
-                    categoriesChecked,
-                    categories[i].dataset.category
-                )
-            ) {
-                categories[i].style.display = "flex";
-            } else {
-                categories[i].style.display = "none";
-            }
-        }
-    } else if (filterGroup === 'access') {
-        var accessChecked = document.querySelectorAll(".filter-access:checked");
-        var categoriesChecked = document.querySelectorAll("input[name=Categories]:checked");
-        var cardProducts = document.querySelectorAll('.card--product');
-        var categories = document.querySelectorAll('.category');
-        var accessCategories = {};
+    document.getElementById('filter-text').addEventListener('input', debounce);
+    document.getElementById('filter-country').addEventListener('change', filterProducts);
+    document.getElementById('filter-clear').addEventListener('click', clearFilters);
 
-        for (var i = cardProducts.length - 1; i >= 0; i--) {
-            if (
-                accessChecked.length === 0 ||
-                inCheckedArray(
-                    accessChecked,
-                    cardProducts[i].dataset.access
-                )
-            ) {
-                cardProducts[i].style.display = "flex";
-                accessCategories[cardProducts[i].dataset.category] = true;
-            } else {
-                cardProducts[i].style.display = "none";
-                if (accessCategories[cardProducts[i].dataset.category] === undefined) {
-                    accessCategories[cardProducts[i].dataset.category] = false;
-                }
-            }
+    for (var i = filterProductsEls.length - 1; i >= 0; i--) {
+        filterProductsEls[i].addEventListener('change', filterProducts);
+    }
+
+    function debounce() {
+        if (timeout) {
+            clearTimeout(timeout);
+            timeout = null;
         }
+
+        timeout = setTimeout(filterProducts, 512);
+    }
+
+    function clearFilters() {
+        var categories = document.querySelectorAll('.filter-category:checked');
+        var access = document.querySelectorAll('.filter-access:checked');
+
+        document.getElementById('filter-text').value = '';
+        document.getElementById('filter-country').value = '';
+        document.getElementById('filter-country-tags').innerHTML = '';
 
         for (var i = categories.length - 1; i >= 0; i--) {
-            if (
-                (accessChecked.length === 0 && inCheckedArray(categoriesChecked, categories[i])) ||
-                (
-                    accessCategories[categories[i].dataset.category.toLowerCase()] && 
-                    (categoriesChecked.length === 0 || inCheckedArray(accessChecked, categories[i]))
-                )
-            ) {
-                categories[i].style.display = "flex";
-            } else {
-                categories[i].style.display = "none";
-            }
+            categories[i].checked = false;
         }
-    } else {
-        var groupChecked = document.querySelectorAll(
-            "input[name=Group]:checked"
-        );
-        var filterText = document.getElementById("filter-text").value;
-        var match = new RegExp(filterText, "gi");
-        var countrySelect = getSelected(
-            document.getElementById("filter-country")
-        );
-        var products = document.querySelectorAll(".card--product");
-        for (var i = products.length - 1; i >= 0; i--) {
-            products[i].style.display = "none";
 
-            groupValid =
-                groupChecked.length === 0 ||
-                inCheckedArray(groupChecked, products[i].dataset.group);
+        for (var i = access.length - 1; i >= 0; i--) {
+            access[i].checked = false;
+        }
 
-            textValid =
-                filterText === "" || products[i].dataset.title.match(match);
+        filterProducts();
+    }
 
-            var locations =
-                products[i].dataset.locations !== undefined
-                    ? products[i].dataset.locations.split(",")
-                    : ["all"];
-            countriesValid =
-                countrySelect.length === 0 ||
-                locations[0] === "all" ||
-                arrayCompare(locations, countrySelect);
+    function filterProducts() {
+        var cards = document.querySelectorAll('.card--product');
+        var categoryHeadings = document.querySelectorAll('.category-title');
+        var categoryHeadingsShow = [];
 
-            if (groupValid && textValid && countriesValid)
-                products[i].style.display = "inline-block";
+        for (var i = cards.length - 1; i >= 0; i--) {
+            if (testFilterText(cards[i]) && testCategories(cards[i]) && testAccess(cards[i]) && testLocation(cards[i])) {
+                cards[i].style.display = 'inherit';
+                categoryHeadingsShow.push(cards[i].dataset.category);
+                continue;
+            }
+
+            cards[i].style.display = 'none';
+        }
+
+        for (var i = categoryHeadings.length - 1; i >= 0; i--) {
+            if (categoryHeadingsShow.indexOf(categoryHeadings[i].dataset.category) !== -1) {
+                categoryHeadings[i].style.display = 'inherit';
+                continue;
+            }
+
+            categoryHeadings[i].style.display = 'none';
         }
     }
-    toggleFilter();
-}
 
-//check if a value is in a checkbox checked array
-function inCheckedArray(haystack, needle) {
-    if (haystack.length > 0) {
-        for (var i = haystack.length - 1; i >= 0; i--) {
-            if (haystack[i].value.toLowerCase() === needle.toLowerCase())
-                return true;
-        }
-    } else {
+    function testFilterText(card) {
+        var filterText = document.getElementById('filter-text').value.toLowerCase();
+        var title = card.dataset.title.toLowerCase();
+        var description = card.querySelector('.card__body').textContent.toLowerCase();
+
+        if (filterText === '') return true;
+        if (title.indexOf(filterText) !== -1) return true;
+        if (description.indexOf(filterText) !== -1) return true;
+
         return false;
     }
-}
 
-//toggles filter button visibility
-function toggleFilter() {
-    var categoriesChecked = document.querySelectorAll(
-        "input[name=Categories]:checked"
-    );
-    var groupChecked = document.querySelectorAll("input[name=Group]:checked");
-    var countrySelect = getSelected(document.getElementById("filter-country"));
-    var filterText = document.getElementById("filter-text").value;
-    if (
-        groupChecked.length !== 0 ||
-        categoriesChecked.length !== 0 ||
-        countrySelect.length !== 0 ||
-        filterText.length !== 0
-    )
-        document.getElementById("clearFilter").style.display = "block";
-    else if (
-        groupChecked.length === 0 &&
-        categoriesChecked.length === 0 &&
-        countrySelect.length === 0 ||
-        filterText.length === 0
-    )
-        document.getElementById("clearFilter").style.display = "none";
-}
+    function testCategories(card) {
+        var categories = document.querySelectorAll('.filter-category:checked');
 
-//clears filter
-function clearFilter() {
-    var categoriesChecked = document.querySelectorAll("input[name=Categories]:checked");
-    var accessChecked = document.querySelectorAll(".filter-access:checked");
-    var groupChecked = document.querySelectorAll("input[name=Group]:checked");
-    var countrySelect = getSelected(document.getElementById("filter-country"));
+        if (categories.length === 0) return true;
 
-    if (categoriesChecked.length > 0) {
-        uncheckArray(categoriesChecked);
-    }
-
-    if (accessChecked.length > 0) {
-        uncheckArray(accessChecked);
-    }
-
-    if (groupChecked.length > 0) {
-        uncheckArray(groupChecked);
-    }
-
-    if (countrySelect.length > 0) {
-        clearSelected(document.getElementById("filter-country"));
-        var multiselectTags = document.getElementById("filter-country-tags");
-        while (multiselectTags.firstChild) {
-            multiselectTags.removeChild(multiselectTags.firstChild);
+        for (var i = categories.length - 1; i >= 0; i--) {
+            if (categories[i].value.indexOf(card.dataset.category) !== -1) return true;
         }
-    }
-    document.getElementById("filter-text").value = "";
 
-    var categories = document.querySelectorAll(".category");
-    for (var i = categories.length - 1; i >= 0; i--) {
-        categories[i].style.display = "flex";
-    }
-    var products = document.querySelectorAll(".card--product");
-    for (var i = products.length - 1; i >= 0; i--) {
-        products[i].style.display = "inline-block";
+        return false;
     }
 
-    document.getElementById("clearFilter").style.display = "none";
-}
+    function testAccess(card) {
+        var access = document.querySelectorAll('.filter-access:checked');
 
-function uncheckArray(checkArray) {
-    for (var i = checkArray.length - 1; i >= 0; i--) {
-        checkArray[i].checked = false;
-    }
-}
+        if (access.length === 0) return true;
 
-function getSelected(multiSelect) {
-    var selected = [];
-    for (var option of multiSelect.options) {
-        if (option.selected) {
-            selected.push(option.value);
+        for (var i = access.length - 1; i >= 0; i--) {
+            if (access[i].value.indexOf(card.dataset.access) !== -1) return true;
         }
-    }
-    return selected;
-}
 
-function clearSelected(multiselect) {
-    var elements = multiselect.options;
-    for (var i = 0; i < elements.length; i++) {
-        elements[i].selected = false;
+        return false;
     }
-}
 
-function arrayCompare(a, b) {
-    var matches = [];
-    for (var i = 0; i < a.length; i++) {
-        for (var e = 0; e < b.length; e++) {
-            if (a[i] === b[e]) matches.push(a[i]);
+    function testLocation(card) {
+        var locations = document.querySelectorAll('#filter-country :checked');
+
+        if (locations.length === 0) return true;
+
+        for (var i = locations.length - 1; i >= 0; i--) {
+            if (card.dataset.locations.split(',').indexOf(locations[i].value) !== -1) return true;
         }
+
+        return false;
     }
-    return matches.length > 0;
-}
+}());

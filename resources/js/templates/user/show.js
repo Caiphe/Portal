@@ -1,4 +1,5 @@
 var recoveryCodes = [];
+var originalProfilePicture = null;
 
 document.getElementById('profile-picture').addEventListener('change', chooseProfilePicture);
 
@@ -18,6 +19,7 @@ function chooseProfilePicture() {
     }
 
     if (allowedTypes[inputAccepts] !== undefined && allowedTypes[inputAccepts].indexOf(files[0].type) !== -1) {
+        originalProfilePicture = document.getElementById('profile-picture-label').style.backgroundImage;
         changeProfilePicture(files[0]);
         uploadProfilePicture(files[0]);
     } else {
@@ -39,10 +41,15 @@ function changeProfilePicture(file) {
 function uploadProfilePicture(file) {
     var xhr = new XMLHttpRequest();
 
+    addLoading('Uploading image...');
+
     xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
             var message = [];
+
+            removeLoading();
+
             if (xhr.status !== 200) {
                 if (result.errors !== undefined) {
                     for (var field in result.errors) {
@@ -52,8 +59,13 @@ function uploadProfilePicture(file) {
                     message = [result.message || 'There was an error uploading your profile picture.'];
                 }
 
+                document.getElementById('profile-picture-label').style.backgroundImage = originalProfilePicture;
+                document.getElementById('profile-menu-picture').style.backgroundImage = originalProfilePicture;
+
                 addAlert('error', message);
             }
+
+            originalProfilePicture = null;
         }
     };
 

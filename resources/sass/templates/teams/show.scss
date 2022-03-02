@@ -1,29 +1,29 @@
 @import '../../variables';
 
-.wrapper{
-    @media(max-width: 768px){
+.wrapper {
+    @media(max-width: 768px) {
         overflow: hidden;
     }
 }
 
-button{
-    &.add-team-mate-btn-mobile{
+button {
+    &.add-team-mate-btn-mobile {
         display: none;
 
-        @media(max-width: 768px){
+        @media(max-width: 768px) {
             margin-top: 20px;
             display: block;
         }
     }
 
-    &.add-team-mate-btn{
-        @media(max-width: 768px){
+    &.add-team-mate-btn {
+        @media(max-width: 768px) {
             display: none;
         }
     }
 }
 
-.team-block-container{
+.team-block-container {
     position: relative;
     overflow-y: hidden;
     overflow-x: auto;
@@ -38,18 +38,18 @@ button{
             display: none;
         }
 
-        .table-title{
-            .members-column{
+        .table-title {
+            .members-column {
                 width: 91px;
             }
 
-            .apps-column{
+            .apps-column {
                 width: 61px;
             }
         }
     }
 
-    .column{
+    .column {
         @media(max-width: 768px) {
             width: 750px;
 
@@ -57,7 +57,7 @@ button{
     }
 }
 
-.red-tag{
+.red-tag {
     display: inline-block;
     text-decoration: none;
     padding: 5px 20px;
@@ -77,7 +77,7 @@ button{
 .make-user-modal-container,
 .make-admin-modal-container,
 .delete-modal-container,
-.modal-container{
+.modal-container {
     position: fixed;
     left: 0;
     top: 0;
@@ -88,7 +88,7 @@ button{
     pointer-events: none;
     transition: opacity 0.356s, transform 0.356s;
 
-    &.show{
+    &.show {
         opacity: 1;
         z-index: 5;
         pointer-events: auto;
@@ -96,8 +96,8 @@ button{
         // transition: opacity 0.356s, transform 0.356s;
     }
 
-    .ownweship-overlay-container{
-        .scrollable-users-container{
+    .ownweship-overlay-container {
+        .scrollable-users-container {
             height: 193px;
         }
     }
@@ -106,7 +106,7 @@ button{
     .user-overlay-container,
     .admin-overlay-container,
     .delete-overlay-container,
-    .overlay-container{
+    .overlay-container {
         position: fixed;
         left: 0;
         top: 0;
@@ -116,7 +116,7 @@ button{
         cursor: pointer;
     }
 
-    .scrollable-users-container{
+    .scrollable-users-container {
         height: 173px;
         width: 85%;
         position: relative;
@@ -125,14 +125,14 @@ button{
         margin: 0px auto;
     }
 
-    .list-users-container{
+    .list-users-container {
         position: relative;
         padding: 0px;
         box-sizing: border-box;
         width: 93%;
         margin: 0px auto;
 
-        .each-user{
+        .each-user {
             position: relative;
             list-style: none;
             display: flex;
@@ -140,11 +140,11 @@ button{
             box-sizing: border-box;
             margin-bottom: 4px;
 
-            &:nth-child(even){
+            &:nth-child(even) {
                 background-color: #F3F3F3;
             }
 
-            .users-thumbnail{
+            .users-thumbnail {
                 width: 34px;
                 height: 34px;
                 border-radius: 50%;
@@ -155,12 +155,12 @@ button{
                 background-position: center center;
             }
 
-            .user-full-name{
+            .user-full-name {
                 margin-top: 5px;
                 font-weight: bold;
             }
 
-            .check-container{
+            .check-container {
                 position: absolute;
                 right: 15px;
                 top: 13px;
@@ -175,16 +175,16 @@ button{
                     font-size: 22px;
                     user-select: none;
 
-                    input{
+                    input {
                         position: absolute;
                         opacity: 0;
                         cursor: pointer;
                         height: 0;
                         width: 0;
                     }
-                  }
+                }
 
-                  .checkmark {
+                .checkmark {
                     position: absolute;
                     top: 0;
                     left: 0;
@@ -193,23 +193,23 @@ button{
                     background-color: #fff;
                     border-radius: 3px;
                     border: solid 2px #000;
-                  }
+                }
 
-                  .container input:checked ~ .checkmark {
+                .container input:checked~.checkmark {
                     background-color: #000000;
-                  }
+                }
 
-                  .checkmark:after {
+                .checkmark:after {
                     content: "";
                     position: absolute;
                     display: none;
-                  }
+                }
 
-                  .container input:checked ~ .checkmark:after {
+                .container input:checked~.checkmark:after {
                     display: block;
-                  }
+                }
 
-                  .container .checkmark:after {
+                .container .checkmark:after {
                     left: 6px;
                     top: 1px;
                     width: 5px;
@@ -225,7 +225,7 @@ button{
     .transfer-ownership-block,
     .confirm-delete-block,
     .delete-user-block,
-    .add-teammate-block{
+    .add-teammate-block {
         width: 420px;
         height: 290px;
         position: absolute;
@@ -236,11 +236,11 @@ button{
         border-radius: 14px;
         display: block;
 
-        &.hide{
+        &.hide {
             display: none;
         }
 
-        @media(max-width: 768px){
+        @media(max-width: 768px) {
             width: 90%;
         }
 
@@ -249,7 +249,7 @@ button{
         .confirm-delete-close-modal,
         .admin-close-modal,
         .delete-close-modal,
-        .close-modal{
+        .close-modal {
             background-color: transparent;
             position: absolute;
             cursor: pointer;
@@ -257,95 +257,95 @@ button{
             right: 5px;
             top: 5px;
 
-            svg{
+            svg {
                 transition: all 0.3s ease;
             }
 
-            &:hover{
-                svg{
+            &:hover {
+                svg {
                     transform: rotate(90deg);
                     transition: all 0.3s ease;
                 }
             }
         }
 
-        .team-head{
+        .team-head {
             text-align: center;
             margin-top: 60px;
 
-            &.addTeam{
+            &.addTeam {
                 margin-bottom: 10px;
                 margin-top: 50px;
             }
 
-            &.custom-head{
+            &.custom-head {
                 margin-top: 40px;
             }
         }
 
-        .teammate-text{
+        .teammate-text {
             text-align: center;
             width: 250px;
             margin: 15px auto;
             position: relative;
         }
 
-        .remove-user-text{
+        .remove-user-text {
             text-align: center;
             width: 300px;
             margin: 15px auto;
             position: relative;
 
-            @media(max-width: 768px){
+            @media(max-width: 768px) {
                 width: 90%;
             }
         }
 
         .admin-user-name,
         .user-name,
-        .app-name{
+        .app-name {
             text-align: center;
             text-decoration: underline;
             font-size: 15px;
         }
 
-        .form-teammate{
+        .form-teammate {
             width: 270px;
             margin: 0px auto;
 
-            @media(max-width: 400px){
+            @media(max-width: 400px) {
                 width: 90%;
 
-                .form-control{
+                .form-control {
                     width: 80%;
                 }
 
-                .radio-container{
+                .radio-container {
                     text-align: center;
                 }
             }
         }
 
-        .mr-10{
+        .mr-10 {
             margin-right: 10px;
         }
 
         .custom-modal-form,
         .form-delete-user,
-        .form-team{
+        .form-team {
             width: 280px;
             margin: 25px auto 0px;
             text-align: center;
 
-            button{
+            button {
                 width: 130px;
 
-                @media(max-width: 768px){
+                @media(max-width: 768px) {
                     width: 90px;
                 }
             }
 
-            .transfer-btn{
+            .transfer-btn {
                 color: #AEAEAE;
                 background-color: #E9E9E9;
                 pointer-events: none;
@@ -354,23 +354,23 @@ button{
             }
         }
 
-        .radio-container{
+        .radio-container {
             margin-top: 15px;
 
-            .radio-round{
+            .radio-round {
                 margin-right: 15px;
             }
         }
 
-        .form-group-container{
+        .form-group-container {
             display: flex;
             width: 100%;
 
-            .teammate-email{
+            .teammate-email {
                 height: 35px;
             }
 
-            .invite-btn{
+            .invite-btn {
                 width: 98px;
                 height: 35px;
                 color: #fff;
@@ -381,7 +381,7 @@ button{
                 pointer-events: none;
                 cursor: none;
 
-                &.active{
+                &.active {
                     pointer-events: auto;
                     cursor: pointer;
                 }
@@ -389,37 +389,37 @@ button{
         }
     }
 
-    .transfer-ownership-block{
+    .transfer-ownership-block {
         height: 460px;
-        display: block ;
-        pointer-events: auto ;
+        display: block;
+        pointer-events: auto;
     }
 
-    .confirm-delete-block{
+    .confirm-delete-block {
         height: 460px;
         display: none;
         pointer-events: none;
 
-        &.show{
+        &.show {
             display: block;
             pointer-events: auto;
         }
     }
 }
 
-.team-detail-left{
+.team-detail-left {
     position: relative;
 
-    .detail-item{
+    .detail-item {
         margin-bottom: 7px;
 
-        &:nth-child(1){
+        &:nth-child(1) {
             width: 170px;
         }
     }
 
-    .cols{
-        @media(max-width: 768px){
+    .cols {
+        @media(max-width: 768px) {
             display: block;
         }
     }
@@ -448,32 +448,33 @@ button{
     }
 }
 
-.team-members-header, .team-members{
+.team-members-header,
+.team-members {
     padding-top: 20px;
 }
 
-.team-members-header{
+.team-members-header {
     position: relative;
 
-    .add-team-mate-btn{
+    .add-team-mate-btn {
         position: absolute;
         right: 27px;
         top: 20px;
     }
 }
 
-.team-app-list{
-    td{
+.team-app-list {
+    td {
         padding-bottom: 8px;
         padding-top: 8px;
     }
 }
 
-.company-logo-name{
+.company-logo-name {
     position: relative;
     padding-left: 55px;
 
-    .company-logo{
+    .company-logo {
         position: absolute;
         width: 32px;
         height: 32px;
@@ -486,7 +487,7 @@ button{
         background-color: #bb1e4f;
     }
 
-    a{
+    a {
         color: #000;
         text-decoration: underline;
     }
@@ -516,7 +517,7 @@ button{
         border: 2px solid #F2F2F2;
         border-radius: 10px;
 
-        @media(max-width:768px) {
+        @media(max-width: 768px) {
             overflow-x: auto;
             padding-bottom: 10px;
             width: 1000px;
@@ -525,7 +526,7 @@ button{
         >div {
             padding: 10px 20px 10px;
 
-            @media(max-width:768px) {
+            @media(max-width: 768px) {
                 width: 900px;
             }
         }
@@ -533,7 +534,7 @@ button{
 
     .approved-apps,
     .revoked-apps {
-        @media (max-width: 768px){
+        @media (max-width: 768px) {
             width: 900px;
         }
     }
@@ -559,10 +560,10 @@ button{
     }
 
     .my-apps {
-        .creator-details{
+        .creator-details {
             display: flex;
 
-            .creator-profile{
+            .creator-profile {
                 width: 24px;
                 height: 24px;
                 border-radius: 50%;
@@ -573,31 +574,31 @@ button{
             }
         }
 
-        .column{
+        .column {
             font-size: 14px;
 
-            &:nth-child(1){
+            &:nth-child(1) {
                 width: 27%;
             }
 
-            &:nth-child(2){
+            &:nth-child(2) {
                 width: 25%;
                 white-space: nowrap;
             }
 
-            &:nth-child(3){
+            &:nth-child(3) {
                 width: 13%;
             }
 
-            &:nth-child(4){
+            &:nth-child(4) {
                 width: 15%;
             }
 
-            &:nth-child(5){
+            &:nth-child(5) {
                 width: 13%;
             }
 
-            &:nth-child(6){
+            &:nth-child(6) {
                 width: 5%;
                 text-align: right;
             }
@@ -633,10 +634,10 @@ button{
     .loading .status-bar {
         background-image:
             repeating-linear-gradient(-45deg,
-                transparent,
-                transparent 1rem,
-                #FFFFFF4D 1rem,
-                #FFFFFF4D 2rem);
+            transparent,
+            transparent 1rem,
+            #FFFFFF4D 1rem,
+            #FFFFFF4D 2rem);
         background-size: 200% 200%;
         animation: barberpole 4s linear infinite;
     }
@@ -648,38 +649,40 @@ button{
     }
 }
 
-.my-app-details{
-    .headings-container{
-        .column-heading{
-            &:nth-child(1){
+.my-app-details {
+    .headings-container {
+        .column-heading {
+            &:nth-child(1) {
                 width: 27%;
             }
-            &:nth-child(2){
+
+            &:nth-child(2) {
                 width: 25%;
                 white-space: nowrap;
             }
 
-            &:nth-child(3){
+            &:nth-child(3) {
                 width: 15%;
             }
 
-            &:nth-child(4){
+            &:nth-child(4) {
                 width: 15%;
             }
 
-            &:nth-child(5){
+            &:nth-child(5) {
                 width: 13%;
             }
-            &:nth-child(6){
+
+            &:nth-child(6) {
                 width: 5%;
             }
         }
     }
 
-    .app-heading{
+    .app-heading {
         display: flex;
 
-        svg{
+        svg {
             width: 16px;
             margin-left: 10px;
             margin-top: -2px;
@@ -763,7 +766,7 @@ button{
     }
 }
 
-.team-name-logo{
+.team-name-logo {
     width: 100%;
     position: relative;
 
@@ -772,11 +775,11 @@ button{
         margin-right: 230px;
     }
 
-    .team-name-logo-container{
+    .team-name-logo-container {
         display: flex;
     }
 
-    .team-logo{
+    .team-logo {
         width: 40px;
         height: 40px;
         background-size: cover;
@@ -787,56 +790,56 @@ button{
         margin-right: 15px;
         flex-shrink: 0;
 
-        @media(max-width: 768px){
+        @media(max-width: 768px) {
             margin-top: 7px;
         }
     }
 
-    h2{
+    h2 {
         margin-top: 8px;
         width: 70%;
 
-        @media(max-width: 960px){
+        @media(max-width: 960px) {
             width: 50%;
         }
 
-        @media(max-width: 768px){
+        @media(max-width: 768px) {
             width: 80%;
         }
     }
 
-    button{
+    button {
         position: absolute;
         right: 20px;
         top: 0px;
         border: none;
         transition: all 0.3s ease-in-out;
 
-        @media(max-width: 768px){
+        @media(max-width: 768px) {
             position: relative;
             margin-top: 15px;
             right: auto;
             top: auto;
         }
 
-        &.non-active{
+        &.non-active {
             color: #AEAEAE;
             background-color: #E9E9E9;
             pointer-events: none;
             cursor: none;
         }
 
-        &.active{
+        &.active {
             background-color: #000000;
             color: #fff
         }
     }
 }
 
-.member-name-profile{
+.member-name-profile {
     display: flex;
 
-    .member-thumbnail{
+    .member-thumbnail {
         width: 40px;
         height: 40px;
         background-color: $red;
@@ -848,11 +851,11 @@ button{
         margin-top: 5px;
     }
 
-    p{
+    p {
         line-height: 1.1;
     }
 
-    .owner-tag{
+    .owner-tag {
         background-color: #BB1E4F;
         width: 80px;
         text-align: center;
@@ -863,7 +866,34 @@ button{
     }
 }
 
-.main-team-container{
+.twofa-status {
+    display: flex;
+    align-items: center;
+    margin-right: 50px;
+
+    &::before {
+        content: '';
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        margin-right: 8px;
+    }
+}
+
+.twofa-enabled {
+    &::before {
+        background-color: $green;
+    }
+}
+
+.twofa-disabled {
+    &::before {
+        background-color: $red;
+    }
+}
+
+.main-team-container {
     height: 100%;
     width: 100%;
     padding: 0;
@@ -882,28 +912,28 @@ button{
     }
 }
 
-.team-members-list{
+.team-members-list {
     position: relative;
 
-    .team-members{
-        .table-title{
-            .bold-role{
+    .team-members {
+        .table-title {
+            .bold-role {
                 width: 25%;
             }
 
-            .bold-2fa{
+            .bold-2fa {
                 width: 15%;
             }
         }
     }
 
-    @media(max-width: 768px){
+    @media(max-width: 768px) {
         width: 850px;
         padding-right: 20px;
     }
 }
 
-.block-hide-menu{
+.block-hide-menu {
     position: fixed;
     left: 0;
     right: 0;
@@ -914,15 +944,15 @@ button{
     background-color: transparent;
     pointer-events: none;
 
-    &.show{
+    &.show {
         z-index: 3;
         opacity: 3;
         pointer-events: auto;
     }
 }
 
-.team-members{
-    .column-container{
+.team-members {
+    .column-container {
         position: relative;
     }
 
@@ -940,7 +970,7 @@ button{
         top: 17px;
     }
 
-    .block-actions{
+    .block-actions {
         width: 170px;
         position: absolute;
         background-color: #fff;
@@ -956,35 +986,35 @@ button{
         transition: all 0.3s ease;
         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12), 0 3px 6px rgba(0, 0, 0, 0.16);
 
-        &.show{
+        &.show {
             opacity: 3;
             z-index: 4;
             pointer-events: auto;
             transition: all 0.3s ease;
         }
 
-        ul{
+        ul {
             padding: 0px;
             margin: 0;
 
-            li{
+            li {
                 list-style: none;
                 padding: 4px 0;
 
-                button{
+                button {
                     background-color: transparent;
                     padding: 0px;
                     margin: 0;
                     border: none;
                     height: 1px;
 
-                    &.non-active{
+                    &.non-active {
                         pointer-events: none;
                         color: #cdcdcd;
                     }
                 }
 
-                .user-delete{
+                .user-delete {
                     color: #FF4380;
                 }
             }
@@ -992,34 +1022,35 @@ button{
     }
 }
 
-.mt-40{
+.mt-40 {
     margin-top: 40px;
 }
 
-.transfer-ownership-container{
+.transfer-ownership-container {
     position: relative;
     width: 100%;
 }
-.transfer-owner-ship-heading{
+
+.transfer-owner-ship-heading {
     position: relative;
     width: 100%;
     margin-top: 40px;
 
-    button{
+    button {
         position: absolute;
         right: 20px;
         top: 0px;
         border: none;
         transition: all 0.3s ease-in-out;
 
-        @media(max-width: 470px){
+        @media(max-width: 470px) {
             position: relative;
             margin-top: 15px;
             right: auto;
             top: auto;
         }
 
-        &.non-active{
+        &.non-active {
             color: #AEAEAE;
             background-color: #E9E9E9;
             pointer-events: none;
@@ -1027,7 +1058,7 @@ button{
             transition: all 0.3s ease-in-out;
         }
 
-        &.active{
+        &.active {
             background-color: #000000;
             transition: all 0.3s ease-in-out;
             color: #fff
@@ -1035,20 +1066,20 @@ button{
     }
 }
 
-.trasfer-container{
+.trasfer-container {
     margin-bottom: 50px;
     margin-top: 30px;
 
-    .transfer-btn-block{
+    .transfer-btn-block {
         margin-top: 20px;
 
-        button{
+        button {
             width: 170px;
 
-            &:nth-child(1){
+            &:nth-child(1) {
                 margin-right: 10px;
 
-                @media(max-width: 470px){
+                @media(max-width: 470px) {
                     margin-bottom: 10px;
                 }
             }
@@ -1056,47 +1087,49 @@ button{
     }
 }
 
-@media(max-width:768px){
-    #app-index{
-        .row{
+@media(max-width:768px) {
+    #app-index {
+        .row {
             width: 1000px;
         }
     }
-    .wrapper{
-        &.container{
+
+    .wrapper {
+        &.container {
             padding: 0 0px !important;
         }
     }
 }
 
-.teammate-error-message{
+.teammate-error-message {
     font-size: 13px;
     color: $error;
     margin-top: 15px;
     display: none;
     transition: all 0.3s ease;
 
-    &.show{
+    &.show {
         display: block;
     }
 }
 
-.country-name-flag{
-    svg{
+.country-name-flag {
+    svg {
         width: 16px;
         margin-bottom: -4px;
         margin-right: 5px;
     }
 }
 
-.custom-margin{
+.custom-margin {
     margin-right: -68px;
 }
 
-.form-team-leave{
+.form-team-leave {
     text-align: center;
 }
-.mb-20{
+
+.mb-20 {
     margin-bottom: 20px;
 }
 

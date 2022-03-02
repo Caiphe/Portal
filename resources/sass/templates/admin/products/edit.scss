@@ -1,0 +1,88 @@
+@import "../../../variables";
+
+#uploader {
+    background-color: $yellow;
+    padding: 8px 16px;
+    border-radius: 22px;
+    justify-content: center;
+    display: inline-flex;
+    cursor: pointer;
+
+    &.uploading {
+        span {
+            display: none;
+        }
+
+        svg {
+            display: inline-block;
+        }
+    }
+
+    &.highlight {
+        background-color: $blue;
+        color: #FFF;
+    }
+
+    svg {
+        display: none;
+        height: 20px;
+
+        circle {
+            stroke: #FFF;
+
+            &+path {
+                stroke: #FFF;
+            }
+        }
+    }
+}
+
+#main {
+    .no-swagger {
+        display: none;
+    }
+
+    .custom-tab input {
+        margin-bottom: 24px;
+        width: 100%;
+    }
+
+    #add-custom-tab {
+        margin-top: 24px;
+        align-self: flex-start;
+    }
+
+    .custom-tab+#add-custom-tab {
+        margin-top: -18px;
+        position: absolute;
+    }
+
+    .add-custom-tab,
+    .remove-custom-tab {
+        background: none;
+        border: none;
+        color: $blue;
+        padding: 0;
+        margin-top: 16px;
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+
+        @media screen and (min-width: 768px) {
+            &::after {
+                content: attr(aria-label);
+            }
+        }
+
+        svg {
+            fill: $blue;
+            stroke: $blue;
+            margin-right: 4px;
+        }
+    }
+
+    .remove-custom-tab {
+        display: flex;
+        margin-left: auto;
+    }
+}

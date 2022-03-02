@@ -56,21 +56,21 @@ table {
     }
 
     th {
-        text-transform: capitalize;
+        &::first-letter,
+        a::first-letter {
+            text-transform: uppercase;
+        }
     }
 
-    td {
-        // vertical-align: top;
-    }
-    .table-title{
-        td{
+    .table-title {
+        td {
             font-weight: 800;
             color: black;
             position: relative;
             font-size: 15px;
             font-family: "mtn-bold";
 
-            svg{
+            svg {
                 width: 17px;
                 margin-bottom: -4px;
                 height: 16px;
@@ -89,32 +89,75 @@ table {
     list-style: none;
     display: flex;
     padding: 0;
+    flex-wrap: wrap;
 
     li {
         padding: 0;
     }
 
+    li:first-of-type {
+        background: url('/images/icons/chevron-left.svg') no-repeat #FFF center center / 24px;
+
+        a, span {
+            color: transparent;
+        }
+    }
+
+    li:last-of-type {
+        background: url('/images/icons/chevron-right.svg') no-repeat #FFF center center / 24px;
+
+        a, span {
+            color: transparent;
+        }
+    }
+
     .page-link {
-        width: 30px;
-        height: 30px;
+        width: 40px;
+        height: 40px;
         padding: 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 2px;
         color: $grey900;
         box-sizing: border-box;
+        font-size: 14px;
+        font-family: $MTN-Regular;
+    }
+
+    .page-item {
+        width: 40px;
+        height: 40px;
         background-color: #FFF;
         border: 1px solid $grey900;
         border-radius: 6px;
-        font-family: 'mtn-bold';
+        margin-right: 8px;
+
+        @media screen and (max-width: 767px) {
+            margin-bottom: 10px;
+        }
     }
 
-    .active .page-link,
-    .page-link:active,
-    .page-link:focus {
+    .page-item::last-of-type {
+        margin-right: 0;
+    }
+
+    .active.page-item,
+    .page-item:active,
+    .page-item:hover,
+    .page-item:focus {
         background-color: $yellow;
         border: 1px solid $yellow;
+    }
+
+    .disabled {
+        &.page-item:hover {
+            background-color: $grey400;
+            border: 1px solid $grey900;
+        }
+
+        a {
+            pointer-events: none;
+        }
     }
 }
 
@@ -122,3 +165,7 @@ table {
     word-break: break-word;
 }
 
+[transparent] {
+    opacity: 0;
+    pointer-events: none;
+}

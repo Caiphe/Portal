@@ -1,64 +1,64 @@
+@php
+    $user = auth()->user();
+@endphp
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    @production
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-EESWEBL5F7"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-
-          gtag('config', 'G-EESWEBL5F7');
-        </script>
-    @endproduction
+    @include('partials.google-analytics')
+    @includeWhen(!isset($_COOKIE['shownCookiePolicy']), 'partials.cookie')
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield("title", '{"MTN":"Developer Admin Portal"}')</title>
     <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
     <link rel="icon" href="/images/favicon.png" type="image/png">
-    <link rel="stylesheet" href="{{ mix('/css/styles.css') }}">
+    <link rel="stylesheet" href="{{ mix('/css/layouts/admin.css') }}">
     @stack("styles")
 </head>
-<body class="admin @yield('body-class')">
-    @yield('banner')
-    <div class="wrapper">
-        <nav id="sidebar">
-            <ul>
-                @if(\Auth::user()->can('administer-content') || \Auth::user()->can('administer-products'))
-                <li class="has-children  @if(!Request::is('admin/dashboard') && !Request::is('admin/users') && !Request::is('admin/users/*')) active @endif">
-                    Manage
-                    <ul>
-                        @if(\Auth::user()->can('administer-content'))
-                        <li @if(Request::is('admin/faqs') || Request::is('admin/faqs/*')) class="active" @endif><a href="{{ route('admin.faq.index') }}">FAQ</a></li>
-                        <li @if(Request::is('admin/pages') || Request::is('admin/pages/*')) class="active" @endif><a href="{{ route('admin.page.index') }}">Pages</a></li>
-                        <li @if(Request::is('admin/categories') || Request::is('admin/categories/*')) class="active" @endif><a href="{{ route('admin.category.index') }}">Categories</a></li>
-                        <li @if(Request::is('admin/docs') || Request::is('admin/docs/*')) class="active" @endif><a href="{{ route('admin.doc.index') }}">Documentation</a></li>
-                        @endif
-                        @if(\Auth::user()->can('administer-products'))
-                        <li @if(Request::is('admin/bundles') || Request::is('admin/bundles/*')) class="active" @endif><a href="{{ route('admin.bundle.index') }}">Bundles</a></li>
-                        <li @if(Request::is('admin/products') || Request::is('admin/products/*')) class="active" @endif><a href="{{ route('admin.product.index') }}">Products</a></li>
-                        @endif
-                    </ul>
-                </li>
-                @endif
-                @if(\Auth::user()->can('administer-dashboard'))
-                <li @if(Request::is('admin/dashboard')) class="active" @endif><a href="{{ route('admin.dashboard.index') }}">Applications</a></li>
-                @endif
-                @if(\Auth::user()->can('administer-users'))
-                <li @if(Request::is('admin/users') || Request::is('admin/users/*')) class="active" @endif><a href="{{ route('admin.user.index') }}">Users</a></li>
-                @endif
-            </ul>
+<body class="admin">
+    <nav id="sidebar">
+        <a class="logo" href="/">@svg('logo', '', '/images/') Admin Portal</a>
+        <button id="hide-menu" class="reset">@svg('close')</button>
 
-            @if(\Auth::user()->can('administer-products'))
-            <button id="sync" class="button yellow outline" onclick="sync(this)">Sync All @svg('sync', '#FC0')</button>
-            @endif
-        </nav>
-        <main id="main">
-            <x-admin.header heading="Title"/>
-            <section>@yield("content")</section>
-        </main>
-    </div>
+        <ul class="main-menu">
+            <li @class(['menu-applications', 'active' => Request::is('admin/dashboard')])><a href="{{ route('admin.dashboard.index') }}">@svg('applications') Applications</a></li>
+            <li @class(['menu-products', 'active' => (Request::is('admin/products') || Request::is('admin/products/*'))])><a href="{{ route('admin.product.index') }}">@svg('products') Products</a></li>
+            <li @class(['menu-users', 'active' => (Request::is('admin/users') || Request::is('admin/users/*'))])><a href="{{ route('admin.user.index') }}">@svg('users') Users</a></li>
+            <li @class(['menu-faq', 'active' => (Request::is('admin/faqs') || Request::is('admin/faqs/*'))])><a href="{{ route('admin.faq.index') }}">@svg('faq') FAQ</a></li>
+            <li @class(['menu-pages', 'active' => (Request::is('admin/pages') || Request::is('admin/pages/*'))])><a href="{{ route('admin.page.index') }}">@svg('pages') Pages</a></li>
+            <li @class(['menu-categories', 'active' => (Request::is('admin/categories') || Request::is('admin/categories/*'))])><a href="{{ route('admin.category.index') }}">@svg('categories') Categories</a></li>
+            <li @class(['menu-documentation', 'active' => (Request::is('admin/docs') || Request::is('admin/docs/*'))])><a href="{{ route('admin.doc.index') }}">@svg('documentation') Documentation</a></li>
+            <li @class(['menu-bundles', 'active' => (Request::is('admin/bundles') || Request::is('admin/bundles/*'))])><a href="{{ route('admin.bundle.index') }}">@svg('bundles') Bundles</a></li>
+        </ul>
+
+        <ul class="secondary-menu">
+            <li><a href="{{ route('user.profile') }}"><div class="profile-picture" style="background-image: url({{ $user->profile_picture }})"></div> {{ $user->full_name }}</a></li>
+            <li>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button>@svg('signout') Sign out</button>
+                </form>
+            </li>
+            <li>
+                <form action="{{ route('admin.search') }}" class="admin-search-form">
+                    <input class="admin-search" type="text" name="q" placeholder="Search site">
+                </form>
+            </li>
+            <li>
+                @if($user->can('administer-products'))
+                <button id="sync" class="button yellow outline" onclick="syncProductsThenApps()">Sync all</button>
+                @endif
+            </li>
+        </ul>
+    </nav>
+    <header id="mobile-header">
+        <a class="logo" href="/">@svg('logo', '', '/images/') Admin Portal</a>
+        <button id="menu-button" class="reset">@svg('menu')</button>
+    </header>
+    <main id="main">
+        @yield("content")
+    </main>
     <x-alert/>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
     <script>

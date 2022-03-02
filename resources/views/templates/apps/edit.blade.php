@@ -107,20 +107,17 @@
                     <div class="products">
                         @foreach ($products as $category => $products)
                             <div class="category" data-category="{{ $category }}">
-                                <h3>{{ $category }}</h3>
+                                <h3 class="category-heading" data-category="{{ $products[0]->category_cid }}">{{ $category }}</h3>
                                 @foreach ($products as $product)
-                                    @php
-                                        $tags = array($product->group, $product->category->title);
-                                        $class = in_array($product->name, $selectedProducts) ? 'product-block selected' : 'product-block';
-                                        $href = route('product.show', $product->slug);
-                                    @endphp
                                     <x-card-product :title="$product->display_name"
-                                                    :class="$class"
-                                                    :href="$href"
-                                                    :tags="$tags"
+                                                    :class="in_array($product->name, $selectedProducts) ? 'product-block selected' : 'product-block'"
+                                                    :href="route('product.show', $product->slug)"
+                                                    :tags="[$product->group, $product->category->title]"
                                                     :addButtonId="$product->slug"
                                                     :data-title="$product->name"
                                                     :data-group="$product->group"
+                                                    :data-access="$product->access"
+                                                    :data-category="$product->category_cid"
                                                     :data-locations="$product->locations">{{ $product->description ?: 'View the product' }}
                                     </x-card-product>
                                 @endforeach
@@ -258,8 +255,9 @@
         }
 
         function filterProducts(selectedCountry) {
-
             var products = document.querySelectorAll(".card--product");
+            var categoryHeadings = document.querySelectorAll(".category-heading");
+            var showCategories = [];
 
             for (var i = products.length - 1; i >= 0; i--) {
                 products[i].style.display = "none";
@@ -270,9 +268,16 @@
                         : ["all"];
 
                 if(selectedCountry.length === 0 || inSelectedArray(selectedCountry, locations)) {
-
                     products[i].style.display = "flex";
+
+                    if(showCategories[products[i].dataset.category] === undefined){
+                        showCategories.push(products[i].dataset.category);
+                    }
                 }
+            }
+
+            for (var i = categoryHeadings.length - 1; i >= 0; i--) {
+                categoryHeadings[i].style.display = showCategories[categoryHeadings[i].dataset.category] === undefined ? "none" : "inherit";
             }
         }
 

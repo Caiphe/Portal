@@ -7,10 +7,21 @@
 @section('title', 'Bundles')
 
 @section('content')
-    <x-admin.table :collection="$bundles" model-name="bundle" :fields="['display_name', 'category.title']"></x-admin-table>
+    <h1>Bundles</h1>
+
+    <x-admin.filter searchTitle="Bundle name"></x-admin.filter>
+
+    <div id="table-data">
+        @include('components.admin.list', [
+            'collection' => $bundles,
+            'fields' => ['Name' => 'display_name', 'Category' => 'category.title|addClass:not-on-mobile'],
+            'modelName' => 'bundle'
+        ])
+    </div>
 @endsection
 
 @push('scripts')
+<script src="{{ mix('/js/templates/admin/index.js') }}" defer></script>
 <script>
     ajaxifyOnPopState = updateFilters;
     function updateFilters(params) {
