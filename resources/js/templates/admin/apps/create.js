@@ -95,40 +95,6 @@
         sectionActive.previousElementSibling.classList.add('active');
     }
 
-    document.querySelector('[type="reset"]').addEventListener('click', function () {
-        if (form.querySelector('.active') !== form.firstElementChild) {
-            form.querySelector('.active').classList.remove('active');
-            form.firstElementChild.classList.add('active');
-            form.firstElementChild.style.display = 'flex';
-        }
-
-        var els = document.querySelectorAll('#app-create nav a.active');
-        var countries = document.querySelectorAll('.countries .selected');
-        var products = document.querySelectorAll('.products .selected');
-        var buttons = document.querySelectorAll('.products .selected .done');
-
-        for (var k = 0; k < els.length; k++) {
-            els[k].classList.remove('active');
-        }
-
-        for (var x = 0; x < countries.length; x++) {
-            countries[x].classList.remove('selected');
-        }
-
-        for (var z = 0; z < products.length; z++) {
-            products[z].classList.remove('selected');
-        }
-
-        for (var w = 0; w < buttons.length; w++) {
-            buttons[w].classList.remove('done');
-            buttons[w].classList.add('plus');
-        }
-
-        nav.querySelector('button').classList.add('active');
-
-        form.reset();
-    });
-
     var countries = document.querySelectorAll('.country');
     for (var l = 0; l < countries.length; l++) {
         countries[l].addEventListener('change', selectCountry);
