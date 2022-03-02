@@ -52,10 +52,16 @@ class ProductController extends Controller
 	 */
 	public function show(Request $request, Product $product)
 	{
-		$user = $request->user()->load('assignedProducts');
-		$assignedProducts = $user->assignedProducts->pluck('pid');
+		$user = $request->user();
 
-		abort_if($product->access === 'private' && (!$user || (!$assignedProducts->contains($product->pid) && !$user->hasRole('private'))), 403);
+		if ($user) {
+			$user->load('assignedProducts');
+			$assignedProducts = $user->assignedProducts->pluck('pid');
+			abort_if($product->access === 'private' && (!$user || (!$assignedProducts->contains($product->pid) && !$user->hasRole('private'))), 403);
+		} else {
+			abort_if($product->access === 'private', 403);
+		}
+
 
 		$product->load(['content', 'keyFeatures', 'category', 'countries']);
 
