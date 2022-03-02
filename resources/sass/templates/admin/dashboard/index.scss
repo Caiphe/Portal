@@ -17,7 +17,8 @@
     }
 }
 
-.body {
+.body,
+.head {
     @media screen and (max-width: 1099px) {
         margin-top: 15px;
     }
