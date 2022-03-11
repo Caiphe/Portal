@@ -77,8 +77,16 @@ class ApigeeService
         return $resp->json();
     }
 
+    protected static function encodeUrl(string $url): string
+    {
+        $url = explode('/', $url);
+        $url = array_map(fn ($arg) => urlencode($arg), $url);
+        return implode('/', $url);
+    }
+
     public static function get(string $url)
     {
+        $url = self::encodeUrl($url);
         $resp = self::HttpWithToken()->get(config('apigee.base') . $url);
 
         if ($resp->status() === 401 || $resp->status() === 403) {
@@ -92,6 +100,7 @@ class ApigeeService
 
     public static function post(string $url, array $data, array $headers = [])
     {
+        $url = self::encodeUrl($url);
         $h = array_merge([
             'Content-Type' => 'application/json'
         ], $headers);
@@ -113,6 +122,7 @@ class ApigeeService
 
     public static function put(string $url, array $data)
     {
+        $url = self::encodeUrl($url);
         $resp = self::HttpWithToken()->put(config('apigee.base') . $url, $data);
 
         if ($resp->status() === 401 || $resp->status() === 403) {
@@ -126,6 +136,7 @@ class ApigeeService
 
     public static function delete(string $url)
     {
+        $url = self::encodeUrl($url);
         $resp = self::HttpWithToken()->delete(config('apigee.base') . $url);
 
         if ($resp->status() === 401 || $resp->status() === 403) {
@@ -144,6 +155,7 @@ class ApigeeService
      */
     public static function getMint(string $url)
     {
+        $url = self::encodeUrl($url);
         $resp = self::HttpWithToken()->get(config('apigee.base_mint') . $url);
 
         if ($resp->status() === 401 || $resp->status() === 403) {
