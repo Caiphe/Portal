@@ -4,7 +4,7 @@
     $user = auth()->user();
 @endphp
 
-@section('body-class', 'layout-master-full-width')
+@section('body-class', 'admin')
 
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/layouts/admin.css') }}">
