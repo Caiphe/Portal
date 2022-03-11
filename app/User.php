@@ -10,10 +10,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Mpociot\Teamwork\TeamInvite;
 use Mpociot\Teamwork\Traits\UserHasTeams;
 use App\Notifications\ResetPasswordNotification;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-	use Notifiable, UserHasTeams;
+	use Notifiable, UserHasTeams, HasFactory;
 
 	/**
 	 * The attributes that are mass assignable.
