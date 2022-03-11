@@ -79,9 +79,12 @@ class ApigeeService
 
     protected static function encodeUrl(string $url): string
     {
+        preg_match('/\?.*/', $url, $get);
+        $url = preg_replace('/\?.*/', '', $url);
         $url = explode('/', $url);
         $url = array_map(fn ($arg) => urlencode($arg), $url);
-        return implode('/', $url);
+        $url = implode('/', $url);
+        return $url . ($get[0] ?? '');
     }
 
     public static function get(string $url)
