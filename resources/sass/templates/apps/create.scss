@@ -1,7 +1,7 @@
-@import '../../variables';
+@use '../../variables';
 
 #sidebar {
-    @media #{$small} {
+    @media #{variables.$small} {
         display: none;
     }
 }
@@ -14,7 +14,7 @@
         width: 100%;
         padding: 0 40px 0 0;
 
-        @media #{$small} {
+        @media #{variables.$small} {
             margin: 0;
             padding: 0;
         }
@@ -26,7 +26,7 @@
             padding-top: 20px;
             padding-bottom: 20px;
 
-            @media #{$small} {
+            @media #{variables.$small} {
                 flex-direction: column;
             }
 
@@ -35,26 +35,26 @@
                 align-items: center;
                 margin-right: 40px;
 
-                @media #{$small} {
+                @media #{variables.$small} {
                     margin-right: 0;
                 }
 
                 &:not(:last-of-type) {
-                    @media #{$small} {
+                    @media #{variables.$small} {
                         margin-bottom: 20px;
                     }
                 }
 
                 &.active {
-                    color: $blue900;
+                    color: variables.$blue900;
 
                     span {
-                        border: 2px solid $blue900;
+                        border: 2px solid variables.$blue900;
                     }
                 }
 
                 &:not(.active) {
-                    color: $blue600;
+                    color: variables.$blue600;
                 }
 
                 span {
@@ -65,7 +65,7 @@
                     width: 16px;
                     height: 16px;
                     padding: 8px;
-                    border: 2px solid $blue600;
+                    border: 2px solid variables.$blue600;
                     font-size: 16px;
                     margin-right: 15px;
                 }
@@ -76,7 +76,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            border: 2px solid $grey300;
+            border: 2px solid variables.$grey300;
             border-radius: 10px;
             margin-top: 20px;
 
@@ -142,7 +142,7 @@
                 margin-bottom: 3rem;
                 width: 50%;
 
-                @media #{$small} {
+                @media #{variables.$small} {
                     width: 100%;
                 }
             }
@@ -159,7 +159,7 @@
                     flex-direction: column;
                     align-items: center;
                     justify-content: flex-start;
-                    border: 2px solid $grey400;
+                    border: 2px solid variables.$grey400;
                     border-radius: 5px;
                     padding: 20px;
                     margin-right: 10px;
@@ -183,7 +183,7 @@
                     }
 
                     .country-checked {
-                        border: 2px solid $grey900;
+                        border: 2px solid variables.$grey900;
                         position: absolute;
                         top: -2px;
                         left: -2px;
@@ -204,7 +204,7 @@
                 }
 
                 .selected {
-                    border: 2px solid $grey900;
+                    border: 2px solid variables.$grey900;
                 }
 
                 .not-selected {
@@ -245,7 +245,7 @@
                     flex-flow: row wrap;
                     width: 100%;
 
-                    @media #{$small} {
+                    @media #{variables.$small} {
                         flex-direction: column;
                     }
 
@@ -264,12 +264,12 @@
                             margin-right: 20px;
                             width: 30%;
 
-                            @media #{$small} {
+                            @media #{variables.$small} {
                                 width: 100%;
                             }
 
                             &.selected {
-                                border-color: $grey900;
+                                border-color: variables.$grey900;
                             }
 
                             @media screen and (min-width: 768px) {
@@ -301,7 +301,7 @@
             font-size: 16px;
             margin: 40px auto 20px;
 
-            @media #{$small} {
+            @media #{variables.$small} {
                 width: 100%;
             }
         }
@@ -467,7 +467,7 @@
                 background-repeat: no-repeat;
                 background-position: center center;
                 background-size: cover;
-                background-color: $yellow;
+                background-color: variables.$yellow;
                 position: absolute;
                 top: 4px;
             }

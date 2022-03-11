@@ -1,4 +1,4 @@
-@import '../../variables';
+@use '../../variables';
 
 #main {
     .content {
@@ -109,7 +109,7 @@
                 position: absolute;
                 top: 84px;
                 right: 0;
-                color: $error;
+                color: variables.$error;
                 font-size: 12px;
                 display: none;
 
@@ -211,7 +211,7 @@
         label {
             display: block;
             padding-bottom: 10px;
-            font-family: $Montserrat-regular;
+            font-family: variables.$Montserrat-regular;
             font-weight: 500;
             color: #000000;
         }
@@ -261,7 +261,7 @@
     height: 60px;
     border-radius: 50%;
     border: none;
-    background-color: $yellow;
+    background-color: variables.$yellow;
     margin-bottom: 10px;
     margin-top: -10px;
     background-size: cover;

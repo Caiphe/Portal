@@ -1,4 +1,4 @@
-@import "../../variables";
+@use "../../variables";
 
 main {
     .container {
@@ -48,7 +48,7 @@ section.yellow-bg {
 
 .banner {
 
-    @media #{$medium-up} {
+    @media #{variables.$medium-up} {
 
         h2,
         p {
@@ -60,7 +60,7 @@ section.yellow-bg {
         }
     }
 
-    @media #{$small} {
+    @media #{variables.$small} {
         h2 {
             margin-top: 60px;
             font-size: 40px;
@@ -74,7 +74,7 @@ section.yellow-bg {
         right: 4%;
         width: 667px;
 
-        @media #{$small} {
+        @media #{variables.$small} {
             display: none;
         }
     }
@@ -88,7 +88,7 @@ section.yellow-bg {
         overflow: hidden;
         border-radius: 16px;
 
-        @media #{$small} {
+        @media #{variables.$small} {
             display: none;
         }
 
@@ -122,11 +122,11 @@ section.yellow-bg {
     flex-wrap: wrap;
     justify-content: space-around;
 
-    @media #{$small} {
+    @media #{variables.$small} {
         margin-top: 30px;
     }
 
-    @media #{$medium-up} {
+    @media #{variables.$medium-up} {
         margin-top: 100px;
     }
 
@@ -134,7 +134,7 @@ section.yellow-bg {
         width: 100%;
         text-align: center;
         font-size: 10px;
-        color: $grey500;
+        color: variables.$grey500;
     }
 }
 
@@ -147,7 +147,7 @@ section.yellow-bg {
         font-size: 30px;
     }
 
-    @media #{$medium-up} {
+    @media #{variables.$medium-up} {
         .benefits-copy {
             width: 405px;
             margin-bottom: 145px;
@@ -159,13 +159,13 @@ section.yellow-bg {
         top: -50px;
         right: 0;
 
-        @media #{$small} {
+        @media #{variables.$small} {
             display: none;
         }
     }
 
     hr {
-        color: $grey300;
+        color: variables.$grey300;
         margin: 40px 0;
     }
 
@@ -175,7 +175,7 @@ section.yellow-bg {
             align-items: center;
             font-size: 14px;
 
-            @media #{$small} {
+            @media #{variables.$small} {
                 flex: 0 0 50%;
                 max-width: 50%;
             }
@@ -184,7 +184,7 @@ section.yellow-bg {
                 margin-right: 8px;
                 width: 11px;
                 height: 11px;
-                background-color: $yellow;
+                background-color: variables.$yellow;
                 padding: 4px;
                 border-radius: 50%;
                 flex-shrink: 0;
@@ -192,15 +192,15 @@ section.yellow-bg {
         }
 
         a {
-            color: $blue;
+            color: variables.$blue;
             display: flex;
 
-            @media #{$small} {
+            @media #{variables.$small} {
                 margin-top: 4px;
             }
 
             svg {
-                fill: $blue;
+                fill: variables.$blue;
                 width: 16px;
                 margin-left: 10px;
             }
@@ -235,19 +235,19 @@ section.yellow-bg {
     }
 
     .active {
-        background-color: $grey900;
+        background-color: variables.$grey900;
     }
 
     .snippet {
         padding: 30px;
         position: absolute;
         bottom: 0;
-        background-color: $grey900;
+        background-color: variables.$grey900;
         width: 100%;
         border-radius: 0 0 5px 5px;
 
         pre {
-            background-color: $grey900;
+            background-color: variables.$grey900;
             padding: 0;
             margin: 0;
             font-size: 12px;
@@ -255,7 +255,7 @@ section.yellow-bg {
     }
 
     .cols {
-        @media #{$medium-up} {
+        @media #{variables.$medium-up} {
             position: absolute;
             right: 8%;
             top: 30px;
@@ -265,7 +265,7 @@ section.yellow-bg {
             }
         }
 
-        @media #{$small} {
+        @media #{variables.$small} {
             a {
                 margin-bottom: 10px;
             }
@@ -284,7 +284,7 @@ section.yellow-bg {
 
         .stack-description {
             .tag {
-                color: $grey900;
+                color: variables.$grey900;
             }
 
             h3 {
@@ -293,11 +293,11 @@ section.yellow-bg {
             }
 
             a {
-                color: $blue;
+                color: variables.$blue;
                 display: flex;
 
                 svg {
-                    fill: $blue;
+                    fill: variables.$blue;
                     width: 14px;
                     margin-left: 10px;
                 }
@@ -305,17 +305,17 @@ section.yellow-bg {
         }
 
         .stack-cards {
-            @media #{$small} {
+            @media #{variables.$small} {
                 display: none;
             }
 
-            @media #{$medium-up} {
+            @media #{variables.$medium-up} {
                 flex: 0 0 auto;
             }
         }
     }
 
-    @media #{$small} {
+    @media #{variables.$small} {
         .stack-product {
             margin-bottom: 40px;
         }
@@ -324,7 +324,7 @@ section.yellow-bg {
 
 // Stack general
 .stack-general {
-    @media #{$medium-up} {
+    @media #{variables.$medium-up} {
         width: 630px;
         height: 394px;
     }
@@ -343,7 +343,7 @@ section.yellow-bg {
     .stack-card {
         background-color: #FFF;
         border-radius: 5px;
-        box-shadow: 0 12px 24px $grey500;
+        box-shadow: 0 12px 24px variables.$grey500;
         width: 490px;
         height: 238px;
         padding: 40px;
@@ -379,7 +379,7 @@ section.yellow-bg {
 
     h3 {
         font-size: 14px;
-        background-color: $yellow;
+        background-color: variables.$yellow;
         border-radius: 15px;
         padding: 5px 20px;
         font-family: Montserrat;
@@ -403,11 +403,11 @@ section.yellow-bg {
     a {
         font-size: 14px;
         font-family: Montserrat;
-        color: $blue;
+        color: variables.$blue;
         display: flex;
 
         svg {
-            fill: $blue;
+            fill: variables.$blue;
             width: 14px;
             margin-left: 10px;
         }
@@ -522,8 +522,8 @@ section.yellow-bg {
     }
 
     .button {
-        background-color: $grey300;
-        border: 2px solid $grey300;
+        background-color: variables.$grey300;
+        border: 2px solid variables.$grey300;
         margin-top: 10px;
         font-size: 14px;
     }
@@ -556,8 +556,8 @@ section.yellow-bg {
         background-image: url("/images/category/themes/mixed/squiggle-bundle.svg");
 
         .tag {
-            color: $yellow;
-            border: 1px solid $yellow;
+            color: variables.$yellow;
+            border: 1px solid variables.$yellow;
             background-color: transparent;
         }
 
@@ -566,15 +566,15 @@ section.yellow-bg {
         }
 
         .stack-card {
-            background-color: $grey900;
+            background-color: variables.$grey900;
             color: #FFF;
 
             &:nth-of-type(2) {
-                background-color: $grey600;
+                background-color: variables.$grey600;
             }
 
             &:nth-of-type(1) {
-                background-color: $grey500;
+                background-color: variables.$grey500;
             }
         }
     }
@@ -583,8 +583,8 @@ section.yellow-bg {
         background-image: url("/images/category/themes/mixed/squiggle-product.svg");
 
         .tag {
-            color: $yellow;
-            border: 1px solid $yellow;
+            color: variables.$yellow;
+            border: 1px solid variables.$yellow;
             background-color: transparent;
         }
 
@@ -593,7 +593,7 @@ section.yellow-bg {
         }
 
         .stack-card {
-            background-color: $blue;
+            background-color: variables.$blue;
             color: #FFF;
 
             &:nth-of-type(2) {
@@ -607,15 +607,15 @@ section.yellow-bg {
     }
 
     #pricing .popular:before {
-        background-color: $blue;
+        background-color: variables.$blue;
     }
 }
 
 .standard {
     .banner {
         .view-products {
-            background-color: $grey900;
-            border: 2px solid $grey900;
+            background-color: variables.$grey900;
+            border: 2px solid variables.$grey900;
             color: #FFF;
         }
 
@@ -636,25 +636,25 @@ section.yellow-bg {
         background-image: url("/images/category/themes/standard/squiggle-bundle.svg");
 
         .tag {
-            color: $grey900;
-            border: 1px solid $grey900;
+            color: variables.$grey900;
+            border: 1px solid variables.$grey900;
             background-color: transparent;
         }
 
         h3 {
-            color: $grey900;
+            color: variables.$grey900;
         }
 
         .stack-card {
-            background-color: $yellow;
-            color: $grey900;
+            background-color: variables.$yellow;
+            color: variables.$grey900;
 
             &:nth-of-type(2) {
-                background-color: $grey600;
+                background-color: variables.$grey600;
             }
 
             &:nth-of-type(1) {
-                background-color: $grey500;
+                background-color: variables.$grey500;
             }
         }
     }
@@ -663,39 +663,39 @@ section.yellow-bg {
         background-image: url("/images/category/themes/standard/squiggle-product.svg");
 
         .tag {
-            color: $grey900;
-            border: 1px solid $grey900;
+            color: variables.$grey900;
+            border: 1px solid variables.$grey900;
             background-color: transparent;
         }
 
         h3 {
-            color: $grey900;
+            color: variables.$grey900;
         }
 
         .stack-card {
-            background-color: $yellow;
-            color: $grey900;
+            background-color: variables.$yellow;
+            color: variables.$grey900;
 
             &:nth-of-type(2) {
-                background-color: $grey600;
+                background-color: variables.$grey600;
             }
 
             &:nth-of-type(1) {
-                background-color: $grey500;
+                background-color: variables.$grey500;
             }
         }
     }
 
     #pricing .popular:before {
-        background-color: $grey900;
+        background-color: variables.$grey900;
     }
 }
 
 .pink {
     .banner {
         .view-products {
-            background-color: $pink;
-            border: 2px solid $pink;
+            background-color: variables.$pink;
+            border: 2px solid variables.$pink;
             color: #FFF;
         }
 
@@ -704,12 +704,12 @@ section.yellow-bg {
         }
 
         .phone svg path {
-            fill: $pink;
+            fill: variables.$pink;
         }
     }
 
     .example {
-        background-color: $pink;
+        background-color: variables.$pink;
         color: #FFF;
 
         h2 {
@@ -719,10 +719,10 @@ section.yellow-bg {
         .button {
             background-color: #FFF;
             border: 2px solid #FFF;
-            color: $grey900;
+            color: variables.$grey900;
 
             svg {
-                fill: $grey900;
+                fill: variables.$grey900;
             }
         }
     }
@@ -731,12 +731,12 @@ section.yellow-bg {
         background-image: url("/images/category/themes/pink/squiggle-benefits.svg");
 
         .stack-card h3 {
-            background-color: $pink;
+            background-color: variables.$pink;
         }
     }
 
     .relationships .stack-description .tag {
-        background-color: $pink;
+        background-color: variables.$pink;
         color: #FFF;
     }
 
@@ -744,8 +744,8 @@ section.yellow-bg {
         background-image: url("/images/category/themes/pink/squiggle-bundle.svg");
 
         .tag {
-            color: $yellow;
-            border: 1px solid $yellow;
+            color: variables.$yellow;
+            border: 1px solid variables.$yellow;
             background-color: transparent;
         }
 
@@ -754,15 +754,15 @@ section.yellow-bg {
         }
 
         .stack-card {
-            background-color: $pink;
+            background-color: variables.$pink;
             color: #FFF;
 
             &:nth-of-type(2) {
-                background-color: $pink300;
+                background-color: variables.$pink300;
             }
 
             &:nth-of-type(1) {
-                background-color: $pink200;
+                background-color: variables.$pink200;
             }
         }
     }
@@ -771,8 +771,8 @@ section.yellow-bg {
         background-image: url("/images/category/themes/pink/squiggle-product.svg");
 
         .tag {
-            color: $yellow;
-            border: 1px solid $yellow;
+            color: variables.$yellow;
+            border: 1px solid variables.$yellow;
             background-color: transparent;
         }
 
@@ -781,33 +781,33 @@ section.yellow-bg {
         }
 
         .stack-card {
-            background-color: $pink;
+            background-color: variables.$pink;
             color: #FFF;
 
             &:nth-of-type(2) {
-                background-color: $pink300;
+                background-color: variables.$pink300;
             }
 
             &:nth-of-type(1) {
-                background-color: $pink200;
+                background-color: variables.$pink200;
             }
         }
     }
 
     #pricing .popular:before {
-        background-color: $pink;
+        background-color: variables.$pink;
     }
 }
 
 .blue {
     .banner {
         .phone svg path {
-            fill: $blue;
+            fill: variables.$blue;
         }
     }
 
     .example {
-        background-color: $blue;
+        background-color: variables.$blue;
         color: #FFF;
 
         h2 {
@@ -826,7 +826,7 @@ section.yellow-bg {
     }
 
     .relationships .stack-description .tag {
-        background-color: $blue;
+        background-color: variables.$blue;
         color: #FFF;
     }
 
@@ -834,8 +834,8 @@ section.yellow-bg {
         background-image: url("/images/category/themes/blue/squiggle-bundle.svg");
 
         .tag {
-            color: $yellow;
-            border: 1px solid $yellow;
+            color: variables.$yellow;
+            border: 1px solid variables.$yellow;
             background-color: transparent;
         }
 
@@ -844,15 +844,15 @@ section.yellow-bg {
         }
 
         .stack-card {
-            background-color: $blue;
+            background-color: variables.$blue;
             color: #FFF;
 
             &:nth-of-type(2) {
-                background-color: $blue300;
+                background-color: variables.$blue300;
             }
 
             &:nth-of-type(1) {
-                background-color: $blue200;
+                background-color: variables.$blue200;
             }
         }
     }
@@ -861,8 +861,8 @@ section.yellow-bg {
         background-image: url("/images/category/themes/blue/squiggle-product.svg");
 
         .tag {
-            color: $yellow;
-            border: 1px solid $yellow;
+            color: variables.$yellow;
+            border: 1px solid variables.$yellow;
             background-color: transparent;
         }
 
@@ -871,29 +871,29 @@ section.yellow-bg {
         }
 
         .stack-card {
-            background-color: $blue;
+            background-color: variables.$blue;
             color: #FFF;
 
             &:nth-of-type(2) {
-                background-color: $blue300;
+                background-color: variables.$blue300;
             }
 
             &:nth-of-type(1) {
-                background-color: $blue200;
+                background-color: variables.$blue200;
             }
         }
     }
 
     #pricing .popular:before {
-        background-color: $blue;
+        background-color: variables.$blue;
     }
 }
 
 .dark {
     .banner {
         .view-products {
-            background-color: $grey900;
-            border: 2px solid $grey900;
+            background-color: variables.$grey900;
+            border: 2px solid variables.$grey900;
             color: #FFF;
         }
 
@@ -902,12 +902,12 @@ section.yellow-bg {
         }
 
         .phone svg path {
-            fill: $grey900;
+            fill: variables.$grey900;
         }
     }
 
     .example {
-        background-color: $grey800;
+        background-color: variables.$grey800;
         color: #FFF;
 
         h2 {
@@ -917,10 +917,10 @@ section.yellow-bg {
         .button {
             background-color: #FFF;
             border: 2px solid #FFF;
-            color: $grey900;
+            color: variables.$grey900;
 
             svg {
-                fill: $grey900;
+                fill: variables.$grey900;
             }
         }
     }
@@ -929,13 +929,13 @@ section.yellow-bg {
         background-image: url("/images/category/themes/dark/squiggle-benefits.svg");
 
         .stack-card h3 {
-            background-color: $grey900;
+            background-color: variables.$grey900;
             color: #FFF;
         }
     }
 
     .relationships .stack-description .tag {
-        background-color: $grey900;
+        background-color: variables.$grey900;
         color: #FFF;
     }
 
@@ -943,8 +943,8 @@ section.yellow-bg {
         background-image: url("/images/category/themes/dark/squiggle-bundle.svg");
 
         .tag {
-            color: $yellow;
-            border: 1px solid $yellow;
+            color: variables.$yellow;
+            border: 1px solid variables.$yellow;
             background-color: transparent;
         }
 
@@ -953,15 +953,15 @@ section.yellow-bg {
         }
 
         .stack-card {
-            background-color: $grey900;
+            background-color: variables.$grey900;
             color: #FFF;
 
             &:nth-of-type(2) {
-                background-color: $grey600;
+                background-color: variables.$grey600;
             }
 
             &:nth-of-type(1) {
-                background-color: $grey500;
+                background-color: variables.$grey500;
             }
         }
     }
@@ -970,8 +970,8 @@ section.yellow-bg {
         background-image: url("/images/category/themes/dark/squiggle-product.svg");
 
         .tag {
-            color: $yellow;
-            border: 1px solid $yellow;
+            color: variables.$yellow;
+            border: 1px solid variables.$yellow;
             background-color: transparent;
         }
 
@@ -980,21 +980,21 @@ section.yellow-bg {
         }
 
         .stack-card {
-            background-color: $grey900;
+            background-color: variables.$grey900;
             color: #FFF;
 
             &:nth-of-type(2) {
-                background-color: $grey600;
+                background-color: variables.$grey600;
             }
 
             &:nth-of-type(1) {
-                background-color: $grey500;
+                background-color: variables.$grey500;
             }
         }
     }
 
     #pricing .popular {
-        background-color: $grey900;
+        background-color: variables.$grey900;
         color: #FFF;
 
         .price {
@@ -1003,19 +1003,19 @@ section.yellow-bg {
 
         &:before,
         .button {
-            background-color: $grey400;
-            color: $grey900;
+            background-color: variables.$grey400;
+            color: variables.$grey900;
         }
 
         .group {
-            border: 1px solid $grey600;
-            color: $grey600;
+            border: 1px solid variables.$grey600;
+            color: variables.$grey600;
             background-color: transparent;
         }
 
         .cost-per-transaction {
-            border-top: 1px solid $grey400;
-            border-bottom: 1px solid $grey400;
+            border-top: 1px solid variables.$grey400;
+            border-bottom: 1px solid variables.$grey400;
         }
     }
 }

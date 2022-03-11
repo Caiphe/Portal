@@ -1,4 +1,5 @@
-@import "vendor/normalize";
+@use "vendor/normalize";
+@use "variables";
 
 html,
 body {
@@ -31,12 +32,12 @@ textarea {
 table {
     border-collapse: collapse;
     border: none;
-    border-bottom: 1px solid $grey400;
+    border-bottom: 1px solid variables.$grey400;
     width: 100%;
 
     thead {
-        background-color: $grey600;
-        color: $grey800;
+        background-color: variables.$grey600;
+        color: variables.$grey800;
 
         input {
             display: block;
@@ -45,7 +46,7 @@ table {
 
     tr {
         &:nth-child(2n) {
-            background-color: $grey300;
+            background-color: variables.$grey300;
         }
     }
 
@@ -118,17 +119,17 @@ table {
         display: flex;
         align-items: center;
         justify-content: center;
-        color: $grey900;
+        color: variables.$grey900;
         box-sizing: border-box;
         font-size: 14px;
-        font-family: $MTN-Regular;
+        font-family: variables.$MTN-Regular;
     }
 
     .page-item {
         width: 40px;
         height: 40px;
         background-color: #FFF;
-        border: 1px solid $grey900;
+        border: 1px solid variables.$grey900;
         border-radius: 6px;
         margin-right: 8px;
 
@@ -145,14 +146,14 @@ table {
     .page-item:active,
     .page-item:hover,
     .page-item:focus {
-        background-color: $yellow;
-        border: 1px solid $yellow;
+        background-color: variables.$yellow;
+        border: 1px solid variables.$yellow;
     }
 
     .disabled {
         &.page-item:hover {
-            background-color: $grey400;
-            border: 1px solid $grey900;
+            background-color: variables.$grey400;
+            border: 1px solid variables.$grey900;
         }
 
         a {

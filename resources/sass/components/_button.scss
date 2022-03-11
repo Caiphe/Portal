@@ -1,3 +1,7 @@
+@use "sass:color";
+@use "../functions";
+@use "../variables";
+
 /*
     The button css component is styled to affect all buttons on the page with just a <button> element.
     The idea is that it will have sane defaults that can be overwritten with styles applied to it.
@@ -14,29 +18,29 @@ button:not(.sl-button, .reset),
 .button {
     height: 37px;
     line-height: 1;
-    background-color: $yellow;
+    background-color: variables.$yellow;
     background-position: center center;
     background-size: 16px;
     background-repeat: no-repeat;
-    border: 2px solid $yellow;
+    border: 2px solid variables.$yellow;
     border-radius: 22px;
     padding: 0 15px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    color: $grey900;
+    color: variables.$grey900;
     transition: all .3s ease-in-out;
 
     &.red-button{
-        background-color: $red;
-        border: 2px solid $red;
+        background-color: variables.$red;
+        border: 2px solid variables.$red;
         color: #fff;
 
         &:hover{
-            border: 2px solid $red;
+            border: 2px solid variables.$red;
             background-color: #fff;
-            color: $red;
+            color: variables.$red;
         }
     }
 
@@ -46,22 +50,22 @@ button:not(.sl-button, .reset),
     }
 
     &.blue {
-        background-color: $blue;
-        border: 2px solid $blue;
+        background-color: variables.$blue;
+        border: 2px solid variables.$blue;
 
         &:hover {
-            background-color: mix(#ffffff, $blue, 20%);
-            border-color: mix(#ffffff, $blue, 20%);
+            background-color: color.mix(#ffffff, variables.$blue, 20%);
+            border-color: color.mix(#ffffff, variables.$blue, 20%);
         }
     }
 
     &.white {
-        background-color: $white;
-        border: 2px solid $white;
+        background-color: variables.$white;
+        border: 2px solid variables.$white;
 
         &:hover {
-            background-color: mix($black, $white, 20%);
-            border-color: mix($black, $white, 20%);
+            background-color: color.mix(variables.$black, variables.$white, 20%);
+            border-color: color.mix(variables.$black, variables.$white, 20%);
         }
     }
 
@@ -72,43 +76,43 @@ button:not(.sl-button, .reset),
         font-weight: 700;
 
         &:hover {
-            background-color: mix(#ffffff, #000, 20%);
-            border-color: mix(#ffffff, #000, 20%);
+            background-color: color.mix(#ffffff, #000, 20%);
+            border-color: color.mix(#ffffff, #000, 20%);
         }
 
         &.kinda {
-            background-color: $grey900;
-            border: 2px solid $grey900;
+            background-color: variables.$grey900;
+            border: 2px solid variables.$grey900;
         }
     }
 
     &.medium {
-        background-color: $grey800;
-        border: 2px solid $grey800;
+        background-color: variables.$grey800;
+        border: 2px solid variables.$grey800;
 
         &:hover {
-            background-color: mix(#ffffff, $grey800, 20%);
-            border-color: mix(#ffffff, $grey800, 20%);
+            background-color: color.mix(#ffffff, variables.$grey800, 20%);
+            border-color: color.mix(#ffffff, variables.$grey800, 20%);
         }
     }
 
     &.light {
-        background-color: $grey700;
-        border: 2px solid $grey700;
+        background-color: variables.$grey700;
+        border: 2px solid variables.$grey700;
 
         &:hover {
-            background-color: mix(#ffffff, $grey700, 20%);
-            border-color: mix(#ffffff, $grey700, 20%);
+            background-color: color.mix(#ffffff, variables.$grey700, 20%);
+            border-color: color.mix(#ffffff, variables.$grey700, 20%);
         }
     }
 
     &.lightest {
-        background-color: $grey500;
-        border: 2px solid $grey500;
+        background-color: variables.$grey500;
+        border: 2px solid variables.$grey500;
 
         &:hover {
-            background-color: mix(#ffffff, $grey500, 20%);
-            border-color: mix(#ffffff, $grey500, 20%);
+            background-color: color.mix(#ffffff, variables.$grey500, 20%);
+            border-color: color.mix(#ffffff, variables.$grey500, 20%);
         }
     }
 
@@ -155,11 +159,11 @@ button:not(.sl-button, .reset),
     }
 
     @each $icon,
-    $svg in $icons {
+    $svg in variables.$icons {
 
         &.before.#{$icon}::before,
         &.after.#{$icon}::after {
-            background-image: get-icon("#{$icon}", #000000);
+            background-image: functions.get-icon("#{$icon}", #000000);
         }
 
         &.dark.before.#{$icon}:not(.outline)::before,
@@ -168,17 +172,17 @@ button:not(.sl-button, .reset),
         &.medium.after.#{$icon}:not(.outline)::after,
         &.blue.before.#{$icon}:not(.outline)::before,
         &.blue.after.#{$icon}:not(.outline)::after {
-            background-image: get-icon("#{$icon}", #ffffff);
+            background-image: functions.get-icon("#{$icon}", #ffffff);
         }
 
         &.fab.#{$icon} {
-            background-image: get-icon("#{$icon}", #000000);
+            background-image: functions.get-icon("#{$icon}", #000000);
         }
 
         &.dark.fab.#{$icon}:not(.outline),
         &.medium.fab.#{$icon}:not(.outline),
         &.blue.fab.#{$icon}:not(.outline) {
-            background-image: get-icon("#{$icon}", #ffffff);
+            background-image: functions.get-icon("#{$icon}", #ffffff);
         }
 
         &.dark.before.#{$icon}.outline:hover::before,
@@ -187,7 +191,7 @@ button:not(.sl-button, .reset),
         &.blue.before.#{$icon}.outline:hover::before,
         &.blue.after.#{$icon}.outline:hover::after,
         &.blue.fab.#{$icon}.outline:hover {
-            background-image: get-icon("#{$icon}", #ffffff);
+            background-image: functions.get-icon("#{$icon}", #ffffff);
         }
     }
 
@@ -200,8 +204,8 @@ button:not(.sl-button, .reset),
         }
 
         &.white:hover {
-            background: $white;
-            border-color: $white;
+            background: variables.$white;
+            border-color: variables.$white;
         }
 
         &.dark:hover {
@@ -215,15 +219,15 @@ button:not(.sl-button, .reset),
         }
 
         &.light {
-            color: $grey700;
+            color: variables.$grey700;
         }
 
         &.yellow {
-            color: $yellow;
+            color: variables.$yellow;
         }
 
         &.lightest {
-            color: $grey500;
+            color: variables.$grey500;
         }
 
         &.light:hover,
@@ -232,13 +236,13 @@ button:not(.sl-button, .reset),
         }
 
         &.yellow:hover {
-            color: $grey900;
+            color: variables.$grey900;
         }
     }
 
     &:hover {
-        background-color: mix(#ffffff, $yellow, 20%);
-        border-color: mix(#ffffff, $yellow, 20%);
+        background-color: color.mix(#ffffff, variables.$yellow, 20%);
+        border-color: color.mix(#ffffff, variables.$yellow, 20%);
     }
 }
 
@@ -250,7 +254,7 @@ button.reset {
 }
 
 button[disabled] {
-    background-color: $grey300;
-    border-color: $grey300;
-    color: $grey700;
+    background-color: variables.$grey300;
+    border-color: variables.$grey300;
+    color: variables.$grey700;
 }

@@ -1,10 +1,10 @@
-@import "../variables";
-@import "../components/utility";
-@import "auth";
+@use "../variables";
+@use "../components/utility";
+@use "auth";
 
 .resent-success{
     padding: 10px;
     color: #FFF;
-    background-color: $success;
+    background-color: variables.$success;
     width: 100%;
 }

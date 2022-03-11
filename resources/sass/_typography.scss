@@ -1,3 +1,5 @@
+@use "variables";
+
 @font-face {
     font-family: "mtn-regular";
     font-style: normal;
@@ -87,7 +89,7 @@ html {
     font-size: 10px;
     line-height: 21px;
     font-family: "mtn-regular", sans-serif;
-    color: $grey900;
+    color: variables.$grey900;
 }
 
 body {
@@ -151,13 +153,13 @@ a {
         font-size: 1rem;
         text-transform: uppercase;
         font-family: "Montserrat-Bold";
-        color: $grey700;
+        color: variables.$grey700;
     }
     &-dark {
         color: #000000 !important;
     }
     &-light {
-        color: $white !important;
+        color: variables.$white !important;
     }
 }
 

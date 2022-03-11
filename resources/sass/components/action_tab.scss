@@ -1,8 +1,8 @@
-@import '../variables';
+@use '../variables';
 
 .action-tab {
     align-items: center;
-    background-color: $purple;
+    background-color: variables.$purple;
     border-radius: 5px;
     color: #FFFFFF !important;
     display: flex;
@@ -24,13 +24,13 @@
     }
 
     &.green {
-        background-color: $green;
+        background-color: variables.$green;
 
-        @media #{$small} {
+        @media #{variables.$small} {
             margin-top: 2rem;
         }
 
-        @media #{$medium} {
+        @media #{variables.$medium} {
             margin-top: 2rem;
         }
     }
@@ -39,11 +39,11 @@
         margin-right: 15px;
     }
 
-    @media #{$small} {
+    @media #{variables.$small} {
         margin-right: 0 !important;
     }
 
-    @media #{$medium} {
+    @media #{variables.$medium} {
         margin-right: 0 !important;
     }
 }
@@ -51,20 +51,20 @@
 .action-tab:first-of-type {
 
     div {
-        @media #{$small} {
+        @media #{variables.$small} {
             display: none;
         }
     }
 
     svg:first-of-type {
-        @media #{$small} {
+        @media #{variables.$small} {
             margin-left: auto;
             order: 2;
         }
     }
 
     svg:last-of-type {
-        @media #{$small} {
+        @media #{variables.$small} {
             margin-left: initial;
             order: 1;
         }
@@ -73,7 +73,7 @@
 
 .action-tab:last-of-type {
     div {
-        @media #{$small} {
+        @media #{variables.$small} {
             display: none;
         }
     }

@@ -1,4 +1,4 @@
-@import "../variables";
+@use "../variables";
 
 .search-card {
     margin: 0 0 20px 0;
@@ -27,11 +27,11 @@
     .body {
         min-height: 60px;
         margin-bottom: 5px;
-        color: $grey900;
+        color: variables.$grey900;
     }
 
     .highlight {
-        background-color: $yellow;
+        background-color: variables.$yellow;
         padding: 0 4px;
         border-radius: 4px;
     }
