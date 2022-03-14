@@ -45,9 +45,10 @@ class SyncBundle extends Command
         $allow = config('apigee.apigee_allow_prefix');
         $deny = explode(',', config('apigee.apigee_deny_prefix'));
 
-        if(is_null($bundles)) return;
-
         $this->info("Start syncing bundles");
+        
+        if(is_null($bundles)) return 0;
+
         foreach ($bundles['monetizationPackage'] as $bundle) {
             if ($allow !== "" && strpos($bundle['displayName'], $allow) === false) continue;
             if (str_replace($deny, '', $bundle['displayName']) !== $bundle['displayName']) continue;
@@ -73,5 +74,7 @@ class SyncBundle extends Command
 
             $p->products()->sync(array_column($bundle['product'], 'name'));
         }
+
+        return 0;
     }
 }

@@ -31,6 +31,7 @@ class UserRequest extends FormRequest
             'email' => ['email:rfc,dns', Rule::unique('users')->ignore(auth()->id())],
             'password' => [
                 'nullable',
+                'confirmed',
                 Password::min(12)
                     ->letters()
                     ->mixedCase()
