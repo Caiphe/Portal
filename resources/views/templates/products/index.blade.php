@@ -83,6 +83,6 @@
     </div>
 @endsection
 
-@pushscript('products')
+@push('scripts')
 <script src="{{ mix('/js/templates/products/index.js') }}" defer></script>
-@endpushscript
+@endpush

@@ -7,10 +7,12 @@
 	The card description is passed through the $slot and link attributes can be added to the card to be applied to the a tag
 --}}
 
-@allowonce('card_link')
+@once
+@push('styles')
 <link href="{{ mix('/css/components/card-link.css') }}" rel="stylesheet"/>
 <link href="{{ mix('/css/components/card.css') }}" rel="stylesheet"/>
-@endallowonce
+@endpush
+@endonce
 
 @props(['title', 'icon'])
 

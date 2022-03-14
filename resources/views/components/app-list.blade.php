@@ -1,7 +1,6 @@
 @props(['app', 'appStagingProducts', 'details', 'type', 'attr', 'countries'])
 
 @php
-
     $user = auth()->user();
     $isAdminPage = Request::is('admin/*');
     $credentials = $app['credentials'];
@@ -16,9 +15,11 @@
     }
 @endphp
 
-@allowonce('card_link')
+@once
+@push('styles')
 <link href="{{ mix('/css/components/_app.css') }}" rel="stylesheet"/>
-@endallowonce
+@endpush
+@endonce
 
 <div class="app app-status-{{ $appStatus }}" data-name="{{ $app['name'] }}" data-id="{{ $app['aid'] }}" data-developer="{{ $app['developer']['first_name'] ?? '' }}"
      data-locations="{{ $countryCode }}">

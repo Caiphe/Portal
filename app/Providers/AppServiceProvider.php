@@ -27,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrap();
 
+        /** Commented out due to not using the custom OpenApi viewer and using Stoplight Elements
         Blade::directive('reqType', function ($expression) {
             $options = explode(',', $expression);
             $value = trim($options[0], " '\"");
@@ -64,6 +65,7 @@ class AppServiceProvider extends ServiceProvider
             ?>
             RTE;
         });
+        **/
 
         Blade::directive('listFunc', function ($expression) {
             return "<?php echo \App\BladeHelpers::listFunc({$expression}); ?>";
@@ -88,22 +90,6 @@ class AppServiceProvider extends ServiceProvider
                 echo preg_replace('/<svg/', '<svg fill="$colour"', file_get_contents(public_path("$path/$icon.svg")));
             ?>
             SVG;
-        });
-
-        Blade::directive('allowonce', function ($expression) {
-            $isDisplayed = '__allowonce_' . trim($expression, " '\"");
-            return "<?php if(!isset(\$__env->{$isDisplayed})): \$__env->{$isDisplayed} = true; ?>";
-        });
-        Blade::directive('endallowonce', function ($expression) {
-            return '<?php endif; ?>';
-        });
-
-        Blade::directive('pushscript', function ($expression) {
-            $isDisplayed = '__pushscript_' . trim($expression, " '\"");
-            return "<?php if(!isset(\$__env->{$isDisplayed})): \$__env->{$isDisplayed} = true; \$__env->startPush('scripts'); ?>";
-        });
-        Blade::directive('endpushscript', function ($expression) {
-            return '<?php $__env->stopPush(); endif; ?>';
         });
     }
 }
