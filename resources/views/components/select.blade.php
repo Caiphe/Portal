@@ -1,6 +1,8 @@
-@allowonce('card_product')
+@once
+@push('styles')
 <link href="{{ mix('/css/components/_select.css') }}" rel="stylesheet"/>
-@endallowonce
+@endpush
+@endonce
 
 <select class="select" name="countries" id="countries">
     <option value="" disabled>Select country</option>
@@ -27,8 +29,10 @@
     </option>
 </select>
 
-@pushscript('select')
+@once
+@push('scripts')
 <script src="{{ mix('/js/components/select.js') }}" defer></script>
-@endpushscript
+@endpush
+@endonce
 
 

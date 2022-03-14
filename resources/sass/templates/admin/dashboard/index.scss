@@ -1,4 +1,4 @@
-@import '../../../variables';
+@use '../../../variables';
 
 .app {
     background-color: #FFF;
@@ -107,8 +107,8 @@
 
     .app-status-approved {
         .app-status {
-            color: $green;
-            border: 1px solid $green;
+            color: variables.$green;
+            border: 1px solid variables.$green;
 
             @media screen and (max-width: 1099px) {
                 &::before {
@@ -124,15 +124,15 @@
 
     .app-status-pending {
         .app-status {
-            color: $orange;
-            border: 1px solid $orange;
+            color: variables.$orange;
+            border: 1px solid variables.$orange;
         }
     }
 
     .app-status-revoked {
         .app-status {
-            color: $red;
-            border: 1px solid $red;
+            color: variables.$red;
+            border: 1px solid variables.$red;
 
             @media screen and (max-width: 1099px) {
                 &::before {
@@ -181,14 +181,14 @@
 
     h2 {
         font-size: 18px;
-        font-family: $MTN-Bold;
+        font-family: variables.$MTN-Bold;
         line-height: 1;
         margin: 16px 24px;
     }
 
     h3 {
         font-size: 15px;
-        font-family: $MTN-Bold;
+        font-family: variables.$MTN-Bold;
         margin-top: 0;
         line-height: 1;
     }
@@ -200,9 +200,9 @@
 
     .reset {
         font-size: 14px;
-        font-family: $MTN-Regular;
+        font-family: variables.$MTN-Regular;
         font-weight: normal;
-        color: $grey850;
+        color: variables.$grey850;
         padding-bottom: 4px;
         margin-right: 12px;
     }
@@ -215,8 +215,8 @@
 
 .active-production {
     .environment-production {
-        color: $orange;
-        border-bottom: 2px solid $orange;
+        color: variables.$orange;
+        border-bottom: 2px solid variables.$orange;
     }
 
     .production-products {
@@ -226,8 +226,8 @@
 
 .active-sandbox {
     .environment-sandbox {
-        color: $orange;
-        border-bottom: 2px solid $orange;
+        color: variables.$orange;
+        border-bottom: 2px solid variables.$orange;
     }
 
     .sandbox-products {
@@ -250,23 +250,23 @@
     }
 
     button {
-        color: $blue;
+        color: variables.$blue;
         display: flex;
         align-items: center;
 
         svg {
-            fill: $blue;
+            fill: variables.$blue;
         }
     }
 
     &.product-status-approved .product-approve,
     &.product-status-revoked .product-revoke {
-        color: $grey400;
+        color: variables.$grey400;
         pointer-events: none;
 
         svg,
         path {
-            fill: $grey400;
+            fill: variables.$grey400;
         }
     }
 
@@ -276,7 +276,7 @@
         padding: 4px 8px;
         border-radius: 35px;
         color: #FFF;
-        background-color: $grey400;
+        background-color: variables.$grey400;
 
         &:before {
             content: '...';
@@ -284,7 +284,7 @@
     }
 
     &.product-status-pending .status {
-        background-color: $orange;
+        background-color: variables.$orange;
 
         &:before {
             content: 'Pending';
@@ -292,7 +292,7 @@
     }
 
     &.product-status-approved .status {
-        background-color: $green;
+        background-color: variables.$green;
 
         &:before {
             content: 'Approved';
@@ -300,7 +300,7 @@
     }
 
     &.product-status-revoked .status {
-        background-color: $red;
+        background-color: variables.$red;
 
         &:before {
             content: 'Revoked';
@@ -309,7 +309,7 @@
 
     .name {
         margin-right: auto;
-        color: $blue;
+        color: variables.$blue;
 
         @media screen and (max-width: 1099px) {
             margin-left: 90px;
@@ -333,11 +333,11 @@
             background: none;
 
             &::after {
-                color: $grey400;
+                color: variables.$grey400;
             }
 
             path {
-                fill: $grey400;
+                fill: variables.$grey400;
             }
         }
 
@@ -375,10 +375,10 @@
     .renew {
         display: flex;
         align-items: center;
-        color: $blue;
+        color: variables.$blue;
 
         svg {
-            fill: $blue;
+            fill: variables.$blue;
             margin-right: 4px;
         }
     }
@@ -387,7 +387,7 @@
 .detail-items {
     display: flex;
     flex-wrap: wrap;
-    background-color: $grey200;
+    background-color: variables.$grey200;
     padding: 0 24px 24px;
     border-radius: 0 0 8px 8px;
 }
@@ -412,7 +412,7 @@
     }
 
     a {
-        color: $blue;
+        color: variables.$blue;
         word-break: break-word;
     }
 }
@@ -454,12 +454,12 @@
 
     button {
         display: flex;
-        color: $blue;
+        color: variables.$blue;
         align-items: center;
         margin-right: 16px;
 
         svg {
-            fill: $blue;
+            fill: variables.$blue;
             margin-right: 8px;
             height: 18px;
         }
@@ -484,7 +484,7 @@
     .status-dialog-textarea {
         width: 100%;
         border-radius: 5px;
-        border: 1px solid $grey400;
+        border: 1px solid variables.$grey400;
         padding: 8px;
         appearance: none;
         outline: none;

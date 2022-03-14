@@ -1,4 +1,4 @@
-@import "../variables";
+@use "../variables";
 
 .layout-sidebar {
     #main #heading {
@@ -11,7 +11,7 @@
             width: calc(100% + 40px);
             margin: -20px 0 20px -20px;
             padding-left: 20px !important;
-            background-color: $grey400 !important;
+            background-color: variables.$grey400 !important;
         }
     }
 }
@@ -45,12 +45,12 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    background-color: $grey400;
+    background-color: variables.$grey400;
     overflow: hidden;
     z-index: 1;
 
     span{
-        font-family: $MTN-Regular;
+        font-family: variables.$MTN-Regular;
     }
 
     @media screen and (min-width: 768px) {
@@ -64,7 +64,7 @@
     .edit {
         margin-left: 10px;
 
-        @media #{$small} {
+        @media #{variables.$small} {
             display: none;
         }
     }
@@ -133,14 +133,14 @@
 
         a {
             font-family: "mtn-bold", sans-serif;
-            color: $grey900;
+            color: variables.$grey900;
         }
     }
 
     .breadcrumb+.breadcrumb:before {
         content: '>';
         font-family: "mtn-bold", sans-serif;
-        color: $grey900;
+        color: variables.$grey900;
         margin-right: 4px;
     }
 

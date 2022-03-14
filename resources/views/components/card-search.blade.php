@@ -6,9 +6,11 @@
 	The card description is passed through the $slot and search attributes can be added to the card to be applied to the a tag
 --}}
 
-@allowonce('card_search')
+@once
+@push('styles')
 <link href="{{ mix('/css/components/card-search.css') }}" rel="stylesheet"/>
-@endallowonce
+@endpush
+@endonce
 
 @props(['title', 'icon', 'link'])
 

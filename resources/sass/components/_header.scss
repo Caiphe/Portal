@@ -1,7 +1,9 @@
+@use "../variables";
+
 #header {
     width: 100%;
     height: 80px;
-    background-color: $yellow;
+    background-color: variables.$yellow;
     position: relative;
     z-index: 3;
 
@@ -28,7 +30,7 @@
             align-items: center;
 
             svg {
-                margin-right: $gutterSmall;
+                margin-right: variables.$gutterSmall;
                 width: auto;
                 height: 36px;
             }
@@ -52,11 +54,11 @@
                 }
             }
 
-            @media #{$medium-portrait} {
+            @media #{variables.$medium-portrait} {
                 display: block;
             }
 
-            @media #{$large} {
+            @media #{variables.$large} {
                 display: none;
             }
         }
@@ -70,7 +72,7 @@
             display: flex;
             flex-wrap: nowrap;
 
-            @media #{$small} {
+            @media #{variables.$small} {
                 margin-left: 0;
             }
 
@@ -92,7 +94,7 @@
                 }
 
                 &:hover {
-                    background-color: $grey900;
+                    background-color: variables.$grey900;
 
                     &>a {
                         color: #fff;
@@ -130,10 +132,10 @@
                         flex: 2;
                         flex-wrap: wrap;
                         padding: 20px 0 20px 20px;
-                        background-color: $grey300;
+                        background-color: variables.$grey300;
 
                         h3 {
-                            color: $grey600;
+                            color: variables.$grey600;
                             font-family: "mtn-bold";
                             font-size: 1rem;
                             line-height: 28px;
@@ -162,7 +164,7 @@
 
                         svg {
                             fill: #FFF;
-                            background-color: $blue;
+                            background-color: variables.$blue;
                             border-radius: 50%;
                             padding: 8px;
                             width: 16px;
@@ -284,8 +286,8 @@
 }
 
 .mobile-menu {
-    background-color: $black;
-    color: $white;
+    background-color: variables.$black;
+    color: variables.$white;
     list-style: none;
     margin-top: 0;
     padding: 1rem 8% !important;
@@ -305,7 +307,7 @@
     }
 
     a {
-        color: $white;
+        color: variables.$white;
     }
 
     .has-children {
@@ -361,7 +363,7 @@
     }
 
     #main .header-page-info {
-        background-color: $grey400;
+        background-color: variables.$grey400;
         position: sticky;
         padding: 6px 40px;
         top: 0;

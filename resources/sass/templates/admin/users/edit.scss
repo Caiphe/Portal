@@ -1,4 +1,4 @@
-@import '../../../variables';
+@use '../../../variables';
 
 button.show-password {
     position: absolute;
@@ -15,7 +15,7 @@ button.show-password {
     border-radius: 50%;
 
     &:hover {
-        background-color: $yellow700;
+        background-color: variables.$yellow700;
     }
 }
 
@@ -31,12 +31,12 @@ button.password-visible {
 
 #password-still-needs {
     font-size: 12px;
-    font-family: $MTN-Regular;
+    font-family: variables.$MTN-Regular;
 }
 
 #password-strength {
     line-height: 1;
-    background-color: $grey500;
+    background-color: variables.$grey500;
     border-radius: 8px;
     padding: 8px;
     transition: background-color 0.356s;
@@ -53,7 +53,7 @@ button.password-visible {
     &.password-score-0,
     &.password-score-1,
     &.password-score-2 {
-        background-color: $error;
+        background-color: variables.$error;
         color: #FFF;
 
         &:before {
@@ -67,7 +67,7 @@ button.password-visible {
 
     &.password-score-3,
     &.password-score-4 {
-        background-color: $warning;
+        background-color: variables.$warning;
         color: #FFF;
 
         &:before {
@@ -80,7 +80,7 @@ button.password-visible {
     }
 
     &.password-score-5 {
-        background-color: $success;
+        background-color: variables.$success;
         color: #FFF;
 
         &:before {
@@ -109,7 +109,7 @@ button.password-visible {
     }
 
     h2 {
-        font-family: $MTN-Regular;
+        font-family: variables.$MTN-Regular;
         font-weight: normal;
 
         @media screen and (min-width: 768px) {
@@ -123,7 +123,7 @@ button.password-visible {
 
     h3 {
         font-size: 14px;
-        font-family: $MTN-Regular;
+        font-family: variables.$MTN-Regular;
         font-weight: normal;
         margin-top: 0;
         margin-bottom: 8px;
@@ -168,8 +168,8 @@ button.password-visible {
     }
 
     .app-status-approved {
-        color: $green;
-        border: 1px solid $green;
+        color: variables.$green;
+        border: 1px solid variables.$green;
 
         @media screen and (max-width: 767px) {
             &::before {
@@ -183,13 +183,13 @@ button.password-visible {
     }
 
     .app-status-pending {
-        color: $orange;
-        border: 1px solid $orange;
+        color: variables.$orange;
+        border: 1px solid variables.$orange;
     }
 
     .app-status-revoked {
-        color: $red;
-        border: 1px solid $red;
+        color: variables.$red;
+        border: 1px solid variables.$red;
 
         @media screen and (max-width: 767px) {
             &::before {

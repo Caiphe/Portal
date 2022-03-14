@@ -1,8 +1,10 @@
+@use "variables";
+
 pre:not(.sl-code-viewer) {
     font-size: 10px;
-    background-color: $grey750;
+    background-color: variables.$grey750;
     border-radius: 8px;
-    padding: $gutterSmall;
+    padding: variables.$gutterSmall;
     font-family: "Montserrat";
     word-break: break-word;
     white-space: break-spaces;
@@ -16,7 +18,7 @@ pre:not(.sl-code-viewer) {
 
 .hljs-comment,
 .hljs-quote {
-    color: $grey500;
+    color: variables.$grey500;
     font-style: italic
 }
 
@@ -92,8 +94,8 @@ h5 > code,
 h6 > code,
 a > code,
 p > code{
-    background-color: $grey300;
-    color: $red;
+    background-color: variables.$grey300;
+    color: variables.$red;
     padding: 5px;
     border-radius: 3px;
     font-size: 80%;

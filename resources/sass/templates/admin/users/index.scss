@@ -1,4 +1,4 @@
-@import "../../../variables";
+@use "../../../variables";
 
 .verified,
 .not-verified {
@@ -13,11 +13,11 @@
 }
 
 .verified {
-    color: $green;
-    border-color: $green;
+    color: variables.$green;
+    border-color: variables.$green;
 }
 
 .not-verified {
-    color: $orange;
-    border-color: $orange;
+    color: variables.$orange;
+    border-color: variables.$orange;
 }

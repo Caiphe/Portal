@@ -16,7 +16,9 @@
 @props(['wait', 'duration', 'autoScroll'])
 
 @once
+@push('styles')
 <link rel="stylesheet" href="{{ mix('/css/components/carousel.css') }}">
+@endpush
 @endonce
 
 <div 

@@ -1,17 +1,17 @@
-@import "../../variables";
-@import "../../functions";
+@use "../../variables";
+@use "../../functions";
 
 #main {
     margin-bottom: 60px;
     height: 100%;
 
-    @media #{$small} {
+    @media #{variables.$small} {
         padding: 90px 40px 40px !important;
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
 
-    @media #{$medium-portrait} {
+    @media #{variables.$medium-portrait} {
         padding: 90px 40px 40px !important;
         padding-left: 0 !important;
         padding-right: 0 !important;
@@ -20,13 +20,13 @@
     #heading {
         margin-bottom: 40px;
 
-        @media #{$small} {
+        @media #{variables.$small} {
             background-color: transparent;
             padding-left: 0 !important;
             position: static !important;
         }
 
-        @media #{$medium-portrait} {
+        @media #{variables.$medium-portrait} {
             background-color: transparent;
             padding-left: 0 !important;
             position: static !important;
@@ -36,24 +36,24 @@
     .app-details {
         margin-top: 110px;
         text-align: center;
-        color: $blue;
+        color: variables.$blue;
         font-size: 16px;
     }
 
     .content {
         margin-left: 40px;
         margin-top: 20px;
-        border: 2px solid $grey300;
+        border: 2px solid variables.$grey300;
         border-radius: 8px;
-        padding: $gutter;
+        padding: variables.$gutter;
 
-        @media #{$small} {
+        @media #{variables.$small} {
             margin-left: 0;
             margin-top: 40px;
             padding: 20px;
         }
 
-        @media #{$medium-portrait} {
+        @media #{variables.$medium-portrait} {
             margin-left: 0;
             margin-top: 40px;
         }
@@ -63,22 +63,22 @@
             position: relative;
             margin: 0 auto;
 
-            @media #{$small} {
+            @media #{variables.$small} {
                 width: 100%;
             }
 
-            @media #{$medium-portrait} {
+            @media #{variables.$medium-portrait} {
                 width: 100%;
             }
 
             h2 {
                 font-size: 1.8rem;
                 text-align: left;
-                margin: $gutter 0 $gutterSmall;
+                margin: variables.$gutter 0 variables.$gutterSmall;
                 font-family: "Montserrat";
 
                 &:first-of-type {
-                    margin: 0 0 $gutterSmall;
+                    margin: 0 0 variables.$gutterSmall;
                 }
             }
 
@@ -116,8 +116,8 @@
                 }
 
                 &.has-file {
-                    background-color: $green;
-                    border: 2px solid $green;
+                    background-color: variables.$green;
+                    border: 2px solid variables.$green;
                     color: #FFF;
 
                     svg {

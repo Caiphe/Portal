@@ -1,3 +1,5 @@
+@use "../variables";
+
 .shadow {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12), 0 3px 6px rgba(0, 0, 0, 0.16);
 }
@@ -142,15 +144,15 @@
 }
 
 .grey-bg {
-    background-color: $grey300;
+    background-color: variables.$grey300;
 }
 
 .blue-bg {
-    background-color: $blue;
+    background-color: variables.$blue;
 }
 
 .yellow-bg {
-    background-color: $yellow;
+    background-color: variables.$yellow;
 }
 
 .layout-master section.grey-bg {
@@ -163,7 +165,7 @@
             content: "";
             height: 100%;
             width: calc((100vw - 1440px) / 2);
-            background-color: $grey300;
+            background-color: variables.$grey300;
             position: absolute;
             top: 0;
         }
@@ -199,7 +201,7 @@
 }
 
 #main .twofa-warning {
-    background-color: $redDark;
+    background-color: variables.$redDark;
     border-radius: 10px;
     color: #FFF;
     margin: 10px 0 15px 0;
@@ -208,7 +210,7 @@
     align-items: center;
     font-size: 16px;
 
-    @media #{$small} {
+    @media #{variables.$small} {
         flex-direction: column;
         text-align: center;
     }
@@ -220,12 +222,12 @@
         &+.content {
             margin-top: 40px;
 
-            @media #{$small} {
+            @media #{variables.$small} {
                 margin: 0;
             }
         }
 
-        @media #{$small} {
+        @media #{variables.$small} {
             margin: 0 0 20px 0;
         }
     }
@@ -234,16 +236,16 @@
         color: #FFF;
         font-size: 14px;
 
-        @media #{$medium-up} {
+        @media #{variables.$medium-up} {
             margin-left: auto;
         }
 
-        @media #{$small} {
+        @media #{variables.$small} {
             margin-top: 10px;
         }
 
         &:hover {
-            color: $redDark;
+            color: variables.$redDark;
         }
     }
 }
@@ -262,7 +264,7 @@
 }
 
 .red-button{
-    background-color: $red;
+    background-color: variables.$red;
 }
 
 // Font end app 
@@ -339,7 +341,7 @@
     }
 
     .head {
-        border-bottom: 2px solid $grey300;
+        border-bottom: 2px solid variables.$grey300;
         display: flex;
         flex-wrap: wrap;
         padding: 0;

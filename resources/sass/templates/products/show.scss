@@ -1,4 +1,5 @@
-@import "../../variables";
+@use "sass:color";
+@use "../../variables";
 
 .layout-master>main#main {
     margin-bottom: 60px;
@@ -17,7 +18,7 @@
 
         h4 {
             font-size: 10px;
-            color: $grey600;
+            color: variables.$grey600;
             font-family: "mtn-bold";
             margin: 0 0 0 6px;
         }
@@ -25,11 +26,11 @@
         .flags {
             text-align: right;
 
-            @media #{$small} {
+            @media #{variables.$small} {
                 text-align: initial;
             }
 
-            @media #{$medium} {
+            @media #{variables.$medium} {
                 text-align: initial;
             }
         }
@@ -76,11 +77,11 @@
         display: inline-block;
         padding: 30px;
 
-        @media #{$small} {
+        @media #{variables.$small} {
             width: 100%;
         }
 
-        @media #{$medium-up} {
+        @media #{variables.$medium-up} {
             width: 400px;
         }
 
@@ -101,7 +102,7 @@
         a {
             color: #FFF;
 
-            @media #{$small} {
+            @media #{variables.$small} {
                 display: flex;
                 padding-left: 0;
                 padding-right: 0;
@@ -110,7 +111,7 @@
             }
 
             &:hover {
-                color: $grey900;
+                color: variables.$grey900;
             }
         }
     }
@@ -120,7 +121,7 @@
         .alternative-cards {
             display: flex;
 
-            @media #{$small} {
+            @media #{variables.$small} {
                 flex-direction: column;
             }
         }
@@ -131,17 +132,17 @@
         }
 
         .card {
-            @media #{$small} {
+            @media #{variables.$small} {
                 flex: 0 0 100%;
                 margin-bottom: 40px;
             }
 
-            @media #{$medium-up} {
+            @media #{variables.$medium-up} {
                 flex: 0 0 33%;
             }
         }
 
-        @media #{$medium-up} {
+        @media #{variables.$medium-up} {
             .card:nth-child(2) {
                 margin-left: 20px;
                 margin-right: 20px;
@@ -170,7 +171,7 @@
     .product-section-button {
         @media screen and (min-width: 768px) {
             display: inline-block;
-            margin: $gutterSmall 6px $gutter 0;
+            margin: variables.$gutterSmall 6px variables.$gutter 0;
         }
 
         @media screen and (max-width: 768px) {
@@ -185,32 +186,32 @@
         word-break: break-word;
 
         h2:first-of-type {
-            @media #{$small} {
+            @media #{variables.$small} {
                 display: none;
             }
 
-            @media #{$medium} {
+            @media #{variables.$medium} {
                 display: none;
             }
         }
 
         a {
             &:first-of-type {
-                @media #{$small} {
+                @media #{variables.$small} {
                     display: none;
                 }
 
-                @media #{$medium} {
+                @media #{variables.$medium} {
                     display: none;
                 }
             }
 
             &:nth-of-type(2) {
-                @media #{$small} {
+                @media #{variables.$small} {
                     display: none;
                 }
 
-                @media #{$medium} {
+                @media #{variables.$medium} {
                     display: none;
                 }
             }
@@ -221,12 +222,12 @@
     &.product-docs #button-docs,
     &.product-overview #button-overview,
     &.product-specification #button-specification {
-        background-color: $grey700;
+        background-color: variables.$grey700;
         color: #FFF;
 
         &:hover {
-            background-color: mix(#FFFFFF, $grey700, 20%);
-            border-color: mix(#FFFFFF, $grey700, 20%);
+            background-color: color.mix(#FFFFFF, variables.$grey700, 20%);
+            border-color: color.mix(#FFFFFF, variables.$grey700, 20%);
             color: #FFF;
         }
     }
@@ -240,11 +241,11 @@
     .key-features {
         display: flex;
         justify-content: center;
-        margin-top: $gutter;
+        margin-top: variables.$gutter;
     }
 
     .key-feature {
-        margin: 0 $gutter;
+        margin: 0 variables.$gutter;
         max-width: 150px;
     }
 
@@ -261,15 +262,15 @@
     }
 
     .specification-detail {
-        padding: $gutterSmall;
-        border: 1px solid $grey300;
+        padding: variables.$gutterSmall;
+        border: 1px solid variables.$grey300;
         border-radius: 8px;
         margin-bottom: 10px;
         overflow: hidden;
         display: flex;
         flex-wrap: wrap;
 
-        @media #{$small} {
+        @media #{variables.$small} {
             flex-direction: column;
         }
 
@@ -305,20 +306,20 @@
     }
 
     .get {
-        background-color: $blue;
+        background-color: variables.$blue;
     }
 
     .post {
-        background-color: $green;
+        background-color: variables.$green;
     }
 
     .put,
     .patch {
-        background-color: $yellow;
+        background-color: variables.$yellow;
     }
 
     .delete {
-        background-color: $red;
+        background-color: variables.$red;
     }
 
     h4 {
@@ -414,7 +415,7 @@
         display: none;
         flex: 1 1 55%;
         overflow: hidden;
-        background-color: $grey400;
+        background-color: variables.$grey400;
         border-radius: 8px;
         padding: 10px;
         margin-top: 50px;
@@ -422,7 +423,7 @@
 
     .specification-response {
         &>h6 {
-            background-color: $yellow;
+            background-color: variables.$yellow;
             padding: 10px;
             border-radius: 5px;
             margin: 0 0 5px;
@@ -458,12 +459,12 @@
 
                 .model {
                     background-color: transparent;
-                    color: $grey700;
+                    color: variables.$grey700;
                 }
             }
 
             button {
-                margin: $gutterSmall 5px 10px 0;
+                margin: variables.$gutterSmall 5px 10px 0;
             }
         }
 
@@ -492,7 +493,7 @@
                 position: relative;
 
                 &.has-children {
-                    border-top: 2px solid $grey500;
+                    border-top: 2px solid variables.$grey500;
                 }
             }
 

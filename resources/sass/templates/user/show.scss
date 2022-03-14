@@ -1,5 +1,5 @@
-@import "../../variables";
-@import "../../functions";
+@use "../../variables";
+@use "../../functions";
 
 #sidebar {
     @media screen and (max-width: 768px) {
@@ -12,17 +12,17 @@
     height: 100%;
 
     .content {
-        border: 2px solid $grey300;
+        border: 2px solid variables.$grey300;
         border-radius: 8px;
-        padding: $gutter;
+        padding: variables.$gutter;
 
-        @media #{$small} {
+        @media #{variables.$small} {
             margin-left: 0;
             margin-top: 40px;
             padding: 20px;
         }
 
-        @media #{$medium-portrait} {
+        @media #{variables.$medium-portrait} {
             margin-left: 0;
             margin-top: 40px;
         }
@@ -67,16 +67,16 @@
             margin: 0 auto;
             border-radius: 50%;
 
-            @media #{$small} {
+            @media #{variables.$small} {
                 max-width: 100%;
             }
 
             &::after {
                 content: '';
-                background-image: get-icon("edit", #FFFFFF);
+                background-image: functions.get-icon("edit", #FFFFFF);
                 background-repeat: no-repeat;
                 background-position: center;
-                background-color: $grey900;
+                background-color: variables.$grey900;
                 position: absolute;
                 width: 40px;
                 height: 40px;
@@ -98,18 +98,18 @@
         position: relative;
         margin: 0 auto;
 
-        @media #{$small} {
+        @media #{variables.$small} {
             width: 100%;
         }
 
-        @media #{$medium-portrait} {
+        @media #{variables.$medium-portrait} {
             width: 100%;
         }
 
         h2 {
             font-size: 1.8rem;
             text-align: left;
-            margin: $gutter 0 $gutterSmall;
+            margin: variables.$gutter 0 variables.$gutterSmall;
         }
 
         input {
@@ -142,7 +142,7 @@
             z-index: 1;
 
             &:hover {
-                background-color: $yellow700;
+                background-color: variables.$yellow700;
             }
         }
 
@@ -151,7 +151,7 @@
         }
 
         button {
-            margin: $gutter auto 0;
+            margin: variables.$gutter auto 0;
             display: block;
             position: relative;
         }
@@ -181,42 +181,42 @@
 .email-warning {
     display: block;
     margin-top: -10px;
-    color: $grey500;
+    color: variables.$grey500;
 }
 
 #password-still-needs {
     margin-top: 10px;
     font-size: 12px;
-    color: $error;
+    color: variables.$error;
 }
 
 #password-strength {
     height: 34px;
     line-height: 1;
-    background-color: $grey500;
+    background-color: variables.$grey500;
     border-radius: 5px;
     padding: 0 20px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    color: $grey600;
+    color: variables.$grey600;
     transition: background-color 0.356s;
 
     &.password-score-0,
     &.password-score-1,
     &.password-score-2 {
-        background-color: $error;
+        background-color: variables.$error;
         color: #FFF;
     }
 
     &.password-score-3,
     &.password-score-4 {
-        background-color: $warning;
+        background-color: variables.$warning;
         color: #FFF;
     }
 
     &.password-score-5 {
-        background-color: $success;
+        background-color: variables.$success;
         color: #FFF;
     }
 }

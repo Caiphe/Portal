@@ -1,4 +1,4 @@
-@import "../../variables";
+@use "../../variables";
 
 h2,
 h3 {
@@ -6,15 +6,15 @@ h3 {
 }
 
 .search-hr {
-    color: $grey300;
+    color: variables.$grey300;
 }
 
 #sidebar {
-    @media #{$small} {
+    @media #{variables.$small} {
         display: none;
     }
 
-    @media #{$medium} {
+    @media #{variables.$medium} {
         display: none;
     }
 }
@@ -25,11 +25,11 @@ h3 {
     background: url('/images/banners/products.jpg') no-repeat center center / cover;
     flex: 1 0 auto;
 
-    @media #{$small} {
+    @media #{variables.$small} {
         display: none;
     }
 
-    @media #{$medium} {
+    @media #{variables.$medium} {
         display: none;
     }
 }
@@ -46,12 +46,12 @@ h3 {
         margin: -90px 0 0 40px;
         width: calc(100% - 80px);
 
-        @media #{$small} {
+        @media #{variables.$small} {
             height: auto;
             margin: 0;
             width: 100%;
-            background-color: $white;
-            color: $black;
+            background-color: variables.$white;
+            color: variables.$black;
             box-shadow: none;
             border: transparent;
             padding: 0;
@@ -59,12 +59,12 @@ h3 {
             margin-bottom: 4rem;
         }
 
-        @media #{$medium} {
+        @media #{variables.$medium} {
             height: auto;
             margin: 0;
             width: 100%;
-            background-color: $white;
-            color: $black;
+            background-color: variables.$white;
+            color: variables.$black;
             box-shadow: none;
             border: transparent;
             padding: 0;
@@ -77,12 +77,12 @@ h3 {
             font-size: 40px;
             margin: 0;
 
-            @media #{$small} {
-                color: $black;
+            @media #{variables.$small} {
+                color: variables.$black;
             }
 
-            @media #{$medium} {
-                color: $black;
+            @media #{variables.$medium} {
+                color: variables.$black;
             }
         }
 
@@ -91,14 +91,14 @@ h3 {
             color: #FFF;
             padding-right: 250px;
 
-            @media #{$small} {
+            @media #{variables.$small} {
                 padding-right: 0;
-                color: $black;
+                color: variables.$black;
             }
 
-            @media #{$medium} {
+            @media #{variables.$medium} {
                 padding-right: 0;
-                color: $black;
+                color: variables.$black;
             }
         }
 
@@ -107,11 +107,11 @@ h3 {
             right: 30px;
             bottom: 20px;
 
-            @media #{$small} {
+            @media #{variables.$small} {
                 display: none;
             }
 
-            @media #{$medium} {
+            @media #{variables.$medium} {
                 display: none;
             }
         }
@@ -123,12 +123,12 @@ h3 {
         height: 100%;
         background-color: #ffffff;
 
-        @media #{$small} {
+        @media #{variables.$small} {
             padding: 0;
             margin: 0;
         }
 
-        @media #{$medium} {
+        @media #{variables.$medium} {
             padding: 0;
             margin: 0;
         }
@@ -181,7 +181,7 @@ h3 {
 }
 
 #footer {
-    @media #{$small} {
+    @media #{variables.$small} {
         margin-top: 5rem;
     }
 }
@@ -198,7 +198,7 @@ h3 {
 
         .filter-label {
             margin-left: 5px;
-            color: $grey700;
+            color: variables.$grey700;
             font-size: 12px;
         }
     }

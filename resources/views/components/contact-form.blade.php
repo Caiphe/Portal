@@ -1,6 +1,8 @@
-@allowonce('contact_form')
+@once
+@push('styles')
 <link href="{{ mix('/css/components/contact-form.css') }}" rel="stylesheet"/>
-@endallowonce
+@endpush
+@endonce
 
 <div class="contact-form mb-4">
 	<form action="{{ route('contact.send') }}" id="contact-form" method="POST">
