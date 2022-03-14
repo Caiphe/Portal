@@ -1,11 +1,11 @@
-@import "../../variables";
+@use "../../variables";
 
 #sidebar {
-    @media #{$small} {
+    @media #{variables.$small} {
         display: none;
     }
 
-    @media #{$medium-portrait} {
+    @media #{variables.$medium-portrait} {
         display: none;
     }
 }
@@ -15,19 +15,19 @@
         margin-bottom: 40px;
 
         span {
-            @media #{$small} {
+            @media #{variables.$small} {
                 display: none;
             }
         }
 
-        @media #{$small} {
+        @media #{variables.$small} {
             background-color: transparent;
             padding-left: 0 !important;
             margin-bottom: 15px;
             position: static !important;
         }
 
-        @media #{$medium-portrait} {
+        @media #{variables.$medium-portrait} {
             background-color: transparent;
             padding-left: 0 !important;
             position: static !important;
@@ -35,11 +35,11 @@
     }
 
     .content {
-        @media #{$small} {
+        @media #{variables.$small} {
             margin: 0;
         }
 
-        @media #{$medium-portrait} {
+        @media #{variables.$medium-portrait} {
             margin: 0;
         }
 
@@ -64,7 +64,7 @@
                 }
 
                 svg {
-                    fill: $grey700;
+                    fill: variables.$grey700;
                     width: 30px;
                     height: 30px;
                 }
@@ -73,19 +73,19 @@
                     font-size: 12px;
                 }
 
-                @media #{$small} {
+                @media #{variables.$small} {
                     height: auto;
                     width: 100%;
                 }
 
-                @media #{$medium-portrait} {
+                @media #{variables.$medium-portrait} {
                     height: auto;
                     width: 100%;
                 }
             }
         }
 
-        @media #{$small} {
+        @media #{variables.$small} {
             margin-left: 0;
         }
     }

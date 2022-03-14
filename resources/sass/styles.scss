@@ -1,7 +1,4 @@
-@import "utils/breakpoints";
-@import "variables";
-@import "normalize";
-@import "typography";
-@import "functions";
-@import "highlight";
-@import "components/components";
+@use "normalize";
+@use "typography";
+@use "highlight";
+@use "components/components";

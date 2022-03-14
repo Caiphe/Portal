@@ -1,3 +1,5 @@
+@use "../variables";
+
 #alert,
 #alert-loading {
     color: #FFF;
@@ -57,22 +59,22 @@
     }
 
     &.success {
-        background-color: $success;
+        background-color: variables.$success;
         background-image: url('/images/icons/success.svg');
     }
 
     &.warning {
-        background-color: $warning;
+        background-color: variables.$warning;
         background-image: url('/images/icons/warning.svg');
     }
 
     &.error {
-        background-color: $error;
+        background-color: variables.$error;
         background-image: url('/images/icons/error.svg');
     }
 
     &.info {
-        background-color: $info;
+        background-color: variables.$info;
         background-image: url('/images/icons/info.svg');
     }
 
@@ -89,7 +91,7 @@
 }
 
 #alert-loading {
-    background-color: $blue;
+    background-color: variables.$blue;
     padding: 13px 20px;
     display: flex;
     align-items: center;

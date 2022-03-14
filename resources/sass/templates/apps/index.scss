@@ -1,4 +1,4 @@
-@import '../../variables';
+@use '../../variables';
 
 #sidebar {
     @media screen and (max-width: 1023px), (max-height: 375px) {
@@ -200,7 +200,7 @@
         }
 
         .head {
-            border-bottom: 2px solid $grey300;
+            border-bottom: 2px solid variables.$grey300;
             display: flex;
             flex-wrap: wrap;
             padding: 0;
@@ -423,7 +423,7 @@
     }
 
     .head {
-        border-bottom: 2px solid $grey300;
+        border-bottom: 2px solid variables.$grey300;
         display: flex;
         flex-wrap: wrap;
         padding: 0;

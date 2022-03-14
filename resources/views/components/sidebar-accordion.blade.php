@@ -21,9 +21,11 @@
         link: What the link should be for the menu item
 --}}
 @props(['id', 'list', 'active'])
-@allowonce('sidebar_accordion')
+@once
+@push('styles')
 <link href="{{ mix('/css/components/sidebar-accordion.css') }}" rel="stylesheet"/>
-@endallowonce
+@endpush
+@endonce
 
 @php
     $isSingle = count($list) === 1;
@@ -52,6 +54,8 @@
     </ul>
 </div>
 
-@pushscript('sidebar_accordion')
+@once
+@push('scripts')
 <script src="{{ mix('/js/components/sidebar-accordion.js') }}" defer></script>
-@endpushscript
+@endpush
+@endonce

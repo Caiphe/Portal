@@ -1,4 +1,4 @@
-@import "../../variables";
+@use "../../variables";
 
 #banner {
     height: 300px;
@@ -10,7 +10,7 @@
 
 #main {
     .heading-box {
-        background-color: $grey900;
+        background-color: variables.$grey900;
         border-radius: 5px;
         height: 244px;
         width: 100%;
@@ -27,7 +27,7 @@
     }
 
     .price-box {
-        background-color: $grey200;
+        background-color: variables.$grey200;
         width: 220px;
         position: absolute;
         top: -100px;
@@ -35,11 +35,11 @@
         padding: 20px 0;
         border-radius: 5px;
         text-align: center;
-        color: $grey600;
-        box-shadow: 0 2px 4px $grey500;
+        color: variables.$grey600;
+        box-shadow: 0 2px 4px variables.$grey500;
 
         h3 {
-            color: $grey900;
+            color: variables.$grey900;
             font-size: 3rem;
             margin: 0 0 10px;
         }
@@ -60,7 +60,7 @@
         }
 
         .border-bottom {
-            border-bottom: 1px solid $grey400;
+            border-bottom: 1px solid variables.$grey400;
             padding: 0 0 10px;
         }
     }
@@ -104,7 +104,7 @@
     }
 
     a {
-        color: $grey700;
+        color: variables.$grey700;
         font-size: 12px;
         padding-left: 20px;
     }

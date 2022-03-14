@@ -1,4 +1,4 @@
-@import "../variables";
+@use "../variables";
 
 @keyframes slideIn {
     0% {
@@ -42,7 +42,7 @@
         animation-timing-function: ease-out;
 
         h2 {
-            @media #{$small} {
+            @media #{variables.$small} {
                 line-height: 0.9;
             }
         }
@@ -75,7 +75,7 @@
         }
 
         &.active {
-            background-color: $grey900;
+            background-color: variables.$grey900;
         }
     }
 }

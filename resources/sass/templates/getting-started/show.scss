@@ -1,11 +1,11 @@
-@import '../../variables';
+@use '../../variables';
 
 #sidebar {
-    @media #{$small} {
+    @media #{variables.$small} {
         display: none;
     }
 
-    @media #{$medium} {
+    @media #{variables.$medium} {
         display: none;
     }
 }
@@ -13,7 +13,7 @@
 #main {
     #heading {
         span {
-            @media #{$small} {
+            @media #{variables.$small} {
                 display: none;
             }
         }

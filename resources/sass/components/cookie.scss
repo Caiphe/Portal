@@ -1,12 +1,12 @@
-@import '../variables';
+@use '../variables';
 
 #cookie-policy {
     position: fixed;
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: $yellow;
-    color: $dark;
+    background-color: variables.$yellow;
+    color: variables.$dark;
     z-index: 2;
     opacity: 0;
     pointer-events: none;
@@ -117,7 +117,7 @@
     }
 
     .cookie-policy-option {
-        background-color: $accentBlue;
+        background-color: variables.$accentBlue;
         padding: 16px;
         position: relative;
 

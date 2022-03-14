@@ -1,4 +1,4 @@
-@import '../../variables';
+@use '../../variables';
 
 .show-password {
     position: absolute;
@@ -17,7 +17,7 @@
     border-radius: 50%;
 
     &:hover {
-        background-color: $yellow700;
+        background-color: variables.$yellow700;
     }
 }
 
@@ -35,7 +35,7 @@
         #password-strength {
             height: 34px;
             line-height: 1;
-            background-color: $grey500;
+            background-color: variables.$grey500;
             border-radius: 5px;
             padding-top: 5px;
             padding-top: 8px;
@@ -47,18 +47,18 @@
             &.password-score-0,
             &.password-score-1,
             &.password-score-2 {
-                background-color: $error;
+                background-color: variables.$error;
                 color: #FFF;
             }
 
             &.password-score-3,
             &.password-score-4 {
-                background-color: $warning;
+                background-color: variables.$warning;
                 color: #FFF;
             }
 
             &.password-score-5 {
-                background-color: $success;
+                background-color: variables.$success;
                 color: #FFF;
             }
         }
@@ -237,7 +237,7 @@
         height: 24px;
         background-size: cover;
         background-repeat: no-repeat;
-        background-color: $yellow;
+        background-color: variables.$yellow;
         border-radius: 50%;
     }
 
@@ -261,7 +261,7 @@
     .outline{
         font-size: 15px;
         font-weight: normal;
-        font-family: $MTN-Regular;
+        font-family: variables.$MTN-Regular;
         margin-left: 10px;
     }
 }
