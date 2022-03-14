@@ -332,7 +332,6 @@
             var url = "{{ route('app.update', $data) }}";
             var xhr = new XMLHttpRequest();
             var selectedProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
-            console.log(url);
 
             event.preventDefault();
 

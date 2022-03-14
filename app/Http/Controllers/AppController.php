@@ -50,7 +50,7 @@ class AppController extends Controller
 
         $apps = App::with(['products.countries', 'country', 'developer'])
             ->byUserEmail($user->email)
-            ->when($userTeams, fn($q) => $q->orWhereIn('team_id', $userTeams->pluck('id')))
+            ->when($userTeams, fn ($q) => $q->orWhereIn('team_id', $userTeams->pluck('id')))
             ->orderBy('updated_at', 'desc')
             ->get()
             ->groupBy('status');
@@ -153,6 +153,10 @@ class AppController extends Controller
 
         if ($createdResponse->failed()) {
             $reasonMsg = $createdResponse['message'] ?? 'There was a problem creating your app. Please try again later.';
+
+            if ($request->ajax()) {
+                return response()->json(['message' => $reasonMsg], $createdResponse->status());
+            }
 
             return redirect()->back()->with('alert', "error:{$reasonMsg}");
         }
