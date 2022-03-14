@@ -849,6 +849,7 @@ button {
         background-position: center center;
         background-repeat: no-repeat;
         margin-top: 5px;
+        flex-shrink: 0;
     }
 
     p {
