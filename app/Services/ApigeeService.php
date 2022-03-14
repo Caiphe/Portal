@@ -82,7 +82,7 @@ class ApigeeService
         preg_match('/\?.*/', $url, $get);
         $url = preg_replace('/\?.*/', '', $url);
         $url = explode('/', $url);
-        $url = array_map(fn ($arg) => urlencode($arg), $url);
+        $url = array_map(fn ($arg) => rawurlencode($arg), $url);
         $url = implode('/', $url);
         return $url . ($get[0] ?? '');
     }

@@ -85,6 +85,8 @@
         productStatusAction.disabled = true;
         productStatusActionSibling.disabled = true;
 
+        dialog.querySelector('.app-dialog-heading').textContent = this.dataset.productDisplayName + ' note:';
+
         dialog.addEventListener('dialog-closed', function () {
             if (productStatusAction) productStatusAction.disabled = false;
             if (productStatusActionSibling) productStatusActionSibling.disabled = false;
@@ -143,6 +145,8 @@
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
             var productActionButtons = product.querySelectorAll('.product-status-action');
             var noteDialogContent;
+            var ariaLabel = '';
+            var datasetPending = 0;
 
             removeLoading();
 
@@ -153,8 +157,12 @@
             if (xhr.status === 200) {
                 noteDialogContent = document.querySelector('#admin-' + data.app + data.productSlug + ' .note');
                 noteDialogContent.innerHTML = result.body;
+                ariaLabel = product.closest('.app').querySelector('.app-status');
 
                 product.className = 'product product-status-' + lookup[data.action];
+                datasetPending = Math.max(+ariaLabel.dataset.pending - 1, 0);
+                ariaLabel.setAttribute('aria-label', datasetPending + ' Pending products');
+                ariaLabel.dataset.pending = datasetPending;
                 addAlert('success', '<strong>Product ' + lookup[data.action] + '.</strong> The product <em>' + data.displayName + '</em> has been ' + lookup[data.action]);
             } else {
                 addAlert('error', result.body || 'There was an error updating the product.');
