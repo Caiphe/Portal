@@ -56,7 +56,7 @@
     <x-alert/>
 @endsection
 
-@push('scripts')
+@prepend('scripts')
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js" defer></script>
     <script>
         function bladeLookupAdmin(key) {
@@ -68,4 +68,4 @@
         }
     </script>
     <script src="{{ mix('/js/templates/admin/scripts.js') }}" defer></script>
-@endpush
+@endprepend

@@ -44,7 +44,7 @@
 
     init();
     ajaxifyOnPopState = updateFilters;
-    ajaxifyComplete = init;
+    ajaxifyComplete.push(init);
 
     function updateFilters(params) {
         document.getElementById('search-page').value = params['q'] || '';

@@ -1,3 +1,5 @@
+ajaxifyComplete = [];
+
 (function () {
     var els = document.querySelectorAll('.ajaxify, .page-link');
     var ajaxedHtml = [];
@@ -10,7 +12,7 @@
         ajaxedHtml.pop();
         document.getElementById('table-data').innerHTML = ajaxedHtml[ajaxedHtml.length - 1];
 
-        if (typeof ajaxifyComplete !== 'undefined') ajaxifyComplete();
+        runAjaxifyComplete();
 
         resetAjaxify();
     }
@@ -68,7 +70,7 @@
                         addAlert('success', (result.body || "Success"));
                     }
 
-                    if (typeof ajaxifyComplete !== 'undefined') ajaxifyComplete();
+                    runAjaxifyComplete();
 
                 } else {
                     addAlert('error', (result.body || "Sorry there was an unexpected error."));
@@ -133,5 +135,13 @@
             };
         }
         return selected;
+    }
+
+    function runAjaxifyComplete() {
+        if (ajaxifyComplete.length === 0) return;
+
+        for (var i = ajaxifyComplete.length - 1; i >= 0; i--) {
+            ajaxifyComplete[i].call();
+        }
     }
 }());
