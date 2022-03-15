@@ -136,15 +136,32 @@
                 align-items: center;
             }
 
+            .groups {
+                @media screen and (min-width: 768px) {
+                    width: 100%;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-between;
+                }
+            }
+
             .group {
                 display: flex;
                 flex-direction: column;
-                margin-bottom: 3rem;
-                width: 50%;
 
-                @media #{variables.$small} {
+                @media screen and (min-width: 768px) {
+                    width: calc(50% - 20px);
+                }
+
+                @media screen and (max-width: 767px) {
                     width: 100%;
                 }
+            }
+
+            .error {
+                color: variables.$error;
+                height: 44px;
+                font-size: 12px;
             }
 
             .countries {
@@ -374,8 +391,7 @@
     }
 
     .selected-data {
-        opacity: 0;
-        pointer-events: none;
+        display: none;
     }
 
     .select_wrap {
@@ -391,7 +407,6 @@
             position: relative;
             cursor: pointer;
             z-index: 2;
-            margin: 0px;
             border: solid 1px #cdcdcd;
             padding: 8px 27px 0px 15px;
             box-sizing: border-box;
