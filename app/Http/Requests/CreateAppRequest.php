@@ -2,11 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use App\Exceptions\ValidationException;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Contracts\Validation\Validator;
 
 class CreateAppRequest extends FormRequest {
 	/**

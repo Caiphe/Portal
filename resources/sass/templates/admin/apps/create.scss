@@ -484,10 +484,18 @@
                 resize: none;
             }
 
+            .groups {
+                @media screen and (min-width: 768px) {
+                    width: 100%;
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 20px;
+                }
+            }
+
             .group {
                 display: flex;
                 flex-direction: column;
-                margin-bottom: 3rem;
 
                 @media screen and (min-width: 768px) {
                     width: 50%;
@@ -496,6 +504,12 @@
                 @media screen and (max-width: 767px) {
                     width: 100%;
                 }
+            }
+
+            .error {
+                color: $error;
+                height: 44px;
+                font-size: 12px;
             }
 
             .countries {

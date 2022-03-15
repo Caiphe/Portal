@@ -84,6 +84,7 @@ class AppController extends Controller
             'productCategories' => array_keys($products->toArray()),
             'teams' => $userOwnTeams,
             'countries' => $countries ?? '',
+            'user' => $user
         ]);
     }
 
@@ -246,6 +247,7 @@ class AppController extends Controller
             'countries' => $countries ?? '',
             'data' => $app,
             'selectedProducts' => $selectedProducts,
+            'user' => $user
         ]);
     }
 

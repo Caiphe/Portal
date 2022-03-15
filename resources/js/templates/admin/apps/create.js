@@ -42,16 +42,30 @@
     }
 
     function nextAppDetails() {
+        var elements = form.elements;
         var urlValue = null;
+        var errors = [];
 
-        if (document.getElementById('name').value === '') {
-            return void addAlert('error', 'Please add a name for your app');
+        if (elements['name'].value === '') {
+            errors.push({ msg: 'Please add a name for your app', el: elements['name'] });
+        } else {
+            elements['name'].nextElementSibling.textContent = '';
         }
 
-        urlValue = document.getElementById('url').value;
+        urlValue = elements['url'].value;
 
         if (urlValue !== '' && !/https?:\/\/.*\..*/.test(urlValue)) {
-            return void addAlert('error', ['Please add a valid url', 'Eg. https://callback.com']);
+            errors.push({ msg: 'Please add a valid url. Eg. https://callback.com', el: elements['url'] });
+        } else {
+            elements['url'].nextElementSibling.textContent = '';
+        }
+
+        if (errors.length > 0) {
+            for (var i = errors.length - 1; i >= 0; i--) {
+                errors[i].el.nextElementSibling.textContent = errors[i].msg;
+            }
+
+            return;
         }
 
         next();
