@@ -46,20 +46,31 @@
 
             <form id="form-edit-app">
                 <div class="app-details active">
-                    @svg('app-avatar', '#ffffff')
-                    <div class="group">
-                        <label for="name">Name your app *</label>
-                        <input type="text" name="name" id="name" placeholder="Enter name" required value="{{ $data['display_name'] }}" maxlength="100">
+                    <div class="user-thumbnails">
+                        <div class="thumbail" style="background-image: url({{ $user->profile_picture }})"></div>
+                        <label for="user-thumb">
+                            <input type="file" name="user-thumb" class="user-thumb">
+                        </label>
                     </div>
+                    
+                    <div class="groups">
+                        <div class="group">
+                            <label for="name">Name your app *</label>
+                            <input type="text" name="name" id="name" placeholder="Enter name" required value="{{ $data['display_name'] }}" autocomplete="off" maxlength="100">
+                            <div class="error">{{ isset($error) && $error->get('display_name', '') }}</div>
+                        </div>
 
-                    <div class="group">
-                        <label for="url">Callback url</label>
-                        <input type="url" name="url" id="url" placeholder="Enter callback url (Eg. https://callback.com)" value="{{ $data['callback_url'] }}">
-                    </div>
+                        <div class="group">
+                            <label for="url">Callback url</label>
+                            <input type="url" name="url" id="url" placeholder="Enter callback url (Eg. https://callback.com)" value="{{ $data['callback_url'] }}" autocomplete="off">
+                            <div class="error">{{ isset($error) && $error->get('url', '') }}</div>
+                        </div>
 
-                    <div class="group">
-                        <label for="description">Description</label>
-                        <textarea name="description" id="description" rows="5" placeholder="Enter description">{{ $data['description'] }}</textarea>
+                        <div class="group">
+                            <label for="description">Description</label>
+                            <textarea name="description" id="description" rows="5" placeholder="Enter description">{{ $data['description'] }}</textarea>
+                            <div class="error">{{ isset($error) && $error->get('description', '') }}</div>
+                        </div>
                     </div>
 
                     <div class="form-actions">
@@ -174,17 +185,31 @@
             var activeDiv = this.parentNode.parentNode;
             var nextDiv = activeDiv.nextElementSibling;
             var urlValue = document.getElementById('url').value;
+            var elements = form.elements;
+            var errors = [];
 
             ev.preventDefault();
 
             if(hasCountry) nextDiv = nextDiv.nextElementSibling;
 
-            if(activeDiv.classList.contains('app-details') && form.elements['name'].value === ''){
-                return void addAlert('error', 'Please choose a name for your app.');
+            if(activeDiv.classList.contains('app-details') && elements['name'].value === '') {
+                errors.push({msg: 'Please add a name for your app', el: elements['name']});
+            } else {
+                elements['name'].nextElementSibling.textContent = '';
             }
 
             if(urlValue !== '' && !/https?:\/\/.*\..*/.test(urlValue)) {
-                return void addAlert('error', ['Please add a valid url', 'Eg. https://callback.com']);
+                errors.push({msg: 'Please add a valid url. Eg. https://callback.com', el: elements['url']});
+            } else {
+                elements['url'].nextElementSibling.textContent = '';
+            }
+
+            if(errors.length > 0){
+                for (var i = errors.length - 1; i >= 0; i--) {
+                    errors[i].el.nextElementSibling.textContent = errors[i].msg;
+                }
+
+                return;
             }
 
             if(activeDiv.classList.contains('select-countries') && document.querySelectorAll('.country-checkbox:checked').length === 0){

@@ -1,6 +1,3 @@
-@php
-    $user = auth()->user();
-@endphp
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/templates/apps/create.css') }}">
 @endpush
@@ -59,51 +56,56 @@
                 </div>
                 {{-- @svg('app-avatar', '#ffffff') --}}
 
-                <div class="group">
-                    <label for="name">Name your app *</label>
-                    <input type="text" name="name" id="name" placeholder="Enter name" maxlength="100" required>
-                </div>
+                <div class="groups">
+                    <div class="group">
+                        <label for="name">Name your app *</label>
+                        <input type="text" name="name" id="name" placeholder="Enter name" maxlength="100" autocomplete="off" required>
+                        <div class="error">{{ isset($error) && $error->get('display_name', '') }}</div>
+                    </div>
 
-                <div class="group group-info">
-                    <label for="url">Callback url @svg('info-icon', '#a5a5a5')<small class="tooltip">The callback URL typically specifies the URL of an app that is designated to receive an authorization code on behalf of the client app. In addition, this URL string is used for validation.</small></label>
-                    <input type="url" name="url" id="url" placeholder="Enter callback url (eg. https://callback.com)">
-                    <small>A callback URL is required only for 3-legged Oauth</small>
-                </div>
+                    <div class="group group-info">
+                        <label for="url">Callback url @svg('info-icon', '#a5a5a5')<small class="tooltip">The callback URL typically specifies the URL of an app that is designated to receive an authorization code on behalf of the client app. In addition, this URL string is used for validation. A callback URL is required only for 3-legged Oauth</small></label>
+                        <input type="url" name="url" id="url" placeholder="Enter callback url (eg. https://callback.com)" autocomplete="off">
+                        <div class="error">{{ isset($error) && $error->get('url', '') }}</div>
+                    </div>
 
-                <div class="group group-info team-field">
-                    <label for="team">Select team *</label>
-                    <div class="select_wrap">
-                        <input name="team" id="team" class="selected-data" value="">
-                        <ul class="default_option">
-                            <li>
-                                {{-- <div class="option"> --}}
-                                    <div class="select-default">Please select team <span class="hide-mobi">to publish under</span></div>
-                                {{-- </div> --}}
-                            </li>
-                        </ul>
+                    <div class="group group-info team-field">
+                        <label for="team">Select team *</label>
+                        <div class="select_wrap">
+                            <input name="team" id="team" class="selected-data" value="">
+                            <ul class="default_option">
+                                <li>
+                                    {{-- <div class="option"> --}}
+                                        <div class="select-default">Please select team <span class="hide-mobi">to publish under</span></div>
+                                    {{-- </div> --}}
+                                </li>
+                            </ul>
 
-                        <ul class="select_ul">
-                            <li>
-                                <div class="option">
-                                    <div class="icon" style="background-image: url({{ $user->profile_picture }})"></div>
-                                    <div class="select-data" data-createdby="" data-teamid="">{{ $user->full_name }} (You)</div>
-                                </div>
-                            </li>
-                            @foreach($teams as $team)
+                            <ul class="select_ul">
+                                <li>
+                                    <div class="option">
+                                        <div class="icon" style="background-image: url({{ $user->profile_picture }})"></div>
+                                        <div class="select-data" data-createdby="" data-teamid="">{{ $user->full_name }} (You)</div>
+                                    </div>
+                                </li>
+                                @foreach($teams as $team)
                                 <li>
                                     <div class="option">
                                         <div class="icon" style="background-image: url({{ $team['logo'] }})"></div>
                                         <div class="select-data" data-createdby="{{ $user->email }}" data-teamid="{{ $team['id'] }}">{{ $team['name'] }}</div>
                                     </div>
                                 </li>
-                            @endforeach
-                        </ul>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <div class="error">{{ isset($error) && $error->get('team', '') }}</div>
                     </div>
-                </div>
 
-                <div class="group">
-                    <label for="description">Description</label>
-                    <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>
+                    <div class="group">
+                        <label for="description">Description</label>
+                        <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>
+                        <div class="error">{{ isset($error) && $error->get('description', '') }}</div>
+                    </div>
                 </div>
 
                 <button class="dark next">
@@ -215,19 +217,33 @@
     }
 
     function handleButtonClick() {
+        var elements = form.elements;
         for (var i = 0; i < buttons.length; i++) {
 
             buttons[i].addEventListener('click', function (event) {
-                var urlValue = document.getElementById('url').value;
+                var errors = [];
+                var urlValue = elements['url'].value;
                 event.preventDefault();
 
                 if(form.firstElementChild.classList.contains('active')) {
-                    if(document.getElementById('name').value === '') {
-                        return void addAlert('error', 'Please add a name for your app');
+                    if(elements['name'].value === '') {
+                        errors.push({msg: 'Please add a name for your app', el: elements['name']});
+                    } else {
+                        elements['name'].nextElementSibling.textContent = '';
                     }
 
                     if(urlValue !== '' && !/https?:\/\/.*\..*/.test(urlValue)) {
-                        return void addAlert('error', ['Please add a valid url', 'Eg. https://callback.com']);
+                        errors.push({msg: 'Please add a valid url. Eg. https://callback.com', el: elements['url']});
+                    } else {
+                        elements['url'].nextElementSibling.textContent = '';
+                    }
+
+                    if(errors.length > 0){
+                        for (var i = errors.length - 1; i >= 0; i--) {
+                            errors[i].el.nextElementSibling.textContent = errors[i].msg;
+                        }
+
+                        return;
                     }
 
                     nav.querySelector('a').nextElementSibling.classList.add('active');
