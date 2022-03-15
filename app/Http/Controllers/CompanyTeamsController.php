@@ -157,9 +157,11 @@ class CompanyTeamsController extends Controller
         $data = $inviteRequest->validated();
         $invitedEmail = $data['invitee'];
         $inviteSent = false;
+        $user = $inviteRequest->user();
 
         $team = $this->getTeam($data['team_id']);
         abort_if(!$team, 404, 'Team was not found');
+        abort_if(!$user->belongsToTeam($team) || !$user->hasTeamRole($team, 'team_admin'), 403, 'Forbidden');
 
         $user = $this->getTeamUserByEmail($invitedEmail);
         abort_if(!$user, 404, 'User was not found');
@@ -293,7 +295,7 @@ class CompanyTeamsController extends Controller
 
         $team = $this->createTeam($user, $data);
 
-        if(!$team) {
+        if (!$team) {
             return back()->with('alert', 'error:There was a problem creating your team;Please try again.');
         }
 
