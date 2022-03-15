@@ -1,6 +1,3 @@
-@php
-    $user = auth()->user();
-@endphp
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/templates/apps/create.css') }}">
 @endpush
@@ -63,7 +60,7 @@
                     <div class="group">
                         <label for="name">Name your app *</label>
                         <input type="text" name="name" id="name" placeholder="Enter name" maxlength="100" autocomplete="off" required>
-                        <div class="error">{{ isset($error) && $error->get('name', '') }}</div>
+                        <div class="error">{{ isset($error) && $error->get('display_name', '') }}</div>
                     </div>
 
                     <div class="group group-info">
