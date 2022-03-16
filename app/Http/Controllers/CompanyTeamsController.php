@@ -289,9 +289,7 @@ class CompanyTeamsController extends Controller
         $user = $request->user();
         $data = $request->validated();
 
-        if (!$this->processLogoFile($request, $data)) {
-            abort(422, 'Could not process logo file upload for your team.');
-        }
+        $data['logo'] = $this->processLogoFile($request);
 
         $team = $this->createTeam($user, $data);
 
@@ -335,9 +333,7 @@ class CompanyTeamsController extends Controller
         $data = $request->validated();
         $team = Team::findOrFail($id);
 
-        if ($request->hasFile('logo_file') && !$this->processLogoFile($request, $data)) {
-            abort(422, 'Could not process logo file upload for your team.');
-        }
+        $data['logo'] = $this->processLogoFile($request);
 
         $team->update($data);
         ApigeeService::updateCompany($team);

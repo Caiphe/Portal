@@ -15,11 +15,11 @@ class AddTeamAttributesToTeamsTable extends Migration
     {
         Schema::table('teams', function (Blueprint $table) {
             $table->unique('name');
-            $table->string('url');
-            $table->string('contact');
+            $table->string('url')->nullable();
+            $table->string('contact')->nullable();
             $table->string('country');
             $table->string('logo');
-            $table->text('description');
+            $table->text('description')->nullable();
         });
     }
 
