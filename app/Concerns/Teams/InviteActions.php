@@ -99,7 +99,7 @@ trait InviteActions
      * @param $request
      * @param array $data
      */
-    public function processLogoFile($request, array &$data)
+    public function processLogoFile($request): string
     {
         if ($request->has('logo_file')) {
 
@@ -107,10 +107,10 @@ trait InviteActions
 
             $path = $request->file('logo_file')->storeAs("public/team/", $fileName);
 
-            $data['logo'] = str_replace('public', '/storage', $path);
+            return str_replace('public', '/storage', $path);
         }
 
-        return isset($data['logo']);
+        return '/storage/profile/profile-' . rand(1, 32) . '.svg';
     }
 
     /**
