@@ -315,10 +315,6 @@ My team
                     </tr>
                 @endforeach
             </table>
-
-            @if ($user->hasTeamRole($team, 'team_admin'))
-                <button class="outline dark add-team-mate-btn-mobile">Add a teammate</button>
-            @endif
         </div>
     </div>
 

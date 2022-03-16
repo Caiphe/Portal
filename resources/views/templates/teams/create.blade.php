@@ -76,7 +76,7 @@
 
             <div class="group">
                 <label for="contact">Enter team contact number</label>
-                <input type="text" name="contact" value="{{ old('contact') }}" id="team-contact" placeholder="Enter team contact number" maxlength="15" required>
+                <input type="text" name="contact" value="{{ old('contact') }}" id="team-contact" placeholder="Enter team contact number" maxlength="16" required>
             </div>
 
             <div class="group countries">
@@ -112,7 +112,7 @@
 
             <div class="group">
                 <label for="description">Team description</label>
-                <textarea name="description" id="description" placeholder="Write a short description about your team">{{ old('description') }}</textarea>
+                <textarea name="description" id="description" placeholder="Write a short description about your team" maxlength="512">{{ old('description') }}</textarea>
             </div>
 
             <div class="form-actions">
