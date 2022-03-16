@@ -1,62 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   height="1280"
-   viewBox="0 0 1280 1280"
-   width="1280"
-   version="1.1"
-   id="svg840"
-   sodipodi:docname="favicon.svg"
-   inkscape:version="1.1 (c4e8f9e, 2021-05-24)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <defs
-     id="defs844" />
-  <sodipodi:namedview
-     id="namedview842"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     showgrid="false"
-     height="1280px"
-     inkscape:zoom="0.23814832"
-     inkscape:cx="222.55038"
-     inkscape:cy="249.8443"
-     inkscape:window-width="1920"
-     inkscape:window-height="1027"
-     inkscape:window-x="0"
-     inkscape:window-y="25"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="svg840" />
-  <g
-     transform="translate(-320)"
-     id="g838">
-    <path
-       d="m 960,320 c -353.46,0 -640,143.27 -640,320 0,176.73 286.54,320 640,320 353.46,0 640,-143.27 640,-320 0,-176.73 -286.54,-320 -640,-320 z m 0,589.48 C 634.44,909.48 370.52,788.83 370.52,640 370.52,491.17 634.44,370.52 960,370.52 c 325.56,0 589.48,120.65 589.48,269.48 0,148.83 -263.92,269.48 -589.48,269.48 z M 879.29,583.86 v -50.53 h 180.55 v 50.53 h -65 V 746.67 H 944.3 V 583.86 Z m 398.49,-50.53 v 213.34 h -50.52 l -91.63,-127 v 127 h -50.52 V 533.33 h 50.52 l 91.63,127 v -127 z M 640.72,746.67 V 533.33 h 50.52 l 56.13,86.34 56.13,-86.34 H 854 V 746.67 H 803.5 V 626 l -38.32,58.9 H 729.56 L 691.24,626 v 120.67 z"
-       fill="#ffcb05"
-       id="path824" />
-    <g
-       fill="none"
-       id="g836">
-      <path
-         d="M 0,1280 C 176.73,1280 320,993.46 320,640 320,286.54 176.73,0 0,0"
-         id="path826" />
-      <path
-         d="m 1920,0 c -176.73,0 -320,286.54 -320,640 0,353.46 143.27,640 320,640"
-         id="path828" />
-      <path
-         d="m 1600,1280 c 0,-176.73 -286.54,-320 -640,-320 -353.46,0 -640,143.27 -640,320"
-         id="path830" />
-      <path
-         d="m 320,0 c 0,176.73 286.54,320 640,320 353.46,0 640,-143.27 640,-320"
-         id="path832" />
-      <path
-         d="M 0,0 H 1920 V 1280 H 0 Z"
-         id="path834" />
+<svg height="1280" width="1280" xmlns="http://www.w3.org/2000/svg">
+   <style>
+      .logo { fill: #000000; } @media (prefers-color-scheme: dark) { .logo { fill: #ffcb05; } }
+   </style>
+    <g transform="translate(-320)">
+        <path class="logo" d="M960 320c-353.46 0-640 143.27-640 320s286.54 320 640 320 640-143.27 640-320-286.54-320-640-320zm0 589.48c-325.56 0-589.48-120.65-589.48-269.48S634.44 370.52 960 370.52 1549.48 491.17 1549.48 640 1285.56 909.48 960 909.48zm-80.71-325.62v-50.53h180.55v50.53h-65v162.81H944.3V583.86zm398.49-50.53v213.34h-50.52l-91.63-127v127h-50.52V533.33h50.52l91.63 127v-127zM640.72 746.67V533.33h50.52l56.13 86.34 56.13-86.34H854v213.34h-50.5V626l-38.32 58.9h-35.62L691.24 626v120.67z" />
+        <g fill="none">
+            <path d="M0 1280c176.73 0 320-286.54 320-640S176.73 0 0 0m1920 0c-176.73 0-320 286.54-320 640s143.27 640 320 640m-320 0c0-176.73-286.54-320-640-320s-640 143.27-640 320M320 0c0 176.73 286.54 320 640 320s640-143.27 640-320" />
+            <path d="M0 0h1920v1280H0z" />
+        </g>
     </g>
-  </g>
 </svg>
