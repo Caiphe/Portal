@@ -480,7 +480,8 @@
     .dialog-content {
         width: 400px;
 
-        h3 {
+        h3,
+        h3 em {
             word-break: break-word;
         }
     }
