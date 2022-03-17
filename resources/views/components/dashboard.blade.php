@@ -90,9 +90,9 @@
                 @endif
                 <div class="detail-actions">
                     @if($app['status'] === 'approved')
-                    <button class="reset app-status-action" data-id="{{ $app['aid'] }}" data-status="revoked" data-action="{{ route('admin.app.status-update', $app) }}">@svg('revoke') Revoke application</button>
+                    <button class="reset app-status-action" data-id="{{ $app['aid'] }}" data-app-display-name="{{ $app['display_name'] }}" data-status="revoked" data-action="{{ route('admin.app.status-update', $app) }}">@svg('revoke') Revoke application</button>
                     @else
-                    <button class="reset app-status-action" data-id="{{ $app['aid'] }}" data-status="approved" data-action="{{ route('admin.app.status-update', $app) }}">@svg('approve') Approve application</button>
+                    <button class="reset app-status-action" data-id="{{ $app['aid'] }}" data-app-display-name="{{ $app['display_name'] }}" data-status="approved" data-action="{{ route('admin.app.status-update', $app) }}">@svg('approve') Approve application</button>
                     @endif
                     <button class="log-notes reset" data-id="{{ $app['aid'] }}">@svg('view') View application log notes</button>
                 </div>

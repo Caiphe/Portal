@@ -85,7 +85,7 @@
         productStatusAction.disabled = true;
         productStatusActionSibling.disabled = true;
 
-        dialog.querySelector('.app-dialog-heading').textContent = this.dataset.productDisplayName + ' note:';
+        dialog.querySelector('.app-dialog-heading').innerHTML = '<em>' + this.dataset.productDisplayName + '</em> note:';
 
         dialog.addEventListener('dialog-closed', function () {
             if (productStatusAction) productStatusAction.disabled = false;
@@ -184,6 +184,7 @@
             once: true
         });
 
+        dialog.querySelector('.app-dialog-heading').innerHTML = '<em>' + this.dataset.appDisplayName + '</em> note:';
         dialog.querySelector('.app-dialog-status').value = this.dataset.status;
         dialog.classList.add('show');
     }
