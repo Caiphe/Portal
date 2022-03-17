@@ -479,6 +479,10 @@
 #status-dialog {
     .dialog-content {
         width: 400px;
+
+        h3 {
+            word-break: break-word;
+        }
     }
 
     .status-dialog-textarea {
