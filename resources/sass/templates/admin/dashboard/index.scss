@@ -476,16 +476,14 @@
     color: #787878;
 }
 
-#status-dialog {
-    .dialog-content {
-        width: 400px;
-
-        h3,
-        h3 em {
-            word-break: break-word;
-        }
+.dialog-content {
+    h3,
+    h3 em {
+        word-break: break-word;
     }
+}
 
+#status-dialog {
     .status-dialog-textarea {
         width: 100%;
         border-radius: 5px;
