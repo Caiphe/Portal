@@ -6,10 +6,6 @@
     flex-wrap: wrap;
     width: 100%;
 
-    @media #{variables.$small} {
-        overflow: hidden;
-    }
-
     .status-icon {
         width: 24px;
         min-width: 24px;
@@ -97,7 +93,7 @@
         padding: 10px;
         position: absolute;
         text-align: left;
-        right: 140px;
+        right: 90px;
         top: 16px;
         z-index: 1;
         opacity: 0;
@@ -119,6 +115,11 @@
             font-size: 12px;
             border: transparent;
             padding: 0;
+
+            &:hover {
+                background: none;
+                border: none;
+            }
         }
 
         &.show {

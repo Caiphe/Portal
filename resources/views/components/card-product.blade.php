@@ -1,12 +1,13 @@
 {{--
     This component allows for adding product cards.
     Eg:
-    <x-card-product :countries="$countries" :tags="$tags" target="_blank" title="API Name" href="http://www.google.com" addButtonId="button-id" addUrl="http://www.google.com">This is the description</x-card-product>
+    <x-card-product :countries="$countries" :tags="$tags" target="_blank" title="API Name" href="http://www.google.com" addButtonId="button-id" showAddButton="true" :selected="false" addUrl="http://www.google.com">This is the description</x-card-product>
     countries - is an array of country names, which is converted to slug friendly text for the country svg files e.g. ['za','cm','ci']
     tags -  is an array the product tags e.g. ['MTN API','MTN APP']
     title - the card title
     href - the link for the card to go to
     addButtonId - id for add button, if empty will hide the add button
+    selected - whether the card is set as selected
     addUrl - The url for the add button
     The card description is passed through the $slot and link attributes can be added to the card to be applied to the a tag
 --}}
@@ -18,13 +19,15 @@
 @endpush
 @endonce
 
-@props(['title','countries','tags', 'href', 'addButtonId', 'addUrl', 'target' => '_self'])
+@props(['title','countries','tags', 'href', 'showAddButton' => 'false', 'selected' => false, 'addButtonId', 'addUrl', 'target' => '_blank'])
+
+<input id="{{ $addButtonId }}" type="checkbox" class="add-product" name="add_product[]" value="{{ $dataTitle }}" @if($selected) checked @endif hidden autocomplete="off">
 <div {{ $attributes->merge(['class' => 'card card--product']) }} >
-    <a href="{{$href}}" target="{{ $target }}">
+    <a href="{{ $href }}" target="{{ $target }}">
         <div class="card__content">
             @isset($tags)
                 @foreach ($tags as $tag)
-                    <span class="tag outline yellow">{{$tag}}</span>
+                    <span class="tag outline yellow">{{ $tag }}</span>
                 @endforeach
                 @if(isset($dataAccess) && $dataAccess !== 'public')
                 <span class="tag outline {{ $dataAccess }}">{{ $dataAccess }}</span>
@@ -42,7 +45,7 @@
             <div class="country-selector">
                 <div class="countries">
                     @foreach ($countries as $name => $country)
-                        <img src="/images/locations/{{$country}}.svg" title="{{ gettype($name) === 'string' ? $name : $country }} flag" alt="{{$country}} flag">
+                        <img src="/images/locations/{{ $country }}.svg" title="{{ gettype($name) === 'string' ? $name : $country }} flag" alt="{{ $country }} flag">
                     @endforeach
                 </div>
                 @if (count($countries ) > 1)
@@ -53,13 +56,12 @@
         </div>
     </a>
     <div class="buttons">
-        <a class="flex button" target="_blank" href="{{$href}}" role="button">View</a>
+        <a class="flex button" target="_blank" href="{{ $href }}" role="button">View</a>
         @isset($addButtonId)
-        <a
-        @isset($addUrl)
-        href="{{$addUrl}}"
-        @endisset
-        id="{{ $addButtonId }}" data-name="{{$dataTitle}}" class="flex button fab plus dark"></a>
+        <label class="flex button fab dark" for="{{ $addButtonId }}">
+            @svg('plus', '#FFF')
+            @svg('done', '#FFF')
+        </label>
         @endisset
     </div>
 </div>
