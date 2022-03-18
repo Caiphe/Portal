@@ -360,6 +360,7 @@
 
             &:nth-child(1){
                 width: 23%;
+                flex-grow: 1;
             }
 
             &:nth-child(2){
@@ -380,6 +381,7 @@
 
             &:nth-child(5){
                 width: 10%;
+                margin-right: 76px;
             }
         }
     }
@@ -392,6 +394,7 @@
 
             &:nth-child(1){
                 width: 23%;
+                flex-grow: 1;
             }
 
             &:nth-child(2){
