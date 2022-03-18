@@ -377,7 +377,6 @@
                     addAlert('error', result.message || 'Sorry there was a problem updating your app. Please try again.');
 
                     button.removeAttribute('disabled');
-                    document.getElementById('update').textContent = "Update";
                 }
             };
         }
