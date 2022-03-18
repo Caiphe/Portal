@@ -649,6 +649,16 @@
                                 border-color: $grey900;
                             }
                         }
+
+                        .buttons {
+                            label {
+                                margin: 0;
+
+                                svg {
+                                    margin: 0;
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -667,18 +677,6 @@
             background-color: transparent;
             border: transparent;
         }
-    }
-
-    .button.plus {
-        background: url('/images/icons/plus.svg') no-repeat #FFF center center / 24px;
-        border: 2px solid #FFF;
-        filter: invert(100%);
-    }
-
-    .button.done {
-        background: url('/images/icons/done.svg') no-repeat #FFF center center / 24px;
-        border: 2px solid #FFF;
-        filter: invert(100%);
     }
 
     input,

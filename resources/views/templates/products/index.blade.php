@@ -71,6 +71,7 @@
                                         :countries="$product->countries->pluck('code', 'name')"
                                         :class="'access-' . $product->access"
                                         :tags="[$product->group, $category]"
+                                        target="_self"
                                         :data-title="$product->display_name"
                                         :data-group="$product->group"
                                         :data-access="$product->access"
