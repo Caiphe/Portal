@@ -121,7 +121,7 @@
                     @foreach($countries as $key => $country)
                         <label class="country" for="country-{{ $loop->index + 1 }}" data-location="{{ $key }}">
                             @svg('$key', '#000000', 'images/locations')
-                            <input type="radio" id="country-{{ $loop->index + 1 }}" class="country-checkbox" name="country-checkbox" value="{{ $key }}" data-location="{{ $key }}">
+                            <input type="radio" id="country-{{ $loop->index + 1 }}" class="country-checkbox" name="country-checkbox" value="{{ $key }}" data-location="{{ $key }}" autocomplete="off">
                             <div class="country-checked"></div>
                             {{ $country }}
                         </label>
@@ -193,21 +193,22 @@
     var default_option = document.querySelector('.default_option');
     var select_wrap = document.querySelector('.select_wrap');
     var inputData = document.querySelector('.selected-data');
+    var submit = document.getElementById('form-create-app').addEventListener('submit', handleCreate);
+    var select_ul = document.querySelectorAll('.select_ul li');
 
     function init() {
         handleButtonClick();
         handleBackButtonClick();
-        clearCheckBoxes();
     }
 
     default_option.addEventListener('click', function(){
         select_wrap.classList.toggle('active');
     });
 
-    var select_ul = document.querySelectorAll('.select_ul li');
     for(var i = 0; i < select_ul.length; i++){
         select_ul[i].addEventListener('click', toggleSelectList);
     }
+
     function toggleSelectList(){
         var selectedDataObject = this.querySelector('.select-data');
         default_option.innerHTML = selectedDataObject.innerHTML;
@@ -287,11 +288,9 @@
 
                     nav.firstElementChild.nextElementSibling.nextElementSibling.classList.remove('active');
 
-                    selectedProducts = document.querySelectorAll('.products .selected .buttons .done');
+                    selectedProducts = document.querySelectorAll('.add-product:checked');
                     for (var i = selectedProducts.length - 1; i >= 0; i--) {
-                        selectedProducts[i].classList.toggle('done');
-                        selectedProducts[i].classList.toggle('plus');
-                        selectedProducts[i].parentNode.parentNode.classList.remove('selected');
+                        selectedProducts[i].checked = false;
                     }
                 }
             });
@@ -308,7 +307,7 @@
         var els = document.querySelectorAll('#app-create nav a.active');
         var countries = document.querySelectorAll('.countries .selected');
         var products = document.querySelectorAll('.products .selected');
-        var buttons = document.querySelectorAll('.products .selected .done');
+        var buttons = document.querySelectorAll('.add-product:checked');
 
         for (var k = 0; k < els.length; k++) {
             els[k].classList.remove('active');
@@ -323,8 +322,7 @@
         }
 
         for(var w = 0; w < buttons.length; w++) {
-            buttons[w].classList.remove('done');
-            buttons[w].classList.add('plus');
+            buttons[w].checked = false;
         }
 
         nav.querySelector('a').classList.add('active');
@@ -387,34 +385,6 @@
         }
     }
 
-    /**
-     *  Clear checkboxes on page load, otherwise some checkboxes persist checked state.
-     */
-    function clearCheckBoxes() {
-        for (var n = 0; n < checkedBoxes.length; ++n) {
-            checkedBoxes[n].checked = false;
-        }
-    }
-
-    var addProductButtons = document.querySelectorAll('[data-title] a');
-    for (var o = 0; o < addProductButtons.length; ++o) {
-
-        addProductButtons[o].addEventListener('click', function (event) {
-            var button = event.currentTarget;
-
-            button.classList.toggle('plus');
-            button.classList.toggle('done');
-
-            if(document.querySelectorAll('[data-title] button')) {
-                var selectedProduct = this.parentNode.parentNode;
-
-                selectedProduct.classList.toggle('selected');
-            }
-        });
-    }
-
-    var submit = document.getElementById('form-create-app').addEventListener('submit', handleCreate);
-
     function handleCreate(event) {
         var elements = this.elements;
         var app = {
@@ -425,13 +395,15 @@
             products: [],
             team_id: inputData.dataset.teamid
         };
-        var selectedProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
+        var selectedProducts = document.querySelectorAll('.add-product:checked');
         var button = document.getElementById('create');
+        var url = "{{ route('app.store') }}";
+        var xhr = new XMLHttpRequest();
 
         event.preventDefault();
 
         for(i = 0; i < selectedProducts.length; i++) {
-            app.products.push(selectedProducts[i].dataset.name);
+            app.products.push(selectedProducts[i].value);
         }
 
         if (app.products.length === 0) {
@@ -439,10 +411,7 @@
         }
 
         button.disabled = true;
-        button.textContent = 'Creating...';
-
-        var url = "{{ route('app.store') }}";
-        var xhr = new XMLHttpRequest();
+        addLoading('Creating app...');
 
         xhr.open('POST', url);
         xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
@@ -452,6 +421,8 @@
         xhr.send(JSON.stringify(app));
 
         xhr.onload = function() {
+            removeLoading();
+
             if (xhr.status === 200) {
                 addAlert('success', ['Application created successfully', 'You will be redirected to your app page shortly.'], function(){
                     window.location.href = "{{ route('app.index') }}";
@@ -469,7 +440,6 @@
                 addAlert('error', result.message || 'Sorry there was a problem creating your app. Please try again.');
 
                 button.removeAttribute('disabled');
-                button.textContent = 'Create';
             }
         };
     }
