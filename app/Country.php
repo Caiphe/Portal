@@ -44,6 +44,6 @@ class Country extends Model
 
     public function opcoUser()
     {
-        return $this->belongsToMany(User::class, 'country_opco');
+        return $this->belongsToMany(User::class, 'country_opco')->whereHas('roles', fn ($q) => $q->where('name', 'opco'));
     }
 }
