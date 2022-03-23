@@ -165,12 +165,21 @@ class App extends Model
 
     public function getProductStatusAttribute()
     {
-        $pending = $this->products->filter(fn($prod) => $prod->pivot->status === 'pending')->count();
+        $pending = $this->products->filter(fn ($prod) => $prod->pivot->status === 'pending')->count();
 
-        if($pending > 0){
+        if ($pending > 0) {
             return ['status' => 'pending', 'label' => $pending . ' Pending products', 'pending' => $pending];
         }
 
         return ['status' => $this->status, 'label' => ucfirst($this->status), 'pending' => 0];
+    }
+
+    public function getEmails(): array
+    {
+        if (!is_null($this->team_id)) {
+            return $this->team->users->pluck('email')->toArray();
+        }
+
+        return [$this->developer->email];
     }
 }
