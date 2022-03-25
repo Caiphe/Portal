@@ -180,7 +180,6 @@ class CompanyTeamsController extends Controller
 
         if ($team && !$user) {
             $invite = $this->createTeamInvite($team, $invitedEmail, 'external', $data['role']);
-
             if ($invite) {
                 $this->sendExternalInvite($team, $invitedEmail);
 
@@ -190,8 +189,11 @@ class CompanyTeamsController extends Controller
             $invite = Teamwork::hasPendingInvite($team, $user->email);
 
             if (!$invite) {
-                Teamwork::inviteToTeam($user->email, $team, function ($invite) use ($team, $user, &$inviteSent) {
+                Teamwork::inviteToTeam($user->email, $team, function ($invite) use ($data, $team, $user, &$inviteSent) {
                     $this->sendInternalInvite($team, $user, $invite);
+
+                    $invite->role = $data['role'];
+                    $invite->save();
 
                     $inviteSent = $invite->exists;
                 });
