@@ -262,7 +262,7 @@ class AppController extends Controller
         $validated = $request->validated();
         $app->load('products', 'team');
         $appTeam = $app->team ?? null;
-        $credentials = $app->credentials;
+        $credentials = ApigeeService::getLatestCredentials($app->credentials);
         $sandboxProducts = $app->products->filter(function ($prod) {
             $envArr = explode(',', $prod->environments);
             return in_array('sandbox', $envArr) && !in_array('prod', $envArr);
@@ -272,30 +272,24 @@ class AppController extends Controller
         $countriesByCode = Country::pluck('iso', 'code');
         $apigeeAttributes = ApigeeService::getApigeeAppAttributes($app);
         $appAttributes = array_merge($apigeeAttributes, $app->attributes);
+        $originalProducts = $credentials['apiProducts'];
 
-        if (count($credentials) === 1 && $hasSandboxProducts) {
+        if ($hasSandboxProducts) {
             $credentialsType = 'consumerKey-sandbox';
-            $originalProducts = $credentials[0]['apiProducts'];
+
             foreach ($products as $name => $attributes) {
                 $attr = json_decode($attributes, true);
                 $newProducts[] = $attr['SandboxProduct'] ?? $name;
             }
-            $syncProducts = $newProducts;
         } else {
             $credentialsType = 'consumerKey-production';
-            $originalProducts = end($credentials)['apiProducts'];
 
             foreach ($products as $name => $attributes) {
                 $attr = json_decode($attributes, true);
                 $newProducts[] = $attr['ProductionProduct'] ?? $name;
             }
-
-            if ($hasSandboxProducts) {
-                $syncProducts = [...$newProducts, ...$credentials[0]['apiProducts']];
-            } else {
-                $syncProducts = $newProducts;
-            }
         }
+        dd($newProducts);
 
         $key = $this->getCredentials($app, $credentialsType, 'string');
 
@@ -349,7 +343,22 @@ class AppController extends Controller
             'country_code' => $validated['country'],
         ]);
 
-        $app->products()->sync($syncProducts);
+        $app->products()->sync(
+            array_reduce(
+                ApigeeService::getLatestCredentials($updatedResponse['credentials'])['apiProducts'],
+                function ($carry, $apiProduct) {
+                    $pivotOptions = ['status' => $apiProduct['status']];
+
+                    if ($apiProduct['status'] === 'approved') {
+                        $pivotOptions['actioned_at'] = date('Y-m-d H:i:s');
+                    }
+
+                    $carry[$apiProduct['apiproduct']] = $pivotOptions;
+                    return $carry;
+                },
+                []
+            )
+        );
 
         $opcoUserEmails = $app->country->opcoUser->pluck('email')->toArray();
         if (empty($opcoUserEmails)) {
