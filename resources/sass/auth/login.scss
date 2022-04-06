@@ -1,9 +1,9 @@
-@import "../variables";
-@import "../components/utility";
-@import "auth";
+@use "../variables";
+@use "../components/utility";
+@use "auth";
 
 .verify {
-    background-color: $green;
+    background-color: variables.$green;
     padding: 10px;
     color: #fff;
     border-radius: 8px;

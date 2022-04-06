@@ -19,7 +19,7 @@ function init() {
 }
 
 init();
-ajaxifyComplete = init;
+ajaxifyComplete.push(init);
 
 document.getElementById('menu-button').addEventListener('click', toggleMenu);
 document.getElementById('hide-menu').addEventListener('click', toggleMenu);

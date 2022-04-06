@@ -180,7 +180,6 @@ class CompanyTeamsController extends Controller
 
         if ($team && !$user) {
             $invite = $this->createTeamInvite($team, $invitedEmail, 'external', $data['role']);
-
             if ($invite) {
                 $this->sendExternalInvite($team, $invitedEmail);
 
@@ -190,8 +189,11 @@ class CompanyTeamsController extends Controller
             $invite = Teamwork::hasPendingInvite($team, $user->email);
 
             if (!$invite) {
-                Teamwork::inviteToTeam($user->email, $team, function ($invite) use ($team, $user, &$inviteSent) {
+                Teamwork::inviteToTeam($user->email, $team, function ($invite) use ($data, $team, $user, &$inviteSent) {
                     $this->sendInternalInvite($team, $user, $invite);
+
+                    $invite->role = $data['role'];
+                    $invite->save();
 
                     $inviteSent = $invite->exists;
                 });
@@ -289,9 +291,7 @@ class CompanyTeamsController extends Controller
         $user = $request->user();
         $data = $request->validated();
 
-        if (!$this->processLogoFile($request, $data)) {
-            abort(422, 'Could not process logo file upload for your team.');
-        }
+        $data['logo'] = $this->processLogoFile($request);
 
         $team = $this->createTeam($user, $data);
 
@@ -335,9 +335,7 @@ class CompanyTeamsController extends Controller
         $data = $request->validated();
         $team = Team::findOrFail($id);
 
-        if ($request->hasFile('logo_file') && !$this->processLogoFile($request, $data)) {
-            abort(422, 'Could not process logo file upload for your team.');
-        }
+        $data['logo'] = $this->processLogoFile($request);
 
         $team->update($data);
         ApigeeService::updateCompany($team);

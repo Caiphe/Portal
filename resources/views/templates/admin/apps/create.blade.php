@@ -68,12 +68,14 @@
 
                 <div class="group">
                     <label for="name">Name your app *</label>
-                    <input type="text" name="name" id="name" placeholder="Enter name" maxlength="100" required>
+                    <input type="text" name="name" id="name" placeholder="Enter name" maxlength="100" autocomplete="off" required>
+                    <div class="error"></div>
                 </div>
 
                 <div class="group">
                     <label for="url">Callback url</label>
-                    <input type="url" name="url" id="url" placeholder="Enter callback url (eg. https://callback.com)">
+                    <input type="url" name="url" id="url" autocomplete="off" placeholder="Enter callback url (eg. https://callback.com)">
+                    <div class="error"></div>
                 </div>
 
                 <div class="group">

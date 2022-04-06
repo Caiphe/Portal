@@ -1,4 +1,4 @@
-@import "../../variables";
+@use "../../variables";
 
 @media screen and (min-width: 768px) {
     .layout-master #main #heading {
@@ -31,7 +31,7 @@
     }
 
     .edit {
-        @media #{$small} {
+        @media #{variables.$small} {
             display: none;
         }
     }
@@ -78,7 +78,7 @@
                 h2 {
                     margin-bottom: 5px;
 
-                    @media #{$small} {
+                    @media #{variables.$small} {
                         text-align: center;
                     }
                 }
@@ -97,7 +97,7 @@
                     outline: 0;
 
                     &::placeholder {
-                        color: $grey800;
+                        color: variables.$grey800;
                     }
                 }
             }
@@ -121,7 +121,7 @@
         }
 
         ul {
-            border-left: 1px solid $grey300;
+            border-left: 1px solid variables.$grey300;
             list-style: none;
             padding-left: 20px;
 
@@ -131,7 +131,7 @@
                 padding: 0 !important;
 
                 a {
-                    color: $grey900 !important;
+                    color: variables.$grey900 !important;
                     margin-bottom: 10px;
 
                     &:hover {
@@ -141,11 +141,11 @@
             }
         }
 
-        @media #{$small} {
+        @media #{variables.$small} {
             display: none;
         }
 
-        @media #{$medium-portrait} {
+        @media #{variables.$medium-portrait} {
             display: none;
         }
     }
@@ -201,11 +201,11 @@
         }
 
         button {
-            margin: $gutter auto 0;
+            margin: variables.$gutter auto 0;
             display: block;
             position: relative;
 
-            @media #{$small} {
+            @media #{variables.$small} {
                 width: 100%;
             }
         }
@@ -230,11 +230,11 @@
         }
     }
 
-    @media #{$small} {
+    @media #{variables.$small} {
         width: 100%;
     }
 
-    @media #{$medium-portrait} {
+    @media #{variables.$medium-portrait} {
         width: 100%;
     }
 }

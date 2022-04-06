@@ -11,13 +11,8 @@ const mix = require("laravel-mix");
  |
  */
 
-mix.scripts(
-    ["resources/js/scripts.js", "resources/js/components/alert.js"],
-    "public/js/scripts.js"
-).scripts(
-    ["resources/js/scripts.js", "resources/js/components/alert.js", "resources/js/components/ajaxify.js", "resources/js/templates/admin/scripts.js"],
-    "public/js/templates/admin/scripts.js"
-)
+mix.scripts("resources/js/scripts.js", "public/js/scripts.js")
+    .scripts(["resources/js/scripts.js", "resources/js/components/ajaxify.js", "resources/js/templates/admin/scripts.js"], "public/js/templates/admin/scripts.js")
     .scripts("resources/js/templates/admin/apps/create.js", "public/js/templates/admin/apps/create.js")
     .scripts("resources/js/templates/admin/products/edit.js", "public/js/templates/admin/products/edit.js")
     .scripts(["resources/js/templates/admin/dashboard/index.js", "resources/js/templates/admin/index.js"], "public/js/templates/admin/dashboard/index.js")
@@ -26,6 +21,7 @@ mix.scripts(
     .scripts(["resources/js/utilities/ajax.js", "resources/js/templates/user/show.js"], "public/js/templates/user/show.js")
     .scripts("resources/js/components/carousel.js", "public/js/components/carousel.js")
     .scripts("resources/js/components/dialog.js", "public/js/components/dialog.js")
+    .scripts("resources/js/components/alert.js", "public/js/components/alert.js")
     .scripts("resources/js/components/cookie.js", "public/js/components/cookie.js")
     .scripts("resources/js/components/sidebar-accordion.js", "public/js/components/sidebar-accordion.js")
     .scripts("resources/js/components/multiselect.js", "public/js/components/multiselect.js")
@@ -50,7 +46,9 @@ mix.scripts(
     .sass("resources/sass/auth/verify.scss", "public/css/auth")
     .sass("resources/sass/auth/forgot-password.scss", "public/css/auth")
     .sass("resources/sass/components/action_tab.scss", "public/css/components")
+    .sass("resources/sass/components/footer.scss", "public/css/components")
     .sass("resources/sass/components/carousel.scss", "public/css/components")
+    .sass("resources/sass/components/alert.scss", "public/css/components")
     .sass("resources/sass/components/dialog.scss", "public/css/components")
     .sass("resources/sass/components/cookie.scss", "public/css/components")
     .sass("resources/sass/components/multiselect.scss", "public/css/components")

@@ -35,7 +35,7 @@
 
 @foreach($apps as $app)
     <x-dialog id="admin-{{ $app->aid }}" class="note-dialog">
-        <h3>App Log Notes</h3>
-        <div class="note">{!! $app['notes'] !!}</div>
+        <h3><em>{{ $app->display_name }}</em> log notes</h3>
+        <div class="note">{!! $app['notes'] ?: 'No notes at the moment' !!}</div>
     </x-dialog>
 @endforeach

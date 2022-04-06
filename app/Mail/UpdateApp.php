@@ -31,10 +31,10 @@ class UpdateApp extends Mailable
      */
     public function build()
     {
-        $email = $this->app->developer->email;
+        $emails = $this->app->getEmails();
 
-        return $this->withSwiftMessage(function ($message) use ($email) {
-            $message->getHeaders()->addTextHeader('Reply-To', $email);
+        return $this->withSwiftMessage(function ($message) use ($emails) {
+            $message->getHeaders()->addTextHeader('Reply-To', implode(",", $emails));
         })
             ->subject('Updated app from the MTN Developer Portal')
             ->markdown('emails.update-app');

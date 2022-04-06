@@ -89,7 +89,7 @@
 
 @endsection
 
-@pushscript('faq')
+@push('scripts')
 <script>
 (function(){
     var search = document.getElementById('filter-categories');
@@ -244,4 +244,4 @@
         document.getElementById('search-page').value = params['q'] || '';
     }
 </script>
-@endpushscript
+@endpush

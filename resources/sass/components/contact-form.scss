@@ -1,4 +1,4 @@
-@import "../variables";
+@use "../variables";
 
 #contact-form {
     width: 478px;
@@ -25,7 +25,7 @@
     }
 
     button {
-        margin: $gutter auto 0;
+        margin: variables.$gutter auto 0;
         display: block;
         position: relative;
     }

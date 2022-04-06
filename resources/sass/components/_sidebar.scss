@@ -1,3 +1,5 @@
+@use "../variables";
+
 @keyframes roll {
     0% {
         transform: rotate(0);
@@ -31,7 +33,7 @@
             padding: 40px 40px 0 40px;
             min-width: 270px;
             max-width: 270px;
-            background-color: $grey200;
+            background-color: variables.$grey200;
             height: 100%;
 
             @media(max-width: 768px){
@@ -71,7 +73,7 @@
             flex: 1 0 300px;
             padding: 20px 0;
 
-            background-color: $grey900;
+            background-color: variables.$grey900;
             color: #FFF;
 
             ul {
@@ -90,7 +92,7 @@
 
                 >li {
                     padding: 8px 0;
-                    border-bottom: 1px solid $grey750;
+                    border-bottom: 1px solid variables.$grey750;
 
                     &:before {
                         content: '';
@@ -105,10 +107,10 @@
                     }
 
                     &.active {
-                        color: $yellow;
+                        color: variables.$yellow;
 
                         >a {
-                            color: $yellow;
+                            color: variables.$yellow;
                         }
 
                         &:before {
@@ -116,7 +118,7 @@
                         }
 
                         ul {
-                            border-top: 1px solid $yellow;
+                            border-top: 1px solid variables.$yellow;
                         }
                     }
                 }
@@ -130,7 +132,7 @@
                 & ul {
                     padding: 6px 0 0 0;
                     margin: 6px 0 0 0;
-                    border-top: 1px solid $grey750;
+                    border-top: 1px solid variables.$grey750;
 
                     li {
                         padding: 2px 0 2px 30px;
@@ -150,7 +152,7 @@
                         &.active {
 
                             a {
-                                color: $yellow;
+                                color: variables.$yellow;
                             }
 
                             &:before {
@@ -179,7 +181,7 @@
             }
 
             &:hover svg {
-                fill: $grey900;
+                fill: variables.$grey900;
             }
 
             &.syncing svg {
@@ -191,26 +193,26 @@
             border-radius: 50px;
             border: none;
             padding: 0 20px;
-            background-color: $yellowDark;
+            background-color: variables.$yellowDark;
             background-image: url('/images/icons/search.svg');
             background-repeat: no-repeat;
             background-position: calc(100% - 10px) center;
             background-size: 22px;
 
             ::-webkit-input-placeholder {
-                color: $grey900;
+                color: variables.$grey900;
             }
 
             ::-moz-placeholder {
-                color: $grey900;
+                color: variables.$grey900;
             }
 
             :-ms-input-placeholder {
-                color: $grey900;
+                color: variables.$grey900;
             }
 
             :-moz-placeholder {
-                color: $grey900;
+                color: variables.$grey900;
             }
         }
 
@@ -228,7 +230,7 @@
             }
 
             a:not(.button) {
-                color: $grey900;
+                color: variables.$grey900;
             }
         }
     }

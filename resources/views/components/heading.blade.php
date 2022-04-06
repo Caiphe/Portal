@@ -20,11 +20,11 @@
     $tags = isset($tags) ? preg_split('/,\s?/', $tags) : [] 
 @endphp
 
-@allowonce('heading')
+@once
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/components/heading.css') }}">
 @endpush
-@endallowonce
+@endonce
 
 <div id="heading">
     @if(!empty($breadcrumbs))

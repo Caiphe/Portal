@@ -12,17 +12,17 @@
     >
         <span class="status"></span>
         <a href="{{route('product.show', $product['slug'] ?? '')}}" target="_blank" class="name">{{ $product['display_name'] }}</a>
-        <button class="reset product-status-action product-approve" data-action="approve" data-for="{{ $for }}" aria-label="Approve">
+        <button class="reset product-status-action product-approve" data-action="approve" data-for="{{ $for }}" data-product-display-name="{{ $product['display_name'] }}" aria-label="Approve">
             @svg('approve')
         </button>
-        <button class="reset product-status-action product-revoke" data-action="revoke" data-for="{{ $for }}" aria-label="Revoke">
+        <button class="reset product-status-action product-revoke" data-action="revoke" data-for="{{ $for }}" data-product-display-name="{{ $product['display_name'] }}" aria-label="Revoke">
             @svg('revoke')
         </button>
         <button class="reset log-notes" data-id="{{ $app->aid . $product->slug }}">View log notes</button>
         <button class="reset product-action">@svg('more-vert')@svg('chevron-right')</button>
     </div>
     <x-dialog id="admin-{{ $app->aid . $product->slug }}" class="note-dialog">
-        <h3>Profile log notes</h3>
+        <h3><em>{{ $product['display_name'] }}</em> log notes</h3>
         <div class="note">{!! $product['notes'] !!}</div>
     </x-dialog>
 @endforeach

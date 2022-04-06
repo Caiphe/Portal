@@ -1,6 +1,9 @@
-@allowonce('pricing')
+@once
+@push('styles')
 <link rel="stylesheet" href="{{ mix('/css/components/pricing.css') }}">
-@endallowonce
+@endpush
+@endonce
+
 <div id="pricing">
     <div class="rate-plan shadow">
         <div class="group">MTN</div>

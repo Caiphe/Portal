@@ -1,5 +1,7 @@
+@use "../variables";
+
 #footer {
-    background-color: $grey900;
+    background-color: variables.$grey900;
     color: #FFF;
     position: relative;
     flex-shrink: 0;
@@ -19,14 +21,14 @@
         position: relative;
         font-size: 1rem;
 
-        @media #{$small} {
+        @media #{variables.$small} {
             display: flex;
             flex-direction: column;
         }
     }
 
     p {
-        @media #{$small} {
+        @media #{variables.$small} {
             order: 3;
         }
     }
@@ -35,7 +37,7 @@
         color: #FFF;
         margin-right: 14px;
 
-        @media #{$small} {
+        @media #{variables.$small} {
             order: 4;
         }
     }
@@ -47,7 +49,7 @@
         right: 0;
         top: 0;
 
-        @media #{$small} {
+        @media #{variables.$small} {
             position: relative;
             margin: 0;
         }
@@ -56,7 +58,7 @@
     .logo {
         margin-top: 4%;
 
-        @media #{$small} {
+        @media #{variables.$small} {
             order: 1;
             margin-bottom: 2rem;
         }
@@ -75,13 +77,13 @@
             margin-left: 10px;
 
             &:first-of-type {
-                @media #{$small} {
+                @media #{variables.$small} {
                     margin-left: 0;
                 }
             }
         }
 
-        @media #{$small} {
+        @media #{variables.$small} {
             order: 2;
             margin-top: 0;
         }

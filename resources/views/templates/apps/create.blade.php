@@ -1,6 +1,3 @@
-@php
-    $user = auth()->user();
-@endphp
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/templates/apps/create.css') }}">
 @endpush
@@ -59,51 +56,56 @@
                 </div>
                 {{-- @svg('app-avatar', '#ffffff') --}}
 
-                <div class="group">
-                    <label for="name">Name your app *</label>
-                    <input type="text" name="name" id="name" placeholder="Enter name" maxlength="100" required>
-                </div>
+                <div class="groups">
+                    <div class="group">
+                        <label for="name">Name your app *</label>
+                        <input type="text" name="name" id="name" placeholder="Enter name" maxlength="100" autocomplete="off" required>
+                        <div class="error">{{ isset($error) && $error->get('display_name', '') }}</div>
+                    </div>
 
-                <div class="group group-info">
-                    <label for="url">Callback url @svg('info-icon', '#a5a5a5')<small class="tooltip">The callback URL typically specifies the URL of an app that is designated to receive an authorization code on behalf of the client app. In addition, this URL string is used for validation.</small></label>
-                    <input type="url" name="url" id="url" placeholder="Enter callback url (eg. https://callback.com)">
-                    <small>A callback URL is required only for 3-legged Oauth</small>
-                </div>
+                    <div class="group group-info">
+                        <label for="url">Callback url @svg('info-icon', '#a5a5a5')<small class="tooltip">The callback URL typically specifies the URL of an app that is designated to receive an authorization code on behalf of the client app. In addition, this URL string is used for validation. A callback URL is required only for 3-legged Oauth</small></label>
+                        <input type="url" name="url" id="url" placeholder="Enter callback url (eg. https://callback.com)" autocomplete="off">
+                        <div class="error">{{ isset($error) && $error->get('url', '') }}</div>
+                    </div>
 
-                <div class="group group-info team-field">
-                    <label for="team">Select team *</label>
-                    <div class="select_wrap">
-                        <input name="team" id="team" class="selected-data" value="">
-                        <ul class="default_option">
-                            <li>
-                                {{-- <div class="option"> --}}
-                                    <div class="select-default">Please select team <span class="hide-mobi">to publish under</span></div>
-                                {{-- </div> --}}
-                            </li>
-                        </ul>
+                    <div class="group group-info team-field">
+                        <label for="team">Select team *</label>
+                        <div class="select_wrap">
+                            <input name="team" id="team" class="selected-data" value="">
+                            <ul class="default_option">
+                                <li>
+                                    {{-- <div class="option"> --}}
+                                        <div class="select-default">Please select team <span class="hide-mobi">to publish under</span></div>
+                                    {{-- </div> --}}
+                                </li>
+                            </ul>
 
-                        <ul class="select_ul">
-                            <li>
-                                <div class="option">
-                                    <div class="icon" style="background-image: url({{ $user->profile_picture }})"></div>
-                                    <div class="select-data" data-createdby="" data-teamid="">{{ $user->full_name }} (You)</div>
-                                </div>
-                            </li>
-                            @foreach($teams as $team)
+                            <ul class="select_ul">
+                                <li>
+                                    <div class="option">
+                                        <div class="icon" style="background-image: url({{ $user->profile_picture }})"></div>
+                                        <div class="select-data" data-createdby="" data-teamid="">{{ $user->full_name }} (You)</div>
+                                    </div>
+                                </li>
+                                @foreach($teams as $team)
                                 <li>
                                     <div class="option">
                                         <div class="icon" style="background-image: url({{ $team['logo'] }})"></div>
                                         <div class="select-data" data-createdby="{{ $user->email }}" data-teamid="{{ $team['id'] }}">{{ $team['name'] }}</div>
                                     </div>
                                 </li>
-                            @endforeach
-                        </ul>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <div class="error">{{ isset($error) && $error->get('team', '') }}</div>
                     </div>
-                </div>
 
-                <div class="group">
-                    <label for="description">Description</label>
-                    <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>
+                    <div class="group">
+                        <label for="description">Description</label>
+                        <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>
+                        <div class="error">{{ isset($error) && $error->get('description', '') }}</div>
+                    </div>
                 </div>
 
                 <button class="dark next">
@@ -119,7 +121,7 @@
                     @foreach($countries as $key => $country)
                         <label class="country" for="country-{{ $loop->index + 1 }}" data-location="{{ $key }}">
                             @svg('$key', '#000000', 'images/locations')
-                            <input type="radio" id="country-{{ $loop->index + 1 }}" class="country-checkbox" name="country-checkbox" value="{{ $key }}" data-location="{{ $key }}">
+                            <input type="radio" id="country-{{ $loop->index + 1 }}" class="country-checkbox" name="country-checkbox" value="{{ $key }}" data-location="{{ $key }}" autocomplete="off">
                             <div class="country-checked"></div>
                             {{ $country }}
                         </label>
@@ -191,21 +193,22 @@
     var default_option = document.querySelector('.default_option');
     var select_wrap = document.querySelector('.select_wrap');
     var inputData = document.querySelector('.selected-data');
+    var submit = document.getElementById('form-create-app').addEventListener('submit', handleCreate);
+    var select_ul = document.querySelectorAll('.select_ul li');
 
     function init() {
         handleButtonClick();
         handleBackButtonClick();
-        clearCheckBoxes();
     }
 
     default_option.addEventListener('click', function(){
         select_wrap.classList.toggle('active');
     });
 
-    var select_ul = document.querySelectorAll('.select_ul li');
     for(var i = 0; i < select_ul.length; i++){
         select_ul[i].addEventListener('click', toggleSelectList);
     }
+
     function toggleSelectList(){
         var selectedDataObject = this.querySelector('.select-data');
         default_option.innerHTML = selectedDataObject.innerHTML;
@@ -215,19 +218,33 @@
     }
 
     function handleButtonClick() {
+        var elements = form.elements;
         for (var i = 0; i < buttons.length; i++) {
 
             buttons[i].addEventListener('click', function (event) {
-                var urlValue = document.getElementById('url').value;
+                var errors = [];
+                var urlValue = elements['url'].value;
                 event.preventDefault();
 
                 if(form.firstElementChild.classList.contains('active')) {
-                    if(document.getElementById('name').value === '') {
-                        return void addAlert('error', 'Please add a name for your app');
+                    if(elements['name'].value === '') {
+                        errors.push({msg: 'Please add a name for your app', el: elements['name']});
+                    } else {
+                        elements['name'].nextElementSibling.textContent = '';
                     }
 
                     if(urlValue !== '' && !/https?:\/\/.*\..*/.test(urlValue)) {
-                        return void addAlert('error', ['Please add a valid url', 'Eg. https://callback.com']);
+                        errors.push({msg: 'Please add a valid url. Eg. https://callback.com', el: elements['url']});
+                    } else {
+                        elements['url'].nextElementSibling.textContent = '';
+                    }
+
+                    if(errors.length > 0){
+                        for (var i = errors.length - 1; i >= 0; i--) {
+                            errors[i].el.nextElementSibling.textContent = errors[i].msg;
+                        }
+
+                        return;
                     }
 
                     nav.querySelector('a').nextElementSibling.classList.add('active');
@@ -271,11 +288,9 @@
 
                     nav.firstElementChild.nextElementSibling.nextElementSibling.classList.remove('active');
 
-                    selectedProducts = document.querySelectorAll('.products .selected .buttons .done');
+                    selectedProducts = document.querySelectorAll('.add-product:checked');
                     for (var i = selectedProducts.length - 1; i >= 0; i--) {
-                        selectedProducts[i].classList.toggle('done');
-                        selectedProducts[i].classList.toggle('plus');
-                        selectedProducts[i].parentNode.parentNode.classList.remove('selected');
+                        selectedProducts[i].checked = false;
                     }
                 }
             });
@@ -292,7 +307,7 @@
         var els = document.querySelectorAll('#app-create nav a.active');
         var countries = document.querySelectorAll('.countries .selected');
         var products = document.querySelectorAll('.products .selected');
-        var buttons = document.querySelectorAll('.products .selected .done');
+        var buttons = document.querySelectorAll('.add-product:checked');
 
         for (var k = 0; k < els.length; k++) {
             els[k].classList.remove('active');
@@ -307,8 +322,7 @@
         }
 
         for(var w = 0; w < buttons.length; w++) {
-            buttons[w].classList.remove('done');
-            buttons[w].classList.add('plus');
+            buttons[w].checked = false;
         }
 
         nav.querySelector('a').classList.add('active');
@@ -371,34 +385,6 @@
         }
     }
 
-    /**
-     *  Clear checkboxes on page load, otherwise some checkboxes persist checked state.
-     */
-    function clearCheckBoxes() {
-        for (var n = 0; n < checkedBoxes.length; ++n) {
-            checkedBoxes[n].checked = false;
-        }
-    }
-
-    var addProductButtons = document.querySelectorAll('[data-title] a');
-    for (var o = 0; o < addProductButtons.length; ++o) {
-
-        addProductButtons[o].addEventListener('click', function (event) {
-            var button = event.currentTarget;
-
-            button.classList.toggle('plus');
-            button.classList.toggle('done');
-
-            if(document.querySelectorAll('[data-title] button')) {
-                var selectedProduct = this.parentNode.parentNode;
-
-                selectedProduct.classList.toggle('selected');
-            }
-        });
-    }
-
-    var submit = document.getElementById('form-create-app').addEventListener('submit', handleCreate);
-
     function handleCreate(event) {
         var elements = this.elements;
         var app = {
@@ -409,13 +395,15 @@
             products: [],
             team_id: inputData.dataset.teamid
         };
-        var selectedProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
+        var selectedProducts = document.querySelectorAll('.add-product:checked');
         var button = document.getElementById('create');
+        var url = "{{ route('app.store') }}";
+        var xhr = new XMLHttpRequest();
 
         event.preventDefault();
 
         for(i = 0; i < selectedProducts.length; i++) {
-            app.products.push(selectedProducts[i].dataset.name);
+            app.products.push(selectedProducts[i].value);
         }
 
         if (app.products.length === 0) {
@@ -423,10 +411,7 @@
         }
 
         button.disabled = true;
-        button.textContent = 'Creating...';
-
-        var url = "{{ route('app.store') }}";
-        var xhr = new XMLHttpRequest();
+        addLoading('Creating app...');
 
         xhr.open('POST', url);
         xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
@@ -436,6 +421,8 @@
         xhr.send(JSON.stringify(app));
 
         xhr.onload = function() {
+            removeLoading();
+
             if (xhr.status === 200) {
                 addAlert('success', ['Application created successfully', 'You will be redirected to your app page shortly.'], function(){
                     window.location.href = "{{ route('app.index') }}";
@@ -453,7 +440,6 @@
                 addAlert('error', result.message || 'Sorry there was a problem creating your app. Please try again.');
 
                 button.removeAttribute('disabled');
-                button.textContent = 'Create';
             }
         };
     }

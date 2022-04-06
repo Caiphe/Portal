@@ -1,3 +1,7 @@
+@push('styles')
+<link rel="stylesheet" href="{{ mix('/css/components/footer.css') }}">
+@endpush
+
 <footer id="footer">
     @svg('curve', '#1a1a1a')
     <div class="footer-inner container">

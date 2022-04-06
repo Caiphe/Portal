@@ -6,9 +6,11 @@
 	title - the card title
 --}}
 
-@allowonce('card_icon')
+@once
+@push('styles')
 <link href="{{ mix('/css/components/card-icon.css') }}" rel="stylesheet"/>
-@endallowonce
+@endpush
+@endonce
 
 @props(['title', 'icon', 'href'])
 

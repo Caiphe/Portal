@@ -1,4 +1,4 @@
-@import "../variables";
+@use "../variables";
 
 .key-feature {
     .body {
@@ -19,7 +19,7 @@
                 content: "";
                 position: absolute;
                 width: 120%;
-                background: $grey800;
+                background: variables.$grey800;
                 height: 40px;
                 border-radius: 85%;
                 z-index: 0;
@@ -30,7 +30,7 @@
                 content: "";
                 position: absolute;
                 width: 120%;
-                background: $grey800;
+                background: variables.$grey800;
                 height: 40px;
                 border-radius: 85%;
                 z-index: 0;
@@ -42,25 +42,25 @@
                 position: relative;
                 display: inline-block;
                 height: auto;
-                background: $grey800;
+                background: variables.$grey800;
                 z-index: 1;
 
                 svg {
                     width: 40px;
                     height: 40px;
-                    fill: $white;
+                    fill: variables.$white;
                 }
             }
         }
 
         .header {
             font-size: 18px;
-            color: $grey900;
+            color: variables.$grey900;
         }
 
         .content {
             font-size: 1.8rem;
-            color: $grey900;
+            color: variables.$grey900;
             font-family: "Montserrat";
         }
     }

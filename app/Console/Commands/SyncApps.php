@@ -127,5 +127,7 @@ class SyncApps extends Command
 		if (count($appsToBeDeleted) > 0) {
 			App::whereIn('aid', array_keys($appsToBeDeleted))->delete();
 		}
+
+		return 0;
 	}
 }

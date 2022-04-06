@@ -1,8 +1,8 @@
-@import "../variables";
-@import "../normalize";
-@import "../typography";
-@import "../components/button";
-@import "../components/alert";
+@use "../variables";
+@use "../normalize";
+@use "../typography";
+@use "../components/button";
+@use "../components/alert";
 
 body {
     background-color: #F0F0F0;
@@ -23,7 +23,7 @@ body {
     display: flex;
     flex-direction: column;
     top: 0;
-    background-color: $dark;
+    background-color: variables.$dark;
 
     @media screen and (min-width: 1100px) {
         width: 320px;
@@ -119,11 +119,11 @@ body {
 
             &.active a,
             a:hover {
-                background-color: $yellow;
-                color: $dark;
+                background-color: variables.$yellow;
+                color: variables.$dark;
 
                 svg {
-                    fill: $dark;
+                    fill: variables.$dark;
                 }
             }
         }
@@ -139,7 +139,7 @@ body {
             color: #fff;
             border-radius: 8px;
             font-size: 18px;
-            font-family: $MTN-Regular;
+            font-family: variables.$MTN-Regular;
             cursor: pointer;
 
             @media screen and (min-width: 1100px) {
@@ -198,12 +198,12 @@ body {
     }
 
     #sync {
-        background-color: $yellow;
+        background-color: variables.$yellow;
         border-radius: 64px;
         display: flex;
         justify-content: center;
         width: 100%;
-        color: $dark;
+        color: variables.$dark;
         margin-top: 18px;
     }
 }
@@ -213,7 +213,7 @@ body {
     display: flex;
     align-items: center;
     font-size: 18px;
-    font-family: $MTN-Regular;
+    font-family: variables.$MTN-Regular;
 
     @media screen and (min-height: 815px) {
         margin-bottom: 32px;
@@ -260,7 +260,7 @@ body {
     }
 
     @media screen and (max-width: 1099px) {
-        background-color: $dark;
+        background-color: variables.$dark;
         display: flex;
         align-items: center;
     }
@@ -295,7 +295,7 @@ body {
     h1 {
         margin-top: 0;
         line-height: 1.2;
-        font-family: $MTN-Bold;
+        font-family: variables.$MTN-Bold;
 
         @media screen and (min-width: 1100px) {
             font-size: 40px;
@@ -367,7 +367,7 @@ body {
     @media screen and (max-width: 1099px) {
         width: 37px;
         background: url('/images/icons/plus.svg') no-repeat center center / 18px;
-        background-color: $yellow;
+        background-color: variables.$yellow;
     }
 }
 
@@ -389,7 +389,7 @@ body {
         position: absolute;
         width: 100%;
         height: 100%;
-        background-color: $grey700;
+        background-color: variables.$grey700;
         border-radius: 12px;
         transition: background-color 0.128s ease-out;
     }
@@ -401,7 +401,7 @@ body {
     }
 
     &.dark .ball {
-        background-color: $grey800;
+        background-color: variables.$grey800;
     }
 
     &.light .ball {
@@ -433,7 +433,7 @@ body {
     }
 
     input:checked+.track {
-        background-color: $yellow;
+        background-color: variables.$yellow;
     }
 
     &.big input:checked+.track+.ball {
