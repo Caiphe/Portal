@@ -233,11 +233,22 @@ class ApigeeService
     {
         $credentials = self::get('apps/' . $app->aid)['credentials'];
         $credentials = self::sortCredentials($credentials);
+        $typeAndEnvironment = explode('-', $type);
+
+        if (count($credentials) === 1) {
+            if ($respondWith === 'string') {
+                return $credentials[0][$typeAndEnvironment[0]];
+            }
+
+            return response()->json([
+                'credentials' => $credentials[0][$typeAndEnvironment[0]]
+            ]);
+        }
+
         $sandboxedProducts = $app->products->filter(function ($prod) {
             $envArr = explode(',', $prod->environments);
             return in_array('sandbox', $envArr) && !in_array('prod', $envArr);
         })->pluck('name')->toArray();
-        $typeAndEnvironment = explode('-', $type);
         $creds = [
             'sandbox' => [],
             'production' => [],
