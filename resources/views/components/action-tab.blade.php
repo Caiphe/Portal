@@ -1,6 +1,8 @@
-@allowonce('action_tab')
+@once
+@push('styles')
 <link href="{{ mix('/css/components/action_tab.css') }}" rel="stylesheet"/>
-@endallowonce
+@endpush
+@endonce
 
 @props(['link' => '', 'title' => '', 'text', 'logo', 'status' => ''])
 <a class="action-tab {{ $status }}" href="{{ $link }}" target="_blank" rel="noopener noreferrer">

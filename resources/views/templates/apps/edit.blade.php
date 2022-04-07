@@ -46,20 +46,31 @@
 
             <form id="form-edit-app">
                 <div class="app-details active">
-                    @svg('app-avatar', '#ffffff')
-                    <div class="group">
-                        <label for="name">Name your app *</label>
-                        <input type="text" name="name" id="name" placeholder="Enter name" required value="{{ $data['display_name'] }}" maxlength="100">
+                    <div class="user-thumbnails">
+                        <div class="thumbail" style="background-image: url({{ $user->profile_picture }})"></div>
+                        <label for="user-thumb">
+                            <input type="file" name="user-thumb" class="user-thumb">
+                        </label>
                     </div>
+                    
+                    <div class="groups">
+                        <div class="group">
+                            <label for="name">Name your app *</label>
+                            <input type="text" name="name" id="name" placeholder="Enter name" required value="{{ $data['display_name'] }}" autocomplete="off" maxlength="100">
+                            <div class="error">{{ isset($error) && $error->get('display_name', '') }}</div>
+                        </div>
 
-                    <div class="group">
-                        <label for="url">Callback url</label>
-                        <input type="url" name="url" id="url" placeholder="Enter callback url (Eg. https://callback.com)" value="{{ $data['callback_url'] }}">
-                    </div>
+                        <div class="group">
+                            <label for="url">Callback url</label>
+                            <input type="url" name="url" id="url" placeholder="Enter callback url (Eg. https://callback.com)" value="{{ $data['callback_url'] }}" autocomplete="off">
+                            <div class="error">{{ isset($error) && $error->get('url', '') }}</div>
+                        </div>
 
-                    <div class="group">
-                        <label for="description">Description</label>
-                        <textarea name="description" id="description" rows="5" placeholder="Enter description">{{ $data['description'] }}</textarea>
+                        <div class="group">
+                            <label for="description">Description</label>
+                            <textarea name="description" id="description" rows="5" placeholder="Enter description">{{ $data['description'] }}</textarea>
+                            <div class="error">{{ isset($error) && $error->get('description', '') }}</div>
+                        </div>
                     </div>
 
                     <div class="form-actions">
@@ -110,10 +121,11 @@
                                 <h3 class="category-heading" data-category="{{ $products[0]->category_cid }}">{{ $category }}</h3>
                                 @foreach ($products as $product)
                                     <x-card-product :title="$product->display_name"
-                                                    :class="in_array($product->name, $selectedProducts) ? 'product-block selected' : 'product-block'"
+                                                    class="product-block"
                                                     :href="route('product.show', $product->slug)"
                                                     :tags="[$product->group, $product->category->title]"
                                                     :addButtonId="$product->slug"
+                                                    :selected="in_array($product->name, $selectedProducts)"
                                                     :data-title="$product->name"
                                                     :data-group="$product->group"
                                                     :data-access="$product->access"
@@ -152,6 +164,8 @@
         var checkedBoxes = document.querySelectorAll('input[name=country-checkbox]:checked');
         var appProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
         var hasCountry = {{ +!is_null($data->country_code) }};
+        var countries = document.querySelectorAll('.country');
+        var update = document.getElementById('form-edit-app').addEventListener('submit', handleUpdate);
 
         function init() {
             handleButtonClick();
@@ -174,17 +188,31 @@
             var activeDiv = this.parentNode.parentNode;
             var nextDiv = activeDiv.nextElementSibling;
             var urlValue = document.getElementById('url').value;
+            var elements = form.elements;
+            var errors = [];
 
             ev.preventDefault();
 
             if(hasCountry) nextDiv = nextDiv.nextElementSibling;
 
-            if(activeDiv.classList.contains('app-details') && form.elements['name'].value === ''){
-                return void addAlert('error', 'Please choose a name for your app.');
+            if(activeDiv.classList.contains('app-details') && elements['name'].value === '') {
+                errors.push({msg: 'Please add a name for your app', el: elements['name']});
+            } else {
+                elements['name'].nextElementSibling.textContent = '';
             }
 
             if(urlValue !== '' && !/https?:\/\/.*\..*/.test(urlValue)) {
-                return void addAlert('error', ['Please add a valid url', 'Eg. https://callback.com']);
+                errors.push({msg: 'Please add a valid url. Eg. https://callback.com', el: elements['url']});
+            } else {
+                elements['url'].nextElementSibling.textContent = '';
+            }
+
+            if(errors.length > 0){
+                for (var i = errors.length - 1; i >= 0; i--) {
+                    errors[i].el.nextElementSibling.textContent = errors[i].msg;
+                }
+
+                return;
             }
 
             if(activeDiv.classList.contains('select-countries') && document.querySelectorAll('.country-checkbox:checked').length === 0){
@@ -217,7 +245,6 @@
             document.location.href = '/apps';
         });
 
-        var countries = document.querySelectorAll('.country');
         for (var l = 0; l < countries.length; l++) {
             countries[l].addEventListener('change', selectCountry);
         }
@@ -293,29 +320,6 @@
             return false;
         }
 
-        var addProductButtons = document.querySelectorAll('[data-title] a');
-        for (var o = 0; o < addProductButtons.length; ++o) {
-
-            addProductButtons[o].addEventListener('click', function (event) {
-                var button = event.currentTarget;
-
-                button.classList.toggle('plus');
-                button.classList.toggle('done');
-
-                if(document.querySelectorAll('[data-title] button')) {
-                    var selectedProduct = this.parentNode.parentNode;
-
-                    selectedProduct.classList.toggle('selected');
-                }
-            });
-        }
-
-        for(var p = 0; p < appProducts.length; ++p) {
-            appProducts[p].classList.remove('plus');
-            appProducts[p].classList.add('done');
-        }
-
-        var update = document.getElementById('form-edit-app').addEventListener('submit', handleUpdate);
 
         function handleUpdate(event) {
             var elements = this.elements;
@@ -331,13 +335,12 @@
             var button = document.getElementById('update');
             var url = "{{ route('app.update', $data) }}";
             var xhr = new XMLHttpRequest();
-            var selectedProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
-            console.log(url);
+            var selectedProducts = document.querySelectorAll('.add-product:checked');
 
             event.preventDefault();
 
             for(i = 0; i < selectedProducts.length; i++) {
-                app.products.push(selectedProducts[i].dataset.name);
+                app.products.push(selectedProducts[i].value);
             }
 
             if (app.products.length === 0) {
@@ -345,7 +348,7 @@
             }
 
             button.disabled = true;
-            button.textContent = "Updating...";
+            addLoading('Updating...');
 
             xhr.open('POST', url, true);
             xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
@@ -355,8 +358,10 @@
             xhr.send(JSON.stringify(app));
 
             xhr.onload = function() {
+                removeLoading();
+
                 if (xhr.status === 200) {
-                    addAlert('success', 'Application updated successfully', function(){
+                    addAlert('success', ['Application updated successfully', 'You will be redirected to your app page shortly.'], function(){
                         window.location.href = "{{ route('app.index') }}";
                     });
                 } else {
@@ -372,10 +377,7 @@
                     addAlert('error', result.message || 'Sorry there was a problem updating your app. Please try again.');
 
                     button.removeAttribute('disabled');
-                    button.textContent = 'Update';
                 }
-
-                document.getElementById('update').textContent = "Update";
             };
         }
     </script>

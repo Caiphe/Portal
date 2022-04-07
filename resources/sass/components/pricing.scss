@@ -1,4 +1,4 @@
-@import "../variables";
+@use "../variables";
 
 #pricing {
     display: flex;
@@ -7,14 +7,14 @@
     .rate-plan {
         flex: 0 0 33%;
         margin: 0 20px;
-        background-color: $grey400;
+        background-color: variables.$grey400;
         border-radius: 5px;
         text-align: center;
         padding: 20px 0;
     }
 
     .popular {
-        background-color: $yellow;
+        background-color: variables.$yellow;
         transform: scale(1.1);
 
         &:before {
@@ -22,7 +22,7 @@
             position: absolute;
             top: -10px;
             font-size: 10px;
-            background-color: $blue;
+            background-color: variables.$blue;
             color: #FFF;
             padding: 0px 12px;
             border-radius: 12px;
@@ -31,12 +31,12 @@
         }
 
         .price {
-            color: $grey900;
+            color: variables.$grey900;
         }
 
         .cost-per-transaction {
-            border-top: 1px solid $yellow700;
-            border-bottom: 1px solid $yellow700;
+            border-top: 1px solid variables.$yellow700;
+            border-bottom: 1px solid variables.$yellow700;
         }
     }
 
@@ -44,7 +44,7 @@
         font-size: 10px;
         font-family: "Montserrat-Light";
         padding: 2px 6px;
-        background-color: $yellow;
+        background-color: variables.$yellow;
         display: inline;
     }
 
@@ -52,7 +52,7 @@
         font-family: "mtn-bold";
         font-size: 40px;
         margin: 20px 0 0;
-        color: $grey800;
+        color: variables.$grey800;
 
         sup {
             font-family: "mtn-regular";
@@ -88,8 +88,8 @@
         font-size: 14px;
         margin: 10px 0;
         padding: 10px 0;
-        border-top: 1px solid $grey500;
-        border-bottom: 1px solid $grey500;
+        border-top: 1px solid variables.$grey500;
+        border-bottom: 1px solid variables.$grey500;
 
         span {
             display: block;

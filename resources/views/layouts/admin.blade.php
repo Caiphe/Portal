@@ -1,22 +1,16 @@
+@extends('layouts.base')
+
 @php
     $user = auth()->user();
 @endphp
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    @include('partials.google-analytics')
-    {{-- @includeWhen(!isset($_COOKIE['shownCookiePolicy']), 'partials.cookie') --}}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield("title", '{"MTN":"Developer Admin Portal"}')</title>
-    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
-    <link rel="icon" href="/images/favicon.png" type="image/png">
+@section('body-class', 'admin')
+
+@push('styles')
     <link rel="stylesheet" href="{{ mix('/css/layouts/admin.css') }}">
-    @stack("styles")
-</head>
-<body class="admin">
+@endpush
+
+@section('body')
     <nav id="sidebar">
         <a class="logo" href="/">@svg('logo', '', '/images/') Admin Portal</a>
         <button id="hide-menu" class="reset">@svg('close')</button>
@@ -60,7 +54,10 @@
         @yield("content")
     </main>
     <x-alert/>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+@endsection
+
+@prepend('scripts')
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js" defer></script>
     <script>
         function bladeLookupAdmin(key) {
             return {
@@ -70,7 +67,5 @@
             }[key] || null;
         }
     </script>
-    <script src="{{ mix('/js/templates/admin/scripts.js') }}"></script>
-    @stack("scripts")
-</body>
-</html>
+    <script src="{{ mix('/js/templates/admin/scripts.js') }}" defer></script>
+@endprepend

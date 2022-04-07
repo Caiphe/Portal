@@ -1,4 +1,4 @@
-@import "../variables";
+@use "../variables";
 
 .card--product {
     .card__content {
@@ -40,14 +40,15 @@
             }
 
             &:hover {
-                > .countries {
+                >.countries {
                     flex: 1;
                     flex-flow: row wrap;
                     //max-height: 50px;
                     //-webkit-transition: max-height 0.5s;
                     transition: max-height 1s;
                 }
-                > .view-more {
+
+                >.view-more {
                     display: none;
                 }
             }
@@ -64,15 +65,39 @@
         a {
             margin-right: 5px;
         }
+
+        label {
+            svg {
+                margin: 0;
+            }
+
+            svg+svg {
+                display: none;
+            }
+        }
     }
 
     .tag.private {
-        border: 1px solid $red;
-        color: $red;
+        border: 1px solid variables.$red;
+        color: variables.$red;
     }
 
     .tag.internal {
-        border: 1px solid $blue;
-        color: $blue;
+        border: 1px solid variables.$blue;
+        color: variables.$blue;
+    }
+}
+
+.add-product:checked+.card--product {
+    border-color: variables.$grey900;
+
+    label {
+        svg {
+            display: none;
+        }
+
+        svg+svg {
+            display: inline;
+        }
     }
 }

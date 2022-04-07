@@ -77,8 +77,19 @@ class ApigeeService
         return $resp->json();
     }
 
+    protected static function encodeUrl(string $url): string
+    {
+        preg_match('/\?.*/', $url, $get);
+        $url = preg_replace('/\?.*/', '', $url);
+        $url = explode('/', $url);
+        $url = array_map(fn ($arg) => rawurlencode($arg), $url);
+        $url = implode('/', $url);
+        return $url . ($get[0] ?? '');
+    }
+
     public static function get(string $url)
     {
+        $url = self::encodeUrl($url);
         $resp = self::HttpWithToken()->get(config('apigee.base') . $url);
 
         if ($resp->status() === 401 || $resp->status() === 403) {
@@ -92,6 +103,7 @@ class ApigeeService
 
     public static function post(string $url, array $data, array $headers = [])
     {
+        $url = self::encodeUrl($url);
         $h = array_merge([
             'Content-Type' => 'application/json'
         ], $headers);
@@ -113,6 +125,7 @@ class ApigeeService
 
     public static function put(string $url, array $data)
     {
+        $url = self::encodeUrl($url);
         $resp = self::HttpWithToken()->put(config('apigee.base') . $url, $data);
 
         if ($resp->status() === 401 || $resp->status() === 403) {
@@ -126,6 +139,7 @@ class ApigeeService
 
     public static function delete(string $url)
     {
+        $url = self::encodeUrl($url);
         $resp = self::HttpWithToken()->delete(config('apigee.base') . $url);
 
         if ($resp->status() === 401 || $resp->status() === 403) {
@@ -144,6 +158,7 @@ class ApigeeService
      */
     public static function getMint(string $url)
     {
+        $url = self::encodeUrl($url);
         $resp = self::HttpWithToken()->get(config('apigee.base_mint') . $url);
 
         if ($resp->status() === 401 || $resp->status() === 403) {
@@ -218,11 +233,22 @@ class ApigeeService
     {
         $credentials = self::get('apps/' . $app->aid)['credentials'];
         $credentials = self::sortCredentials($credentials);
+        $typeAndEnvironment = explode('-', $type);
+
+        if (count($credentials) === 1) {
+            if ($respondWith === 'string') {
+                return $credentials[0][$typeAndEnvironment[0]];
+            }
+
+            return response()->json([
+                'credentials' => $credentials[0][$typeAndEnvironment[0]]
+            ]);
+        }
+
         $sandboxedProducts = $app->products->filter(function ($prod) {
             $envArr = explode(',', $prod->environments);
             return in_array('sandbox', $envArr) && !in_array('prod', $envArr);
         })->pluck('name')->toArray();
-        $typeAndEnvironment = explode('-', $type);
         $creds = [
             'sandbox' => [],
             'production' => [],

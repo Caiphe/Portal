@@ -1,3 +1,7 @@
+@push('styles')
+<link rel="stylesheet" href="{{ mix('/css/components/alert.css') }}">
+@endpush
+
 @if ((isset($errors) && $errors->any()) || Session::has('alert'))
 @php
 if($errors->any()){
@@ -23,3 +27,7 @@ if($errors->any()){
     <button class="fab blue close" onclick="closeAlert()">&times;</button>
 </div>
 @endif
+
+@push('scripts')
+<script src="{{ mix('/js/components/alert.js') }}" defer></script>
+@endpush

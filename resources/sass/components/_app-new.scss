@@ -1,4 +1,4 @@
-@import '../variables';
+@use '../variables';
 
 .app {
     display: flex;
@@ -6,7 +6,7 @@
     flex-wrap: wrap;
     width: 100%;
 
-    @media #{$small} {
+    @media #{variables.$small} {
         overflow: hidden;
     }
 
@@ -69,7 +69,7 @@
         align-items: center;
         cursor: pointer;
 
-        @media #{$small} {
+        @media #{variables.$small} {
             margin-right: 10px;
         }
     }
@@ -95,7 +95,7 @@
     }
 
     .menu {
-        background-color: $grey900;
+        background-color: variables.$grey900;
         border-radius: 10px;
         padding: 10px;
         position: absolute;
@@ -155,7 +155,7 @@
 
     .detail {
         display: none;
-        background-color: $grey200;
+        background-color: variables.$grey200;
         border-radius: 8px;
         width: 100%;
         padding: 20px;
@@ -250,7 +250,7 @@
 
         .go-live,
         .kyc-status {
-            border-top: 1px solid $grey900;
+            border-top: 1px solid variables.$grey900;
             padding-top: 14px;
             margin-top: 14px;
 
@@ -277,7 +277,7 @@
                 background-color: transparent;
                 border-radius: 5px;
                 display: flex;
-                color: $grey900 !important;
+                color: variables.$grey900 !important;
                 justify-content: space-between;
                 align-items: stretch;
                 font-size: 12px;
@@ -298,15 +298,15 @@
                 }
 
                 &.product-status-approved .status-bar {
-                    background-color: $success;
+                    background-color: variables.$success;
                 }
 
                 &.product-status-pending .status-bar {
-                    background-color: $warning;
+                    background-color: variables.$warning;
                 }
 
                 &.product-status-revoked .status-bar {
-                    background-color: $error;
+                    background-color: variables.$error;
                 }
 
                 span[class^="status-"],

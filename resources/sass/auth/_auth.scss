@@ -1,8 +1,10 @@
+@use "../variables";
+
 #auth-main {
     height: 100%;
 
     .header {
-        margin: $gutterSmall 0 0 $gutter;
+        margin: variables.$gutterSmall 0 0 variables.$gutter;
         display: flex;
         position: relative;
         align-items: center;
@@ -23,7 +25,7 @@
     }
 
     form {
-        padding: $gutter $gutter 0 $gutter;
+        padding: variables.$gutter variables.$gutter 0 variables.$gutter;
         width: 35%;
         height: calc(100vh - 170px);
         display: flex;
@@ -40,7 +42,7 @@
             margin-top: 2rem;
             align-items: center;
 
-            @media #{$small} {
+            @media #{variables.$small} {
                 text-align: center;
                 width: 100%;
 
@@ -54,7 +56,7 @@
                 }
             }
 
-            @media #{$medium-up} {
+            @media #{variables.$medium-up} {
                 display: flex;
             }
 
@@ -69,26 +71,26 @@
             }
         }
 
-        @media #{$small} {
+        @media #{variables.$small} {
             width: 100%;
         }
 
-        @media #{$medium} {
+        @media #{variables.$medium} {
             width: 100%;
         }
     }
 
     .invalid {
-        border-color: $error;
+        border-color: variables.$error;
     }
 
     .invalid-feedback {
         font-size: 1rem;
-        color: $error;
+        color: variables.$error;
     }
 
     .yellow {
-        color: $yellow;
+        color: variables.$yellow;
     }
 
     .carousel {
@@ -98,11 +100,11 @@
         top: 0;
         right: 0;
 
-        @media #{$small} {
+        @media #{variables.$small} {
             display: none;
         }
 
-        @media #{$medium} {
+        @media #{variables.$medium} {
             display: none;
         }
     }
@@ -143,7 +145,7 @@
 
         h1 {
             color: currentColor;
-            margin-bottom: $gutterSmall;
+            margin-bottom: variables.$gutterSmall;
         }
     }
 
@@ -152,7 +154,7 @@
         align-items: center;
 
         span {
-            color: $grey900;
+            color: variables.$grey900;
             margin-right: 6px;
         }
 
@@ -164,7 +166,7 @@
 
     .bottom {
         position: absolute;
-        bottom: $gutterSmall;
-        left: $gutter;
+        bottom: variables.$gutterSmall;
+        left: variables.$gutter;
     }
 }

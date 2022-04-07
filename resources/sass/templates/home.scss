@@ -1,4 +1,4 @@
-@import "../variables";
+@use "../variables";
 
 #main,
 body > #main {
@@ -6,7 +6,7 @@ body > #main {
 }
 
 .grey-bg {
-    background-color: $grey300;
+    background-color: variables.$grey300;
 }
 
 .banner-carousel {
@@ -38,7 +38,7 @@ body > #main {
             }
 
             .carousel-content {
-                padding: $gutter 40px;
+                padding: variables.$gutter 40px;
                 max-width: 70%;
                 position: relative;
                 height: 100%;
@@ -58,35 +58,35 @@ body > #main {
                 .button {
                     width: 110px;
 
-                    @media #{$small} {
+                    @media #{variables.$small} {
                         width: 100%;
                     }
 
-                    @media #{$medium} {
+                    @media #{variables.$medium} {
                         width: 100%;
                     }
 
-                    @media #{$medium-portrait} {
+                    @media #{variables.$medium-portrait} {
                         width: 110px;
                     }
                 }
 
-                @media #{$small} {
+                @media #{variables.$small} {
                     max-width: 100%;
                 }
 
-                @media #{$medium} {
+                @media #{variables.$medium} {
                     max-width: 100%;
                 }
             }
         }
     }
 
-    @media #{$small} {
+    @media #{variables.$small} {
         margin-top: 80px;
     }
 
-    @media #{$medium-portrait} {
+    @media #{variables.$medium-portrait} {
         margin-top: 80px;
     }
 }
@@ -102,11 +102,11 @@ body > #main {
     p {
         padding: 0 15em;
 
-        @media #{$small} {
+        @media #{variables.$small} {
             padding: 0;
         }
 
-        @media #{$medium} {
+        @media #{variables.$medium} {
             padding: initial;
         }
     }
@@ -143,8 +143,8 @@ section {
             &:before {
                 counter-increment: listCounter;
                 content: counter(listCounter);
-                color: $grey800;
-                border: 2px solid $grey800;
+                color: variables.$grey800;
+                border: 2px solid variables.$grey800;
                 border-radius: 50%;
                 display: inline-block;
                 text-align: center;
@@ -204,7 +204,7 @@ section {
     a {
         margin-top: 15px;
 
-        @media #{$small} {
+        @media #{variables.$small} {
             width: 100%;
         }
     }
@@ -223,7 +223,7 @@ section {
         }
     }
 
-    @media #{$medium} {
+    @media #{variables.$medium} {
         flex-wrap: wrap;
     }
 }
@@ -232,7 +232,7 @@ section {
 .view-products {
     display: flex;
     justify-content: center;
-    margin-top: $gutter;
+    margin-top: variables.$gutter;
 }
 
 .steps {
@@ -242,7 +242,7 @@ section {
         margin-right: auto;
     }
 
-    @media #{$small} {
+    @media #{variables.$small} {
         .col {
             flex: 1 auto !important;
             max-width: 100% !important;
@@ -266,49 +266,49 @@ section {
 }
 
 #section-sign-up {
-    @media #{$small} {
+    @media #{variables.$small} {
         padding-bottom: 40px;
     }
 
     .cols {
-        @media #{$small} {
+        @media #{variables.$small} {
             flex-direction: column;
         }
 
         .col-6 {
-            @media #{$small} {
+            @media #{variables.$small} {
                 flex: 1 auto !important;
                 max-width: 100% !important;
             }
         }
 
         .col-image {
-            @media #{$small} {
+            @media #{variables.$small} {
                 margin-top: 80px;
             }
         }
     }
 
     .content-left {
-        @media #{$small} {
+        @media #{variables.$small} {
             padding-right: 0;
         }
     }
 
     .image-right {
-        @media #{$small} {
+        @media #{variables.$small} {
             padding-left: 0;
         }
     }
 
     ol {
-        @media #{$small} {
+        @media #{variables.$small} {
             width: 100%;
         }
     }
 
     img {
-        @media #{$small} {
+        @media #{variables.$small} {
             display: block;
             height: auto;
             width: 100%;
@@ -318,32 +318,32 @@ section {
 
 #section-browse-our-products {
     .cols {
-        @media #{$small} {
+        @media #{variables.$small} {
             flex-direction: column;
         }
 
         .col-6 {
-            @media #{$small} {
+            @media #{variables.$small} {
                 flex: 1 auto !important;
                 max-width: 100% !important;
             }
 
             .content-right {
-                @media #{$small} {
+                @media #{variables.$small} {
                     padding: 0;
                 }
             }
         }
 
         .col-image {
-            @media #{$small} {
+            @media #{variables.$small} {
                 padding-bottom: 40px;
             }
         }
     }
 
     img {
-        @media #{$small} {
+        @media #{variables.$small} {
             display: block;
             height: auto;
             width: 100%;
@@ -352,29 +352,29 @@ section {
 }
 
 #section-register-an-app {
-    @media #{$small} {
+    @media #{variables.$small} {
         padding-bottom: 40px;
     }
 
     .cols {
-        @media #{$small} {
+        @media #{variables.$small} {
             flex-direction: column;
         }
 
         .col-6 {
-            @media #{$small} {
+            @media #{variables.$small} {
                 flex: 1 auto !important;
                 max-width: 100% !important;
             }
         }
 
         .col-image {
-            @media #{$small} {
+            @media #{variables.$small} {
                 margin-top: 80px;
             }
 
             .image-right {
-                @media #{$small} {
+                @media #{variables.$small} {
                     padding: 0;
                 }
             }
@@ -382,7 +382,7 @@ section {
     }
 
     img {
-        @media #{$small} {
+        @media #{variables.$small} {
             display: block;
             height: auto;
             width: 100%;
@@ -392,38 +392,38 @@ section {
 
 #section-access-the-keys {
     .cols {
-        @media #{$small} {
+        @media #{variables.$small} {
             flex-direction: column;
         }
 
         .col-6 {
-            @media #{$small} {
+            @media #{variables.$small} {
                 flex: 1 auto !important;
                 max-width: 100% !important;
             }
         }
 
         .col-image {
-            @media #{$small} {
+            @media #{variables.$small} {
                 padding-bottom: 20px;
             }
         }
     }
 
     .content-right {
-        @media #{$small} {
+        @media #{variables.$small} {
             padding-left: 0;
         }
     }
 
     .image-left {
-        @media #{$small} {
+        @media #{variables.$small} {
             padding-right: 0;
         }
     }
 
     img {
-        @media #{$small} {
+        @media #{variables.$small} {
             display: block;
             height: auto;
             width: 100%;
@@ -434,12 +434,12 @@ section {
 
 #section-product-categories {
     .products-cards {
-        @media #{$small} {
+        @media #{variables.$small} {
             flex-direction: column;
         }
 
         a {
-            @media #{$small} {
+            @media #{variables.$small} {
                 margin-right: 0;
                 width: 100%;
             }

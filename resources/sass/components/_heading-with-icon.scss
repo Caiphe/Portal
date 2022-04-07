@@ -1,3 +1,6 @@
+@use "../functions";
+@use "../variables";
+
 h1, h2, h3, h4, h5, h6 {
     &.with-icon {
         padding-left: 30px;
@@ -6,13 +9,13 @@ h1, h2, h3, h4, h5, h6 {
         background-size: 16px;
         position: absolute;
     }
-    @each $icon, $svg in $icons {
+    @each $icon, $svg in variables.$icons {
         &.#{$icon}::before {
             content: "";
             position: relative;
             width: 30px;
             height: 30px;
-            background-image: get-icon("#{$icon}", $yellow);
+            background-image: functions.get-icon("#{$icon}", variables.$yellow);
             position: absolute;
             left: 0;
         }

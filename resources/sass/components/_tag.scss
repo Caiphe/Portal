@@ -1,4 +1,4 @@
-@import "../variables";
+@use "../variables";
 
 .tag {
     padding: 4px;
@@ -12,7 +12,7 @@
     -moz-border-radius: 3px;
     border-radius: 3px;
 
-    @media #{$small} {
+    @media #{variables.$small} {
         height: 20px;
     }
 
@@ -21,27 +21,27 @@
         cursor: pointer;
 
         &.yellow:hover {
-            background-color: $yellow900;
+            background-color: variables.$yellow900;
         }
 
         &.blue:hover {
-            background-color: $blue900;
+            background-color: variables.$blue900;
         }
 
         &.grey:hover {
-            background-color: $grey900;
+            background-color: variables.$grey900;
         }
 
         &.success:hover {
-            background-color: $success900;
+            background-color: variables.$success900;
         }
 
         &.warning:hover {
-            background-color: $warning900;
+            background-color: variables.$warning900;
         }
 
         &.error:hover {
-            background-color: $error900;
+            background-color: variables.$error900;
         }
     }
 
@@ -55,33 +55,33 @@
         }
 
         &.yellow {
-            border: 1px solid $yellow;
-            color: $yellow;
+            border: 1px solid variables.$yellow;
+            color: variables.$yellow;
         }
 
         &.blue {
-            border: 1px solid $blue;
-            color: $blue;
+            border: 1px solid variables.$blue;
+            color: variables.$blue;
         }
 
         &.grey {
-            border: 1px solid $grey900;
-            color: $grey900;
+            border: 1px solid variables.$grey900;
+            color: variables.$grey900;
         }
 
         &.success {
-            border: 1px solid $success;
-            color: $success;
+            border: 1px solid variables.$success;
+            color: variables.$success;
         }
 
         &.warning {
-            border: 1px solid $warning;
-            color: $warning;
+            border: 1px solid variables.$warning;
+            color: variables.$warning;
         }
 
         &.error {
-            border: 1px solid $error;
-            color: $error;
+            border: 1px solid variables.$error;
+            color: variables.$error;
         }
     }
 
@@ -92,26 +92,26 @@
     }
 
     &.success {
-        background-color: $success;
+        background-color: variables.$success;
     }
 
     &.warning {
-        background-color: $warning;
+        background-color: variables.$warning;
     }
 
     &.error {
-        background-color: $error;
+        background-color: variables.$error;
     }
 
     &.yellow {
-        background-color: $yellow;
+        background-color: variables.$yellow;
     }
 
     &.blue {
-        background-color: $blue;
+        background-color: variables.$blue;
     }
 
     &.grey {
-        background-color: $grey900;
+        background-color: variables.$grey900;
     }
 }

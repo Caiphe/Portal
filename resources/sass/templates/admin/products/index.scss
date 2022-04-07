@@ -1,4 +1,4 @@
-@import "../../../variables";
+@use "../../../variables";
 
 .prod,
 .preprod,
@@ -20,46 +20,46 @@
 }
 
 .prod{
-    color: $green;
-    border-color: $green;
+    color: variables.$green;
+    border-color: variables.$green;
 }
 
 .preprod{
-    color: $orange;
-    border-color: $orange;
+    color: variables.$orange;
+    border-color: variables.$orange;
 }
 
 .staging {
-    color: $blue;
-    border-color: $blue;
+    color: variables.$blue;
+    border-color: variables.$blue;
 }
 
 .sandbox {
-    color: $purple;
-    border-color: $purple;
+    color: variables.$purple;
+    border-color: variables.$purple;
 }
 
 .testing {
-    color: $yellow;
-    border-color: $yellow;
+    color: variables.$yellow;
+    border-color: variables.$yellow;
 }
 
 .dev {
-    color: $blue;
-    border-color: $blue;
+    color: variables.$blue;
+    border-color: variables.$blue;
 }
 
 .rejected {
-    color: $red;
-    border-color: $red;
+    color: variables.$red;
+    border-color: variables.$red;
 }
 
 .draft {
-    color: $yellow;
-    border-color: $yellow;
+    color: variables.$yellow;
+    border-color: variables.$yellow;
 }
 
 .review {
-    color: $yellow;
-    border-color: $yellow;
+    color: variables.$yellow;
+    border-color: variables.$yellow;
 }

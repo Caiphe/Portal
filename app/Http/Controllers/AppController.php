@@ -50,7 +50,7 @@ class AppController extends Controller
 
         $apps = App::with(['products.countries', 'country', 'developer'])
             ->byUserEmail($user->email)
-            ->when($userTeams, fn($q) => $q->orWhereIn('team_id', $userTeams->pluck('id')))
+            ->when($userTeams, fn ($q) => $q->orWhereIn('team_id', $userTeams->pluck('id')))
             ->orderBy('updated_at', 'desc')
             ->get()
             ->groupBy('status');
@@ -84,6 +84,7 @@ class AppController extends Controller
             'productCategories' => array_keys($products->toArray()),
             'teams' => $userOwnTeams,
             'countries' => $countries ?? '',
+            'user' => $user
         ]);
     }
 
@@ -154,6 +155,10 @@ class AppController extends Controller
         if ($createdResponse->failed()) {
             $reasonMsg = $createdResponse['message'] ?? 'There was a problem creating your app. Please try again later.';
 
+            if ($request->ajax()) {
+                return response()->json(['message' => $reasonMsg], $createdResponse->status());
+            }
+
             return redirect()->back()->with('alert', "error:{$reasonMsg}");
         }
 
@@ -220,7 +225,7 @@ class AppController extends Controller
         )->firstOrFail();
         $products = Product::with('category')
             ->where('category_cid', '!=', 'misc')
-            ->where(fn ($q) => $q->basedOnUser(auth()->user())->orWhereIn('pid', $app->products->pluck('pid')->toArray()))
+            ->where(fn ($q) => $q->basedOnUser(auth()->user())->orWhereIn('pid', $app->products->where('environments', '!=', 'sandbox')->pluck('pid')->toArray()))
             ->get();
         $assignedProducts = $user->assignedProducts()->with('category')->get();
 
@@ -231,7 +236,7 @@ class AppController extends Controller
 
         $app->load('products', 'country');
         $credentials = $app->credentials;
-        $selectedProducts = end($credentials)['apiProducts'] ?? [];
+        $selectedProducts = ApigeeService::getLatestCredentials($credentials)['apiProducts'] ?? [];
 
         if (count($credentials) === 1 && $app->products->filter(fn ($prod) => isset($prod->attributes['ProductionProduct']))->count() > 0) {
             $selectedProducts = $app->products->map(fn ($prod) => $prod->attributes['ProductionProduct'] ?? $prod->name)->toArray();
@@ -242,6 +247,7 @@ class AppController extends Controller
             'countries' => $countries ?? '',
             'data' => $app,
             'selectedProducts' => $selectedProducts,
+            'user' => $user
         ]);
     }
 
@@ -256,38 +262,36 @@ class AppController extends Controller
         $validated = $request->validated();
         $app->load('products', 'team');
         $appTeam = $app->team ?? null;
-        $credentials = $app->credentials;
-        $sandboxProducts = $app->products->filter(function ($prod) {
-            $envArr = explode(',', $prod->environments);
-            return in_array('sandbox', $envArr) && !in_array('prod', $envArr);
-        });
-        $hasSandboxProducts = $sandboxProducts->count() > 0;
-        $products = Product::whereIn('name', $validated['products'])->pluck('attributes', 'name');
+        $credentials = ApigeeService::getLatestCredentials($app->credentials);
+        $products = Product::whereIn('name', $validated['products'])->get();
+        $sandboxProducts = is_null($app->live_at) ? $products : $products->diff($app->products);
+        $hasSandboxProducts = $sandboxProducts->filter(function ($prod) {
+            return strpos($prod->attributes, 'SandboxProduct') !== false;
+        })->count() > 0;
+        $productGroups = $app->products->groupBy('name')->toArray();
+        $products = $products->pluck('attributes', 'name');
         $countriesByCode = Country::pluck('iso', 'code');
         $apigeeAttributes = ApigeeService::getApigeeAppAttributes($app);
         $appAttributes = array_merge($apigeeAttributes, $app->attributes);
+        $originalProducts = $credentials['apiProducts'];
+        $sandboxProducts = [];
 
-        if (count($credentials) === 1 && $hasSandboxProducts) {
+        if ($hasSandboxProducts) {
             $credentialsType = 'consumerKey-sandbox';
-            $originalProducts = $credentials[0]['apiProducts'];
+
             foreach ($products as $name => $attributes) {
                 $attr = json_decode($attributes, true);
                 $newProducts[] = $attr['SandboxProduct'] ?? $name;
             }
-            $syncProducts = $newProducts;
         } else {
             $credentialsType = 'consumerKey-production';
-            $originalProducts = end($credentials)['apiProducts'];
 
             foreach ($products as $name => $attributes) {
                 $attr = json_decode($attributes, true);
                 $newProducts[] = $attr['ProductionProduct'] ?? $name;
-            }
-
-            if ($hasSandboxProducts) {
-                $syncProducts = [...$newProducts, ...$credentials[0]['apiProducts']];
-            } else {
-                $syncProducts = $newProducts;
+                if (isset($attr['SandboxProduct'])) {
+                    $sandboxProducts[$attr['SandboxProduct']] = ['status' => $productGroups[$attr['SandboxProduct']][0]['pivot']['status'], 'actioned_at' => $productGroups[$attr['SandboxProduct']][0]['pivot']['actioned_at']];
+                }
             }
         }
 
@@ -343,7 +347,26 @@ class AppController extends Controller
             'country_code' => $validated['country'],
         ]);
 
-        $app->products()->sync($syncProducts);
+        $app->products()->sync(
+            array_reduce(
+                ApigeeService::getLatestCredentials($updatedResponse['credentials'])['apiProducts'],
+                function ($carry, $apiProduct) {
+                    $pivotOptions = ['status' => $apiProduct['status']];
+
+                    if ($apiProduct['status'] === 'approved') {
+                        $pivotOptions['actioned_at'] = date('Y-m-d H:i:s');
+                    }
+
+                    $carry[$apiProduct['apiproduct']] = $pivotOptions;
+                    return $carry;
+                },
+                []
+            )
+        );
+
+        if ($sandboxProducts) {
+            $app->products()->attach($sandboxProducts);
+        }
 
         $opcoUserEmails = $app->country->opcoUser->pluck('email')->toArray();
         if (empty($opcoUserEmails)) {
@@ -576,12 +599,12 @@ class AppController extends Controller
         $apiProductsPortal = [];
 
         foreach ($app->products as $product) {
-            $apiProductsPortal[] = $product->name;
+            $apiProductsPortal[$product->name] = ['status' => $product->pivot->status, 'actioned_at' => $product->pivot->actioned_at];
 
             // ProductionProduct is set in the SyncProducts Console Command.
             // This checks if there is a relationship from a sandbox/staging product to a production product.
             if (isset($product->attributes['ProductionProduct'])) {
-                $apiProductsPortal[] = $product->attributes['ProductionProduct'];
+                $apiProductsPortal[$product->attributes['ProductionProduct']] = ['status' => $product->pivot->status, 'actioned_at' => $product->pivot->actioned_at];
                 $apiProductsApigee[] = $product->attributes['ProductionProduct'];
                 continue;
             }
@@ -628,7 +651,7 @@ class AppController extends Controller
         $resp = $resp->json();
 
         $app->update([
-            'attributes' => $data['attributes'],
+            'attributes' => ApigeeService::formatAppAttributes($data['attributes']),
             'credentials' => $resp['credentials']
         ]);
 

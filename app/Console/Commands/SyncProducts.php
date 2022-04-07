@@ -135,5 +135,7 @@ class SyncProducts extends Command
 				'attributes' => $attr
 			]);
 		});
+
+		return 0;
 	}
 }

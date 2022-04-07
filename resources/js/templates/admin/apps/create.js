@@ -12,12 +12,11 @@
     var removeThumbnail = document.getElementById('remove-assignee');
     var ownerAvatar = document.querySelector(".owner-avatar");
     var buttonsContainer = document.querySelector(".apps-button-container");
-    var addProductButtons = document.querySelectorAll('[data-title] a');
 
     document.getElementById('next-app-owner').addEventListener('click', nextAppOwner);
     document.getElementById('next-app-details').addEventListener('click', nextAppDetails);
     document.getElementById('next-select-products').addEventListener('click', nextSelectProducts);
-    document.getElementById('next-create-app').addEventListener('click', nextCreateApp);
+    document.getElementById('next-create-app').addEventListener('click', handleCreate);
     searchField.addEventListener('keyup', searchFieldSuggestions);
 
     for (var j = 0; j < backButtons.length; j++) {
@@ -42,16 +41,30 @@
     }
 
     function nextAppDetails() {
+        var elements = form.elements;
         var urlValue = null;
+        var errors = [];
 
-        if (document.getElementById('name').value === '') {
-            return void addAlert('error', 'Please add a name for your app');
+        if (elements['name'].value === '') {
+            errors.push({ msg: 'Please add a name for your app', el: elements['name'] });
+        } else {
+            elements['name'].nextElementSibling.textContent = '';
         }
 
-        urlValue = document.getElementById('url').value;
+        urlValue = elements['url'].value;
 
         if (urlValue !== '' && !/https?:\/\/.*\..*/.test(urlValue)) {
-            return void addAlert('error', ['Please add a valid url', 'Eg. https://callback.com']);
+            errors.push({ msg: 'Please add a valid url. Eg. https://callback.com', el: elements['url'] });
+        } else {
+            elements['url'].nextElementSibling.textContent = '';
+        }
+
+        if (errors.length > 0) {
+            for (var i = errors.length - 1; i >= 0; i--) {
+                errors[i].el.nextElementSibling.textContent = errors[i].msg;
+            }
+
+            return;
         }
 
         next();
@@ -63,14 +76,6 @@
         }
 
         next();
-    }
-
-    function nextCreateApp() {
-        if (document.querySelectorAll('.products .selected .buttons .done').length === 0) {
-            return void addAlert('error', 'Please select at least one product');
-        }
-
-        handleCreate();
     }
 
     function next() {
@@ -149,25 +154,9 @@
         }
     }
 
-    for (var o = 0; o < addProductButtons.length; ++o) {
-
-        addProductButtons[o].addEventListener('click', function (event) {
-            var button = event.currentTarget;
-
-            button.classList.toggle('plus');
-            button.classList.toggle('done');
-
-            if (document.querySelectorAll('[data-title] button')) {
-                var selectedProduct = this.parentNode.parentNode;
-
-                selectedProduct.classList.toggle('selected');
-            }
-        });
-    }
-
     function handleCreate() {
         var elements = form.elements;
-        var selectedProducts = document.querySelectorAll('.products .selected .buttons a:last-of-type');
+        var selectedProducts = document.querySelectorAll('.add-product:checked');
         var button = document.getElementById('next-create-app');
         var app = {
             app_owner: elements['app-owner'].value,
@@ -179,7 +168,7 @@
         };
 
         for (i = 0; i < selectedProducts.length; i++) {
-            app.products.push(selectedProducts[i].dataset.name);
+            app.products.push(selectedProducts[i].value);
         }
 
         if (app.products.length === 0) {
@@ -187,7 +176,6 @@
         }
 
         button.disabled = true;
-        
         addLoading('Creating app...');
 
         var url = adminAppsCreateLookup('appStoreUrl');
@@ -201,7 +189,6 @@
         xhr.send(JSON.stringify(app));
 
         xhr.onload = function () {
-            button.removeAttribute('disabled');
             removeLoading();
 
             if (xhr.status === 200) {
@@ -217,6 +204,7 @@
                 }
             }
 
+            button.removeAttribute('disabled');
             addAlert('error', result.message || 'Sorry there was a problem creating your app. Please try again.');
         };
     }

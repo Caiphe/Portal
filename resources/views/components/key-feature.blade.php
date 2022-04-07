@@ -1,8 +1,10 @@
 @props(['title', 'icon' => 'key'])
 
-@allowonce('key_feature')
+@once
+@push('styles')
 <link href="{{ mix('/css/components/key-feature.css') }}" rel="stylesheet"/>
-@endallowonce
+@endpush
+@endonce
 
 <div {{ $attributes->merge(['class' => 'key-feature']) }}>
     <div class="body">

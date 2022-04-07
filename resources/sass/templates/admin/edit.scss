@@ -1,5 +1,5 @@
-@import '../../variables';
-@import '../../components/tag';
+@use '../../variables';
+@use '../../components/tag';
 
 #admin-form {
     display: flex;
@@ -14,8 +14,8 @@ h1 {
     display: inline-flex;
     align-items: center;
     font-size: 14px;
-    font-family: $MTN-Regular;
-    color: $grey750;
+    font-family: variables.$MTN-Regular;
+    color: variables.$grey750;
 
     @media screen and (min-width: 768px) {
         margin: 0 0 16px -5px;
@@ -26,7 +26,7 @@ h1 {
     }
 
     svg {
-        fill: $grey750;
+        fill: variables.$grey750;
     }
 }
 
@@ -54,7 +54,7 @@ h1 {
 
             svg {
                 width: 16px;
-                fill: $grey500;
+                fill: variables.$grey500;
                 margin-left: 8px;
             }
 
@@ -108,7 +108,7 @@ h1 {
             box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.04);
             padding: 24px;
             font-size: 20px;
-            font-family: $MTN-Regular;
+            font-family: variables.$MTN-Regular;
             font-weight: normal;
             flex: 1 1 100%;
 
@@ -122,7 +122,7 @@ h1 {
         h3,
         .editor-field-label {
             font-size: 16px;
-            font-family: $MTN-Regular;
+            font-family: variables.$MTN-Regular;
             display: block;
             font-weight: normal;
             width: 100%;
@@ -150,9 +150,9 @@ h1 {
         .editor-field-copy {
             background-color: transparent;
             border: none;
-            border-bottom: 1px solid $grey800;
+            border-bottom: 1px solid variables.$grey800;
             font-size: 14px;
-            font-family: $MTN-Regular;
+            font-family: variables.$MTN-Regular;
             padding: 8px 0;
             display: block;
             width: 100%;
@@ -225,7 +225,7 @@ h1 {
 }
 
 #main .save-button {
-    color: $blue;
+    color: variables.$blue;
     height: 32px;
     line-height: 1;
 
