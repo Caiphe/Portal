@@ -2,24 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\TeamAppCreated;
+use DB;
+use App\App;
 use App\Team;
 use App\User;
-use App\App;
-use App\Product;
 use App\Country;
-use App\Http\Requests\CreateAppRequest;
-use App\Http\Requests\DeleteAppRequest;
-use App\Http\Requests\KycRequest;
-use App\Mail\CredentialRenew;
-use App\Mail\GoLiveMail;
+use App\Product;
 use App\Mail\NewApp;
 use App\Mail\UpdateApp;
+use App\Mail\GoLiveMail;
+use Illuminate\Support\Str;
+use App\Mail\TeamAppCreated;
+use Illuminate\Http\Request;
+use App\Mail\CredentialRenew;
 use App\Services\ApigeeService;
 use App\Services\Kyc\KycService;
-use DB;
-use Illuminate\Support\Str;
+use App\Http\Requests\KycRequest;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\CreateAppRequest;
+use App\Http\Requests\DeleteAppRequest;
 
 class AppController extends Controller
 {
@@ -65,21 +66,31 @@ class AppController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        $user = request()->user();
+        $user = $request->user();
         $userOwnTeams = $user->teams;
+        $product = null;
+
         $assignedProducts = $user->assignedProducts()->with('category')->get();
         $products = Product::with(['category', 'countries'])
             ->where('category_cid', '!=', 'misc')
             ->basedOnUser($user)
+            ->when($request->has('product'), function($q) use($request, &$product){
+                $product = Product::with(['countries'])->where('slug', $request->product)->first();
+                $productLocations = $product->countries->pluck('code')->toArray();
+                $q->byLocations($productLocations);
+            })
             ->get()
             ->merge($assignedProducts);
-        $locations = array_unique(explode(',', $products->pluck('locations')->implode(',')));
+
+        $locations = $product->locations ?? $products->pluck('locations')->implode(',');
+        $locations = array_unique(explode(',', $locations));
         $countries = Country::whereIn('code', $locations)->pluck('name', 'code');
         $products = $products->sortBy('display_name')->groupBy('category.title')->sortKeys();
 
         return view('templates.apps.create', [
+            'productSelected' => $product,
             'products' => $products,
             'productCategories' => array_keys($products->toArray()),
             'teams' => $userOwnTeams,
@@ -139,6 +150,7 @@ class AppController extends Controller
             ],
             'callbackUrl' => $validated['url'],
         ];
+
 
         if (($user->hasRole('admin') || $user->hasRole('opco')) && $request->has('app_owner')) {
             $appOwner = User::where('email', $request->get('app_owner'))->first();
