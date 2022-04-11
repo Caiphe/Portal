@@ -28,7 +28,7 @@ class CreateAppRequest extends FormRequest {
 			'description' => 'sometimes',
 			'country' => 'sometimes',
 			'products' => 'required|array|min:1',
-            'team_id' => 'sometimes'
+            'team_id' => 'sometimes',
 		];
 	}
 
@@ -40,9 +40,9 @@ class CreateAppRequest extends FormRequest {
     protected function prepareForValidation()
     {
         $this->merge([
-            'display_name' => filter_var($this->display_name, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'url' => filter_var($this->url, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
-            'description' => filter_var($this->description, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
+            'display_name' => htmlspecialchars($this->display_name),
+            'url' => htmlspecialchars($this->url),
+            'description' => htmlspecialchars($this->description),
         ]);
     }
 

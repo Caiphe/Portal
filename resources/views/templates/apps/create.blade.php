@@ -152,18 +152,20 @@
                     @foreach ($products as $category => $prods)
                         <div class="category" data-category="{{ $category }}">
                             <h3 class="category-heading" data-category="{{ $prods[0]->category_cid }}">{{ $category }}</h3>
-                            @foreach ($prods as $product)
-                                <x-card-product :title="$product->display_name"
+                            @foreach ($prods as $prod)
+                                <x-card-product
+                                                :selected="!is_null($productSelected) && $productSelected->pid === $prod->pid"
+                                                :title="$prod->display_name"
                                                 class="product-block"
-                                                :href="route('product.show', $product->slug)"
+                                                :href="route('product.show', $prod->slug)"
                                                 target="_blank"
-                                                :tags="[$product->group, $product->category->title]"
-                                                :addButtonId="$product->slug"
-                                                :data-title="$product->name"
-                                                :data-group="$product->group"
-                                                :data-access="$product->access"
-                                                :data-category="$product->category_cid"
-                                                :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}
+                                                :tags="[$prod->group, $prod->category->title]"
+                                                :addButtonId="$prod->slug"
+                                                :data-title="$prod->name"
+                                                :data-group="$prod->group"
+                                                :data-access="$prod->access"
+                                                :data-category="$prod->category_cid"
+                                                :data-locations="$prod->locations">{{ !empty($prod->description)?$prod->description:'View the product' }}
                                 </x-card-product>
                             @endforeach
                         </div>

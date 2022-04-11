@@ -181,6 +181,21 @@
         }
     }
 
+    // create app from the product button
+    .create-app-from-product{
+        position: absolute;
+        right: 20px;
+        top: 10px;
+
+        @media(max-width:768px){
+            position: relative;
+            right: revert;
+            top: 0px;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+    }
+
     .product-section {
         display: none;
         word-break: break-word;
