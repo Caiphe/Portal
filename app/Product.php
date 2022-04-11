@@ -108,6 +108,17 @@ class Product extends Model
         return $query;
     }
 
+    public function scopeByLocations($query, array $locations)
+    {
+        $query->where(function ($q) use ($locations) {
+            foreach ($locations as $loc) {
+                $q->orWhereRaw("find_in_set('$loc',locations)");
+            }
+        });
+
+        return $query;
+    }
+
     public function scopeByResponsibleCountry($query, $user)
     {
         if ($user->hasRole('admin')) return $query;

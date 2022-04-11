@@ -45,7 +45,9 @@
     </x-heading>
 
     <div class="content">
-        <div id="product-sections" class="{{$startingPoint}}">
+        <div id="product-sections" class="{{ $startingPoint }}">
+            <a class="button create-app-from-product" href="{{ route('app.create', ['product' => $product->slug]) }}" role="button">Create app with product</a>
+
             @foreach($content['lhs'] as $tab)
                 <button id="button-{{$tab->slug}}" class="light small outline product-section-button" onclick="switchSection('product-{{$tab->slug}}');">{{strtoupper($tab->title)}}</button>
             @endforeach
