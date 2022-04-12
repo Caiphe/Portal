@@ -182,17 +182,34 @@
     }
 
     // create app from the product button
-    .create-app-from-product{
+    .create-app-from-product-swagger-btn{
         position: absolute;
         right: 20px;
         top: 10px;
 
-        @media(max-width:768px){
+        .button{
+            margin-left: 10px;
+        }
+
+        @media(max-width: 945px){
             position: relative;
             right: revert;
             top: 0px;
             margin-bottom: 10px;
             width: 100%;
+
+            .button{
+                margin-left: 0px;
+                margin-right: 10px;
+            }
+        }
+
+        @media(max-width:768px){
+            .button{
+                width: 100%;
+                margin-right: 0px;
+                margin-bottom: 10px;
+            }
         }
     }
 
