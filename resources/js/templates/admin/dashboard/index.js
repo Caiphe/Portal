@@ -4,6 +4,7 @@
         var renewCredentials = document.querySelectorAll('.renew-credentials');
         var environment = document.querySelectorAll('.environment');
         var logNotes = document.querySelectorAll('.log-notes');
+        var customAttributes = document.querySelectorAll('.custom-attributes');
         var productStatusButtons = document.querySelectorAll('.product-status-action');
         var appStatusAction = document.querySelectorAll('.app-status-action');
         var productAction = document.querySelectorAll(".product-action");
@@ -23,6 +24,10 @@
 
         for (var m = 0; m < logNotes.length; m++) {
             logNotes[m].addEventListener('click', viewNote);
+        }
+
+        for (var i = 0; i < customAttributes.length; i++) {
+            customAttributes[i].addEventListener('click', customAttributesDialog);
         }
 
         for (var m = 0; m < productStatusButtons.length; m++) {
@@ -74,6 +79,13 @@
         if (!noteDialog) return;
 
         noteDialog.classList.add('show');
+    }
+
+    function customAttributesDialog(){
+        var id = this.dataset.id;
+        var customAttributeDialog = document.getElementById('custom-attributes-' + id);
+        if (!customAttributeDialog) return;
+        customAttributeDialog.classList.add('show');
     }
 
     function showProductNoteDialog() {

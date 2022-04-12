@@ -73,39 +73,53 @@
         </div>
         @endif
 
-        <div class="detail-items">
-            <div class="detail-left">
-                <h3>Application details</h3>
-                <p>Callback URL: @if($app['callback_url']) <a href="{{ $app['callback_url'] }}" target="_blank" rel="noopener noreferrer">{{ $app['callback_url'] }}</a> @else <span class="detail-text"> No callback url</span> @endif</p>
-                <p>Description: <span class="detail-text">{{ $app['description'] ?: 'No description' }}</span></p>
-                @if(!is_null($app['kyc_status']))
-                <p>
-                    Update the KYC status:
-                    <select name="kyc_status" class="kyc-status-select" data-aid="{{ $app['aid'] }}" autocomplete="off">
-                        <option @if($app['kyc_status'] === 'Documents Received') selected @endif value="Documents Received">Documents received</option>
-                        <option @if($app['kyc_status'] === 'In Review') selected @endif value="In Review">In review</option>
-                        <option @if($app['kyc_status'] === 'KYC Approved') selected @endif value="KYC Approved">KYC approved</option>
-                    </select>
-                </p>
-                @endif
-                <div class="detail-actions">
-                    @if($app['status'] === 'approved')
-                    <button class="reset app-status-action" data-id="{{ $app['aid'] }}" data-app-display-name="{{ $app['display_name'] }}" data-status="revoked" data-action="{{ route('admin.app.status-update', $app) }}">@svg('revoke') Revoke application</button>
-                    @else
-                    <button class="reset app-status-action" data-id="{{ $app['aid'] }}" data-app-display-name="{{ $app['display_name'] }}" data-status="approved" data-action="{{ route('admin.app.status-update', $app) }}">@svg('approve') Approve application</button>
+        <div class="main-details-items">
+            <div class="detail-items">
+                <div class="detail-left">
+                    <h3>Application details</h3>
+                    <p>Callback URL: @if($app['callback_url']) <a href="{{ $app['callback_url'] }}" target="_blank" rel="noopener noreferrer">{{ $app['callback_url'] }}</a> @else <span class="detail-text"> No callback url</span> @endif</p>
+                    <p>Description: <span class="detail-text">{{ $app['description'] ?: 'No description' }}</span></p>
+                    @if(!is_null($app['kyc_status']))
+                    <p>
+                        Update the KYC status:
+                        <select name="kyc_status" class="kyc-status-select" data-aid="{{ $app['aid'] }}" autocomplete="off">
+                            <option @if($app['kyc_status'] === 'Documents Received') selected @endif value="Documents Received">Documents received</option>
+                            <option @if($app['kyc_status'] === 'In Review') selected @endif value="In Review">In review</option>
+                            <option @if($app['kyc_status'] === 'KYC Approved') selected @endif value="KYC Approved">KYC approved</option>
+                        </select>
+                    </p>
                     @endif
-                    <button class="log-notes reset" data-id="{{ $app['aid'] }}">@svg('view') View application log notes</button>
+
                 </div>
+
+                <div class="detail-right">
+                    <h3>Developer details</h3>
+                    @if(isset($details['developer_id']))
+                    <p>Name: <a href="{{ route('admin.user.edit', $details) }}" target="_blank" rel="noopener noreferrer">{{ $details->full_name ?? 'User not in portal' }}</a></p>
+                    @else
+                    <p>Name: <span class="detail-text">{{ $details->full_name ?? 'User not in portal' }}</span></p>
+                    @endif
+                    <p>Email address: @if(isset($details->email))<a href="mailto:{{ $details->email }}">{{ $details->email }}</a>@endif</p>
+                </div>
+             </div>
+
+             {{-- Custom attribe data to go here --}}
+            <div class="custom-attribute-data">
+                <h4 class="custom-attribute-data-heading">Custom Attributes</h4>
+                <div class="no-custom-attribute">None defined</div>
             </div>
-            <div class="detail-right">
-                <h3>Developer details</h3>
-                @if(isset($details['developer_id']))
-                <p>Name: <a href="{{ route('admin.user.edit', $details) }}" target="_blank" rel="noopener noreferrer">{{ $details->full_name ?? 'User not in portal' }}</a></p>
+
+            <div class="detail-actions">
+                @if($app['status'] === 'approved')
+                <button class="reset app-status-action" data-id="{{ $app['aid'] }}" data-app-display-name="{{ $app['display_name'] }}" data-status="revoked" data-action="{{ route('admin.app.status-update', $app) }}">@svg('revoke') Revoke application</button>
                 @else
-                <p>Name: <span class="detail-text">{{ $details->full_name ?? 'User not in portal' }}</span></p>
+                <button class="reset app-status-action" data-id="{{ $app['aid'] }}" data-app-display-name="{{ $app['display_name'] }}" data-status="approved" data-action="{{ route('admin.app.status-update', $app) }}">@svg('approve') Approve application</button>
                 @endif
-                <p>Email address: @if(isset($details->email))<a href="mailto:{{ $details->email }}">{{ $details->email }}</a>@endif</p>
+                <button class="log-notes reset" data-id="{{ $app['aid'] }}">@svg('view') View application log notes</button>
+                <button class="custom-attributes reset" data-id="{{ $app['aid'] }}">@svg('tag') Custom attributes</button>
             </div>
         </div>
+
+
     </div>
 </div>
