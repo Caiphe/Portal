@@ -82,6 +82,7 @@
                 padding: 0 10px;
                 height: 80px;
                 line-height: 80px;
+                flex-shrink: 0;
 
                 &>a {
                     display: flex;
@@ -203,6 +204,7 @@
             margin-right: 12px;
 
             &:hover input,
+            &:focus input,
             & input:focus {
                 opacity: 1;
                 pointer-events: auto;
@@ -217,7 +219,6 @@
 
             input {
                 opacity: 0;
-                pointer-events: none;
                 transition: all 0.256s;
                 width: 32px;
                 background-color: #ffdd59;
@@ -232,6 +233,7 @@
                 position: absolute;
                 top: 4px;
                 left: 4px;
+                pointer-events: none;
             }
         }
     }

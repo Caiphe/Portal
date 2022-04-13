@@ -1,28 +1,46 @@
 @use '../../variables';
 
 #sidebar {
-    @media screen and (max-width: 1023px), (max-height: 375px) {
+    @media screen and (max-width: 1024px), (max-height: 375px) {
         display: none;
     }
 }
 
-#heading {
-    .create-new {
-        @media screen and (min-width: 768px) {
-            &::before {
-                content: "Create new";
-            }
+.layout-sidebar main#main {
+
+    @media screen and (max-width: 1024px), (max-height: 375px) {
+        padding: 40px 0 40px 40px;
+        margin-right: 0;
+    }
+
+    #heading {
+        @media screen and (max-width: 768px) {
+            margin: -40px 0 20px -40px;
         }
 
-        @media screen and (max-width: 768px) {
-            &::before {
-                content: "New";
+        @media screen and (min-width: 768px) and (max-width: 1099px) {
+            width: calc(100% + 120px);
+        }
+
+        .create-new {
+            @media screen and (min-width: 768px) {
+                &::before {
+                    content: "Create new";
+                }
             }
+
+            @media screen and (max-width: 768px) {
+                &::before {
+                    content: "New";
+                }
+            }
+
         }
     }
 }
 
-.ownership-request{
+
+.ownership-request {
     background-color: #0C678F;
     width: 560px;
     position: absolute;
@@ -37,7 +55,7 @@
     display: flex;
     pointer-events: auto;
 
-    @media(max-width:768px){
+    @media(max-width: 768px) {
         position: absolute;
         width: 90%;
         height: auto;
@@ -46,30 +64,30 @@
         left: 5%;
     }
 
-    svg{
-        &:nth-child(1){
+    svg {
+        &:nth-child(1) {
             width: 60px;
         }
     }
 
-    .message-container{
+    .message-container {
         color: #fff;
         margin-left: 13px;
         margin-top: 8px;
         width: 84%;
 
-        @media(max-width: 768px){
+        @media(max-width: 768px) {
             padding-right: 30px;
         }
 
-        a{
+        a {
             text-decoration: underline;
             color: #fff;
             cursor: pointer;
         }
     }
 
-    .close-banner{
+    .close-banner {
         width: 19px;
         height: 22px;
         position: absolute;
@@ -80,12 +98,12 @@
         padding: 0px;
         cursor: pointer;
 
-        &:hover{
+        &:hover {
             background-color: transparent;
         }
     }
 
-    &.hide{
+    &.hide {
         opacity: 0;
         z-index: -1;
         transition: all 0.3s ease-in-out;
@@ -116,9 +134,7 @@
     }
 }
 
-.app-main-container{
-
-}
+.app-main-container {}
 
 #app-index {
     height: 100%;
@@ -353,73 +369,83 @@
 
 }
 
-.updated-app{
-    .head{
+.updated-app {
+    .head {
         .column {
             font-size: 14px;
 
-            &:nth-child(1){
+            &:nth-child(1) {
                 width: 23%;
                 flex-grow: 1;
             }
 
-            &:nth-child(2){
+            &:nth-child(2) {
                 width: 25%;
+
+                @media screen and (min-width: 768px) and (max-width: 1099px) {
+                    display: none;
+                }
             }
 
-            &:nth-child(3){
+            &:nth-child(3) {
                 width: 12%;
             }
 
-            &:nth-child(4){
+            &:nth-child(4) {
                 width: 10%;
             }
 
-            &:nth-child(4){
+            &:nth-child(4) {
                 width: 20%;
             }
 
-            &:nth-child(5){
+            &:nth-child(5) {
                 width: 10%;
                 margin-right: 76px;
             }
         }
     }
 
-    .app-list-body{
+    .app-list-body {
         .column {
             position: relative;
             word-wrap: break-word;
-           
 
-            &:nth-child(1){
+
+            &:nth-child(1) {
                 width: 23%;
                 flex-grow: 1;
             }
 
-            &:nth-child(2){
+            &:nth-child(2) {
                 width: 25%;
                 padding-right: 10px;
+
+                @media screen and (min-width: 768px) and (max-width: 1099px) {
+                    display: none;
+                    padding-right: 0;
+                }
             }
 
-            &:nth-child(3){
+            &:nth-child(3) {
                 width: 12%;
             }
 
-            &:nth-child(4){
+            &:nth-child(4) {
                 width: 10%;
             }
 
-            &:nth-child(4){
+            &:nth-child(4) {
                 width: 20%;
             }
 
-            &:nth-child(5){
+            &:nth-child(5) {
                 width: 10%;
                 display: flex;
+                white-space: nowrap;
             }
 
-            .toggle-app-button{
+            .toggle-app-button {
                 margin-top: 7px;
             }
         }
@@ -436,7 +462,7 @@
             font-weight: bold;
             position: relative;
 
-            svg{
+            svg {
                 width: 16px;
                 margin-bottom: -7px;
                 margin-left: 2px;
@@ -459,21 +485,20 @@
         display: none;
     }
 
-    .details-row-container{
+    .details-row-container {
         display: flex;
 
-        .detail-item{
+        .detail-item {
             width: 30%;
         }
 
-        .detail-item-description{
+        .detail-item-description {
             width: 284px;
         }
     }
 
-    .copy-btn{
+    .copy-btn {
         position: absolute;
         right: 16px;
     }
 }
-
