@@ -76,7 +76,7 @@
                             <ul class="default_option">
                                 <li>
                                     {{-- <div class="option"> --}}
-                                        <div class="select-default">Please select team <span class="hide-mobi">to publish under</span></div>
+                                        <div class="select-default">Select team <span class="hide-mobi">to publish under</span></div>
                                     {{-- </div> --}}
                                 </li>
                             </ul>
@@ -180,7 +180,7 @@
                 </div>
             </div>
         </form>
-        <button type="reset">Cancel</button>
+        <a class="cancel" href="{{ route('app.index') }}">Cancel</a>
     </div>
 @endsection
 

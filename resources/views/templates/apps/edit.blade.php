@@ -150,7 +150,7 @@
             </form>
         </div>
 
-        <button type="reset">Cancel</button>
+        <a class="cancel" href="{{ route('app.index') }}">Cancel</a>
     </div>
 @endsection
 @push('scripts')
