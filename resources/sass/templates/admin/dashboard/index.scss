@@ -438,6 +438,13 @@
     }
 }
 
+.custom-attribute-data{
+    .custom-attribute-data-heading{
+        line-height: 7px;
+        margin-bottom: 12px;
+    }
+}
+
 .detail-actions {
     display: flex;
 
@@ -463,16 +470,14 @@
         align-items: center;
         margin-right: 20px;
 
+        @media screen and (max-width: 1099px) {
+            margin-bottom: 24px;
+        }
+
         svg {
             fill: variables.$blue;
             margin-right: 8px;
             height: 18px;
-        }
-    }
-
-    .app-status-action {
-        @media screen and (max-width: 1099px) {
-            margin-bottom: 24px;
         }
     }
 }
@@ -508,21 +513,38 @@
 // Custom attribute dialog
 .mdp-dialog{
     &.custom-attributes-dialog{
+
         .dialog-close{
             z-index: 2;
             font-size: 40px;
+            width: 46px;
             top: 8px;
-            right: 6px;
+            right: 17px;
             font-family: variables.$MTN-Regular;
+            cursor: pointer;
+
+            svg{
+                width: 40px;
+            }
         }
 
         .dialog-content{
-            @media(min-width: 768px){
+            background: #F0F0F0;
+            width: 629px;
+            height: 399px;
+            padding: 0px;
+
+            @media screen and (min-width: 768px){
                 width: 629px;
                 height: 399px;
-                padding: 0px;
-                background: #F0F0F0;
-                position: relative;
+            }
+
+            @media screen and (max-width: 768px){
+                width: 97%;
+            }
+
+            @media screen and (max-width: 500px){
+                height: 750px;
             }
         }
 
@@ -543,12 +565,42 @@
                 margin-top: 1px;
                 box-sizing: border-box;
                 padding: 15px 20px;
+                margin-bottom: 0;
                 font-family: variables.$MTN-Regular;
             }
         }
 
-        .custom-attributes-list{
+        .attributes-heading{
+            display: flex;
+            padding-top: 7px;
             position: relative;
+            margin-left: 21px;
+            padding-bottom: 4px;
+
+            h4{
+                font-size: 14px;
+                line-height: 6px;
+                margin-bottom: 10px;
+                color: #1D1D1D;
+            }
+
+            .name-heading{
+                width: 220px;
+
+                @media(max-width: 768px){
+                    width: 35%;
+                }
+            }
+        }
+
+        // Custom attributes list
+        .custom-attributes-list{
+            width: 98%;
+            height: 205px;
+            padding: 0px 16px;
+            position: relative;
+            overflow-y: scroll;
+
             .each-attribute-block{
                 width: 100%;
                 display: flex;
@@ -565,16 +617,26 @@
                     border-radius: 10px;
                     box-sizing: border-box;
                     color: #969696;
-                    padding: 10px 0px 0px 12px;
+                    border: none;
+                    outline: none;
+                    padding: 1px 11px 0px 12px;
                 }
 
                 .name{
                     width: 216px;
                     position: relative;
+
+                    @media(max-width: 768px){
+                        width: 35%;
+                    }
                 }
 
                 .value{
                     width: 308px;
+
+                    @media(max-width: 768px){
+                        width: 55%;
+                    }
                 }
 
                 button{
@@ -585,21 +647,12 @@
             }
         }
 
-        // Custom attributes list
-        .custom-attributes-list{
-            width: 98%;
-            height: 210px;
-            padding: 0px 16px;
-            position: relative;
-            overflow-y: scroll;
-        }
-
         .custom-attributes-form{
             width: 100%;
             position: relative;
             display: flex;
             box-shadow: 0px -8px 16px rgba(0, 0, 0, 0.1);
-            padding: 20px 20px 0px;
+            padding: 13px 20px 0px;
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
 
@@ -611,7 +664,7 @@
 
                 label{
                     font-size: 16px;
-                    margin-bottom: 15px;
+                    margin-bottom: 11px;
                 }
 
                 .attribute-field{
@@ -631,6 +684,7 @@
                 position: absolute;
                 right: 12px;
                 bottom: -1px;
+                outline: none;
             }
         }
     }

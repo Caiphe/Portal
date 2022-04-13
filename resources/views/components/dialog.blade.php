@@ -7,7 +7,7 @@
 <div {{ $attributes->merge(['class' => 'mdp-dialog']) }} transparent>
     <div class="dialog-background" onclick="closeDialog(this);"></div>
     <div class="dialog-content">
-        <button class="dialog-close" onclick="closeDialog(this);">&times;</button>
+        <button class="dialog-close" onclick="closeDialog(this);">@svg('custom-close')</button>
         {!! $slot !!}
     </div>
 </div>

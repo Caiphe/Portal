@@ -43,63 +43,20 @@
         <div class="content-container">
             <h3 class="dialog-heading">Custom attributes</h3>
 
+            <div class="attributes-heading">
+                <h4 class="name-heading">Attribue Name</h4>
+                <h4 class="value-heading">Value</h4>
+            </div>
+
             {{-- Custom Attributes list --}}
             <div class="custom-attributes-list">
-
-                <div class="each-attribute-block">
-                    <div class="attribute-data name">
-                        Some new attribute
-                    </div>
-                    <div class="attribute-data value">
-                        Lorem Ipsum dolar sit
-                    </div>
-                    <button>@svg('attribute-trash')</button>
-                </div>
-
-                <div class="each-attribute-block">
-                    <div class="attribute-data name">
-                        Some new attribute
-                    </div>
-                    <div class="attribute-data value">
-                        Lorem Ipsum dolar sit
-                    </div>
-                    <button>@svg('attribute-trash')</button>
-                </div>
-
-                <div class="each-attribute-block">
-                    <div class="attribute-data name">
-                        Some new attribute
-                    </div>
-                    <div class="attribute-data value">
-                        Lorem Ipsum dolar sit
-                    </div>
-                    <button>@svg('attribute-trash')</button>
-                </div>
-
-                <div class="each-attribute-block">
-                    <div class="attribute-data name">
-                        Some new attribute
-                    </div>
-                    <div class="attribute-data value">
-                        Lorem Ipsum dolar sit
-                    </div>
-                    <button>@svg('attribute-trash')</button>
-                </div>
-
-                <div class="each-attribute-block">
-                    <div class="attribute-data name">
-                        Some new attribute
-                    </div>
-                    <div class="attribute-data value">
-                        Lorem Ipsum dolar sit
-                    </div>
-                    <button>@svg('attribute-trash')</button>
-                </div>
-
+                <x-apps.custom-attribute />
+                <x-apps.custom-attribute />
+                <x-apps.custom-attribute />
             </div>
 
             {{-- Custom attributes form --}}
-            <form class="custom-attributes-form">
+            <form class="custom-attributes-form" action="">
                 <div class="each-field">
                     <label for="name">Attribute name</label>
                     <input type="text" name="name" class="attribute-field" placeholder="New Attribute name"/>
