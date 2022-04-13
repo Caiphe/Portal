@@ -502,3 +502,6 @@
     flex-wrap: wrap;
 }
 
+.dont-shrink {
+    flex-shrink: 0;
+}
