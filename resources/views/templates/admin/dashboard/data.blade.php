@@ -53,6 +53,10 @@
                 <x-apps.custom-attribute />
                 <x-apps.custom-attribute />
                 <x-apps.custom-attribute />
+                <x-apps.custom-attribute />
+                <x-apps.custom-attribute />
+                <x-apps.custom-attribute />
+                <x-apps.custom-attribute />
             </div>
 
             {{-- Custom attributes form --}}
