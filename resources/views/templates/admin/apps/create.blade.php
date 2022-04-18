@@ -83,6 +83,38 @@
                     <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>
                 </div>
 
+                {{-- Custom attributes --}}
+                <div class="custom-attribute-list-container">
+                    <h5 class="custom-attribute-heading">Custom Attributes</h5>
+
+                    <div class="attributes-heading">
+                        <h4 class="name-heading">Attribue Name</h4>
+                        <h4 class="value-heading">Value</h4>
+                    </div>
+
+                        <x-apps.custom-attribute />
+                        <x-apps.custom-attribute />
+                        <x-apps.custom-attribute />
+                        <x-apps.custom-attribute />
+                    <div class="custom-attributes-list">
+                    </div>
+
+                </div>
+
+                <div class="custom-attributes-form" action="">
+                    <div class="each-field">
+                        <label for="name">Attribute name</label>
+                        <input type="text" name="name" class="attribute-field" placeholder="New Attribute name"/>
+                    </div>
+                    <div class="each-field">
+                        <label for="value">Value</label>
+                        <input type="text" name="value" class="attribute-field" placeholder="New Value"/>
+                    </div>
+
+                    <button class="button">Add</button>
+                </div>
+                {{-- Custom attributes ends --}}
+
                 <div class="actions-btn-container">
                     <button type="button" class="btn dark outline back">Back</button>
                     <button type="button" id="next-app-details" class="dark next apps-create-btn">Select countries</button>

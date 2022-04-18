@@ -1,0 +1,52 @@
+@use "../variables";
+
+#main {
+    .each-attribute-block{
+        input{
+            border: none;
+        }
+    }
+}
+
+.each-attribute-block{
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    margin-bottom: 8px;
+
+    .attribute-data{
+        background-color: #fff;
+        height: 40px;
+        font-size: 14px;
+        font-family: variables.$MTN-Regular;
+        font-weight: 400;
+        margin-right: 8px;
+        border-radius: 10px;
+        box-sizing: border-box;
+        color: #969696;
+        border: none;
+        outline: none;
+        position: relative;
+        padding: 1px 11px 0px 12px;
+    }
+
+    .name{
+        width: 35%;
+    }
+
+    .value{
+        width: 55%;
+    }
+
+    .attribute-remove-btn{
+        background-color: transparent;
+        border: none;
+        outline: none;
+
+        &:hover{
+            background-color: transparent;
+            border: none;
+            outline: none;
+        }
+    }
+}

@@ -1,3 +1,7 @@
+@push('styles')
+<link rel="stylesheet" href="{{ mix('/css/components/custom-attribute.css') }}">
+@endpush
+
 <div class="each-attribute-block">
     <input class="attribute-data name" value="Some new attribute"/>
     <input class="attribute-data value" value=" Lorem Ipsum dolar sit" />
