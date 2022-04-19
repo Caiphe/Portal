@@ -8,5 +8,5 @@
         <input type="text" name="value" class="attribute-field" placeholder="New Value"/>
     </div>
 
-    <button class="button">Add</button>
+    <button type="submit" class="button">Add</button>
 </form>

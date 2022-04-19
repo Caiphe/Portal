@@ -43,35 +43,30 @@
         <div class="content-container">
             <h3 class="dialog-heading">Custom attributes</h3>
 
+            <span class="no-attribute">None defined</span>
+
             <div class="attributes-heading">
                 <h4 class="name-heading">Attribue Name</h4>
                 <h4 class="value-heading">Value</h4>
             </div>
 
             {{-- Custom Attributes list --}}
-            <div class="custom-attributes-list">
-                <x-apps.custom-attribute />
-                <x-apps.custom-attribute />
-                <x-apps.custom-attribute />
-                <x-apps.custom-attribute />
-                <x-apps.custom-attribute />
-                <x-apps.custom-attribute />
-                <x-apps.custom-attribute />
-            </div>
+            <div class="custom-attributes-list" id="custom-attributes-list"></div>
 
             {{-- Custom attributes form --}}
             <form class="custom-attributes-form" action="">
                 <div class="each-field">
                     <label for="name">Attribute name</label>
-                    <input type="text" name="name" class="attribute-field" placeholder="New Attribute name"/>
+                    <input type="text" name="attribute[name][]" id="attribute-name" class="attribute-field" placeholder="New Attribute name"/>
                 </div>
                 <div class="each-field">
                     <label for="value">Value</label>
-                    <input type="text" name="value" class="attribute-field" placeholder="New Value"/>
+                    <input type="text" name="attribute[value][]" id="attribute-value" class="attribute-field" placeholder="New Value"/>
                 </div>
-
-                <button class="button">Add</button>
+                <button type="button" class="button add-attribute" id="add-attribute">Add</button>
+                <div class="attribute-error" id="attribute-error">Attribute name and value required</div>
             </form>
+
 
         </div>
     </x-dialog>

@@ -29,6 +29,7 @@ class CreateAppRequest extends FormRequest {
 			'country' => 'sometimes',
 			'products' => 'required|array|min:1',
             'team_id' => 'sometimes',
+            'attribute' => ['sometimes', 'array'],
 		];
 	}
 
@@ -43,6 +44,8 @@ class CreateAppRequest extends FormRequest {
             'display_name' => htmlspecialchars($this->display_name),
             'url' => htmlspecialchars($this->url),
             'description' => htmlspecialchars($this->description),
+            'name' => array_map(fn ($attr) => htmlspecialchars($attr, ENT_NOQUOTES), $this->attribute['name'] ?? []),
+            'value' => array_map(fn ($attr) => htmlspecialchars($attr, ENT_NOQUOTES), $this->attribute['value'] ?? []),
         ]);
     }
 

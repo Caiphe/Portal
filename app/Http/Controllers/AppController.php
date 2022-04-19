@@ -122,32 +122,44 @@ class AppController extends Controller
             $team = Team::find($validated['team_id']);
         }
 
+        $customAttributes = null;
+        if($validated['attribute']){
+            $customAttributes = [
+                [
+                    'name' => $validated['name'],
+                    'value' => $validated['value'],
+                ],
+            ];
+        };
+
+        $mainAttributes = array_merge($customAttributes, [
+            [
+                'name' => 'DisplayName',
+                'value' => $validated['display_name'],
+            ],
+            [
+                'name' => 'Description',
+                'value' => $validated['description'],
+            ],
+            [
+                'name' => 'Country',
+                'value' => $validated['country'],
+            ],
+            [
+                'name' => 'location',
+                'value' => $countriesByCode[$validated['country']] ?? "",
+            ],
+            [
+                'name' => 'TeamName',
+                'value' => $team->name ?? "",
+            ],
+        ]);
+
         $data = [
             'name' => Str::slug($validated['display_name']),
             'apiProducts' => $productIds,
             'keyExpiresIn' => -1,
-            'attributes' => [
-                [
-                    'name' => 'DisplayName',
-                    'value' => $validated['display_name'],
-                ],
-                [
-                    'name' => 'Description',
-                    'value' => $validated['description'],
-                ],
-                [
-                    'name' => 'Country',
-                    'value' => $validated['country'],
-                ],
-                [
-                    'name' => 'location',
-                    'value' => $countriesByCode[$validated['country']] ?? "",
-                ],
-                [
-                    'name' => 'TeamName',
-                    'value' => $team->name ?? "",
-                ],
-            ],
+            'attributes' => $mainAttributes,
             'callbackUrl' => $validated['url'],
         ];
 

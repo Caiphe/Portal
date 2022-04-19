@@ -544,7 +544,7 @@
             }
 
             @media screen and (max-width: 500px){
-                height: 550px;
+                height: 98vh;
                 position: absolute;
                 top: 10px;
             }
@@ -573,12 +573,26 @@
             }
         }
 
+        .no-attribute{
+            display: block;
+            padding-left: 20px;
+            padding-top: 10px;
+
+            &.hide{
+                display: none;
+            }
+        }
+
         .attributes-heading{
-            display: flex;
             padding-top: 7px;
             position: relative;
             margin-left: 19px;
             padding-bottom: 4px;
+            display: none;
+
+            &.show{
+                display: flex;
+            }
 
             h4{
                 font-size: 14px;
@@ -611,7 +625,7 @@
             box-shadow: 0px -8px 16px rgba(0, 0, 0, 0.1);
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
-            height: 86px;
+            height: 95px;
             position: absolute;
             bottom: 15px;
             padding-top: 20px;
@@ -630,6 +644,17 @@
                 flex-direction: column;
                 width: 216px;
                 margin-right: 15px;
+
+
+                &:nth-child(1){
+                    @media(max-width: 768px){
+                        width: 35%;
+                    }
+
+                    @media(max-width: 550px){
+                        width: 100%;
+                    }
+                }
 
                 @media(max-width: 768px){
                     width: 40%;
@@ -676,6 +701,24 @@
                     width: 100%;
                     right: revert;
                 }
+            }
+        }
+
+        .attribute-error{
+            color: #bb1e4f;
+            font-size: 13px;
+            text-align: left;
+            width: 60%;
+            opacity: 0;
+            position: absolute;
+            bottom: -4px;
+
+            @media(max-width: 768px){
+                bottom: -22px;
+            }
+
+            &.show{
+                opacity: 1;
             }
         }
     }

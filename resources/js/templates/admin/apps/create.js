@@ -271,4 +271,42 @@
 
         suggBox.innerHTML = listData;
     }
+
+    // custom attribute add
+    var addAttributeBtn = document.querySelector('#add-attribute');
+    var attributeName = document.querySelector('#attribute-name');
+    var attributeValue = document.querySelector('#attribute-value');
+    var attributeErrorMessage = document.querySelector('#attribute-error');
+    var attributesList = document.querySelector('#custom-attributes-list');
+
+    addAttributeBtn.addEventListener('click', addNewAttribute);
+
+    function addNewAttribute(){
+        if(attributeName.value === "" || attributeValue.value === ''){
+            attributeErrorMessage.classList.add('show');
+            return;
+        }
+
+        attributeErrorMessage.classList.remove('show');
+        var customAttributeBlock = document.getElementById('custom-attribute').innerHTML;
+        customAttributeBlock = document.createRange().createContextualFragment(customAttributeBlock);
+        customAttributeBlock.querySelector('.name').value = attributeName.value;
+        customAttributeBlock.querySelector('.value').value = attributeValue.value;
+        customAttributeBlock.querySelector('.attribute-remove-btn').addEventListener('click', attributeRemove);
+        attributesList.appendChild(customAttributeBlock);
+        document.querySelector('.no-attribute').classList.add('hide');
+        document.querySelector('.attributes-heading').classList.add('show');
+        attributeName.value = '';
+        attributeValue.value = '';
+    }
+
+    function attributeRemove(){
+        var attribute = this.parentNode;
+        attribute.parentNode.removeChild(attribute);
+
+        if(document.querySelectorAll('.each-attribute-block').length === 0){
+            document.querySelector('.no-attribute').classList.remove('hide');
+            document.querySelector('.attributes-heading').classList.remove('show');
+        }
+    }
 }());
