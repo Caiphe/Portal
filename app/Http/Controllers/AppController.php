@@ -122,17 +122,7 @@ class AppController extends Controller
             $team = Team::find($validated['team_id']);
         }
 
-        $customAttributes = null;
-        if($validated['attribute']){
-            $customAttributes = [
-                [
-                    'name' => $validated['name'],
-                    'value' => $validated['value'],
-                ],
-            ];
-        };
-
-        $mainAttributes = array_merge($customAttributes, [
+        $attributes = array_merge($validated['attribute'], [
             [
                 'name' => 'DisplayName',
                 'value' => $validated['display_name'],
@@ -159,7 +149,7 @@ class AppController extends Controller
             'name' => Str::slug($validated['display_name']),
             'apiProducts' => $productIds,
             'keyExpiresIn' => -1,
-            'attributes' => $mainAttributes,
+            'attributes' => $attributes,
             'callbackUrl' => $validated['url'],
         ];
 

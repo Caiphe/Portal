@@ -156,6 +156,9 @@
 
     function handleCreate() {
         var elements = form.elements;
+        var attrNames = elements['attribute[name][]'];
+        var attrValues = elements['attribute[value][]'];
+
         var selectedProducts = document.querySelectorAll('.add-product:checked');
         var button = document.getElementById('next-create-app');
         var app = {
@@ -165,15 +168,31 @@
             description: elements['description'].value,
             country: document.querySelector('.country-checkbox:checked').dataset.location,
             products: [],
+            attribute: [],
         };
 
-        for (i = 0; i < selectedProducts.length; i++) {
+        for (var i = 0; i < selectedProducts.length; i++) {
             app.products.push(selectedProducts[i].value);
         }
 
         if (app.products.length === 0) {
             return void addAlert('error', 'Please select at least one product.')
         }
+
+        if(attrNames && attrNames.length === undefined) {
+            attrNames = [attrNames];
+            attrValues = [attrValues];
+        }
+
+        if(attrNames){
+            for(var i = 0; i < attrNames.length; i++) {
+                app.attribute.push({
+                    'name': attrNames[i].value,
+                    'value': attrValues[i].value
+                });
+            }
+        }
+
 
         button.disabled = true;
         addLoading('Creating app...');
@@ -292,7 +311,7 @@
         customAttributeBlock = document.createRange().createContextualFragment(customAttributeBlock);
         customAttributeBlock.querySelector('.name').value = attributeName.value;
         customAttributeBlock.querySelector('.value').value = attributeValue.value;
-        customAttributeBlock.querySelector('.attribute-remove-btn').addEventListener('click', attributeRemove);
+        // customAttributeBlock.querySelector('.attribute-remove-btn').addEventListener('click', attributeRemove);
         attributesList.appendChild(customAttributeBlock);
         document.querySelector('.no-attribute').classList.add('hide');
         document.querySelector('.attributes-heading').classList.add('show');

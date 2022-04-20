@@ -43,15 +43,21 @@
         <div class="content-container">
             <h3 class="dialog-heading">Custom attributes</h3>
 
-            <span class="no-attribute">None defined</span>
+            {{-- <span class="no-attribute">None defined</span> --}}
 
-            <div class="attributes-heading">
+            <div class="attributes-heading @if ($app->custom_attributes) show @endif">
                 <h4 class="name-heading">Attribue Name</h4>
                 <h4 class="value-heading">Value</h4>
             </div>
 
             {{-- Custom Attributes list --}}
-            <div class="custom-attributes-list" id="custom-attributes-list"></div>
+            <div class="custom-attributes-list" id="custom-attributes-list">
+                @forelse ($app->custom_attributes as $key => $value)
+                    <x-apps.custom-attribute :nameValue="$key" :valueValue="$value"></x-apps.custom-attribute>
+                @empty
+                    <div class="no-attribute">None defined</div>
+                @endforelse
+            </div>
 
             {{-- Custom attributes form --}}
             <form class="custom-attributes-form" action="">

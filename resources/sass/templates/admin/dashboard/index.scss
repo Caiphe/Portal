@@ -442,6 +442,20 @@
     .custom-attribute-data-heading{
         line-height: 7px;
         margin-bottom: 12px;
+        font-size: 15px;
+    }
+
+    .attribute-display{
+        position: relative;
+        .attr-name{
+            font-size: 14px;
+            color: #000;
+        }
+
+        .attr-value{
+            color: #787878;
+            font-size: 14px;
+        }
     }
 }
 
@@ -647,6 +661,7 @@
 
 
                 &:nth-child(1){
+                    width: 35%;
                     @media(max-width: 768px){
                         width: 35%;
                     }
@@ -689,10 +704,10 @@
 
             .button{
                 width: 130px;
-                height: 45px;
+                height: 40px;
                 position: absolute;
                 right: 12px;
-                bottom: -1px;
+                bottom: 18px;
                 outline: none;
 
                 @media(max-width: 550px){

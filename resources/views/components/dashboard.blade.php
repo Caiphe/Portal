@@ -106,7 +106,15 @@
              {{-- Custom attribe data to go here --}}
             <div class="custom-attribute-data">
                 <h4 class="custom-attribute-data-heading">Custom Attributes</h4>
-                <div class="no-custom-attribute">None defined</div>
+                @forelse ($app->custom_attributes as $key => $value)
+                    <div class="attribute-display">
+                        <span class="attr-name bold"> {{ $key }} : </span>
+                        <span class="attr-value">{{ $value }}</span>
+                    </div>
+                @empty
+                    <div class="no-custom-attribute">None defined</div>
+                @endforelse
+
             </div>
 
             <div class="detail-actions">
