@@ -687,21 +687,40 @@
         border: 1px solid $grey850;
     }
 
-
     // custom attributes
     .custom-attribute-list-container{
         width: 60%;
         position: relative;
+
+        &.active{
+            .no-attribute{
+                display: none;
+            }
+
+            .attributes-heading{
+                display: block;
+            }
+        }
+
+        &.non-active{
+            .no-attribute{
+                display: block;
+            }
+
+            .attributes-heading{
+                display: none;
+            }
+        }
 
         @media(max-width: 820px){
             width: 100%;
         }
         .no-attribute{
             display: block;
+        }
 
-            &.hide{
-                display: none;
-            }
+        .each-attribute-block+.no-attribute{
+            display: none;
         }
 
         .attributes-heading{
@@ -730,7 +749,6 @@
             font-size: 24px;
             color: #000;
             margin-bottom: 20px;
-
         }
     }
 

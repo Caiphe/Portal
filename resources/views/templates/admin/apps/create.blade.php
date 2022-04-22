@@ -101,11 +101,11 @@
                 <div class="custom-attributes-form" action="">
                     <div class="each-field">
                         <label for="name">Attribute name</label>
-                        <input type="text" value="" name="attribute_name" id="attribute-name" class="attribute-field" placeholder="New Attribute name"/>
+                        <input type="text" value="" name="attribute_name" id="attribute-name" class="attribute-field attribute-name" placeholder="New Attribute name"/>
                     </div>
                     <div class="each-field">
                         <label for="value">Value</label>
-                        <input type="text" value="" name="attribute_value" id="attribute-value" class="attribute-field" placeholder="New Value"/>
+                        <input type="text" value="" name="attribute_value" id="attribute-value" class="attribute-field attribute-value" placeholder="New Value"/>
                     </div>
                     <button type="button" class="button add-attribute" id="add-attribute">Add</button>
                 </div>

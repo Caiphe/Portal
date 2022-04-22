@@ -43,37 +43,37 @@
         <div class="content-container">
             <h3 class="dialog-heading">Custom attributes</h3>
 
-            {{-- <span class="no-attribute">None defined</span> --}}
-
             <div class="attributes-heading @if ($app->custom_attributes) show @endif">
                 <h4 class="name-heading">Attribue Name</h4>
                 <h4 class="value-heading">Value</h4>
             </div>
 
             {{-- Custom Attributes list --}}
-            <div class="custom-attributes-list" id="custom-attributes-list">
-                @forelse ($app->custom_attributes as $key => $value)
+            <form class="custom-attributes-list" method="post" action="{{ route('app.update.attributes', $app) }}">
+                @csrf
+                @method('PUT')
+                @foreach ($app->custom_attributes as $key => $value)
                     <x-apps.custom-attribute :nameValue="$key" :valueValue="$value"></x-apps.custom-attribute>
-                @empty
-                    <div class="no-attribute">None defined</div>
-                @endforelse
-            </div>
+                @endforeach
+
+                <div class="no-attribute">None defined</div>
+            </form>
 
             {{-- Custom attributes form --}}
             <form class="custom-attributes-form" action="">
                 <div class="each-field">
                     <label for="name">Attribute name</label>
-                    <input type="text" name="attribute[name][]" id="attribute-name" class="attribute-field" placeholder="New Attribute name"/>
+                    <input type="text" name="attribute[name][]" class="attribute-field attribute-name" placeholder="New Attribute name"/>
                 </div>
                 <div class="each-field">
                     <label for="value">Value</label>
-                    <input type="text" name="attribute[value][]" id="attribute-value" class="attribute-field" placeholder="New Value"/>
+                    <input type="text" name="attribute[value][]" class="attribute-field attribute-value" placeholder="New Value"/>
                 </div>
-                <button type="button" class="button add-attribute" id="add-attribute">Add</button>
-                <div class="attribute-error" id="attribute-error">Attribute name and value required</div>
+                <button type="button" class="button add-attribute">Add</button>
+                <div class="attribute-error">Attribute name and value required</div>
             </form>
-
 
         </div>
     </x-dialog>
 @endforeach
+

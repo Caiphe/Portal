@@ -185,7 +185,13 @@ class App extends Model
 
     public function getCustomAttributesAttribute()
     {
-        $attrs = json_decode($this->attributes['attributes'], true);
-        return array_diff_key($attrs, array_flip(['Location', 'Country', 'TeamName', 'Description', 'DisplayName']));
+        return $this->filterCustomAttributes($this->attributes['attributes']);
+    }
+
+    public function filterCustomAttributes($attributes){
+        if(is_string($attributes)){
+            $attributes = json_decode($attributes, true);
+        }
+        return array_diff_key($attributes, array_flip(['Location', 'Country', 'TeamName', 'Description', 'DisplayName']));
     }
 }

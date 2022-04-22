@@ -21,6 +21,7 @@ use App\Http\Requests\KycRequest;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\CreateAppRequest;
 use App\Http\Requests\DeleteAppRequest;
+use App\Http\Requests\CustomAttributesRequest;
 
 class AppController extends Controller
 {
@@ -410,6 +411,43 @@ class AppController extends Controller
         $app->delete();
 
         return redirect(route('app.index'));
+    }
+
+    public function updateCustomAttributes(App $app, CustomAttributesRequest $request)
+    {
+        $validated = $request->validated();
+        $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
+        $apigeeAttributes = ApigeeService::getApigeeAppAttributes($app);
+        $appAttributes = array_merge($apigeeAttributes, $app->attributes);
+        $previousCustomAttributes = $app->filterCustomAttributes($appAttributes);
+        $appAttributes = array_diff($appAttributes, $previousCustomAttributes);
+        $appAttributes = array_merge($appAttributes, $app->filterCustomAttributes($attributes));
+
+        $team = $app->team ?? null;
+        $user = auth()->user();
+        $accessUrl = $team ? "companies/{$team->username}" : "developers/{$user->email}";
+
+        $updatedResponse = ApigeeService::put("{$accessUrl}/apps/{$app->name}", [
+            "name" => $app->name,
+            'attributes' => ApigeeService::formatToApigeeAttributes($appAttributes),
+            "callbackUrl" => $app->url ?? '',
+        ]);
+
+        if ($updatedResponse->failed()) {
+            $reasonMsg = $updatedResponse['message'] ?? 'There was a problem updating your app. Please try again later.';
+
+            if ($request->ajax()) {
+                return response()->json(['response' => "error:{$reasonMsg}"], $updatedResponse->status());
+            }
+
+            return redirect()->back()->with('alert', "error:{$reasonMsg}");
+        }
+
+        $app->update(['attributes' =>  ApigeeService::formatAppAttributes($updatedResponse['attributes'])]);
+
+        if ($request->ajax()) {
+            return response()->json(['attributes' => $attributes]);
+        }
     }
 
     /**

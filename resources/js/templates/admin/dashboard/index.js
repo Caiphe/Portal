@@ -86,6 +86,105 @@
         var customAttributeDialog = document.getElementById('custom-attributes-' + id);
         if (!customAttributeDialog) return;
         customAttributeDialog.classList.add('show');
+
+        var addAttributeBtn = customAttributeDialog.querySelector('.add-attribute');
+        var attributeName = customAttributeDialog.querySelector('.attribute-name');
+        var attributeValue = customAttributeDialog.querySelector('.attribute-value');
+        var attributeErrorMessage = customAttributeDialog.querySelector('.attribute-error');
+        var attributesList = customAttributeDialog.querySelector('.custom-attributes-list');
+
+        addAttributeBtn.addEventListener('click', addNewAttribute);
+
+        customAttributeDialog.addEventListener('dialog-closed', submitNewAttribute.bind(attributesList, id));
+
+        function addNewAttribute(){
+            if(attributeName.value === "" || attributeValue.value === ''){
+                attributeErrorMessage.classList.add('show');
+                return;
+            }
+            attributesList.classList.add('active');
+            attributeErrorMessage.classList.remove('show');
+            var customAttributeBlock = document.getElementById('custom-attribute').innerHTML;
+            customAttributeBlock = document.createRange().createContextualFragment(customAttributeBlock);
+            customAttributeBlock.querySelector('.name').value = attributeName.value;
+            customAttributeBlock.querySelector('.value').value = attributeValue.value;
+            attributesList.appendChild(customAttributeBlock);
+            customAttributeDialog.querySelector('.attributes-heading').classList.add('show');
+            attributeName.value = '';
+            attributeValue.value = '';
+        }
+
+        function submitNewAttribute(id){
+            var elements = this.elements;
+            var attrNames = elements['attribute[name][]'];
+            var attrValues = elements['attribute[value][]'];
+
+
+            var app = {
+                attribute: [],
+                _method: 'PUT',
+                _token: elements['_token'].value,
+            };
+
+            if(attrNames && attrNames.length === undefined) {
+                attrNames = [attrNames];
+                attrValues = [attrValues];
+            }
+
+            if(attrNames){
+                for(var i = 0; i < attrNames.length; i++) {
+                    app.attribute.push({
+                        'name': attrNames[i].value,
+                        'value': attrValues[i].value
+                    });
+                }
+            }
+
+            var xhr = new XMLHttpRequest();
+
+            event.preventDefault();
+            addLoading('Updating...');
+
+            xhr.open('POST', this.action, true);
+            xhr.setRequestHeader('X-CSRF-TOKEN', elements['_token'].value);
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+            xhr.send(JSON.stringify(app));
+
+            xhr.onload = function() {
+                removeLoading();
+                var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+                var attrHtml = '';
+
+                if (xhr.status === 200) {
+
+                    for (key in result['attributes']) {
+                        attrHtml += `
+                        <div class="attribute-display">
+                            <span class="attr-name bold">${key} : </span>
+                            <span class="attr-value">${result['attributes'][key]}</span>
+                        </div>
+                        `;
+                    }
+
+                    document.querySelector('#wrapper-'+id+' .list-custom-attributes').innerHTML = attrHtml;
+
+                    addAlert('success', ['Custom attributes added successfully',]);
+                } else {
+
+                    if(result.errors) {
+                        result.message = [];
+                        for(var error in result.errors){
+                            result.message.push(result.errors[error]);
+                        }
+                    }
+
+                    addAlert('error', result.message || 'Sorry there was a problem updating your app. Please try again.');
+                    button.removeAttribute('disabled');
+                }
+            };
+        }
     }
 
     function showProductNoteDialog() {
@@ -233,42 +332,4 @@
         this.parentNode.classList.toggle('show-actions');
     }
 
-        // custom attribute add
-        var addAttributeBtn = document.querySelector('#add-attribute');
-        var attributeName = document.querySelector('#attribute-name');
-        var attributeValue = document.querySelector('#attribute-value');
-        var attributeErrorMessage = document.querySelector('#attribute-error');
-        var attributesList = document.querySelector('#custom-attributes-list');
-
-        addAttributeBtn.addEventListener('click', addNewAttribute);
-
-        function addNewAttribute(){
-            if(attributeName.value === "" || attributeValue.value === ''){
-                attributeErrorMessage.classList.add('show');
-                return;
-            }
-
-            attributeErrorMessage.classList.remove('show');
-            var customAttributeBlock = document.getElementById('custom-attribute').innerHTML;
-            customAttributeBlock = document.createRange().createContextualFragment(customAttributeBlock);
-            customAttributeBlock.querySelector('.name').value = attributeName.value;
-            customAttributeBlock.querySelector('.value').value = attributeValue.value;
-            customAttributeBlock.querySelector('.attribute-remove-btn').addEventListener('click', attributeRemove);
-            attributesList.appendChild(customAttributeBlock);
-            document.querySelector('.no-attribute').classList.add('hide');
-            document.querySelector('.attributes-heading').classList.add('show');
-            attributeName.value = '';
-            attributeValue.value = '';
-        }
-
-        // Remove a custom attribure and change heading state accordingly
-        function attributeRemove(){
-            var attribute = this.parentNode;
-            attribute.parentNode.removeChild(attribute);
-
-            if(document.querySelectorAll('.each-attribute-block').length === 0){
-                document.querySelector('.no-attribute').classList.remove('hide');
-                document.querySelector('.attributes-heading').classList.remove('show');
-            }
-        }
 }());
