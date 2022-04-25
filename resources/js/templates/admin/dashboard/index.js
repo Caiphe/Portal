@@ -136,7 +136,6 @@
 
             if (xhr.status === 200) {
                 updateAppAttributesHtml(result['attributes'], id);
-
                 addAlert('success', ['Custom attributes added successfully',]);
             } else {
 

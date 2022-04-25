@@ -11,21 +11,8 @@
     <button type="button" class="attribute-remove-btn" onclick="attributeRemove(this)">@svg('attribute-trash')</button>
 </div>
 
-
 @once
 @push('scripts')
-<script type="text/javascript">
-    function attributeRemove(button){
-        var attribute = button.parentNode;
-        attribute.parentNode.removeChild(attribute);
-
-        if(document.querySelectorAll('.each-attribute-block').length === 0){
-            var addedAttributeForm =  document.querySelector('.custom-attribute-list-container');
-            document.querySelector('.attributes-heading').classList.remove('show');
-            addedAttributeForm.classList.remove('active');
-            addedAttributeForm.classList.add('non-active');
-        }
-    }
-</script>
+<script type="text/javascript" src="{{ mix('/js/components/custom-attribute.js') }}" defer></script>
 @endpush
 @endonce
