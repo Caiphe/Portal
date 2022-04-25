@@ -424,8 +424,8 @@ class AppController extends Controller
         $appAttributes = array_merge($appAttributes, $app->filterCustomAttributes($attributes));
 
         $team = $app->team ?? null;
-        $user = auth()->user();
-        $accessUrl = $team ? "companies/{$team->username}" : "developers/{$user->email}";
+        $developerEmail = $app->developer->email;
+        $accessUrl = $team ? "companies/{$team->username}" : "developers/{$developerEmail}";
 
         $updatedResponse = ApigeeService::put("{$accessUrl}/apps/{$app->name}", [
             "name" => $app->name,

@@ -120,7 +120,6 @@
 
         var xhr = new XMLHttpRequest();
 
-        event.preventDefault();
         addLoading('Updating...');
 
         xhr.open('POST', this.action, true);
@@ -147,7 +146,6 @@
                 }
 
                 addAlert('error', result.message || 'Sorry there was a problem updating your app. Please try again.');
-                button.removeAttribute('disabled');
             }
         };
     }
