@@ -63,6 +63,10 @@
         <button class="status-dialog-button">Submit</button>
     </form>
 </x-dialog>
+
+<template id="custom-attribute" hidden>
+    <x-apps.custom-attribute></x-apps.custom-attribute>
+</template>
 @endsection
 
 @push('scripts')

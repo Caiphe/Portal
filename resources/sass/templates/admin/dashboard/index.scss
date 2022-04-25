@@ -384,13 +384,18 @@
     }
 }
 
-.detail-items {
-    display: flex;
-    flex-wrap: wrap;
+.main-details-items{
     background-color: variables.$grey200;
     padding: 0 24px 24px;
     border-radius: 0 0 8px 8px;
+
+    .detail-items {
+        display: flex;
+        flex-wrap: wrap;
+
+    }
 }
+
 
 .detail-left,
 .detail-right {
@@ -433,6 +438,27 @@
     }
 }
 
+.custom-attribute-data{
+    .custom-attribute-data-heading{
+        line-height: 7px;
+        margin-bottom: 12px;
+        font-size: 15px;
+    }
+
+    .attribute-display{
+        position: relative;
+        .attr-name{
+            font-size: 14px;
+            color: #000;
+        }
+
+        .attr-value{
+            color: #787878;
+            font-size: 14px;
+        }
+    }
+}
+
 .detail-actions {
     display: flex;
 
@@ -456,18 +482,16 @@
         display: flex;
         color: variables.$blue;
         align-items: center;
-        margin-right: 16px;
+        margin-right: 20px;
+
+        @media screen and (max-width: 1099px) {
+            margin-bottom: 24px;
+        }
 
         svg {
             fill: variables.$blue;
             margin-right: 8px;
             height: 18px;
-        }
-    }
-
-    .app-status-action {
-        @media screen and (max-width: 1099px) {
-            margin-bottom: 24px;
         }
     }
 }
@@ -497,6 +521,238 @@
 
     .status-dialog-button {
         margin-top: 20px;
+    }
+}
+
+// Custom attribute dialog
+.mdp-dialog{
+    &.custom-attributes-dialog{
+
+        .dialog-close{
+            z-index: 2;
+            font-size: 40px;
+            width: 46px;
+            top: 8px;
+            right: 17px;
+            font-family: variables.$MTN-Regular;
+            cursor: pointer;
+
+            svg{
+                width: 40px;
+                flex-shrink: 0;
+            }
+        }
+
+        .dialog-content{
+            background: #F0F0F0;
+            width: 629px;
+            height: 399px;
+            padding: 0px;
+
+            @media screen and (min-width: 768px){
+                width: 629px;
+                height: 399px;
+            }
+
+            @media screen and (max-width: 768px){
+                width: 97%;
+            }
+
+            @media screen and (max-width: 500px){
+                height: 98vh;
+                position: absolute;
+                top: 10px;
+            }
+        }
+
+        .content-container{
+            position: relative;
+            height: 100%;
+
+            .dialog-heading{
+                font-weight: 500;
+                font-size: 20px;
+                line-height: 26px;
+                color: #000;
+                position: relative;
+                background-color: #fff;
+                width: 100%;
+                min-height: 56px;
+                border-radius: 17px;
+                z-index: 0;
+                margin-top: 1px;
+                box-sizing: border-box;
+                padding: 15px 20px;
+                margin-bottom: 0;
+                padding-right: 60px;
+                font-family: variables.$MTN-Regular;
+            }
+        }
+
+        .no-attribute{
+            display: block;
+            padding-top: 10px;
+        }
+
+        .each-attribute-block+.no-attribute{
+            display: none;
+        }
+
+        .attributes-heading{
+            padding-top: 7px;
+            position: relative;
+            margin-left: 19px;
+            padding-bottom: 4px;
+            display: none;
+
+            &.show{
+                display: flex;
+            }
+
+            h4{
+                font-size: 14px;
+                line-height: 6px;
+                margin-bottom: 10px;
+                color: #1D1D1D;
+            }
+
+            .name-heading{
+                width: 35%;
+                line-height: 14px;
+            }
+        }
+
+        // Custom attributes list
+        .custom-attributes-list{
+            width: 98%;
+            height: 205px;
+            padding: 0px 16px;
+            position: relative;
+            overflow-y: scroll;
+
+            &.active{
+                .no-attribute{
+                    display: none;
+                }
+            }
+
+            @media(max-width: 550px){
+                height: 245px;
+            }
+
+            .attribute-remove-btn{
+                @media(max-width: 768px){
+                    padding: 0px;
+                }
+            }
+        }
+
+        .custom-attributes-form{
+            width: 100%;
+            display: flex;
+            box-shadow: 0px -8px 16px rgba(0, 0, 0, 0.1);
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            height: 95px;
+            position: absolute;
+            bottom: 15px;
+            padding-top: 20px;
+            padding-left: 15px;
+            padding-right: 15px;
+            background: #F0F0F0;
+
+            @media(max-width:550px){
+                flex-direction: column;
+                height: 180px;
+                bottom: 25px;
+            }
+
+            .each-field{
+                display: flex;
+                flex-direction: column;
+                width: 216px;
+                margin-right: 15px;
+
+
+                &:nth-child(1){
+                    width: 35%;
+                    @media(max-width: 768px){
+                        width: 35%;
+                    }
+
+                    @media(max-width: 550px){
+                        width: 100%;
+                    }
+                }
+
+                @media(max-width: 768px){
+                    width: 40%;
+                }
+
+                @media(max-width: 550px){
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    margin-bottom: 15px;
+                }
+
+                label{
+                    font-size: 16px;
+                    margin-bottom: 8px;
+
+                    @media(max-width: 550px){
+                        margin-bottom: 4px;
+                    }
+                }
+
+                .attribute-field{
+                    border: none;
+                    outline: none;
+                    background-color: transparent;
+                    font-size: 15px;
+                    font-family: variables.$MTN-Regular;
+                    border-bottom: 1px solid #969696;
+                    color: #464646;
+                }
+            }
+
+            .button{
+                width: 130px;
+                height: 40px;
+                position: absolute;
+                right: 12px;
+                bottom: 18px;
+                outline: none;
+
+                @media(max-width: 550px){
+                    position: relative;
+                    display: block;
+                    width: 100%;
+                    right: revert;
+                    top: revert;
+                    bottom: revert;
+                }
+            }
+        }
+
+        .attribute-error{
+            color: #bb1e4f;
+            font-size: 13px;
+            text-align: left;
+            width: 60%;
+            opacity: 0;
+            position: absolute;
+            bottom: -4px;
+
+            @media(max-width: 768px){
+                bottom: -17px;
+                width: 100%;
+            }
+
+            &.show{
+                opacity: 1;
+            }
+        }
     }
 }
 

@@ -4,6 +4,7 @@
         var renewCredentials = document.querySelectorAll('.renew-credentials');
         var environment = document.querySelectorAll('.environment');
         var logNotes = document.querySelectorAll('.log-notes');
+        var customAttributes = document.querySelectorAll('.custom-attributes');
         var productStatusButtons = document.querySelectorAll('.product-status-action');
         var appStatusAction = document.querySelectorAll('.app-status-action');
         var productAction = document.querySelectorAll(".product-action");
@@ -23,6 +24,10 @@
 
         for (var m = 0; m < logNotes.length; m++) {
             logNotes[m].addEventListener('click', viewNote);
+        }
+
+        for (var i = 0; i < customAttributes.length; i++) {
+            customAttributes[i].addEventListener('click', customAttributesDialog);
         }
 
         for (var m = 0; m < productStatusButtons.length; m++) {
@@ -74,6 +79,112 @@
         if (!noteDialog) return;
 
         noteDialog.classList.add('show');
+    }
+
+    function customAttributesDialog(){
+        var id = this.dataset.id;
+        var customAttributeDialog = document.getElementById('custom-attributes-' + id);
+        if (!customAttributeDialog) return;
+        customAttributeDialog.classList.add('show');
+        var addAttributeBtn = customAttributeDialog.querySelector('.add-attribute');
+        var attributesList = customAttributeDialog.querySelector('.custom-attributes-list');
+
+        addAttributeBtn.addEventListener('click', addNewAttribute.bind(customAttributeDialog, attributesList));
+        customAttributeDialog.addEventListener('dialog-closed', submitNewAttribute.bind(attributesList, id));
+    }
+
+    function submitNewAttribute(id){
+        var elements = this.elements;
+        var attrNames = elements['attribute[name][]'];
+        var attrValues = elements['attribute[value][]'];
+
+        var app = {
+            attribute: [],
+            _method: 'PUT',
+            _token: elements['_token'].value,
+        };
+
+        if(attrNames && attrNames.length === undefined) {
+            attrNames = [attrNames];
+            attrValues = [attrValues];
+        }
+
+        if(attrNames){
+            for(var i = 0; i < attrNames.length; i++) {
+                app.attribute.push({
+                    'name': attrNames[i].value,
+                    'value': attrValues[i].value
+                });
+            }
+        }
+
+        var xhr = new XMLHttpRequest();
+
+        event.preventDefault();
+        addLoading('Updating...');
+
+        xhr.open('POST', this.action, true);
+        xhr.setRequestHeader('X-CSRF-TOKEN', elements['_token'].value);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+        xhr.send(JSON.stringify(app));
+
+        xhr.onload = function() {
+            removeLoading();
+            var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+            if (xhr.status === 200) {
+                updateAppAttributesHtml(result['attributes'], id);
+                addAlert('success', ['Custom attributes added successfully',]);
+            } else {
+
+                if(result.errors) {
+                    result.message = [];
+                    for(var error in result.errors){
+                        result.message.push(result.errors[error]);
+                    }
+                }
+
+                addAlert('error', result.message || 'Sorry there was a problem updating your app. Please try again.');
+                button.removeAttribute('disabled');
+            }
+        };
+    }
+
+    function updateAppAttributesHtml(attributes, id){
+        var attrHtml = '';
+        for (key in attributes) {
+            attrHtml += `
+            <div class="attribute-display">
+                <span class="attr-name bold">${key} : </span>
+                <span class="attr-value">${attributes[key]}</span>
+            </div>
+            `;
+        }
+        document.querySelector('#wrapper-'+id+' .list-custom-attributes').innerHTML = attrHtml;
+    }
+
+    function addNewAttribute(attributesList){
+        var attributeName = this.querySelector('.attribute-name');
+        var attributeValue = this.querySelector('.attribute-value');
+        var attributeErrorMessage = this.querySelector('.attribute-error');
+
+        if(attributeName.value === "" || attributeValue.value === ''){
+            attributeErrorMessage.classList.add('show');
+            return;
+        }
+
+        attributesList.classList.add('active');
+        attributeErrorMessage.classList.remove('show');
+        var customAttributeBlock = document.getElementById('custom-attribute').innerHTML;
+        customAttributeBlock = document.createRange().createContextualFragment(customAttributeBlock);
+        customAttributeBlock.querySelector('.name').value = attributeName.value;
+        customAttributeBlock.querySelector('.value').value = attributeValue.value;
+        attributesList.appendChild(customAttributeBlock);
+        this.querySelector('.attributes-heading').classList.add('show');
+        attributeName.value = '';
+        attributeValue.value = '';
     }
 
     function showProductNoteDialog() {
@@ -220,4 +331,5 @@
     function showProductActions() {
         this.parentNode.classList.toggle('show-actions');
     }
+
 }());

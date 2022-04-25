@@ -34,8 +34,9 @@
                 margin: 40px auto 20px;
             }
 
-            @media screen and (max-width: 767px) {
+            @media screen and (max-width: 768px) {
                 width: 100%;
+                height: 40px;
                 margin: 5px auto;
             }
 
@@ -138,7 +139,7 @@
             }
 
             .apps-create-btn {
-                height: 37px;
+                height: 40px;
                 font-family: $MTN-Regular;
                 font-size: 14px;
                 font-weight: 300;
@@ -498,7 +499,7 @@
                 flex-direction: column;
 
                 @media screen and (min-width: 768px) {
-                    width: 50%;
+                    width: 60%;
                 }
 
                 @media screen and (max-width: 767px) {
@@ -684,6 +685,182 @@
         padding: 8px;
         border-radius: 8px;
         border: 1px solid $grey850;
+    }
+
+    // custom attributes
+    .custom-attribute-list-container{
+        width: 60%;
+        position: relative;
+
+        &.active{
+            .no-attribute{
+                display: none;
+            }
+
+            .attributes-heading{
+                display: block;
+            }
+        }
+
+        &.non-active{
+            .no-attribute{
+                display: block;
+            }
+
+            .attributes-heading{
+                display: none;
+            }
+        }
+
+        @media(max-width: 820px){
+            width: 60%;
+        }
+
+        @media(max-width: 768px){
+            width: 100%
+        }
+        .no-attribute{
+            display: block;
+        }
+
+        .each-attribute-block+.no-attribute{
+            display: none;
+        }
+
+        .attributes-heading{
+            padding-top: 7px;
+            position: relative;
+            padding-bottom: 4px;
+            display: none;
+
+            &.show{
+                display: flex;
+            }
+
+            h4{
+                font-size: 14px;
+                line-height: 6px;
+                margin-bottom: 10px;
+                color: #1D1D1D;
+            }
+
+            .name-heading{
+                width: 35%;
+                line-height: 15px;
+            }
+        }
+
+        .custom-attribute-heading{
+            font-size: 24px;
+            color: #000;
+            margin-bottom: 20px;
+        }
+    }
+
+    .custom-attributes-form{
+        width: 60%;
+        display: flex;
+        bottom: 15px;
+        padding-top: 10px;
+        padding-right: 15px;
+        background-color: transparent;
+        margin-top: 30px;
+
+        @media(max-width: 768px){
+            flex-direction: column;
+            width: 100%;
+            padding-right: 0px;
+            position: relative;
+        }
+
+        .each-field{
+            display: flex;
+            flex-direction: column;
+            margin-right: 15px;
+
+            &:nth-child(1){
+                width: 35%;
+
+                @media(max-width: 768px){
+                    width: 100%;
+                }
+            }
+
+            &:nth-child(2){
+                width: 42%;
+
+                @media(max-width: 768px){
+                    width: 100%;
+                }
+            }
+
+            @media(max-width: 768px){
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                margin-bottom: 15px;
+                margin-right: 0px;
+            }
+
+            label{
+                font-size: 16px;
+                margin-bottom: 8px;
+
+                @media(max-width: 550px){
+                    margin-bottom: 4px;
+                }
+            }
+
+            .attribute-field{
+                border: none;
+                outline: none;
+                background-color: transparent;
+                font-size: 15px;
+                font-family: $MTN-Regular;
+                border-bottom: 1px solid #969696;
+                color: #464646;
+                border-radius: 0px;
+                padding: 0px 5px 2px 0px;
+            }
+        }
+
+        .button{
+            width: 120px;
+            height: 40px;
+            position: absolute;
+            right: -5px;
+            bottom: -1px;
+            outline: none;
+
+            @media(max-width: 820px){
+                width: 82px;
+            }
+
+            @media(max-width: 768px){
+                position: relative;
+                display: block;
+                width: 100%;
+                right: revert;
+                bottom: revert;
+            }
+        }
+    }
+
+    .attribute-error{
+        color: $error;
+        font-size: 12px;
+        text-align: left;
+        width: 60%;
+        opacity: 0;
+
+        &.show{
+            opacity: 1;
+        }
+
+        @media(max-width: 768px){
+            width: 100%;
+            padding-bottom: 15px;
+        }
     }
 }
 

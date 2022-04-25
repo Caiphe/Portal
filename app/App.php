@@ -182,4 +182,16 @@ class App extends Model
 
         return [$this->developer->email];
     }
+
+    public function getCustomAttributesAttribute()
+    {
+        return $this->filterCustomAttributes($this->attributes['attributes']);
+    }
+
+    public function filterCustomAttributes($attributes){
+        if(is_string($attributes)){
+            $attributes = json_decode($attributes, true);
+        }
+        return array_diff_key($attributes, array_flip(['Location', 'Country', 'TeamName', 'Description', 'DisplayName']));
+    }
 }

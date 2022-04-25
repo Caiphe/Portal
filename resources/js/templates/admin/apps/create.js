@@ -156,6 +156,9 @@
 
     function handleCreate() {
         var elements = form.elements;
+        var attrNames = elements['attribute[name][]'];
+        var attrValues = elements['attribute[value][]'];
+
         var selectedProducts = document.querySelectorAll('.add-product:checked');
         var button = document.getElementById('next-create-app');
         var app = {
@@ -165,15 +168,31 @@
             description: elements['description'].value,
             country: document.querySelector('.country-checkbox:checked').dataset.location,
             products: [],
+            attribute: [],
         };
 
-        for (i = 0; i < selectedProducts.length; i++) {
+        for (var i = 0; i < selectedProducts.length; i++) {
             app.products.push(selectedProducts[i].value);
         }
 
         if (app.products.length === 0) {
             return void addAlert('error', 'Please select at least one product.')
         }
+
+        if(attrNames && attrNames.length === undefined) {
+            attrNames = [attrNames];
+            attrValues = [attrValues];
+        }
+
+        if(attrNames){
+            for(var i = 0; i < attrNames.length; i++) {
+                app.attribute.push({
+                    'name': attrNames[i].value,
+                    'value': attrValues[i].value
+                });
+            }
+        }
+
 
         button.disabled = true;
         addLoading('Creating app...');
@@ -271,4 +290,34 @@
 
         suggBox.innerHTML = listData;
     }
+
+        // custom attribute add
+        var addAttributeBtn = document.querySelector('.add-attribute');
+        var attributeName = document.querySelector('#attribute-name');
+        var attributeValue = document.querySelector('#attribute-value');
+        var attributeErrorMessage = document.querySelector('#attribute-error');
+        var attributesList = document.querySelector('#custom-attributes-list');
+
+        addAttributeBtn.addEventListener('click', addNewAttribute);
+
+        function addNewAttribute(){
+            if(attributeName.value === "" || attributeValue.value === ''){
+                attributeErrorMessage.classList.add('show');
+                return;
+            }
+
+            attributeErrorMessage.classList.remove('show');
+            var customAttributeBlock = document.getElementById('custom-attribute').innerHTML;
+            customAttributeBlock = document.createRange().createContextualFragment(customAttributeBlock);
+            customAttributeBlock.querySelector('.name').value = attributeName.value;
+            customAttributeBlock.querySelector('.value').value = attributeValue.value;
+            attributesList.appendChild(customAttributeBlock);
+            attributeName.value = '';
+            attributeValue.value = '';
+            document.querySelector('.attributes-heading').classList.add('show');
+            var addedAttributeForm = document.querySelector('.custom-attribute-list-container');
+            addedAttributeForm.classList.remove('non-active');
+            addedAttributeForm.classList.add('active');
+        }
+
 }());
