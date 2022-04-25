@@ -83,6 +83,36 @@
                     <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>
                 </div>
 
+                {{-- Custom attributes --}}
+                <div class="custom-attribute-list-container">
+                    <h5 class="custom-attribute-heading">Custom Attributes</h5>
+
+                    <span class="no-attribute">None defined</span>
+
+                    <div class="attributes-heading">
+                        <h4 class="name-heading">Attribue Name</h4>
+                        <h4 class="value-heading">Value</h4>
+                    </div>
+
+                    <div class="custom-attributes-list" id="custom-attributes-list"></div>
+
+                </div>
+
+                <div class="custom-attributes-form" action="">
+                    <div class="each-field">
+                        <label for="name">Attribute name</label>
+                        <input type="text" value="" name="attribute_name" id="attribute-name" class="attribute-field attribute-name" placeholder="New Attribute name"/>
+                    </div>
+                    <div class="each-field">
+                        <label for="value">Value</label>
+                        <input type="text" value="" name="attribute_value" id="attribute-value" class="attribute-field attribute-value" placeholder="New Value"/>
+                    </div>
+                    <button type="button" class="button add-attribute" id="add-attribute">Add</button>
+                </div>
+                <div class="attribute-error" id="attribute-error">Attribute name and value required</div>
+
+                {{-- Custom attributes ends --}}
+
                 <div class="actions-btn-container">
                     <button type="button" class="btn dark outline back">Back</button>
                     <button type="button" id="next-app-details" class="dark next apps-create-btn">Select countries</button>
@@ -174,7 +204,9 @@
 
         </form>
     </div>
-
+    <template id="custom-attribute" hidden>
+        <x-apps.custom-attribute></x-apps.custom-attribute>
+    </template>
 @endsection
 
 @push('scripts')

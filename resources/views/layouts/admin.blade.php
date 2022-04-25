@@ -16,7 +16,7 @@
         <button id="hide-menu" class="reset">@svg('close')</button>
 
         <ul class="main-menu">
-            <li @class(['menu-applications', 'active' => Request::is('admin/dashboard')])><a href="{{ route('admin.dashboard.index') }}">@svg('applications') Applications</a></li>
+            <li @class(['menu-applications', 'active' => Request::is('admin/dashboard') || Request::is('admin/apps/create')])><a href="{{ route('admin.dashboard.index') }}">@svg('applications') Applications</a></li>
             <li @class(['menu-products', 'active' => (Request::is('admin/products') || Request::is('admin/products/*'))])><a href="{{ route('admin.product.index') }}">@svg('products') Products</a></li>
             <li @class(['menu-users', 'active' => (Request::is('admin/users') || Request::is('admin/users/*'))])><a href="{{ route('admin.user.index') }}">@svg('users') Users</a></li>
             <li @class(['menu-faq', 'active' => (Request::is('admin/faqs') || Request::is('admin/faqs/*'))])><a href="{{ route('admin.faq.index') }}">@svg('faq') FAQ</a></li>

@@ -25,6 +25,7 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 	Route::post('apps', 'AppController@store')->name('app.store');
 
 	Route::put('apps/{app:slug}', 'AppController@update')->name('app.update');
+	Route::put('apps/{app:aid}/custom-attributes', 'AppController@updateCustomAttributes')->name('app.update.attributes');
 	Route::delete('apps/{app:slug}', 'AppController@destroy')->name('app.destroy');
 
 	Route::get('apps/{app:aid}/credentials/{type}', 'AppController@getCredentials')->middleware('can:access-own-app,app')->name('app.credentials');
