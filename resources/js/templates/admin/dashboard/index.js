@@ -133,20 +133,9 @@
         xhr.onload = function() {
             removeLoading();
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
-            var attrHtml = '';
 
             if (xhr.status === 200) {
-
-                for (key in result['attributes']) {
-                    attrHtml += `
-                    <div class="attribute-display">
-                        <span class="attr-name bold">${key} : </span>
-                        <span class="attr-value">${result['attributes'][key]}</span>
-                    </div>
-                    `;
-                }
-
-                document.querySelector('#wrapper-'+id+' .list-custom-attributes').innerHTML = attrHtml;
+                updateAppAttributesHtml(result['attributes'], id);
 
                 addAlert('success', ['Custom attributes added successfully',]);
             } else {
@@ -164,11 +153,23 @@
         };
     }
 
+    function updateAppAttributesHtml(attributes, id){
+        var attrHtml = '';
+        for (key in attributes) {
+            attrHtml += `
+            <div class="attribute-display">
+                <span class="attr-name bold">${key} : </span>
+                <span class="attr-value">${attributes[key]}</span>
+            </div>
+            `;
+        }
+        document.querySelector('#wrapper-'+id+' .list-custom-attributes').innerHTML = attrHtml;
+    }
+
     function addNewAttribute(attributesList){
         var attributeName = this.querySelector('.attribute-name');
         var attributeValue = this.querySelector('.attribute-value');
         var attributeErrorMessage = this.querySelector('.attribute-error');
-
 
         if(attributeName.value === "" || attributeValue.value === ''){
             attributeErrorMessage.classList.add('show');
