@@ -24,7 +24,7 @@ class AdminAppTest extends TestCase
         parent::setUp();
 
         $this->withoutMiddleware([TwoFA::class]);
-        $this->seed(['UserSeeder', 'CategorySeeder', 'CountrySeeder', 'ProductSeeder', 'AppSeeder']);
+        $this->seed(['UserSeeder', 'CategorySeeder', 'CountrySeeder', 'ProductSeeder']);
 
         $this->user = User::whereEmail('wes+2fa@plusnarrative.com')->first();
     }
