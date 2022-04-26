@@ -2,18 +2,18 @@
 
 namespace Tests\Feature;
 
+use App\App;
+use App\User;
+use Tests\TestCase;
 use App\Http\Middleware\TwoFA;
 use App\Services\ApigeeService;
-use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class AdminAppTest extends TestCase
 {
     use RefreshDatabase;
 
     protected $user;
-
     /**
      * Setup the test environment.
      *
@@ -57,7 +57,40 @@ class AdminAppTest extends TestCase
             'X-Requested-With' => 'XMLHttpRequest'
         ])
             ->assertOk();
+    }
 
+    /** @test */
+    public function can_create_custom_attribute()
+    {
+        $app = App::where('display_name', 'Plusnarrative admin app test case')->first();
+        $adminUser = User::where('email', 'wes@plusnarrative.com')->first();
+
+       $rsp = $this->actingAs($adminUser)->putJson(route('app.update.attributes', $app), [
+            "attribute" => [
+                [
+                    "name" => "container",
+                    "value" => "block"
+                ],
+                [
+                    "name" => "testing",
+                    "value" => "data"
+                ],
+            ],
+        ], [
+            'X-Requested-With' => 'XMLHttpRequest'
+        ])
+        ->AssertOk()
+        ->assertJson([
+            'attributes' => [
+                'container' => 'block',
+                'testing' => 'data'
+            ],
+        ]);
+    }
+
+     /** @test */
+    public function admin_can_delete_an_app()
+    {
         // Cleanup
         $resp = ApigeeService::delete("developers/{$this->user->email}/apps/plusnarrative-admin-app-test-case");
         $this->assertTrue($resp->successful());

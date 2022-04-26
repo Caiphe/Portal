@@ -33,7 +33,7 @@ class UserSeeder extends Seeder {
 			'password' => bcrypt('&jklfFI9@bI!'),
 			'email_verified_at' => $now,
 			'2fa' => 'VHRDUGYWGZZXWRSJTVM72XDH2GY6PKMX',
-			'developer_id' => '2a940d6f-22ce-4d58-9844-a5b4bd7fc689',
+			'developer_id' => 'beb50521-af70-435a-a17a-fb13162aa147',
 			'profile_picture' => '/storage/profile/profile-1.svg',
 		]);
 
