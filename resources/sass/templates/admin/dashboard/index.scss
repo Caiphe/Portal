@@ -447,6 +447,8 @@
 
     .attribute-display{
         position: relative;
+        word-break: break-all;
+
         .attr-name{
             font-size: 14px;
             color: #000;
@@ -626,7 +628,7 @@
         .custom-attributes-list{
             width: 98%;
             height: 205px;
-            padding: 0px 16px;
+            padding: 0px 16px 20px 15px;
             position: relative;
             overflow-y: scroll;
 
@@ -642,7 +644,7 @@
 
             .attribute-remove-btn{
                 @media(max-width: 768px){
-                    padding: 0px;
+                    padding: 0;
                 }
             }
         }
@@ -663,7 +665,7 @@
 
             @media(max-width:550px){
                 flex-direction: column;
-                height: 180px;
+                height: 190px;
                 bottom: 25px;
             }
 
@@ -693,7 +695,8 @@
                     width: 100%;
                     display: flex;
                     flex-direction: column;
-                    margin-bottom: 15px;
+                    margin-bottom: 13px;
+                    margin-right: 0px;
                 }
 
                 label{
@@ -730,6 +733,7 @@
                     width: 100%;
                     right: revert;
                     top: revert;
+                    margin-top: 11px;
                     bottom: revert;
                 }
             }

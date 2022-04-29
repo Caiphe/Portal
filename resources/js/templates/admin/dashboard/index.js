@@ -111,11 +111,24 @@
 
         if(attrNames){
             for(var i = 0; i < attrNames.length; i++) {
+
+                if(attrValues[i].value === '' || attrNames[i].value === ''){
+                    var attribute = attrValues[i].parentNode;
+                    attribute.parentNode.removeChild(attribute);
+                    addAlert('error', 'No empty attributes allowed. Try again.');
+                    return;
+                }
+
                 app.attribute.push({
                     'name': attrNames[i].value,
                     'value': attrValues[i].value
                 });
             }
+        }
+
+        if(!attrNames){
+            addAlert('warning', 'No custom attributes added.');
+            return;
         }
 
         var xhr = new XMLHttpRequest();
@@ -170,6 +183,9 @@
 
         if(attributeName.value === "" || attributeValue.value === ''){
             attributeErrorMessage.classList.add('show');
+            setTimeout(function(){
+                attributeErrorMessage.classList.remove('show');
+            }, 4000);
             return;
         }
 
