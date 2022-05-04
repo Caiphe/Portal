@@ -150,12 +150,13 @@
             if (xhr.status === 200) {
                if(Object.values(result['attributes']).length < 1){
                     addAlert('success', ['Custom attributes removed successfully',]);
+                    elements['remove-check'].value = '';
                     document.querySelector('#wrapper-'+id+' .list-custom-attributes').innerHTML = '<div class="no-custom-attribute">None defined</div>';
                     return;
                }
 
                 updateAppAttributesHtml(result['attributes'], id);
-                removeCheck = "";
+                elements['remove-check'].value = '';
                 addAlert('success', ['Custom attributes added successfully',]);
 
             } else {
@@ -170,7 +171,6 @@
                 addAlert('error', result.message || 'Sorry there was a problem updating your app. Please try again.');
             }
         };
-        removeCheck = "";
     }
 
     function updateAppAttributesHtml(attributes, id){

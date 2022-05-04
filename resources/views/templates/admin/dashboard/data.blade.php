@@ -53,7 +53,7 @@
                 @csrf
                 @method('PUT')
 
-                <input type="hidden" name="remove-check" class="remove-check" id="remove-check" value=""/>
+                <input type="hidden" name="remove-check" class="remove-check" value=""/>
                 @foreach ($app->custom_attributes as $key => $value)
                     <x-apps.custom-attribute :nameValue="$key" :valueValue="$value"></x-apps.custom-attribute>
                 @endforeach
