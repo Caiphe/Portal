@@ -97,6 +97,7 @@
         var elements = this.elements;
         var attrNames = elements['attribute[name][]'];
         var attrValues = elements['attribute[value][]'];
+        var removeCheck = elements['remove-check'].value;
 
         var app = {
             attribute: [],
@@ -126,7 +127,7 @@
             }
         }
 
-        if(!attrNames){
+        if(!attrNames && removeCheck === ''){
             addAlert('warning', 'No custom attributes added.');
             return;
         }
@@ -147,8 +148,16 @@
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
             if (xhr.status === 200) {
+               if(Object.values(result['attributes']).length < 1){
+                    addAlert('success', ['Custom attributes removed successfully',]);
+                    document.querySelector('#wrapper-'+id+' .list-custom-attributes').innerHTML = '<div class="no-custom-attribute">None defined</div>';
+                    return;
+               }
+
                 updateAppAttributesHtml(result['attributes'], id);
+                removeCheck = "";
                 addAlert('success', ['Custom attributes added successfully',]);
+
             } else {
 
                 if(result.errors) {
@@ -161,6 +170,7 @@
                 addAlert('error', result.message || 'Sorry there was a problem updating your app. Please try again.');
             }
         };
+        removeCheck = "";
     }
 
     function updateAppAttributesHtml(attributes, id){

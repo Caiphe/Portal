@@ -54,7 +54,6 @@
         }
 
         if(attrNames){
-
             for(var i = 0; i < attrNames.length; i++) {
                 if(attrValues[i].value === '' || attrNames[i].value === ''){
                     addAlert('error', 'No empty attributes allowed. Try again.');
@@ -322,21 +321,25 @@
         attrNames = [attrNames];
     }
 
-
-    attributeName.addEventListener('keyup', function(){
-        console.log(this.value);
-    });
-
     addAttributeBtn.addEventListener('click', addNewAttribute);
+
     function addNewAttribute(){
+        var form = document.getElementById('form-create-app');
         if(attributeName.value === "" || attributeValue.value === ''){
             attributeErrorMessage.classList.add('show');
             return;
         }
 
-        attributeErrorMessage.classList.remove('show');
-        var customAttributeBlock = document.getElementById('custom-attribute').innerHTML;
+        var elements = form.elements;
+        var attrNames = elements['attribute[name][]'];
+        var attrValues = elements['attribute[value][]'];
 
+        if(attrNames && attrNames.length === undefined) {
+            attrNames = [attrNames];
+            attrValues = [attrValues];
+        }
+
+        var customAttributeBlock = document.getElementById('custom-attribute').innerHTML;
         customAttributeBlock = document.createRange().createContextualFragment(customAttributeBlock);
         customAttributeBlock.querySelector('.name').value = attributeName.value;
         customAttributeBlock.querySelector('.value').value = attributeValue.value;
@@ -347,6 +350,22 @@
         var addedAttributeForm = document.querySelector('.custom-attribute-list-container');
         addedAttributeForm.classList.remove('non-active');
         addedAttributeForm.classList.add('active');
+
+
+        attributeName.addEventListener('change', function(){
+            if(attrNames) {
+                for(var i = 0; i < attrNames.length; i++) {
+
+                    if(attrNames[i].value === this.value){
+                        this.value = '';
+                        attributeValue.value= '';
+                        this.focus();
+                        addAlert('warning', 'Attribute name exists already.');
+                        return;
+                    }
+                }
+            }
+        })
     }
 
 }());
