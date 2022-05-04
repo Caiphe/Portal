@@ -97,6 +97,7 @@
         var elements = this.elements;
         var attrNames = elements['attribute[name][]'];
         var attrValues = elements['attribute[value][]'];
+        var removeCheck = elements['remove-check'].value;
 
         var app = {
             attribute: [],
@@ -111,11 +112,24 @@
 
         if(attrNames){
             for(var i = 0; i < attrNames.length; i++) {
+
+                if(attrValues[i].value === '' || attrNames[i].value === ''){
+                    var attribute = attrValues[i].parentNode;
+                    attribute.parentNode.removeChild(attribute);
+                    addAlert('error', 'No empty attributes allowed. Try again.');
+                    return;
+                }
+
                 app.attribute.push({
                     'name': attrNames[i].value,
                     'value': attrValues[i].value
                 });
             }
+        }
+
+        if(!attrNames && removeCheck === ''){
+            addAlert('warning', 'No custom attributes added.');
+            return;
         }
 
         var xhr = new XMLHttpRequest();
@@ -134,8 +148,17 @@
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
             if (xhr.status === 200) {
+               if(Object.values(result['attributes']).length < 1){
+                    addAlert('success', ['Custom attributes removed successfully',]);
+                    elements['remove-check'].value = '';
+                    document.querySelector('#wrapper-'+id+' .list-custom-attributes').innerHTML = '<div class="no-custom-attribute">None defined</div>';
+                    return;
+               }
+
                 updateAppAttributesHtml(result['attributes'], id);
+                elements['remove-check'].value = '';
                 addAlert('success', ['Custom attributes added successfully',]);
+
             } else {
 
                 if(result.errors) {
@@ -170,6 +193,9 @@
 
         if(attributeName.value === "" || attributeValue.value === ''){
             attributeErrorMessage.classList.add('show');
+            setTimeout(function(){
+                attributeErrorMessage.classList.remove('show');
+            }, 4000);
             return;
         }
 

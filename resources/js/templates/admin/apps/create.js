@@ -45,6 +45,23 @@
         var urlValue = null;
         var errors = [];
 
+        var attrNames = elements['attribute[name][]'];
+        var attrValues = elements['attribute[value][]'];
+
+        if(attrNames && attrNames.length === undefined) {
+            attrNames = [attrNames];
+            attrValues = [attrValues];
+        }
+
+        if(attrNames){
+            for(var i = 0; i < attrNames.length; i++) {
+                if(attrValues[i].value === '' || attrNames[i].value === ''){
+                    addAlert('error', 'No empty attributes allowed. Try again.');
+                    return;
+                }
+            }
+        }
+
         if (elements['name'].value === '') {
             errors.push({ msg: 'Please add a name for your app', el: elements['name'] });
         } else {
@@ -291,33 +308,64 @@
         suggBox.innerHTML = listData;
     }
 
-        // custom attribute add
-        var addAttributeBtn = document.querySelector('.add-attribute');
-        var attributeName = document.querySelector('#attribute-name');
-        var attributeValue = document.querySelector('#attribute-value');
-        var attributeErrorMessage = document.querySelector('#attribute-error');
-        var attributesList = document.querySelector('#custom-attributes-list');
+    // custom attribute add
+    var addAttributeBtn = document.querySelector('.add-attribute');
+    var attributeName = document.querySelector('#attribute-name');
+    var attributeValue = document.querySelector('#attribute-value');
+    var attributeErrorMessage = document.querySelector('#attribute-error');
+    var attributesList = document.querySelector('#custom-attributes-list');
 
-        addAttributeBtn.addEventListener('click', addNewAttribute);
+    var attrNames = document.querySelector('input[name="attribute[name][]"]');
 
-        function addNewAttribute(){
-            if(attributeName.value === "" || attributeValue.value === ''){
-                attributeErrorMessage.classList.add('show');
-                return;
-            }
+    if(attrNames && attrNames.length === undefined) {
+        attrNames = [attrNames];
+    }
 
-            attributeErrorMessage.classList.remove('show');
-            var customAttributeBlock = document.getElementById('custom-attribute').innerHTML;
-            customAttributeBlock = document.createRange().createContextualFragment(customAttributeBlock);
-            customAttributeBlock.querySelector('.name').value = attributeName.value;
-            customAttributeBlock.querySelector('.value').value = attributeValue.value;
-            attributesList.appendChild(customAttributeBlock);
-            attributeName.value = '';
-            attributeValue.value = '';
-            document.querySelector('.attributes-heading').classList.add('show');
-            var addedAttributeForm = document.querySelector('.custom-attribute-list-container');
-            addedAttributeForm.classList.remove('non-active');
-            addedAttributeForm.classList.add('active');
+    addAttributeBtn.addEventListener('click', addNewAttribute);
+
+    function addNewAttribute(){
+        var form = document.getElementById('form-create-app');
+        if(attributeName.value === "" || attributeValue.value === ''){
+            attributeErrorMessage.classList.add('show');
+            return;
         }
+
+        var elements = form.elements;
+        var attrNames = elements['attribute[name][]'];
+        var attrValues = elements['attribute[value][]'];
+
+        if(attrNames && attrNames.length === undefined) {
+            attrNames = [attrNames];
+            attrValues = [attrValues];
+        }
+
+        var customAttributeBlock = document.getElementById('custom-attribute').innerHTML;
+        customAttributeBlock = document.createRange().createContextualFragment(customAttributeBlock);
+        customAttributeBlock.querySelector('.name').value = attributeName.value;
+        customAttributeBlock.querySelector('.value').value = attributeValue.value;
+        attributesList.appendChild(customAttributeBlock);
+        attributeName.value = '';
+        attributeValue.value = '';
+        document.querySelector('.attributes-heading').classList.add('show');
+        var addedAttributeForm = document.querySelector('.custom-attribute-list-container');
+        addedAttributeForm.classList.remove('non-active');
+        addedAttributeForm.classList.add('active');
+
+
+        attributeName.addEventListener('change', function(){
+            if(attrNames) {
+                for(var i = 0; i < attrNames.length; i++) {
+
+                    if(attrNames[i].value === this.value){
+                        this.value = '';
+                        attributeValue.value= '';
+                        this.focus();
+                        addAlert('warning', 'Attribute name exists already.');
+                        return;
+                    }
+                }
+            }
+        })
+    }
 
 }());
