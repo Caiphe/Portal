@@ -105,7 +105,7 @@
 
              {{-- Custom attribe data to go here --}}
             <div class="custom-attribute-data">
-                <h4 class="custom-attribute-data-heading">Custom Attributes</h4>
+                <h4 class="custom-attribute-data-heading">Custom attributes</h4>
                 <div class="list-custom-attributes">
                     @forelse ($app->custom_attributes as $key => $value)
                     <div class="attribute-display">
