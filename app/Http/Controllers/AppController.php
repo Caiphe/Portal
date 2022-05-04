@@ -123,7 +123,10 @@ class AppController extends Controller
             $team = Team::find($validated['team_id']);
         }
 
-        $attributes = array_merge($validated['attribute'], [
+        $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
+        $attributes = ApigeeService::formatToApigeeAttributes($attributes);
+
+        $attributes = array_merge($attributes, [
             [
                 'name' => 'DisplayName',
                 'value' => $validated['display_name'],
