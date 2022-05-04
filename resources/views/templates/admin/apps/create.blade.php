@@ -85,12 +85,12 @@
 
                 {{-- Custom attributes --}}
                 <div class="custom-attribute-list-container">
-                    <h5 class="custom-attribute-heading">Custom Attributes</h5>
+                    <h5 class="custom-attribute-heading">Custom attributes</h5>
 
                     <span class="no-attribute">None defined</span>
 
                     <div class="attributes-heading">
-                        <h4 class="name-heading">Attribue Name</h4>
+                        <h4 class="name-heading">Attribue name</h4>
                         <h4 class="value-heading">Value</h4>
                     </div>
 
@@ -110,7 +110,6 @@
                     <button type="button" class="button add-attribute" id="add-attribute">Add</button>
                 </div>
                 <div class="attribute-error" id="attribute-error">Attribute name and value required</div>
-
                 {{-- Custom attributes ends --}}
 
                 <div class="actions-btn-container">
