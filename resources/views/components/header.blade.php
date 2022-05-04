@@ -41,7 +41,7 @@
             @svg('search')
         </form>
         @if(\Auth::check())
-            <a href="{{ route('app.create') }}" class="button dark hidden" role="button">Build app</a>
+            <a href="{{ route('app.create') }}" class="button dark hidden dont-shrink" role="button">Build app</a>
             <div id="profile-menu" class="hidden">
                 <div id="profile-menu-picture" class="hidden" style="background-image: url({{\Auth::user()->profile_picture}})"></div>
                 <ul class="profile-menu-options shadow">
