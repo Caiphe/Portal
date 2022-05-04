@@ -44,7 +44,7 @@
             <h3 class="dialog-heading">Custom attributes</h3>
 
             <div class="attributes-heading @if ($app->custom_attributes) show @endif">
-                <h4 class="name-heading">Attribue Name</h4>
+                <h4 class="name-heading">Attribue name</h4>
                 <h4 class="value-heading">Value</h4>
             </div>
 
