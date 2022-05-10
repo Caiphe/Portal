@@ -93,7 +93,6 @@
         customAttributeDialog.addEventListener('dialog-closed', submitNewAttribute.bind(attributesList, id));
     }
 
-
     function submitNewAttribute(id){
         var elements = this.elements;
         var attrNames = elements['attribute[name][]'];
