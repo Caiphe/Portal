@@ -93,11 +93,25 @@
         customAttributeDialog.addEventListener('dialog-closed', submitNewAttribute.bind(attributesList, id));
     }
 
+
     function submitNewAttribute(id){
         var elements = this.elements;
         var attrNames = elements['attribute[name][]'];
         var attrValues = elements['attribute[value][]'];
         var removeCheck = elements['remove-check'].value;
+        var attributeData = this.querySelectorAll('.attribute-data');
+        var attributesUpdated = false;
+
+        for(var i = 0; i < attributeData.length; i++){
+            if(attributeData[i].value !== attributeData[i].dataset.original){
+                attributesUpdated = true;
+                break;
+            }
+        }
+
+        if(!attributesUpdated && removeCheck !== "1"){
+            return;
+        }
 
         var app = {
             attribute: [],
@@ -114,9 +128,7 @@
             for(var i = 0; i < attrNames.length; i++) {
 
                 if(attrValues[i].value === '' || attrNames[i].value === ''){
-                    var attribute = attrValues[i].parentNode;
-                    attribute.parentNode.removeChild(attribute);
-                    addAlert('error', 'No empty attributes allowed. Try again.');
+                    addAlert('error', 'Custom attributes were not updated because of an empty name or value. Try again.');
                     return;
                 }
 
@@ -125,11 +137,6 @@
                     'value': attrValues[i].value
                 });
             }
-        }
-
-        if(!attrNames && removeCheck === ''){
-            addAlert('warning', 'No custom attributes added.');
-            return;
         }
 
         var xhr = new XMLHttpRequest();
@@ -149,16 +156,16 @@
 
             if (xhr.status === 200) {
                if(Object.values(result['attributes']).length < 1){
-                    addAlert('success', ['Custom attributes removed successfully',]);
                     elements['remove-check'].value = '';
                     document.querySelector('#wrapper-'+id+' .list-custom-attributes').innerHTML = '<div class="no-custom-attribute">None defined</div>';
+                    addAlert('success', ['Custom attributes removed successfully',]);
+                    return;
+               }else{
+                    updateAppAttributesHtml(result['attributes'], id);
+                    elements['remove-check'].value = '';
+                    addAlert('success', ['Custom attributes added successfully',]);
                     return;
                }
-
-                updateAppAttributesHtml(result['attributes'], id);
-                elements['remove-check'].value = '';
-                addAlert('success', ['Custom attributes added successfully',]);
-
             } else {
 
                 if(result.errors) {
