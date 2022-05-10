@@ -66,11 +66,11 @@
             <form class="custom-attributes-form" action="">
                 <div class="each-field">
                     <label for="name">Attribute name</label>
-                    <input type="text" name="attribute[name][]" class="attribute-field attribute-name" placeholder="New Attribute name"/>
+                    <input type="text" name="attribute[name][]" class="attribute-field attribute-name" placeholder="New attribute name"/>
                 </div>
                 <div class="each-field">
                     <label for="value">Value</label>
-                    <input type="text" name="attribute[value][]" class="attribute-field attribute-value" placeholder="New Value"/>
+                    <input type="text" name="attribute[value][]" class="attribute-field attribute-value" placeholder="New value"/>
                 </div>
                 <button type="button" class="button add-attribute">Add</button>
                 <div class="attribute-error">Attribute name and value required</div>
