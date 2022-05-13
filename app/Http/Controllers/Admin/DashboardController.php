@@ -46,6 +46,7 @@ class DashboardController extends Controller
             return view('templates.admin.dashboard.index', [
                 'apps' => App::where('country_code', 'none')->paginate($numberPerPage),
                 'countries' => Country::all(),
+                'previous' => null,
                 'selectedCountry' => $request->get('countries', ''),
                 'appStatus' => $request->get('app-status', 'pending'),
                 'productStatus' => $request->get('product-status', 'pending')
