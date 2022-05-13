@@ -31,7 +31,7 @@ class DashboardController extends Controller
         $appStatus = $request->get('app-status', 'all');
         $productStatus = $request->get('product-status', 'pending');
         $hasAid = $request->has('aid');
-        $previous = url()->previous();
+        $previous = url()->previous() ?? null;
         $numberPerPage = (int)$request->get('number_per_page', '15');
 
         if (($notAdminNoResponsibleCountries) && $request->ajax()) {
@@ -46,6 +46,7 @@ class DashboardController extends Controller
             return view('templates.admin.dashboard.index', [
                 'apps' => App::where('country_code', 'none')->paginate($numberPerPage),
                 'countries' => Country::all(),
+                'previous' => null,
                 'selectedCountry' => $request->get('countries', ''),
                 'appStatus' => $request->get('app-status', 'pending'),
                 'productStatus' => $request->get('product-status', 'pending')
