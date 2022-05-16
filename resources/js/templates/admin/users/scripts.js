@@ -2,7 +2,25 @@
     var countryAppFilter = document.getElementById('country-filter');
     var passwordEl = document.getElementById('password');
     var confirmEl = document.getElementById('password-confirm');
+    var btnSubmit = document.querySelectorAll('.save-button');
     var passwordScore = 0;
+
+    for(var i = 0; i < btnSubmit.length; i++) {
+        btnSubmit[i].addEventListener('click', checkOpcoRole);
+    }
+
+    function checkOpcoRole(event){
+        var spanRoles = document.getElementById('roles-tags').querySelectorAll('span');
+        var spanCountry = document.getElementById('responsible_countries-tags').querySelectorAll('span');
+
+        for(var i = 0; i < spanRoles.length; i++){
+            if(spanRoles[i].innerHTML === 'Opco' && spanCountry.length === 0){
+                addAlert('warning', 'Please select countries this Opco admin is responsible for.');
+                event.preventDefault();
+                return;
+            }
+        }
+    }
 
     passwordEl.addEventListener('input', checkPassword);
     confirmEl.addEventListener('input', checkPassword);
