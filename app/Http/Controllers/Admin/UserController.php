@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Country;
-use App\Http\Controllers\Controller;
-use App\Product;
 use App\Role;
-use App\RoleUser;
 use App\User;
+use App\Country;
+use App\Product;
+use App\RoleUser;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\UserStoreRequest;
+use App\Http\Requests\Admin\UserUpdateRequest;
 
 class UserController extends Controller
 {
@@ -99,22 +101,11 @@ class UserController extends Controller
         );
     }
 
-    public function store(Request $request)
+    public function store(UserStoreRequest $request)
     {
-        $data = $request->validate([
-            'first_name' => 'required|max:140',
-            'last_name' => 'required|max:140',
-            'email' => 'email:rfc,dns|unique:users,email',
-            'password' => 'required|confirmed',
-            'roles' => 'nullable',
-            'country' => 'nullable',
-            'responsible_countries' => 'nullable',
-            'responsible_groups' => 'nullable',
-            'private_products' => 'nullable',
-        ]);
+        $data = $request->validated();
 
         $data['profile_picture'] = '/storage/profile/profile-' . rand(1, 32) . '.svg';
-
 
         $user = User::create($data);
 
@@ -177,22 +168,9 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(User $user, Request $request)
+    public function update(User $user, UserUpdateRequest $request)
     {
-        $data = $request->validate([
-            'first_name' => 'required|max:140',
-            'last_name' => 'required|max:140',
-            'email' => [
-                'email:rfc,dns',
-                Rule::unique('users')->ignore($user->id),
-            ],
-            'password' => 'sometimes|confirmed',
-            'roles' => 'nullable',
-            'country' => 'nullable',
-            'responsible_countries' => 'nullable',
-            'responsible_groups' => 'nullable',
-            'private_products' => 'nullable',
-        ]);
+        $data = $request->validated();
 
         if (is_null($data['password'])) {
             unset($data['password']);

@@ -13,9 +13,11 @@
         var spanRoles = document.getElementById('roles-tags').querySelectorAll('span');
         var spanCountry = document.getElementById('responsible_countries-tags').querySelectorAll('span');
 
+        if(spanCountry.length !== 0) return;
+
         for(var i = 0; i < spanRoles.length; i++){
-            if(spanRoles[i].innerHTML === 'Opco' && spanCountry.length === 0){
-                addAlert('warning', 'Please select countries this Opco admin is responsible for.');
+            if(spanRoles[i].innerHTML === 'Opco'){
+                addAlert('warning', 'Please select at least one country this Opco admin is responsible for.');
                 event.preventDefault();
                 return;
             }
