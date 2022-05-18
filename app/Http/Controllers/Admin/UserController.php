@@ -103,7 +103,6 @@ class UserController extends Controller
     public function store(UserStoreRequest $request)
     {
         $data = $request->validated();
-        $data['password'] = bcrypt($data['password']);
 
         $data['profile_picture'] = '/storage/profile/profile-' . rand(1, 32) . '.svg';
 
@@ -171,12 +170,6 @@ class UserController extends Controller
     public function update(User $user, UserUpdateRequest $request)
     {
         $data = $request->validated();
-
-        if (is_null($data['password'])) {
-            unset($data['password']);
-        } else {
-            $data['password'] = bcrypt($data['password']);
-        }
 
         $user->update($data);
         if ($request->has('roles')) {

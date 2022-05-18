@@ -298,4 +298,12 @@ class User extends Authenticatable implements MustVerifyEmail
 	{
 		return $this->email_verified_at ? 'Verified' : 'Not verified';
 	}
+
+    public function setPasswordAttribute($password)
+    {
+        if ( $password !== null & $password !== "" )
+        {
+            $this->attributes['password'] = bcrypt($password);
+        }
+    }
 }

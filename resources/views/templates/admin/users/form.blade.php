@@ -36,13 +36,13 @@
     <label class="editor-field-label half">
         <h3>Password</h3>
         <input id="password" type="password" name="password" placeholder="Password" autocomplete="new-password">
-        <button type="button" class="reset show-password" onclick="togglePasswordVisibility(this)"></button>
+        <button type="button" class="show-password reset" onclick="togglePasswordVisibility(this)"></button>
     </label>
 
     <label class="editor-field-label half">
         <h3>Confirm Password</h3>
         <input id="password-confirm" type="password" name="password_confirmation" placeholder="Confirm password" autocomplete="new-password">
-        <button type="button" class="reset show-password" onclick="togglePasswordVisibility(this)"></button>
+        <button type="button" class="show-password reset" onclick="togglePasswordVisibility(this)"></button>
     </label>
 
     <label class="editor-field-label password-strength">

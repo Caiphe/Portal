@@ -72,12 +72,6 @@ class UserController extends Controller
 			$validated['email_verified_at'] = null;
 		}
 
-		if (!is_null($validated['password'])) {
-			$validated['password'] = bcrypt($validated['password']);
-		} else {
-			unset($validated['password']);
-		}
-
 		$user->update($validated);
 
 		if ($request->has('locations')) {
