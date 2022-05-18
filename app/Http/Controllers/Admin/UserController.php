@@ -8,7 +8,6 @@ use App\Country;
 use App\Product;
 use App\RoleUser;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UserStoreRequest;
 use App\Http\Requests\Admin\UserUpdateRequest;
@@ -114,7 +113,7 @@ class UserController extends Controller
         }
 
         if ($request->has('country')) {
-            $user->countries()->sync([$data['country']]);
+            $user->countries()->sync($data['country']);
         }
 
         if ($request->has('responsible_countries')) {
