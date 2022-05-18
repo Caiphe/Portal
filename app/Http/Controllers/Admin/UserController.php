@@ -103,6 +103,7 @@ class UserController extends Controller
     public function store(UserStoreRequest $request)
     {
         $data = $request->validated();
+        $data['password'] = bcrypt($data['password']);
 
         $data['profile_picture'] = '/storage/profile/profile-' . rand(1, 32) . '.svg';
 

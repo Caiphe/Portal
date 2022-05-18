@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserUpdateRequest extends FormRequest
@@ -28,9 +29,17 @@ class UserUpdateRequest extends FormRequest
             'first_name' => ['required', 'max:140'],
             'last_name' => ['required', 'max:140'],
             'email' => ['email:rfc,dns', Rule::unique('users')->ignore($this->route('user')->id ?? 0), 'exists:users'],
-            'password' => ['sometimes', 'confirmed'],
+            'password' => [
+                'sometimes',
+                'confirmed',
+                Password::min(12)
+                ->letters()
+                ->mixedCase()
+                ->numbers()
+                ->symbols()
+            ],
             'roles' => ['required', 'array'],
-            'country' => ['required'],
+            'country' => ['required', 'array'],
             'responsible_countries' => ['nullable', 'array', Rule::requiredIf(in_array(3, $this->roles))],
             'responsible_groups' => ['nullable', 'array'],
             'private_products' => ['nullable', 'array'],
