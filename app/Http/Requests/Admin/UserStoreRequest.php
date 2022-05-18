@@ -52,7 +52,7 @@ class UserStoreRequest extends FormRequest
         $this->merge([
             'first_name' => htmlspecialchars($this->first_name, ENT_NOQUOTES),
             'last_name' => htmlspecialchars($this->last_name, ENT_NOQUOTES),
-            'email' => htmlspecialchars($this->email, ENT_NOQUOTES),
+            'email' => filter_var($this->email, FILTER_SANITIZE_EMAIL),
             'roles' => array_map(fn($item) =>  htmlspecialchars($item, ENT_NOQUOTES), $this->roles ?? []),
             'country' => array_map(fn($item) =>  htmlspecialchars($item, ENT_NOQUOTES), $this->country ?? []),
             'responsible_countries' => array_map(fn($item) =>  htmlspecialchars($item, ENT_NOQUOTES), $this->responsible_countries ?? []),
