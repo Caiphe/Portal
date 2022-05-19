@@ -30,7 +30,7 @@ class UserUpdateRequest extends FormRequest
             'last_name' => ['required', 'max:140'],
             'email' => ['email:rfc,dns', Rule::unique('users')->ignore($this->route('user')->id ?? 0), 'exists:users'],
             'password' => [
-                'sometimes',
+                'nullable',
                 'confirmed',
                 Password::min(12)
                 ->letters()
