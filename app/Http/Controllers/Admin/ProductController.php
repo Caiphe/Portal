@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Category;
+use App\Log;
 use App\Country;
+use App\Product;
+use App\Category;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ProductRequest;
-use App\Product;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -80,20 +81,24 @@ class ProductController extends Controller
             'countries' => Country::get(),
             'categories' => Category::pluck('title', 'cid'),
             'hasSwagger' => $hasSwagger,
+            'logs' => Log::all(),
         ]);
     }
 
     public function update(Product $product, ProductRequest $request)
     {
+        $data = $request->validated();
         $now = date('Y-m-d H:i:s');
         $contents = [];
-        $tabs = $request->get('tab', []);
+        $tabs = $data['tab'] ?? [];
+
+        // dd($data);
 
         $product->update([
-            'display_name' => $request->get('display_name'),
-            'locations' => implode(',', $request->get('locations', ['all'])),
-            'group' => $request->get('group', 'MTN'),
-            'category_cid' => $request->get('category_cid', 'misc'),
+            'display_name' => $data['display_name'],
+            'locations' =>  implode(',', $data['locations']),
+            'group' => $data['group'] ?? 'MTN',
+            'category_cid' => $request['category_cid'],
         ]);
 
         $product->countries()->sync($request->get('locations', Country::all()));

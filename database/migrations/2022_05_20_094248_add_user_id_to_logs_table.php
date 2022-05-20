@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLogsTable extends Migration
+class AddUserIdToLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('logs', function (Blueprint $table) {
-            $table->id();
-            $table->string('logable_id')->nullable();
-            $table->string('logable_type')->nullable();
-            $table->longText('message')->nullable();
-            $table->timestamps();
+        Schema::table('logs', function (Blueprint $table) {
+            $table->foreignId('user_id')->constrained('users')->onDelete('CASCADE');
         });
     }
 
@@ -29,6 +25,8 @@ class CreateLogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('logs');
+        Schema::table('logs', function (Blueprint $table) {
+            $table->dropForeign(['user_id']);
+        });
     }
 }
