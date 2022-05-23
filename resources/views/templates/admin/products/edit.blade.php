@@ -63,73 +63,30 @@
             <button class="button outline blue save-button">Apply changes</button>
         </div>
 
+        @if(count($logs) > 0)
         <div class="editor-field">
             <h2>Product Update Log</h2>
 
             <div class="product-logs-container">
 
+                @foreach ($logs as $log)
                 <div class="each-log">
                    @svg('calendar')
                     <div class="date-block">
-                        <p class="date">9 April 2022</p>
-                        <span class="time">18:30</span>
+                        <p class="date">{{ date('j F Y', strtotime($log->created_at)) }}</p>
+                        <span class="time">{{ date('H:i', strtotime($log->created_at)) }}</span>
                     </div>
-                    <div class="profile-picture"></div>
+                    <div class="profile-picture" style="background-image: url('{{ $log->user->profile_picture }}')"></div>
 
-                    <div class="log-description">Custom attribute added by</div>
-                    <div class="logged-by">Hitesh Jinabhai</div>
+                    <div class="log-description">{{ $log->message }}</div>
+                    <div class="logged-by">{{ $log->user->first_name }} {{ $log->user->last_name }}</div>
                 </div>
-
-                <div class="each-log">
-                    @svg('calendar')
-                    <div class="date-block">
-                        <p class="date">9 April 2022</p>
-                        <span class="time">18:30</span>
-                    </div>
-                    <div class="profile-picture"></div>
-
-                    <div class="log-description">Custom attribute added by</div>
-                    <div class="logged-by">Hitesh Jinabhai</div>
-                </div>
-
-                <div class="each-log">
-                    @svg('calendar')
-                    <div class="date-block">
-                        <p class="date">9 April 2022</p>
-                        <span class="time">18:30</span>
-                    </div>
-                    <div class="profile-picture"></div>
-
-                    <div class="log-description">Custom attribute added by</div>
-                    <div class="logged-by">Hitesh Jinabhai</div>
-                </div>
-
-                <div class="each-log">
-                    @svg('calendar')
-                    <div class="date-block">
-                        <p class="date">9 April 2022</p>
-                        <span class="time">18:30</span>
-                    </div>
-                    <div class="profile-picture"></div>
-
-                    <div class="log-description">Custom attribute added by</div>
-                    <div class="logged-by">Hitesh Jinabhai</div>
-                </div>
-
-                <div class="each-log">
-                    @svg('calendar')
-                    <div class="date-block">
-                        <p class="date">9 April 2022</p>
-                        <span class="time">18:30</span>
-                    </div>
-                    <div class="profile-picture"></div>
-
-                    <div class="log-description">Custom attribute added by</div>
-                    <div class="logged-by">Hitesh Jinabhai</div>
-                </div>
+                @endforeach
 
             </div>
         </div>
+        @endif
+
     </div>
 
     <div id="custom-tabs" class="editor-field two-thirds">

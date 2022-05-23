@@ -2,8 +2,9 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Log extends Model
 {
@@ -19,5 +20,10 @@ class Log extends Model
     public function logable()
     {
         return $this->morphTo();
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ProductRequest;
+use Illuminate\Database\Eloquent\Collection;
 
 class ProductController extends Controller
 {
@@ -91,8 +92,7 @@ class ProductController extends Controller
         $now = date('Y-m-d H:i:s');
         $contents = [];
         $tabs = $data['tab'] ?? [];
-
-        // dd($data);
+        $updatedFields = [];
 
         $product->update([
             'display_name' => $data['display_name'],
@@ -115,9 +115,42 @@ class ProductController extends Controller
             ];
         }
 
+        $updatedFields = array_keys($product->getChanges());
+        $logs = [];
+
+        if(count($updatedFields) > 0)
+        {
+            for($i = 0; $i < count($updatedFields); $i++)
+            {
+               Log::create([
+                    'user_id' => auth()->user()->id,
+                    'logable_id' => null,
+                    'logable_type' => 'Product',
+                    'message' => $updatedFields[$i].' has been updated',
+                ]);
+            }
+        }
+
+        // $product->log()->createMany($logs);
         $product->content()->delete();
         $product->content()->createMany($contents);
 
         return redirect()->route('admin.product.index')->with('alert', 'success:The content has been updated.');
+    }
+
+    protected function compareContent(array $currentContent, array $updatedContent)
+    {
+        dd($currentContent, $updatedContent);
+        $updated = [];
+        foreach ($currentContent as $current){
+            foreach ($updatedContent as $updated){
+                if($updated !== $current)
+                {
+                    $updated[] = $updated;
+                }
+            }
+        }
+
+        return $updated;
     }
 }
