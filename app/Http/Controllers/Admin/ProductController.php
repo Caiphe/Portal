@@ -117,7 +117,6 @@ class ProductController extends Controller
         }
 
         $contentdData = $this->compareContent($contents, $product->content->toArray());
-        // dd($contentdData);
 
         $updatedFields = array_keys($product->getChanges());
         array_pop($updatedFields);
