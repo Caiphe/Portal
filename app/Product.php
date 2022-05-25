@@ -142,9 +142,9 @@ class Product extends Model
     /**
      * Get the products Log
      */
-    public function log()
+    public function logs()
     {
-        return $this->morphToMany(Log::class, 'logable');
+        return $this->morphMany(Log::class, 'logable');
     }
 
     public function apps()

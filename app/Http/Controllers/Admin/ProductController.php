@@ -82,7 +82,7 @@ class ProductController extends Controller
             'countries' => Country::get(),
             'categories' => Category::pluck('title', 'cid'),
             'hasSwagger' => $hasSwagger,
-            'logs' => Log::all(),
+            'logs' => Log::where('logable_id', $product->pid)->latest()->get(),
         ]);
     }
 
@@ -93,6 +93,7 @@ class ProductController extends Controller
         $contents = [];
         $tabs = $data['tab'] ?? [];
         $updatedFields = [];
+        $logs = [];
 
         $product->update([
             'display_name' => $data['display_name'],
@@ -115,38 +116,62 @@ class ProductController extends Controller
             ];
         }
 
-        $updatedFields = array_keys($product->getChanges());
-        $logs = [];
+        $contentdData = $this->compareContent($contents, $product->content->toArray());
+        // dd($contentdData);
 
-        if(count($updatedFields) > 0)
-        {
-            for($i = 0; $i < count($updatedFields); $i++)
-            {
-               Log::create([
-                    'user_id' => auth()->user()->id,
-                    'logable_id' => null,
-                    'logable_type' => 'Product',
-                    'message' => $updatedFields[$i].' has been updated',
-                ]);
+        $updatedFields = array_keys($product->getChanges());
+        array_pop($updatedFields);
+
+        if(!empty($updatedFields) || $contentdData !== null){
+            $messages = '';
+
+            for($i = 0; $i < count($updatedFields); $i++){
+                if($updatedFields[$i] === 'category_cid') $messages .= 'Product category updated ' .'<br/>';
+                if($updatedFields[$i] === 'display_name')  $messages .= 'Product name updated ' .'<br/>';
+                if($updatedFields[$i] === 'locations')  $messages .= 'Locations updated ' .'<br />';
+                if($updatedFields[$i] === 'group')  $messages .= 'Group updated ' .'<br />';
             }
+
+            $messages.= $contentdData;
+
+           $logs[]= [
+                'user_id' => auth()->user()->id,
+                'message' => $messages,
+            ];
         }
 
-        // $product->log()->createMany($logs);
         $product->content()->delete();
         $product->content()->createMany($contents);
-
+        $product->logs()->createMany($logs);
         return redirect()->route('admin.product.index')->with('alert', 'success:The content has been updated.');
     }
 
     protected function compareContent(array $currentContent, array $updatedContent)
     {
-        dd($currentContent, $updatedContent);
-        $updated = [];
-        foreach ($currentContent as $current){
-            foreach ($updatedContent as $updated){
-                if($updated !== $current)
-                {
-                    $updated[] = $updated;
+        $currentColumn = array_column($currentContent, 'title');
+        $updatedColumn = array_column($updatedContent, 'title');
+        $currentContent = array_combine($currentColumn, $currentContent);
+        $updatedContent = array_combine($updatedColumn, $updatedContent);
+
+        $updated = '';
+
+        $addedColumn = array_diff($currentColumn, $updatedColumn);
+        $removedColumn = array_diff($updatedColumn, $currentColumn);
+
+        if(!empty($addedColumn)){
+            $updated .= implode(', ', $addedColumn) .' was added <br />';
+        }
+
+        if(!empty($removedColumn)){
+            $updated .= implode(', ', $removedColumn) .' was removed <br />';
+        }
+
+        $sameColumns = array_intersect($currentColumn, $updatedColumn);
+
+        if(!empty($sameColumns)){
+            foreach($sameColumns as $title){
+                if($currentContent[$title]['body'] !== $updatedContent[$title]['body']){
+                    $updated .= "{$title} was updated <br />";
                 }
             }
         }
