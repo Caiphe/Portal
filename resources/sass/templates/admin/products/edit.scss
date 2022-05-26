@@ -187,10 +187,17 @@
             }
 
             .logged-by{
-                color: #00678F;
                 font-weight: 400;
                 font-size: 10px;
                 line-height: 18px;
+
+                .span-by{
+                    color: #969696;
+                }
+
+                .developer-name{
+                    color: #00678F;
+                }
             }
         }
     }

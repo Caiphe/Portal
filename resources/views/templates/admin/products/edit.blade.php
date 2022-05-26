@@ -79,7 +79,7 @@
                     <div class="profile-picture" style="background-image: url('{{ $log->user->profile_picture }}')"></div>
 
                     <div class="log-description">{!! $log->message !!}</div>
-                    <div class="logged-by">by {{ $log->user->first_name }} {{ $log->user->last_name }}</div>
+                    <div class="logged-by"><span class="span-by">by</span> <span class="developer-name">{{ $log->user->first_name }} {{ $log->user->last_name }}</span></div>
                 </div>
                 @endforeach
 
