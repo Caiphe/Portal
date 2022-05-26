@@ -17,7 +17,6 @@ function closeAlert() {
 
 function addAlert(type, messages, cb) {
     closeAlert();
-
     setTimeout(showAlert.bind(null, type, messages, cb), 260);
 }
 

@@ -52,7 +52,7 @@
                             <input type="file" name="user-thumb" class="user-thumb">
                         </label>
                     </div>
-                    
+
                     <div class="groups">
                         <div class="group">
                             <label for="name">Name your app *</label>

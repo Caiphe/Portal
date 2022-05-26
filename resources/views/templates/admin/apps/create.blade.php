@@ -114,7 +114,7 @@
 
                 <div class="actions-btn-container">
                     <button type="button" class="btn dark outline back">Back</button>
-                    <button type="button" id="next-app-details" class="dark next apps-create-btn">Select countries</button>
+                    <button type="button" id="next-app-details" class="dark next apps-create-btn">Select country</button>
                 </div>
             </div>
 
