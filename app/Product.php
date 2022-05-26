@@ -3,12 +3,13 @@
 namespace App;
 
 use App\App;
+use App\Log;
 use App\Content;
-use App\Category;
 use App\Country;
+use App\Category;
 use App\KeyFeature;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
@@ -136,6 +137,14 @@ class Product extends Model
     public function content()
     {
         return $this->morphMany(Content::class, 'contentable');
+    }
+
+    /**
+     * Get the products Log
+     */
+    public function logs()
+    {
+        return $this->morphMany(Log::class, 'logable');
     }
 
     public function apps()
