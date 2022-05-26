@@ -124,10 +124,10 @@ class ProductController extends Controller
             $messages = '';
 
             for($i = 0; $i < count($updatedFields); $i++){
-                if($updatedFields[$i] === 'category_cid') $messages .= 'Product category updated ' .'<br/>';
-                if($updatedFields[$i] === 'display_name')  $messages .= 'Product name updated ' .'<br/>';
-                if($updatedFields[$i] === 'locations')  $messages .= 'Locations updated ' .'<br />';
-                if($updatedFields[$i] === 'group')  $messages .= 'Group updated ' .'<br />';
+                if($updatedFields[$i] === 'category_cid') $messages .= '&#x2022; Product category updated ' .'<br/>';
+                if($updatedFields[$i] === 'display_name')  $messages .= '&#x2022; Product name updated ' .'<br/>';
+                if($updatedFields[$i] === 'locations')  $messages .= '&#x2022; Locations updated ' .'<br />';
+                if($updatedFields[$i] === 'group')  $messages .= '&#x2022; Group updated ' .'<br />';
             }
 
             $messages.= $contentdData;
@@ -157,11 +157,11 @@ class ProductController extends Controller
         $removedColumn = array_diff($updatedColumn, $currentColumn);
 
         if(!empty($addedColumn)){
-            $updated .= implode(', ', $addedColumn) .' was added <br />';
+            $updated .= '&#x2022; ' . implode(', ', $addedColumn) .' was added <br />';
         }
 
         if(!empty($removedColumn)){
-            $updated .= implode(', ', $removedColumn) .' was removed <br />';
+            $updated .= '&#x2022; ' . implode(', ', $removedColumn) .' was removed <br />';
         }
 
         $sameColumns = array_intersect($currentColumn, $updatedColumn);
@@ -169,7 +169,7 @@ class ProductController extends Controller
         if(!empty($sameColumns)){
             foreach($sameColumns as $title){
                 if($currentContent[$title]['body'] !== $updatedContent[$title]['body']){
-                    $updated .= "{$title} was updated <br />";
+                    $updated .= "&#x2022; {$title} was updated <br />";
                 }
             }
         }
