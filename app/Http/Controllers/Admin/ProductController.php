@@ -82,7 +82,7 @@ class ProductController extends Controller
             'countries' => Country::get(),
             'categories' => Category::pluck('title', 'cid'),
             'hasSwagger' => $hasSwagger,
-            'logs' => Log::where('logable_id', $product->pid)->latest()->get(),
+            'logs' => $product->logs()->latest()->get(),
         ]);
     }
 
@@ -117,11 +117,10 @@ class ProductController extends Controller
         }
 
         $contentdData = $this->compareContent($contents, $product->content->toArray());
-
         $updatedFields = array_keys($product->getChanges());
-        array_pop($updatedFields);
+        unset($updatedFields['updated_at']);
 
-        if(!empty($updatedFields) || $contentdData !== null){
+        if(!empty($updatedFields) || !empty($contentdData)){
             $messages = '';
 
             for($i = 0; $i < count($updatedFields); $i++){
@@ -145,7 +144,7 @@ class ProductController extends Controller
         return redirect()->route('admin.product.index')->with('alert', 'success:The content has been updated.');
     }
 
-    protected function compareContent(array $currentContent, array $updatedContent)
+    protected function compareContent(array $currentContent, array $updatedContent): string
     {
         $currentColumn = array_column($currentContent, 'title');
         $updatedColumn = array_column($updatedContent, 'title');
