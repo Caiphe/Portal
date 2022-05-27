@@ -17,7 +17,7 @@
         <nav>
             <button type="button" @class(['reset', 'active' => !isset($chosenUser)])><span>1</span> App owner</button>
             <button type="button" @class(['reset', 'active' => isset($chosenUser)])><span>2</span> App details</button>
-            <button type="button" class="reset "><span>3</span> Select countries</button>
+            <button type="button" class="reset "><span>3</span> Select a country</button>
             <button type="button" class="reset "><span>4</span> Select products</button>
             <button type="button" class="reset "><span>5</span> Complete</button>
         </nav>
@@ -121,8 +121,8 @@
             <div class="select-countries create-app-section">
                 <div class="apps-heading-container">
                     <span class="apps-top-text">Create a new app</span>
-                    <h2 class="app-create-heading">Select countries</h2>
-                    <span class="gray-text">Select the countries you would like to associate with your app *</span>
+                    <h2 class="app-create-heading">Select a country</h2>
+                    <span class="gray-text">Select a country you would like to associate with your app *</span>
                 </div>
 
                 <div class="countries">

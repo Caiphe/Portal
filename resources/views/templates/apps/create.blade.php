@@ -38,7 +38,7 @@
                 <span>1</span> App details
             </a>
             <a href="#">
-                <span>2</span> Select countries
+                <span>2</span> Select a country
             </a>
             <a href="#">
                 <span>3</span> Select products
@@ -109,13 +109,13 @@
                 </div>
 
                 <button class="dark next">
-                    Select countries
+                    Select country
                     @svg('arrow-forward', '#ffffff')
                 </button>
             </div>
 
             <div class="select-countries">
-                <p>Select the countries you would like to associate with your app *</p>
+                <p>Select a country you would like to associate with your app *</p>
 
                 <div class="countries">
                     @foreach($countries as $key => $country)
