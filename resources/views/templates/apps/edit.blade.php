@@ -35,7 +35,7 @@
                 <span>1</span> App details
             </a>
             <a href="#" class="nav-item select-countries-nav">
-                <span>2</span> Select countries
+                <span>2</span> Select a country
             </a>
             <a href="#" class="nav-item select-products-nav">
                 <span>3</span> Select products
@@ -82,7 +82,7 @@
                 </div>
 
                 <div class="select-countries">
-                    <p>Select the countries you would like to associate with your app *</p>
+                    <p>Select a country you would like to associate with your app *</p>
 
                     <div class="countries">
                         @foreach($countries as $key => $country)
