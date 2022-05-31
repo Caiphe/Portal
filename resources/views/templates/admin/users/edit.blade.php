@@ -17,7 +17,7 @@
 
 <x-dialog-box class="admin-removal-confirm" dialogTitle="Confirm admin role removal">
     <div class="data-container">
-        <span>"Please note: By changing this role, you are changing access permissions to the user's account. The user might lose access to certain areas of the developer portal. <strong>Are you sure you would like to proceed ?</strong>"</span>
+        <span>Please note: By changing this role, you are changing access permissions to the user's account. The user might lose access to certain areas of the developer portal. <strong>Are you sure you would like to proceed ?</strong></span>
     </div>
 
     <div class="bottom-shadow-container button-container">
