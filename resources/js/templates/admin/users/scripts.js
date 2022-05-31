@@ -77,6 +77,31 @@
     }
 }());
 
+var spanRoles = document.getElementById('roles-tags').querySelectorAll('span');
+var adminDialog = document.querySelector('.admin-removal-confirm');
+
+for(var i = 0; i < spanRoles.length; i++){
+    if(spanRoles[i].innerHTML === 'Admin'){
+        spanRoles[i].addEventListener('click', checkAdminRemoved);
+    }
+}
+
+function checkAdminRemoved(event)
+{
+    event.preventDefault();
+    adminDialog.classList.add('show');
+    return;
+}
+
+function adminRestore(){
+    addTag('1', document.getElementById('roles-select'));
+    closeAdminRestore();
+}
+
+function closeAdminRestore(){
+    adminDialog.classList.remove('show');
+}
+
 function togglePasswordVisibility(el) {
     el.classList.toggle('password-visible');
     el.previousElementSibling.setAttribute('type', el.classList.contains('password-visible') ? "text" : "password");
