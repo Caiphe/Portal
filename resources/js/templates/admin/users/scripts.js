@@ -83,6 +83,7 @@ var adminDialog = document.querySelector('.admin-removal-confirm');
 for(var i = 0; i < spanRoles.length; i++){
     if(spanRoles[i].innerHTML === 'Admin'){
         spanRoles[i].addEventListener('click', checkAdminRemoved);
+        break;
     }
 }
 
@@ -90,7 +91,6 @@ function checkAdminRemoved(event)
 {
     event.preventDefault();
     adminDialog.classList.add('show');
-    return;
 }
 
 function adminRestore(){
