@@ -23,7 +23,7 @@ class UserController extends Controller
 
         $users = User::with('roles', 'countries')
             ->withCount('apps')
-            ->when($currentUser->hasRole('opco'), function ($query) use ($currentUser) {
+            ->when(!$currentUser->hasRole('admin') && $currentUser->hasRole('opco'), function ($query) use ($currentUser) {
                 $query->whereHas('countries', fn ($q) => $q->whereIn('code', $currentUser->responsibleCountries()->pluck('code')->toArray()));
             })
             ->when($request->has('q'), function ($q) use ($request) {
@@ -75,7 +75,7 @@ class UserController extends Controller
                 ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         }
-
+        
         return view('templates.admin.users.index', [
             'users' => $users->paginate($numberPerPage),
             'order' => $order,
