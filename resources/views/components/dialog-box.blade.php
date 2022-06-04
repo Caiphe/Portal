@@ -5,11 +5,11 @@
 @endonce
 @props(['dialogTitle' => ''])
 
-<div {{ $attributes->merge(['class' => 'mdp-dialog']) }} transparent>
-    <div class="dialog-background" onclick="closeDialog(this);"></div>
+<div {{ $attributes->merge(['class' => 'mdp-dialog-box']) }} transparent>
+    <div class="dialog-background" onclick="closeDialogBox(this);"></div>
     <div class="dialog-content">
-        <h2 class="dialog-heading">{{ $dialogTitle }}</h2>
-        <button type="button" class="dialog-close" onclick="closeDialog(this);">@svg('close')</button>
+        <h2 class="dialog-heading app-dialog-heading">{{ $dialogTitle }}</h2>
+        <button type="button" class="dialog-close" onclick="closeDialogBox(this);">@svg('close')</button>
         <div class="dialog-content-inner">
             {!! $slot !!}
         </div>
@@ -18,6 +18,6 @@
 
 @once
 @push('scripts')
-<script src="{{ mix('/js/components/dialog.js') }}"></script>
+<script src="{{ mix('/js/components/dialog-box.js') }}"></script>
 @endpush
 @endonce
