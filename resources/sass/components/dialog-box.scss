@@ -56,6 +56,30 @@
             font-family: variables.$MTN-Regular;
         }
 
+        .dialog-custom-form{
+            height: 325px;
+        }
+
+        .radio-round{
+            margin-right: 20px;
+        }
+
+        .form-group-container{
+            padding: 0px 20px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            width: 100%;
+
+            .form-control{
+                width: 100%;
+                border: none;
+            }
+        }
+
+        .radio-container{
+            padding: 0px 20px;
+        }
+
         .bottom-shadow-container{
             position: absolute;
             box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px -8px 16px rgba(0, 0, 0, 0.1);
@@ -87,6 +111,7 @@
                 color: #333;
             }
 
+            .bolder-text,
             .boder-text{
                 font-weight: 700;
                 color: #000;
@@ -107,6 +132,22 @@
                 button{
                     width: 220px;
                     margin: 5px;
+
+                    &.inactive{
+                        color: #AEAEAE;
+                        background-color: #E9E9E9;
+                        pointer-events: none;
+                        cursor: none;
+                        border: solid 2px #E9E9E9;
+                    }
+
+                    &.active{
+                        color: #000;
+                        background-color: #fc0;
+                        pointer-events: auto;
+                        cursor: pointer;
+                        border: solid 2px #fc0;
+                    }
 
                     &.cancel{
                         background-color: transparent;

@@ -55,24 +55,6 @@
         </form>
     </x-dialog-box>
 
-    {{-- <div class="modal-container">
-        <div class="overlay-container"></div>
-        <div class="add-teammate-block">
-            <button class="close-modal">@svg('close-popup', '#000')</button>
-
-            <h2 class="team-head">Leave team</h2>
-            <p class="teammate-text">Are you sure you want to leave this team?</p>
-            <p class="app-name team-name mb-20"></p>
-            <form class="form-team-leave">
-                <input type="hidden" value="" name="team_id" class="hidden-team-id"/>
-                <input type="hidden" value="" name="team_user_id" class="hidden-team-user-id"/>
-                <button type="button" class="btn primary mr-10 cancel-btn">CANCEL</button>
-                <button type="button" class="btn dark leave-team-btn">LEAVE</button>
-            </form>
-        </div>
-    </div> --}}
-
-
     <div class="team-block-container">
         <div class="mt-2">
             <div class="column">
