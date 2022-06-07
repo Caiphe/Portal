@@ -1,4 +1,5 @@
 function closeDialogBox(node) {
+    var node;
     for (var i = 0; i < 2; i++) {
         node = node.parentNode;
 
