@@ -32,8 +32,8 @@
             @svg('arrow-forward', '#000000')
         @endif
     </a>
-    <x-dialog id="admin-{{ $app->aid . $product->slug }}-note-dialog" class="note-dialog">
+    <x-dialog-box id="admin-{{ $app->aid . $product->slug }}-note-dialog" class="note-dialog">
         <h3>Profile Log Notes</h3>
         <div class="note">{!! $product['notes'] !!}</div>
-    </x-dialog>
+    </x-dialog-box>
 @endforeach

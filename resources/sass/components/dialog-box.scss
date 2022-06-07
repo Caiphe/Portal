@@ -1,6 +1,6 @@
 @use '../variables';
 
-.mdp-dialog {
+.mdp-dialog-box {
     position: fixed;
     top: 0;
     right: 0;
@@ -56,6 +56,34 @@
             font-family: variables.$MTN-Regular;
         }
 
+        .dialog-custom-form{
+            height: 325px;
+
+            @media(max-width: 500px){
+                height: 80vh;
+            }
+        }
+
+        .radio-round{
+            margin-right: 20px;
+        }
+
+        .form-group-container{
+            padding: 0px 20px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            width: 100%;
+
+            .form-control{
+                width: 100%;
+                border: none;
+            }
+        }
+
+        .radio-container{
+            padding: 0px 20px;
+        }
+
         .bottom-shadow-container{
             position: absolute;
             box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px -8px 16px rgba(0, 0, 0, 0.1);
@@ -71,6 +99,18 @@
             min-height: 100%;
             padding-top: 60px;
 
+            h3{
+                position: absolute;
+                top: 20px;
+                z-index: 3;
+                font-size: 18px;
+                left: 20px;
+            }
+
+            @media(max-width: 500px){
+                height: 98vh;
+            }
+
             .data-container{
                 position: relative;
                 overflow-y: auto;
@@ -83,6 +123,18 @@
                 color: #333;
             }
 
+            .bolder-text,
+            .boder-text{
+                font-weight: 700;
+                color: #000;
+                font-size: 16px;
+            }
+
+            .dialog-text-padding{
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
             .button-container{
                 padding-top: 20px;
                 box-sizing: border-box;
@@ -92,6 +144,22 @@
                 button{
                     width: 220px;
                     margin: 5px;
+
+                    &.inactive{
+                        color: #AEAEAE;
+                        background-color: #E9E9E9;
+                        pointer-events: none;
+                        cursor: none;
+                        border: solid 2px #E9E9E9;
+                    }
+
+                    &.active{
+                        color: #000;
+                        background-color: #fc0;
+                        pointer-events: auto;
+                        cursor: pointer;
+                        border: solid 2px #fc0;
+                    }
 
                     &.cancel{
                         background-color: transparent;
@@ -150,5 +218,23 @@
     .content-container{
         position: relative;
         height: 100%;
-    }    
+    }
+    
+    .black-bordered{
+        border: 1px solid #000;
+        background-color: transparent;
+        color: #000;
+        transition: all 0.3s ease-in-out;
+
+        &:hover{
+            background-color: #000;
+            color: #fff;
+            transition: all 0.3s ease-in-out;
+            border: 1px solid #000;
+        }
+    }
+
+    h2{
+        margin: 0px;
+    }
 }
