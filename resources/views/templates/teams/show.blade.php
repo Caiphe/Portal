@@ -78,7 +78,7 @@ My team
     </div>
 
     <form class="custom-modal-form bottom-shadow-container button-container mt-40">
-        <button type="button" id="transfer-btn" data-teamid="{{ $team->id }}" class="transfer-btn">TRANSFER</button>
+        <button type="button" id="transfer-btn" data-teamid="{{ $team->id }}" class="inactive">TRANSFER</button>
         <button type="button" class="btn black-bordered mr-10 ownership-removal-btn">CANCEL</button>
     </form>
 

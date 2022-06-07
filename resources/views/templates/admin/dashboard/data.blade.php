@@ -37,7 +37,7 @@
 
     <x-dialog-box id="admin-{{ $app->aid }}" dialogTitle="{{ $app->display_name }} log notes" class="log-content">
         <div class="note">
-            {{ $app['notes'] ?: 'No notes at the moment' }}
+            {!! $app['notes'] ?: 'No notes at the moment here' !!}
         </div>
     </x-dialog-box>
 

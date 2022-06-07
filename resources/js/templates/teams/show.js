@@ -51,10 +51,6 @@ function AddTeammateFunc() {
     addTeamamteDialog.classList.add('show');
 }
 
-document.querySelector('.close-add-teammate-btn').addEventListener('click', hideTeammateDialog)
-function hideTeammateDialog() {
-    addTeamamteDialog.classList.remove('show');
-}
 
 // Show delete modal
 var userDeleteBtn = document.querySelectorAll('.user-delete');
@@ -90,7 +86,7 @@ for (var i = 0; i < radiosList.length; i++) {
 
 function checkedRadio() {
     if (this.checked) {
-        transferOwnsershipBtn.classList.remove('transfer-btn');
+        transferOwnsershipBtn.classList.remove('inactive');
         transferOwnsershipBtn.setAttribute('data-useremail', this.value);
     }
 }
@@ -489,7 +485,7 @@ teamInviteUserBtn.addEventListener('click', function (event) {
 
         hideUserModal();
         removeLoading();
-        hideAddTeamMateModalContainer();
+        hideTeammateDialog();
     };
 
     teamMateInvitEmail.value = "";
@@ -652,4 +648,10 @@ function showAdminModalFunc() {
 document.querySelector('.make-admin-cancel-btn').addEventListener('click', hideAdminModal);
 function hideAdminModal() {
     adminModal.classList.remove('show');
+}
+
+
+document.querySelector('.close-add-teammate-btn').addEventListener('click', hideTeammateDialog)
+function hideTeammateDialog() {
+    addTeamamteDialog.classList.remove('show');
 }

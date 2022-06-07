@@ -511,14 +511,17 @@
 
 .note{
     padding: 20px;
+    height: 300px;
+    overflow-y: scroll;
 }
 
 #status-dialog {
+    .data-container,
     .status-dialog-form{
         height: 339px;
         position: relative;
 
-        @media(max-width: 768px){
+        @media(max-width: 500px){
             height: 100%;
         }
     }

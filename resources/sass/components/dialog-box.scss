@@ -58,6 +58,10 @@
 
         .dialog-custom-form{
             height: 325px;
+
+            @media(max-width: 500px){
+                height: 80vh;
+            }
         }
 
         .radio-round{
@@ -95,7 +99,15 @@
             min-height: 100%;
             padding-top: 60px;
 
-            @media(max-width: 820px){
+            h3{
+                position: absolute;
+                top: 20px;
+                z-index: 3;
+                font-size: 18px;
+                left: 20px;
+            }
+
+            @media(max-width: 500px){
                 height: 98vh;
             }
 
@@ -220,5 +232,9 @@
             transition: all 0.3s ease-in-out;
             border: 1px solid #000;
         }
+    }
+
+    h2{
+        margin: 0px;
     }
 }
