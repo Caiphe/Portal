@@ -107,7 +107,7 @@
             <div class="custom-attribute-data">
                 <h4 class="custom-attribute-data-heading">Custom attributes</h4>
                 <div class="list-custom-attributes">
-                    @forelse ($app->custom_attributes as $key => $value)
+                    @forelse ($app->attributes as $key => $value)
                     <div class="attribute-display">
                         <span class="attr-name bold"> {{ $key }} : </span>
                         <span class="attr-value">{{ $value }}</span>

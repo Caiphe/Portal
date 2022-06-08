@@ -192,6 +192,10 @@ class App extends Model
         if(is_string($attributes)){
             $attributes = json_decode($attributes, true);
         }
-        return array_diff_key($attributes, array_flip(['Location', 'Country', 'TeamName', 'Description', 'DisplayName']));
+        return array_diff_ukey(
+            $attributes, 
+            array_flip(['Location', 'Country', 'TeamName', 'Description', 'DisplayName']), 
+            fn($a, $b) => strtolower($a) <=> strtolower($b)
+        );
     }
 }
