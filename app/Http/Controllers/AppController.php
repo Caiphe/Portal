@@ -445,8 +445,10 @@ class AppController extends Controller
 
             return redirect()->back()->with('alert', "error:{$reasonMsg}");
         }
+        
+        $attributes = ApigeeService::formatAppAttributes($updatedResponse['attributes']);
 
-        $app->update(['attributes' =>  ApigeeService::formatAppAttributes($updatedResponse['attributes'])]);
+        $app->update(['attributes' =>  $attributes]);
 
         if ($request->ajax()) {
             return response()->json(['attributes' => $attributes]);

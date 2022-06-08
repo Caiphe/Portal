@@ -97,32 +97,34 @@
             attrNames = [attrNames];
         }
 
+        currentAttributeName.addEventListener('change', checkNameExists.bind(currentAttributeName, attrNames));
+
+        addAttributeBtn.addEventListener('click', addNewAttribute.bind(customAttributeDialog, attributesList));
+        
+        customAttributeDialog.addEventListener('dialog-closed', submitNewAttribute.bind(attributesList, id));
+    }
+
+    function checkNameExists(attrNames){
         var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName'];
 
-        currentAttributeName.addEventListener('change', function(){
-            if(attrNames){
-                for(var i = 0; i < attrNames.length; i++){
-                    if(attrNames[i].value.toLowerCase() === this.value.toLowerCase()){
-                        this.value = '';
-                        addAlert('warning', 'Attribute name exists already.');
-                        break;
-                    }
-                }
+        for(var i = 0; i < existingNames.length; i++){
+            if(existingNames[i].toLowerCase() === this.value.toLowerCase()){
+                this.value = '';
+                addAlert('warning', `${existingNames[i]} is a reserved attribute name.`);
+                break;
             }
-            
-            for(var i = 0; i < existingNames.length; i++){
-                if(existingNames[i].toLowerCase() === this.value.toLowerCase()){
+        }
+
+        if(attrNames){
+            for(var i = 0; i < attrNames.length; i++){
+                if(attrNames[i].value.toLowerCase() === this.value.toLowerCase()){
                     this.value = '';
                     addAlert('warning', 'Attribute name exists already.');
                     break;
                 }
             }
-        });
-
-        addAttributeBtn.addEventListener('click', addNewAttribute.bind(customAttributeDialog, attributesList));
-        customAttributeDialog.addEventListener('dialog-closed', submitNewAttribute.bind(attributesList, id));
+        }
     }
-
 
     function submitNewAttribute(id){
         var elements = this.elements;
