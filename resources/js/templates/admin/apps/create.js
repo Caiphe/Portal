@@ -361,7 +361,7 @@
                         attributeValue.value= '';
                         this.focus();
                         addAlert('warning', 'Attribute name exists already.');
-                        return;
+                        break;
                     }
                 }
             }

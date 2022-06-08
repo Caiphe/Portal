@@ -88,10 +88,41 @@
         customAttributeDialog.classList.add('show');
         var addAttributeBtn = customAttributeDialog.querySelector('.add-attribute');
         var attributesList = customAttributeDialog.querySelector('.custom-attributes-list');
+        var currentAttributeName = customAttributeDialog.querySelector('.attribute-name');
+
+        var elements = attributesList.elements;
+        var attrNames = elements['attribute[name][]'];
+
+        if(attrNames && attrNames.length === undefined) {
+            attrNames = [attrNames];
+        }
+
+        var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName'];
+
+        currentAttributeName.addEventListener('change', function(){
+            if(attrNames){
+                for(var i = 0; i < attrNames.length; i++){
+                    if(attrNames[i].value.toLowerCase() === this.value.toLowerCase()){
+                        this.value = '';
+                        addAlert('warning', 'Attribute name exists already.');
+                        break;
+                    }
+                }
+            }
+            
+            for(var i = 0; i < existingNames.length; i++){
+                if(existingNames[i].toLowerCase() === this.value.toLowerCase()){
+                    this.value = '';
+                    addAlert('warning', 'Attribute name exists already.');
+                    break;
+                }
+            }
+        });
 
         addAttributeBtn.addEventListener('click', addNewAttribute.bind(customAttributeDialog, attributesList));
         customAttributeDialog.addEventListener('dialog-closed', submitNewAttribute.bind(attributesList, id));
     }
+
 
     function submitNewAttribute(id){
         var elements = this.elements;
