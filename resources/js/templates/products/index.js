@@ -101,7 +101,7 @@
 
     function testLocation(card) {
         var locations = document.querySelectorAll('#filter-country :checked');
-
+        
         if (locations.length === 0) return true;
         if (card.dataset.locations === undefined) return false;
 

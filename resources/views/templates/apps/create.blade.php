@@ -332,6 +332,7 @@
         var products = document.querySelectorAll(".card--product");
         var categoryHeadings = document.querySelectorAll(".category-heading");
         var showCategories = [];
+        var locations = null;
 
         for (var i = products.length - 1; i >= 0; i--) {
             products[i].style.display = "none";

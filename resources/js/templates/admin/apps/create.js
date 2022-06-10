@@ -149,7 +149,7 @@
         var products = document.querySelectorAll(".card--product");
         var categories = document.querySelectorAll(".category");
         var availabelCategories = [];
-        var locations = null;
+        var locations = null; 
 
         for (var i = products.length - 1; i >= 0; i--) {
             products[i].style.display = "none";
