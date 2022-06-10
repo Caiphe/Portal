@@ -102,8 +102,7 @@
     function testLocation(card) {
         var locations = document.querySelectorAll('#filter-country :checked');
         
-        if (locations.length === 0) return true;
-        if (card.dataset.locations === undefined) return false;
+        if (locations.length === 0 || card.dataset.locations === undefined) return false;
 
         for (var i = locations.length - 1; i >= 0; i--) {
             if (card.dataset.locations.split(',').indexOf(locations[i].value) !== -1) return true;
