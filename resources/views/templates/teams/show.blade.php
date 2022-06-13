@@ -223,7 +223,7 @@ My team
                 <tr class="table-title">
                     <td class="bold"><a href="?sort=name&order={{ $order }}">Member name @svg('arrow-down' ,'#cdcdcd')</a></td>
                     <td class="bold bold-role"><a href="?sort=role&order={{ $order }}">Role @svg('arrow-down' ,'#cdcdcd')</a></td>
-                    <td class="bold bold-2fa"><a href="?sort=2fa&order={{ $order }}">2FA Status @svg('arrow-down' ,'#cdcdcd')</a></td>
+                    <td class="bold bold-2fa"><a href="?sort=2fa&order={{ $order }}">2FA status @svg('arrow-down' ,'#cdcdcd')</a></td>
                 </tr>
 
                 @foreach($team->users as $teamUser)
@@ -340,7 +340,7 @@ My team
                 <div class="heading-app">
                     @svg('chevron-down', '#000000')
 
-                    <h3>Approved Apps</h3>
+                    <h3>Approved apps</h3>
                 </div>
 
                 <div class="updated-app">
@@ -394,7 +394,7 @@ My team
                 <div class="heading-app">
                     @svg('chevron-down', '#000000')
 
-                    <h3>Revoked Apps</h3>
+                    <h3>Revoked apps</h3>
                 </div>
 
                 <div class="updated-app">

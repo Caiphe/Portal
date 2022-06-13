@@ -60,7 +60,7 @@
             <div class="column">
                 <table class="teams">
                     <tr class="table-title">
-                        <td class="bold">Team Name @svg('arrow-down' ,'#cdcdcd')</td>
+                        <td class="bold">Team name @svg('arrow-down' ,'#cdcdcd')</td>
                         <td class="bold">Country @svg('arrow-down' ,'#cdcdcd')</td>
                         <td class="bold members-column">Members @svg('arrow-down' ,'#cdcdcd')</td>
                         <td class="bold apps-column">Apps @svg('arrow-down' ,'#cdcdcd')</td>

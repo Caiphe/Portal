@@ -80,7 +80,7 @@
                     <div class="approved-apps">
                         <div class="heading-app">
                             @svg('chevron-down', '#000000')
-                            <h3>Approved Apps</h3>
+                            <h3>Approved apps</h3>
                         </div>
 
                         <div class="updated-app">
@@ -102,7 +102,7 @@
                                 </div>
 
                                 <div class="column">
-                                    <p>Date Created  @svg('arrow-down' ,'#cdcdcd')</p>
+                                    <p>Date created  @svg('arrow-down' ,'#cdcdcd')</p>
                                 </div>
 
                             </div>
@@ -131,7 +131,7 @@
                         <div class="heading-app">
                             @svg('chevron-down', '#000000')
 
-                            <h3>Revoked Apps</h3>
+                            <h3>Revoked apps</h3>
                         </div>
 
                         <div class="updated-app">
@@ -153,7 +153,7 @@
                                 </div>
 
                                 <div class="column">
-                                    <p>Date Created  @svg('arrow-down' ,'#cdcdcd')</p>
+                                    <p>Date created  @svg('arrow-down' ,'#cdcdcd')</p>
                                 </div>
                             </div>
 

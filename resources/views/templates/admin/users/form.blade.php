@@ -40,7 +40,7 @@
     </label>
 
     <label class="editor-field-label half">
-        <h3>Confirm Password</h3>
+        <h3>Confirm password</h3>
         <input id="password-confirm" type="password" name="password_confirmation" placeholder="Confirm password" autocomplete="new-password">
         <button type="button" class="show-password reset" onclick="togglePasswordVisibility(this)"></button>
     </label>
