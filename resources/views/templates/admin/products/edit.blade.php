@@ -65,7 +65,7 @@
 
         @if(count($logs) > 0)
         <div class="editor-field">
-            <h2>Product Update Log</h2>
+            <h2>Product update log</h2>
 
             <div class="product-logs-container">
 
