@@ -241,9 +241,6 @@
             previousDiv.classList.add('active');
         }
 
-        document.querySelector('[type="reset"]').addEventListener('click', function () {
-            document.location.href = '/apps';
-        });
 
         for (var l = 0; l < countries.length; l++) {
             countries[l].addEventListener('change', selectCountry);
