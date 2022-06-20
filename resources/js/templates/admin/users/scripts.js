@@ -80,22 +80,16 @@
 var spanRoles = document.getElementById('roles-tags').querySelectorAll('span');
 var adminDialog = document.querySelector('.admin-removal-confirm');
 
-for(var i = 0; i < spanRoles.length; i++){
-    if(spanRoles[i].innerHTML === 'Admin'){
-        spanRoles[i].addEventListener('click', checkAdminRemoved);
-        break;
-    }
-}
+document.querySelector('#roles-tags').addEventListener('click', checkAdminRemoved);
 
-function checkAdminRemoved(event)
-{
-    event.preventDefault();
+function checkAdminRemoved(event){
+    if(event.target.dataset.index !== undefined && event.target.dataset.index !== '1') return;
     adminDialog.classList.add('show');
+    document.querySelector('.admin-removal-confirm').addEventListener('dialog-closed', adminRestore, {once:true});
 }
 
-function adminRestore(){
+function adminRestore(e){
     addTag('1', document.getElementById('roles-select'));
-    closeAdminRestore();
 }
 
 function closeAdminRestore(){
