@@ -22,7 +22,7 @@
 
     <div class="bottom-shadow-container button-container">
         <button type="button" class="primary" onclick="closeAdminRestore();">Proceed</button>
-        <button type="button" class="cancel" onclick="adminRestore();">Cancel</button>
+        <button type="button" class="cancel" onclick="closeDialogBox(this);">Cancel</button>
     </div>
 
 </x-dialog-box>
