@@ -23,12 +23,12 @@ function addTag(value, el){
     for (var i = multiselectEl.options.length - 1; i >= 0; i--) {
         if (multiselectEl.options[i].value !== value) continue;
         multiselectEl.options[i].selected = true;
+        el.options[i].selected = true;
         value = multiselectEl.options[i].textContent;
         break;
     }
 
     tagEl.appendChild(createTag(value, el.selectedIndex, multiselectEl.id));
-
 }
 
 function createTag(value, index, id) {
