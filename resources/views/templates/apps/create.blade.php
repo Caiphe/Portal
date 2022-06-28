@@ -70,14 +70,12 @@
                     </div>
 
                     <div class="group group-info team-field">
-                        <label for="team">Select team *</label>
+                        <label for="team">Select team</label>
                         <div class="select_wrap">
                             <input name="team" id="team" class="selected-data" value="">
                             <ul class="default_option">
                                 <li>
-                                    {{-- <div class="option"> --}}
-                                        <div class="select-default">Select team <span class="hide-mobi">to publish under</span></div>
-                                    {{-- </div> --}}
+                                    <div class="select-default">Select team <span class="hide-mobi">to publish under</span></div>
                                 </li>
                             </ul>
 
