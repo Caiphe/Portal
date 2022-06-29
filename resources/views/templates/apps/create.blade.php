@@ -93,7 +93,7 @@
                             @else
                             <ul class="default_option no-team">
                                 <li>
-                                    <div class="select-default">No teams available</div>
+                                    <div class="select-default">You aren't part of any teams</div>
                                 </li>
                             </ul>
 
