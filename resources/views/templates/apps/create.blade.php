@@ -72,6 +72,7 @@
                     <div class="group group-info team-field">
                         <label for="team">Select team</label>
                         <div class="select_wrap">
+                            @if($teams->count() >= 1)
                             <input name="team" id="team" class="selected-data" value="">
                             <ul class="default_option">
                                 <li>
@@ -80,12 +81,6 @@
                             </ul>
 
                             <ul class="select_ul">
-                                <li>
-                                    <div class="option">
-                                        <div class="icon" style="background-image: url({{ $user->profile_picture }})"></div>
-                                        <div class="select-data" data-createdby="" data-teamid="">{{ $user->full_name }} (You)</div>
-                                    </div>
-                                </li>
                                 @foreach($teams as $team)
                                 <li>
                                     <div class="option">
@@ -95,6 +90,15 @@
                                 </li>
                                 @endforeach
                             </ul>
+                            @else
+                            <ul class="default_option no-team">
+                                <li>
+                                    <div class="select-default">You don't have a team</div>
+                                </li>
+                            </ul>
+
+                            @endif
+                         
                         </div>
                         <div class="error">{{ isset($error) && $error->get('team', '') }}</div>
                     </div>
