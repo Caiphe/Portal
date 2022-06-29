@@ -72,7 +72,7 @@
                     <div class="group group-info team-field">
                         <label for="team">Select team</label>
                         <div class="select_wrap">
-                            @if($teams->count() >= 1)
+                            @if($teams->count() > 0)
                             <input name="team" id="team" class="selected-data" value="">
                             <ul class="default_option">
                                 <li>
