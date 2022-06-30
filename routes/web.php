@@ -59,6 +59,9 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa', 'can:view-admin'])->group(function () {
 	Route::get('/', 'HomeController')->name('admin.home');
 
+	// Tasks
+	Route::get('/tasks', 'TaskController@index')->middleware(['auth', 'verified', '2fa'])->name('admin.task.index');
+
 	// Products
 	Route::get('products', 'ProductController@index')->middleware('can:administer-products')->name('admin.product.index');
 	Route::get('products/{product:slug}/edit', 'ProductController@edit')->middleware('can:administer-products')->name('admin.product.edit');

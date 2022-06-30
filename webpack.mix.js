@@ -101,5 +101,6 @@ mix.scripts("resources/js/scripts.js", "public/js/scripts.js")
     .sass("resources/sass/components/_accordion.scss", "public/css/components")
     .sass("resources/sass/components/_select.scss", "public/css/components")
     .sass("resources/sass/styles.scss", "public/css")
+    .sass("resources/sass/templates/admin/tasks/index.scss", "public/css/templates/admin/tasks/index.css")
     .sass("resources/sass/vendor/stoplight.scss", "public/css/vendor")
     .version();

@@ -40,6 +40,10 @@ class AuthServiceProvider extends ServiceProvider
 			return $user->hasPermissionTo('administer_products');
 		});
 
+		Gate::define('administer-task-panel', function ($user) {
+			return $user->hasPermissionTo('administer_task_panel');
+		});
+
 		Gate::define('administer-users', function ($user) {
 			return $user->hasPermissionTo('administer_users');
 		});
