@@ -112,29 +112,36 @@ Update profile
         </form>
         @endisset
 
-        {{-- Opco Role request by a developer --}}
-        <form class="opco-role-request-form">
-            <h2>Apply for Amin Role</h2>
-            <p class="align-left">
-                Even wanted to wield the power of Thano's guantlet. Well now you can apply to have the Opco universe at your purple fingertips. And with just one snap, half the tasks assigned to you will vanish.
-            </p>
-            <p>But remember, only we the Eternals can grant you this power.</p>
+        {{-- Opco Admin Role request by a developer --}}
+        @can('request-opco-admin-role')
 
-            <h2>Apply for Amin Role</h2>
-            <textarea class="" rows="4" placeholder="Tell us why you are worthy of the Gauntlet. Eg. How many infinigy stones do you currently possess?"></textarea>
-            <h2>Your selected countries</h2>
-            <div class="locations">
-                @foreach($locations as $location)
-                <label for="{{$location}}">
-                    <input type="checkbox" name="locations[]" value="{{$location}}" id="{{$location}}" autocomplete="off" @if(in_array($location, $userLocations)) checked @endif>
-                    <img src="/images/locations/{{$location}}.svg" alt="{{$location}}" title="{{$location}}">
-                </label>
-                @endforeach
-            </div>
-            <button type="submit" class="primary">Apply Now</button>
+            <form class="opco-role-request-form" id="opco-role-request-form" method="POST" action="{{ route('opco-admin-role.store') }}">
+                @csrf
+
+                <h2>Apply for Amin Role</h2>
+                <p class="align-left">
+                    Even wanted to wield the power of Thano's guantlet. Well now you can apply to have the Opco universe at your purple fingertips. And with just one snap, half the tasks assigned to you will vanish.
+                </p>
+
+                <p>But remember, only we the Eternals can grant you this power.</p>
+                <h2>Motivation for Amin Role</h2>
+
+                <textarea class="" rows="4" name="message" placeholder="Tell us why you are worthy of the Gauntlet. Eg. How many infinigy stones do you currently possess?"></textarea>
+                <h2>Your selected countries</h2>
+                <div class="locations">
+                    @foreach($locations as $location)
+                    <label for="user-{{$location}}">
+                        <input type="checkbox" name="countries[]" value="{{$location}}" id="user-{{$location}}" autocomplete="off">
+                        <img src="/images/locations/{{$location}}.svg" alt="{{$location}}" title="{{$location}}">
+                    </label>
+                    @endforeach
+                </div>
+                <button type="submit" class="primary">Apply Now</button>
+
+            </form>
+        @endcan
 
 
-        </form>
     </div>
 @endsection
 

@@ -25,9 +25,38 @@ $Primary: #00ffc0;
             display: flex;
             justify-content: space-between;
 
+            @media(max-width: 1270px){
+                height: auto;
+                flex-wrap: wrap;
+            }
+
             .header {
+                position: relative;
+
+                @media(max-width: 1200px){
+                    width: 50%;
+                    margin-bottom: 15px;
+                }
+
+                @media(max-width: 550px){
+                    width: 100%;
+
+                }
+                
                 &.user-name-block {
                     width: 228px;
+
+                    @media(max-width: 1200px){
+                        width: 50%;
+                        padding-left: 21px;
+                    }
+
+                    @media(max-width: 550px){
+                        width: 100%;
+                        padding-left: 0px;
+                        padding-bottom: 20px;
+                        border-bottom: solid 2px #E6E6E6;
+                    }
 
                     a {
                         color: variables.$blue;
@@ -35,16 +64,17 @@ $Primary: #00ffc0;
                     }
                 }
 
-                .countrys-list {
-                    text-align: center;
+                .countries-list {
+                    text-align: left;
                     display: flex;
-                    justify-content: center;
 
-                    svg {
+                    .country-flag {
+                        width: 20px;
+                        margin-left: -5px;
+
                         &:nth-child(1) {
                             margin-left: 0px;
                         }
-                        margin-left: -5px;
                     }
                 }
 
@@ -57,6 +87,17 @@ $Primary: #00ffc0;
                     padding: 0px;
                     height: 20px;
                     position: relative;
+
+                    svg {
+                        transition: all 0.3s ease;
+                    }
+
+                    &.rotate-svg {
+                        svg {
+                            transform: rotate(181deg);
+                            transition: all 0.3s ease;
+                        }
+                    }
                 }
 
                 p {
@@ -69,6 +110,10 @@ $Primary: #00ffc0;
                 &.button-container {
                     display: flex;
 
+                    @media(max-width: 550px){
+                        justify-content: space-between;
+                    }
+
                     button {
                         font-weight: 500;
                         font-size: 16px;
@@ -79,6 +124,16 @@ $Primary: #00ffc0;
                         background-color: transparent;
                         color: #000;
                         margin-right: 5px;
+                        font-weight: 500;
+
+                        @media(max-width: 1200px){
+                            padding: 0px;
+                            margin-right: 30px;
+                        }
+
+                        @media(max-width: 550px){
+                            margin-left: -2px;
+                        }
 
                         svg {
                             width: 20px;
@@ -90,6 +145,11 @@ $Primary: #00ffc0;
                         color: #000;
                         background-color: transparent;
                         transition: all 0.3s ease-in-out;
+                        font-weight: 500;
+
+                        img {
+                            margin-right: 4px;
+                        }
 
                         &:hover {
                             background-color: $Primary;
@@ -120,11 +180,24 @@ $Primary: #00ffc0;
             border-bottom-left-radius: 8px;
             border-bottom-right-radius: 8px;
 
+            @media(max-width: 1200px){
+                border-top: solid 2px #E6E6E6;
+            }
+
             .inner-panel-container {
                 display: flex;
 
+                @media(max-width: 550px){
+                    flex-direction: column;
+                }
+
                 .motivation-container {
                     width: 70%;
+
+                    @media(max-width: 550px){
+                        width: 100%;
+                        padding-top: 20px;
+                    }
                 }
 
                 .countries-requested-block {
@@ -133,13 +206,24 @@ $Primary: #00ffc0;
                     margin-left: 50px;
                     padding-bottom: 30px;
 
+                    @media(max-width: 550px){
+                        margin-left: 0px;
+                        width: 100%;
+                    }
+
                     .each-country {
                         display: flex;
                         margin-bottom: 10px;
+                        align-items: center;
 
-                        svg {
+                        .country-flag {
                             margin-right: 15px;
                             width: 32px;
+                        }
+
+                        .country-name {
+                            font-size: 14px;
+                            color: #000;
                         }
                     }
                 }
@@ -152,37 +236,6 @@ $Primary: #00ffc0;
                 line-height: 0;
                 margin-bottom: 29px;
             }
-
-            .deny-form-container {
-                position: relative;
-
-                .deny-form {
-                    padding-bottom: 30px;
-                    display: flex;
-                    flex-direction: column;
-                    width: 520px;
-
-                    textarea {
-                        width: 100%;
-                        height: 118px;
-                        border: 1px solid #969696;
-                        outline: none;
-                        padding: 10px;
-                        font-size: 15px;
-                        box-sizing: border-box;
-                    }
-
-                    .submit-deny {
-                        background-color: transparent;
-                        color: variables.$blue;
-                        border: none;
-                        width: 60px;
-                        font-size: 15px;
-                        outline: none;
-                        margin-top: 5px;
-                    }
-                }
-            }
         }
 
         &.active {
@@ -191,6 +244,30 @@ $Primary: #00ffc0;
                 transition: all 0.3s ease-in-out;
                 max-height: auto;
                 height: auto;
+            }
+        }
+
+        .deny-form {
+            p {
+                padding-top: 15px;
+            }
+
+            textarea {
+                width: 100%;
+                height: 150px;
+                border: 1px solid #bcbcbc;
+                outline: none;
+                padding: 10px;
+                font-size: 15px;
+                box-sizing: border-box;
+                width: 590px;
+                margin: 25px auto;
+                display: flex;
+                border-radius: 5px;
+
+                @media (max-width: 630px) {
+                    width: 90%;
+                }
             }
         }
     }

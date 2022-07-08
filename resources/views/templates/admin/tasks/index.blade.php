@@ -10,23 +10,27 @@
     <h1>Task Panel</h1>
     <div class="tasks-container">
 
+        @foreach ($opco_role_requests as $request)
         <div class="single-task">
             <div class="panel-headers">
                 <div class="header">
                     <p>Opco Admin Request</p>
-                    <div class="countrys-list">
-                        @svg('country')
-                        @svg('country')
-                        @svg('country')
+                    <div class="countries-list">
+                        @foreach (explode(',', $request->countries) as $country)
+                            <img class="country-flag" src="/images/locations/{{$country}}.svg" alt="{{$country}}" title="{{$country}}">
+                        @endforeach
+
                     </div>
                 </div>
 
                 <div class="header user-name-block">
-                    <a class="user-name">Name Surname if its really long can overflow </a>
+                    <a class="user-name">
+                        {{ $request->user->first_name }}  {{ $request->user->last_name }}
+                    </a>
                 </div>
 
                 <div class="header">
-                    <p class="date-requested">24 Mar 2022</p>
+                    <p class="date-requested">{{ $request->created_at->format('d M Y') }}</p>
                     <button class="view-motivation-button">
                         View motivation @svg('chevron-down', '#0c678f')
                     </button>
@@ -34,288 +38,64 @@
 
                 <div class="header button-container">
                     <button class="deny-btn">@svg('close', '#000') Deny</button>
-                    <button class="approve-btn">
-                        @svg('check') Approve
-                    </button>
+
+                    <x-dialog-box dialogTitle="Reason for Denial" class="deny-role-modal">
+
+                        <form class="dialog-custom-form deny-form" method="post" action="{{ route('admin.opco.deny', $request->id) }}">
+                            @csrf
+                            <input type="hidden" name="request_id" value="{{ $request->id }}" />
+                            <p class="dialog-text-padding">Tell us why you're denying this Opco Admin access</p>
+                            <textarea name="message" rows="4" cols="10" placeholder="Please list a reason here"></textarea>
+                            <div class="form-team-leave bottom-shadow-container button-container">
+                                <button type="submit" class="submit-deny">Submit</button>
+                            </div>
+                        </form>
+
+                    </x-dialog-box>
+
+                    <form class="approval-form" name="approve-form-{{ $request->id }}" method="POST" action="{{ route('admin.opco.approve', $request->id) }}">
+                        @csrf
+                        <input type="hidden" name="request_id" value="{{ $request->id }}" />
+                        <button type="sbmit" class="approve-btn" data-request-id="{{ $request->id }}" for="approve-form-{{ $request->id }}">
+                            <img src="/images/check.png"> Approve
+                        </button>
+                    </form>
+                   
                 </div>
 
             </div>
 
             <div class="panel">
-
                 <div class="inner-panel-container">
                     <div class="motivation-container">
                         <h4>Motivation</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore
-                            et
-                            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                            aliquip ex
-                            ea commodo consequat.
+                        <p>{{ $request->message }}
                         </p>
                     </div>
 
                     <div class="countries-requested-block">
                         <h4>Countries Requested</h4>
 
-                        <div class="each-country">
-                            @svg('country')
-                            <span class="country-name">Ghana</span>
-                        </div>
-
-                        <div class="each-country">
-                            @svg('country')
-                            <span class="country-name">Ghana</span>
-                        </div>
-
-                        <div class="each-country">
-                            @svg('country')
-                            <span class="country-name">Ghana</span>
-                        </div>
-
-                        <div class="each-country">
-                            @svg('country')
-                            <span class="country-name">Ghana</span>
-                        </div>
-
-                        <div class="each-country">
-                            @svg('country')
-                            <span class="country-name">Ghana</span>
-                        </div>
-
-                        <div class="each-country">
-                            @svg('country')
-                            <span class="country-name">Ghana</span>
-                        </div>
+                        @foreach (explode(',', $request->countries) as $country)
+                            <div class="each-country">
+                                <img class="country-flag" src="/images/locations/{{ $country }}.svg" alt="{{ $country }}" title="{{ $country }}">
+                                @foreach ($countries as $location)
+                                    @if($location->code === $country )
+                                        <span class="country-name">{{ $location->name }}</span>
+                                    @endif
+                                @endforeach
+                            </div>
+                        @endforeach
 
                     </div>
                 </div>
-
-                <div class="deny-form-container">
-                    <h4>Countries Requested</h4>
-                    <p>Tell us why you're denying this Opco Admin access</p>
-
-                    <form class="deny-form" method="POST" action="#">
-                        @csrf
-                        <textarea name="message" placeholder="Please list a reason here">
-                        </textarea>
-
-                        <button type="submit" class="submit-deny">Submit</button>
-                    </form>
-
-                </div>
-
             </div>
-        </div>
-
-        <div class="single-task">
-            <div class="panel-headers">
-                <div class="header">
-                    <p>Opco Admin Request</p>
-                    <div class="countrys-list">
-                        @svg('country')
-                        @svg('country')
-                        @svg('country')
-                    </div>
-                </div>
-
-                <div class="header user-name-block">
-                    <a class="user-name">Name Surname if its really long can overflow </a>
-                </div>
-
-                <div class="header">
-                    <p class="date-requested">24 Mar 2022</p>
-                    <button class="view-motivation-button">
-                        View motivation @svg('chevron-down', '#0c678f')
-                    </button>
-                </div>
-
-                <div class="header button-container">
-                    <button class="deny-btn">@svg('close', '#000') Deny</button>
-                    <button class="approve-btn">
-                        @svg('check') Approve
-                    </button>
-                </div>
-
-            </div>
-
-            <div class="panel">
-
-                <div class="inner-panel-container">
-                    <div class="motivation-container">
-                        <h4>Motivation</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore
-                            et
-                            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                            aliquip ex
-                            ea commodo consequat.
-                        </p>
-                    </div>
-
-                    <div class="countries-requested-block">
-                        <h4>Countries Requested</h4>
-
-                        <div class="each-country">
-                            @svg('country')
-                            <span class="country-name">Ghana</span>
-                        </div>
-
-                        <div class="each-country">
-                            @svg('country')
-                            <span class="country-name">Ghana</span>
-                        </div>
-
-                        <div class="each-country">
-                            @svg('country')
-                            <span class="country-name">Ghana</span>
-                        </div>
-
-                        <div class="each-country">
-                            @svg('country')
-                            <span class="country-name">Ghana</span>
-                        </div>
-
-                        <div class="each-country">
-                            @svg('country')
-                            <span class="country-name">Ghana</span>
-                        </div>
-
-                        <div class="each-country">
-                            @svg('country')
-                            <span class="country-name">Ghana</span>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="deny-form-container">
-                    <h4>Countries Requested</h4>
-                    <p>Tell us why you're denying this Opco Admin access</p>
-
-                    <form class="deny-form" method="POST" action="#">
-                        @csrf
-                        <textarea name="message" placeholder="Please list a reason here">
-                        </textarea>
-
-                        <button type="submit" class="submit-deny">Submit</button>
-                    </form>
-
-                </div>
-
-            </div>
-        </div>
-
-        <div class="single-task">
-            <div class="panel-headers">
-                <div class="header">
-                    <p>Opco Admin Request</p>
-                    <div class="countrys-list">
-                        @svg('country')
-                        @svg('country')
-                        @svg('country')
-                    </div>
-                </div>
-
-                <div class="header user-name-block">
-                    <a class="user-name">Name Surname if its really long can overflow </a>
-                </div>
-
-                <div class="header">
-                    <p class="date-requested">24 Mar 2022</p>
-                    <button class="view-motivation-button">
-                        View motivation @svg('chevron-down', '#0c678f')
-                    </button>
-                </div>
-
-                <div class="header button-container">
-                    <button class="deny-btn">@svg('close', '#000') Deny</button>
-                    <button class="approve-btn">
-                        @svg('check') Approve
-                    </button>
-                </div>
-
-            </div>
-
-            <div class="panel">
-
-                <div class="inner-panel-container">
-                    <div class="motivation-container">
-                        <h4>Motivation</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore
-                            et
-                            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                            aliquip ex
-                            ea commodo consequat.
-                        </p>
-                    </div>
-
-                    <div class="countries-requested-block">
-                        <h4>Countries Requested</h4>
-
-                        <div class="each-country">
-                            @svg('country')
-                            <span class="country-name">Ghana</span>
-                        </div>
-
-                        <div class="each-country">
-                            @svg('country')
-                            <span class="country-name">Ghana</span>
-                        </div>
-
-                        <div class="each-country">
-                            @svg('country')
-                            <span class="country-name">Ghana</span>
-                        </div>
-
-                        <div class="each-country">
-                            @svg('country')
-                            <span class="country-name">Ghana</span>
-                        </div>
-
-                        <div class="each-country">
-                            @svg('country')
-                            <span class="country-name">Ghana</span>
-                        </div>
-
-                        <div class="each-country">
-                            @svg('country')
-                            <span class="country-name">Ghana</span>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="deny-form-container">
-                    <h4>Countries Requested</h4>
-                    <p>Tell us why you're denying this Opco Admin access</p>
-
-                    <form class="deny-form" method="POST" action="#">
-                        @csrf
-                        <textarea name="message" placeholder="Please list a reason here">
-                        </textarea>
-
-                        <button type="submit" class="submit-deny">Submit</button>
-                    </form>
-
-                </div>
-
-            </div>
-        </div>
+        </div>   
+        @endforeach
 
     </div>
 @endsection
 
 @push('scripts')
-    <script>
-        var viewMotivationBtns = document.getElementsByClassName("view-motivation-button");
-
-        for (var i = 0; i < viewMotivationBtns.length; i++) {
-            viewMotivationBtns[i].addEventListener("click", function() {
-                var singleTask = this.closest('.single-task');
-                singleTask.classList.toggle('active');
-            });
-        }
-    </script>
+    <script src="{{ mix('/js/templates/admin/task/index.js') }}" defer></script>
 @endpush

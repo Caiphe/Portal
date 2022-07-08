@@ -104,6 +104,7 @@ function copyCodes() {
     document.getElementById('password').addEventListener('input', checkPassword);
     document.getElementById('profile-form').addEventListener('submit', validateSubmit);
     document.getElementById('recovery-codes').addEventListener('click', showRecoveryCodes);
+    document.getElementById('opco-role-request-form').addEventListener('submit', opcoRoleRequestFormSubmit);
 
     function checkPassword() {
         var value = this.value;
@@ -164,6 +165,73 @@ function copyCodes() {
         }
 
         addLoading('Updating your profile.');
+    }
+
+    function opcoRoleRequestFormSubmit(ev){
+        ev.preventDefault();
+        var message = this.elements['message'].value;
+        var countriesCheck = this.elements['countries[]'];
+        var formToken = this.elements['_token'].value;
+        var errors = [];
+        var countries = [];
+
+        for(var i = 0; i< countriesCheck.length; i++){
+            if(countriesCheck[i].checked){
+                countries.push(countriesCheck[i].value);
+            }
+        }
+
+        if(message === ''){
+            errors.push('Please add a motivation message for admin role request');
+        }
+
+        if(countries.length === 0){
+            errors.push('Please select countries, you are request role for');
+        }
+
+        if (errors.length > 0) {
+            addAlert('error', errors);
+            return;
+        }
+
+        var roleData = {
+            message: message,
+            countries: countries,
+            _method: 'POST',
+            _token: formToken,
+        };
+
+        var xhr = new XMLHttpRequest();
+
+        addLoading('Sending opco admin role request...');
+
+        xhr.open('POST', this.action);
+        xhr.setRequestHeader('X-CSRF-TOKEN', formToken);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+        xhr.send(JSON.stringify(roleData));
+
+        xhr.onload = function() {
+            removeLoading();
+            var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+            if (xhr.status === 200) {
+                addAlert('success', ['Your opco role request has been sent. Please check your emails for the update',]);
+                ev.target.reset();
+                return;
+               
+            } else {
+                if(result.errors) {
+                    result.message = [];
+                    for(var error in result.errors){
+                        result.message.push(result.errors[error]);
+                    }
+                }
+
+                addAlert('error', result.message || 'Sorry there was a problem with your opco admin request. Please try again.');
+            }
+        };
     }
 
     function showRecoveryCodes() {
