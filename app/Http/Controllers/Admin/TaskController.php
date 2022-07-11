@@ -11,7 +11,7 @@ class TaskController extends Controller
 {
     public function index()
     {
-        $opcoRequest = OpcoRoleRequest::whereDoesntHave('action')->get();
+        $opcoRequest = OpcoRoleRequest::whereDoesntHave('action') ->orderBy('id', 'DESC')->get();
         $countries = Country::all();
         
         return view('templates.admin.tasks.index', [

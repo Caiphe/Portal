@@ -54,10 +54,10 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
     Route::any('teams/reject', 'CompanyTeamsController@reject')->name('teams.invite.deny');
     Route::any('teams/{team}/ownership', 'CompanyTeamsController@ownership')->middleware('can:administer-team-by-owner,team')->name('teams.ownership.invite');
     Route::post('teams/{id}/user/role', 'CompanyTeamsController@roleUpdate')->middleware('can:administer-team,id')->name('teams.user.role');
-});
 
-// Opco admin role request
-Route::post('/opco-admin-role-request/store', 'OpcoRoleRequestController@store')->middleware(['auth', 'can:request-opco-admin-role'])->name('opco-admin-role.store');
+	// Opco admin role request
+	Route::post('/opco-admin-role-request/store', 'OpcoRoleRequestController@store')->middleware(['can:request-opco-admin-role'])->name('opco-admin-role.store');
+});
 
 Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa', 'can:view-admin'])->group(function () {
 	Route::get('/', 'HomeController')->name('admin.home');
