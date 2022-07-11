@@ -129,10 +129,10 @@ Update profile
                 <textarea class="" rows="4" name="message" placeholder="Tell us why you are worthy of the Gauntlet. Eg. How many infinigy stones do you currently possess?"></textarea>
                 <h2>Your selected countries</h2>
                 <div class="locations">
-                    @foreach($locations as $location)
-                    <label for="user-{{$location}}">
-                        <input type="checkbox" name="countries[]" value="{{$location}}" id="user-{{$location}}" autocomplete="off">
-                        <img src="/images/locations/{{$location}}.svg" alt="{{$location}}" title="{{$location}}">
+                    @foreach($countries as $country)
+                    <label for="user-{{ $country['code'] }}">
+                        <input type="checkbox" name="countries[]" value="{{ $country['code'] }}" id="user-{{ $country['code'] }}" autocomplete="off">
+                        <img src="/images/locations/{{ $country['code'] }}.svg" alt="{{ $country['code'] }}" title="{{ $country['name'] }}">
                     </label>
                     @endforeach
                 </div>
