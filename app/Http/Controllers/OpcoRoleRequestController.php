@@ -17,9 +17,7 @@ class OpcoRoleRequestController extends Controller
         $data['user_id'] = $user->id;
         OpcoRoleRequest::create($data);
 
-        $emails = [];
-
-		Mail::to('marc@plusnarrative.com')->send(new OpcoAdminRoleRequest($user));
+		Mail::to(config('mail.mail_to_address'))->send(new OpcoAdminRoleRequest($user));
 
         return json_encode(array(
             "statusCode"=>200

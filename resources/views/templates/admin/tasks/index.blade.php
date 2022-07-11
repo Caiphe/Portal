@@ -93,6 +93,10 @@
         </div>   
         @endforeach
 
+        @if(count($opco_role_requests) < 1)
+            <p class="no-tasks">You have no task</p>
+        @endif
+
     </div>
 @endsection
 

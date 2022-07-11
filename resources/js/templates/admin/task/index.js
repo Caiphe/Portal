@@ -57,7 +57,9 @@ function submitRoleApproval(event)
     xhr.onload = function() {
         removeLoading();
         if (xhr.status === 200) {
-            addAlert('success', ['You have approved an opco admin role request',]);
+            addAlert('success', ['You have approved an opco admin role request',], function(){
+                location.reload();
+            });
             return;
            
         } else {
@@ -83,7 +85,7 @@ function submitRoleDenial(event){
     var errors = [];
     
     if(message === ''){
-        errors.push('Please leave a message of the opco admin role denial');
+        errors.push('Please leave a reason for deniyn the request');
     }
 
     if (errors.length > 0) {
@@ -114,7 +116,9 @@ function submitRoleDenial(event){
         event.target.reset();
 
         if (xhr.status === 200) {
-            addAlert('success', ['You have denied opco admin role request',]);
+            addAlert('success', ['You have denied opco admin role request',], function(){
+                    location.reload();
+            });
             return;
            
         } else {
@@ -129,6 +133,5 @@ function submitRoleDenial(event){
             addAlert('error', result.message || 'Sorry there was a problem with your opco admin request. Please try again.');
         }
 
-        location.reload();
     };
 }
