@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Country;
 use App\Http\Requests\UserRequest;
 use App\Mail\UpdateUser;
 use App\Product;
@@ -50,6 +51,7 @@ class UserController extends Controller
 			'key' => $key,
 			'inlineUrl' => $inlineUrl,
 			'teamInvite' => $teamInvite,
+			'countries' => Country::all()
 		]);
 	}
 
