@@ -1,7 +1,5 @@
 @component('mail::message')
-# Opco admin role request
-
-Below are the user's details:
+# A user has requested an Opco admin role, below are the user's detais:
 
 |                                      |    |           |
 |:----------------------------|:---|:----------|
