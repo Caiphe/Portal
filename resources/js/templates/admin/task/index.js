@@ -85,7 +85,7 @@ function submitRoleDenial(event){
     var errors = [];
     
     if(message === ''){
-        errors.push('Please leave a reason for deniyn the request');
+        errors.push('Please leave a reason for deniyng the request');
     }
 
     if (errors.length > 0) {

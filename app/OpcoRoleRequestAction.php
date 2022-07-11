@@ -9,5 +9,10 @@ class OpcoRoleRequestAction extends Model
 {
     use HasFactory;
     protected $table = 'opco_role_request_action';
-    protected $guarded = [];
+    protected $fillable = [
+        'request_id',
+        'approved_by',
+        'approved',
+        'message'
+    ];
 }

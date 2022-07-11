@@ -9,7 +9,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class OpcoRoleRequest extends Model
 {
     use HasFactory;
-    protected $guarded = [];
+    protected $fillable = [
+        'countries',
+        'message',
+        'user_id'
+    ];
 
     public function user()
     {

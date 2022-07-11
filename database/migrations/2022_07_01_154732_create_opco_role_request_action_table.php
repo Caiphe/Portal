@@ -30,11 +30,11 @@ class CreateOpcoRoleRequestActionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('opco_role_request_action');
-
         Schema::table('opco_role_request_action', function (Blueprint $table) {
             $table->dropForeign(['approved_by']);
             $table->dropForeign(['request_id']);
         });
+
+        Schema::dropIfExists('opco_role_request_action');
     }
 }

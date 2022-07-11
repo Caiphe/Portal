@@ -18,9 +18,7 @@ class OpcoRoleRequestController extends Controller
         OpcoRoleRequest::create($data);
 
 		Mail::to(config('mail.mail_to_address'))->send(new OpcoAdminRoleRequest($user));
-
-        return json_encode(array(
-            "statusCode"=>200
-        ));
+        
+        return response()->json(['success' => true, 'code' => 200], 200);
     }
 }

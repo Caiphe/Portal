@@ -57,7 +57,7 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 });
 
 // Opco admin role request
-Route::post('/opco-admin-role-request/store', 'OpcoRoleRequestController@store')->middleware(['auth'])->name('opco-admin-role.store');
+Route::post('/opco-admin-role-request/store', 'OpcoRoleRequestController@store')->middleware(['auth', 'can:request-opco-admin-role'])->name('opco-admin-role.store');
 
 Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa', 'can:view-admin'])->group(function () {
 	Route::get('/', 'HomeController')->name('admin.home');
@@ -66,8 +66,10 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 	Route::get('/tasks', 'TaskController@index')->middleware(['auth', 'verified', '2fa', 'can:administer-task-panel'])->name('admin.task.index');
 
 	// Opco role approval
-	Route::post('/opco-role-request/{id}/approve', 'OpcoRoleRequestActionController@approve')->middleware(['auth', 'verified', '2fa', 'can:administer-task-panel'])->name('admin.opco.approve');
-	Route::post('/opco-role-request/{id}/deny', 'OpcoRoleRequestActionController@deny')->middleware(['auth', 'verified', '2fa', 'can:administer-task-panel'])->name('admin.opco.deny');
+	Route::middleware(['auth', 'verified', '2fa', 'can:administer-task-panel'])->group(function(){
+		Route::post('/opco-role-request/{id}/approve', 'OpcoRoleRequestActionController@approve')->name('admin.opco.approve');
+		Route::post('/opco-role-request/{id}/deny', 'OpcoRoleRequestActionController@deny')->name('admin.opco.deny');
+	});
 
 	// Products
 	Route::get('products', 'ProductController@index')->middleware('can:administer-products')->name('admin.product.index');

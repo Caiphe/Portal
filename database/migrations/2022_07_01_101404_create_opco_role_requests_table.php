@@ -29,10 +29,9 @@ class CreateOpcoRoleRequestsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('opco_role_requests');
-
         Schema::table('opco_role_requests', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
         });
+        Schema::dropIfExists('opco_role_requests');
     }
 }

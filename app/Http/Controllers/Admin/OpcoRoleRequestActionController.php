@@ -17,11 +17,10 @@ class OpcoRoleRequestActionController extends Controller
     public function approve(OpcoRoleRequestApprovalFormRequest $request)
     {
         $admin = auth()->user();
-        $countryApproved = [];
         $data = $request->validated();
         $requestId = $data['request_id'];
 
-        $roleRequest = OpcoRoleRequest::where('id', $requestId)->first();
+        $roleRequest = OpcoRoleRequest::find($requestId);
         $user = $roleRequest->user;
         $requestCountryCodes = explode(',', $roleRequest->countries);
 
@@ -39,9 +38,7 @@ class OpcoRoleRequestActionController extends Controller
 
         ]);
 
-        return json_encode(array(
-            "statusCode"=>200
-        ));
+        return response()->json(['success' => true, 'code' => 200], 200);
     }
 
     public function deny(OpcoRoleRequestApprovalFormRequest $request)
@@ -50,7 +47,7 @@ class OpcoRoleRequestActionController extends Controller
         $data = $request->validated();
         $requestId = $data['request_id'];
 
-        $roleRequest = OpcoRoleRequest::where('id', $requestId)->first();
+        $roleRequest = OpcoRoleRequest::find($requestId);
         Mail::to($roleRequest->user->email)->send(new OpcoAdminRoleDenial($data));
 
         OpcoRoleRequestAction::create([
@@ -61,9 +58,6 @@ class OpcoRoleRequestActionController extends Controller
 
         ]);
 
-        return json_encode(array(
-            "statusCode"=>200
-        ));
-
+        return response()->json(['success' => true, 'code' => 200], 200);
     }
 }

@@ -182,7 +182,7 @@ function copyCodes() {
         }
 
         if(message === ''){
-            errors.push('Please add a motivation message for admin role request');
+            errors.push('Please add a motivation message for Opco Admin role request');
         }
 
         if(countries.length === 0){
