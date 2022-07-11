@@ -77,6 +77,11 @@ class UserSeeder extends Seeder {
 			'label' => "View admin backend",
 		]);
 
+		Permission::create([
+			'name' => "administer_task_panel",
+			'label' => "Administer task panel",
+		]);
+
 		$adminRole = Role::create([
 			'name' => "admin",
 			'label' => "Admin",
