@@ -317,22 +317,19 @@
     var attributeErrorMessage = document.querySelector('#attribute-error');
     var attributesList = document.querySelector('#custom-attributes-list');
 
-    var attrNames = document.querySelector('input[name="attribute[name][]"]');
-
-    if(attrNames && attrNames.length === undefined) {
-        attrNames = [attrNames];
-    }
-
     addAttributeBtn.addEventListener('click', addNewAttribute);
 
+    attributeName.addEventListener('input', checkNameExists);
+
     function addNewAttribute(){
-        var form = document.getElementById('form-create-app');
+        var attributeName = document.querySelector('#attribute-name');
+        elements = document.getElementById('form-create-app').elements;
+
         if(attributeName.value === "" || attributeValue.value === ''){
             attributeErrorMessage.classList.add('show');
             return;
         }
 
-        var elements = form.elements;
         var attrNames = elements['attribute[name][]'];
         var attrValues = elements['attribute[value][]'];
 
@@ -342,6 +339,8 @@
         }
 
         var customAttributeBlock = document.getElementById('custom-attribute').innerHTML;
+        var addedAttributeForm = document.querySelector('.custom-attribute-list-container');
+
         customAttributeBlock = document.createRange().createContextualFragment(customAttributeBlock);
         customAttributeBlock.querySelector('.name').value = attributeName.value;
         customAttributeBlock.querySelector('.value').value = attributeValue.value;
@@ -349,25 +348,40 @@
         attributeName.value = '';
         attributeValue.value = '';
         document.querySelector('.attributes-heading').classList.add('show');
-        var addedAttributeForm = document.querySelector('.custom-attribute-list-container');
         addedAttributeForm.classList.remove('non-active');
         addedAttributeForm.classList.add('active');
 
-
-        attributeName.addEventListener('change', function(){
-            if(attrNames) {
-                for(var i = 0; i < attrNames.length; i++) {
-
-                    if(attrNames[i].value === this.value){
-                        this.value = '';
-                        attributeValue.value= '';
-                        this.focus();
-                        addAlert('warning', 'Attribute name exists already.');
-                        break;
-                    }
-                }
-            }
-        })
+        attributeName.addEventListener('input', checkNameExists);
     }
 
+    function checkNameExists(){
+        var elements = document.getElementById('form-create-app').elements;
+        var attrNames = elements['attribute[name][]'];
+    
+        if(attrNames && attrNames.length === undefined) {
+            attrNames = [attrNames];
+        }
+
+        if(attrNames){
+
+            for(var i = 0; i < attrNames.length; i++){
+                if(attrNames[i].value.toLowerCase() === this.value.toLowerCase()){
+                    this.value = '';
+                    this.focus();
+                    addAlert('warning', 'Attribute name exists already.');
+                    break;
+                }
+            }
+        }
+
+        var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName'];
+        for(var i = 0; i < existingNames.length; i++){
+            if(existingNames[i].toLowerCase() === this.value.toLowerCase()){
+                this.value = '';
+                this.focus();
+                addAlert('warning', `${existingNames[i]} is a reserved attribute name.`);
+                break;
+            }
+        }
+    }
 }());

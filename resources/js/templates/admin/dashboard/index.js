@@ -97,14 +97,14 @@
             attrNames = [attrNames];
         }
 
-        currentAttributeName.addEventListener('change', checkNameExists.bind(currentAttributeName, attrNames));
+        currentAttributeName.addEventListener('change', checkNameExists.bind(currentAttributeName, id));
 
         addAttributeBtn.addEventListener('click', addNewAttribute.bind(customAttributeDialog, attributesList));
         
         customAttributeDialog.addEventListener('dialog-closed', submitNewAttribute.bind(attributesList, id));
     }
 
-    function checkNameExists(attrNames){
+    function checkNameExists(id){
         var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName'];
 
         for(var i = 0; i < existingNames.length; i++){
@@ -113,6 +113,15 @@
                 addAlert('warning', `${existingNames[i]} is a reserved attribute name.`);
                 break;
             }
+        }
+
+        var customAttributeDialog = document.getElementById('custom-attributes-' + id);
+        var elements = customAttributeDialog.querySelector('.custom-attributes-list').elements;
+
+        var attrNames = elements['attribute[name][]'];
+
+        if(attrNames && attrNames.length === undefined) {
+            attrNames = [attrNames];
         }
 
         if(attrNames){

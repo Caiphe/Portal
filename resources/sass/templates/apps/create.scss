@@ -399,6 +399,10 @@
         position: absolute;
         top: 9px;
 
+        &.select-data{
+            margin: 0px;
+        }
+
         .hide-mobi {
             @media(max-width: 1024px) {
                 display: none;

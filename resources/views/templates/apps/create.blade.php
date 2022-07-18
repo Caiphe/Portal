@@ -71,12 +71,13 @@
 
                     <div class="group group-info team-field">
                         <label for="team">Select team</label>
+                       
                         <div class="select_wrap">
-                            @if($teams->count() > 0)
                             <input name="team" id="team" class="selected-data" value="">
+                            @if($teams->count() > 0)
                             <ul class="default_option">
                                 <li>
-                                    <div class="select-default">Select team <span class="hide-mobi">to publish under</span></div>
+                                    <div class="select-default">Please select team <span class="hide-mobi">to publish under</span></div>
                                 </li>
                             </ul>
 
@@ -93,12 +94,11 @@
                             @else
                             <ul class="default_option no-team">
                                 <li>
-                                    <div class="select-default">You aren't part of any teams</div>
+                                    <div class="select-default select-data" data-createdby="" data-teamid="">You aren't part of any teams</div>
                                 </li>
                             </ul>
 
                             @endif
-                         
                         </div>
                         <div class="error">{{ isset($error) && $error->get('team', '') }}</div>
                     </div>
