@@ -317,21 +317,13 @@
     var attributeErrorMessage = document.querySelector('#attribute-error');
     var attributesList = document.querySelector('#custom-attributes-list');
 
-    var attrNames = document.querySelector('input[name="attribute[name][]"]');
-    var form = document.getElementById('form-create-app');
-    var elements = form.elements;
-
-    var attrNames = elements['attribute[name][]'];
-
-    if(attrNames && attrNames.length === undefined) {
-        attrNames = [attrNames];
-    }
-
     addAttributeBtn.addEventListener('click', addNewAttribute);
-    attributeName.addEventListener('input', checkNameExists.bind(attributeName, attrNames));
+
+    attributeName.addEventListener('input', checkNameExists);
 
     function addNewAttribute(){
         var attributeName = document.querySelector('#attribute-name');
+        elements = document.getElementById('form-create-app').elements;
 
         if(attributeName.value === "" || attributeValue.value === ''){
             attributeErrorMessage.classList.add('show');
@@ -359,12 +351,18 @@
         addedAttributeForm.classList.remove('non-active');
         addedAttributeForm.classList.add('active');
 
-        attributeName.addEventListener('input', checkNameExists.bind(attributeName, attrNames));
+        attributeName.addEventListener('input', checkNameExists);
     }
 
-    function checkNameExists(attrNames){
+    function checkNameExists(){
+        var elements = document.getElementById('form-create-app').elements;
+        var attrNames = elements['attribute[name][]'];
+    
+        if(attrNames && attrNames.length === undefined) {
+            attrNames = [attrNames];
+        }
+
         if(attrNames){
-            console.log(attrNames.length);
 
             for(var i = 0; i < attrNames.length; i++){
                 if(attrNames[i].value.toLowerCase() === this.value.toLowerCase()){
@@ -375,7 +373,7 @@
                 }
             }
         }
-        
+
         var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName'];
         for(var i = 0; i < existingNames.length; i++){
             if(existingNames[i].toLowerCase() === this.value.toLowerCase()){
@@ -386,5 +384,4 @@
             }
         }
     }
-
 }());
