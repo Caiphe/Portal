@@ -78,10 +78,10 @@
     }
 }());
 
-if(document.querySelector('#roles-tags')){
-    var spanRoles = document.getElementById('roles-tags').querySelectorAll('span');
+var roleTags = document.querySelector('#roles-tags');
+if(roleTags){
     var adminDialog = document.querySelector('.admin-removal-confirm');
-    document.querySelector('#roles-tags').addEventListener('click', checkAdminRemoved);
+    roleTags.addEventListener('click', checkAdminRemoved);
     
     function checkAdminRemoved(event){
         if(event.target.dataset.index !== undefined && event.target.dataset.index !== '1') return;
