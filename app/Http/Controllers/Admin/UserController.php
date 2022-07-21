@@ -170,15 +170,16 @@ class UserController extends Controller
     public function update(User $user, UserUpdateRequest $request)
     {
         $data = $request->validated();
-
         $user->update($data);
-        if ($request->has('roles')) {
-            $user->roles()->sync($data['roles']);
+        
+        if($request->user()->hasRole('admin'))
+        {
+            $user->roles()->sync($data['roles'] ?? []);
+            $user->responsibleCountries()->sync($data['responsible_countries'] ?? []);
+            $user->responsibleGroups()->sync($data['responsible_groups'] ?? []);
         }
 
         $user->countries()->sync($data['country'] ?? []);
-        $user->responsibleCountries()->sync($data['responsible_countries'] ?? []);
-        $user->responsibleGroups()->sync($data['responsible_groups'] ?? []);
         $user->assignedProducts()->sync($data['private_products'] ?? []);
 
         return redirect()->route('admin.user.index')->with('alert', 'success:The user has been updated');

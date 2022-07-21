@@ -14,6 +14,7 @@
         var spanCountry = document.getElementById('responsible_countries-tags').querySelectorAll('span');
 
         if(spanCountry.length !== 0) return;
+        if(!spanRoles) return;
 
         for(var i = 0; i < spanRoles.length; i++){
             if(spanRoles[i].innerHTML === 'Opco'){
@@ -77,15 +78,16 @@
     }
 }());
 
-var spanRoles = document.getElementById('roles-tags').querySelectorAll('span');
-var adminDialog = document.querySelector('.admin-removal-confirm');
-
-document.querySelector('#roles-tags').addEventListener('click', checkAdminRemoved);
-
-function checkAdminRemoved(event){
-    if(event.target.dataset.index !== undefined && event.target.dataset.index !== '1') return;
-    adminDialog.classList.add('show');
-    document.querySelector('.admin-removal-confirm').addEventListener('dialog-closed', adminRestore, {once:true});
+if(document.querySelector('#roles-tags')){
+    var spanRoles = document.getElementById('roles-tags').querySelectorAll('span');
+    var adminDialog = document.querySelector('.admin-removal-confirm');
+    document.querySelector('#roles-tags').addEventListener('click', checkAdminRemoved);
+    
+    function checkAdminRemoved(event){
+        if(event.target.dataset.index !== undefined && event.target.dataset.index !== '1') return;
+        adminDialog.classList.add('show');
+        document.querySelector('.admin-removal-confirm').addEventListener('dialog-closed', adminRestore, {once:true});
+    }
 }
 
 function adminRestore(e){
