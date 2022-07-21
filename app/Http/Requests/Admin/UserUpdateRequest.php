@@ -39,7 +39,7 @@ class UserUpdateRequest extends FormRequest
                 ->numbers()
                 ->symbols()
             ],
-            'roles' => ['required', 'array'],
+            'roles' => ['array'],
             'country' => ['required', 'array'],
             'responsible_countries' => ['nullable', 'array', Rule::requiredIf(in_array(3, $this->roles))],
             'responsible_groups' => ['nullable', 'array'],
