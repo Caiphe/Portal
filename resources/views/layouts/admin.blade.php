@@ -32,6 +32,7 @@
 
         <ul class="secondary-menu">
             <li><a href="{{ route('user.profile') }}"><div class="profile-picture" style="background-image: url({{ $user->profile_picture }})"></div> {{ $user->full_name }}</a></li>
+            <li class="menu-applications active"><a class="toggle-notification">@svg('notifications') Notifications</a></li>
             <li>
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
@@ -54,6 +55,9 @@
         <a class="logo" href="/">@svg('logo', '', '/images/') Admin Portal</a>
         <button id="menu-button" class="reset">@svg('menu')</button>
     </header>
+
+    @include('templates.admin.notifications.index')
+
     <main id="main">
         @yield("content")
     </main>

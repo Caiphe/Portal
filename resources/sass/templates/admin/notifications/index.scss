@@ -1,0 +1,70 @@
+@use "../../../variables";
+
+.notification-main-container{
+    width: calc(100% - 320px);
+    height: 100vh;
+    background-color: #2a2a2a38;
+    position: fixed;
+    z-index: 2;
+    right: 0;
+    top: 0;
+    
+    .notification-content{
+        width: 360px;
+        height: 100vh;
+        position: fixed;
+        left: 0px;
+        background-color: #fff;
+        left: 320px;
+        top: 0;
+        z-index: 2;
+        box-shadow: 0px -8px 16px rgba(0, 0, 0, 0.1);
+        border-radius: 0px 16px 16px 0px;
+        padding: 24px;
+
+        .top-buttons{
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button{
+            background-color: #fff;
+            border: none;
+            padding: 0px;
+            color: #00678F;
+            cursor: pointer;
+            font-size: 12px;
+            height: auto;
+
+            &:hover{
+                background-color: #fff;
+                border: none;
+                outline: none;
+            }
+        }
+
+        .notification-list{
+            overflow-y: scroll;
+            height: 100%;
+            margin-top: 20px;
+
+            .single-notification{
+                border-bottom: solid 1px #cdcdcd;
+                padding-bottom: 15px;
+                
+                .more-details{
+                    display: flex;
+                    justify-content: space-between;
+    
+                    .date-time{
+                        font-weight: 700;
+                    }
+    
+                    .mark-as-read{
+                        font-size: 15px;
+                    }
+                }
+            }
+        }
+    }
+}
