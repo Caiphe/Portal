@@ -4,23 +4,24 @@ namespace App\Http\Controllers;
 
 use App\App;
 use App\Role;
-use App\TeamUser;
-use App\User;
 use App\Team;
+use App\User;
 use App\Country;
+use App\TeamUser;
 
+use App\Notification;
+use Illuminate\Http\Request;
+
+use App\Services\ApigeeService;
+use Mpociot\Teamwork\TeamInvite;
 use App\Concerns\Teams\InviteActions;
 use App\Concerns\Teams\InviteRequests;
-
+use Mpociot\Teamwork\Facades\Teamwork;
 use App\Http\Requests\Teams\UpdateRequest;
 use App\Http\Requests\Teams\RoleUpdateRequest;
 use App\Http\Requests\Teams\Invites\InviteRequest;
 use App\Http\Requests\Teams\Invites\LeavingRequest;
 use App\Http\Requests\Teams\Request as TeamRequest;
-use App\Services\ApigeeService;
-use Illuminate\Http\Request;
-use Mpociot\Teamwork\Facades\Teamwork;
-use Mpociot\Teamwork\TeamInvite;
 
 /**
  * Class CompanyTeamsController
@@ -339,6 +340,13 @@ class CompanyTeamsController extends Controller
 
         $team->update($data);
         ApigeeService::updateCompany($team);
+
+        foreach($team->users as $user){
+            Notification::create([
+                'user_id' => $user->id,
+                'notification' => "Your team $team->name has been updated please nagivate to your team to view the changes",
+            ]);
+        }
 
         return redirect()->route('team.show', $team->id)
             ->with('alert', 'success:Your team was successfully updated.');

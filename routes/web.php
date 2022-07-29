@@ -57,10 +57,15 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 
 	// Opco admin role request
 	Route::post('/opco-admin-role-request/store', 'OpcoRoleRequestController@store')->middleware(['can:request-opco-admin-role'])->name('opco-admin-role.store');
+
+	// 
 });
+
 
 Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa', 'can:view-admin'])->group(function () {
 	Route::get('/', 'HomeController')->name('admin.home');
+
+	Route::post('/notification/{notification}/read', 'NotificationController@read')->name('notification.read');
 
 	// Tasks
 	Route::get('/tasks', 'TaskController@index')->middleware(['auth', 'verified', '2fa', 'can:administer-task-panel'])->name('admin.task.index');

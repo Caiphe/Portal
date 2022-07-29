@@ -1,67 +1,113 @@
 @use "../../../variables";
 
-.notification-main-container{
+.notification-main-container {
     width: calc(100% - 320px);
     height: 100vh;
-    background-color: #2a2a2a38;
+    background-color: transparent;
     position: fixed;
     z-index: 2;
     right: 0;
     top: 0;
-    
-    .notification-content{
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.5s ease;
+
+    &.show {
+        opacity: 1;
+        pointer-events: auto;
+        transition: all 0.1s ease-in-out;
+
+        .notification-content {
+            left: 320px;
+            transition: all 0.3s ease-in-out;
+        }
+    }
+
+    .notification-content {
         width: 360px;
         height: 100vh;
         position: fixed;
         left: 0px;
         background-color: #fff;
-        left: 320px;
         top: 0;
         z-index: 2;
         box-shadow: 0px -8px 16px rgba(0, 0, 0, 0.1);
         border-radius: 0px 16px 16px 0px;
-        padding: 24px;
+        padding: 24px 20px 24px 24px;
+        transition: all 0.3s ease-in-out;
 
-        .top-buttons{
+        .top-buttons {
             display: flex;
             justify-content: space-between;
         }
 
-        button{
+        button {
             background-color: #fff;
             border: none;
             padding: 0px;
-            color: #00678F;
+            color: #00678f;
             cursor: pointer;
             font-size: 12px;
             height: auto;
 
-            &:hover{
+            &:hover {
                 background-color: #fff;
                 border: none;
                 outline: none;
             }
         }
 
-        .notification-list{
+        .notification-list {
             overflow-y: scroll;
             height: 100%;
             margin-top: 20px;
+            padding-right: 20px;
 
-            .single-notification{
+            .single-notification {
                 border-bottom: solid 1px #cdcdcd;
                 padding-bottom: 15px;
-                
-                .more-details{
+
+                .more-details {
                     display: flex;
                     justify-content: space-between;
-    
-                    .date-time{
+
+                    .date-time {
                         font-weight: 700;
+                        position: relative;
+                        padding-left: 15px;
+
+                        &:before {
+                            position: absolute;
+                            content: "";
+                            width: 8px;
+                            height: 8px;
+                            background-color: #10b630;
+                            left: 0;
+                            top: 7px;
+                            border-radius: 50%;
+                        }
                     }
-    
-                    .mark-as-read{
+
+                    .mark-as-read {
                         font-size: 15px;
+                    }
+                }
+
+                &.read {
+                    .notification-message {
+                        color: #969696;
+                    }
+
+                    .more-details {
+                        .date-time {
+                            padding-left: 0px;
+                            color: #969696;
+                            font-weight: 400;
+
+                            &:before {
+                                display: none;
+                            }
+                        }
                     }
                 }
             }
