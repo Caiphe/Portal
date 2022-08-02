@@ -34,7 +34,9 @@
             <li><a href="{{ route('user.profile') }}"><div class="profile-picture" style="background-image: url({{ $user->profile_picture }})"></div> {{ $user->full_name }}</a></li>
             <li class="notification-menu">
                 <a class="toggle-notification">@svg('notifications') Notifications</a>
-                <span class="notification-count">1</span>
+                <span class="notification-count">
+                    {{ $user->notifications->count() }}
+                </span>
             </li>
             <li>
                 <form action="{{ route('logout') }}" method="POST">

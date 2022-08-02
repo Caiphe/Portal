@@ -66,7 +66,7 @@
 
         function toggleReadFunc(event){ 
             event.preventDefault();
-            // this.closest('.single-notification').classList.toggle('read');
+            this.closest('.single-notification').classList.toggle('read');
 
             var notification = this.elements['notification'].value;
             var formToken = this.elements['_token'].value;
