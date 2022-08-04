@@ -6,8 +6,8 @@
 @endonce
 
 <div class="each-attribute-block">
-    <input class="attribute-data name" name="attribute[name][]" data-original="{{ $nameValue }}" value="{{ $nameValue }}" onblur="this.value === '' && addAlert('error', 'Please complete the field')"/>
-    <input class="attribute-data value" name="attribute[value][]" data-original="{{ $valueValue }}" value="{{ $valueValue }}" onblur="this.value === '' && addAlert('error', 'Please complete the field')"/>
+    <input class="attribute-data name" name="attribute[name][]" data-original="{!! $nameValue !!}" value="{!! $nameValue !!}" onblur="this.value === '' && addAlert('error', 'Please complete the field')"/>
+    <input class="attribute-data value" name="attribute[value][]" data-original="{!! $valueValue !!}" value="{!! $valueValue !!}" onblur="this.value === '' && addAlert('error', 'Please complete the field')"/>
     <button type="button" class="attribute-remove-btn" onclick="attributeRemove(this)">@svg('attribute-trash')</button>
 </div>
 
