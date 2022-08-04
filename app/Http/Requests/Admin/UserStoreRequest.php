@@ -39,7 +39,7 @@ class UserStoreRequest extends FormRequest
                 ->symbols()
             ],
             'password_confirmation' => ['required'],
-            'roles' => ['required', 'array'],
+            'roles' => ['nullable', 'array'],
             'country' => ['required', 'array'],
             'responsible_countries' => ['nullable', 'array', Rule::requiredIf(in_array(3, $this->roles))],
             'responsible_groups' => ['nullable', 'array'],
@@ -53,7 +53,7 @@ class UserStoreRequest extends FormRequest
             'first_name' => htmlspecialchars($this->first_name, ENT_NOQUOTES),
             'last_name' => htmlspecialchars($this->last_name, ENT_NOQUOTES),
             'email' => filter_var($this->email, FILTER_SANITIZE_EMAIL),
-            'roles' => array_map(fn($item) =>  htmlspecialchars($item, ENT_NOQUOTES), $this->roles ?? []),
+            'roles' => array_map(fn($item) =>  htmlspecialchars($item, ENT_NOQUOTES), $this->roles ?? [2]),
             'country' => array_map(fn($item) =>  htmlspecialchars($item, ENT_NOQUOTES), $this->country ?? []),
             'responsible_countries' => array_map(fn($item) =>  htmlspecialchars($item, ENT_NOQUOTES), $this->responsible_countries ?? []),
             'responsible_groups' => array_map(fn($item) =>  htmlspecialchars($item, ENT_NOQUOTES), $this->responsible_groups ?? []),
