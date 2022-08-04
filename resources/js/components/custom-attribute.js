@@ -11,5 +11,7 @@ function attributeRemove(button){
         document.querySelector('.attributes-heading').classList.remove('show');
         addedAttributeForm.classList.remove('active');
         addedAttributeForm.classList.add('non-active');
+        var listContainert = document.querySelector('.custom-attribute-list-container');
+        if(listContainert) listContainert.classList.remove('active');
     }
 }
