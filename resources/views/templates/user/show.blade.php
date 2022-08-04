@@ -117,17 +117,19 @@ Update profile
 
             <form class="opco-role-request-form" id="opco-role-request-form" method="POST" action="{{ route('opco-admin-role.store') }}">
                 @csrf
-
-                <h2>Apply for Amin Role</h2>
+                <h2>Apply for Admin Role</h2>
                 <p class="align-left">
-                    Even wanted to wield the power of Thano's guantlet. Well now you can apply to have the Opco universe at your purple fingertips. And with just one snap, half the tasks assigned to you will vanish.
+                    If you would like to request the the addition of the OpCo Admin Role to your profile, please supply a motivation below why you should be granted this role, including the applicable countries you are requesting permission for.
                 </p>
 
-                <p>But remember, only we the Eternals can grant you this power.</p>
-                <h2>Motivation for Amin Role</h2>
+                <p>
+                    Your application will be received by existing OpOo Admins, assigned to the countries you have and will be reviewed accordingly.
+                </p>
 
-                <textarea class="" rows="4" name="message" placeholder="Tell us why you are worthy of the Gauntlet. Eg. How many infinigy stones do you currently possess?"></textarea>
+                <h2>Motivation for Admin Role</h2>
+                <textarea class="" rows="4" name="message" placeholder='Please motivate the reason for your request of the OpCo Admin role e.g.  "Applying for the OpCo administrative role as I have been promoted to team lead of country X. "'></textarea>
                 <h2>Your selected countries</h2>
+                
                 <div class="locations">
                     @foreach($countries as $country)
                     <label for="user-{{ $country['code'] }}">
@@ -136,6 +138,7 @@ Update profile
                     </label>
                     @endforeach
                 </div>
+
                 <button type="submit" class="primary">Apply Now</button>
 
             </form>

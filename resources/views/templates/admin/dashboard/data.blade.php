@@ -56,9 +56,10 @@
 
                 <input type="hidden" name="remove-check" class="remove-check" value=""/>
                 @foreach ($app->custom_attributes as $key => $value)
-                    <x-apps.custom-attribute :nameValue="$key" :valueValue="$value"></x-apps.custom-attribute>
+                    @if($key !== 'Notes' && $key !== 'ApprovedAt' && $value !== '') 
+                        <x-apps.custom-attribute :nameValue="$key" :valueValue="$value"></x-apps.custom-attribute>
+                    @endif
                 @endforeach
-
                 <div class="no-attribute">None defined</div>
             </form>
         </div>
