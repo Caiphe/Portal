@@ -119,11 +119,11 @@ Update profile
                 @csrf
                 <h2>Apply for Admin Role</h2>
                 <p class="align-left">
-                    If you would like to request the the addition of the OpCo Admin Role to your profile, please supply a motivation below why you should be granted this role, including the applicable countries you are requesting permission for.
+                    If you would like to request the addition of the OpCo Admin Role to your profile, please supply a motivation below why you should be granted this role, including the applicable countries you are requesting permission for.
                 </p>
 
                 <p>
-                    Your application will be received by existing OpOo Admins, assigned to the countries you have and will be reviewed accordingly.
+                    Your application will be received by existing Admins, assigned to the countries you have and will be reviewed accordingly.
                 </p>
 
                 <h2>Motivation for Admin Role</h2>
