@@ -319,7 +319,7 @@
 
     addAttributeBtn.addEventListener('click', addNewAttribute);
 
-    attributeName.addEventListener('input', checkNameExists);
+    attributeName.addEventListener('change', checkNameExists);
 
     function addNewAttribute(){
         var attributeName = document.querySelector('#attribute-name');
@@ -351,7 +351,7 @@
         addedAttributeForm.classList.remove('non-active');
         addedAttributeForm.classList.add('active');
 
-        attributeName.addEventListener('input', checkNameExists);
+        attributeName.addEventListener('change', checkNameExists);
     }
 
     function checkNameExists(){
@@ -363,7 +363,6 @@
         }
 
         if(attrNames){
-
             for(var i = 0; i < attrNames.length; i++){
                 if(attrNames[i].value.toLowerCase() === this.value.toLowerCase()){
                     this.value = '';

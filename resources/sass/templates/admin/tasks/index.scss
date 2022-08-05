@@ -20,7 +20,6 @@ $Primary: #00ffc0;
             position: relative;
             width: 100%;
             padding: 15px 24px;
-            height: 80px;
             border-radius: 8px;
             display: flex;
             justify-content: space-between;
@@ -67,14 +66,22 @@ $Primary: #00ffc0;
                 .countries-list {
                     text-align: left;
                     display: flex;
+                    width: 250px;
+                    flex-wrap: wrap;
+                    padding-left: 5px;
+
+                    @media(min-width: 1500px){
+                        width: 350px;
+                    }
+
+                    @media(max-width: 550px){
+                        width: 100%;
+                    }
 
                     .country-flag {
                         width: 20px;
                         margin-left: -5px;
-
-                        &:nth-child(1) {
-                            margin-left: 0px;
-                        }
+                        margin-bottom: 5px;
                     }
                 }
 
@@ -105,6 +112,10 @@ $Primary: #00ffc0;
                     color: #000;
                     font-size: 15px;
                     margin-bottom: 13px;
+
+                    @media(max-width: 700px){
+                        line-height: 16px;
+                    }
                 }
 
                 &.button-container {
