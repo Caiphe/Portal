@@ -5,8 +5,17 @@
 <div class="notification-main-container" id="notification-main-container">
     <div class="notification-content">
         <div class="top-buttons">
-            <button>Clear notifiations</button>
-            <button>Mark all as read</button>
+
+            <form method="POST" action="{{ route('notification.clear.all') }}" class="clear-all-notification">
+                @csrf
+                <button type="submit">Clear notifiations</button>
+            </form>
+
+            <form method="POST" action="{{ route('notification.read.all') }}" class="mark-read-all-form">
+                @csrf
+                <button type="submit" href="">Mark all as read</button>
+            </form>
+
             <button type="button" class="close-notification" id="close-notification">@svg('close', '#00678F')</button>
         </div>
 
@@ -27,7 +36,11 @@
             </div>
             @endforeach
 
+            @if($notifications->count() < 1)
+            <div class="no-notifications">You have no notifications</div>
+            @endif
         </div>
+
     </div>
 </div>
 
@@ -38,6 +51,7 @@
         var markAsReadButtons = document.querySelectorAll('.mark-as-read');
         var notificationMenu = document.querySelector('.notification-menu');
         var toggleReadForm = document.querySelectorAll('.read-unread-form');
+        
 
         document.querySelector('.toggle-notification').addEventListener('click', toggleShowNotification);
         function toggleShowNotification(){
@@ -64,9 +78,12 @@
             toggleReadForm[i].addEventListener('submit', toggleReadFunc);
         }
 
+        // Pull notification from the database with AJax
+
+        // toggles the read and Non read notification
         function toggleReadFunc(event){ 
             event.preventDefault();
-            this.closest('.single-notification').classList.toggle('read');
+            // this.closest('.single-notification').classList.toggle('read');
 
             var notification = this.elements['notification'].value;
             var formToken = this.elements['_token'].value;
@@ -94,11 +111,8 @@
                 if (xhr.status === 200) {
 
                     var readMark = '';
-                    if(reat_at === ''){
-                        readMark = 'read';
-                    }else{
-                        readMark = 'unread';
-                    }
+                    if(reat_at === ''){ readMark = 'read';}
+                    else{ readMark = 'unread'; }
 
                     addAlert('success', [`Notification marked as ${readMark}.`]);
                     return;
@@ -116,6 +130,95 @@
                 }
             };
         }
+
+        // Mark all notifications unread as read
+        document.querySelector('.mark-read-all-form').addEventListener('submit', readAllFunc);
+        function readAllFunc(ev){
+            ev.preventDefault();
+
+            var formToken = this.elements['_token'].value;
+
+            var notificationData = {
+                _method: 'POST',
+                _token: formToken,
+            };
+
+            var xhr = new XMLHttpRequest();
+
+            addLoading('marking all notificationa as read...');
+
+            xhr.open('POST', this.action);
+            xhr.setRequestHeader('X-CSRF-TOKEN', formToken);
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+            xhr.send(JSON.stringify(notificationData));
+
+            xhr.onload = function() {
+                removeLoading();
+                if (xhr.status === 200) {
+
+                    addAlert('success', [`Notifications marked read.`]);
+                    return;
+                
+                } else {
+                    var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+                    if(result.errors) {
+                        result.message = [];
+                        for(var error in result.errors){
+                            result.message.push(result.errors[error]);
+                        }
+                    }
+
+                    addAlert('error', result.message || 'Sorry there was a problem with your opco admin request. Please try again.');
+                }
+            };
+        }
+
+        // Mark all notifications unread as read
+        document.querySelector('.clear-all-notification').addEventListener('submit', readAllFunc);
+        function readAllFunc(ev){
+            ev.preventDefault();
+
+            var formToken = this.elements['_token'].value;
+
+            var notificationData = {
+                _method: 'POST',
+                _token: formToken,
+            };
+
+            var xhr = new XMLHttpRequest();
+
+            addLoading('clearing all notifications...');
+
+            xhr.open('POST', this.action);
+            xhr.setRequestHeader('X-CSRF-TOKEN', formToken);
+            xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+            xhr.send(JSON.stringify(notificationData));
+
+            xhr.onload = function() {
+                removeLoading();
+                if (xhr.status === 200) {
+
+                    addAlert('success', [`All notifications cleared successfully.`]);
+                    return;
+                
+                } else {
+                    var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+                    if(result.errors) {
+                        result.message = [];
+                        for(var error in result.errors){
+                            result.message.push(result.errors[error]);
+                        }
+                    }
+
+                    addAlert('error', result.message || 'Sorry there was a problem with your opco admin request. Please try again.');
+                }
+            };
+        }
+
 
     </script>
 @endpush

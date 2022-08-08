@@ -57,6 +57,13 @@
             }
         }
 
+        .no-notifications{
+            text-align: center;
+            color: #969696;
+            padding-top: 15px;
+            border-top: solid 1px #cdcdcd;
+        }
+
         .notification-list {
             overflow-y: scroll;
             height: 100%;
