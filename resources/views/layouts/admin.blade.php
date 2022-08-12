@@ -34,9 +34,7 @@
             <li><a href="{{ route('user.profile') }}"><div class="profile-picture" style="background-image: url({{ $user->profile_picture }})"></div> {{ $user->full_name }}</a></li>
             <li class="notification-menu">
                 <a class="toggle-notification">@svg('notifications') Notifications</a>
-                <div class="notification-count">
-                    {{ $user->notifications->count() }}
-                </div>
+                <div class="notification-count"></div>
             </li>
             <li>
                 <form action="{{ route('logout') }}" method="POST">
@@ -60,7 +58,6 @@
         <a class="logo" href="/">@svg('logo', '', '/images/') Admin Portal</a>
         <button id="menu-button" class="reset">@svg('menu')</button>
     </header>
-
     
     <x-notifications></x-notifications>
     
@@ -80,6 +77,32 @@
                 syncProductApiUrl: "{{ route('api.sync.products') }}",
             }[key] || null;
         }
+
+        // fetch("{{ route('notifications.count') }}").then(function(data){
+        //     return data.json();
+        // }).then(function(data){
+        //     console.log(data.count);
+        //     document.querySelector('.notification-count').textContent = data.count;
+        // }).catch(function(error) {
+        //     // 
+        // });
+
+        var request = new XMLHttpRequest();
+        request.onload = requestListener;
+        request.onerror = requestError;
+        request.open('GET', "{{ route('notifications.count') }}", true);
+        request.send();
+
+        function requestListener(){
+            var data = JSON.parse(this.responseText);
+            document.querySelector('.notification-count').textContent = data.count;
+            console.log(data);
+        }
+
+        function requestError(){
+            console.log('Error here');
+        }
+
     </script>
     <script src="{{ mix('/js/templates/admin/scripts.js') }}" defer></script>
 @endprepend

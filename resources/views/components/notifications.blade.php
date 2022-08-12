@@ -1,11 +1,11 @@
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/admin/notifications/index.css') }}">
 @endpush
+<meta class="csrf-token" name="csrf-token" content="{{ csrf_token() }}">
 
 <div class="notification-main-container" id="notification-main-container">
     <div class="notification-content">
         <div class="top-buttons">
-
             <form method="POST" action="{{ route('notification.clear.all') }}" class="clear-all-notification">
                 @csrf
                 <button type="submit">Clear notifiations</button>
@@ -41,6 +41,10 @@
             @endif
         </div>
 
+        <div style="display: none" class="notification-list" id="second-container" data-csrftoken="{{ csrf_token() }}">
+
+        </div>
+
     </div>
 </div>
 
@@ -52,7 +56,6 @@
         var notificationMenu = document.querySelector('.notification-menu');
         var toggleReadForm = document.querySelectorAll('.read-unread-form');
         
-
         document.querySelector('.toggle-notification').addEventListener('click', toggleShowNotification);
         function toggleShowNotification(){
             notificationMainContainer.classList.toggle('show');
@@ -78,12 +81,45 @@
             toggleReadForm[i].addEventListener('submit', toggleReadFunc);
         }
 
-        // Pull notification from the database with AJax
+
+        fetch('/admin/notifications/fetch-all').then((data)=> {
+            return data.json();
+        }).then((notifications)=>{
+            var content = "";
+            var entries = notifications.notifications;
+            var notificationsContainer = document.querySelector('#second-container');
+
+            entries.map((values)=>{
+                if(values){
+                    content += `
+                        <div class="single-notification read">
+                            <p class="notification-message">${values.notification}</p>
+                            <div class="more-details">
+                                <span class="date-time">${Date(values.created_at)}</span>
+                                <form method="POST" action="/admin/notification/${values.id}/read" class="read-unread-form">
+                                    @csrf
+                                    <input type="hidden" name="notification" value="${values.id}" />
+                                    <input type="hidden" name="read_at" value="${values.read_at}" />
+                                    <button class="mark-as-read">Mark as unread</button>
+                                </form>
+                            </div>
+                        </div>
+                    `;
+
+                }else{
+                    content += "You have no notifications";
+                }
+            });
+            notificationsContainer.innerHTML = content;
+
+        }).catch((error)=>{
+            // console.log("Error here");
+        });
 
         // toggles the read and Non read notification
         function toggleReadFunc(event){ 
             event.preventDefault();
-            // this.closest('.single-notification').classList.toggle('read');
+            this.closest('.single-notification').classList.toggle('read');
 
             var notification = this.elements['notification'].value;
             var formToken = this.elements['_token'].value;

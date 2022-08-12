@@ -9,6 +9,11 @@ use App\Http\Controllers\Controller;
 class NotificationController extends Controller
 {
 
+    public function fetchNotification(){
+        $notifications = Notification::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
+        return response()->json(['notifications' => $notifications]);
+    }
+
     public function read(Notification $notification)
     {
         $read = '';
@@ -48,5 +53,11 @@ class NotificationController extends Controller
             }
             return response()->json(['success' => true], 200);       
         }
+    }
+
+    public function notificationsCount()
+    {
+        $count = Notification::where('user_id', auth()->user()->id)->whereNull('read_at')->count();
+        return response()->json(['count' => $count]);
     }
 }

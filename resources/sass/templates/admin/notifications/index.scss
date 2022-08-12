@@ -18,8 +18,15 @@
         transition: all 0.1s ease-in-out;
 
         .notification-content {
+            @media(max-with: 1100px){
+                left: 0px;
+                transition: all 0.3s ease-in-out;
+            }
+
             left: 320px;
             transition: all 0.3s ease-in-out;
+
+            
         }
     }
 
@@ -33,7 +40,7 @@
         z-index: 2;
         box-shadow: 0px -8px 16px rgba(0, 0, 0, 0.1);
         border-radius: 0px 16px 16px 0px;
-        padding: 24px 20px 24px 24px;
+        padding: 24px 40px 24px 24px;
         transition: all 0.3s ease-in-out;
 
         .top-buttons {
@@ -66,10 +73,10 @@
 
         .notification-list {
             overflow-y: scroll;
-            height: 100%;
+            height: 95%;
             margin-top: 20px;
-            margin-bottom: 20px;
-            padding-right: 20px;
+            margin-bottom: 60px;
+            padding: 0px 20px 20px 0px;
 
             .single-notification {
                 border-bottom: solid 1px #cdcdcd;

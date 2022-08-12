@@ -66,9 +66,11 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 	Route::get('/', 'HomeController')->name('admin.home');
 
 	// Notification
-	Route::post('/notification/{notification}/read', 'NotificationController@read')->middleware(['auth', 'verified', '2fa', 'can:view-admin'])->name('notification.read');
-	Route::post('/notifications/read-all', 'NotificationController@readAll')->middleware(['auth', 'verified', '2fa', 'can:view-admin'])->name('notification.read.all');
-	Route::post('/notifications/clear-all', 'NotificationController@clearAll')->middleware(['auth', 'verified', '2fa', 'can:view-admin'])->name('notification.clear.all');
+	Route::post('/notification/{notification:id}/read', 'NotificationController@read')->middleware(['auth', 'verified', '2fa'])->name('notification.read');
+	Route::post('/notifications/read-all', 'NotificationController@readAll')->middleware(['auth', 'verified', '2fa'])->name('notification.read.all');
+	Route::post('/notifications/clear-all', 'NotificationController@clearAll')->middleware(['auth', 'verified', '2fa'])->name('notification.clear.all');
+	Route::get('/notifications/fetch-all', 'NotificationController@fetchNotification')->middleware(['auth', 'verified', '2fa'])->name('notification.fetch.all');
+	Route::get('/notifications/count', 'NotificationController@notificationsCount')->middleware(['auth', 'verified', '2fa'])->name('notifications.count');
 
 	// Tasks
 	Route::get('/tasks', 'TaskController@index')->middleware(['auth', 'verified', '2fa', 'can:administer-task-panel'])->name('admin.task.index');
