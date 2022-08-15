@@ -45,7 +45,7 @@
         <div class="content-container">
 
             <div class="attributes-heading @if ($app->custom_attributes) show @endif">
-                <h4 class="name-heading">Attribue name</h4>
+                <h4 class="name-heading">Attribute name</h4>
                 <h4 class="value-heading">Value</h4>
             </div>
 
