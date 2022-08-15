@@ -90,7 +90,7 @@
                     <span class="no-attribute">None defined</span>
 
                     <div class="attributes-heading">
-                        <h4 class="name-heading">Attribtue name</h4>
+                        <h4 class="name-heading">Attribute name</h4>
                         <h4 class="value-heading">Value</h4>
                     </div>
 
