@@ -6,6 +6,7 @@ use DB;
 use App\App;
 use App\Team;
 use App\User;
+use App\Notification;
 use App\Country;
 use App\Product;
 use App\Mail\NewApp;
@@ -277,6 +278,7 @@ class AppController extends Controller
             fn ($q) => $q->where('developer_id', $user->developer_id)
                 ->orWhereIn('team_id', $userTeams)
         )->firstOrFail();
+        
         $validated = $request->validated();
         $app->load('products', 'team');
         $appTeam = $app->team ?? null;
@@ -365,6 +367,17 @@ class AppController extends Controller
             'country_code' => $validated['country'],
         ]);
 
+        // Notification creation on apps update
+        $users = $app->country->opcoUser->pluck('id')->toArray();
+        if($users){
+            foreach($users as $user){
+                Notification::create([
+                    'user_id' => $user,
+                    'notification' => "Your App {$app->display_name} has been updated please nagivate to your apps to view the changes",
+                ]);
+            }
+        }
+
         $app->products()->sync(
             array_reduce(
                 ApigeeService::getLatestCredentials($updatedResponse['credentials'])['apiProducts'],
@@ -412,6 +425,16 @@ class AppController extends Controller
         ApigeeService::delete("developers/{$user->email}/apps/{$validated['name']}");
 
         $app->delete();
+
+        $users = $app->country->opcoUser->pluck('id')->toArray();
+        if($users){
+            foreach($users as $user){
+                Notification::create([
+                    'user_id' => $user,
+                    'notification' => "Your App {$app->display_name} has been deleted",
+                ]);
+            }
+        }
 
         return redirect(route('app.index'));
     }
@@ -507,6 +530,16 @@ class AppController extends Controller
         $app->update([
             'credentials' => $updatedApp['credentials']
         ]);
+
+        $users = $app->country->opcoUser->pluck('id')->toArray();
+        if($users){
+            foreach($users as $user){
+                Notification::create([
+                    'user_id' => $user,
+                    'notification' => "Your App {$app->display_name}'s credential has been renewed",
+                ]);
+            }
+        }
 
         return redirect()->route('app.index')->with('alert', 'success:Your credentials have been renewed');
     }

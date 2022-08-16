@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\App;
 use App\Product;
+use App\Notification;
 use App\Services\ApigeeService;
 use App\Http\Controllers\Controller;
 
@@ -71,6 +72,16 @@ class AppController extends Controller
             'attributes' => $data['attributes'],
             'credentials' => $resp['credentials']
         ]);
+
+        $users = $app->country->opcoUser->pluck('id')->toArray();
+        if($users){
+            foreach($users as $user){
+                Notification::create([
+                    'user_id' => $user,
+                    'notification' => "Your App name {$app->display_name} has been approved, navigate to your apps to view the changes.",
+                ]);
+            }
+        }
 
         $app->products()->sync($updatedApiProducts);
 
