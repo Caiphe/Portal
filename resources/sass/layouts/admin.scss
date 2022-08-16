@@ -18,6 +18,10 @@ body {
     }
 }
 
+textarea{
+    resize: none;
+}
+
 #sidebar {
     position: fixed;
     display: flex;
