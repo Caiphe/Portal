@@ -275,6 +275,7 @@ $Primary: #00ffc0;
                 margin: 25px auto;
                 display: flex;
                 border-radius: 5px;
+                resize: none;
 
                 @media (max-width: 630px) {
                     width: 90%;
