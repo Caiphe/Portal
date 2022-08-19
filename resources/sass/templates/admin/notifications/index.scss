@@ -25,8 +25,6 @@
 
             left: 320px;
             transition: all 0.3s ease-in-out;
-
-            
         }
     }
 
@@ -40,7 +38,8 @@
         z-index: 2;
         box-shadow: 0px -8px 16px rgba(0, 0, 0, 0.1);
         border-radius: 0px 16px 16px 0px;
-        padding: 24px 40px 24px 24px;
+        padding: 24px 21px 24px 24px;
+        box-sizing: border-box;
         transition: all 0.3s ease-in-out;
 
         .top-buttons {
@@ -67,8 +66,20 @@
         .no-notifications{
             text-align: center;
             color: #969696;
-            padding-top: 15px;
             border-top: solid 1px #cdcdcd;
+            display: none;
+            pointer-events: none;
+            opacity: 0;
+            transition: all .3s ease;
+
+            &.show{
+                display: block;
+                pointer-events: auto;
+                opacity: 1;
+                transition: all .3s ease;
+                padding-top: 15px;
+                margin-top: 20px;
+            }
         }
 
         .notification-list {
@@ -105,9 +116,15 @@
 
                     .mark-as-read {
                         font-size: 15px;
+                        position: relative;
+
+                        &:after{
+                            content: 'Mark as read';
+                            font-size: 15px;
+                        }
                     }
                 }
-
+                
                 &.read {
                     .notification-message {
                         color: #969696;
@@ -122,6 +139,13 @@
                             &:before {
                                 display: none;
                             }
+                        }
+                    }
+
+                    .mark-as-read {
+
+                        &:after{
+                            content: 'Mark as unread';
                         }
                     }
                 }

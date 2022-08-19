@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,4 +15,11 @@ class Notification extends Model
         'notification',
         'read_at'
     ];
+
+    public function getFormattedDateAttribute()
+    {
+        return $this->created_at->format('M d, h:m');
+    }
+
+    protected $appends = ['formattedDate'];
 }

@@ -1,7 +1,7 @@
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/admin/notifications/index.css') }}">
 @endpush
-<meta class="csrf-token" name="csrf-token" content="{{ csrf_token() }}">
+<meta class="csrf-token" name="_token" content="{{ csrf_token() }}">
 
 <div class="notification-main-container" id="notification-main-container">
     <div class="notification-content">
@@ -19,8 +19,7 @@
             <button type="button" class="close-notification" id="close-notification">@svg('close', '#00678F')</button>
         </div>
 
-        <div class="notification-list">
-           
+        {{-- <div class="notification-list">
             @foreach ($notifications as $note)
             <div class="single-notification @if($note->read_at) read @endif">
                 <p class="notification-message">{{ $note->notification }}</p>
@@ -30,7 +29,7 @@
                         @csrf
                         <input type="hidden" name="notification" value="{{ $note->id }}" />
                         <input type="hidden" name="read_at" value="{{ $note->read_at }}">
-                        <button class="mark-as-read">Mark as @if($note->read_at) unread @else read @endif </button>
+                        <button class="mark-as-read"></button>
                     </form>
                 </div>
             </div>
@@ -39,11 +38,13 @@
             @if($notifications->count() < 1)
             <div class="no-notifications">You have no notifications</div>
             @endif
+        </div> --}}
+
+        <div class="no-notifications" id="no-notifications">You have no notifications</div>
+
+        <div style="display: block;" class="notification-list" id="second-container">
         </div>
 
-        <div style="display: none" class="notification-list" id="second-container" data-csrftoken="{{ csrf_token() }}">
-
-        </div>
 
     </div>
 </div>
@@ -81,49 +82,51 @@
             toggleReadForm[i].addEventListener('submit', toggleReadFunc);
         }
 
-
-        fetch('/admin/notifications/fetch-all').then((data)=> {
+        fetch('/admin/notifications/fetch-all').then(function(data) {
             return data.json();
-        }).then((notifications)=>{
+        }).then(function(notifications){
             var content = "";
             var entries = notifications.notifications;
             var notificationsContainer = document.querySelector('#second-container');
 
-            entries.map((values)=>{
-                if(values){
-                    content += `
-                        <div class="single-notification read">
-                            <p class="notification-message">${values.notification}</p>
-                            <div class="more-details">
-                                <span class="date-time">${Date(values.created_at)}</span>
-                                <form method="POST" action="/admin/notification/${values.id}/read" class="read-unread-form">
-                                    @csrf
-                                    <input type="hidden" name="notification" value="${values.id}" />
-                                    <input type="hidden" name="read_at" value="${values.read_at}" />
-                                    <button class="mark-as-read">Mark as unread</button>
-                                </form>
-                            </div>
-                        </div>
-                    `;
+            if(entries.lenth === 0){
+                document.querySelector('#no-notifications').classList.add('show');
+                return;
+            }
 
-                }else{
-                    content += "You have no notifications";
-                }
+            entries.map(function(values){
+            content += `
+                <div class="single-notification ${values.read_at ? 'read' : ''}">
+                    <p class="notification-message">${values.notification}</p>
+                    <div class="more-details">
+                        <span class="date-time">${values.formattedDate}</span>
+
+                        <form method="POST" action="/admin/notification/${values.id}/read" class="read-unread-form">
+                            @csrf
+                            <input type="hidden" name="notification" value="${values.id}" />
+                            <input type="hidden" name="read_at" value="${values.read_at ? values.read_at : ''}" />
+                            <button type="sbmit" class="mark-as-read"></button>
+                        </form>
+
+                    </div>
+                </div>
+            `;
             });
             notificationsContainer.innerHTML = content;
 
-        }).catch((error)=>{
+        }).catch(function(error){
             // console.log("Error here");
         });
 
         // toggles the read and Non read notification
-        function toggleReadFunc(event){ 
+        function toggleReadFunc(event){
             event.preventDefault();
-            this.closest('.single-notification').classList.toggle('read');
 
+            this.closest('.single-notification').classList.toggle('read'); 
+           
             var notification = this.elements['notification'].value;
             var formToken = this.elements['_token'].value;
-            var reat_at = this.elements['read_at'].value;
+            var reatAt = this.elements['read_at'].value;
 
             var notificationData = {
                 notification: notification,
@@ -135,7 +138,7 @@
 
             addLoading('marking as read...');
 
-            xhr.open('POST', this.action);
+            xhr.open('POST', this.action, true);
             xhr.setRequestHeader('X-CSRF-TOKEN', formToken);
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -147,12 +150,12 @@
                 if (xhr.status === 200) {
 
                     var readMark = '';
-                    if(reat_at === ''){ readMark = 'read';}
+                    if(reatAt === ''){ readMark = 'read';}
                     else{ readMark = 'unread'; }
 
                     addAlert('success', [`Notification marked as ${readMark}.`]);
                     return;
-                
+    
                 } else {
                     var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
                     if(result.errors) {
@@ -254,7 +257,6 @@
                 }
             };
         }
-
 
     </script>
 @endpush

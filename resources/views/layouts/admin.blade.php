@@ -96,7 +96,6 @@
         function requestListener(){
             var data = JSON.parse(this.responseText);
             document.querySelector('.notification-count').textContent = data.count;
-            console.log(data);
         }
 
         function requestError(){

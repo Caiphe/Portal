@@ -368,7 +368,7 @@ class AppController extends Controller
         ]);
 
         // Notification creation on apps update
-        $users = $app->country->opcoUser->pluck('id')->toArray();
+        $users = $app->country->users->pluck('id')->toArray();
         if($users){
             foreach($users as $user){
                 Notification::create([
