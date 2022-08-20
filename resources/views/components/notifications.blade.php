@@ -19,27 +19,6 @@
             <button type="button" class="close-notification" id="close-notification">@svg('close', '#00678F')</button>
         </div>
 
-        {{-- <div class="notification-list">
-            @foreach ($notifications as $note)
-            <div class="single-notification @if($note->read_at) read @endif">
-                <p class="notification-message">{{ $note->notification }}</p>
-                <div class="more-details">
-                    <span class="date-time">{{ $note['created_at']->format('M d, h:m ') }}</span>
-                    <form method="POST" action="{{ route('notification.read', $note) }}" class="read-unread-form">
-                        @csrf
-                        <input type="hidden" name="notification" value="{{ $note->id }}" />
-                        <input type="hidden" name="read_at" value="{{ $note->read_at }}">
-                        <button class="mark-as-read"></button>
-                    </form>
-                </div>
-            </div>
-            @endforeach
-
-            @if($notifications->count() < 1)
-            <div class="no-notifications">You have no notifications</div>
-            @endif
-        </div> --}}
-
         <div class="no-notifications" id="no-notifications">You have no notifications</div>
 
         <div style="display: block;" class="notification-list" id="second-container">
@@ -49,13 +28,10 @@
     </div>
 </div>
 
-
 @push('scripts')
     <script>
         var notificationMainContainer = document.getElementById('notification-main-container');
-        var markAsReadButtons = document.querySelectorAll('.mark-as-read');
         var notificationMenu = document.querySelector('.notification-menu');
-        var toggleReadForm = document.querySelectorAll('.read-unread-form');
         
         document.querySelector('.toggle-notification').addEventListener('click', toggleShowNotification);
         function toggleShowNotification(){
@@ -78,10 +54,7 @@
             notificationMenu.classList.remove('active');
         }
         
-        for(var i = 0; i < toggleReadForm.length; i++){
-            toggleReadForm[i].addEventListener('submit', toggleReadFunc);
-        }
-
+       
         fetch('/admin/notifications/fetch-all').then(function(data) {
             return data.json();
         }).then(function(notifications){
@@ -100,14 +73,11 @@
                     <p class="notification-message">${values.notification}</p>
                     <div class="more-details">
                         <span class="date-time">${values.formattedDate}</span>
-
-                        <form method="POST" action="/admin/notification/${values.id}/read" class="read-unread-form">
-                            @csrf
-                            <input type="hidden" name="notification" value="${values.id}" />
-                            <input type="hidden" name="read_at" value="${values.read_at ? values.read_at : ''}" />
-                            <button type="sbmit" class="mark-as-read"></button>
-                        </form>
-
+                        <button type="sbmit" data-status="${values.read_at ? 'unread' : 'read'}"
+                                data-url ="/admin/notification/${values.id}/read"
+                                data-notification="${values.id}" onclick="toggleRead(this);" 
+                                class="mark-as-read new-read">
+                        </button>
                     </div>
                 </div>
             `;
@@ -118,27 +88,26 @@
             // console.log("Error here");
         });
 
-        // toggles the read and Non read notification
-        function toggleReadFunc(event){
-            event.preventDefault();
+        var toggleReadForm = document.querySelectorAll('.read-unread-form');
 
-            this.closest('.single-notification').classList.toggle('read'); 
-           
-            var notification = this.elements['notification'].value;
-            var formToken = this.elements['_token'].value;
-            var reatAt = this.elements['read_at'].value;
+        function toggleRead(e){
+            var notification = e.dataset.notification;
+            var status = e.dataset.status;
+            var url = e.dataset.url;
+            var formToken = document.querySelector('meta[name="csrf-token"]').content;
+            e.closest('.single-notification').classList.toggle('read'); 
 
             var notificationData = {
                 notification: notification,
                 _method: 'POST',
-                _token: formToken,
+                _token: formToken
             };
 
             var xhr = new XMLHttpRequest();
 
             addLoading('marking as read...');
 
-            xhr.open('POST', this.action, true);
+            xhr.open("POST", url, true);
             xhr.setRequestHeader('X-CSRF-TOKEN', formToken);
             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -149,13 +118,9 @@
                 removeLoading();
                 if (xhr.status === 200) {
 
-                    var readMark = '';
-                    if(reatAt === ''){ readMark = 'read';}
-                    else{ readMark = 'unread'; }
-
-                    addAlert('success', [`Notification marked as ${readMark}.`]);
+                    addAlert('success', [`Notification marked as ${status}.`]);
                     return;
-    
+
                 } else {
                     var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
                     if(result.errors) {
