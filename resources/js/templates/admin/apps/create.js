@@ -320,6 +320,7 @@
     addAttributeBtn.addEventListener('click', addNewAttribute);
 
     attributeName.addEventListener('change', checkNameExists);
+    attributeValue.addEventListener('change', removeQuote);
 
     function addNewAttribute(){
         var attributeName = document.querySelector('#attribute-name');
@@ -327,6 +328,11 @@
 
         if(attributeName.value === "" || attributeValue.value === ''){
             attributeErrorMessage.classList.add('show');
+
+            setTimeout(function(){
+                attributeErrorMessage.classList.remove('show');
+            }, 4000);
+
             return;
         }
 
@@ -362,6 +368,8 @@
             attrNames = [attrNames];
         }
 
+        this.value = this.value.replaceAll(/["']/g, "");
+
         if(attrNames){
             for(var i = 0; i < attrNames.length; i++){
                 if(attrNames[i].value.toLowerCase() === this.value.toLowerCase()){
@@ -373,7 +381,7 @@
             }
         }
 
-        var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName'];
+        var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName', 'Notes'];
         for(var i = 0; i < existingNames.length; i++){
             if(existingNames[i].toLowerCase() === this.value.toLowerCase()){
                 this.value = '';
@@ -382,5 +390,10 @@
                 break;
             }
         }
+    }
+
+    function removeQuote()
+    {
+        this.value = this.value.replaceAll(/["']/g, "");
     }
 }());
