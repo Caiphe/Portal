@@ -64,8 +64,8 @@ class CreateAppRequest extends FormRequest
         $attrs = [];
         foreach ($attributes as $attr) {
             $attrs[] = [
-                "name" => htmlspecialchars($attr["name"]),
-                'value' => htmlspecialchars($attr["value"])
+                "name" => htmlspecialchars($attr["name"], ENT_NOQUOTES),
+                'value' => htmlspecialchars($attr["value"], ENT_NOQUOTES)
             ];
         }
         return $attrs;

@@ -194,7 +194,7 @@ class App extends Model
         }
         return array_diff_ukey(
             $attributes, 
-            array_flip(['Location', 'Country', 'TeamName', 'Description', 'DisplayName']), 
+            array_flip(['Location', 'Country', 'TeamName', 'Description', 'DisplayName', 'Notes']), 
             fn($a, $b) => strtolower($a) <=> strtolower($b)
         );
     }
