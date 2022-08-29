@@ -24,7 +24,6 @@
         <div style="display: block;" class="notification-list" id="second-container">
         </div>
 
-
     </div>
 </div>
 
@@ -92,11 +91,11 @@
 
         function toggleRead(e){
             var notification = e.dataset.notification;
-            var status = e.dataset.status;
+            var notificationStatus = e.dataset.status;
             var url = e.dataset.url;
             var formToken = document.querySelector('meta[name="csrf-token"]').content;
             e.closest('.single-notification').classList.toggle('read'); 
-
+           
             var notificationData = {
                 notification: notification,
                 _method: 'POST',
@@ -118,7 +117,18 @@
                 removeLoading();
                 if (xhr.status === 200) {
 
-                    addAlert('success', [`Notification marked as ${status}.`]);
+                    var notificationCount = document.querySelector('.notification-count');
+                    var noteState = '';
+
+                    if(e.closest('.single-notification').classList.contains('read')) {
+                        notificationCount.innerHTML = Number(notificationCount.innerHTML) - 1;
+                        noteState = 'read';
+                    }else{
+                        notificationCount.innerHTML = Number(notificationCount.innerHTML) + 1;
+                        noteState = 'unread';
+                    }
+
+                    addAlert('success', [`Notification marked as ${noteState}.`]);
                     return;
 
                 } else {
@@ -161,8 +171,15 @@
             xhr.onload = function() {
                 removeLoading();
                 if (xhr.status === 200) {
+                    var allNotifications = document.querySelectorAll('.single-notification');
+                    
+                    for(var i = 0; i < allNotifications.length; i++){
+                        if(allNotifications[i].classList.contains('read')) continue;
+                        allNotifications[i].classList.add('read');
+                        document.querySelector('.notification-count').innerHTML = 0;
+                    }
 
-                    addAlert('success', [`Notifications marked read.`]);
+                    addAlert('success', [`All notifications marked as read.`]);
                     return;
                 
                 } else {
@@ -180,9 +197,11 @@
         }
 
         // Mark all notifications unread as read
-        document.querySelector('.clear-all-notification').addEventListener('submit', readAllFunc);
-        function readAllFunc(ev){
+        document.querySelector('.clear-all-notification').addEventListener('submit', clearAll);
+        function clearAll(ev){
             ev.preventDefault();
+            addAlert('success', [`All notifications cleared successfully here.`]);
+            return;
 
             var formToken = this.elements['_token'].value;
 

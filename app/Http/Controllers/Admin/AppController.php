@@ -73,12 +73,13 @@ class AppController extends Controller
             'credentials' => $resp['credentials']
         ]);
 
-        $users = $app->country->opcoUser->pluck('id')->toArray();
-        if($users){
-            foreach($users as $user){
+        $appUsers = $app->team->users->pluck('id')->toArray() ?? null;
+        
+        if($appUsers){
+            foreach($appUsers as $user){
                 Notification::create([
                     'user_id' => $user,
-                    'notification' => "Your App name {$app->display_name} has been approved, navigate to your apps to view the changes.",
+                    'notification' => "Your team App {$app->display_name} has been deleted.",
                 ]);
             }
         }

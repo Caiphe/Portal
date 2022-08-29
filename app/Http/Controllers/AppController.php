@@ -368,9 +368,9 @@ class AppController extends Controller
         ]);
 
         // Notification creation on apps update
-        $users = $app->country->users->pluck('id')->toArray();
-        if($users){
-            foreach($users as $user){
+        $appUsers = $app->team->users->pluck('id')->toArray();
+        if($appUsers){
+            foreach($appUsers as $user){
                 Notification::create([
                     'user_id' => $user,
                     'notification' => "Your App {$app->display_name} has been updated please nagivate to your apps to view the changes",
@@ -424,8 +424,9 @@ class AppController extends Controller
 
         ApigeeService::delete("developers/{$user->email}/apps/{$validated['name']}");
 
-        if($userTeams){
-            foreach($userTeams as $user){
+        $appUsers = $app->team->users->pluck('id')->toArray();
+        if($appUsers){
+            foreach($appUsers as $user){
                 Notification::create([
                     'user_id' => $user,
                     'notification' => "Your team App {$app->display_name} has been deleted.",
@@ -529,16 +530,6 @@ class AppController extends Controller
         $app->update([
             'credentials' => $updatedApp['credentials']
         ]);
-
-        $users = $app->country->opcoUser->pluck('id')->toArray();
-        if($users){
-            foreach($users as $user){
-                Notification::create([
-                    'user_id' => $user,
-                    'notification' => "Your App {$app->display_name}'s credential has been renewed",
-                ]);
-            }
-        }
 
         return redirect()->route('app.index')->with('alert', 'success:Your credentials have been renewed');
     }
