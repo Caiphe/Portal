@@ -424,17 +424,16 @@ class AppController extends Controller
 
         ApigeeService::delete("developers/{$user->email}/apps/{$validated['name']}");
 
-        $app->delete();
-
-        $users = $app->country->opcoUser->pluck('id')->toArray();
-        if($users){
-            foreach($users as $user){
+        if($userTeams){
+            foreach($userTeams as $user){
                 Notification::create([
                     'user_id' => $user,
-                    'notification' => "Your App {$app->display_name} has been deleted",
+                    'notification' => "Your team App {$app->display_name} has been deleted.",
                 ]);
             }
         }
+
+        $app->delete();
 
         return redirect(route('app.index'));
     }

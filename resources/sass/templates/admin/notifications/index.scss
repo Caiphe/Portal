@@ -12,22 +12,6 @@
     pointer-events: none;
     transition: all 0.5s ease;
 
-    &.show {
-        opacity: 1;
-        pointer-events: auto;
-        transition: all 0.1s ease-in-out;
-
-        .notification-content {
-            @media(max-with: 1100px){
-                left: 0px;
-                transition: all 0.3s ease-in-out;
-            }
-
-            left: 320px;
-            transition: all 0.3s ease-in-out;
-        }
-    }
-
     .notification-content {
         width: 360px;
         height: 100vh;
@@ -41,6 +25,10 @@
         padding: 24px 21px 24px 24px;
         box-sizing: border-box;
         transition: all 0.3s ease-in-out;
+
+        @media(max-width: 1100px){
+            width: 100%;
+        }
 
         .top-buttons {
             display: flex;
@@ -149,6 +137,26 @@
                         }
                     }
                 }
+            }
+        }
+    }
+
+    &.show {
+        opacity: 1;
+        pointer-events: auto;
+        transition: all 0.1s ease-in-out;
+
+        .notification-content {
+            left: 320px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        @media(max-width: 1100px){
+            
+            .notification-content{
+                left: 0px;
+                border-radius: 0px;
+                transition: all 0.3s ease-in-out;
             }
         }
     }
