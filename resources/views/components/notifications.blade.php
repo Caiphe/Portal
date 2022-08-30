@@ -8,21 +8,19 @@
         <div class="top-buttons">
             <form method="POST" action="{{ route('notification.clear.all') }}" class="clear-all-notification">
                 @csrf
-                <button type="submit">Clear notifiations</button>
+                <button type="submit" class="text-button @if(!$notifications->count()) non-active @endif">Clear notifiations</button>
             </form>
 
             <form method="POST" action="{{ route('notification.read.all') }}" class="mark-read-all-form">
                 @csrf
-                <button type="submit" href="">Mark all as read</button>
+                <button type="submit" class="text-button @if(!$notifications->count()) non-active @endif" href="">Mark all as read</button>
             </form>
 
             <button type="button" class="close-notification" id="close-notification">@svg('close', '#00678F')</button>
         </div>
 
-        <div class="no-notifications" id="no-notifications">You have no notifications</div>
-
-        <div style="display: block;" class="notification-list" id="second-container">
-        </div>
+        <div class="no-notifications @if(!$notifications->count()) show @endif" id="no-notifications">You have no notifications</div>
+        <div class="notification-list" id="second-container"></div>
 
     </div>
 </div>
@@ -31,6 +29,7 @@
     <script>
         var notificationMainContainer = document.getElementById('notification-main-container');
         var notificationMenu = document.querySelector('.notification-menu');
+        var notificationsContainer = document.querySelector('#second-container');
         
         document.querySelector('.toggle-notification').addEventListener('click', toggleShowNotification);
         function toggleShowNotification(){
@@ -59,11 +58,17 @@
         }).then(function(notifications){
             var content = "";
             var entries = notifications.notifications;
-            var notificationsContainer = document.querySelector('#second-container');
+
+            console.log(entries.length, typeof entries.length);
 
             if(entries.lenth === 0){
                 document.querySelector('#no-notifications').classList.add('show');
+                console.log('No notifications');
                 return;
+            }
+
+            if(entries) {
+                notificationsContainer.classList.remove('hide');
             }
 
             entries.map(function(values){
@@ -200,10 +205,9 @@
         document.querySelector('.clear-all-notification').addEventListener('submit', clearAll);
         function clearAll(ev){
             ev.preventDefault();
-            addAlert('success', [`All notifications cleared successfully here.`]);
-            return;
 
             var formToken = this.elements['_token'].value;
+            var activeBtn = document.querySelectorAll('.text-button');
 
             var notificationData = {
                 _method: 'POST',
@@ -224,6 +228,14 @@
             xhr.onload = function() {
                 removeLoading();
                 if (xhr.status === 200) {
+
+                    document.querySelector('.notification-count').innerHTML = 0;
+                    notificationsContainer.classList.add('hide');
+                    document.querySelector('#no-notifications').classList.add('show');
+                    
+                    for(var i= 0; i < activeBtn.length; i++){
+                        activeBtn[i].classList.add('non-active');
+                    }
 
                     addAlert('success', [`All notifications cleared successfully.`]);
                     return;

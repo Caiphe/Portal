@@ -44,6 +44,12 @@
             font-size: 12px;
             height: auto;
 
+            &.non-active{
+                color: #969696;
+                pointer-events: none;
+
+            }
+
             &:hover {
                 background-color: #fff;
                 border: none;
@@ -137,6 +143,10 @@
                         }
                     }
                 }
+            }
+
+            &.hide{
+                display: none;
             }
         }
     }
