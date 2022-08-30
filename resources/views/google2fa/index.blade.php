@@ -1,31 +1,57 @@
 @extends('layouts.master')
 
+
 @push('styles')
-<style>
-    #form-2fa {
-        width: 300px;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        margin: 90px auto;
-    }
-
-    #form-2fa img{
-        width: 256px;
-        margin: 0 auto;
-    }
-
-    #form-2fa input {
-        margin-bottom: 20px;
-    }
-</style>
+    <link rel="stylesheet" href="{{ mix('/css/templates/2fa/index.css') }}">
 @endpush
 
 @section('content')
-<form id="form-2fa" action="{{ route('user.2fa.verify') }}" method="POST">
-    <img src="/images/illustrations/2fa.svg" alt="2FA Illustration" width="256" height="354">
-    @csrf
-    <input name="one_time_password" type="text" placeholder="Enter authenticator code" required autocomplete="off" autofocus>
-    <button type="submit">Authenticate</button>
-</form>
+<div class="twofa-main-container">
+    <div class="inner-top-twofa">
+        <img src="/images/illustrations/2fa.svg" class="twofa-icon" alt="2FA Illustration" />
+
+        <form id="form-2fa" class="form-2fa" action="{{ route('user.2fa.verify') }}" method="POST">
+            @csrf
+            <input name="one_time_password" type="text" placeholder="Enter authenticator code" required autocomplete="off" autofocus>
+            <button type="submit">Authenticate</button>
+        </form>
+
+        <button type="button" class="reset-twofa" id="reset-twofa" href="">Can't access your authentification device?</button>
+
+        {{-- Reset twofa --}}
+        <div class="reset-container" id="reset-container">
+            <h4>Reset your two factor authentication</h4>
+            <p>Once confirming your request to reset your 2FA, an administrator will be able to complete your request</p>
+
+            <form class="reset-form" id="reset-form">
+                @csrf
+                <div class="confirm-checkbox">
+                    <input type="checkbox" name="customer" id="confirm" class="confirm-check" value="confirm" autocomplete="off">
+                    <label class="confirm-label" for="confirm">
+                        I confirm I have lost my device with my 2FA authenticator, or am otherwise unable to access my account
+                    </label>
+                </div>
+
+                <button type="submit" id="reset-btn" class="reset-btn non-active">Confirm Reset Request</button>
+            </form>
+        </div>
+
+    </div>
+
+    {{-- Request complete --}}
+    <div class="complete-request" id="complete-request">
+        <div class="inner-container">
+            <h4>Authentication reset request complete</h4>
+            <p>Please check your email and spam folder for confirmation of your 2FA reset.</p>
+            <a href="/" class="button continue-btn">Continue</a>
+        </div>
+        
+        <p class="gray-text">Consider downloading your 2FA recovery codes under you profile section when logging into your account. Recovery codes can be used to access your account should you lose your 2FA device and authenticator</p>
+    </div>
+
+</div>
 @endsection
+
+@push('scripts')
+    <script src="{{ mix('/js/templates/2fa/index.js') }}" defer></script>
+@endpush
