@@ -362,9 +362,10 @@ class ApigeeService
 
             if (!isset($value)) {
                 $attribute['value'] = '';
-            }
-
-            $value = $key === 'Group' ? $value : $value;
+	    
+	   }
+            $value = $key === 'Group' ? Str::studly($value) : $value;
+      
             $a[$key] = $value;
         }
 
@@ -385,7 +386,7 @@ class ApigeeService
             if (!isset($attribute['value'])) {
                 $attribute['value'] = '';
             }
-            $value = $attribute['name'] === 'Group' ? $attribute['value'] : $attribute['value'];
+	   $value = $attribute['name'] === 'Group' ? Str::studly($attribute['value']) : $attribute['value'];
             $a[$attribute['name']] = $value;
         }
         return $a;
