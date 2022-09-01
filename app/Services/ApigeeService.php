@@ -371,6 +371,25 @@ class ApigeeService
 
         return $a;
     }
+    public static function getProductAttributes(array $attributes)
+    {
+        $a = [];
+
+        foreach ($attributes as $attribute) {
+            $key = Str::studly($attribute['name']);
+            $value = trim($attribute['value']);
+
+            if (!isset($value)) {
+                $attribute['value'] = '';
+	    
+	   }
+            $value = $key === 'Group' ? Str::studly($value) : $value;
+      
+            $a[$key] = $value;
+        }
+
+        return $a;
+    }
 
     public static function getApigeeAppAttributes(App $app)
     {
