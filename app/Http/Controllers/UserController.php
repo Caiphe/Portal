@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Country;
-use App\Http\Requests\UserRequest;
-use App\Mail\UpdateUser;
-use App\Product;
-use Illuminate\Http\Request;
-use Intervention\Image\Facades\Image;
-use App\Services\TwofaService;
+use App\User;
 use Google2FA;
-use PragmaRX\Google2FALaravel\Support\Authenticator;
-use Illuminate\Support\Facades\Mail;
+use App\Country;
+use App\Product;
+use App\Mail\UpdateUser;
+use App\TwofaResetRequest;
+use Illuminate\Http\Request;
+use Laravel\Ui\Presets\React;
+use App\Services\TwofaService;
 use Mpociot\Teamwork\TeamInvite;
+use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\Mail;
+use Intervention\Image\Facades\Image;
+use PragmaRX\Google2FALaravel\Support\Authenticator;
 
 class UserController extends Controller
 {
@@ -192,5 +195,16 @@ class UserController extends Controller
 		}
 
 		return back()->with('alert', $message);
+	}
+	
+	public function reset2farequest(Request $request, User $user)
+	{
+
+		dd($user->responsibleCountries->pluck('name')->toArray());
+
+		TwofaResetRequest::create([
+			'user_id' => $user->id
+		]);
+
 	}
 }

@@ -6,6 +6,10 @@
     margin: 90px auto 40px;
     width: 420px;
 
+    @media(max-width: 600px){
+        width: 100%;
+    }
+
     .inner-top-twofa{
         width: 350px;
         margin: 0px auto 0px;

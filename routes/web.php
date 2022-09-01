@@ -144,6 +144,7 @@ Route::namespace('Api\Admin')->prefix('api/admin')->group(function () {
 });
 
 Route::post('profile/2fa/verify', 'UserController@verify2fa')->middleware('throttle:3,5')->name('user.2fa.verify');
+Route::post('user/{user}/2fa/reset-request', 'UserController@reset2farequest')->name('2fa.reset.request');
 
 Route::get('products', 'ProductController@index')->name('product.index');
 Route::get('products/{product:slug}', 'ProductController@show')->name('product.show');

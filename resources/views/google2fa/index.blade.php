@@ -23,10 +23,11 @@
             <h4>Reset your two factor authentication</h4>
             <p>Once confirming your request to reset your 2FA, an administrator will be able to complete your request</p>
 
-            <form class="reset-form" id="reset-form">
+            <form class="reset-form" id="reset-form" action="{{ route('2fa.reset.request', auth()->user()) }}">
                 @csrf
+                <input type="hidden" name="user" value="{{ auth()->user()->id }}" />
                 <div class="confirm-checkbox">
-                    <input type="checkbox" name="customer" id="confirm" class="confirm-check" value="confirm" autocomplete="off">
+                    <input type="checkbox" id="confirm" class="confirm-check" value="confirm" autocomplete="off">
                     <label class="confirm-label" for="confirm">
                         I confirm I have lost my device with my 2FA authenticator, or am otherwise unable to access my account
                     </label>
