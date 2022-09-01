@@ -362,9 +362,29 @@ class ApigeeService
 
             if (!isset($value)) {
                 $attribute['value'] = '';
-            }
+	    
+	   }
+            $value = $key === 'Group' ? Str::studly($value) : $value;
+      
+            $a[$key] = $value;
+        }
 
-            $value = $key === 'Group' ? $value : $value;
+        return $a;
+    }
+    public static function getProductAttributes(array $attributes)
+    {
+        $a = [];
+
+        foreach ($attributes as $attribute) {
+            $key = Str::studly($attribute['name']);
+            $value = trim($attribute['value']);
+
+            if (!isset($value)) {
+                $attribute['value'] = '';
+	    
+	   }
+            $value = $key === 'Group' ? Str::studly($value) : $value;
+      
             $a[$key] = $value;
         }
 
@@ -385,7 +405,7 @@ class ApigeeService
             if (!isset($attribute['value'])) {
                 $attribute['value'] = '';
             }
-            $value = $attribute['name'] === 'Group' ? $attribute['value'] : $attribute['value'];
+	   $value = $attribute['name'] === 'Group' ? Str::studly($attribute['value']) : $attribute['value'];
             $a[$attribute['name']] = $value;
         }
         return $a;
