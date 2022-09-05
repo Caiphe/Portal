@@ -200,11 +200,8 @@ class UserController extends Controller
 	public function reset2farequest(Request $request, User $user)
 	{
 
-		dd($user->countries()->opcoUser->pluck('name')->toArray());
-
 		TwofaResetRequest::create([
 			'user_id' => $user->id
 		]);
-
 	}
 }
