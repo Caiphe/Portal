@@ -120,6 +120,6 @@ class BladeHelpers
 
     public static function addClass(?string $str = ''): string 
     {
-        return $str ?? '';        
+        return $str ?? '';       
     }
 }

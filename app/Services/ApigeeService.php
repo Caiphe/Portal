@@ -355,7 +355,7 @@ class ApigeeService
     public static function getAppAttributes(array $attributes)
     {
         $a = [];
-
+        
         foreach ($attributes as $attribute) {
             $key = $attribute['name'];
             $value = trim($attribute['value']);
