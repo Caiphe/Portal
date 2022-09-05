@@ -278,7 +278,7 @@ class AppController extends Controller
             fn ($q) => $q->where('developer_id', $user->developer_id)
                 ->orWhereIn('team_id', $userTeams)
         )->firstOrFail();
-        
+
         $validated = $request->validated();
         $app->load('products', 'team');
         $appTeam = $app->team ?? null;
@@ -368,14 +368,21 @@ class AppController extends Controller
         ]);
 
         // Notification creation on apps update
-        $appUsers = $app->team->users->pluck('id')->toArray();
-        if($appUsers){
+        if($app->team){
+            $appUsers = $app->team->users->pluck('id')->toArray();
             foreach($appUsers as $user){
                 Notification::create([
                     'user_id' => $user,
                     'notification' => "Your App {$app->display_name} has been updated please nagivate to your apps to view the changes",
                 ]);
             }
+        }
+
+        if($app->developer){
+            Notification::create([
+                'user_id' => $app->developer->id,
+                'notification' => "Your App {$app->display_name} has been updated please nagivate to your apps to view the changes",
+            ]);
         }
 
         $app->products()->sync(

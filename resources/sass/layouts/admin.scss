@@ -132,6 +132,20 @@ textarea{
                 svg {
                     fill: variables.$dark;
                 }
+
+            }
+
+            &.non-active{
+                background-color: transparent;
+
+                a{
+                    color: white;
+                    background-color: transparent;
+
+                    svg{
+                        fill: #fff;
+                    }
+                }
             }
         }
     }

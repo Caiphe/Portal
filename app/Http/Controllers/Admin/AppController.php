@@ -11,7 +11,7 @@ use App\Http\Controllers\Controller;
 class AppController extends Controller
 {
     public function approve(App $app)
-    {
+    {        
         $app->load(['products', 'country']);
         $currentUser = \Auth::user();
         $updatedApiProducts = [];
@@ -73,15 +73,22 @@ class AppController extends Controller
             'credentials' => $resp['credentials']
         ]);
 
-        $appUsers = $app->team->users->pluck('id')->toArray() ?? null;
         
-        if($appUsers){
+        if($app->team){
+            $appUsers = $app->team->users->pluck('id')->toArray();
             foreach($appUsers as $user){
                 Notification::create([
                     'user_id' => $user,
-                    'notification' => "Your team App {$app->display_name} has been deleted.",
+                    'notification' => "Your team App {$app->display_name} has been updated. Please nagivate to your apps to view the changes.",
                 ]);
             }
+        }
+
+        if($app->developer){
+            Notification::create([
+                'user_id' => $app->developer->id,
+                'notification' => "Your App {$app->display_name} has been updated. Please nagivate to your apps to view the changes",
+            ]);
         }
 
         $app->products()->sync($updatedApiProducts);

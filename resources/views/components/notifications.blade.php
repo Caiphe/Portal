@@ -13,7 +13,7 @@
 
             <form method="POST" action="{{ route('notification.read.all') }}" class="mark-read-all-form">
                 @csrf
-                <button type="submit" class="text-button @if(!$notifications->count()) non-active @endif" href="">Mark all as read</button>
+                <button type="submit" id="mark-read-all-button" class="text-button @if(!$notifications->count()) non-active @endif" href="">Mark all as read</button>
             </form>
 
             <button type="button" class="close-notification" id="close-notification">@svg('close', '#00678F')</button>
@@ -35,6 +35,13 @@
         function toggleShowNotification(){
             notificationMainContainer.classList.toggle('show');
             notificationMenu.classList.toggle('active');
+            var mainMenu = document.querySelectorAll('.main-menu li');
+
+            for(var i =0; i <= mainMenu.length; i++){
+                if(mainMenu[i].classList.contains('active')){
+                    mainMenu[i].classList.toggle('non-active');
+                }
+            }
         }
 
         document.getElementById('close-notification').addEventListener('click',  closeFunc);
