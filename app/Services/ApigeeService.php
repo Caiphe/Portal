@@ -405,7 +405,7 @@ class ApigeeService
             if (!isset($attribute['value'])) {
                 $attribute['value'] = '';
             }
-	   $value = $attribute['name'] === 'Group' ? Str::studly($attribute['value']) : $attribute['value'];
+            $value = $attribute['name'] === 'Group' ? Str::studly($attribute['value']) : $attribute['value'];
             $a[$attribute['name']] = $value;
         }
         return $a;
