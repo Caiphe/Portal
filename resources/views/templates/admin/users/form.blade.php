@@ -60,8 +60,9 @@
     <button class="button outline blue save-button">Apply changes</button>
 </div>
 
+<div class="half">
 @if($isAdminUser)
-<div class="editor-field half">
+<div class="editor-field ">
     <h2>Groups and roles</h2>
 
     <label class="editor-field-label">
@@ -82,6 +83,21 @@
     <button class="button outline blue save-button">Apply changes</button>
 </div>
 @endif
+<div class="editor-field ">
+    <h2>Authentication method</h2>
+
+    <div class="auth-method-block">
+        <div class="auth-block">
+            <span>Two factor authentication</span>
+            <span class="status-dot active">Enable</span>
+        </div>
+
+        <button type="button" id="reset-2fa-btn" class="button outline blue reset-2fa">Reset 2FA</button>
+    </div>
+
+</div>
+</div>
+
 
 @push('scripts')
 <script src="{{ mix('/js/templates/admin/users/scripts.js') }}"></script>

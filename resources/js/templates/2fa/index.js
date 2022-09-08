@@ -37,7 +37,7 @@ function submitResetTwofa(ev){
 
     var xhr = new XMLHttpRequest();
 
-    addLoading('sending a 2fa reset request ...');
+    addLoading('Sending your 2FA reset request...');
 
     xhr.open("POST", this.action, true);
     xhr.setRequestHeader('X-CSRF-TOKEN', formToken);

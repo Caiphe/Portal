@@ -44,7 +44,11 @@
         <div class="inner-container">
             <h4>Authentication reset request complete</h4>
             <p>Please check your email and spam folder for confirmation of your 2FA reset.</p>
-            <a href="/" class="button continue-btn">Continue</a>
+
+            <form method="post" action="{{ route('logout') }}">
+                @csrf
+                <button class="button continue-btn">Continue</button>
+            </form>
         </div>
         
         <p class="gray-text">Consider downloading your 2FA recovery codes under you profile section when logging into your account. Recovery codes can be used to access your account should you lose your 2FA device and authenticator</p>

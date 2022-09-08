@@ -13,6 +13,7 @@ use Laravel\Ui\Presets\React;
 use App\Services\TwofaService;
 use Mpociot\Teamwork\TeamInvite;
 use App\Http\Requests\UserRequest;
+use App\Mail\TwoFaResetRequestMail;
 use Illuminate\Support\Facades\Mail;
 use Intervention\Image\Facades\Image;
 use PragmaRX\Google2FALaravel\Support\Authenticator;
@@ -197,11 +198,35 @@ class UserController extends Controller
 		return back()->with('alert', $message);
 	}
 	
-	public function reset2farequest(Request $request, User $user)
+	public function reset2farequest(User $user)
 	{
+		$adminUsers = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))
+					  ->pluck('email')->toArray();
 
-		TwofaResetRequest::create([
-			'user_id' => $user->id
-		]);
+		Mail::to('marc@plusnarrative.com')->send( new TwoFaResetRequestMail($user));
+
+		// foreach($adminUsers as $admin){
+		// 	Mail::to($admin)->send( new TwoFaResetRequestMail($user));
+		// }
+
+		TwofaResetRequest::create(['user_id' => $user->id]);
+        return response()->json(['success' => true, 'code' => 200], 200);
+	}
+
+	public function resetTwofaConfirm(User $user)
+	{
+		$admin = auth()->user()->first_name . ' '. auth()->user()->last_name;
+
+		if(is_null($user->twoFaResetRequest->approved_by)){
+			$user->twoFaResetRequest->update([
+				'approved_by' => $admin
+			]);
+		}
+
+		// $user->update([
+		// 	'2fa'=> null,
+		// ]);
+
+        return response()->json(['success' => true, 'code' => 200], 200);
 	}
 }
