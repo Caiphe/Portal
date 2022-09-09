@@ -364,13 +364,13 @@ class ApigeeService
                 $attribute['value'] = '';
 	    
 	   }
-            $value = $key === 'Group' ? Str::studly($value) : $value;
-      
+            $value = $key === 'Group' ? Str::studly($value) : $value;      
             $a[$key] = $value;
         }
 
         return $a;
     }
+
     public static function getProductAttributes(array $attributes)
     {
         $a = [];
