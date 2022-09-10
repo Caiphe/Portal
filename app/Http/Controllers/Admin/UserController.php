@@ -7,8 +7,11 @@ use App\User;
 use App\Country;
 use App\Product;
 use App\RoleUser;
+use App\TwofaResetRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TwoFaResetConfirmationMail;
 use App\Http\Requests\Admin\UserStoreRequest;
 use App\Http\Requests\Admin\UserUpdateRequest;
 
@@ -141,6 +144,8 @@ class UserController extends Controller
         $privateProducts = Product::where('access', 'private')->pluck('display_name', 'pid');
         $order = 'desc';
 
+        $userTwoFaRequest = TwofaResetRequest::where(['user_id' => $user->id, 'approved_by' => null])->first();
+
         if ($request->has('sort')) {
             $order = ['asc' => 'desc', 'desc' => 'asc'][$request->get('order', 'desc')] ?? 'desc';
         }
@@ -163,7 +168,8 @@ class UserController extends Controller
             'duplicateCountries' => [],
             'userApps' => $user->getApps($countrySelectFilterCode, $order, $request->get('sort', 'name')),
             'privateProducts' => $privateProducts,
-            'userAssignedProducts' => $user->assignedProducts->pluck('pid')->toArray()
+            'userAssignedProducts' => $user->assignedProducts->pluck('pid')->toArray(),
+			'user_twofa_reset_request' => $userTwoFaRequest
         ]);
     }
 
@@ -191,4 +197,21 @@ class UserController extends Controller
 
         return redirect()->route('admin.user.index')->with('alert', 'success:The user has been deleted.');
     }
+
+    public function resetTwofaConfirm(User $user)
+	{
+		$admin = auth()->user()->first_name . ' '. auth()->user()->last_name;
+
+        $userRequest = TwofaResetRequest::where([
+			'user_id' => $user->id,
+			'approved_by' => null
+		])->first();
+
+        $userRequest->update(['approved_by' => $admin]);
+
+		$user->update(['2fa'=> null]);
+		Mail::to($user->email)->send( new TwoFaResetConfirmationMail());
+
+        return response()->json(['success' => true, 'code' => 200], 200);
+	}
 }

@@ -309,6 +309,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
 	public function twoFaResetRequest()
 	{
-		return $this->hasOne(TwofaResetRequest::class);
+		return $this->hasMany(TwofaResetRequest::class);
 	}
 }

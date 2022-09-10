@@ -203,29 +203,16 @@ class UserController extends Controller
 		$adminUsers = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))
 					  ->pluck('email')->toArray();
 
-		Mail::to('marc@plusnarrative.com')->send( new TwoFaResetRequestMail($user));
+		// Mail::to('marc@plusnarrative.com')->send( new TwoFaResetRequestMail($user));
 
-		// foreach($adminUsers as $admin){
-		// 	Mail::to($admin)->send( new TwoFaResetRequestMail($user));
-		// }
-
-		TwofaResetRequest::create(['user_id' => $user->id]);
-        return response()->json(['success' => true, 'code' => 200], 200);
-	}
-
-	public function resetTwofaConfirm(User $user)
-	{
-		$admin = auth()->user()->first_name . ' '. auth()->user()->last_name;
-
-		if(is_null($user->twoFaResetRequest->approved_by)){
-			$user->twoFaResetRequest->update([
-				'approved_by' => $admin
-			]);
+		foreach($adminUsers as $admin){
+			Mail::to($admin)->send( new TwoFaResetRequestMail($user));
 		}
 
-		// $user->update([
-		// 	'2fa'=> null,
-		// ]);
+		TwofaResetRequest::firstOrCreate([
+			'user_id' => $user->id,
+			'approved_by' => null
+		]);
 
         return response()->json(['success' => true, 'code' => 200], 200);
 	}

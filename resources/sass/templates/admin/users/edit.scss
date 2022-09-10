@@ -257,7 +257,6 @@ button.show-password {
         margin-left: 100px;
         position: relative;
         font-size: 15px;
-        margin-bottom: 20px;
 
         &:after{
             content: '';
@@ -280,7 +279,7 @@ button.show-password {
     .reset-2fa{
         font-size: 14px;
         color: #0c678f;
-        margin-bottom: 10px;
+        margin: 17px 0px 10px;
     }
 }
 

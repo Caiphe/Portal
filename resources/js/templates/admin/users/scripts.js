@@ -139,9 +139,10 @@ function twoFaResetConfirmation(ev){
     xhr.onload = function () {
         if (xhr.status === 200) {
             addAlert('success', [`2FA has been reset for ${fullName} .`], function () {
-                // window.location.reload()
+                window.location.href = '/admin/users';
                 confirmTwoFaModal.classList.remove('show');
             });
+
         } else {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 

@@ -17,6 +17,10 @@ Route::get('/', 'HomeController')->name('home');
 
 Route::get('search', 'SearchController')->name('search');
 
+Route::middleware(['auth', 'verified'])->group(function () {
+	Route::post('user/{user}/2fa/reset-request', 'UserController@reset2farequest')->name('2fa.reset.request');
+});
+
 Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 
 	Route::get('apps', 'AppController@index')->name('app.index');
@@ -58,11 +62,12 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 	// Opco admin role request
 	Route::post('/opco-admin-role-request/store', 'OpcoRoleRequestController@store')->middleware(['can:request-opco-admin-role'])->name('opco-admin-role.store');
 	
-	Route::post('user/{user}/2fa/reset-confirm', 'UserController@resetTwofaConfirm')->name('2fa.reset.confirm');
 });
 
 Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa', 'can:view-admin'])->group(function () {
 	Route::get('/', 'HomeController')->name('admin.home');
+
+	Route::post('user/{user}/2fa/reset-confirm', 'UserController@resetTwofaConfirm')->name('2fa.reset.confirm');
 
 	// Tasks
 	Route::get('/tasks', 'TaskController@index')->middleware(['auth', 'verified', '2fa', 'can:administer-task-panel'])->name('admin.task.index');
@@ -146,7 +151,6 @@ Route::namespace('Api\Admin')->prefix('api/admin')->group(function () {
 });
 
 Route::post('profile/2fa/verify', 'UserController@verify2fa')->middleware('throttle:3,5')->name('user.2fa.verify');
-Route::post('user/{user}/2fa/reset-request', 'UserController@reset2farequest')->name('2fa.reset.request');
 
 Route::get('products', 'ProductController@index')->name('product.index');
 Route::get('products/{product:slug}', 'ProductController@show')->name('product.show');

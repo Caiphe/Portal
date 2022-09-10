@@ -1,7 +1,7 @@
 @component('mail::message')
-# A user has requested his 2Fa reset
+# A user has requested 2Fa reset
 
-Below are user's details:
+Below are the user's details:
 
 |                   |    |           |
 |:------------------|:---|:----------|
