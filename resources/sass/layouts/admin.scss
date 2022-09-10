@@ -154,6 +154,16 @@ textarea{
         margin: 6px 0;
         line-height: 0px;
 
+        &.logout-menu{
+            svg{
+                @media screen and (max-height: 814px) {
+                    width: 28px;
+                    height: 28px;
+                    margin-top: -2px;
+                }
+            }
+        }
+
         a,
         button {
             display: flex;

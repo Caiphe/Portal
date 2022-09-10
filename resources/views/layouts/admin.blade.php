@@ -36,10 +36,10 @@
                 <a class="toggle-notification">@svg('notifications') Notifications</a>
                 <div class="notification-count"></div>
             </li>
-            <li>
+            <li class="logout-menu">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button>@svg('signout') Sign out</button>
+                    <button class="logout-button">@svg('signout') Sign out</button>
                 </form>
             </li>
             <li>
