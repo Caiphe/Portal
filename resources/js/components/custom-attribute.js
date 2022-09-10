@@ -15,3 +15,8 @@ function attributeRemove(button){
         if(listContainert) listContainert.classList.remove('active');
     }
 }
+
+function removeQuote(field)
+{
+    field.value = field.value.replaceAll(/["']/g, "");
+}

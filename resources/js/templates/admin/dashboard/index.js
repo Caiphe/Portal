@@ -89,6 +89,7 @@
         var addAttributeBtn = customAttributeDialog.querySelector('.add-attribute');
         var attributesList = customAttributeDialog.querySelector('.custom-attributes-list');
         var currentAttributeName = customAttributeDialog.querySelector('.attribute-name');
+        var currentAttributevalue = customAttributeDialog.querySelector('.attribute-value');
 
         var elements = attributesList.elements;
         var attrNames = elements['attribute[name][]'];
@@ -99,13 +100,17 @@
 
         currentAttributeName.addEventListener('change', checkNameExists.bind(currentAttributeName, id));
 
+        currentAttributevalue.addEventListener('change', removeQuote.bind(currentAttributevalue));
+
         addAttributeBtn.addEventListener('click', addNewAttribute.bind(customAttributeDialog, attributesList));
         
         customAttributeDialog.addEventListener('dialog-closed', submitNewAttribute.bind(attributesList, id));
+
     }
 
     function checkNameExists(id){
-        var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName'];
+        this.value = this.value.replaceAll(/["']/g, "");
+        var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName', 'Notes'];
 
         for(var i = 0; i < existingNames.length; i++){
             if(existingNames[i].toLowerCase() === this.value.toLowerCase()){
@@ -224,12 +229,15 @@
     function updateAppAttributesHtml(attributes, id){
         var attrHtml = '';
         for (key in attributes) {
-            attrHtml += `
-            <div class="attribute-display">
-                <span class="attr-name bold">${key} : </span>
-                <span class="attr-value">${attributes[key]}</span>
-            </div>
-            `;
+            if(key !== 'Notes'){
+                attrHtml += `
+                <div class="attribute-display">
+                    <span class="attr-name bold">${key} : </span>
+                    <span class="attr-value">${attributes[key]}</span>
+                </div>
+                `;
+            }
+           
         }
         document.querySelector('#wrapper-'+id+' .list-custom-attributes').innerHTML = attrHtml;
     }
@@ -257,6 +265,12 @@
         this.querySelector('.attributes-heading').classList.add('show');
         attributeName.value = '';
         attributeValue.value = '';
+    }
+
+    function removeQuote()
+    {
+        this.value = this.value.replaceAll(/["']/g, "");
+        console.log("Hello testing");
     }
 
     function showProductNoteDialog() {
