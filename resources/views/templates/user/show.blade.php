@@ -145,7 +145,6 @@ Update profile
             @endcan
         @endif
 
-
     </div>
 @endsection
 
