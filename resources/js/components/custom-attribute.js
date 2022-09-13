@@ -18,5 +18,5 @@ function attributeRemove(button){
 
 function removeQuote(field)
 {
-    field.value = field.value.replaceAll(/["']/g, "");
+    field.value = field.value.replaceAll(/["']/g, "").replaceAll(/  +/g, ' ');
 }

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\OpcoRoleRequest;
 use App\Mail\OpcoAdminRoleRequest;
-use App\Http\Requests\OpcoRoleRequestFormRequest;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\OpcoRoleRequestFormRequest;
 
 class OpcoRoleRequestController extends Controller
 {
@@ -17,7 +18,12 @@ class OpcoRoleRequestController extends Controller
         $data['user_id'] = $user->id;
         OpcoRoleRequest::create($data);
 
-		Mail::to(config('mail.mail_to_address'))->send(new OpcoAdminRoleRequest($user));
+        $adminUsers = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))
+					  ->pluck('email')->toArray();
+
+        foreach($adminUsers as $admin){
+            Mail::to($admin)->send(new OpcoAdminRoleRequest($user));
+        }
         
         return response()->json(['success' => true, 'code' => 200], 200);
     }
