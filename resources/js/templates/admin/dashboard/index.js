@@ -269,8 +269,7 @@
 
     function removeQuote()
     {
-        this.value = this.value.replaceAll(/["']/g, "");
-        console.log("Hello testing");
+        this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, ' ');
     }
 
     function showProductNoteDialog() {

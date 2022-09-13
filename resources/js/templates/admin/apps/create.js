@@ -394,6 +394,7 @@
 
     function removeQuote()
     {
-        this.value = this.value.replaceAll(/["']/g, "");
+        this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, ' ');
     }
+    
 }());
