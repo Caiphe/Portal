@@ -6,7 +6,6 @@
 |First Name                            |    | **{{ $user->first_name }}** |
 |Last Name                             |    | **{{ $user->last_name }}** |
 |Email                                 |    | **{{ $user->email }}** |
-|Countries                             |    | **{{ $user->countries->pluck('name')->implode(', ') }}** |
 
 
 @component('mail::button', ['url' => route('admin.task.index')])
