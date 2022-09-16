@@ -19,3 +19,7 @@
     @include('templates.admin.users.form')
 </form>
 @endsection
+
+@push('scripts')
+<script src="{{ mix('/js/templates/admin/users/scripts.js') }}"></script>
+@endpush

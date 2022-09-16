@@ -32,3 +32,7 @@
     @include('templates.admin.users.editform')
 </form>
 @endsection
+
+@push('scripts')
+    <script src="{{ mix('/js/templates/admin/users/edit-scripts.js') }}"></script>
+@endpush
