@@ -235,7 +235,9 @@ h1 {
 
 #main .save-button {
     color: variables.$blue;
+    pointer-events: auto;
     height: 32px;
+    cursor: pointer;
     line-height: 1;
 
     @media screen and (min-width: 820px) {
@@ -251,5 +253,22 @@ h1 {
 
     &:hover {
         color: #FFF;
+    }
+
+    &.non-active{
+        cursor: none;
+        pointer-events: none;
+        border: 2px solid #a4a4a4;
+        color: #a4a4a4;
+    }
+}
+
+.role-error{
+    font-size: 13px;
+    color: variables.$error;
+    display: none;
+
+    &.show{
+        display: block;
     }
 }
