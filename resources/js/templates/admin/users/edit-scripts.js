@@ -2,26 +2,7 @@
     var countryAppFilter = document.getElementById('country-filter');
     var passwordEl = document.getElementById('password');
     var confirmEl = document.getElementById('password-confirm');
-    var btnSubmit = document.querySelectorAll('.save-button');
     var passwordScore = 0;
-    var roleSelect = document.querySelector('#roles-select');
-
-    roleSelect.addEventListener('click', checkEmptyRoles);
-
-    function checkEmptyRoles(){
-        var spanRoles = document.getElementById('roles-tags').querySelectorAll('span');
-        if(spanRoles.length < 1){
-            addAlert('warning', 'Please assign at least one role to this user.');
-
-            for(var i = 0; i < btnSubmit.length; i++) {
-                btnSubmit[i].classList.add('non-active');
-            }
-        }else{
-            for(var i = 0; i < btnSubmit.length; i++) {
-                btnSubmit[i].classList.remove('non-active');
-            }
-        }
-    }
 
     passwordEl.addEventListener('input', checkPassword);
     confirmEl.addEventListener('input', checkPassword);
@@ -66,7 +47,7 @@
         } 
 
         for(var i = 0; i < spanRoles.length; i++){
-            if(spanRoles[i].innerHTML === 'Opco'){
+            if(spanRoles[i].innerHTML === 'Opco' && spanCountry.length < 1){
                 addAlert('warning', 'Please select at least one country this Opco admin is responsible for.');
                 e.preventDefault();
                 return;
