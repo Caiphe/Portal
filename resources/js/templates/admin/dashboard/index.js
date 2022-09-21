@@ -229,7 +229,7 @@
     function updateAppAttributesHtml(attributes, id){
         var attrHtml = '';
         for (key in attributes) {
-            if(key !== 'Notes'){
+            if(key !== 'Notes' && attributes[key] !== ''){
                 attrHtml += `
                 <div class="attribute-display">
                     <span class="attr-name bold">${key} : </span>
