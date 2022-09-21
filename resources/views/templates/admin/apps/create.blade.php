@@ -17,7 +17,7 @@
         <nav>
             <button type="button" @class(['reset', 'active' => !isset($chosenUser)])><span>1</span> App owner</button>
             <button type="button" @class(['reset', 'active' => isset($chosenUser)])><span>2</span> App details</button>
-            <button type="button" class="reset "><span>3</span> Select countries</button>
+            <button type="button" class="reset "><span>3</span> Select a country</button>
             <button type="button" class="reset "><span>4</span> Select products</button>
             <button type="button" class="reset "><span>5</span> Complete</button>
         </nav>
@@ -83,17 +83,46 @@
                     <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>
                 </div>
 
+                {{-- Custom attributes --}}
+                <div class="custom-attribute-list-container">
+                    <h5 class="custom-attribute-heading">Custom attributes</h5>
+
+                    <span class="no-attribute">None defined</span>
+
+                    <div class="attributes-heading">
+                        <h4 class="name-heading">Attribute name</h4>
+                        <h4 class="value-heading">Value</h4>
+                    </div>
+
+                    <div class="custom-attributes-list" id="custom-attributes-list"></div>
+
+                </div>
+
+                <div class="custom-attributes-form" action="">
+                    <div class="each-field">
+                        <label for="name">Attribute name</label>
+                        <input type="text" value="" name="attribute_name" id="attribute-name" class="attribute-field attribute-name" placeholder="New attribute name"/>
+                    </div>
+                    <div class="each-field">
+                        <label for="value">Value</label>
+                        <input type="text" value="" name="attribute_value" id="attribute-value" class="attribute-field attribute-value" placeholder="New value"/>
+                    </div>
+                    <button type="button" class="button add-attribute" id="add-attribute">Add</button>
+                </div>
+                <div class="attribute-error" id="attribute-error">Attribute name and value required</div>
+                {{-- Custom attributes ends --}}
+
                 <div class="actions-btn-container">
                     <button type="button" class="btn dark outline back">Back</button>
-                    <button type="button" id="next-app-details" class="dark next apps-create-btn">Select countries</button>
+                    <button type="button" id="next-app-details" class="dark next apps-create-btn">Select country</button>
                 </div>
             </div>
 
             <div class="select-countries create-app-section">
                 <div class="apps-heading-container">
                     <span class="apps-top-text">Create a new app</span>
-                    <h2 class="app-create-heading">Select countries</h2>
-                    <span class="gray-text">Select the countries you would like to associate with your app *</span>
+                    <h2 class="app-create-heading">Select a country</h2>
+                    <span class="gray-text">Select a country you would like to associate with your app *</span>
                 </div>
 
                 <div class="countries">
@@ -174,7 +203,9 @@
 
         </form>
     </div>
-
+    <template id="custom-attribute" hidden>
+        <x-apps.custom-attribute></x-apps.custom-attribute>
+    </template>
 @endsection
 
 @push('scripts')

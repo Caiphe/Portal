@@ -35,7 +35,7 @@
                 <span>1</span> App details
             </a>
             <a href="#" class="nav-item select-countries-nav">
-                <span>2</span> Select countries
+                <span>2</span> Select a country
             </a>
             <a href="#" class="nav-item select-products-nav">
                 <span>3</span> Select products
@@ -52,7 +52,7 @@
                             <input type="file" name="user-thumb" class="user-thumb">
                         </label>
                     </div>
-                    
+
                     <div class="groups">
                         <div class="group">
                             <label for="name">Name your app *</label>
@@ -82,7 +82,7 @@
                 </div>
 
                 <div class="select-countries">
-                    <p>Select the countries you would like to associate with your app *</p>
+                    <p>Select a country you would like to associate with your app *</p>
 
                     <div class="countries">
                         @foreach($countries as $key => $country)
@@ -150,7 +150,7 @@
             </form>
         </div>
 
-        <button type="reset">Cancel</button>
+        <a class="cancel" href="{{ route('app.index') }}">Cancel</a>
     </div>
 @endsection
 @push('scripts')
@@ -241,9 +241,6 @@
             previousDiv.classList.add('active');
         }
 
-        document.querySelector('[type="reset"]').addEventListener('click', function () {
-            document.location.href = '/apps';
-        });
 
         for (var l = 0; l < countries.length; l++) {
             countries[l].addEventListener('change', selectCountry);

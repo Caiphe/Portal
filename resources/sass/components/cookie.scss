@@ -105,14 +105,10 @@
 }
 
 #cookie-policy-preferences {
-    .dialog-content {
-        max-width: 720px;
-        font-size: 16px;
 
-        >h2 {
-            font-size: 16px;
-            font-weight: 700;
-            position: relative;
+    .dialog-content {
+        .dialog-content-inner{
+            box-sizing: border-box;
         }
     }
 
@@ -176,6 +172,3 @@
     }
 }
 
-#cookie-policy-accept {
-    margin-top: 20px;
-}

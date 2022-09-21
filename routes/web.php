@@ -25,6 +25,7 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 	Route::post('apps', 'AppController@store')->name('app.store');
 
 	Route::put('apps/{app:slug}', 'AppController@update')->name('app.update');
+	Route::put('apps/{app:aid}/custom-attributes', 'AppController@updateCustomAttributes')->name('app.update.attributes');
 	Route::delete('apps/{app:slug}', 'AppController@destroy')->name('app.destroy');
 
 	Route::get('apps/{app:aid}/credentials/{type}', 'AppController@getCredentials')->middleware('can:access-own-app,app')->name('app.credentials');
@@ -53,10 +54,22 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
     Route::any('teams/reject', 'CompanyTeamsController@reject')->name('teams.invite.deny');
     Route::any('teams/{team}/ownership', 'CompanyTeamsController@ownership')->middleware('can:administer-team-by-owner,team')->name('teams.ownership.invite');
     Route::post('teams/{id}/user/role', 'CompanyTeamsController@roleUpdate')->middleware('can:administer-team,id')->name('teams.user.role');
+
+	// Opco admin role request
+	Route::post('/opco-admin-role-request/store', 'OpcoRoleRequestController@store')->middleware(['can:request-opco-admin-role'])->name('opco-admin-role.store');
 });
 
 Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa', 'can:view-admin'])->group(function () {
 	Route::get('/', 'HomeController')->name('admin.home');
+
+	// Tasks
+	Route::get('/tasks', 'TaskController@index')->middleware(['auth', 'verified', '2fa', 'can:administer-task-panel'])->name('admin.task.index');
+
+	// Opco role approval
+	Route::middleware(['auth', 'verified', '2fa', 'can:administer-task-panel'])->group(function(){
+		Route::post('/opco-role-request/{id}/approve', 'OpcoRoleRequestActionController@approve')->name('admin.opco.approve');
+		Route::post('/opco-role-request/{id}/deny', 'OpcoRoleRequestActionController@deny')->name('admin.opco.deny');
+	});
 
 	// Products
 	Route::get('products', 'ProductController@index')->middleware('can:administer-products')->name('admin.product.index');

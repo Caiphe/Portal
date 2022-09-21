@@ -2,11 +2,6 @@ var btnActions = document.querySelectorAll('.btn-actions');
 var hideMenuBlock = document.querySelectorAll('.block-hide-menu');
 var blockActions = document.querySelectorAll('.block-actions');
 var mainUserMenu = document.querySelector('.main-users-menu')
-var clodeModal = document.querySelector('.close-modal');
-var deleteClodeModal = document.querySelector('.delete-close-modal');
-var modalContainer = document.querySelector('.modal-container');
-var overlayContainer = document.querySelector('.overlay-container');
-var deleteOverlayContainer = document.querySelector('.delete-overlay-container');
 var cancelRemoveUserBtn = document.querySelector('.cancel-remove-user-btn');
 var hiddenTeamId = document.querySelector('.hidden-team-id');
 var hiddenTeamUserId = document.querySelector('.hidden-team-user-id');
@@ -42,24 +37,20 @@ function hideActions() {
     }
 }
 
+var addTeamamteDialog = document.querySelector('.add-teammate-dialog');
+
 if (addTeamMobile = document.querySelector('.add-team-mate-btn-mobile')) {
-    addTeamMobile.addEventListener('click', hideModalContainer);
+    addTeamMobile.addEventListener('click', AddTeammateFunc);
 }
 
 if (addTeammateBtn = document.querySelector('.add-team-mate-btn')) {
-    addTeammateBtn.addEventListener('click', hideModalContainer);
+    addTeammateBtn.addEventListener('click', AddTeammateFunc);
 }
 
-function hideModalContainer() {
-    modalContainer.classList.add('show');
+function AddTeammateFunc() {
+    addTeamamteDialog.classList.add('show');
 }
 
-clodeModal.addEventListener('click', hideAddTeamMateModalContainer);
-overlayContainer.addEventListener('click', hideAddTeamMateModalContainer);
-
-function hideAddTeamMateModalContainer() {
-    modalContainer.classList.remove('show');
-}
 
 // Show delete modal
 var userDeleteBtn = document.querySelectorAll('.user-delete');
@@ -77,11 +68,8 @@ function showUserDelete() {
     hiddenTeamUserId.value = this.dataset.teamuserid;
 }
 
-deleteClodeModal.addEventListener('click', hideDeleteUserModal);
-deleteOverlayContainer.addEventListener('click', hideDeleteUserModal);
 cancelRemoveUserBtn.addEventListener('click', hideDeleteUserModal);
 document.querySelector('.cancel-removal-btn').addEventListener('click', hideDeleteUserModal);
-document.querySelector('.confirm-delete-close-modal').addEventListener('click', hideDeleteUserModal);
 
 // show Make admin modal
 var adminModal = document.querySelector('.make-admin-modal-container');
@@ -98,7 +86,7 @@ for (var i = 0; i < radiosList.length; i++) {
 
 function checkedRadio() {
     if (this.checked) {
-        transferOwnsershipBtn.classList.remove('transfer-btn');
+        transferOwnsershipBtn.classList.remove('inactive');
         transferOwnsershipBtn.setAttribute('data-useremail', this.value);
     }
 }
@@ -235,8 +223,6 @@ function showUserModalFunc() {
     userModal.classList.add('show');
 }
 
-document.querySelector('.user-close-modal').addEventListener('click', hideUserModal);
-document.querySelector('.user-overlay-container').addEventListener('click', hideUserModal);
 document.querySelector('.user-admin-cancel-btn').addEventListener('click', hideUserModal);
 
 function hideUserModal() {
@@ -442,7 +428,7 @@ var timer = null;
 
 teamMateInvitEmail.addEventListener('input', function () {
     clearTimeout(timer);
-    timer = setTimeout(emailCheck, 1000);
+    timer = setTimeout(emailCheck, 500);
 });
 
 function emailCheck() {
@@ -499,7 +485,7 @@ teamInviteUserBtn.addEventListener('click', function (event) {
 
         hideUserModal();
         removeLoading();
-        hideAddTeamMateModalContainer();
+        hideTeammateDialog();
     };
 
     teamMateInvitEmail.value = "";
@@ -629,7 +615,6 @@ function handleAcceptOwnershipTransfer(url, data, event) {
     };
 }
 
-
 /** Fix a bug when attempting to remove/delete a User from Team */
 if (ownershipModalShow !== null) {
     ownershipModalShow.addEventListener('click', showOwnershipModalFunc);
@@ -639,8 +624,6 @@ function showOwnershipModalFunc() {
     ownershipModal.classList.add('show');
 }
 
-document.querySelector('.ownweship-close-modal').addEventListener('click', hideOwnershipModal);
-document.querySelector('.ownweship-overlay-container').addEventListener('click', hideOwnershipModal);
 document.querySelector('.ownership-removal-btn').addEventListener('click', hideOwnershipModal);
 function hideOwnershipModal() {
     ownershipModal.classList.remove('show');
@@ -662,9 +645,13 @@ function showAdminModalFunc() {
     adminModal.classList.add('show');
 }
 
-document.querySelector('.admin-close-modal').addEventListener('click', hideAdminModal);
-document.querySelector('.admin-overlay-container').addEventListener('click', hideAdminModal);
 document.querySelector('.make-admin-cancel-btn').addEventListener('click', hideAdminModal);
 function hideAdminModal() {
     adminModal.classList.remove('show');
+}
+
+
+document.querySelector('.close-add-teammate-btn').addEventListener('click', hideTeammateDialog)
+function hideTeammateDialog() {
+    addTeamamteDialog.classList.remove('show');
 }

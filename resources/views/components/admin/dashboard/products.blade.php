@@ -21,8 +21,9 @@
         <button class="reset log-notes" data-id="{{ $app->aid . $product->slug }}">View log notes</button>
         <button class="reset product-action">@svg('more-vert')@svg('chevron-right')</button>
     </div>
-    <x-dialog id="admin-{{ $app->aid . $product->slug }}" class="note-dialog">
+
+    <x-dialog-box id="admin-{{ $app->aid . $product->slug }}" class="note-dialog">
         <h3><em>{{ $product['display_name'] }}</em> log notes</h3>
         <div class="note">{!! $product['notes'] !!}</div>
-    </x-dialog>
+    </x-dialog-box>
 @endforeach

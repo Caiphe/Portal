@@ -34,8 +34,50 @@
 </div>
 
 @foreach($apps as $app)
-    <x-dialog id="admin-{{ $app->aid }}" class="note-dialog">
-        <h3><em>{{ $app->display_name }}</em> log notes</h3>
-        <div class="note">{!! $app['notes'] ?: 'No notes at the moment' !!}</div>
-    </x-dialog>
+
+    <x-dialog-box id="admin-{{ $app->aid }}" dialogTitle="{{ $app->display_name }} log notes" class="log-content">
+        <div class="note">
+            {!! $app['notes'] ?: 'No notes at the moment here' !!}
+        </div>
+    </x-dialog-box>
+
+    <x-dialog-box id="custom-attributes-{{ $app->aid }}" dialogTitle="Custom attributes" class="custom-attributes-dialog">
+        <div class="content-container">
+
+            <div class="attributes-heading @if ($app->custom_attributes) show @endif">
+                <h4 class="name-heading">Attribute name</h4>
+                <h4 class="value-heading">Value</h4>
+            </div>
+
+            {{-- Custom Attributes list --}}
+            <form class="custom-attributes-list" method="post" action="{{ route('app.update.attributes', $app) }}">
+                @csrf
+                @method('PUT')
+
+                <input type="hidden" name="remove-check" class="remove-check" value=""/>
+                @foreach ($app->custom_attributes as $key => $value)
+                    @if($key !== 'Notes' && $key !== 'ApprovedAt' && $value !== '') 
+                        <x-apps.custom-attribute :nameValue="$key" :valueValue="$value"></x-apps.custom-attribute>
+                    @endif
+                @endforeach
+                <div class="no-attribute">None defined</div>
+            </form>
+        </div>
+
+            {{-- Custom attributes form --}}
+        <form class="custom-attributes-form" action="">
+            <div class="each-field">
+                <label for="name">Attribute name</label>
+                <input type="text" name="attribute[name][]" class="attribute-field attribute-name" placeholder="New attribute name"/>
+            </div>
+            <div class="each-field">
+                <label for="value">Value</label>
+                <input type="text" name="attribute[value][]" class="attribute-field attribute-value" placeholder="New value"/>
+            </div>
+            <button type="button" class="button add-attribute">Add</button>
+            <div class="attribute-error">Attribute name and value required</div>
+        </form>
+
+    </x-dialog-box>
 @endforeach
+

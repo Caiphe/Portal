@@ -4,23 +4,28 @@ button.show-password {
     position: absolute;
     right: 4px;
     top: 24px;
-    background-image: url("/images/icons/visible.svg");
     background-size: 20px;
     background-repeat: no-repeat;
-    background-position: center;
-    width: 30px;
+    background-color: transparent;
+    border: none;
+    width: 26px;
     height: 30px;
     z-index: 1;
     display: block;
     border-radius: 50%;
 
+    &.reset{
+        background-image: url("/images/icons/visible.svg");
+        background-position: center center;
+
+        &.password-visible{
+            background-image: url('/images/icons/hidden.svg');
+        }
+    }
+
     &:hover {
         background-color: variables.$yellow700;
     }
-}
-
-button.password-visible {
-    background-image: url('/images/icons/hidden.svg');
 }
 
 #main .editor-field .password-strength {

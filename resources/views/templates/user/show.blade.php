@@ -111,6 +111,40 @@ Update profile
             <div id="show-recovery-codes"></div>
         </form>
         @endisset
+
+        {{-- Opco Admin Role request by a developer --}}
+        @if(!in_array('Admin', $userRoles))
+            @can('request-opco-admin-role')
+                <form class="opco-role-request-form" id="opco-role-request-form" method="POST" action="{{ route('opco-admin-role.store') }}">
+                    @csrf
+                    <h2>Apply for Admin Role</h2>
+                    <p class="align-left">
+                        If you would like to request the addition of the OpCo Admin Role to your profile, please supply a motivation below why you should be granted this role, including the applicable countries you are requesting permission for.
+                    </p>
+
+                    <p>
+                        Your application will be received by existing Admins, assigned to the countries you have and will be reviewed accordingly.
+                    </p>
+
+                    <h2>Motivation for Admin Role</h2>
+                    <textarea class="" rows="4" name="message" placeholder='Please motivate the reason for your request of the OpCo Admin role e.g.  "Applying for the OpCo administrative role as I have been promoted to team lead of country X. "'></textarea>
+                    <h2>Your selected countries</h2>
+                    
+                    <div class="locations">
+                        
+                        @foreach($locations as $location)
+                        <label for="user-{{ $location }}">
+                            <input type="checkbox" value="{{ $location }}" id="user-{{ $location }}" autocomplete="off" @if(in_array($location, $responsibleCountries)) name="locations[]" checked @else name="countries[]" @endif>
+                            <img src="/images/locations/{{ $location }}.svg" alt="{{ $location }}" title="{{ $location }}">
+                        </label>
+                        @endforeach
+
+                    </div>
+                    <button type="submit" class="primary">Apply Now</button>
+                </form>
+            @endcan
+        @endif
+
     </div>
 @endsection
 

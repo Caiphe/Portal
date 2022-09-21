@@ -36,8 +36,16 @@ class AuthServiceProvider extends ServiceProvider
 			return $user->hasPermissionTo('view_admin_backend');
 		});
 
+		Gate::define('request-opco-admin-role', function ($user) {
+			return $user->hasPermissionTo('request_opco_admin_role');
+		});
+
 		Gate::define('administer-products', function ($user) {
 			return $user->hasPermissionTo('administer_products');
+		});
+
+		Gate::define('administer-task-panel', function ($user) {
+			return $user->hasPermissionTo('administer_task_panel');
 		});
 
 		Gate::define('administer-users', function ($user) {

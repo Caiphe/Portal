@@ -18,6 +18,10 @@ body {
     }
 }
 
+textarea{
+    resize: none;
+}
+
 #sidebar {
     position: fixed;
     display: flex;
@@ -114,13 +118,15 @@ body {
             }
 
             a {
-                padding: 8px;
+                padding: 5px 8px;
+                transition: all .2s ease;
             }
 
             &.active a,
             a:hover {
                 background-color: variables.$yellow;
                 color: variables.$dark;
+                transition: all .2s ease;
 
                 svg {
                     fill: variables.$dark;
@@ -131,6 +137,7 @@ body {
 
     li {
         margin: 8px 0;
+        line-height: 0px;
 
         a,
         button {
