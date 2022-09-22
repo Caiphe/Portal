@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Country;
-use App\Http\Controllers\Controller;
-use App\Product;
 use App\Role;
-use App\RoleUser;
 use App\User;
+use App\Country;
+use App\Product;
+use App\RoleUser;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\UserStoreRequest;
+use App\Http\Requests\Admin\UserUpdateRequest;
 
 class UserController extends Controller
 {
@@ -22,7 +23,7 @@ class UserController extends Controller
 
         $users = User::with('roles', 'countries')
             ->withCount('apps')
-            ->when($currentUser->hasRole('opco'), function ($query) use ($currentUser) {
+            ->when(!$currentUser->hasRole('admin') && $currentUser->hasRole('opco'), function ($query) use ($currentUser) {
                 $query->whereHas('countries', fn ($q) => $q->whereIn('code', $currentUser->responsibleCountries()->pluck('code')->toArray()));
             })
             ->when($request->has('q'), function ($q) use ($request) {
@@ -74,7 +75,7 @@ class UserController extends Controller
                 ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         }
-
+        
         return view('templates.admin.users.index', [
             'users' => $users->paginate($numberPerPage),
             'order' => $order,
@@ -99,22 +100,11 @@ class UserController extends Controller
         );
     }
 
-    public function store(Request $request)
+    public function store(UserStoreRequest $request)
     {
-        $data = $request->validate([
-            'first_name' => 'required|max:140',
-            'last_name' => 'required|max:140',
-            'email' => 'email:rfc,dns|unique:users,email',
-            'password' => 'required|confirmed',
-            'roles' => 'nullable',
-            'country' => 'nullable',
-            'responsible_countries' => 'nullable',
-            'responsible_groups' => 'nullable',
-            'private_products' => 'nullable',
-        ]);
+        $data = $request->validated();
 
         $data['profile_picture'] = '/storage/profile/profile-' . rand(1, 32) . '.svg';
-
 
         $user = User::create($data);
 
@@ -123,7 +113,7 @@ class UserController extends Controller
         }
 
         if ($request->has('country')) {
-            $user->countries()->sync([$data['country']]);
+            $user->countries()->sync($data['country']);
         }
 
         if ($request->has('responsible_countries')) {
@@ -177,37 +167,19 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(User $user, Request $request)
+    public function update(User $user, UserUpdateRequest $request)
     {
-        $data = $request->validate([
-            'first_name' => 'required|max:140',
-            'last_name' => 'required|max:140',
-            'email' => [
-                'email:rfc,dns',
-                Rule::unique('users')->ignore($user->id),
-            ],
-            'password' => 'sometimes|confirmed',
-            'roles' => 'nullable',
-            'country' => 'nullable',
-            'responsible_countries' => 'nullable',
-            'responsible_groups' => 'nullable',
-            'private_products' => 'nullable',
-        ]);
-
-        if (is_null($data['password'])) {
-            unset($data['password']);
-        } else {
-            $data['password'] = bcrypt($data['password']);
-        }
-
+        $data = $request->validated();
         $user->update($data);
-        if ($request->has('roles')) {
-            $user->roles()->sync($data['roles']);
+        
+        if($request->user()->hasRole('admin'))
+        {
+            $user->roles()->sync($data['roles'] ?? []);
+            $user->responsibleCountries()->sync($data['responsible_countries'] ?? []);
+            $user->responsibleGroups()->sync($data['responsible_groups'] ?? []);
         }
 
         $user->countries()->sync($data['country'] ?? []);
-        $user->responsibleCountries()->sync($data['responsible_countries'] ?? []);
-        $user->responsibleGroups()->sync($data['responsible_groups'] ?? []);
         $user->assignedProducts()->sync($data['private_products'] ?? []);
 
         return redirect()->route('admin.user.index')->with('alert', 'success:The user has been updated');

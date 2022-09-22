@@ -17,7 +17,7 @@
 	        </div>
 	    @endif
 		<p>Please supply your email address and we’ll send you a reset email.</p>
-		<input id="email" type="email" class="@error('email') invalid @enderror" name="email" value="{{ old('email') }}" placeholder="Email Address" required autocomplete="email" autofocus>
+		<input id="email" type="email" class="@error('email') invalid @enderror" name="email" value="{{ old('email') }}" placeholder="Email address" required autocomplete="email" autofocus>
 		@error('email')
 			<span class="invalid-feedback" role="alert">
 				<strong>{{ $message }}</strong>

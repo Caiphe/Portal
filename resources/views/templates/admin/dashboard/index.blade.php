@@ -54,15 +54,23 @@
     @include('templates.admin.dashboard.data')
 </div>
 
-<x-dialog id="status-dialog">
+<x-dialog-box class="admin-removal-confirm" id="status-dialog">
     <form class="status-dialog-form" name="status-note-form" method="POST" action="">
-        @csrf
-        <h3 class="app-dialog-heading">Add note:</h3>
-        <input class="app-dialog-status" type="hidden" value="approved" name="status">
-        <textarea class="status-dialog-textarea" name="status-note" rows="5" placeholder="Optional product status change note" autocomplete="off"></textarea>
-        <button class="status-dialog-button">Submit</button>
+        <div class="data-container">
+            @csrf
+            <input class="app-dialog-status" type="hidden" value="approved" name="status">
+            <textarea class="status-dialog-textarea" name="status-note" rows="5" placeholder="Optional product status change note" autocomplete="off"></textarea>
+        </div>
+
+        <div class="bottom-shadow-container button-container">
+            <button class="status-dialog-button">Submit</button>
+        </div>
     </form>
-</x-dialog>
+</x-dialog-box>
+
+<template id="custom-attribute" hidden>
+    <x-apps.custom-attribute></x-apps.custom-attribute>
+</template>
 @endsection
 
 @push('scripts')

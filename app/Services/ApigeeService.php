@@ -355,7 +355,7 @@ class ApigeeService
     public static function getAppAttributes(array $attributes)
     {
         $a = [];
-
+        
         foreach ($attributes as $attribute) {
             $key = $attribute['name'];
             $value = trim($attribute['value']);
@@ -364,7 +364,8 @@ class ApigeeService
                 $attribute['value'] = '';
 	    
 	   }
-            $value = $key === 'Group' ? Str::studly($value) : $value;      
+            $value = $key === 'Group' ? Str::studly($value) : $value;
+      
             $a[$key] = $value;
         }
 

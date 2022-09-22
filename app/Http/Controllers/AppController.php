@@ -2,24 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\TeamAppCreated;
+use DB;
+use App\App;
 use App\Team;
 use App\User;
-use App\App;
-use App\Product;
 use App\Country;
-use App\Http\Requests\CreateAppRequest;
-use App\Http\Requests\DeleteAppRequest;
-use App\Http\Requests\KycRequest;
-use App\Mail\CredentialRenew;
-use App\Mail\GoLiveMail;
+use App\Product;
 use App\Mail\NewApp;
 use App\Mail\UpdateApp;
+use App\Mail\GoLiveMail;
+use Illuminate\Support\Str;
+use App\Mail\TeamAppCreated;
+use Illuminate\Http\Request;
+use App\Mail\CredentialRenew;
 use App\Services\ApigeeService;
 use App\Services\Kyc\KycService;
-use DB;
-use Illuminate\Support\Str;
+use App\Http\Requests\KycRequest;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\CreateAppRequest;
+use App\Http\Requests\DeleteAppRequest;
+use App\Http\Requests\CustomAttributesRequest;
 
 class AppController extends Controller
 {
@@ -65,21 +67,31 @@ class AppController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        $user = request()->user();
+        $user = $request->user();
         $userOwnTeams = $user->teams;
+        $product = null;
+
         $assignedProducts = $user->assignedProducts()->with('category')->get();
         $products = Product::with(['category', 'countries'])
             ->where('category_cid', '!=', 'misc')
             ->basedOnUser($user)
+            ->when($request->has('product'), function($q) use($request, &$product){
+                $product = Product::with(['countries'])->where('slug', $request->product)->first();
+                $productLocations = $product->countries->pluck('code')->toArray();
+                $q->byLocations($productLocations);
+            })
             ->get()
             ->merge($assignedProducts);
-        $locations = array_unique(explode(',', $products->pluck('locations')->implode(',')));
+
+        $locations = $product->locations ?? $products->pluck('locations')->implode(',');
+        $locations = array_unique(explode(',', $locations));
         $countries = Country::whereIn('code', $locations)->pluck('name', 'code');
         $products = $products->sortBy('display_name')->groupBy('category.title')->sortKeys();
 
         return view('templates.apps.create', [
+            'productSelected' => $product,
             'products' => $products,
             'productCategories' => array_keys($products->toArray()),
             'teams' => $userOwnTeams,
@@ -111,34 +123,40 @@ class AppController extends Controller
             $team = Team::find($validated['team_id']);
         }
 
+        $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
+        $attributes = ApigeeService::formatToApigeeAttributes($attributes);
+
+        $attributes = array_merge($attributes, [
+            [
+                'name' => 'DisplayName',
+                'value' => $validated['display_name'],
+            ],
+            [
+                'name' => 'Description',
+                'value' => $validated['description'],
+            ],
+            [
+                'name' => 'Country',
+                'value' => $validated['country'],
+            ],
+            [
+                'name' => 'location',
+                'value' => $countriesByCode[$validated['country']] ?? "",
+            ],
+            [
+                'name' => 'TeamName',
+                'value' => $team->name ?? "",
+            ],
+        ]);
+
         $data = [
             'name' => Str::slug($validated['display_name']),
             'apiProducts' => $productIds,
             'keyExpiresIn' => -1,
-            'attributes' => [
-                [
-                    'name' => 'DisplayName',
-                    'value' => $validated['display_name'],
-                ],
-                [
-                    'name' => 'Description',
-                    'value' => $validated['description'],
-                ],
-                [
-                    'name' => 'Country',
-                    'value' => $validated['country'],
-                ],
-                [
-                    'name' => 'location',
-                    'value' => $countriesByCode[$validated['country']] ?? "",
-                ],
-                [
-                    'name' => 'TeamName',
-                    'value' => $team->name ?? "",
-                ],
-            ],
+            'attributes' => $attributes,
             'callbackUrl' => $validated['url'],
         ];
+
 
         if (($user->hasRole('admin') || $user->hasRole('opco')) && $request->has('app_owner')) {
             $appOwner = User::where('email', $request->get('app_owner'))->first();
@@ -396,6 +414,45 @@ class AppController extends Controller
         $app->delete();
 
         return redirect(route('app.index'));
+    }
+
+    public function updateCustomAttributes(App $app, CustomAttributesRequest $request)
+    {
+        $validated = $request->validated();
+        $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
+        $apigeeAttributes = ApigeeService::getApigeeAppAttributes($app);
+        $appAttributes = array_merge($apigeeAttributes, $app->attributes);
+        $previousCustomAttributes = $app->filterCustomAttributes($appAttributes);
+        $appAttributes = array_diff($appAttributes, $previousCustomAttributes);
+        $appAttributes = array_merge($appAttributes, $app->filterCustomAttributes($attributes));
+
+        $team = $app->team ?? null;
+        $developerEmail = $app->developer->email;
+        $accessUrl = $team ? "companies/{$team->username}" : "developers/{$developerEmail}";
+
+        $updatedResponse = ApigeeService::put("{$accessUrl}/apps/{$app->name}", [
+            "name" => $app->name,
+            'attributes' => ApigeeService::formatToApigeeAttributes($appAttributes),
+            "callbackUrl" => $app->url ?? '',
+        ]);
+
+        if ($updatedResponse->failed()) {
+            $reasonMsg = $updatedResponse['message'] ?? 'There was a problem updating your app. Please try again later.';
+
+            if ($request->ajax()) {
+                return response()->json(['response' => "error:{$reasonMsg}"], $updatedResponse->status());
+            }
+
+            return redirect()->back()->with('alert', "error:{$reasonMsg}");
+        }
+        
+        $attributes = ApigeeService::formatAppAttributes($updatedResponse['attributes']);
+
+        $app->update(['attributes' =>  $attributes]);
+
+        if ($request->ajax()) {
+            return response()->json(['attributes' => $attributes]);
+        }
     }
 
     /**

@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Category;
+use App\Log;
 use App\Country;
+use App\Product;
+use App\Category;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ProductRequest;
-use App\Product;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Collection;
 
 class ProductController extends Controller
 {
@@ -80,20 +82,24 @@ class ProductController extends Controller
             'countries' => Country::get(),
             'categories' => Category::pluck('title', 'cid'),
             'hasSwagger' => $hasSwagger,
+            'logs' => $product->logs()->latest()->get(),
         ]);
     }
 
     public function update(Product $product, ProductRequest $request)
     {
+        $data = $request->validated();
         $now = date('Y-m-d H:i:s');
         $contents = [];
-        $tabs = $request->get('tab', []);
+        $tabs = $data['tab'] ?? [];
+        $updatedFields = [];
+        $logs = [];
 
         $product->update([
-            'display_name' => $request->get('display_name'),
-            'locations' => implode(',', $request->get('locations', ['all'])),
-            'group' => $request->get('group', 'MTN'),
-            'category_cid' => $request->get('category_cid', 'misc'),
+            'display_name' => $data['display_name'],
+            'locations' =>  implode(',', $data['locations']),
+            'group' => $data['group'] ?? 'MTN',
+            'category_cid' => $request['category_cid'],
         ]);
 
         $product->countries()->sync($request->get('locations', Country::all()));
@@ -110,9 +116,64 @@ class ProductController extends Controller
             ];
         }
 
+        $contentdData = $this->compareContent($contents, $product->content->toArray());
+        $updatedFields = array_keys($product->getChanges());
+        unset($updatedFields['updated_at']);
+
+        if(!empty($updatedFields) || !empty($contentdData)){
+            $messages = '';
+
+            for($i = 0; $i < count($updatedFields); $i++){
+                if($updatedFields[$i] === 'category_cid') $messages .= '&#x2022; Product category updated ' .'<br/>';
+                if($updatedFields[$i] === 'display_name')  $messages .= '&#x2022; Product name updated ' .'<br/>';
+                if($updatedFields[$i] === 'locations')  $messages .= '&#x2022; Locations updated ' .'<br />';
+                if($updatedFields[$i] === 'group')  $messages .= '&#x2022; Group updated ' .'<br />';
+            }
+
+            $messages.= $contentdData;
+
+           $logs[]= [
+                'user_id' => auth()->user()->id,
+                'message' => $messages,
+            ];
+        }
+
         $product->content()->delete();
         $product->content()->createMany($contents);
-
+        $product->logs()->createMany($logs);
         return redirect()->route('admin.product.index')->with('alert', 'success:The content has been updated.');
+    }
+
+    protected function compareContent(array $currentContent, array $updatedContent): string
+    {
+        $currentColumn = array_column($currentContent, 'title');
+        $updatedColumn = array_column($updatedContent, 'title');
+        $currentContent = array_combine($currentColumn, $currentContent);
+        $updatedContent = array_combine($updatedColumn, $updatedContent);
+
+        $updated = '';
+
+        $addedColumn = array_diff($currentColumn, $updatedColumn);
+        $removedColumn = array_diff($updatedColumn, $currentColumn);
+
+        if(!empty($addedColumn)){
+            $updated .= '&#x2022; ' . implode(', ', $addedColumn) .' was added <br />';
+        }
+
+        if(!empty($removedColumn)){
+            $updated .= '&#x2022; ' . implode(', ', $removedColumn) .' was removed <br />';
+        }
+
+        $sameColumns = array_intersect($currentColumn, $updatedColumn);
+
+        if(!empty($sameColumns)){
+            foreach($sameColumns as $title){
+                if($currentContent[$title]['body'] !== $updatedContent[$title]['body']){
+                    $updated .= "&#x2022; {$title} was updated <br />";
+                }
+            }
+        }
+
+        return $updated;
     }
 }

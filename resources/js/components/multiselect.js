@@ -2,7 +2,6 @@ var event = new Event('change');
 
 function multiselectChanged(el) {
     var value = el.value;
-    var tagEl = document.getElementById(el.id.replace(/select$/, 'tags'));
     var multiselectEl = document.getElementById(el.id.replace(/-select$/, ''));
 
     if (multiselectEl.options[el.selectedIndex].selected) {
@@ -10,17 +9,26 @@ function multiselectChanged(el) {
         return;
     };
 
+    addTag(value, el);
+
+    el.selectedIndex = 0;
+
+    multiselectEl.dispatchEvent(event);
+}
+
+function addTag(value, el){
+    var tagEl = document.getElementById(el.id.replace(/select$/, 'tags'));
+    var multiselectEl = document.getElementById(el.id.replace(/-select$/, ''));
+
     for (var i = multiselectEl.options.length - 1; i >= 0; i--) {
         if (multiselectEl.options[i].value !== value) continue;
         multiselectEl.options[i].selected = true;
+        el.options[i].selected = true;
         value = multiselectEl.options[i].textContent;
         break;
     }
 
     tagEl.appendChild(createTag(value, el.selectedIndex, multiselectEl.id));
-    el.selectedIndex = 0;
-
-    multiselectEl.dispatchEvent(event);
 }
 
 function createTag(value, index, id) {

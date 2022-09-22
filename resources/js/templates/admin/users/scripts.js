@@ -2,7 +2,28 @@
     var countryAppFilter = document.getElementById('country-filter');
     var passwordEl = document.getElementById('password');
     var confirmEl = document.getElementById('password-confirm');
+    var btnSubmit = document.querySelectorAll('.save-button');
     var passwordScore = 0;
+
+    for(var i = 0; i < btnSubmit.length; i++) {
+        btnSubmit[i].addEventListener('click', checkOpcoRole);
+    }
+
+    function checkOpcoRole(event){
+        var spanRoles = document.getElementById('roles-tags').querySelectorAll('span');
+        var spanCountry = document.getElementById('responsible_countries-tags').querySelectorAll('span');
+
+        if(spanCountry.length !== 0) return;
+        if(!spanRoles) return;
+
+        for(var i = 0; i < spanRoles.length; i++){
+            if(spanRoles[i].innerHTML === 'Opco'){
+                addAlert('warning', 'Please select at least one country this Opco admin is responsible for.');
+                event.preventDefault();
+                return;
+            }
+        }
+    }
 
     passwordEl.addEventListener('input', checkPassword);
     confirmEl.addEventListener('input', checkPassword);
@@ -56,6 +77,26 @@
         }
     }
 }());
+
+var roleTags = document.querySelector('#roles-tags');
+if(roleTags){
+    var adminDialog = document.querySelector('.admin-removal-confirm');
+    roleTags.addEventListener('click', checkAdminRemoved);
+    
+    function checkAdminRemoved(event){
+        if(event.target.dataset.index !== undefined && event.target.dataset.index !== '1') return;
+        adminDialog.classList.add('show');
+        document.querySelector('.admin-removal-confirm').addEventListener('dialog-closed', adminRestore, {once:true});
+    }
+}
+
+function adminRestore(e){
+    addTag('1', document.getElementById('roles-select'));
+}
+
+function closeAdminRestore(){
+    adminDialog.classList.remove('show');
+}
 
 function togglePasswordVisibility(el) {
     el.classList.toggle('password-visible');

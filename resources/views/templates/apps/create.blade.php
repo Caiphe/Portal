@@ -38,7 +38,7 @@
                 <span>1</span> App details
             </a>
             <a href="#">
-                <span>2</span> Select countries
+                <span>2</span> Select a country
             </a>
             <a href="#">
                 <span>3</span> Select products
@@ -70,24 +70,18 @@
                     </div>
 
                     <div class="group group-info team-field">
-                        <label for="team">Select team *</label>
+                        <label for="team">Select team</label>
+                       
                         <div class="select_wrap">
                             <input name="team" id="team" class="selected-data" value="">
+                            @if($teams->count() > 0)
                             <ul class="default_option">
                                 <li>
-                                    {{-- <div class="option"> --}}
-                                        <div class="select-default">Please select team <span class="hide-mobi">to publish under</span></div>
-                                    {{-- </div> --}}
+                                    <div class="select-default">Please select team <span class="hide-mobi">to publish under</span></div>
                                 </li>
                             </ul>
 
                             <ul class="select_ul">
-                                <li>
-                                    <div class="option">
-                                        <div class="icon" style="background-image: url({{ $user->profile_picture }})"></div>
-                                        <div class="select-data" data-createdby="" data-teamid="">{{ $user->full_name }} (You)</div>
-                                    </div>
-                                </li>
                                 @foreach($teams as $team)
                                 <li>
                                     <div class="option">
@@ -97,6 +91,14 @@
                                 </li>
                                 @endforeach
                             </ul>
+                            @else
+                            <ul class="default_option no-team">
+                                <li>
+                                    <div class="select-default select-data" data-createdby="" data-teamid="">You aren't part of any teams</div>
+                                </li>
+                            </ul>
+
+                            @endif
                         </div>
                         <div class="error">{{ isset($error) && $error->get('team', '') }}</div>
                     </div>
@@ -109,13 +111,13 @@
                 </div>
 
                 <button class="dark next">
-                    Select countries
+                    Select country
                     @svg('arrow-forward', '#ffffff')
                 </button>
             </div>
 
             <div class="select-countries">
-                <p>Select the countries you would like to associate with your app *</p>
+                <p>Select a country you would like to associate with your app *</p>
 
                 <div class="countries">
                     @foreach($countries as $key => $country)
@@ -152,18 +154,20 @@
                     @foreach ($products as $category => $prods)
                         <div class="category" data-category="{{ $category }}">
                             <h3 class="category-heading" data-category="{{ $prods[0]->category_cid }}">{{ $category }}</h3>
-                            @foreach ($prods as $product)
-                                <x-card-product :title="$product->display_name"
+                            @foreach ($prods as $prod)
+                                <x-card-product
+                                                :selected="!is_null($productSelected) && $productSelected->pid === $prod->pid"
+                                                :title="$prod->display_name"
                                                 class="product-block"
-                                                :href="route('product.show', $product->slug)"
+                                                :href="route('product.show', $prod->slug)"
                                                 target="_blank"
-                                                :tags="[$product->group, $product->category->title]"
-                                                :addButtonId="$product->slug"
-                                                :data-title="$product->name"
-                                                :data-group="$product->group"
-                                                :data-access="$product->access"
-                                                :data-category="$product->category_cid"
-                                                :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}
+                                                :tags="[$prod->group, $prod->category->title]"
+                                                :addButtonId="$prod->slug"
+                                                :data-title="$prod->name"
+                                                :data-group="$prod->group"
+                                                :data-access="$prod->access"
+                                                :data-category="$prod->category_cid"
+                                                :data-locations="$prod->locations">{{ !empty($prod->description)?$prod->description:'View the product' }}
                                 </x-card-product>
                             @endforeach
                         </div>
@@ -178,7 +182,7 @@
                 </div>
             </div>
         </form>
-        <button type="reset">Cancel</button>
+        <a class="cancel" href="{{ route('app.index') }}">Cancel</a>
     </div>
 @endsection
 
@@ -297,38 +301,6 @@
         }
     }
 
-    document.querySelector('[type="reset"]').addEventListener('click', function () {
-        if(form.querySelector('.active') !== form.firstElementChild) {
-            form.querySelector('.active').classList.remove('active');
-            form.firstElementChild.classList.add('active');
-            form.firstElementChild.style.display = 'flex';
-        }
-
-        var els = document.querySelectorAll('#app-create nav a.active');
-        var countries = document.querySelectorAll('.countries .selected');
-        var products = document.querySelectorAll('.products .selected');
-        var buttons = document.querySelectorAll('.add-product:checked');
-
-        for (var k = 0; k < els.length; k++) {
-            els[k].classList.remove('active');
-        }
-
-        for(var x = 0; x < countries.length; x++) {
-            countries[x].classList.remove('selected');
-        }
-
-        for(var z = 0; z < products.length; z++) {
-            products[z].classList.remove('selected');
-        }
-
-        for(var w = 0; w < buttons.length; w++) {
-            buttons[w].checked = false;
-        }
-
-        nav.querySelector('a').classList.add('active');
-
-        form.reset();
-    });
 
     var countries = document.querySelectorAll('.country');
     for (var l = 0; l < countries.length; l++) {
@@ -362,11 +334,13 @@
         var products = document.querySelectorAll(".card--product");
         var categoryHeadings = document.querySelectorAll(".category-heading");
         var showCategories = [];
+        var locations = null;
 
         for (var i = products.length - 1; i >= 0; i--) {
             products[i].style.display = "none";
 
-            var locations =
+            if(!products[i].dataset.locations) continue;
+            locations =
             products[i].dataset.locations !== undefined
             ? products[i].dataset.locations.split(",")
             : ["all"];

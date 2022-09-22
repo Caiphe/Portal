@@ -45,7 +45,14 @@
     </x-heading>
 
     <div class="content">
-        <div id="product-sections" class="{{$startingPoint}}">
+        <div id="product-sections" class="{{ $startingPoint }}">
+            <div class="create-app-from-product-swagger-btn">
+                @if($specification)
+                    <a href="{{ route('product.download.swagger', [$product->slug]) }}" class="button">Download Swagger</a>
+                @endif
+                <a class="button create-app-from-product" href="{{ route('app.create', ['product' => $product->slug]) }}" role="button">Create app with product</a>
+            </div>
+
             @foreach($content['lhs'] as $tab)
                 <button id="button-{{$tab->slug}}" class="light small outline product-section-button" onclick="switchSection('product-{{$tab->slug}}');">{{strtoupper($tab->title)}}</button>
             @endforeach
@@ -56,9 +63,7 @@
 
             <div id="product-specification" class="product-section">
                 @if($specification)
-                    <h2 class="mt-0">Download</h2>
                     {{-- <a href="{{ route('product.download.postman', [$product->slug]) }}" class="button">Download Postman collection</a> --}}
-                    <a href="{{ route('product.download.swagger', [$product->slug]) }}" class="button">Download Swagger</a>
 
                     <h2 class="mt-4">Available endpoints</h2>
                     <div id="elements-api-desktop">

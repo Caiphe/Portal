@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Country;
 use App\Http\Requests\UserRequest;
 use App\Mail\UpdateUser;
 use App\Product;
@@ -46,10 +47,14 @@ class UserController extends Controller
 		return view('templates.user.show', [
 			'user' => $user,
 			'userLocations' => $user->countries->pluck('code')->toArray(),
+			'responsibleCountries' => $user->responsibleCountries->pluck('code')->toArray(),
 			'locations' => array_unique(explode(',', $productLocations)),
 			'key' => $key,
 			'inlineUrl' => $inlineUrl,
 			'teamInvite' => $teamInvite,
+			'countries' => Country::all(),
+			'userRoles' => array_unique(explode(',', $user->getRolesListAttribute()))
+
 		]);
 	}
 
@@ -70,12 +75,6 @@ class UserController extends Controller
 		if ($hasNewEmail) {
 			$emails[] = $validated['email'];
 			$validated['email_verified_at'] = null;
-		}
-
-		if (!is_null($validated['password'])) {
-			$validated['password'] = bcrypt($validated['password']);
-		} else {
-			unset($validated['password']);
 		}
 
 		$user->update($validated);

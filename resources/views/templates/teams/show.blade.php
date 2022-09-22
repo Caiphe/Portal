@@ -32,87 +32,102 @@ My team
     @endif
 </x-heading>
 
-{{-- Edit teammate --}}
-<div class="modal-container">
-    <div class="overlay-container"></div>
-    <div class="add-teammate-block">
-        <button class="close-modal">@svg('close-popup', '#000')</button>
-        <h2 class="team-head addTeam">Add teammate</h2>
-        <p class="teammate-text">Invite additional team members or other users</p>
-        <form class="form-teammate">
-            <div class="form-group-container">
-                <input type="text" class="form-control teammate-email" placeholder="Add email to invite users"/>
-                <button type="" class="invite-btn" data-teamid="{{ $team->id }}">INVITE</button>
-            </div>
-            <div class="radio-container">
-                <x-radio-round id="user-radio" name="role_name" value="team_admin">Administrator</x-radio-round>
-                <x-radio-round id="user-radio-two" name="role_name" checked value="team_user">User</x-radio-round>
-            </div>
+<x-dialog-box dialogTitle="Add teammate" class="add-teammate-dialog">
+    <form class="form-teammate dialog-custom-form">
+        <p class="dialog-text-padding">Invite additional team members or other users</p>
+        <div class="form-group-container">
+            <input type="text" class="form-control teammate-email" placeholder="Add email to invite users"/>
+        </div>
+        <div class="radio-container">
+            <x-radio-round id="user-radio" name="role_name" value="team_admin">Administrator</x-radio-round>
+            <x-radio-round id="user-radio-two" name="role_name" checked value="team_user">User</x-radio-round>
+        </div>
 
-            <div class="teammate-error-message">Valid email required!</div>
-        </form>
+        <div class="teammate-error-message">Valid email required!</div>
+    
+        <div class="form-team-leave bottom-shadow-container button-container">
+            <button type="" class="btn invite-btn primary inactive" data-teamid="{{ $team->id }}">INVITE</button>
+            <button type="button" class="btn black-bordered mr-10 close-add-teammate-btn">CANCEL</button>
+        </div>
+    </form>
+</x-dialog-box>
+{{-- Add teammate ends --}}
+
+
+{{-- Transfer ownership Dialog --}}
+<x-dialog-box dialogTitle="Transfer Ownership" class="ownweship-modal-container">
+   
+    <p class="remove-user-text dialog-text-padding">Which team member would you like to transfer ownership to? </p>
+
+    <div class="scrollable-users-container">
+        <ul class="list-users-container">
+        @if ($team->users)
+            @foreach($team->users as $teamUser)
+                @if(!$teamUser->isTeamOwner($team))
+                    <li class="each-user">
+                        <div class="users-thumbnail" style="background-image: url({{ $teamUser->profile_picture }})"></div>
+                        <div class="user-full-name">{{ $teamUser->full_name }}</div>
+                        <div class="check-container">
+                            <x-radio-round-two name="transfer-ownership-check" id="{{ $teamUser->id }}" value="{{ $teamUser->email }}"></x-radio-round-two>
+                        </div>
+                    </li>
+                @endif
+            @endforeach
+        @endif
+        </ul>
     </div>
-</div>
-{{-- Edit team mate ends --}}
+
+    <form class="custom-modal-form bottom-shadow-container button-container mt-40">
+        <button type="button" id="transfer-btn" data-teamid="{{ $team->id }}" class="inactive">TRANSFER</button>
+        <button type="button" class="btn black-bordered mr-10 ownership-removal-btn">CANCEL</button>
+    </form>
+
+</x-dialog-box>
+{{-- Transfer ownership ends --}}
 
 {{-- Make Admin Modal Container --}}
-<div class="make-admin-modal-container">
-    <div class="admin-overlay-container"></div>
-    <div class="add-teammate-block">
-        <button class="admin-close-modal">@svg('close-popup', '#000')</button>
-        <h2 class="team-head">Make Owner</h2>
-        <p class="teammate-text">Would you like to make this user a new <strong>owner</strong> of this team?</p>
-        <p class="admin-user-name"></p>
-        <form class="custom-modal-form">
-            <button type="button" class="btn primary mr-10 make-admin-cancel-btn">CANCEL</button>
-            <button type="button" id="make-owner-btn" class="btn dark admin-removal-btn"  data-teamid="{{ $team->id }}">Submit</button>
-        </form>
-    </div>
-</div>
+<x-dialog-box dialogTitle="Make Owner" class="make-admin-modal-container">
+    <p class="teammate-text dialog-text-padding">Would you like to make this user a new <strong>owner</strong> of this team?</p>
+    <p class="admin-user-name bolder-text dialog-text-padding"></p>
+    <form class="custom-modal-form bottom-shadow-container button-container mt-40">
+        <button type="button" id="make-owner-btn" class="btn primary admin-removal-btn"  data-teamid="{{ $team->id }}">Submit</button>
+        <button type="button" class="btn black-bordered mr-10 make-admin-cancel-btn">CANCEL</button>
+    </form>
+</x-dialog-box>
 {{-- Make admin ends --}}
 
 {{-- Make user modal Container --}}
-<div class="make-user-modal-container">
-    <div class="user-overlay-container"></div>
-    <div class="add-teammate-block">
-        <button class="user-close-modal">@svg('close-popup', '#000')</button>
-        <h2 class="team-head">Make User</h2>
-        <p class="teammate-text">Would you like change this user's level of access to <strong>user</strong>?</p>
-        <p class="user-name make-user-name"></p>
-        <form class="custom-modal-form" method="post" id="make-user-form">
-            @csrf()
-            <input type="hidden" name="team_id" id="each-team-id" value="" />
-            <input type="hidden" name="user_id" id="each-user-id" value="" />
-            <input type="hidden" name="user_role" id="each-user-role" value="" />
+<x-dialog-box dialogTitle="Make User" class="make-user-modal-container">
+    <p class="teammate-text dialog-text-padding">Would you like to make this user a new <strong>owner</strong> of this team?</p>
+    <p class="make-user-name bolder-text dialog-text-padding"></p>
+    <h2 class="team-head" style="display: none; ">Make User</h2>
 
-            <button type="button" class="btn primary mr-10 user-admin-cancel-btn">CANCEL</button>
-            <button type="button" class="btn dark make-user-btn">SUBMIT</button>
-        </form>
-    </div>
-</div>
+    <form class="custom-modal-form bottom-shadow-container button-container mt-40" method="post" id="make-user-form">
+        @csrf()
+        <input type="hidden" name="team_id" id="each-team-id" value="" />
+        <input type="hidden" name="user_id" id="each-user-id" value="" />
+        <input type="hidden" name="user_role" id="each-user-role" value="" />
+
+        <button type="button" class="btn primary make-user-btn">SUBMIT</button>
+        <button type="button" class="btn black-bordered mr-10 user-admin-cancel-btn">CANCEL</button>
+    </form>
+</x-dialog-box>
 {{-- Make user modal ends --}}
 
 {{-- Delete User Modal --}}
-<div class="delete-modal-container">
-    <div class="delete-overlay-container"></div>
+<x-dialog-box dialogTitle="Remove User" class="delete-modal-container">
 
-    <div class="delete-user-block">
-        <button class="delete-close-modal">@svg('close-popup', '#000')</button>
+    <p class="teammate-text dialog-text-padding">Are you sure you want to remove this user?</p>
+    <p class="user-name user-delete-name bolder-text dialog-text-padding"></p>
 
-        <h2 class="team-head">Remove User</h2>
-        <p class="teammate-text">Are you sure you want to remove this user?</p>
-        <p class="user-name user-delete-name"></p>
-    {{-- Form to confirm the users removal --}}
-        <form class="custom-modal-form" method="post">
-            @csrf()
-            <input type="hidden" value="" name="team_id" class="hidden-team-id"/>
-            <input type="hidden" value="" name="team_user_id" class="hidden-team-user-id"/>
-            <button type="button" class="btn primary mr-10 cancel-remove-user-btn">CANCEL</button>
-            <button type="" class="btn dark remove-user-from-team">REMOVE</button>
-        </form>
-    </div>
+    <form class="custom-modal-form bottom-shadow-container button-container mt-40" method="post">
+        @csrf()
+        <input type="hidden" value="" name="team_id" class="hidden-team-id"/>
+        <input type="hidden" value="" name="team_user_id" class="hidden-team-user-id"/>
+        <button type="" class="btn primary remove-user-from-team">REMOVE</button>
+        <button type="button" class="btn black-bordered mr-10 cancel-remove-user-btn">CANCEL</button>
+    </form>
 
-    {{-- This show up if ou are the owner so you should assign a different owner --}}
     <div class="confirm-delete-block">
         <button class="confirm-delete-close-modal">@svg('close-popup', '#000')</button>
         <h2 class="team-head custom-head">Warning</h2>
@@ -138,49 +153,14 @@ My team
             </ul>
         </div>
 
-        <form class="form-delete-user">
-            <button type="button" class="btn primary mr-10 cancel-removal-btn">CANCEL</button>
-            <button type="button" class="btn dark">REMOVE</button>
+        <form class="form-delete-user ">
+            <button type="button" class="btn primary">REMOVE</button>
+            <button type="button" class="btn black-bordered mr-10 cancel-removal-btn">CANCEL</button>
         </form>
     </div>
-</div>
+</x-dialog-box>
 {{-- Delete User Ends --}}
 
-
-{{-- Transfer ownership Modal--}}
-<div class="ownweship-modal-container">
-    <div class="ownweship-overlay-container"></div>
-    {{-- This show up if you are the owner so you should assign a different owner --}}
-    <div class="transfer-ownership-block">
-        <button class="ownweship-close-modal">@svg('close-popup', '#000')</button>
-        <h2 class="team-head custom-head">Transfer Ownership</h2>
-        <p class="remove-user-text">Which team member would you like to transfer ownership to? </p>
-
-        <div class="scrollable-users-container">
-            <ul class="list-users-container">
-            @if ($team->users)
-                @foreach($team->users as $teamUser)
-                    @if(!$teamUser->isTeamOwner($team))
-                        <li class="each-user">
-                            <div class="users-thumbnail" style="background-image: url({{ $teamUser->profile_picture }})"></div>
-                            <div class="user-full-name">{{ $teamUser->full_name }}</div>
-                            <div class="check-container">
-                                <x-radio-round-two name="transfer-ownership-check" id="{{ $teamUser->id }}" value="{{ $teamUser->email }}"></x-radio-round-two>
-                            </div>
-                        </li>
-                    @endif
-                @endforeach
-            @endif
-            </ul>
-        </div>
-
-        <form class="custom-modal-form mt-40">
-            <button type="button" class="btn primary mr-10 ownership-removal-btn">CANCEL</button>
-            <button type="button" id="transfer-btn" data-teamid="{{ $team->id }}" class="btn dark transfer-btn">TRANSFER</button>
-        </form>
-
-    </div>
-</div>
 
 <div class="mt-2 custom-margin">
     {{-- Top ownerhip block container --}}
@@ -243,7 +223,7 @@ My team
                 <tr class="table-title">
                     <td class="bold"><a href="?sort=name&order={{ $order }}">Member name @svg('arrow-down' ,'#cdcdcd')</a></td>
                     <td class="bold bold-role"><a href="?sort=role&order={{ $order }}">Role @svg('arrow-down' ,'#cdcdcd')</a></td>
-                    <td class="bold bold-2fa"><a href="?sort=2fa&order={{ $order }}">2FA Status @svg('arrow-down' ,'#cdcdcd')</a></td>
+                    <td class="bold bold-2fa"><a href="?sort=2fa&order={{ $order }}">2FA status @svg('arrow-down' ,'#cdcdcd')</a></td>
                 </tr>
 
                 @foreach($team->users as $teamUser)
@@ -360,7 +340,7 @@ My team
                 <div class="heading-app">
                     @svg('chevron-down', '#000000')
 
-                    <h3>Approved Apps</h3>
+                    <h3>Approved apps</h3>
                 </div>
 
                 <div class="updated-app">
@@ -414,7 +394,7 @@ My team
                 <div class="heading-app">
                     @svg('chevron-down', '#000000')
 
-                    <h3>Revoked Apps</h3>
+                    <h3>Revoked apps</h3>
                 </div>
 
                 <div class="updated-app">

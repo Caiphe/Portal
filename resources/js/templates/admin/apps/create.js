@@ -45,6 +45,23 @@
         var urlValue = null;
         var errors = [];
 
+        var attrNames = elements['attribute[name][]'];
+        var attrValues = elements['attribute[value][]'];
+
+        if(attrNames && attrNames.length === undefined) {
+            attrNames = [attrNames];
+            attrValues = [attrValues];
+        }
+
+        if(attrNames){
+            for(var i = 0; i < attrNames.length; i++) {
+                if(attrValues[i].value === '' || attrNames[i].value === ''){
+                    addAlert('error', 'No empty attributes allowed. Try again.');
+                    return;
+                }
+            }
+        }
+
         if (elements['name'].value === '') {
             errors.push({ msg: 'Please add a name for your app', el: elements['name'] });
         } else {
@@ -132,17 +149,19 @@
         var products = document.querySelectorAll(".card--product");
         var categories = document.querySelectorAll(".category");
         var availabelCategories = [];
-        var locations = null;
+        var locations = null; 
 
         for (var i = products.length - 1; i >= 0; i--) {
             products[i].style.display = "none";
 
+            if(!products[i].dataset.locations) continue;
             locations = products[i].dataset.locations !== undefined ? products[i].dataset.locations.split(",") : ["all"];
 
             if (locations[0] === 'all' || locations.indexOf(selectedCountry) !== -1) {
                 products[i].style.display = "flex";
                 availabelCategories.push(products[i].dataset.category);
             }
+            
         }
 
         for (var i = categories.length - 1; i >= 0; i--) {
@@ -156,6 +175,9 @@
 
     function handleCreate() {
         var elements = form.elements;
+        var attrNames = elements['attribute[name][]'];
+        var attrValues = elements['attribute[value][]'];
+
         var selectedProducts = document.querySelectorAll('.add-product:checked');
         var button = document.getElementById('next-create-app');
         var app = {
@@ -165,15 +187,31 @@
             description: elements['description'].value,
             country: document.querySelector('.country-checkbox:checked').dataset.location,
             products: [],
+            attribute: [],
         };
 
-        for (i = 0; i < selectedProducts.length; i++) {
+        for (var i = 0; i < selectedProducts.length; i++) {
             app.products.push(selectedProducts[i].value);
         }
 
         if (app.products.length === 0) {
             return void addAlert('error', 'Please select at least one product.')
         }
+
+        if(attrNames && attrNames.length === undefined) {
+            attrNames = [attrNames];
+            attrValues = [attrValues];
+        }
+
+        if(attrNames){
+            for(var i = 0; i < attrNames.length; i++) {
+                app.attribute.push({
+                    'name': attrNames[i].value,
+                    'value': attrValues[i].value
+                });
+            }
+        }
+
 
         button.disabled = true;
         addLoading('Creating app...');
@@ -271,4 +309,92 @@
 
         suggBox.innerHTML = listData;
     }
+
+    // custom attribute add
+    var addAttributeBtn = document.querySelector('.add-attribute');
+    var attributeName = document.querySelector('#attribute-name');
+    var attributeValue = document.querySelector('#attribute-value');
+    var attributeErrorMessage = document.querySelector('#attribute-error');
+    var attributesList = document.querySelector('#custom-attributes-list');
+
+    addAttributeBtn.addEventListener('click', addNewAttribute);
+
+    attributeName.addEventListener('change', checkNameExists);
+    attributeValue.addEventListener('change', removeQuote);
+
+    function addNewAttribute(){
+        var attributeName = document.querySelector('#attribute-name');
+        elements = document.getElementById('form-create-app').elements;
+
+        if(attributeName.value === "" || attributeValue.value === ''){
+            attributeErrorMessage.classList.add('show');
+
+            setTimeout(function(){
+                attributeErrorMessage.classList.remove('show');
+            }, 4000);
+
+            return;
+        }
+
+        var attrNames = elements['attribute[name][]'];
+        var attrValues = elements['attribute[value][]'];
+
+        if(attrNames && attrNames.length === undefined) {
+            attrNames = [attrNames];
+            attrValues = [attrValues];
+        }
+
+        var customAttributeBlock = document.getElementById('custom-attribute').innerHTML;
+        var addedAttributeForm = document.querySelector('.custom-attribute-list-container');
+
+        customAttributeBlock = document.createRange().createContextualFragment(customAttributeBlock);
+        customAttributeBlock.querySelector('.name').value = attributeName.value;
+        customAttributeBlock.querySelector('.value').value = attributeValue.value;
+        attributesList.appendChild(customAttributeBlock);
+        attributeName.value = '';
+        attributeValue.value = '';
+        document.querySelector('.attributes-heading').classList.add('show');
+        addedAttributeForm.classList.remove('non-active');
+        addedAttributeForm.classList.add('active');
+
+        attributeName.addEventListener('change', checkNameExists);
+    }
+
+    function checkNameExists(){
+        var elements = document.getElementById('form-create-app').elements;
+        var attrNames = elements['attribute[name][]'];
+    
+        if(attrNames && attrNames.length === undefined) {
+            attrNames = [attrNames];
+        }
+
+        this.value = this.value.replaceAll(/["']/g, "");
+
+        if(attrNames){
+            for(var i = 0; i < attrNames.length; i++){
+                if(attrNames[i].value.toLowerCase() === this.value.toLowerCase()){
+                    this.value = '';
+                    this.focus();
+                    addAlert('warning', 'Attribute name exists already.');
+                    break;
+                }
+            }
+        }
+
+        var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName', 'Notes'];
+        for(var i = 0; i < existingNames.length; i++){
+            if(existingNames[i].toLowerCase() === this.value.toLowerCase()){
+                this.value = '';
+                this.focus();
+                addAlert('warning', `${existingNames[i]} is a reserved attribute name.`);
+                break;
+            }
+        }
+    }
+
+    function removeQuote()
+    {
+        this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, ' ');
+    }
+    
 }());
