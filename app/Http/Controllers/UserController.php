@@ -51,11 +51,14 @@ class UserController extends Controller
 		return view('templates.user.show', [
 			'user' => $user,
 			'userLocations' => $user->countries->pluck('code')->toArray(),
+			'responsibleCountries' => $user->responsibleCountries->pluck('code')->toArray(),
 			'locations' => array_unique(explode(',', $productLocations)),
 			'key' => $key,
 			'inlineUrl' => $inlineUrl,
 			'teamInvite' => $teamInvite,
-			'countries' => Country::all()
+			'countries' => Country::all(),
+			'userRoles' => array_unique(explode(',', $user->getRolesListAttribute()))
+
 		]);
 	}
 

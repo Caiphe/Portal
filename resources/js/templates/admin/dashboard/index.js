@@ -229,7 +229,7 @@
     function updateAppAttributesHtml(attributes, id){
         var attrHtml = '';
         for (key in attributes) {
-            if(key !== 'Notes'){
+            if(key !== 'Notes' && attributes[key] !== ''){
                 attrHtml += `
                 <div class="attribute-display">
                     <span class="attr-name bold">${key} : </span>
@@ -269,8 +269,7 @@
 
     function removeQuote()
     {
-        this.value = this.value.replaceAll(/["']/g, "");
-        console.log("Hello testing");
+        this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, ' ');
     }
 
     function showProductNoteDialog() {

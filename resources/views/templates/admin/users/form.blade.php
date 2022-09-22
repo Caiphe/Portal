@@ -103,6 +103,3 @@
 </div>
 
 
-@push('scripts')
-<script src="{{ mix('/js/templates/admin/users/scripts.js') }}"></script>
-@endpush

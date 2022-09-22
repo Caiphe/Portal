@@ -64,7 +64,7 @@ class SyncProducts extends Command
 
 			$prod = Product::withTrashed()->find($product['name']);
 
-			$attributes = ApigeeService::getAppAttributes($product['attributes']);
+			$attributes = ApigeeService::getProductAttributes($product['attributes']);
 
 			if (isset($attributes['SandboxProduct'])) {
 				$sandboxProductAttribute[$attributes['SandboxProduct']] = $product['name'];
