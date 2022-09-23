@@ -201,15 +201,10 @@ class UserController extends Controller
     public function resetTwofaConfirm(User $user)
 	{
 		$admin = auth()->user()->first_name . ' '. auth()->user()->last_name;
-
-        $userRequest = TwofaResetRequest::where([
-			'user_id' => $user->id,
-			'approved_by' => null
-		])->first();
-
+        $userRequest = TwofaResetRequest::where(['user_id' => $user->id,'approved_by' => null])->first();
         $userRequest->update(['approved_by' => $admin]);
-
 		$user->update(['2fa'=> null]);
+        
 		Mail::to($user->email)->send( new TwoFaResetConfirmationMail());
 
         return response()->json(['success' => true, 'code' => 200], 200);
