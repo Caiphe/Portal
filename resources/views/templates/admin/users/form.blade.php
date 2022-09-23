@@ -84,22 +84,16 @@
     </div>
     @endif
 
-    @if($user_twofa_reset_request)
-        <div class="editor-field">
-            <h2>Authentication method</h2>
-            <div class="auth-method-block">
-                <div class="auth-block">
-                    <span>Two factor authentication</span>
-                    <span class="status-dot active">Enable</span>
-                </div>
-
-                <button type="button" id="reset-2fa-btn" class="button outline blue reset-2fa">Reset 2FA</button>
-
+    <div class="editor-field">
+        <h2>Authentication method</h2>
+        <div class="auth-method-block">
+            <div class="auth-block">
+                <span>Two factor authentication</span>
+                <span class="status-dot {{ $user->twoFactorStatus() }}">{{ $user->twoFactorStatus() }}</span>
             </div>
+            <button type="button" id="reset-2fa-btn" class="button outline  reset-2fa @if($user_twofa_reset_request) blue @endif">Reset 2FA</button>
         </div>
-    @endif
-
-
+    </div>
 </div>
 
 

@@ -266,20 +266,34 @@ button.show-password {
             height: 17px;
             margin-top: 3px;
             border-radius: 50%;
-            background-color: #d32101;
         }
 
-        &.active{
+        &.Enabled{
             &:after{
                 background-color: #19AC4A;
+            }
+        }
+
+        &.Disabled{
+            &:after{
+                background-color: #d32101;
             }
         }
     }
 
     .reset-2fa{
         font-size: 14px;
-        color: #0c678f;
         margin: 17px 0px 10px;
+        border: solid 1px #bbbbbb;
+        color: #bbbbbb;
+        cursor: none;
+        pointer-events: none;
+
+        &.blue{
+            color: #0c678f;
+            cursor: pointer;
+            pointer-events: auto;
+        }
     }
 }
 
