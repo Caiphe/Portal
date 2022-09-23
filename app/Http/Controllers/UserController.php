@@ -206,8 +206,6 @@ class UserController extends Controller
 		$adminUsers = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))
 					  ->pluck('email')->toArray();
 
-		// Mail::to('marc@plusnarrative.com')->send( new TwoFaResetRequestMail($user));
-
 		foreach($adminUsers as $admin){
 			Mail::to($admin)->send( new TwoFaResetRequestMail($user));
 		}
