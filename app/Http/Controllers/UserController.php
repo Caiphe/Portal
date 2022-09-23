@@ -9,7 +9,6 @@ use App\Product;
 use App\Mail\UpdateUser;
 use App\TwofaResetRequest;
 use Illuminate\Http\Request;
-use Laravel\Ui\Presets\React;
 use App\Services\TwofaService;
 use Mpociot\Teamwork\TeamInvite;
 use App\Http\Requests\UserRequest;
