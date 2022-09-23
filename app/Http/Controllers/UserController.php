@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Country;
-use App\Http\Requests\UserRequest;
-use App\Mail\UpdateUser;
-use App\Product;
-use Illuminate\Http\Request;
-use Intervention\Image\Facades\Image;
-use App\Services\TwofaService;
+use App\User;
 use Google2FA;
-use PragmaRX\Google2FALaravel\Support\Authenticator;
-use Illuminate\Support\Facades\Mail;
+use App\Country;
+use App\Product;
+use App\Mail\UpdateUser;
+use App\TwofaResetRequest;
+use Illuminate\Http\Request;
+use App\Services\TwofaService;
 use Mpociot\Teamwork\TeamInvite;
+use App\Http\Requests\UserRequest;
+use App\Mail\TwoFaResetRequestMail;
+use Illuminate\Support\Facades\Mail;
+use Intervention\Image\Facades\Image;
+use PragmaRX\Google2FALaravel\Support\Authenticator;
 
 class UserController extends Controller
 {
@@ -195,5 +198,22 @@ class UserController extends Controller
 		}
 
 		return back()->with('alert', $message);
+	}
+	
+	public function reset2farequest(User $user)
+	{
+		$adminUsers = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))
+					  ->pluck('email')->toArray();
+
+		foreach($adminUsers as $admin){
+			Mail::to($admin)->send( new TwoFaResetRequestMail($user));
+		}
+
+		TwofaResetRequest::firstOrCreate([
+			'user_id' => $user->id,
+			'approved_by' => null
+		]);
+
+        return response()->json(['success' => true, 'code' => 200], 200);
 	}
 }
