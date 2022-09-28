@@ -1,0 +1,156 @@
+@use "../../variables";
+
+.twofa-main-container {
+    display: flex;
+    flex-direction: column;
+    margin: 90px auto 40px;
+    width: 420px;
+
+    @media(max-width: 600px){
+        width: 100%;
+    }
+
+    .inner-top-twofa{
+        width: 350px;
+        margin: 0px auto 0px;
+    }
+
+    .twofa-icon {
+        margin: 0px auto;
+        width: 256px;
+        height: 354px;
+        display: flex;
+    }
+
+    .form-2fa {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+
+        &.hide{
+            display: none;
+        }
+    }
+
+    #form-2fa img {
+        width: 256px;
+        margin: 0 auto;
+    }
+
+    #form-2fa input {
+        margin-bottom: 20px;
+    }
+
+    .reset-twofa {
+        color: #00678f;
+        font-size: 15px;
+        margin-top: 40px;
+        text-align: center;
+        display: block;
+        background-color: transparent;
+        text-decoration: none;
+        border: none;
+        height: 20px;
+
+        &.hide{
+            display: none;
+        }
+
+        &:hover{
+            background-color: transparent;
+            border: none;
+            height: 20px;
+        }
+    }
+
+    .reset-container {
+        display: none;
+
+        &.show {
+            display: block;
+        }
+
+        .reset-form {
+            width: 294px;
+            margin: 10px auto;
+    
+            .confirm-checkbox {
+                display: flex;
+    
+                .confirm-check {
+                    width: 50px;
+                    margin-right: 10px;
+                }
+    
+                .confirm-label {
+                    cursor: pointer;
+                }
+            }
+    
+            .reset-btn {
+                width: 260px;
+                margin: 40px auto 10px;
+                display: block;
+                font-size: 18px;
+                height: 47px;
+                pointer-events: auto;
+                border: none;
+                font-weight: 700;
+                color: #1D1D1D;
+    
+                &.non-active {
+                    background-color: #e6e6e6;
+                    color: #969696;
+                    pointer-events: none;
+                }
+            }
+        }
+    }
+
+    h4 {
+        text-align: center;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 26px;
+        text-align: center;
+        color: #1d1d1d;
+        width: 250px;
+        margin: -45px auto 10px;
+    }
+
+    p {
+        text-align: center;
+        font-size: 15px;
+    }
+
+    .continue-btn{
+        width: 260px;
+        margin: 25px auto 10px;
+        display: block;
+        font-size: 18px;
+        font-weight: 700;
+        color: #1D1D1D;
+        height: 47px;
+        pointer-events: auto;
+        border: none;
+        text-align: center;
+    }
+
+    .gray-text{
+        width: 100%;
+        text-align: center;
+        font-size: 12px;
+        line-height: 15px;
+        color: #969696;
+        margin-top: 25px;
+    }
+
+    .complete-request{
+        display: none;
+
+        &.show{
+            display: block;
+        }
+    }
+}
