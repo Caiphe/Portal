@@ -1,6 +1,3 @@
-@push('styles')
-<link rel="stylesheet" href="{{ mix('/css/templates/admin/notifications/index.css') }}">
-@endpush
 <meta class="csrf-token" name="_token" content="{{ csrf_token() }}">
 
 <div class="notification-main-container" id="notification-main-container">
@@ -59,7 +56,6 @@
             notificationMenu.classList.remove('active');
         }
         
-       
         fetch('/admin/notifications/fetch-all').then(function(data) {
             return data.json();
         }).then(function(notifications){
@@ -96,7 +92,7 @@
             notificationsContainer.innerHTML = content;
 
         }).catch(function(error){
-            // console.log("Error here");
+            console.log("Error here");
         });
 
         var toggleReadForm = document.querySelectorAll('.read-unread-form');

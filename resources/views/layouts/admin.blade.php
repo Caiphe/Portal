@@ -9,6 +9,7 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/layouts/admin.css') }}">
+    <link rel="stylesheet" href="{{ mix('/css/components/notification-admin.css') }}">
 @endpush
 
 @section('body')

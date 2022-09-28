@@ -51,6 +51,19 @@
                     <li><form action="{{route('logout')}}" method="post">@csrf<button>Sign out</button></form></li>
                 </ul>
             </div>
+
+            <div id="notification-menu" class="hidden">
+                <div class="notification-container shadow">
+                    <span class="toggle-notification"></span>
+                    <span class="notification-count"></span>
+                    <span id="notificationMenu"></span>
+                </div>
+
+                <button id="notification-btn" class="button hidden notification-btn">@svg('notifications')</button>
+                <x-notifications></x-notifications>
+                
+            </div>
+
         @else
             <a href="{{route('login')}}" class="button dark outline mr-1 hidden" role="button">Login</a>
             <a href="{{route('register')}}" class="button dark hidden" role="button">Register</a>

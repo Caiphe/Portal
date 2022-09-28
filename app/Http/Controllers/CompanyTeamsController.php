@@ -344,7 +344,7 @@ class CompanyTeamsController extends Controller
         foreach($team->users as $user){
             Notification::create([
                 'user_id' => $user->id,
-                'notification' => "Your team $team->name has been updated please nagivate to your team to view the changes",
+                'notification' => "Your team $team->name has been updated please navigate to your team to view the changes",
             ]);
         }
 
