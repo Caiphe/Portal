@@ -2,7 +2,7 @@
 {{-- Header --}}
 @slot('header')
 @component('mail::header', ['url' => config('app.url')])
-<img src="{{ asset('images/mtn-logo.png') }}" width="90px" alt="MTN Logo">
+<img src="{{ asset('images/mtn-email-logo.png') }}" width="90px" alt="MTN Logo">
 @endcomponent
 @endslot
 

@@ -6,7 +6,7 @@
     <p class="column-app-name">App name</p>
     <p class="column-country">Country</p>
     <p class="column-developer-company">Developer/company</p>
-    <p class="column-go-live">Go live</p>
+    <p class="column-go-live">Created at</p>
     <p class="column-status">Status</p>
 </div>
 

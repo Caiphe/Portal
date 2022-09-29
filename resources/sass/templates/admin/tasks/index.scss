@@ -44,6 +44,9 @@ $Primary: #00ffc0;
                 
                 &.user-name-block {
                     width: 228px;
+                    display: flex;
+                    align-content: center;
+                    align-items: center;
 
                     @media(max-width: 1200px){
                         width: 50%;

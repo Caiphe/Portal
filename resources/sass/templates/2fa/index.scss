@@ -8,11 +8,16 @@
 
     @media(max-width: 600px){
         width: 100%;
+        margin: 20px auto 40px;
     }
 
     .inner-top-twofa{
-        width: 350px;
+        width: 388px;
         margin: 0px auto 0px;
+
+        @media(max-width: 500px){
+            width: 100%; 
+        }
     }
 
     .twofa-icon {
@@ -20,15 +25,26 @@
         width: 256px;
         height: 354px;
         display: flex;
+
+        @media(max-width: 500px){
+            width: 132px;
+            height: 201px;
+        }
     }
 
     .form-2fa {
         text-align: center;
         display: flex;
         flex-direction: column;
+        width: 300px;
+        margin: 0px auto;
 
         &.hide{
             display: none;
+        }
+
+        @media(max-width: 400px){
+            width: 100%;
         }
     }
 
@@ -51,6 +67,13 @@
         text-decoration: none;
         border: none;
         height: 20px;
+        width: 348px;
+        margin: 40px auto 0px;
+        line-height: 21px;
+
+        @media(max-width: 500px){
+            width: 100%;
+        }
 
         &.hide{
             display: none;
@@ -117,11 +140,16 @@
         color: #1d1d1d;
         width: 250px;
         margin: -45px auto 10px;
+
+        @media(max-width: 500px){
+            margin: -17px auto 10px;
+        }
     }
 
     p {
         text-align: center;
         font-size: 15px;
+        margin-bottom: 20px;
     }
 
     .continue-btn{
