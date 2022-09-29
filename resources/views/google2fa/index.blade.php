@@ -23,6 +23,7 @@
             <h4>Reset your two factor authentication</h4>
             <p>Once confirming your request to reset your 2FA, an administrator will be able to complete your request</p>
 
+            
             <form class="reset-form" id="reset-form" action="{{ route('2fa.reset.request', auth()->user()) }}">
                 @csrf
                 <input type="hidden" name="user" value="{{ auth()->user()->id }}" />
@@ -33,7 +34,7 @@
                     </label>
                 </div>
 
-                <button type="submit" id="reset-btn" class="reset-btn non-active">Confirm Reset Request</button>
+                <button type="submit" id="reset-btn" class="reset-btn non-active">Confirm reset request</button>
             </form>
         </div>
 

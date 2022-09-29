@@ -24,7 +24,7 @@
                 </div>
 
                 <div class="header user-name-block">
-                    <a class="user-name">
+                    <a class="user-name" href="{{ route('admin.user.edit', $request->user->id) }}">
                         {{ $request->user->first_name }}  {{ $request->user->last_name }}
                     </a>
                 </div>

@@ -1,11 +1,12 @@
 @component('mail::message')
-# A user has requested an Opco admin role, below are the user's details:
+# A user has requested an Opco admin role, below are user's details and coutries requested:
 
 |                                      |    |           |
 |:----------------------------|:---|:----------|
 |First Name                            |    | **{{ $user->first_name }}** |
 |Last Name                             |    | **{{ $user->last_name }}** |
 |Email                                 |    | **{{ $user->email }}** |
+|Countries                             |    | @foreach ($countries as $country) {{ $country }}, @endforeach |
 
 
 @component('mail::button', ['url' => route('admin.task.index')])
