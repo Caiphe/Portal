@@ -27,7 +27,8 @@
         </div>
 
         <div class="column column-go-live">
-            {{ date('d M Y', strtotime($app['live_at'] ?? $app['updated_at'])) }}
+            {{ date('d M Y', strtotime($app['created_at'])) }}
+
         </div>
 
         <div class="column column-status">

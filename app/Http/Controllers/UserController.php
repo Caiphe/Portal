@@ -202,11 +202,12 @@ class UserController extends Controller
 	
 	public function reset2farequest(User $user)
 	{
-		$adminUsers = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))
-					  ->pluck('email')->toArray();
-
+		$adminUsers = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))->pluck('email')->toArray();
+		
 		foreach($adminUsers as $admin){
-			Mail::to($admin)->send( new TwoFaResetRequestMail($user));
+			if($admin !== $user->email){
+				Mail::to($admin)->send( new TwoFaResetRequestMail($user));
+			}
 		}
 
 		TwofaResetRequest::firstOrCreate([

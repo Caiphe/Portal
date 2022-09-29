@@ -57,7 +57,7 @@ class LoginController extends Controller
             'last_name' => $data['last_name'],
             'email' => $data['email'],
             'developer_id' => $data['developer_id'],
-            'password' => Hash::make($data['password']),
+            'password' => $data['password'],
             'profile_picture' => '/storage/profile/profile-' . rand(1, 32) . '.svg',
         ]);
 

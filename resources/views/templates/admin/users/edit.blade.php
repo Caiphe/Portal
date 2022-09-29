@@ -28,9 +28,9 @@
 </x-dialog-box>
 
 {{-- confirm use's 2FA reset --}}
-<x-dialog-box dialogTitle="Confirm 2FA Reset" class="two-fa-modal-container">
+<x-dialog-box dialogTitle="Confirm 2FA reset" class="two-fa-modal-container">
     <div class="two-note">
-        Would you like to confirm the reset of the user's 2FA? They will be required to set it up on their next login.
+        Would you like to confirm the reset of the user's 2FA ? They will be required to set it up on their next login.
     </div>
 
     <div class="bottom-shadow-container button-container">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Country;
 use App\OpcoRoleRequest;
 use App\Mail\OpcoAdminRoleRequest;
 use Illuminate\Support\Facades\Mail;
@@ -16,13 +17,14 @@ class OpcoRoleRequestController extends Controller
         $countries = $data['countries'];
         $data['countries'] = implode(',', $countries);
         $data['user_id'] = $user->id;
-        OpcoRoleRequest::create($data);
+        $requestCountryCodes = explode(',', $data['countries']);
 
-        $adminUsers = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))
-					  ->pluck('email')->toArray();
+        OpcoRoleRequest::create($data);
+        $countries = Country::whereIn('code', $requestCountryCodes)->pluck('name')->toArray();
+        $adminUsers = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))->pluck('email')->toArray();
 
         foreach($adminUsers as $admin){
-            Mail::to($admin)->send(new OpcoAdminRoleRequest($user));
+            Mail::to($admin)->send(new OpcoAdminRoleRequest($user, $countries));
         }
         
         return response()->json(['success' => true, 'code' => 200], 200);
