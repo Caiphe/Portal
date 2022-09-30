@@ -1,5 +1,5 @@
 @component('mail::message')
-# A user has requested 2fa reset
+# A user has requested 2FA reset
 
 Below are user's details:
 
@@ -10,7 +10,7 @@ Below are user's details:
 |Email              |    | **{{ $user->email }}** |
 
 @component('mail::button', ['url' => route('admin.user.edit', $user)])
-    Confirm 2fA reset
+    Confirm 2FA reset
 @endcomponent
 
 Thanks,<br>
