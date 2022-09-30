@@ -1,7 +1,7 @@
 @component('mail::message')
-# 2fa reset request confirmation 
+# 2FA reset request confirmation 
 
-You are now able to set up your 2fa please click on below button:
+You are now able to set up your 2FA please click on below button:
 
 
 @component('mail::button', ['url' => route('login')])
