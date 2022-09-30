@@ -84,6 +84,7 @@
     </div>
     @endif
 
+    @if(isset($user))
     <div class="editor-field">
         <h2>Authentication method</h2>
         <div class="auth-method-block">
@@ -94,6 +95,7 @@
             <button type="button" id="reset-2fa-btn" class="button outline  reset-2fa @if($user_twofa_reset_request) blue @endif">Reset 2FA</button>
         </div>
     </div>
+    @endif
 </div>
 
 
