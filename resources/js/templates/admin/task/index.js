@@ -12,6 +12,14 @@ for (var i = 0; i < viewMotivationBtns.length; i++) {
 function toggleTask() {
     this.classList.toggle('rotate-svg');
     this.closest('.single-task').classList.toggle('active');
+    var viewHide =  this.querySelector('.view-hide');
+
+    if(this.classList.contains('rotate-svg')){
+       viewHide.innerHTML = 'Hide';
+        return;
+    }
+
+   viewHide.innerHTML = 'View'
 }
 
 function showDenyPopup() {
@@ -32,10 +40,11 @@ for(var i = 0; i < denyForms.length; i++){
 function submitRoleApproval(event)
 { 
     event.preventDefault();
-
     var request_id = this.elements['request_id'].value;
     var formToken = this.elements['_token'].value;
-
+    var approvalContainer = this.querySelector('.approval-form-container');
+    approvalContainer.classList.add('show');
+    
     var roleData = {
         message: "Approved",
         request_id: request_id,
@@ -56,9 +65,11 @@ function submitRoleApproval(event)
 
     xhr.onload = function() {
         removeLoading();
+
         if (xhr.status === 200) {
             addAlert('success', ['You have approved an opco admin role request',], function(){
                 location.reload();
+                approvalContainer.classList.remove('show');
             });
             return;
            
@@ -70,7 +81,7 @@ function submitRoleApproval(event)
                     result.message.push(result.errors[error]);
                 }
             }
-
+            approvalContainer.classList.remove('show');
             addAlert('error', result.message || 'Sorry there was a problem with your opco admin request. Please try again.');
         }
     };
