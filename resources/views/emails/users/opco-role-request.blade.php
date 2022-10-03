@@ -10,7 +10,7 @@
 
 
 @component('mail::button', ['url' => route('admin.task.index')])
-Proceed to the Task Panel
+Proceed to task panel
 @endcomponent
 
 Thanks,<br>
