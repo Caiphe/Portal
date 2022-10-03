@@ -117,7 +117,7 @@ Update profile
             @can('request-opco-admin-role')
                 <form class="opco-role-request-form" id="opco-role-request-form" method="POST" action="{{ route('opco-admin-role.store') }}">
                     @csrf
-                    <h2>Apply for Admin Role</h2>
+                    <h2>Apply for admin role</h2>
                     <p class="align-left">
                         If you would like to request the addition of the OpCo Admin Role to your profile, please supply a motivation below why you should be granted this role, including the applicable countries you are requesting permission for.
                     </p>
@@ -126,7 +126,7 @@ Update profile
                         Your application will be received by existing Admins, assigned to the countries you have and will be reviewed accordingly.
                     </p>
 
-                    <h2>Motivation for Admin Role</h2>
+                    <h2>Motivation for admin role</h2>
                     <textarea class="" rows="4" name="message" placeholder='Please motivate the reason for your request of the OpCo Admin role e.g.  "Applying for the OpCo administrative role as I have been promoted to team lead of country X. "'></textarea>
                     <h2>Your selected countries</h2>
                     
@@ -140,7 +140,7 @@ Update profile
                         @endforeach
 
                     </div>
-                    <button type="submit" class="primary">Apply Now</button>
+                    <button type="submit" class="primary">Apply now</button>
                 </form>
             @endcan
         @endif
