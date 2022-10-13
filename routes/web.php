@@ -152,7 +152,6 @@ Route::get('products/{product:slug}/download/swagger', 'ProductController@downlo
 
 Route::get('categories/{category:slug}', 'CategoryController@show')->name('category.show');
 
-Route::get('bundles', 'BundleController@index')->name('bundle.index');
 Route::get('bundles/{bundle:slug}', 'BundleController@show')->name('bundle.show');
 
 Route::get('getting-started', 'GettingStartedController@index')->name('doc.index');
