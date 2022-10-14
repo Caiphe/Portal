@@ -9,27 +9,6 @@ use App\Services\ProductLocationService;
 class BundleController extends Controller
 {
     /**
-     * Show all the bundles
-     * @return \Illuminate\View\View Show the view
-     */
-    public function index(ProductLocationService $productLocationService)
-    {
-        $bundles = Bundle::with(['products', 'category'])->get();
-        $content = Content::where('contentable_type', 'Bundles')->get();
-        $products = $bundles->reduce(function($carry, $bundle){
-            $carry = array_merge($bundle->products->pluck('pid')->toArray(), $carry);
-            return $carry;
-        }, []);
-
-        return view('templates.bundles.index', [
-            'bundles' => $bundles,
-            'content' => $content,
-            'categories' => $bundles->pluck('category.title', 'category.cid'),
-            'countries' => $productLocationService->fetch($products, 'countries')
-        ]);
-    }
-
-    /**
      * Show an individual bundle.
      * @param  \App\Bundle $bundle      The bundle that is being requested
      * @return \Illuminate\View\View    Show the view
