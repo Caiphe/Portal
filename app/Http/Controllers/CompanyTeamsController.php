@@ -418,4 +418,15 @@ class CompanyTeamsController extends Controller
 
         return response()->json(['success' => $updated]);
     }
+
+    /**
+     * Delete Team
+     */
+    public function delete($team)
+    {
+        $teamModel = Team::find($team);
+        $teamModel->delete();
+
+        return redirect()->route('teams.listing')->with('alert', 'success: ' . $teamModel->name . ' successfully deleted.');
+    }
 }

@@ -44,7 +44,7 @@ My team
         </div>
 
         <div class="teammate-error-message">Valid email required!</div>
-    
+
         <div class="form-team-leave bottom-shadow-container button-container">
             <button type="" class="btn invite-btn primary inactive" data-teamid="{{ $team->id }}">INVITE</button>
             <button type="button" class="btn black-bordered mr-10 close-add-teammate-btn">CANCEL</button>
@@ -56,7 +56,7 @@ My team
 
 {{-- Transfer ownership Dialog --}}
 <x-dialog-box dialogTitle="Transfer Ownership" class="ownweship-modal-container">
-   
+
     <p class="remove-user-text dialog-text-padding">Which team member would you like to transfer ownership to? </p>
 
     <div class="scrollable-users-container">
@@ -186,6 +186,21 @@ My team
         @if ($team->users->count() > 1 && $isOwner)
             <button class="btn dark make-owner">Select a new owner</button>
         @endif
+            <button class="btn red-button delete-team-btn">Delete team</button>
+            <x-dialog-box dialogTitle="Delete team" class="deny-role-modal">
+                <form class="dialog-custom-form deny-form" method="post" action="{{ route('teams.delete', $team->id) }}">
+                    @csrf
+                    @method('DELETE')
+                    <input type="hidden" name="team_id" value="{{ $team->id }}" />
+                    <p class="dialog-text-padding">Are you sure you want to delete this team?</p>
+                    <p class="dialog-text-padding"><strong>Team name</strong></p>
+                    <p class="dialog-text-padding">All team members and applications will be removed from the team.</p>
+                    <form class="custom-modal-form bottom-shadow-container button-container mt-40">
+                        <button type="submit" class="btn red-button submit-team-delete">Delete team</button>
+                    </form>
+                </form>
+
+            </x-dialog-box>
     </div>
 
     <h5>Team bio</h5>

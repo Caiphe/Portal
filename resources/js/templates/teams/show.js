@@ -9,6 +9,7 @@ var deleteUserActionBtn = document.querySelector('.remove-user-from-team');
 var teamInviteUserBtn = document.querySelector('.invite-btn');
 var transferOwnsershipBtn = document.querySelector('#transfer-btn');
 var makeOwnershipBtn = document.querySelector('#make-owner-btn');
+var deleteTeamBtn = document.querySelector('.delete-team-btn');
 var addTeamMobile;
 var addTeammateBtn;
 
@@ -16,8 +17,14 @@ for (var i = 0; i < btnActions.length; i++) {
     btnActions[i].addEventListener('click', showUserAction);
 }
 
+deleteTeamBtn.addEventListener('click', showDeleteTeamPopup)
+
 function showUserAction() {
     this.previousElementSibling.classList.add("show");
+    this.nextElementSibling.classList.add('show');
+}
+
+function showDeleteTeamPopup() {
     this.nextElementSibling.classList.add('show');
 }
 
