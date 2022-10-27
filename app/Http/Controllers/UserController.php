@@ -200,9 +200,10 @@ class UserController extends Controller
 		return back()->with('alert', $message);
 	}
 	
-	public function reset2farequest(User $user)
+	public function reset2farequest(Request $request)
 	{
 		$adminUsers = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))->pluck('email')->toArray();
+		$user = $request->user();
 		
 		foreach($adminUsers as $admin){
 			if($admin !== $user->email){
