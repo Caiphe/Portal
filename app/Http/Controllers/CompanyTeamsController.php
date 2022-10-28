@@ -427,6 +427,6 @@ class CompanyTeamsController extends Controller
         $teamModel = Team::find($team);
         $teamModel->delete();
 
-        return redirect()->route('teams.listing')->with('alert', 'success: ' . $teamModel->name . ' successfully deleted.');
+        return redirect()->route('user.profile')->with('alert', 'success: ' . $teamModel->name . ' successfully deleted.');
     }
 }
