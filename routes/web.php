@@ -17,6 +17,10 @@ Route::get('/', 'HomeController')->name('home');
 
 Route::get('search', 'SearchController')->name('search');
 
+Route::middleware(['auth', 'verified'])->group(function () {
+	Route::post('user/2fa/reset-request', 'UserController@reset2farequest')->name('2fa.reset.request');
+});
+
 Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 
 	Route::get('apps', 'AppController@index')->name('app.index');
@@ -57,18 +61,24 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 
 	// Opco admin role request
 	Route::post('/opco-admin-role-request/store', 'OpcoRoleRequestController@store')->middleware(['can:request-opco-admin-role'])->name('opco-admin-role.store');
+	
 });
 
 Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa', 'can:view-admin'])->group(function () {
 	Route::get('/', 'HomeController')->name('admin.home');
 
-	// Tasks
-	Route::get('/tasks', 'TaskController@index')->middleware(['auth', 'verified', '2fa', 'can:administer-task-panel'])->name('admin.task.index');
+	Route::post('user/{user}/2fa/reset-confirm', 'UserController@resetTwofaConfirm')->name('2fa.reset.confirm');
 
-	// Opco role approval
-	Route::middleware(['auth', 'verified', '2fa', 'can:administer-task-panel'])->group(function(){
+
+	Route::middleware('can:administer-task-panel')->group(function(){
+
+		// Opco role status
 		Route::post('/opco-role-request/{id}/approve', 'OpcoRoleRequestActionController@approve')->name('admin.opco.approve');
 		Route::post('/opco-role-request/{id}/deny', 'OpcoRoleRequestActionController@deny')->name('admin.opco.deny');
+
+		// Tasks Panel 
+		Route::get('/tasks', 'TaskController@index')->name('admin.task.index');
+
 	});
 
 	// Products

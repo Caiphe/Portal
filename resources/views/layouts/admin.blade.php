@@ -19,14 +19,20 @@
         <ul class="main-menu">
             <li @class(['menu-applications', 'active' => Request::is('admin/dashboard') || Request::is('admin/apps/create') || Request::is('admin/apps/create/*')])><a href="{{ route('admin.dashboard.index') }}">@svg('applications') Applications</a></li>
             <li @class(['menu-products', 'active' => (Request::is('admin/products') || Request::is('admin/products/*'))])><a href="{{ route('admin.product.index') }}">@svg('products') Products</a></li>
+            
             @if($isAdminUser)
-            <li @class(['menu-products', 'active' => (Request::is('admin/tasks'))])><a href="{{ route('admin.task.index') }}">@svg('task') Tasks</a></li>
+                <li @class(['menu-products', 'active' => (Request::is('admin/tasks'))])><a href="{{ route('admin.task.index') }}">@svg('task') Tasks</a></li>
             @endif
+
             <li @class(['menu-users', 'active' => (Request::is('admin/users') || Request::is('admin/users/*'))])><a href="{{ route('admin.user.index') }}">@svg('users') Users</a></li>
-            <li @class(['menu-faq', 'active' => (Request::is('admin/faqs') || Request::is('admin/faqs/*'))])><a href="{{ route('admin.faq.index') }}">@svg('faq') FAQ</a></li>
-            <li @class(['menu-pages', 'active' => (Request::is('admin/pages') || Request::is('admin/pages/*'))])><a href="{{ route('admin.page.index') }}">@svg('pages') Pages</a></li>
-            <li @class(['menu-categories', 'active' => (Request::is('admin/categories') || Request::is('admin/categories/*'))])><a href="{{ route('admin.category.index') }}">@svg('categories') Categories</a></li>
-            <li @class(['menu-documentation', 'active' => (Request::is('admin/docs') || Request::is('admin/docs/*'))])><a href="{{ route('admin.doc.index') }}">@svg('documentation') Documentation</a></li>
+            
+            @can('administer-content')
+                <li @class(['menu-faq', 'active' => (Request::is('admin/faqs') || Request::is('admin/faqs/*'))])><a href="{{ route('admin.faq.index') }}">@svg('faq') FAQ</a></li>
+                <li @class(['menu-pages', 'active' => (Request::is('admin/pages') || Request::is('admin/pages/*'))])><a href="{{ route('admin.page.index') }}">@svg('pages') Pages</a></li>
+                <li @class(['menu-categories', 'active' => (Request::is('admin/categories') || Request::is('admin/categories/*'))])><a href="{{ route('admin.category.index') }}">@svg('categories') Categories</a></li>
+                <li @class(['menu-documentation', 'active' => (Request::is('admin/docs') || Request::is('admin/docs/*'))])><a href="{{ route('admin.doc.index') }}">@svg('documentation') Documentation</a></li>
+            @endcan
+
             <li @class(['menu-bundles', 'active' => (Request::is('admin/bundles') || Request::is('admin/bundles/*'))])><a href="{{ route('admin.bundle.index') }}">@svg('bundles') Bundles</a></li>
         </ul>
 
