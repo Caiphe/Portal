@@ -24,7 +24,7 @@
             <p>Once confirming your request to reset your 2FA, an administrator will be able to complete your request</p>
 
             
-            <form class="reset-form" id="reset-form" action="{{ route('2fa.reset.request', auth()->user()) }}">
+            <form class="reset-form" id="reset-form" action="{{ route('2fa.reset.request') }}">
                 @csrf
                 <input type="hidden" name="user" value="{{ auth()->user()->id }}" />
                 <div class="confirm-checkbox">

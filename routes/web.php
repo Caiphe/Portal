@@ -18,7 +18,7 @@ Route::get('/', 'HomeController')->name('home');
 Route::get('search', 'SearchController')->name('search');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-	Route::post('user/{user}/2fa/reset-request', 'UserController@reset2farequest')->name('2fa.reset.request');
+	Route::post('user/2fa/reset-request', 'UserController@reset2farequest')->name('2fa.reset.request');
 });
 
 Route::middleware(['auth', 'verified', '2fa'])->group(function () {
