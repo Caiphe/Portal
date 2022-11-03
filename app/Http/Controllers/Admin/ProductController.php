@@ -156,6 +156,12 @@ class ProductController extends Controller
         $addedColumn = array_diff($currentColumn, $updatedColumn);
         $removedColumn = array_diff($updatedColumn, $currentColumn);
 
+        foreach($addedColumn as $key=>$column){
+            if(isset($currentContent[$column]['body']) && empty($currentContent[$column]['body'])){
+                unset($addedColumn[$key]);
+            }
+        }
+
         if(!empty($addedColumn)){
             $updated .= '&#x2022; ' . implode(', ', $addedColumn) .' was added <br />';
         }
