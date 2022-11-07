@@ -87,7 +87,7 @@ class SyncProducts extends Command
 				$prod->update([
 					'pid' => $product['name'],
 					'name' => $product['name'],
-					'display_name' => preg_replace('/[-_]+/', ' ', ltrim($product['displayName'], "$allow ")),
+					'display_name' => preg_replace('/[_]+/', ' ', ltrim($product['displayName'], "$allow ")),
 					'environments' => implode(',', $productEnvironments),
 					'access' => $attributes['Access'] ?? null,
 					'attributes' => json_encode($attributes),
@@ -103,7 +103,7 @@ class SyncProducts extends Command
 				[
 					'pid' => $product['name'],
 					'name' => $product['name'],
-					'display_name' => preg_replace('/[-_]+/', ' ', ltrim($product['displayName'], "$allow ")),
+					'display_name' => preg_replace('/[_]+/', ' ', ltrim($product['displayName'], "$allow ")),
 					'description' => $product['description'],
 					'environments' => implode(',', $productEnvironments),
 					'group' => $attributes['Group'] ?? "MTN",
