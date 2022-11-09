@@ -90,6 +90,7 @@ class SyncProducts extends Command
 					'display_name' => preg_replace('/[_]+/', ' ', ltrim($product['displayName'], "$allow ")),
 					'environments' => implode(',', $productEnvironments),
 					'access' => $attributes['Access'] ?? null,
+					'locations' => $attributes['Locations'] ?? null,
 					'attributes' => json_encode($attributes),
 				]);
 				continue;
