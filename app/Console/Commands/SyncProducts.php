@@ -94,11 +94,6 @@ class SyncProducts extends Command
 					'attributes' => json_encode($attributes),
 				]);
 
-				if (isset($attributes['Locations'])) {
-					$locations = $attributes['Locations'] !== 'all' ? preg_split('/, ?/', $attributes['Locations']) : $allCountries;
-					$prod->countries()->sync($locations);
-				}
-				
 				continue;
 			}
 
