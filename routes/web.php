@@ -87,9 +87,9 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 	Route::put('products/{product:slug}/update', 'ProductController@update')->middleware('can:administer-products')->name('admin.product.update');
 
 	// Bundles
-	Route::get('bundles', 'BundleController@index')->middleware('can:administer-products')->name('admin.bundle.index');
-	Route::get('bundles/{bundle:slug}/edit', 'BundleController@edit')->middleware('can:administer-products')->name('admin.bundle.edit');
-	Route::put('bundles/{bundle:slug}/update', 'BundleController@update')->middleware('can:administer-products')->name('admin.bundle.update');
+	// Route::get('bundles', 'BundleController@index')->middleware('can:administer-products')->name('admin.bundle.index');
+	// Route::get('bundles/{bundle:slug}/edit', 'BundleController@edit')->middleware('can:administer-products')->name('admin.bundle.edit');
+	// Route::put('bundles/{bundle:slug}/update', 'BundleController@update')->middleware('can:administer-products')->name('admin.bundle.update');
 
 	// Page
 	Route::get('pages', 'ContentController@indexPage')->middleware('can:administer-content')->name('admin.page.index');
