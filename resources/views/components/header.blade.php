@@ -28,7 +28,6 @@
                     </div>
                 </div>
             </li>
-            <li><a href="{{ route('doc.index') }}">Docs</a></li>
             <li><a href="{{ route('faq.index') }}">FAQ</a></li>
             <li><a href="{{ route('contact.index') }}">Contact us</a></li>
             @can('view-admin')
