@@ -24,7 +24,6 @@
                     </div>
                     <div class="nav-pages">
                         <a href="{{ route('product.index') }}">Browse all our products</a>
-                        <a href="{{ route('bundle.index') }}">Browse all our bundles</a>
                         <a href="{{ route('doc.index') }}">Working with our products</a>
                     </div>
                 </div>
@@ -60,9 +59,6 @@
     <ul class="mobile-menu container">
         <li>
             <a href="{{ route('product.index') }}">Products @svg("chevron-down")</a>
-        </li>
-        <li>
-            <a href="{{ route('bundle.index') }}">Bundles</a>
         </li>
         <li>
             <a href="{{ route('doc.index') }}">Docs</a>

@@ -25,6 +25,7 @@
 
                 <x-contact-form></x-contact-form>
             </div>
+
             <div class="column details">
                 <h2>Contact details</h2>
                 <address>
@@ -42,6 +43,7 @@
                     </div>
                 </address>
             </div>
+            
         </div>
     </section>
 @endsection
