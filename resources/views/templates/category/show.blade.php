@@ -86,7 +86,9 @@ grant_type=client_credentials -d 'client_id={consumer-key}&client_secret={consum
             <h2 class="t-large mb-1">Create an account</h2>
             <p>Register your account if you want to create an App.</p>
             <div class="cols">
+                @guest
                 <a href="{{ route('register') }}" class="button dark mr-4">Register @svg('arrow-forward')</a>
+                @endguest
                 <a href="{{ route('doc.index') }}" class="button dark">Getting started @svg('arrow-forward')</a>
             </div>
         </div>
