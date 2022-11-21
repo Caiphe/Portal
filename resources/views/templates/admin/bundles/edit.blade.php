@@ -9,9 +9,6 @@
 @section('content')
 <h1>{{ $bundle->display_name }}</h1>
 
-<div class="page-actions">
-</div>
-
 <form id="admin-form" action="" method="POST">
     @method('PUT')
     @csrf
