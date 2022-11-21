@@ -54,7 +54,9 @@
             </div>
 
             @foreach($content['lhs'] as $tab)
-                <button id="button-{{$tab->slug}}" class="light small outline product-section-button" onclick="switchSection('product-{{$tab->slug}}');">{{strtoupper($tab->title)}}</button>
+                @if($tab->body)
+                    <button id="button-{{$tab->slug}}" class="light small outline product-section-button" onclick="switchSection('product-{{$tab->slug}}');">{{strtoupper($tab->title)}}</button>
+                @endif
             @endforeach
             <button id="button-specification" class="light small outline product-section-button" onclick="switchSection('product-specification');">SPECIFICATION</button>
             @foreach($content['rhs'] as $tab)
