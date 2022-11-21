@@ -182,17 +182,20 @@ My team
             <div class="team-logo"  style="background-image: url({{ $team['logo'] }})"></div>
             <h2 class="team-name">{{ $team->name }} </h2>
         </div>
-
-        @if ($team->users->count() > 1 && $isOwner)
+        <div class="teams-action-button-container">
+            @if ($team->users->count() > 1 && $isOwner)
             <button class="btn dark make-owner">Select a new owner</button>
-        @endif
-        @if ($team->users)
-            @foreach($team->users as $teamUser)
-                @if($teamUser->isTeamOwner($team))
-                    <button class="btn red-button delete-team-btn">Delete team</button>
-                @endif
-            @endforeach
-        @endif
+            @endif
+            @if ($team->users)
+                @foreach($team->users as $teamUser)
+                    @if($teamUser->isTeamOwner($team))
+                        <button class="btn red-button delete-team-btn">Delete team</button>
+                    @endif
+                @endforeach
+            @endif
+        </div>
+       
+
         <x-dialog-box dialogTitle="Delete team" class="deny-role-modal">
             <form class="dialog-custom-form deny-form" method="post" action="{{ route('teams.delete', $team->id) }}">
                 @csrf

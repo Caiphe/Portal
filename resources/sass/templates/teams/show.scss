@@ -767,12 +767,33 @@ button {
         }
     }
 
+    .teams-action-button-container{
+        @media(max-width: 768px){
+            display: flex;
+            flex-direction: column;
+            width: 190px;
+        }
+    }
+
     button {
         position: absolute;
         right: 20px;
         top: 0px;
         border: none;
         transition: all 0.3s ease-in-out;
+
+        &.delete-team-btn{
+            top: 90px;
+            z-index: 2;
+
+            @media(max-width: 768px){
+                position: relative;
+                margin-top: 15px;
+                right: auto;
+                top: auto;
+                margin-bottom: 30px;
+            }
+        }
 
         @media(max-width: 768px) {
             position: relative;
