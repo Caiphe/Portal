@@ -87,10 +87,18 @@ class SyncProducts extends Command
 				$prod->update([
 					'pid' => $product['name'],
 					'name' => $product['name'],
+					'display_name' => preg_replace('/[_]+/', ' ', ltrim($product['displayName'], "$allow ")),
 					'environments' => implode(',', $productEnvironments),
 					'access' => $attributes['Access'] ?? null,
+					'locations' => $attributes['Locations'] ?? null,
 					'attributes' => json_encode($attributes),
 				]);
+
+				if (isset($attributes['Locations'])) {
+					$locations = $attributes['Locations'] !== 'all' ? preg_split('/, ?/', $attributes['Locations']) : $allCountries;
+					$prod->countries()->sync($locations);
+				}
+
 				continue;
 			}
 
@@ -102,7 +110,7 @@ class SyncProducts extends Command
 				[
 					'pid' => $product['name'],
 					'name' => $product['name'],
-					'display_name' => preg_replace('/[-_]+/', ' ', ltrim($product['displayName'], "$allow ")),
+					'display_name' => preg_replace('/[_]+/', ' ', ltrim($product['displayName'], "$allow ")),
 					'description' => $product['description'],
 					'environments' => implode(',', $productEnvironments),
 					'group' => $attributes['Group'] ?? "MTN",

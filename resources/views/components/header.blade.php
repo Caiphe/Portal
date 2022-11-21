@@ -24,12 +24,10 @@
                     </div>
                     <div class="nav-pages">
                         <a href="{{ route('product.index') }}">Browse all our products</a>
-                        <a href="{{ route('bundle.index') }}">Browse all our bundles</a>
                         <a href="{{ route('doc.index') }}">Working with our products</a>
                     </div>
                 </div>
             </li>
-            <li><a href="{{ route('doc.index') }}">Docs</a></li>
             <li><a href="{{ route('faq.index') }}">FAQ</a></li>
             <li><a href="{{ route('contact.index') }}">Contact us</a></li>
             @can('view-admin')
@@ -60,9 +58,6 @@
     <ul class="mobile-menu container">
         <li>
             <a href="{{ route('product.index') }}">Products @svg("chevron-down")</a>
-        </li>
-        <li>
-            <a href="{{ route('bundle.index') }}">Bundles</a>
         </li>
         <li>
             <a href="{{ route('doc.index') }}">Docs</a>

@@ -26,7 +26,6 @@
         {!! $content['heading'][0]['body'] ?? 'Content needed' !!}
         <div class="row mt-3">
             <a href="{{ route('product.index', ['category' => $category]) }}" class="button mr-1 view-products">View products @svg('arrow-forward')</a>
-            <a href="{{ route('bundle.index') }}" class="button dark">View bundles @svg('arrow-forward', '#FFF')</a>
         </div>
         <img class="squiggle" src="/images/category/themes/{{ $theme }}/squiggle-hero.svg" alt="background squiggle">
         <div class="phone">
@@ -67,7 +66,7 @@
                 <div class="cols">
                     <div class="col-4">@svg('done') Extensive documentation</div>
                     <div class="col-4">@svg('done') Support</div>
-                    <div class="col"><a href="{{ route('product.index', ['category' => $category]) }}" class="right-flex">View the docs @svg('arrow-forward')</a></div>
+                    <div class="col"><a href="{{ route('doc.index') }}" class="right-flex">View the docs @svg('arrow-forward')</a></div>
                 </div>
             </div>
         </div>
@@ -87,7 +86,9 @@ grant_type=client_credentials -d 'client_id={consumer-key}&client_secret={consum
             <h2 class="t-large mb-1">Create an account</h2>
             <p>Register your account if you want to create an App.</p>
             <div class="cols">
+                @guest
                 <a href="{{ route('register') }}" class="button dark mr-4">Register @svg('arrow-forward')</a>
+                @endguest
                 <a href="{{ route('doc.index') }}" class="button dark">Getting started @svg('arrow-forward')</a>
             </div>
         </div>
@@ -101,7 +102,6 @@ grant_type=client_credentials -d 'client_id={consumer-key}&client_secret={consum
                 <span class="tag yellow">MTN</span>
                 <h3>{!! $content['bundles'][0]['title'] ?? 'Content needed' !!}</h3>
                 {!! $content['bundles'][0]['body'] ?? 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Officiis commodi ipsum, ut ipsam, debitis incidunt dignissimos suscipit vitae reiciendis non, fugiat similique, deleniti nostrum aliquid voluptates enim mollitia sint ad.' !!}
-                <a href="{{ route('bundle.index') }}">View all bundles @svg('arrow-forward')</a>
             </div>
         </div>
         @endif

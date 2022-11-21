@@ -6,22 +6,22 @@ use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class OpcoAdminRoleRequest extends Mailable
+class TwoFaResetRequestMail extends Mailable
 {
     use Queueable, SerializesModels;
+
     public $user;
-    public $countries;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user, $countries)
+    public function __construct(User $user)
     {
         $this->user = $user;
-        $this->countries = $countries;
     }
 
     /**
@@ -31,6 +31,6 @@ class OpcoAdminRoleRequest extends Mailable
      */
     public function build()
     {
-        return $this->subject('A developer has requested an Opco role')->markdown('emails.users.opco-role-request');
+        return $this->subject('2FA reset request')->markdown('emails.users.twofa-reset-request');
     }
 }

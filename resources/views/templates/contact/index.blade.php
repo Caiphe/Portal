@@ -24,24 +24,7 @@
                 <h2>Get in touch</h2>
 
                 <x-contact-form></x-contact-form>
-            </div>
-            <div class="column details">
-                <h2>Contact details</h2>
-                <address>
-                    <div class="left">
-                        @svg('map-marker', '#FC0')
-                        <div>
-                            <span>14th Avenue</span>
-                            <span>Johannesburg</span>
-                            <span>2196, South Africa</span>
-                        </div>
-                    </div>
-                    <div class="right">
-                        @svg('phone', '#FC0')
-                        <a href="tel:+27 11 912 3000">+27 11 912 3000</a>
-                    </div>
-                </address>
-            </div>
+            </div>            
         </div>
     </section>
 @endsection

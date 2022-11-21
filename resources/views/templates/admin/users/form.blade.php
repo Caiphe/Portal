@@ -60,26 +60,42 @@
     <button class="button outline blue save-button">Apply changes</button>
 </div>
 
-@if($isAdminUser)
-<div class="editor-field half">
-    <h2>Groups and roles</h2>
+<div class="half">
+    @if($isAdminUser)
+    <div class="editor-field ">
+        <h2>Groups and roles</h2>
 
-    <label class="editor-field-label">
-        <h3><b>Groups</b> this user is responsible for</h3>
-        <x-multiselect id="responsible_groups" name="responsible_groups" label="Select groups" :options="$groups" :selected="$userResponsibleGroups ?? []"/>
-    </label>
+        <label class="editor-field-label">
+            <h3><b>Groups</b> this user is responsible for</h3>
+            <x-multiselect id="responsible_groups" name="responsible_groups" label="Select groups" :options="$groups" :selected="$userResponsibleGroups ?? []"/>
+        </label>
 
-    <label class="editor-field-label">
-        <h3><b>Role</b> this user is responsible for</h3>
-        <x-multiselect id="roles" name="roles" label="Select role" :options="$roles->pluck('label', 'id')->toArray()" :selected="$userRoleIds ?? []"/>
-    </label>
+        <label class="editor-field-label">
+            <h3><b>Role</b> this user is responsible for</h3>
+            <x-multiselect id="roles" name="roles" label="Select role" :options="$roles->pluck('label', 'id')->toArray()" :selected="$userRoleIds ?? []"/>
+        </label>
 
-    <label class="editor-field-label">
-        <h3><b>Countries</b> this user is responsible for</h3>
-        <x-multiselect id="responsible_countries" name="responsible_countries" label="Select country" :options="$countries->pluck('name', 'code')->toArray()" :selected="$userResponsibleCountries ?? []"/>
-    </label>
+        <label class="editor-field-label">
+            <h3><b>Countries</b> this user is responsible for</h3>
+            <x-multiselect id="responsible_countries" name="responsible_countries" label="Select country" :options="$countries->pluck('name', 'code')->toArray()" :selected="$userResponsibleCountries ?? []"/>
+        </label>
 
-    <button class="button outline blue save-button">Apply changes</button>
+        <button class="button outline blue save-button">Apply changes</button>
+    </div>
+    @endif
+
+    @if(isset($user))
+    <div class="editor-field">
+        <h2>Authentication method</h2>
+        <div class="auth-method-block">
+            <div class="auth-block">
+                <span>Two factor authentication</span>
+                <span class="status-dot {{ $user->twoFactorStatus() }}">{{ $user->twoFactorStatus() }}</span>
+            </div>
+            <button type="button" id="reset-2fa-btn" class="button outline  reset-2fa @if($user_twofa_reset_request) blue @endif">Reset 2FA</button>
+        </div>
+    </div>
+    @endif
 </div>
-@endif
+
 
