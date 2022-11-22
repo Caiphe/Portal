@@ -7,12 +7,7 @@
 @endpush
 
 @section('content')
-<a href="" class="go-back">@svg('chevron-left') Back to bundles</a>
 <h1>{{ $bundle->display_name }}</h1>
-
-<div class="page-actions">
-    <a class="button primary" href="" target="_blank" rel="noreferrer">View bundle</a>
-</div>
 
 <form id="admin-form" action="" method="POST">
     @method('PUT')
