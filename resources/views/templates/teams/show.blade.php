@@ -194,22 +194,25 @@ My team
                 @endforeach
             @endif
         </div>
-       
-
-        <x-dialog-box dialogTitle="Delete team" class="deny-role-modal">
-            <form class="dialog-custom-form deny-form" method="post" action="{{ route('teams.delete', $team->id) }}">
-                @csrf
-                @method('DELETE')
-                <input type="hidden" name="team_id" value="{{ $team->id }}" />
-                <p class="dialog-text-padding">Are you sure you want to delete this team?</p>
-                <p class="dialog-text-padding"><strong>{{ $team->name }}</strong></p>
-                <p class="dialog-text-padding">All team members and applications will be removed from the team.</p>
-                <form class="custom-modal-form bottom-shadow-container button-container mt-40">
-                    <button type="submit" class="btn red-button submit-team-delete">Delete team</button>
-                </form>
-            </form>
-        </x-dialog-box>
     </div>
+       
+    <x-dialog-box dialogTitle="Delete team" class="deny-role-modal delete-team-modal">
+        <div class="dialog-custom-form">
+            
+            <p class="dialog-text-padding">Are you sure you want to delete this team?</p>
+            <div class="dialog-text-padding team-name-to-delete"><strong>{{ $team->name }}</strong></div>
+            <p class="dialog-text-padding">All team members and applications will be removed from the team.</p>
+            
+            <form class="custom-modal-form bottom-shadow-container button-container mt-40 delete-team-form" method="post" action="{{ route('teams.delete', $team->id) }}">
+                @csrf()
+                {{-- @method('DELETE') --}}
+                <input type="hidden" name="team_id" value="{{ $team->id }}" />
+                <input type="hidden" name="team_name" value="{{ $team->name }}" />
+                <button type="" class="btn primary submit-team-delete">CONFIRM</button>
+                <button type="button" class="btn black-bordered mr-10 cancel-delete-team-btn">CANCEL</button>
+            </form>
+        </div>
+    </x-dialog-box>
 
     <h5>Team bio</h5>
     <p>{{ $team->description }}</p>

@@ -422,11 +422,36 @@ class CompanyTeamsController extends Controller
     /**
      * Delete Team
      */
-    public function delete($team)
+    public function delete(Team $team)
     {
-        $teamModel = Team::find($team);
-        $teamModel->delete();
+        if($team->owner_id !== auth()->user()->id){
+            abort('401');
+        }
 
-        return redirect()->route('user.profile')->with('alert', 'success: ' . $teamModel->name . ' successfully deleted.');
+        $team->users()->detach();
+		$appsToDelete = App::whereNull('deleted_at')->where('team_id', $team->id)->pluck('aid')->toArray();
+
+        if (count($appsToDelete) > 0) {
+			App::whereIn('aid', array_keys($appsToDelete))->delete();
+		}
+
+        // Removing team users from Apigee Company
+        $teamUsers = TeamUser::where('team_id', $team->team_id)->pluck('user_id')->toArray();
+        if($teamUsers){
+            foreach($teamUsers as $teamUser){
+                ApigeeService::removeDeveloperFromCompany($team->id, $teamUser);
+            }
+        }
+
+        $apps = App::Where('team_id', $team->id)->pluck('name')->toArray();
+        $user = auth()->user();
+        if($apps){
+            foreach($apps as $app){
+                ApigeeService::delete("developers/{$user->email}/apps/{$app}");
+            }
+        }
+
+        $team->delete();
+        return response()->json(['success' => true, 'code' => 200], 200);
     }
 }

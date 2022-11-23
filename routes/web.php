@@ -58,7 +58,7 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
     Route::any('teams/reject', 'CompanyTeamsController@reject')->name('teams.invite.deny');
     Route::any('teams/{team}/ownership', 'CompanyTeamsController@ownership')->middleware('can:administer-team-by-owner,team')->name('teams.ownership.invite');
     Route::post('teams/{id}/user/role', 'CompanyTeamsController@roleUpdate')->middleware('can:administer-team,id')->name('teams.user.role');
-    Route::delete('teams/{team:slug}/delete', 'CompanyTeamsController@delete')->middleware('can:administer-team-by-owner')->name('teams.delete');
+    Route::post('teams/{team}/delete', 'CompanyTeamsController@delete')->middleware('can:administer-team-by-owner,team')->name('teams.delete');
 
 	// Opco admin role request
 	Route::post('/opco-admin-role-request/store', 'OpcoRoleRequestController@store')->middleware(['can:request-opco-admin-role'])->name('opco-admin-role.store');
