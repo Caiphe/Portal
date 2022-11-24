@@ -1,15 +1,6 @@
 {{-- 
-    This component allows for adding multiselects that show removeable tags.
-    If you would like to add an event listener for the change please use the 'multiselect' event, like the below:
-    el.addEventListener('mulstiselct', function);
-    Eg:
-    <x-multiselect id="test" name="test" label="please choose it" :options="['first' => 'one', 'second' => 'two']" :selected="['first']"/>
-    
-    id: The id that gets passed in. This needs to be a prop because I reuse it in a couple places
-    name: The name of the select. I use this as a fallback if no id is added
-    label: What should be the first first option that tells the user what to do, defaults to -- Select --
-    options: An associative array that makes up the options. The key is the value and the value is the option label. I know that sounds weird :)
-    selected: An array that will mark an option as selected. This is a single array of values.
+    This is component is just to have some mutliple options that are not removable or editable
+    Just the display 
 --}}
 
 @props(['id', 'name', 'options', 'selected', 'label'])
