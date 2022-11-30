@@ -205,6 +205,17 @@
         handleBackButtonClick();
     }
 
+    document.querySelector('#name').addEventListener('keyup', appNameValidate);
+
+    function appNameValidate(){
+        var specialChrs = /[`~!@#$%^&*|+=?;:'",.<>\{\}\[\]\\\/]/gi;
+        if(specialChrs.test(this.value)){
+            this.value = this.value.replace(specialChrs, '');
+            addAlert('warning', 'Not allowed character.');
+        }
+    }
+
+
     default_option.addEventListener('click', function(){
         select_wrap.classList.toggle('active');
     });
@@ -224,7 +235,6 @@
     function handleButtonClick() {
         var elements = form.elements;
         for (var i = 0; i < buttons.length; i++) {
-
             buttons[i].addEventListener('click', function (event) {
                 var errors = [];
                 var urlValue = elements['url'].value;
@@ -232,7 +242,7 @@
 
                 if(form.firstElementChild.classList.contains('active')) {
                     if(elements['name'].value === '') {
-                        errors.push({msg: 'Please add a name for your app', el: elements['name']});
+                        errors.push({msg: 'Please add your app name', el: elements['name']});
                     } else {
                         elements['name'].nextElementSibling.textContent = '';
                     }
@@ -400,8 +410,13 @@
             if (xhr.status === 200) {
                 addAlert('success', ['Application created successfully', 'You will be redirected to your app page shortly.'], function(){
                     window.location.href = "{{ route('app.index') }}";
+                });}
+            else if(xhr.status === 429){
+                addAlert('warning', ['This action is not allowed.', 'Please contact your admin.'], function(){
+                    window.location.href = "{{ route('app.index') }}";
                 });
-            } else {
+            }
+             else {
                 var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
                 if(result.errors) {

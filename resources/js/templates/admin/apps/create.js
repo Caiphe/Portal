@@ -19,6 +19,15 @@
     document.getElementById('next-create-app').addEventListener('click', handleCreate);
     searchField.addEventListener('keyup', searchFieldSuggestions);
 
+    document.querySelector('#name').addEventListener('keyup', checkSpecialCharacters);
+    function checkSpecialCharacters(){
+        var specialChrs = /[`~!@#$%^&*|+=?;:'",.<>\{\}\[\]\\\/]/gi;
+        if(specialChrs.test(this.value)){
+            this.value = this.value.replace(specialChrs, '');
+            addAlert('warning', 'Not allowed charater.');
+        }
+    }
+
     for (var j = 0; j < backButtons.length; j++) {
         backButtons[j].addEventListener('click', back);
     }
@@ -63,7 +72,7 @@
         }
 
         if (elements['name'].value === '') {
-            errors.push({ msg: 'Please add a name for your app', el: elements['name'] });
+            errors.push({ msg: 'Please add your app name', el: elements['name'] });
         } else {
             elements['name'].nextElementSibling.textContent = '';
         }

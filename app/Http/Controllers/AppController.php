@@ -8,6 +8,7 @@ use App\Team;
 use App\User;
 use App\Country;
 use App\Product;
+use Carbon\Carbon;
 use App\Mail\NewApp;
 use App\Mail\UpdateApp;
 use App\Mail\GoLiveMail;
@@ -102,6 +103,14 @@ class AppController extends Controller
 
     public function store(CreateAppRequest $request)
     {
+        $count = App::where('developer_id', auth()->user()->developer_id)
+                ->where('created_at', '>=', Carbon::now()->startOfDay())
+                ->count();
+
+        if($count >= 5){
+            abort('429');
+        }
+
         $validated = $request->validated();
         $user = $request->user();
         $countriesByCode = Country::pluck('iso', 'code');
