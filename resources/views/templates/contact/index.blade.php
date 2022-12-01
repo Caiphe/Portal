@@ -28,3 +28,7 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+<script src="{{ mix('/js/templates/contact/index.js') }}" defer></script>
+@endpush
