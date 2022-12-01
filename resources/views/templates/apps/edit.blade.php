@@ -196,7 +196,7 @@
             if(hasCountry) nextDiv = nextDiv.nextElementSibling;
 
             if(activeDiv.classList.contains('app-details') && elements['name'].value === '') {
-                errors.push({msg: 'Please add a name for your app', el: elements['name']});
+                errors.push({msg: 'Please add your app name', el: elements['name']});
             } else {
                 elements['name'].nextElementSibling.textContent = '';
             }
