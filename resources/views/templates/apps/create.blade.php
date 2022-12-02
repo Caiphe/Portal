@@ -209,6 +209,8 @@
 
     function appNameValidate(){
         var specialChrs = /[`~!@#$%^&*|+=?;:'",.<>\{\}\[\]\\\/]/gi;
+        this.value = this.value.replace(/  +/g, ' ');
+
         if(specialChrs.test(this.value)){
             this.value = this.value.replace(specialChrs, '');
             addAlert('warning', 'Not allowed character.');
@@ -243,9 +245,14 @@
                 if(form.firstElementChild.classList.contains('active')) {
                     if(elements['name'].value === '') {
                         errors.push({msg: 'Please add your app name', el: elements['name']});
-                    } else {
+                    } else if(elements['name'].value.length === 1){
+                        elements['name'].value = '';
+                        errors.push({msg: 'Please provide a valid app name', el: elements['name']});
+                    } 
+                    else {
                         elements['name'].nextElementSibling.textContent = '';
                     }
+
 
                     if(urlValue !== '' && !/https?:\/\/.*\..*/.test(urlValue)) {
                         errors.push({msg: 'Please add a valid url. Eg. https://callback.com', el: elements['url']});
@@ -415,6 +422,12 @@
                 addAlert('warning', ['This action is not allowed.', 'Please contact your admin.'], function(){
                     window.location.href = "{{ route('app.index') }}";
                 });
+            }
+            else if(xhr.status === 422){
+                addAlert('warning', [`Application name '${elements['name'].value}' exists already, try with a different name`]);
+                setTimeout(function(){
+                    location.reload(); 
+                }, 6000);
             }
              else {
                 var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
