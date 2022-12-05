@@ -240,6 +240,16 @@
 
             if (xhr.status === 200) {
                 return void next();
+            } else if(xhr.status === 429){
+                addAlert('warning', ['This action is not allowed.', 'Please contact your admin.'], function(){
+                    window.location.href = "/admin/dashboard";
+                });
+            }
+            else if(xhr.status === 422){
+                addAlert('warning', [`Application name '${elements['name'].value}' exists already, try with a different name`]);
+                setTimeout(function(){
+                    location.reload(); 
+                }, 6000);
             }
 
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
