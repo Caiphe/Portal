@@ -21,10 +21,10 @@
 
     document.querySelector('#name').addEventListener('keyup', checkSpecialCharacters);
     function checkSpecialCharacters(){
-        var specialChrs = /[`~!@#$%^&*|+=?;:'",.<>\{\}\[\]\\\/]/gi;
+        var specialChrs = /[`~!@#$%^&*|+=?;:±§'",.<>\{\}\[\]\\\/]/gi;
         if(specialChrs.test(this.value)){
             this.value = this.value.replace(specialChrs, '');
-            addAlert('warning', 'Not allowed charater.');
+            addAlert('warning', 'Application name cannot contain special characters.');
         }
     }
 
