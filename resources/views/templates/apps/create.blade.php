@@ -208,12 +208,13 @@
     document.querySelector('#name').addEventListener('keyup', appNameValidate);
 
     function appNameValidate(){
-        var specialChrs = /[`~!@#$%^&*|+=?;:'",.<>\{\}\[\]\\\/]/gi;
+        var specialChrs = /[`~!@#$%^&*|+=?;:±§'",.<>\{\}\[\]\\\/]/gi;
+
         this.value = this.value.replace(/  +/g, ' ');
 
         if(specialChrs.test(this.value)){
             this.value = this.value.replace(specialChrs, '');
-            addAlert('warning', 'Not allowed character.');
+            addAlert('warning', 'Application name cannot contain special characters.');
         }
     }
 
