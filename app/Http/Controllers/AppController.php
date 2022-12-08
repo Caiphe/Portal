@@ -80,6 +80,7 @@ class AppController extends Controller
             ->basedOnUser($user)
             ->when($request->has('product'), function($q) use($request, &$product){
                 $product = Product::with(['countries'])->where('slug', $request->product)->first();
+                abort_if($product === null, 404);
                 $productLocations = $product->countries->pluck('code')->toArray();
                 $q->byLocations($productLocations);
             })
