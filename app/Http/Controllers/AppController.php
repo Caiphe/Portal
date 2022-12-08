@@ -73,13 +73,15 @@ class AppController extends Controller
         $user = $request->user();
         $userOwnTeams = $user->teams;
         $product = null;
+        $product_sanitized = Str::slug(htmlspecialchars($request->product, ENT_NOQUOTES));
 
         $assignedProducts = $user->assignedProducts()->with('category')->get();
         $products = Product::with(['category', 'countries'])
             ->where('category_cid', '!=', 'misc')
             ->basedOnUser($user)
-            ->when($request->has('product'), function($q) use($request, &$product){
-                $product = Product::with(['countries'])->where('slug', $request->product)->first();
+            ->when($request->has('product'), function($q) use(&$product, $product_sanitized){
+                $product = Product::with(['countries'])->where('slug', $product_sanitized)->first();
+                abort_if($product === null, 404);
                 $productLocations = $product->countries->pluck('code')->toArray();
                 $q->byLocations($productLocations);
             })
