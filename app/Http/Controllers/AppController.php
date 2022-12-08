@@ -105,16 +105,18 @@ class AppController extends Controller
 
     public function store(CreateAppRequest $request)
     {
+        $user = $request->user();
         $count = App::where('developer_id', auth()->user()->developer_id)
                 ->where('created_at', '>=', Carbon::now()->startOfDay())
                 ->count();
+        
+        $userRoles = array_unique(explode(',', $user->getRolesListAttribute()));
 
-        if($count >= 5){
+        if($count >= 5 && !in_array('Admin', $userRoles)){
             abort('429');
         }
 
         $validated = $request->validated();
-        $user = $request->user();
         $countriesByCode = Country::pluck('iso', 'code');
         $products = Product::whereIn('name', $validated['products'])->pluck('attributes', 'name');
         $productIds = [];

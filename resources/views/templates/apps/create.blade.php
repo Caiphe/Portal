@@ -425,7 +425,7 @@
                 });
             }
             else if(xhr.status === 422){
-                addAlert('warning', [`Application name '${elements['name'].value}' exists already, try with a different name`]);
+                addAlert('error', [`An application with the name '${elements['name'].value}' already exists. Please wait, you will be redirected back to the app creation page where you can try a different name.`])
                 setTimeout(function(){
                     location.reload(); 
                 }, 6000);
