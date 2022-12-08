@@ -53,6 +53,12 @@ class CompanyTeamsController extends Controller
             $team = Team::find($teamInvite->team_id);
         }
 
+        foreach($teams as $team){
+            if($team->teamCountry === null){
+                abort('403');
+            }
+        }
+
         return view('templates.teams.index', [
             'teams' => $teams,
             'user' => $user,
