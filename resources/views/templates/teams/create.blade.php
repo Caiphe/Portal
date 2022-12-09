@@ -96,7 +96,7 @@
                 <label for="lfile-input">Upload team logo</label>
                 <label for="file-input" class="logo-file-container mb-0">
                     <span class="upload-file-name">Upload team logo</span>
-                    <input type="file" name="logo_file" class="logo-file" id="logo-file" placeholder="Upload team logo" maxlength="100"  accept="image/*" required>
+                    <input type="file" name="logo_file" class="logo-file" id="logo-file" placeholder="Upload team logo" maxlength="100"  accept="image/png, image/jpg, image/jpeg" required>
                     <button type="button" class="logo-add-icon">@svg('plus', '#fff')</button>
                 </label>
                 <small class="mb-3">*Max 5MB file size and Max Width of 2000 and Max Height of 2000.</small>
