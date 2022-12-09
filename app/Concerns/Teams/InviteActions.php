@@ -103,9 +103,9 @@ trait InviteActions
     {
         if ($request->has('logo_file')) {
 
-            $fileName =  md5(uniqid()) . '.' . $request->file('logo_file')->extension();
+            $fileName =  md5(uniqid()) . '.png';
 
-            $path = $request->file('logo_file')->storeAs("public/team/", $fileName);
+            $path = $request->file('logo_file')->storeAs("public/team", $fileName);
 
             return str_replace('public', '/storage', $path);
         }

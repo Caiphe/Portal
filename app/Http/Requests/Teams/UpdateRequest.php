@@ -33,7 +33,7 @@ class UpdateRequest extends FormRequest
             'url' => 'required',
             'contact' => 'required',
             'country' => 'required',
-            'logo_file' => 'sometimes|file',
+            'logo_file' => 'sometimes|file|max:5120|dimensions:max_width=2000,max_height=2000|mimes:jpeg,jpg,png',
             'description' => 'required',
         ];
     }
