@@ -10,6 +10,17 @@ invitationInput.addEventListener('input', function () {
     timer = setTimeout(invitationEmailCheck, 1000);
 });
 
+document.querySelector('#team-name').addEventListener('keyup', removeSpecialCharacters);
+function removeSpecialCharacters(){
+    var specialChrs = /[`~!)@#$%(^&*|+=?;:±§'",.<>\{\}\[\]\\\/]/gi;
+    this.value = this.value.replace(/  +/g, ' ');
+
+    if(specialChrs.test(this.value)){
+        this.value = this.value.replace(specialChrs, '');
+        addAlert('warning', 'Team name cannot contain special characters.');
+    }
+}
+
 function invitationEmailCheck() {
     var mailformat = /^[\w\.\-\+]+@[\w\.\-]+\.[a-z]{2,5}$/;
     var errorMsg = document.querySelector('.error-email');

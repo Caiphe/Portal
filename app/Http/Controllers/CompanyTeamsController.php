@@ -296,6 +296,7 @@ class CompanyTeamsController extends Controller
     {
         $user = $request->user();
         $data = $request->validated();
+        $data['name'] = preg_replace('/[-_±§@#$%^&*()+=!]+/', '', $data['name']);
 
         $data['logo'] = $this->processLogoFile($request);
 
@@ -342,6 +343,7 @@ class CompanyTeamsController extends Controller
         $team = Team::findOrFail($id);
 
         $data['logo'] = $this->processLogoFile($request);
+        $data['name'] = preg_replace('/[-_±§@#$%^&*()+=!]+/', '', $data['name']);
 
         $team->update($data);
         ApigeeService::updateCompany($team);
