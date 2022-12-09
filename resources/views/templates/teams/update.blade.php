@@ -74,7 +74,7 @@
                 <label for="lfile-input">Upload team logo</label>
                 <label for="file-input" class="logo-file-container">
                     <span class="upload-file-name">Upload team logo</span>
-                    <input type="file" name="logo_file" class="logo-file" id="logo-file" placeholder="Upload team logo" maxlength="100"  {{ $team->logo }} accept="image/*">
+                    <input type="file" name="logo_file" class="logo-file" id="logo-file" placeholder="Upload team logo" maxlength="100"  {{ $team->logo }} accept="image/png, image/jpg, image/jpeg">
                     <button type="button" class="logo-add-icon">@svg('plus', '#fff')</button>
                 </label>
             </div>
