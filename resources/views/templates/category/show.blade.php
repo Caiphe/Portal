@@ -66,7 +66,7 @@
                 <div class="cols">
                     <div class="col-4">@svg('done') Extensive documentation</div>
                     <div class="col-4">@svg('done') Support</div>
-                    <div class="col"><a href="{{ route('product.index', ['category' => $category]) }}" class="right-flex">View the docs @svg('arrow-forward')</a></div>
+                    <div class="col"><a href="{{ route('doc.index') }}" class="right-flex">View the docs @svg('arrow-forward')</a></div>
                 </div>
             </div>
         </div>
