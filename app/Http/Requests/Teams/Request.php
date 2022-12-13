@@ -29,13 +29,13 @@ class Request extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:teams,name|max:100',
-            'url' => 'sometimes|max:100',
-            'contact' => 'sometimes|max:16',
-            'country' => 'required',
-            'logo_file' => 'sometimes|file|max:5120|dimensions:max_width=2000,max_height=2000|mimes:jpeg,jpg,png',
-            'team_members' => 'sometimes',
-            'description' => 'sometimes|max:512',
+            'name' => ['required', 'unique:teams,name', 'max:100'],
+            'url' => ['required', 'max:100'],
+            'contact' => ['required', 'max:16'],
+            'country' => ['required'],
+            'logo_file' => ['sometimes ', 'file', 'max:5120', 'dimensions:max_width=2000,max_height=2000', 'mimes:jpeg,jpg,png'],
+            'team_members' => ['sometimes'],
+            'description' => ['sometimes', 'max:512'],
         ];
     }
 

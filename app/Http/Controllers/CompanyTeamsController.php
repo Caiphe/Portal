@@ -369,12 +369,28 @@ class CompanyTeamsController extends Controller
     public function update(UpdateRequest $request, $id)
     {
         $data = $request->validated();
-        $team = Team::findOrFail($id);
 
-        $data['logo'] = $this->processLogoFile($request);
+        $team = Team::findOrFail($id);
+        $teamLogo = $team->logo;
+
+        $teamAdmin = auth()->user()->hasTeamRole($team, 'team_admin');
+        abort_if(!$teamAdmin, 424, "You are not this team's admin");
+
+        if($request->has('logo_file')){
+            $teamLogo = $this->processLogoFile($request);
+        }
+        
         $data['name'] = preg_replace('/[-_±§@#$%^&*()+=!]+/', '', $data['name']);
 
-        $team->update($data);
+        $team->update([
+            'name' => $data['name'],
+            'url' => $data['url'],
+            'contact' => $data['contact'],
+            'country' => $data['country'],
+            'logo' => $teamLogo,
+            'description' => $data['description'],
+        ]);
+        
         ApigeeService::updateCompany($team);
 
         return redirect()->route('team.show', $team->id)
