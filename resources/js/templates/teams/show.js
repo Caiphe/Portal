@@ -380,7 +380,6 @@ function copyToClipboard(text) {
 
 deleteUserActionBtn.addEventListener('click', removeUser);
 function removeUser(event){
-    console.log(hiddenTeamId.value);
     var xhr = new XMLHttpRequest();
     var data = {
         team_id: hiddenTeamId.value,
