@@ -90,8 +90,37 @@ class CompanyTeamsController extends Controller
 
         return response()->json([
             'success' => false,
-            'error:message' => $user->full_name . ' could not leave and/or be removed from ' . $team->name
+            'error:message' => $user->full_name . ' could not leave ' . $team->name
         ]);
+    }
+
+    public function remove(LeavingRequest $teamRequest, Team $team){
+        $data = $teamRequest->validated();
+
+        $team = $this->getTeam($data['team_id']);
+        abort_if(!$team, 424, 'The team could not be found');
+
+        // check requesting user is a team admin for this team
+        $admin = auth()->user();
+        $teamAdmin = $admin->hasTeamRole($team, 'team_admin');
+        abort_if(!$teamAdmin, 424, "You are not this team's admin");
+
+        $user = $this->getTeamUser($data['user_id']);
+        abort_if(!$user, 424, 'Your user could not be found');
+        
+        if ($team->hasUser($user) && $this->memberLeavesTeam($team, $user)) {
+            ApigeeService::removeDeveloperFromCompany($team, $user);
+            return response()->json([
+                'success' => true,
+                'success:message' => $user->full_name . ' has been successfully removed from ' . $team->name
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'error:message' => $user->full_name . ' could not be removed from ' . $team->name
+        ]);
+
     }
 
     /**
