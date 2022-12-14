@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Teams;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -34,7 +35,7 @@ class UpdateRequest extends FormRequest
             'contact' => ['required'],
             'country' => ['required'],
             'logo_file' => ['sometimes','file', 'max:5120', 'dimensions:max_width=2000,max_height=2000', 'mimes:jpeg,jpg,png'],
-            'description' => ['sometimes'],
+            'description' => ['sometimes', 'max:512'],
         ];
     }
 

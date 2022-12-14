@@ -4,23 +4,24 @@ namespace App\Http\Controllers;
 
 use App\App;
 use App\Role;
-use App\TeamUser;
-use App\User;
 use App\Team;
+use App\User;
 use App\Country;
+use App\Product;
 
+use App\TeamUser;
+use Illuminate\Http\Request;
+
+use App\Services\ApigeeService;
+use Mpociot\Teamwork\TeamInvite;
 use App\Concerns\Teams\InviteActions;
 use App\Concerns\Teams\InviteRequests;
-
+use Mpociot\Teamwork\Facades\Teamwork;
 use App\Http\Requests\Teams\UpdateRequest;
 use App\Http\Requests\Teams\RoleUpdateRequest;
 use App\Http\Requests\Teams\Invites\InviteRequest;
 use App\Http\Requests\Teams\Invites\LeavingRequest;
 use App\Http\Requests\Teams\Request as TeamRequest;
-use App\Services\ApigeeService;
-use Illuminate\Http\Request;
-use Mpociot\Teamwork\Facades\Teamwork;
-use Mpociot\Teamwork\TeamInvite;
 
 /**
  * Class CompanyTeamsController
@@ -133,9 +134,18 @@ class CompanyTeamsController extends Controller
 
         $user->load(['responsibleCountries']);
 
-        $countries = Country::whereIn('code', Country::all()->pluck('code'))->orderBy('name')->pluck('name', 'code');
+        $locations = Product::isPublic()
+        ->WhereNotNull('locations')
+        ->Where('locations', '!=', 'all')
+        ->select('locations')
+        ->get()
+        ->implode('locations', ',');
+
+        $locations = array_unique(explode(',', $locations));
+        $countries = Country::whereIn('code', $locations)->orderBy('name')->pluck('name', 'code');
 
         $teamInvite = $this->getInviteByEmail($user->email);
+
 
         $invitingTeam = null;
         if ($teamInvite) {
@@ -355,7 +365,15 @@ class CompanyTeamsController extends Controller
 
         $user->load(['responsibleCountries']);
 
-        $countries = Country::whereIn('code', Country::all()->pluck('code'))->orderBy('name')->pluck('name', 'code');
+        $locations = Product::isPublic()
+        ->WhereNotNull('locations')
+        ->Where('locations', '!=', 'all')
+        ->select('locations')
+        ->get()
+        ->implode('locations', ',');
+
+        $locations = array_unique(explode(',', $locations));
+        $countries = Country::whereIn('code', $locations)->orderBy('name')->pluck('name', 'code');
 
         return view('templates.teams.update', [
             'team' => $this->getTeam($id),
@@ -390,7 +408,14 @@ class CompanyTeamsController extends Controller
             'logo' => $teamLogo,
             'description' => $data['description'],
         ]);
-        
+
+        $updatedFields = array_keys($team->getChanges());
+        unset($updatedFields['updated_at']);
+
+        if(empty($updatedFields)){
+            return redirect()->route('team.show', $team->id);
+        }
+
         ApigeeService::updateCompany($team);
 
         return redirect()->route('team.show', $team->id)
