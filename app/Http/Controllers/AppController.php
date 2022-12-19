@@ -513,13 +513,9 @@ class AppController extends Controller
         $credentialsType = 'consumerKey-' . $type;
         $consumerKey = $this->getCredentials($app, $credentialsType, 'string');
 
-        $user = auth()->user();
+        $entity = $app->getEntity();
 
-        // if($app->team){
-        //     $user = $app->team;
-        // }
-
-        $updatedApp = ApigeeService::renewCredentials($user, $app, $consumerKey);
+        $updatedApp = ApigeeService::renewCredentials($entity, $app, $consumerKey);
 
         if ($updatedApp->failed()) {
             $reasonMsg = $updatedApp['message'] ?? 'There was a problem renewing the credentials. Please try again later.';
