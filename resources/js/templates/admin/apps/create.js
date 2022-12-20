@@ -19,6 +19,15 @@
     document.getElementById('next-create-app').addEventListener('click', handleCreate);
     searchField.addEventListener('keyup', searchFieldSuggestions);
 
+    document.querySelector('#name').addEventListener('keyup', checkSpecialCharacters);
+    function checkSpecialCharacters(){
+        var specialChrs = /[`~!@#$%^&*|+=?;:±§'",.<>\{\}\[\]\\\/]/gi;
+        if(specialChrs.test(this.value)){
+            this.value = this.value.replace(specialChrs, '');
+            addAlert('warning', 'Application name cannot contain special characters.');
+        }
+    }
+
     for (var j = 0; j < backButtons.length; j++) {
         backButtons[j].addEventListener('click', back);
     }
@@ -63,7 +72,7 @@
         }
 
         if (elements['name'].value === '') {
-            errors.push({ msg: 'Please add a name for your app', el: elements['name'] });
+            errors.push({ msg: 'Please add your app name', el: elements['name'] });
         } else {
             elements['name'].nextElementSibling.textContent = '';
         }
@@ -231,6 +240,16 @@
 
             if (xhr.status === 200) {
                 return void next();
+            } else if(xhr.status === 429){
+                addAlert('warning', ['This action is not allowed.', 'Please contact your admin.'], function(){
+                    window.location.href = "/admin/dashboard";
+                });
+            }
+            else if(xhr.status === 422){
+                addAlert('warning', [`Application name '${elements['name'].value}' exists already, try with a different name`]);
+                setTimeout(function(){
+                    location.reload(); 
+                }, 6000);
             }
 
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;

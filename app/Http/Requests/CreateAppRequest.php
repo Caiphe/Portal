@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CreateAppRequest extends FormRequest
 {
@@ -18,7 +19,7 @@ class CreateAppRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Get the validation rules that apply to the request. 
      *
      * @return array
      */
@@ -26,7 +27,7 @@ class CreateAppRequest extends FormRequest
     {
         return [
             'app_owner' => ['sometimes'],
-            'display_name' => ['sometimes', 'max:100'],
+            'display_name' => ['sometimes', 'max:100', Rule::unique('apps', 'display_name')->ignore($this->route('app')->display_name ?? '', 'display_name')],
             'url' => ['sometimes'],
             'description' => ['sometimes'],
             'country' => ['sometimes'],
@@ -55,7 +56,8 @@ class CreateAppRequest extends FormRequest
     {
         return [
             'products.required' => 'Please select at least one product.',
-            'team_id.sometimes' => 'Please provide a team for your app.'
+            'team_id.sometimes' => 'Please provide a team for your app.',
+            'display_name.unique' => "App name ' $this->display_name ' exists already, try with a different name."
         ];
     }
 

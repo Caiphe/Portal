@@ -205,6 +205,20 @@
         handleBackButtonClick();
     }
 
+    document.querySelector('#name').addEventListener('keyup', appNameValidate);
+
+    function appNameValidate(){
+        var specialChrs = /[`~!@#$%^&*|+=?;:±§'",.<>\{\}\[\]\\\/]/gi;
+
+        this.value = this.value.replace(/  +/g, ' ');
+
+        if(specialChrs.test(this.value)){
+            this.value = this.value.replace(specialChrs, '');
+            addAlert('warning', 'Application name cannot contain special characters.');
+        }
+    }
+
+
     default_option.addEventListener('click', function(){
         select_wrap.classList.toggle('active');
     });
@@ -224,7 +238,6 @@
     function handleButtonClick() {
         var elements = form.elements;
         for (var i = 0; i < buttons.length; i++) {
-
             buttons[i].addEventListener('click', function (event) {
                 var errors = [];
                 var urlValue = elements['url'].value;
@@ -232,10 +245,15 @@
 
                 if(form.firstElementChild.classList.contains('active')) {
                     if(elements['name'].value === '') {
-                        errors.push({msg: 'Please add a name for your app', el: elements['name']});
-                    } else {
+                        errors.push({msg: 'Please add your app name', el: elements['name']});
+                    } else if(elements['name'].value.length === 1){
+                        elements['name'].value = '';
+                        errors.push({msg: 'Please provide a valid app name', el: elements['name']});
+                    } 
+                    else {
                         elements['name'].nextElementSibling.textContent = '';
                     }
+
 
                     if(urlValue !== '' && !/https?:\/\/.*\..*/.test(urlValue)) {
                         errors.push({msg: 'Please add a valid url. Eg. https://callback.com', el: elements['url']});
@@ -400,8 +418,19 @@
             if (xhr.status === 200) {
                 addAlert('success', ['Application created successfully', 'You will be redirected to your app page shortly.'], function(){
                     window.location.href = "{{ route('app.index') }}";
+                });}
+            else if(xhr.status === 429){
+                addAlert('warning', ['This action is not allowed.', 'Please contact your admin.'], function(){
+                    window.location.href = "{{ route('app.index') }}";
                 });
-            } else {
+            }
+            else if(xhr.status === 422){
+                addAlert('error', [`An application with the name '${elements['name'].value}' already exists. Please wait, you will be redirected back to the app creation page where you can try a different name.`])
+                setTimeout(function(){
+                    location.reload(); 
+                }, 6000);
+            }
+             else {
                 var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
                 if(result.errors) {

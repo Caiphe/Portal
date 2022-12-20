@@ -33,7 +33,7 @@ class Request extends FormRequest
             'url' => 'sometimes|max:100',
             'contact' => 'sometimes|max:16',
             'country' => 'required',
-            'logo_file' => 'sometimes|file|max:5120|dimensions:max_width=2000,max_height=2000',
+            'logo_file' => 'sometimes|file|max:5120|dimensions:max_width=2000,max_height=2000|mimes:jpeg,jpg,png',
             'team_members' => 'sometimes',
             'description' => 'sometimes|max:512',
         ];
@@ -59,7 +59,7 @@ class Request extends FormRequest
     {
         return [
             'logo_file.max' => 'The logo file size is more than the allowed 5MB limit',
-            'logo_file.dimensions' => 'The logo dimentions are too large, please make sure the width and height are less than 2000'
+            'logo_file.dimensions' => 'The logo dimentions are too large, please make sure the width and height are less than 2000',
         ];
     }
 }

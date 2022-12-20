@@ -437,17 +437,18 @@ function copyToClipboard(text) {
     document.body.removeChild(dummy);
 }
 
-deleteUserActionBtn.addEventListener('click', function (event) {
+deleteUserActionBtn.addEventListener('click', removeUser);
+function removeUser(event){
     var xhr = new XMLHttpRequest();
     var data = {
         team_id: hiddenTeamId.value,
         user_id: hiddenTeamUserId.value
     }
-    var url = "/teams/" + data.team_id + "/leave";
+    var url = "/teams/" + data.team_id + "/remove";
 
     event.preventDefault();
 
-    addLoading('Leaving...');
+    addLoading('Removing...');
 
     xhr.open('POST', url);
 
@@ -479,7 +480,7 @@ deleteUserActionBtn.addEventListener('click', function (event) {
 
         removeLoading();
     };
-});
+};
 
 var teamMateInvitEmail = document.querySelector('.teammate-email');
 teamMateInvitEmail.value = "";

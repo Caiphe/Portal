@@ -53,6 +53,7 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
     Route::put('teams/{id}/update', 'CompanyTeamsController@update')->middleware('can:administer-team,id')->name('teams.update');
     Route::post('teams/store', 'CompanyTeamsController@store')->name('teams.store');
     Route::post('teams/{team}/leave', 'CompanyTeamsController@leave')->middleware('can:administer-own-team,team')->name('teams.leave.team');
+    Route::post('teams/{team}/remove', 'CompanyTeamsController@remove')->middleware('can:administer-own-team,team')->name('teams.remove.team');
     Route::post('teams/{id}/invite', 'CompanyTeamsController@invite')->middleware('can:administer-team,id')->name('teams.invite');
     Route::any('teams/accept', 'CompanyTeamsController@accept')->name('teams.invite.accept');
     Route::any('teams/reject', 'CompanyTeamsController@reject')->name('teams.invite.deny');

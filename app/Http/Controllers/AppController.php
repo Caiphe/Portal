@@ -8,6 +8,7 @@ use App\Team;
 use App\User;
 use App\Country;
 use App\Product;
+use Carbon\Carbon;
 use App\Mail\NewApp;
 use App\Mail\UpdateApp;
 use App\Mail\GoLiveMail;
@@ -72,13 +73,15 @@ class AppController extends Controller
         $user = $request->user();
         $userOwnTeams = $user->teams;
         $product = null;
+        $product_sanitized = Str::slug(htmlspecialchars($request->product, ENT_NOQUOTES));
 
         $assignedProducts = $user->assignedProducts()->with('category')->get();
         $products = Product::with(['category', 'countries'])
             ->where('category_cid', '!=', 'misc')
             ->basedOnUser($user)
-            ->when($request->has('product'), function($q) use($request, &$product){
-                $product = Product::with(['countries'])->where('slug', $request->product)->first();
+            ->when($request->has('product'), function($q) use(&$product, $product_sanitized){
+                $product = Product::with(['countries'])->where('slug', $product_sanitized)->first();
+                abort_if($product === null, 404);
                 $productLocations = $product->countries->pluck('code')->toArray();
                 $q->byLocations($productLocations);
             })
@@ -102,8 +105,18 @@ class AppController extends Controller
 
     public function store(CreateAppRequest $request)
     {
-        $validated = $request->validated();
         $user = $request->user();
+        $count = App::where('developer_id', auth()->user()->developer_id)
+                ->where('created_at', '>=', Carbon::now()->startOfDay())
+                ->count();
+        
+        $userRoles = array_unique(explode(',', $user->getRolesListAttribute()));
+
+        if($count >= 5 && !in_array('Admin', $userRoles)){
+            abort('429');
+        }
+
+        $validated = $request->validated();
         $countriesByCode = Country::pluck('iso', 'code');
         $products = Product::whereIn('name', $validated['products'])->pluck('attributes', 'name');
         $productIds = [];
