@@ -674,6 +674,21 @@ class ApigeeService
     }
 
     /**
+     * Delete a company.
+     *
+     * @param      \App\Company  $company  The company
+     *
+     * @return     mixed         The response from the post
+     */
+    public function deleteCompany(Team $team, ?User $user = null){
+        $user ??= $team->owner ?? $team->users->first(fn ($user) => $user->hasRole('team_admin'));
+
+        if (!$user) {
+            return null;
+        }
+    }
+
+    /**
      * Adds a developer to company.
      *
      * @param      \App\Company  $company  The company
