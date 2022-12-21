@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\CreateAppRequest;
 use App\Http\Requests\DeleteAppRequest;
 use App\Http\Requests\CustomAttributesRequest;
+use App\Http\Requests\UpdateAppRequest;
 
 class AppController extends Controller
 {
@@ -282,7 +283,7 @@ class AppController extends Controller
         ]);
     }
 
-    public function update($app, CreateAppRequest $request)
+    public function update($app, UpdateAppRequest $request)
     {
         $user = auth()->user();
         $userTeams = $user->teams()->pluck('id')->toArray();
