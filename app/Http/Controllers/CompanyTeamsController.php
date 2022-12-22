@@ -108,7 +108,9 @@ class CompanyTeamsController extends Controller
 
         $user = $this->getTeamUser($data['user_id']);
         abort_if(!$user, 424, 'Your user could not be found');
-        
+
+        abort_if($user->isOwnerOfTeam($team), 424, "You can not remove team's owner");
+
         if ($team->hasUser($user) && $this->memberLeavesTeam($team, $user)) {
             ApigeeService::removeDeveloperFromCompany($team, $user);
             return response()->json([
