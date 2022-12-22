@@ -675,10 +675,12 @@ class ApigeeService
 
     /**
      * Delete a company.
-     *
+  *
      * @param      \App\Company  $company  The company
+     * @param      \App\User     $user     The user
      *
-     * @return     mixed         The response from the post
+     * @return     mixed         The response from the delete
+
      */
     public function deleteCompany(Team $team, ?User $user = null){
         $user ??= $team->owner ?? $team->users->first(fn ($user) => $user->hasRole('team_admin'));
@@ -686,6 +688,8 @@ class ApigeeService
         if (!$user) {
             return null;
         }
+
+        return self::delete("companies/{$team->name}");
     }
 
     /**
