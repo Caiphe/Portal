@@ -4,23 +4,24 @@ namespace App\Http\Controllers;
 
 use App\App;
 use App\Role;
-use App\TeamUser;
-use App\User;
 use App\Team;
+use App\User;
 use App\Country;
+use App\Product;
 
+use App\TeamUser;
+use Illuminate\Http\Request;
+
+use App\Services\ApigeeService;
+use Mpociot\Teamwork\TeamInvite;
 use App\Concerns\Teams\InviteActions;
 use App\Concerns\Teams\InviteRequests;
-
+use Mpociot\Teamwork\Facades\Teamwork;
 use App\Http\Requests\Teams\UpdateRequest;
 use App\Http\Requests\Teams\RoleUpdateRequest;
 use App\Http\Requests\Teams\Invites\InviteRequest;
 use App\Http\Requests\Teams\Invites\LeavingRequest;
 use App\Http\Requests\Teams\Request as TeamRequest;
-use App\Services\ApigeeService;
-use Illuminate\Http\Request;
-use Mpociot\Teamwork\Facades\Teamwork;
-use Mpociot\Teamwork\TeamInvite;
 
 /**
  * Class CompanyTeamsController
@@ -107,7 +108,9 @@ class CompanyTeamsController extends Controller
 
         $user = $this->getTeamUser($data['user_id']);
         abort_if(!$user, 424, 'Your user could not be found');
-        
+
+        abort_if($user->isOwnerOfTeam($team), 424, "You can not remove team's owner");
+
         if ($team->hasUser($user) && $this->memberLeavesTeam($team, $user)) {
             ApigeeService::removeDeveloperFromCompany($team, $user);
             return response()->json([
@@ -133,9 +136,18 @@ class CompanyTeamsController extends Controller
 
         $user->load(['responsibleCountries']);
 
-        $countries = Country::whereIn('code', Country::all()->pluck('code'))->orderBy('name')->pluck('name', 'code');
+        $locations = Product::isPublic()
+        ->WhereNotNull('locations')
+        ->Where('locations', '!=', 'all')
+        ->select('locations')
+        ->get()
+        ->implode('locations', ',');
+
+        $locations = array_unique(explode(',', $locations));
+        $countries = Country::whereIn('code', $locations)->orderBy('name')->pluck('name', 'code');
 
         $teamInvite = $this->getInviteByEmail($user->email);
+
 
         $invitingTeam = null;
         if ($teamInvite) {
@@ -355,7 +367,15 @@ class CompanyTeamsController extends Controller
 
         $user->load(['responsibleCountries']);
 
-        $countries = Country::whereIn('code', Country::all()->pluck('code'))->orderBy('name')->pluck('name', 'code');
+        $locations = Product::isPublic()
+        ->WhereNotNull('locations')
+        ->Where('locations', '!=', 'all')
+        ->select('locations')
+        ->get()
+        ->implode('locations', ',');
+
+        $locations = array_unique(explode(',', $locations));
+        $countries = Country::whereIn('code', $locations)->orderBy('name')->pluck('name', 'code');
 
         return view('templates.teams.update', [
             'team' => $this->getTeam($id),
@@ -369,12 +389,35 @@ class CompanyTeamsController extends Controller
     public function update(UpdateRequest $request, $id)
     {
         $data = $request->validated();
-        $team = Team::findOrFail($id);
 
-        $data['logo'] = $this->processLogoFile($request);
+        $team = Team::findOrFail($id);
+        $teamLogo = $team->logo;
+
+        $teamAdmin = auth()->user()->hasTeamRole($team, 'team_admin');
+        abort_if(!$teamAdmin, 424, "You are not this team's admin");
+
+        if($request->has('logo_file')){
+            $teamLogo = $this->processLogoFile($request);
+        }
+        
         $data['name'] = preg_replace('/[-_±§@#$%^&*()+=!]+/', '', $data['name']);
 
-        $team->update($data);
+        $team->update([
+            'name' => $data['name'],
+            'url' => $data['url'],
+            'contact' => $data['contact'],
+            'country' => $data['country'],
+            'logo' => $teamLogo,
+            'description' => $data['description'],
+        ]);
+
+        $updatedFields = array_keys($team->getChanges());
+        unset($updatedFields['updated_at']);
+
+        if(empty($updatedFields)){
+            return redirect()->route('team.show', $team->id);
+        }
+
         ApigeeService::updateCompany($team);
 
         return redirect()->route('team.show', $team->id)

@@ -74,7 +74,7 @@
                 <label for="lfile-input">Upload team logo</label>
                 <label for="file-input" class="logo-file-container">
                     <span class="upload-file-name">Upload team logo</span>
-                    <input type="file" name="logo_file" class="logo-file" id="logo-file" placeholder="Upload team logo" maxlength="100"  {{ $team->logo }} accept="image/*">
+                    <input type="file" name="logo_file" class="logo-file" id="logo-file" value="{{ $team->logo }}" placeholder="Upload team logo" maxlength="100"  accept="image/*">
                     <button type="button" class="logo-add-icon">@svg('plus', '#fff')</button>
                 </label>
             </div>
@@ -91,9 +91,7 @@
             </div>
 
             <div class="form-actions">
-                <button class="dark next " id="create">
-                    SAVE & SUBMIT @svg('arrow-forward', '#ffffff')
-                </button>
+                <button class="dark next " id="create">SAVE & SUBMIT @svg('arrow-forward', '#ffffff')</button>
             </div>
         </form>
     </div>
@@ -101,4 +99,5 @@
 
 @push('scripts')
     <script src="{{ mix('/js/templates/teams/update.js') }}"></script>
+    <script src="{{ mix('/js/templates/teams/create-update-validation.js') }}"></script>
 @endpush
