@@ -492,7 +492,11 @@ class AppController extends Controller
      */
     public function requestRenewCredentials(App $app, string $type)
     {
-        Mail::to(auth()->user())->send(new CredentialRenew($app, $type));
+        if($app->team){
+            Mail::to($app->team->email)->send(new CredentialRenew($app, $type));
+        }else{
+            Mail::to(auth()->user())->send(new CredentialRenew($app, $type));
+        }
 
         return redirect()->route('app.index')->with('alert', 'success:You will receive an email to renew your apps credentials');
     }
@@ -510,7 +514,9 @@ class AppController extends Controller
         $credentialsType = 'consumerKey-' . $type;
         $consumerKey = $this->getCredentials($app, $credentialsType, 'string');
 
-        $updatedApp = ApigeeService::renewCredentials(auth()->user(), $app, $consumerKey);
+        $entity = $app->getEntity();
+
+        $updatedApp = ApigeeService::renewCredentials($entity, $app, $consumerKey);
 
         if ($updatedApp->failed()) {
             $reasonMsg = $updatedApp['message'] ?? 'There was a problem renewing the credentials. Please try again later.';

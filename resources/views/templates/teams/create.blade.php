@@ -61,7 +61,6 @@
         </div>
 
         <form id="form-create-team" method="POST" action="{{ route('teams.store') }}" enctype="multipart/form-data" novalidate>
-
             @csrf
 
             <div class="group">
@@ -121,9 +120,11 @@
                 </button>
             </div>
         </form>
+
     </div>
 @endsection
 
 @push('scripts')
     <script src="{{ mix('/js/templates/teams/create.js') }}"></script>
+    <script src="{{ mix('/js/templates/teams/create-update-validation.js') }}"></script>
 @endpush

@@ -3,14 +3,15 @@
 namespace App\Services;
 
 use App\App;
-use App\Country;
 use App\Team;
 use App\User;
+use App\Country;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Http\Client\Response;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * This is a helper service to connect to Apigee.
@@ -216,12 +217,14 @@ class ApigeeService
         return $updatedDetails;
     }
 
-    public static function updateAppWithNewCredentials(array $data, $user = null): Response
+    public static function updateAppWithNewCredentials(array $data, $entity = null): Response
     {
-        $user ??= auth()->user();
+        $entity ??= auth()->user();
         $name = $data['name'];
 
-        return self::put("developers/{$user->email}/apps/{$name}", [
+        $accessUrl = $entity instanceof Team ? "companies/{$entity->username}" : "developers/{$entity->email}";
+
+        return self::put("{$accessUrl}/apps/{$name}", [
             "name" => $name,
             "attributes" => $data['attributes'],
             "callbackUrl" => $data['callbackUrl'],
@@ -282,13 +285,13 @@ class ApigeeService
     /**
      * Revoke credentials and then add a set of new credentials
      *
-     * @param      \App\User                         $user   The user
-     * @param      \App\App                          $app    The application
-     * @param      string                            $key    The key
+     * @param      \Illuminate\Database\Eloquent\Model         $entity The user or team
+     * @param      \App\App                                   $app    The application
+     * @param      string                                     $key    The key
      *
      * @return     \Illuminate\Http\Client\Response  The client response
      */
-    public static function renewCredentials(User $user, App $app, string $key)
+    public static function renewCredentials(Model $entity , App $app, string $key)
     {
         $apiProducts = [];
         $attributes = [];
@@ -315,7 +318,7 @@ class ApigeeService
             'attributes' => $attributes,
             'callbackUrl' => $app->callbackUrl ?? '',
             'apiProducts' => $apiProducts,
-        ], $user);
+        ], $entity);
 
         if ($updatedApp->status() !== 200) return $updatedApp;
 
@@ -329,10 +332,10 @@ class ApigeeService
         foreach ($appProducts as $prod) {
             if ($prod->pivot->status === 'pending') continue;
 
-            self::updateProductStatus($user->email, $app->name, $updatedCredentials, $prod->name, $statusLookup[$prod->pivot->status]);
+            self::updateProductStatus($entity->email ?? $entity->username, $app->name, $updatedCredentials, $prod->name, $statusLookup[$prod->pivot->status], $entity instanceof Team);
         }
 
-        self::revokeCredentials($user, $app, $key);
+        self::revokeCredentials($entity, $app, $key);
 
         return $updatedApp;
     }
@@ -341,15 +344,17 @@ class ApigeeService
     /**
      * Revoke credentials
      *
-     * @param      \App\User                         $user   The user
-     * @param      \App\App                          $app    The application
-     * @param      string                            $key    The key
+     * @param      \Illuminate\Database\Eloquent\Model       $entity   The user or team 
+     * @param      \App\App                                 $app      The application
+     * @param      string                                   $key      The key
      *
      * @return     \Illuminate\Http\Client\Response  The client response
      */
-    public static function revokeCredentials(User $user, App $app, string $key)
+    public static function revokeCredentials(Model $entity, App $app, string $key)
     {
-        return self::post("developers/{$user->email}/apps/{$app->name}/keys/{$key}?action=revoke", [], ['Content-Type' => 'application/octet-stream']);
+        $accessUrl = $entity instanceof Team ? "companies/{$entity->username}" : "developers/{$entity->email}";
+
+        return self::post("{$accessUrl}/apps/{$app->name}/keys/{$key}?action=revoke", [], ['Content-Type' => 'application/octet-stream']);
     }
 
     public static function getAppAttributes(array $attributes)
