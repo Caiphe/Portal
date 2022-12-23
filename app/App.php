@@ -183,6 +183,15 @@ class App extends Model
         return [$this->developer->email];
     }
 
+    public function getEntity(): Model
+    {
+        if (!is_null($this->team_id)) {
+            return $this->team;
+        }
+
+        return $this->developer;
+    }
+
     public function getCustomAttributesAttribute()
     {
         return $this->filterCustomAttributes($this->attributes['attributes']);
