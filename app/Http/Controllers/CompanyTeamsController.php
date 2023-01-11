@@ -508,7 +508,6 @@ class CompanyTeamsController extends Controller
             abort('401');
         }
 
-
         $team->users()->detach();
 		$appsToDelete = App::whereNull('deleted_at')->where('team_id', $team->id)->pluck('aid')->toArray();
 

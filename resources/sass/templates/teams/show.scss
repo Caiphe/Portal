@@ -793,6 +793,7 @@ button {
         &.delete-team-btn{
             z-index: 2;
             margin-left: 15px;
+            margin-right: 20px;
 
             @media(max-width: 1024px){
                margin-top: 15px;
