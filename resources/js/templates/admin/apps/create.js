@@ -377,9 +377,20 @@
         addedAttributeForm.classList.add('active');
 
         attributeName.addEventListener('change', checkNameExists);
+
+        if(attrNames){
+            for(var i = 0; i < attrNames.length; i++){
+                attrNames[i].addEventListener('change', checkNameExists);
+            }
+        }
     }
 
     function checkNameExists(){
+        if(this.value.length <= 1){
+            addAlert('warning', 'Please provide a valid attribute name.');
+            return;
+        }
+
         var elements = document.getElementById('form-create-app').elements;
         var attrNames = elements['attribute[name][]'];
     
@@ -400,15 +411,17 @@
             }
         }
 
-        var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName', 'Notes'];
+        var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName', 'Notes','PermittedSenderIDs', 'AutoRenewAllowed'];
         for(var i = 0; i < existingNames.length; i++){
-            if(existingNames[i].toLowerCase() === this.value.toLowerCase()){
+            if(attrNames[i] !== this && attrNames[i].value.toLowerCase() === this.value.toLowerCase()){
                 this.value = '';
                 this.focus();
                 addAlert('warning', `${existingNames[i]} is a reserved attribute name.`);
                 break;
             }
         }
+
+        this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, ' ');
     }
 
     function removeQuote()
