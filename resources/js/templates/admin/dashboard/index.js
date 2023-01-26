@@ -116,6 +116,7 @@
     function checkNameExists(id){
         if(this.value.length <= 1){
             addAlert('warning', 'Please provide a valid attribute name.');
+            this.value = '';
             return;
         }
 

@@ -388,6 +388,7 @@
     function checkNameExists(){
         if(this.value.length <= 1){
             addAlert('warning', 'Please provide a valid attribute name.');
+            this.value = '';
             return;
         }
 
@@ -402,7 +403,7 @@
 
         if(attrNames){
             for(var i = 0; i < attrNames.length; i++){
-                if(attrNames[i].value.toLowerCase() === this.value.toLowerCase()){
+                if(attrNames[i] !== this && attrNames[i].value.toLowerCase() === this.value.toLowerCase()){
                     this.value = '';
                     this.focus();
                     addAlert('warning', 'Attribute name exists already.');
@@ -411,9 +412,9 @@
             }
         }
 
-        var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName', 'Notes','PermittedSenderIDs', 'AutoRenewAllowed'];
+        var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName', 'Notes', 'PermittedSenderIDs', 'AutoRenewAllowed'];
         for(var i = 0; i < existingNames.length; i++){
-            if(attrNames[i] !== this && attrNames[i].value.toLowerCase() === this.value.toLowerCase()){
+            if(existingNames[i].toLowerCase() === this.value.toLowerCase()){
                 this.value = '';
                 this.focus();
                 addAlert('warning', `${existingNames[i]} is a reserved attribute name.`);
