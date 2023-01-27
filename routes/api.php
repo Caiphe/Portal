@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum', '2fa'])->group(function () {
     Route::get('/recovery-codes', [UserController::class, 'getRecoveryCodes'])->name('api.recovery-codes');
 });
