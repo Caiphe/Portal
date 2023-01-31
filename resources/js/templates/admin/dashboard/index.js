@@ -98,6 +98,12 @@
             attrNames = [attrNames];
         }
 
+        if(attrNames){
+            for(var i = 0; i < attrNames.length; i++){
+                attrNames[i].addEventListener('change', checkNameExists.bind(attrNames[i], id));
+            }
+        }
+
         currentAttributeName.addEventListener('change', checkNameExists.bind(currentAttributeName, id));
 
         currentAttributevalue.addEventListener('change', removeQuote.bind(currentAttributevalue));
@@ -105,12 +111,17 @@
         addAttributeBtn.addEventListener('click', addNewAttribute.bind(customAttributeDialog, attributesList));
         
         customAttributeDialog.addEventListener('dialog-closed', submitNewAttribute.bind(attributesList, id));
-
     }
 
     function checkNameExists(id){
+        if(this.value.length <= 1){
+            addAlert('warning', 'Please provide a valid attribute name.');
+            this.value = '';
+            return;
+        }
+
         this.value = this.value.replaceAll(/["']/g, "");
-        var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName', 'Notes'];
+        var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName', 'Notes', 'PermittedSenderIDs', 'AutoRenewAllowed'];
 
         for(var i = 0; i < existingNames.length; i++){
             if(existingNames[i].toLowerCase() === this.value.toLowerCase()){
@@ -131,13 +142,16 @@
 
         if(attrNames){
             for(var i = 0; i < attrNames.length; i++){
-                if(attrNames[i].value.toLowerCase() === this.value.toLowerCase()){
+                if(attrNames[i] !== this && attrNames[i].value.toLowerCase() === this.value.toLowerCase()){
                     this.value = '';
+                    this.focus();
                     addAlert('warning', 'Attribute name exists already.');
                     break;
                 }
             }
         }
+
+        this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, ' ');
     }
 
     function submitNewAttribute(id){
