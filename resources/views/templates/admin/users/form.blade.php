@@ -82,7 +82,6 @@
 
         <button class="button outline blue save-button">Apply changes</button>
     </div>
-    @endif
 
     @if(isset($user))
     <div class="editor-field">
@@ -96,6 +95,8 @@
         </div>
     </div>
     @endif
+    @endif
+
 </div>
 
 
