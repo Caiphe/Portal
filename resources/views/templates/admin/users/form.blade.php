@@ -82,7 +82,6 @@
 
         <button class="button outline blue save-button">Apply changes</button>
     </div>
-    @endif
 
     @if(isset($user))
     <div class="editor-field">
@@ -95,6 +94,7 @@
             <button type="button" id="reset-2fa-btn" class="button outline  reset-2fa @if($user_twofa_reset_request) blue @endif">Reset 2FA</button>
         </div>
     </div>
+    @endif
     @endif
 </div>
 
