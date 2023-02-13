@@ -35,7 +35,7 @@
     <div class="content">
 
         <div class="content-header mt-40">
-            <h2>Team Profile</h2>
+            <h2>Team profile</h2>
         </div>
 
         <form id="form-create-team" method="POST" action="{{ route('teams.update', $team->id) }}" enctype="multipart/form-data">
@@ -43,7 +43,7 @@
             @csrf
 
             <div class="group">
-                <label for="name">Enter team Name</label>
+                <label for="name">Enter team name</label>
                 <input type="text" name="name" value="{{ $team->name }}" id="team-name" class="form-field" placeholder="Enter team name" maxlength="100" required autofocus>
             </div>
 
