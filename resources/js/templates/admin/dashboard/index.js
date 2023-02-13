@@ -27,53 +27,7 @@
         }
 
         for (var i = 0; i < customAttributes.length; i++) {
-            // customAttributes[i].addEventListener('click', customAttributesDialog);
-            customAttributes[i].addEventListener('click', function(){
-                var token = document.querySelector('meta[name="csrf-token"]').content;
-                var id = this.dataset.id;
-                var url = this.dataset.route;
-
-                var app = {
-                    _method: 'PUT',
-                    _token: token,
-                    aid: this.dataset.id
-                };
-
-                var xhr = new XMLHttpRequest();
-
-                addLoading('Fetching Attributes...');
-        
-                xhr.open('POST', url, true);
-                xhr.setRequestHeader('X-CSRF-TOKEN', token);
-                xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        
-                xhr.send(JSON.stringify(app));
-        
-                xhr.onload = function() {
-                    removeLoading();
-                    var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
-        
-                    if (xhr.status === 200) {
-                        updateAppAttributesHtml(result['attributes'], id);
-                        console.log(result['attributes'], id);
-                        // addAlert('success', ['Custom attributes fetched successfully',]);
-                        customAttributesDialog(id);
-                        return;
-                       
-                    } else {
-        
-                        if(result.errors) {
-                            result.message = [];
-                            for(var error in result.errors){
-                                result.message.push(result.errors[error]);
-                            }
-                        }
-        
-                        addAlert('error', result.message || 'Sorry there was a problem updating your app. Please try again.');
-                    }
-                };
-            });
+            customAttributes[i].addEventListener('click', fetchAttributes);
         }
 
         for (var m = 0; m < productStatusButtons.length; m++) {
@@ -127,8 +81,55 @@
         noteDialog.classList.add('show');
     }
 
+    function fetchAttributes(){
+        var token = document.querySelector('meta[name="csrf-token"]').content;
+        var id = this.dataset.id;
+        var url = this.dataset.route;
+
+        var app = {
+            _method: 'PUT',
+            _token: token,
+            aid: this.dataset.id
+        };
+
+        var xhr = new XMLHttpRequest();
+
+        addLoading('Fetching custom attributes...');
+
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('X-CSRF-TOKEN', token);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+        xhr.send(JSON.stringify(app));
+
+        xhr.onload = function() {
+            removeLoading();
+            var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+            if (xhr.status === 200) {
+                document.querySelector(`#custom-attributes-list-partial-${result['id']}`).innerHTML = result['listHtml'];
+                document.querySelector(`#custom-attributes-form-partial-${result['id']}`).innerHTML = result['formHtml'];
+                document.querySelector('.attributes-heading').classList.add('show');
+                customAttributesDialog(id);
+                return;
+               
+            } else {
+
+                if(result.errors) {
+                    result.message = [];
+                    for(var error in result.errors){
+                        result.message.push(result.errors[error]);
+                    }
+                }
+
+                addAlert('error', result.message || 'Sorry there was a problem updating your app. Please try again.');
+            }
+        };
+    }
+    
+
     function customAttributesDialog(id){
-        // var id = this.dataset.id;
         var customAttributeDialog = document.getElementById('custom-attributes-' + id);
         if (!customAttributeDialog) return;
         customAttributeDialog.classList.add('show');
@@ -322,7 +323,6 @@
         customAttributeBlock.querySelector('.name').value = attributeName.value;
         customAttributeBlock.querySelector('.value').value = attributeValue.value;
         attributesList.appendChild(customAttributeBlock);
-        this.querySelector('.attributes-heading').classList.add('show');
         attributeName.value = '';
         attributeValue.value = '';
     }

@@ -435,10 +435,15 @@ class AppController extends Controller
         $attrs= ApigeeService::formatToApigeeAttributes($apigeeAttributes);
         $attributes = ApigeeService::formatAppAttributes($attrs);
 
-        $app->update(['attributes' =>  $attributes]);
+        $app->attributes = $attributes;
+        $app->save();
 
         if ($request->ajax()) {
-            return response()->json(['attributes' => $attributes]);
+            return response()->json([
+                'id' => $app->aid,
+                'formHtml' => view('partials.custom-attributes.form', ['app' => $app])->render(),
+                'listHtml' => view('partials.custom-attributes.list', ['app' => $app])->render()
+            ]);
         }
     }
 
