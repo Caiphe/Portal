@@ -217,6 +217,13 @@ function showUserModalFunc() {
     makeUserRole.value = this.dataset.userrole;
 
     document.querySelector('.make-user-name').textContent = this.dataset.username;
+    var userRole = userModal.querySelector('.dialog-heading');
+
+    if(this.dataset.userrole !== 'team_user'){
+        userRole.innerHTML = "Make administrator";
+    }else{
+        userRole.innerHTML = 'Make user';
+    }
 
     userModal.querySelector('.team-head').textContent = textLookup[(this.dataset.userrole + '_header')];
     userModal.querySelector('.teammate-text strong').textContent = textLookup[(this.dataset.userrole + '_role')];
