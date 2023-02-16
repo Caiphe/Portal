@@ -84,34 +84,32 @@
                 </div>
 
                 {{-- Custom attributes --}}
-                <div class="hidden-form">
-                    <div class="custom-attribute-list-container">
-                        <h5 class="custom-attribute-heading">Custom attributes</h5>
+                <div class="custom-attribute-list-container">
+                    <h5 class="custom-attribute-heading">Custom attributes</h5>
 
-                        <span class="no-attribute">None defined</span>
+                    <span class="no-attribute">None defined</span>
 
-                        <div class="attributes-heading">
-                            <h4 class="name-heading">Attribute name</h4>
-                            <h4 class="value-heading">Value</h4>
-                        </div>
-
-                        <div class="custom-attributes-list" id="custom-attributes-list"></div>
-
+                    <div class="attributes-heading">
+                        <h4 class="name-heading">Attribute name</h4>
+                        <h4 class="value-heading">Value</h4>
                     </div>
 
-                    <div class="custom-attributes-form" action="">
-                        <div class="each-field">
-                            <label for="name">Attribute name</label>
-                            <input type="text" value="" name="attribute_name" id="attribute-name" class="attribute-field attribute-name" placeholder="New attribute name"/>
-                        </div>
-                        <div class="each-field">
-                            <label for="value">Value</label>
-                            <input type="text" value="" name="attribute_value" id="attribute-value" class="attribute-field attribute-value" placeholder="New value"/>
-                        </div>
-                        <button type="button" class="button add-attribute" id="add-attribute">Add</button>
-                    </div>
-                    <div class="attribute-error" id="attribute-error">Attribute name and value required</div>
+                    <div class="custom-attributes-list" id="custom-attributes-list"></div>
+
                 </div>
+
+                <div class="custom-attributes-form" action="">
+                    <div class="each-field">
+                        <label for="name">Attribute name</label>
+                        <input type="text" value="" name="attribute_name" id="attribute-name" class="attribute-field attribute-name" placeholder="New attribute name"/>
+                    </div>
+                    <div class="each-field">
+                        <label for="value">Value</label>
+                        <input type="text" value="" name="attribute_value" id="attribute-value" class="attribute-field attribute-value" placeholder="New value"/>
+                    </div>
+                    <button type="button" class="button add-attribute" id="add-attribute">Add</button>
+                </div>
+                <div class="attribute-error" id="attribute-error">Attribute name and value required</div>
 
                 {{-- Custom attributes ends --}}
 
