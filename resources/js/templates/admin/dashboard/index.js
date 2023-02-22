@@ -89,7 +89,7 @@
         var app = {
             _method: 'PUT',
             _token: token,
-            aid: this.dataset.id
+            aid: id
         };
 
         var xhr = new XMLHttpRequest();
@@ -106,12 +106,17 @@
         xhr.onload = function() {
             removeLoading();
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+            var attributeDialog = document.getElementById(`custom-attributes-${result['id']}`);
 
             if (xhr.status === 200) {
                 document.querySelector(`#custom-attributes-list-partial-${result['id']}`).innerHTML = result['listHtml'];
                 document.querySelector(`#custom-attributes-form-partial-${result['id']}`).innerHTML = result['formHtml'];
-                document.querySelector('.attributes-heading').classList.add('show');
-                customAttributesDialog(id);
+
+                if(attributeDialog.querySelector('.each-attribute-block')){
+                    attributeDialog.querySelector('.attributes-heading').classList.add('show');
+                }
+
+                customAttributesDialog(result['id']);
                 return;
                
             } else {
@@ -134,7 +139,7 @@
         if (!customAttributeDialog) return;
         customAttributeDialog.classList.add('show');
         var addAttributeBtn = customAttributeDialog.querySelector('.add-attribute');
-        var attributesList = customAttributeDialog.querySelector('.custom-attributes-list');
+        var attributesList = customAttributeDialog.querySelector('.custom-attributes-form-list');
         var currentAttributeName = customAttributeDialog.querySelector('.attribute-name');
         var currentAttributevalue = customAttributeDialog.querySelector('.attribute-value');
 
@@ -155,7 +160,7 @@
 
         currentAttributevalue.addEventListener('change', removeQuote.bind(currentAttributevalue));
 
-        addAttributeBtn.addEventListener('click', addNewAttribute.bind(customAttributeDialog, attributesList));
+        addAttributeBtn.addEventListener('click', addNewAttribute.bind(customAttributeDialog, id));
         
         customAttributeDialog.addEventListener('dialog-closed', submitNewAttribute.bind(attributesList, id));
     }
@@ -179,7 +184,7 @@
         }
 
         var customAttributeDialog = document.getElementById('custom-attributes-' + id);
-        var elements = customAttributeDialog.querySelector('.custom-attributes-list').elements;
+        var elements = customAttributeDialog.querySelector('.custom-attributes-form-list').elements;
 
         var attrNames = elements['attribute[name][]'];
 
@@ -298,38 +303,42 @@
                 </div>
                 `;
             }
-           
         }
         document.querySelector('#wrapper-'+id+' .list-custom-attributes').innerHTML = attrHtml;
     }
 
-    function addNewAttribute(attributesList){
+    function addNewAttribute(id){
         var attributeName = this.querySelector('.attribute-name');
         var attributeValue = this.querySelector('.attribute-value');
         var attributeErrorMessage = this.querySelector('.attribute-error');
+        var customAttributeDialog = document.getElementById('custom-attributes-' + id);
+        var attributesList =  customAttributeDialog.querySelector('.custom-attributes-form-list');
 
         if(attributeName.value === "" || attributeValue.value === ''){
             attributeErrorMessage.classList.add('show');
+
             setTimeout(function(){
                 attributeErrorMessage.classList.remove('show');
             }, 4000);
+
             return;
         }
 
         attributesList.classList.add('active');
-        attributeErrorMessage.classList.remove('show');
         var customAttributeBlock = document.getElementById('custom-attribute').innerHTML;
         customAttributeBlock = document.createRange().createContextualFragment(customAttributeBlock);
         customAttributeBlock.querySelector('.name').value = attributeName.value;
         customAttributeBlock.querySelector('.value').value = attributeValue.value;
+        customAttributeDialog.querySelector('.attributes-heading').classList.add('show');
         attributesList.appendChild(customAttributeBlock);
         attributeName.value = '';
         attributeValue.value = '';
+        return;
     }
 
-    function removeQuote()
-    {
+    function removeQuote(){
         this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, ' ');
+        return;
     }
 
     function showProductNoteDialog() {

@@ -1,4 +1,4 @@
-<form class="custom-attributes-list" method="post" action="{{ route('app.update.attributes', $app) }}">
+<form class="custom-attributes-form-list" method="post" action="{{ route('app.update.attributes', $app) }}">
     @csrf
     @method('PUT')
 
