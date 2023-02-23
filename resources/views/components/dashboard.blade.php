@@ -106,7 +106,7 @@
 
              {{-- Custom attribe data to go here --}}
              <div id="custom-attributes-list-partial-{{ $app->aid }}">
-                @include('partials.custom-attributes.list')
+                @include('partials.custom-attributes.list', ['app' => $app])
              </div>
 
             <div class="detail-actions">
