@@ -51,7 +51,7 @@
 
             {{-- Custom Attributes list --}}
             <div id="custom-attributes-form-partial-{{ $app->aid }}">
-                @include('partials.custom-attributes.form')
+                @include('partials.custom-attributes.form', ['app' => $app])
             </div>
         </div>
 
