@@ -114,7 +114,7 @@
 
                 var eachAttributeBlock = attributeDialog.querySelector('.each-attribute-block');
                 if(eachAttributeBlock){
-                    eachAttributeBlock.classList.add('show');
+                    attributeDialog.querySelector('.attributes-heading').classList.add('show');
                 }
 
                 customAttributesDialog(result['id']);
