@@ -112,8 +112,9 @@
                 document.querySelector(`#custom-attributes-list-partial-${result['id']}`).innerHTML = result['listHtml'];
                 document.querySelector(`#custom-attributes-form-partial-${result['id']}`).innerHTML = result['formHtml'];
 
-                if(attributeDialog.querySelector('.each-attribute-block')){
-                    attributeDialog.querySelector('.attributes-heading').classList.add('show');
+                var eachAttributeBlock = attributeDialog.querySelector('.each-attribute-block');
+                if(eachAttributeBlock){
+                    eachAttributeBlock.classList.add('show');
                 }
 
                 customAttributesDialog(result['id']);
