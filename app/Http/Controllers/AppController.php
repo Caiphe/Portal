@@ -429,12 +429,31 @@ class AppController extends Controller
         return redirect(route('app.index'));
     }
 
+    public function saveCustomAttributeFromApigee(App $app, Request $request)
+    {
+        $apigeeAttributes = ApigeeService::getApigeeAppAttributes($app);
+        $attrs= ApigeeService::formatToApigeeAttributes($apigeeAttributes);
+        $attributes = ApigeeService::formatAppAttributes($attrs);
+
+        $app->attributes = $attributes;
+        $app->save();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'id' => $app->aid,
+                'formHtml' => view('partials.custom-attributes.form', ['app' => $app])->render(),
+                'listHtml' => view('partials.custom-attributes.list', ['app' => $app])->render()
+            ]);
+        }
+    }
+
     public function updateCustomAttributes(App $app, CustomAttributesRequest $request)
     {
         $validated = $request->validated();
         $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
         $apigeeAttributes = ApigeeService::getApigeeAppAttributes($app);
         $appAttributes = array_merge($apigeeAttributes, $app->attributes);
+
         $previousCustomAttributes = $app->filterCustomAttributes($appAttributes);
         $appAttributes = array_diff($appAttributes, $previousCustomAttributes);
         $appAttributes = array_merge($appAttributes, $app->filterCustomAttributes($attributes));
@@ -460,7 +479,6 @@ class AppController extends Controller
         }
         
         $attributes = ApigeeService::formatAppAttributes($updatedResponse['attributes']);
-
         $app->update(['attributes' =>  $attributes]);
 
         if ($request->ajax()) {
@@ -491,7 +509,11 @@ class AppController extends Controller
      */
     public function requestRenewCredentials(App $app, string $type)
     {
-        Mail::to(auth()->user())->send(new CredentialRenew($app, $type));
+        if($app->team){
+            Mail::to($app->team->email)->send(new CredentialRenew($app, $type));
+        }else{
+            Mail::to(auth()->user())->send(new CredentialRenew($app, $type));
+        }
 
         return redirect()->route('app.index')->with('alert', 'success:You will receive an email to renew your apps credentials');
     }
@@ -509,7 +531,9 @@ class AppController extends Controller
         $credentialsType = 'consumerKey-' . $type;
         $consumerKey = $this->getCredentials($app, $credentialsType, 'string');
 
-        $updatedApp = ApigeeService::renewCredentials(auth()->user(), $app, $consumerKey);
+        $entity = $app->getEntity();
+
+        $updatedApp = ApigeeService::renewCredentials($entity, $app, $consumerKey);
 
         if ($updatedApp->failed()) {
             $reasonMsg = $updatedApp['message'] ?? 'There was a problem renewing the credentials. Please try again later.';

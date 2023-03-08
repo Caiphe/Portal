@@ -55,7 +55,7 @@ My team
 
 
 {{-- Transfer ownership Dialog --}}
-<x-dialog-box dialogTitle="Transfer Ownership" class="ownweship-modal-container">
+<x-dialog-box dialogTitle="Transfer ownership" class="ownweship-modal-container">
    
     <p class="remove-user-text dialog-text-padding">Which team member would you like to transfer ownership to? </p>
 
@@ -86,18 +86,18 @@ My team
 {{-- Transfer ownership ends --}}
 
 {{-- Make Admin Modal Container --}}
-<x-dialog-box dialogTitle="Make Owner" class="make-admin-modal-container">
+<x-dialog-box dialogTitle="Make owner" class="make-admin-modal-container">
     <p class="teammate-text dialog-text-padding">Would you like to make this user a new <strong>owner</strong> of this team?</p>
     <p class="admin-user-name bolder-text dialog-text-padding"></p>
     <form class="custom-modal-form bottom-shadow-container button-container mt-40">
-        <button type="button" id="make-owner-btn" class="btn primary admin-removal-btn"  data-teamid="{{ $team->id }}">Submit</button>
+        <button type="button" id="make-owner-btn" class="btn primary admin-removal-btn"  data-teamid="{{ $team->id }}">SUBMIT</button>
         <button type="button" class="btn black-bordered mr-10 make-admin-cancel-btn">CANCEL</button>
     </form>
 </x-dialog-box>
 {{-- Make admin ends --}}
 
 {{-- Make user modal Container --}}
-<x-dialog-box dialogTitle="Make User" class="make-user-modal-container">
+<x-dialog-box dialogTitle="Make user" class="make-user-modal-container">
     <p class="teammate-text dialog-text-padding">Would you like to make this user a new <strong>owner</strong> of this team?</p>
     <p class="make-user-name bolder-text dialog-text-padding"></p>
     <h2 class="team-head" style="display: none; ">Make User</h2>
@@ -115,7 +115,7 @@ My team
 {{-- Make user modal ends --}}
 
 {{-- Delete User Modal --}}
-<x-dialog-box dialogTitle="Remove User" class="delete-modal-container">
+<x-dialog-box dialogTitle="Remove user" class="delete-modal-container">
 
     <p class="teammate-text dialog-text-padding">Are you sure you want to remove this user?</p>
     <p class="user-name user-delete-name bolder-text dialog-text-padding"></p>
@@ -257,7 +257,7 @@ My team
                                             data-invite=""
                                             data-teamid="{{ $team->id }}"
                                             data-useremail="{{ $teamUser->email }}">
-                                            Make Owner
+                                            Make owner
                                         </button>
                                     </li>
                                     @endif
@@ -272,7 +272,7 @@ My team
                                             data-teamid="{{ $team->id }}"
                                             data-teamuserid="{{ $teamUser->id }}"
                                             data-userrole = "{{ $teamUser->teamRole($team)->name === 'team_user' ? 'team_admin' : 'team_user' }}">
-                                            {{ $teamUser->teamRole($team)->name === 'team_user' ? 'Make Administrator' : 'Make User' }}
+                                            {{ $teamUser->teamRole($team)->name === 'team_user' ? 'Make administrator' : 'Make user' }}
                                         </button>
                                     </li>
 
@@ -346,7 +346,7 @@ My team
                 <div class="updated-app">
                     <div class="head headings-container">
                         <div class="column-heading">
-                            <p>App Name {{-- @svg('arrow-down' ,'#cdcdcd') --}}</p>
+                            <p>App name {{-- @svg('arrow-down' ,'#cdcdcd') --}}</p>
                         </div>
 
                         <div class="column-heading">
