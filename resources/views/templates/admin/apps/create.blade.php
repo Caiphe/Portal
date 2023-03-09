@@ -110,6 +110,7 @@
                     <button type="button" class="button add-attribute" id="add-attribute">Add</button>
                 </div>
                 <div class="attribute-error" id="attribute-error">Attribute name and value required</div>
+
                 {{-- Custom attributes ends --}}
 
                 <div class="actions-btn-container">
