@@ -139,11 +139,10 @@ class CompanyTeamsController extends Controller
         $locations = Product::isPublic()
         ->WhereNotNull('locations')
         ->Where('locations', '!=', 'all')
-        ->pluck('locations')
-        ->unique();
+        ->pluck('locations');
 
         $locations = array_unique(explode(',', $locations));
-        $countries = Country::whereIn('code', $locations)->orderBy('name')->pluck('name', 'code');
+        $countries = Country::whereIn('code', array_unique($locations))->orderBy('name')->pluck('name', 'code');
 
         $teamInvite = $this->getInviteByEmail($user->email);
 
@@ -368,8 +367,7 @@ class CompanyTeamsController extends Controller
         $locations = Product::isPublic()
         ->WhereNotNull('locations')
         ->Where('locations', '!=', 'all')
-        ->pluck('locations')
-        ->unique();
+        ->pluck('locations');
 
         $locations = array_unique(explode(',', $locations));
         $countries = Country::whereIn('code', $locations)->orderBy('name')->pluck('name', 'code');
