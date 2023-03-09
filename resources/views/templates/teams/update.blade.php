@@ -38,7 +38,7 @@
             <h2>Team profile</h2>
         </div>
 
-        <form id="form-create-team" class="form-create-team" method="POST" action="{{ route('teams.update', $team->id) }}" enctype="multipart/form-data">
+        <form id="form-create-team" method="POST" action="{{ route('teams.update', $team->id) }}" enctype="multipart/form-data">
             @method('put')
             @csrf
 
