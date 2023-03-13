@@ -209,6 +209,7 @@ class CompanyTeamsController extends Controller
 
         $user = $this->getTeamUserByEmail($invitedEmail);
         abort_if(!$user, 404, 'User was not found');
+        abort_if($user->belongsToTeam($team), 403, 'user is already member of this team');
 
         $isAlreadyInvited = false;
         if ($user) {
