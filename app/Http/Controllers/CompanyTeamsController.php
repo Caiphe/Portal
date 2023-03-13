@@ -206,7 +206,7 @@ class CompanyTeamsController extends Controller
         $team = $this->getTeam($data['team_id']);
         abort_if(!$team, 404, 'Team was not found');
 
-        // Check if the user is not part of the team or the user does not have admin role of the team 
+        // Check if a user is not part of the team or a user does not have admin role of the team 
         abort_if(!$user->belongsToTeam($team) || !$user->hasTeamRole($team, 'team_admin'), 403, 'Forbidden');
 
         $user = $this->getTeamUserByEmail($invitedEmail);
