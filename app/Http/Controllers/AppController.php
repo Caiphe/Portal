@@ -451,8 +451,7 @@ class AppController extends Controller
     {
         $validated = $request->validated();
         $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
-        $apigeeAttributes = ApigeeService::getApigeeAppAttributes($app);
-        $appAttributes = array_merge($apigeeAttributes, $app->attributes);
+        $appAttributes = $app->attributes;
 
         $previousCustomAttributes = $app->filterCustomAttributes($appAttributes);
         $appAttributes = array_diff($appAttributes, $previousCustomAttributes);

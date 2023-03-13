@@ -23,7 +23,7 @@ function createTeam(event){
     }
 
     if(form['contact'].value === ''){
-        errors.push("Contact required");
+        errors.push("Contact number required");
     }
 
     if(form['country'].value === ''){
