@@ -324,15 +324,22 @@ function handleDeleteMenuClick(event) {
     );
 
     xhr.send(JSON.stringify(data));
+    addLoading('Deleting app...');
 
     xhr.onload = function () {
+        removeLoading();
+
         if (xhr.status === 200) {
-            window.location.href = "{{ route('app.index') }}";
             addAlert('success', 'Application deleted successfully');
+            setTimeout(reloadTimeOut, 4000);
         }
     };
 
     document.querySelector(".menu.show").classList.remove('show');
+}
+
+function reloadTimeOut(){
+    location.reload();
 }
 
 var keys = document.querySelectorAll('.copy');
