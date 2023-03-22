@@ -19,11 +19,15 @@
         'dark',
         'no-swagger' => !$hasSwagger
     ]) href="/openapi/{{ $product->swagger }}" download>Download swagger</a>
+
+     @can('administer-content')
     <label id="uploader">
         @svg('loading-blue')
         <span>{{ $hasSwagger ? 'Replace' : 'Upload' }} swagger</span>
         <input id="uploader-input" type="file" name="uploader" hidden accept=".yaml,yml">
     </label>
+    @endcan
+    
 </div>
 
 <form id="admin-form" action="{{ route('admin.product.update', $product->slug) }}" method="POST">

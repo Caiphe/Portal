@@ -35,7 +35,7 @@
     <div class="content">
 
         <div class="content-header mt-40">
-            <h2>Team Profile</h2>
+            <h2>Team profile</h2>
         </div>
 
         <form id="form-create-team" method="POST" action="{{ route('teams.update', $team->id) }}" enctype="multipart/form-data">
@@ -43,18 +43,18 @@
             @csrf
 
             <div class="group">
-                <label for="name">Enter team Name</label>
-                <input type="text" name="name" value="{{ $team->name }}" id="team-name" class="form-field" placeholder="Enter team name" maxlength="100" required autofocus>
+                <label for="name">Enter team name</label>
+                <input type="text" name="name" value="{{ $team->name }}" id="team-name" class="form-field" placeholder="Enter team name" maxlength="100">
             </div>
 
             <div class="group">
                 <label for="url">Enter team URL</label>
-                <input type="text" name="url" id="url" placeholder="Enter team URL" maxlength="100" value="{{ $team->url }}"  required>
+                <input type="text" name="url" id="url" placeholder="Enter team URL" maxlength="100" value="{{ $team->url }}">
             </div>
 
             <div class="group">
                 <label for="contact">Enter team contact number</label>
-                <input type="text" name="contact" id="contact" placeholder="Enter team contact number" maxlength="15" value="{{ $team->contact }}"  required>
+                <input type="text" name="contact" id="contact" placeholder="Enter team contact number" maxlength="15" value="{{ $team->contact }}">
             </div>
 
             <div class="group countries">
@@ -98,6 +98,6 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ mix('/js/templates/teams/update.js') }}"></script>
     <script src="{{ mix('/js/templates/teams/create-update-validation.js') }}"></script>
+    <script src="{{ mix('/js/templates/teams/update.js') }}"></script>
 @endpush

@@ -23,7 +23,6 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\CreateAppRequest;
 use App\Http\Requests\DeleteAppRequest;
 use App\Http\Requests\CustomAttributesRequest;
-use App\Http\Requests\UpdateAppRequest;
 
 class AppController extends Controller
 {
@@ -283,7 +282,7 @@ class AppController extends Controller
         ]);
     }
 
-    public function update($app, UpdateAppRequest $request)
+    public function update($app, CreateAppRequest $request)
     {
         $user = auth()->user();
         $userTeams = $user->teams()->pluck('id')->toArray();
@@ -430,12 +429,30 @@ class AppController extends Controller
         return redirect(route('app.index'));
     }
 
+    public function saveCustomAttributeFromApigee(App $app, Request $request)
+    {
+        $apigeeAttributes = ApigeeService::getApigeeAppAttributes($app);
+        $attrs= ApigeeService::formatToApigeeAttributes($apigeeAttributes);
+        $attributes = ApigeeService::formatAppAttributes($attrs);
+
+        $app->attributes = $attributes;
+        $app->save();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'id' => $app->aid,
+                'formHtml' => view('partials.custom-attributes.form', ['app' => $app])->render(),
+                'listHtml' => view('partials.custom-attributes.list', ['app' => $app])->render()
+            ]);
+        }
+    }
+
     public function updateCustomAttributes(App $app, CustomAttributesRequest $request)
     {
         $validated = $request->validated();
         $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
-        $apigeeAttributes = ApigeeService::getApigeeAppAttributes($app);
-        $appAttributes = array_merge($apigeeAttributes, $app->attributes);
+        $appAttributes = $app->attributes;
+
         $previousCustomAttributes = $app->filterCustomAttributes($appAttributes);
         $appAttributes = array_diff($appAttributes, $previousCustomAttributes);
         $appAttributes = array_merge($appAttributes, $app->filterCustomAttributes($attributes));
@@ -461,7 +478,6 @@ class AppController extends Controller
         }
         
         $attributes = ApigeeService::formatAppAttributes($updatedResponse['attributes']);
-
         $app->update(['attributes' =>  $attributes]);
 
         if ($request->ajax()) {
