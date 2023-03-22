@@ -104,7 +104,11 @@ function copyCodes() {
     document.getElementById('password').addEventListener('input', checkPassword);
     document.getElementById('profile-form').addEventListener('submit', validateSubmit);
     document.getElementById('recovery-codes').addEventListener('click', showRecoveryCodes);
-    document.getElementById('opco-role-request-form').addEventListener('submit', opcoRoleRequestFormSubmit);
+
+    var opcoRoleRequestForm =  document.getElementById('opco-role-request-form');
+    if(opcoRoleRequestForm){
+        opcoRoleRequestForm.addEventListener('submit', opcoRoleRequestFormSubmit);
+    }
 
     function checkPassword() {
         var value = this.value;
