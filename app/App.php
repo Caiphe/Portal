@@ -203,7 +203,7 @@ class App extends Model
         }
         return array_diff_ukey(
             $attributes, 
-            array_flip(['Location', 'Country', 'TeamName', 'Description', 'DisplayName', 'Notes', 'PermittedSenderIDs', 'AutoRenewAllowed']), 
+            array_flip(['Location', 'Country', 'TeamName', 'Description', 'DisplayName']), 
             fn($a, $b) => strtolower($a) <=> strtolower($b)
         );
     }
