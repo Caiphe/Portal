@@ -12,7 +12,7 @@
     <section class="container">
         <h1>
             {{ $category }}
-            @if(\Auth::check() && \Auth::user()->can('view-admin'))
+            @if(\Auth::check() && \Auth::user()->can('administer-content'))
             <a href="{{ route('admin.category.edit', $slug) }}" class="edit button small dark outline">EDIT</a>
             @endif
         </h1>
