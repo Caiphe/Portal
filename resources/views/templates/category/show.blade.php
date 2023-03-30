@@ -12,12 +12,12 @@
     <section class="container">
         <h1>
             {{ $category }}
-            @if(\Auth::check() && \Auth::user()->can('view-admin'))
+            @if(\Auth::check() && \Auth::user()->can('administer-content'))
             <a href="{{ route('admin.category.edit', $slug) }}" class="edit button small dark outline">EDIT</a>
             @endif
         </h1>
         <div class="breadcrumb">
-            <a href="{{ route('product.index', ['category' => $category]) }}">Products @svg('arrow-forward')</a>
+            <a href="{{ route('product.index') }}" data-category="{{ $category }}" class="breadcrumb-view-products">Products @svg('arrow-forward')</a>
         </div>
     </section>
 
@@ -25,7 +25,7 @@
         <h2 class="t-xlarge mb-3">{{ $content['heading'][0]['title'] ?? 'Content needed' }}</h2>
         {!! $content['heading'][0]['body'] ?? 'Content needed' !!}
         <div class="row mt-3">
-            <a href="{{ route('product.index', ['category' => $category]) }}" class="button mr-1 view-products">View products @svg('arrow-forward')</a>
+            <a href="{{ route('product.index') }}" data-category='{{ $category }}' class="button mr-1 view-products">View products @svg('arrow-forward')</a>
         </div>
         <img class="squiggle" src="/images/category/themes/{{ $theme }}/squiggle-hero.svg" alt="background squiggle">
         <div class="phone">
@@ -111,7 +111,7 @@ grant_type=client_credentials -d 'client_id={consumer-key}&client_secret={consum
                 <span class="tag yellow">MTN</span>
                 <h3>{!! $content['products'][0]['title'] ?? 'Content needed' !!}</h3>
                 {!! $content['products'][0]['body'] ?? 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Officiis commodi ipsum, ut ipsam, debitis incidunt dignissimos suscipit vitae reiciendis non, fugiat similique, deleniti nostrum aliquid voluptates enim mollitia sint ad.' !!}
-                <a href="{{ route('product.index', ['category' => $category]) }}">View all products @svg('arrow-forward')</a>
+                <a href="{{ route('product.index') }}" data-category="{{ $category }}" class="view-products-list">View all products @svg('arrow-forward')</a>
             </div>
             <x-stack-cards class="product right" :cards="$products"></x-stack-cards>
         </div>
@@ -145,5 +145,15 @@ grant_type=client_credentials -d 'client_id={consumer-key}&client_secret={consum
     function activate(entry) {
         if(entry.isIntersecting) entry.target.classList.add('activate');
     }
+
+    document.querySelector('.view-products').addEventListener('click', setCategoryLocally);
+    document.querySelector('.breadcrumb-view-products').addEventListener('click', setCategoryLocally);
+    document.querySelector('.view-products-list').addEventListener('click', setCategoryLocally);
+
+    function setCategoryLocally(){
+        localStorage.clear('category');
+        localStorage.setItem("category", this.dataset.category);
+    }
+
 </script>
 @endpush

@@ -2,6 +2,18 @@
     var filterProductsEls = document.querySelectorAll('.filter-products');
     var timeout = null;
 
+    var currentCategory = localStorage.getItem("category");
+    if(currentCategory){
+        var categoriesChecks = document.querySelectorAll('.filter-category');
+
+        categoriesChecks.forEach(function(checkbox) {
+            if (!checkbox.checked && checkbox.nextElementSibling.innerHTML === currentCategory)  {
+                checkbox.checked = true;
+                filterProducts();
+            }
+        });
+    }
+
     document.getElementById('filter-text').addEventListener('input', debounce);
     document.getElementById('filter-country').addEventListener('change', filterProducts);
     document.getElementById('filter-clear').addEventListener('click', clearFilters);
@@ -111,3 +123,7 @@
         return false;
     }
 }());
+
+window.addEventListener('load', function(){
+    localStorage.removeItem("category");
+})

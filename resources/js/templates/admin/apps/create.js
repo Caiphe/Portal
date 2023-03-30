@@ -412,7 +412,7 @@
             }
         }
 
-        var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName', 'Notes', 'PermittedSenderIDs', 'AutoRenewAllowed'];
+        var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName', 'Notes'];
         for(var i = 0; i < existingNames.length; i++){
             if(existingNames[i].toLowerCase() === this.value.toLowerCase()){
                 this.value = '';
