@@ -378,12 +378,10 @@
         addedAttributeForm.classList.add('active');
 
         attributeName.addEventListener('change', checkNameExists);
-        attributeName.addEventListener('keyup', removeSpaces);
 
         if(attrNames){
             for(var i = 0; i < attrNames.length; i++){
                 attrNames[i].addEventListener('change', checkNameExists);
-                attrNames[i].addEventListener('keyup', removeSpaces);
             }
         }
     }
