@@ -339,6 +339,7 @@
     addAttributeBtn.addEventListener('click', addNewAttribute);
 
     attributeName.addEventListener('change', checkNameExists);
+    
     attributeValue.addEventListener('change', removeQuote);
 
     function addNewAttribute(){
@@ -377,10 +378,12 @@
         addedAttributeForm.classList.add('active');
 
         attributeName.addEventListener('change', checkNameExists);
+        attributeName.addEventListener('keyup', removeSpaces);
 
         if(attrNames){
             for(var i = 0; i < attrNames.length; i++){
                 attrNames[i].addEventListener('change', checkNameExists);
+                attrNames[i].addEventListener('keyup', removeSpaces);
             }
         }
     }
@@ -392,6 +395,9 @@
             return;
         }
 
+        var pattern = new RegExp('[ ]+', 'g');
+        this.value = this.value.replaceAll(/["']/g, "").replace(pattern, '');
+
         var elements = document.getElementById('form-create-app').elements;
         var attrNames = elements['attribute[name][]'];
     
@@ -399,7 +405,6 @@
             attrNames = [attrNames];
         }
 
-        this.value = this.value.replaceAll(/["']/g, "");
 
         if(attrNames){
             for(var i = 0; i < attrNames.length; i++){
@@ -422,12 +427,17 @@
             }
         }
 
-        this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, ' ');
+        var pattern = new RegExp('[ ]+', 'g');
+        this.value = this.value.replaceAll(/["']/g, "").replace(pattern, '');
     }
 
-    function removeQuote()
-    {
-        this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, ' ');
+    function removeQuote(){
+        this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, '');
+    }
+
+    function removeSpaces(){
+        var pattern = new RegExp('[ ]+', 'g');
+        this.value = this.value.replace(pattern, '');
     }
     
 }());
