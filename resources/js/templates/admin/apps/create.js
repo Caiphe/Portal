@@ -356,14 +356,6 @@
             return;
         }
 
-        var attrNames = elements['attribute[name][]'];
-        var attrValues = elements['attribute[value][]'];
-
-        if(attrNames && attrNames.length === undefined) {
-            attrNames = [attrNames];
-            attrValues = [attrValues];
-        }
-
         var customAttributeBlock = document.getElementById('custom-attribute').innerHTML;
         var addedAttributeForm = document.querySelector('.custom-attribute-list-container');
 
@@ -377,7 +369,13 @@
         addedAttributeForm.classList.remove('non-active');
         addedAttributeForm.classList.add('active');
 
-        attributeName.addEventListener('change', checkNameExists);
+        var attrNames = elements['attribute[name][]'];
+        var attrValues = elements['attribute[value][]'];
+
+        if(attrNames && attrNames.length === undefined) {
+            attrNames = [attrNames];
+            attrValues = [attrValues];
+        }
 
         if(attrNames){
             for(var i = 0; i < attrNames.length; i++){
