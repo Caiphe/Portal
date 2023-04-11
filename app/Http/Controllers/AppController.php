@@ -478,10 +478,14 @@ class AppController extends Controller
         }
         
         $attributes = ApigeeService::formatAppAttributes($updatedResponse['attributes']);
-        $app->update(['attributes' =>  $attributes]);
+
+        //Removing extra spaces in any attribute's name
+        $attributesWithoutSpaces = array_combine(array_map(fn ($key) => str_replace(' ', '', $key), array_keys($attributes)), $attributes);
+
+        $app->update(['attributes' =>  $attributesWithoutSpaces]);
 
         if ($request->ajax()) {
-            return response()->json(['attributes' => $attributes]);
+            return response()->json(['attributes' => $attributesWithoutSpaces]);
         }
     }
 

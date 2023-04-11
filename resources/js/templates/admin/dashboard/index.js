@@ -173,7 +173,9 @@
             return;
         }
 
-        this.value = this.value.replaceAll(/["']/g, "");
+        var pattern = new RegExp('[ ]+', 'g');
+        this.value = this.value.replaceAll(/["']/g, "").replace(pattern, '');
+
         var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName', 'Notes'];
 
         for(var i = 0; i < existingNames.length; i++){
@@ -204,7 +206,8 @@
             }
         }
 
-        this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, ' ');
+        var pattern = new RegExp('[ ]+', 'g');
+        this.value = this.value.replaceAll(/["']/g, "").replace(pattern, '');
     }
 
     function submitNewAttribute(id){
@@ -338,7 +341,7 @@
     }
 
     function removeQuote(){
-        this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, ' ');
+        this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, '');
         return;
     }
 
