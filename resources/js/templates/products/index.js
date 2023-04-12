@@ -93,7 +93,9 @@
         if (categories.length === 0) return true;
 
         for (var i = categories.length - 1; i >= 0; i--) {
-            if (categories[i].value.indexOf(card.dataset.category) !== -1) return true;
+            if (categories[i].value === card.dataset.category) {
+                return true;
+            }
         }
 
         return false;
