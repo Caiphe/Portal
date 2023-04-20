@@ -202,6 +202,7 @@ class UserController extends Controller
 	
 	public function reset2farequest(Request $request)
 	{
+		$adminUsers = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))->pluck('email')->toArray();
 		$user = $request->user();
 
 		TwofaResetRequest::firstOrCreate([
@@ -211,10 +212,18 @@ class UserController extends Controller
 
 		$usersCountries = $user->countries;
 
-		foreach($usersCountries as $opco){
-			$opcos = $opco->opcoUser->pluck('email')->all();
+		if($usersCountries){
+			foreach($usersCountries as $opco){
+				$opcos = $opco->opcoUser->pluck('email')->all();
 
-			foreach($opcos as $admin){
+				foreach($opcos as $admin){
+					if($admin !== $user->email){
+						Mail::to($admin)->send( new TwoFaResetRequestMail($user));
+					}
+				}
+			}
+		}else{
+			foreach($adminUsers as $admin){
 				if($admin !== $user->email){
 					Mail::to($admin)->send( new TwoFaResetRequestMail($user));
 				}
