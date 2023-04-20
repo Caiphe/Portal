@@ -202,7 +202,6 @@ class UserController extends Controller
 	
 	public function reset2farequest(Request $request)
 	{
-		$adminUsers = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))->pluck('email')->toArray();
 		$user = $request->user();
 
 		TwofaResetRequest::firstOrCreate([
@@ -213,23 +212,16 @@ class UserController extends Controller
 		$usersCountries = $user->countries;
 
 		if($usersCountries){
-			foreach($usersCountries as $opco){
-				$opcos = $opco->opcoUser->pluck('email')->all();
+			$opcoEmails = $usersCountries->load('opcoUser')->pluck('opcoUser')->flatten()->pluck('email')->unique()->values();
 
-				foreach($opcos as $admin){
-					if($admin !== $user->email){
-						Mail::to($admin)->send( new TwoFaResetRequestMail($user));
-					}
-				}
-			}
-		}else{
-			foreach($adminUsers as $admin){
-				if($admin !== $user->email){
-					Mail::to($admin)->send( new TwoFaResetRequestMail($user));
-				}
-			}
+			Mail::bcc($opcoEmails)->send( new TwoFaResetRequestMail($user));
+			
+			return response()->json(['success' => true, 'code' => 200], 200);
 		}
-		
+	
+		$adminUsers = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))->pluck('email')->toArray();
+		Mail::bcc($adminUsers)->send( new TwoFaResetRequestMail($user));
+
         return response()->json(['success' => true, 'code' => 200], 200);
 	}
 }
