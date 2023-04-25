@@ -173,6 +173,10 @@
             return;
         }
 
+        if(this.value.includes(' ')){
+            addAlert('warning', 'White spaces are not allowed to be used in attribute names and have been automatically removed.');
+        }
+
         var pattern = new RegExp('[ ]+', 'g');
         this.value = this.value.replaceAll(/["']/g, "").replace(pattern, '');
 
