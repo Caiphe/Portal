@@ -221,7 +221,6 @@ class UserController extends Controller
 				return response()->json(['success' => true, 'code' => 200], 200);
 			}
 
-
 			Mail::bcc($opcoEmails)->send( new TwoFaResetRequestMail($user));
 			return response()->json(['success' => true, 'code' => 200], 200);
 		}
