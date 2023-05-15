@@ -142,8 +142,20 @@ Update profile
 
                     <h2>Motivation for admin role</h2>
                     <textarea class="" rows="4" name="message" placeholder='Please motivate the reason for your request of the OpCo Admin role e.g.  "Applying for the OpCo administrative role as I have been promoted to team lead of country X. "'></textarea>
-                    <h2>Your selected countries</h2>
+                    
+                    @php
+                        $titleDisplayed = false;
+                    @endphp
 
+                    @foreach($locations as $location)
+                        @if(in_array($location, $responsibleCountries) && !$titleDisplayed)
+                            <h2>Your selected countries</h2>
+                            @php
+                                $titleDisplayed = true;
+                            @endphp
+                        @endif
+                    @endforeach
+                    
                     <div class="locations selected-country">
                         @foreach($locations as $location)
                         <label for="user-{{ $location }}" class="each-country @if(in_array($location, $responsibleCountries)) show @endif">
