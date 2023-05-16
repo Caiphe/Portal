@@ -32,6 +32,10 @@
 
             label {
                 cursor: pointer;
+
+                &.hide{
+                    display: none;
+                }
             }
 
             img {
@@ -52,6 +56,18 @@
 
             input:checked+img {
                 opacity: 1;
+            }
+        }
+
+        .selected-country{
+            .each-country{
+                display: none;
+
+                &.show{
+                    width: 25px;
+                    display: inline-block;
+                    margin-right: 10px;
+                }
             }
         }
 
@@ -181,6 +197,10 @@
         position: relative;
         width: 478px;
         margin: 0 auto;
+
+        h2{
+            margin: 20px 0px;
+        }
 
         textarea{
             width: 100%;

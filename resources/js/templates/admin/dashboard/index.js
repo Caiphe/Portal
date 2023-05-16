@@ -173,7 +173,13 @@
             return;
         }
 
-        this.value = this.value.replaceAll(/["']/g, "");
+        if(this.value.includes(' ')){
+            addAlert('warning', 'White spaces are not allowed to be used in attribute names and have been automatically removed.');
+        }
+
+        var pattern = new RegExp('[ ]+', 'g');
+        this.value = this.value.replaceAll(/["']/g, "").replace(pattern, '');
+
         var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName', 'Notes'];
 
         for(var i = 0; i < existingNames.length; i++){
@@ -204,7 +210,8 @@
             }
         }
 
-        this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, ' ');
+        var pattern = new RegExp('[ ]+', 'g');
+        this.value = this.value.replaceAll(/["']/g, "").replace(pattern, '');
     }
 
     function submitNewAttribute(id){
@@ -338,7 +345,7 @@
     }
 
     function removeQuote(){
-        this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, ' ');
+        this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, '');
         return;
     }
 

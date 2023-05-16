@@ -339,6 +339,7 @@
     addAttributeBtn.addEventListener('click', addNewAttribute);
 
     attributeName.addEventListener('change', checkNameExists);
+    
     attributeValue.addEventListener('change', removeQuote);
 
     function addNewAttribute(){
@@ -355,14 +356,6 @@
             return;
         }
 
-        var attrNames = elements['attribute[name][]'];
-        var attrValues = elements['attribute[value][]'];
-
-        if(attrNames && attrNames.length === undefined) {
-            attrNames = [attrNames];
-            attrValues = [attrValues];
-        }
-
         var customAttributeBlock = document.getElementById('custom-attribute').innerHTML;
         var addedAttributeForm = document.querySelector('.custom-attribute-list-container');
 
@@ -376,7 +369,13 @@
         addedAttributeForm.classList.remove('non-active');
         addedAttributeForm.classList.add('active');
 
-        attributeName.addEventListener('change', checkNameExists);
+        var attrNames = elements['attribute[name][]'];
+        var attrValues = elements['attribute[value][]'];
+
+        if(attrNames && attrNames.length === undefined) {
+            attrNames = [attrNames];
+            attrValues = [attrValues];
+        }
 
         if(attrNames){
             for(var i = 0; i < attrNames.length; i++){
@@ -392,6 +391,13 @@
             return;
         }
 
+        if(this.value.includes(' ')){
+            addAlert('warning', 'White spaces are not allowed to be used in attribute names and have been automatically removed.');
+        }
+
+        var pattern = new RegExp('[ ]+', 'g');
+        this.value = this.value.replaceAll(/["']/g, "").replace(pattern, '');
+
         var elements = document.getElementById('form-create-app').elements;
         var attrNames = elements['attribute[name][]'];
     
@@ -399,7 +405,6 @@
             attrNames = [attrNames];
         }
 
-        this.value = this.value.replaceAll(/["']/g, "");
 
         if(attrNames){
             for(var i = 0; i < attrNames.length; i++){
@@ -422,12 +427,17 @@
             }
         }
 
-        this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, ' ');
+        var pattern = new RegExp('[ ]+', 'g');
+        this.value = this.value.replaceAll(/["']/g, "").replace(pattern, '');
     }
 
-    function removeQuote()
-    {
-        this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, ' ');
+    function removeQuote(){
+        this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, '');
+    }
+
+    function removeSpaces(){
+        var pattern = new RegExp('[ ]+', 'g');
+        this.value = this.value.replace(pattern, '');
     }
     
 }());
