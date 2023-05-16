@@ -217,7 +217,6 @@ class UserController extends Controller
 
 			if(count($opcoEmails) === 0 || count($opcoEmails) === 1 && $opcoEmails[0] = $user->email){
 				Mail::bcc($adminUsers)->send( new TwoFaResetRequestMail($user));
-
 				return response()->json(['success' => true, 'code' => 200], 200);
 			}
 

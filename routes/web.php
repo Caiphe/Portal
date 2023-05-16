@@ -71,17 +71,12 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 
 	Route::post('user/{user}/2fa/reset-confirm', 'UserController@resetTwofaConfirm')->name('2fa.reset.confirm');
 
+	// Opco role status
+	Route::post('/opco-role-request/{id}/approve', 'OpcoRoleRequestActionController@approve')->name('admin.opco.approve');
+	Route::post('/opco-role-request/{id}/deny', 'OpcoRoleRequestActionController@deny')->name('admin.opco.deny');
 
-	Route::middleware('can:administer-task-panel')->group(function(){
-
-		// Opco role status
-		Route::post('/opco-role-request/{id}/approve', 'OpcoRoleRequestActionController@approve')->name('admin.opco.approve');
-		Route::post('/opco-role-request/{id}/deny', 'OpcoRoleRequestActionController@deny')->name('admin.opco.deny');
-
-		// Tasks Panel 
-		Route::get('/tasks', 'TaskController@index')->name('admin.task.index');
-
-	});
+	// Tasks Panel 
+	Route::get('/tasks', 'TaskController@index')->name('admin.task.index');
 
 	// Products
 	Route::get('products', 'ProductController@index')->middleware('can:administer-products')->name('admin.product.index');

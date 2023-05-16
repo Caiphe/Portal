@@ -9,13 +9,23 @@ use App\Http\Controllers\Controller;
 
 class TaskController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $opcoRequest = OpcoRoleRequest::whereDoesntHave('action') ->orderBy('id', 'DESC')->get();
+        $currentUser = $request->user();
         $countries = Country::all();
-        
+        $opcoCountries = $currentUser->responsibleCountries()->pluck('code')->toArray();
+
+        $opcoRequests = OpcoRoleRequest::whereDoesntHave('action')->with('user.countries')->orderBy('id', 'DESC')->get();
+
+        if(!$currentUser->hasRole('admin') && $currentUser->hasRole('opco')){
+            
+            $opcoRequests = $opcoRequests->filter(function($item) use ($opcoCountries) {
+                return count(array_intersect(explode(',', $item->countries), $opcoCountries)) > 0;
+            });
+        }
+
         return view('templates.admin.tasks.index', [
-            'opco_role_requests' => $opcoRequest,
+            'opco_role_requests' => $opcoRequests,
             'countries' => $countries
         ]);
     }

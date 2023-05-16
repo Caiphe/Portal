@@ -173,13 +173,14 @@ function copyCodes() {
 
     function opcoRoleRequestFormSubmit(ev){
         ev.preventDefault();
+        
         var message = this.elements['message'].value;
         var countriesCheck = this.elements['countries[]'];
         var formToken = this.elements['_token'].value;
         var errors = [];
         var countries = [];
 
-        for(var i = 0; i< countriesCheck.length; i++){
+        for(var i = 0; i < countriesCheck.length; i++){
             if(countriesCheck[i].checked){
                 countries.push(countriesCheck[i].value);
             }
@@ -190,7 +191,15 @@ function copyCodes() {
         }
 
         if(countries.length === 0){
-            errors.push('Please select countries, you are request role for');
+            errors.push('Pleasee select a country you are requesting for');
+        }
+
+        if(countries.length > 1){
+            for(var i = 0; i< countriesCheck.length; i++){
+                countriesCheck[i].checked = false;
+            }
+
+            errors.push('You can select only one country per request ');
         }
 
         if (errors.length > 0) {
