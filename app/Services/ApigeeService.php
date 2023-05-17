@@ -689,7 +689,7 @@ class ApigeeService
         $user ??= $team->owner ?? $team->users->first(fn ($user) => $user->hasRole('team_admin'));
 
         if (!$user) {
-            return null;
+            return;
         }
 
         return self::delete("companies/{$team->name}");
