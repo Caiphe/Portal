@@ -30,9 +30,10 @@ class OpcoRoleRequestController extends Controller
         OpcoRoleRequest::create($data);
 
         $requestedCountry = Country::where('code', $requestCountryCodes)->first();
-        $requestedCountryOpcoEmail = $requestedCountry->opcoUser->flatten()->pluck('email')->toArray();
+        
+        if($requestedCountry->opcoUser){
+            $requestedCountryOpcoEmail = $requestedCountry->opcoUser->flatten()->pluck('email')->toArray();
 
-        if($requestedCountryOpcoEmail){
             Mail::bcc($requestedCountryOpcoEmail)->send(new OpcoAdminRoleRequest($user, $countries));
             return response()->json(['success' => true, 'code' => 200], 200);
         }
