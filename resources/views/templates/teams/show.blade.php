@@ -186,13 +186,11 @@ My team
             @if ($team->users->count() > 1 && $isOwner)
             <button class="btn dark make-owner">Select a new owner</button>
             @endif
-            @if ($team->users)
-                @foreach($team->users as $teamUser)
-                    @if($teamUser->isTeamOwner($team))
-                        <button class="btn red-button delete-team-btn">Delete team</button>
-                    @endif
-                @endforeach
+
+            @if($isOwner)
+                <button class="btn red-button delete-team-btn">Delete team</button>
             @endif
+
         </div>
     </div>
        

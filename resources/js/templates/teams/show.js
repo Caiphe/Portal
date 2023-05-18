@@ -69,7 +69,9 @@ for (var i = 0; i < btnActions.length; i++) {
     btnActions[i].addEventListener('click', showUserAction);
 }
 
-deleteTeamBtn.addEventListener('click', showDeleteTeamPopup)
+if(deleteTeamBtn){
+    deleteTeamBtn.addEventListener('click', showDeleteTeamPopup)
+}
 
 function showUserAction() {
     this.previousElementSibling.classList.add("show");
