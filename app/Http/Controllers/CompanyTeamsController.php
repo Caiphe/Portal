@@ -506,31 +506,36 @@ class CompanyTeamsController extends Controller
     {
         abort_if($team->owner_id !== auth()->user()->id, 401, 'You are not this teams owner');
 
-        $team->users()->detach();
-		$appsToDelete = App::whereNull('deleted_at')->where('team_id', $team->id)->pluck('aid')->toArray();
+        $teamMembers = $team->users->pluck('id')->toArray();
+        $currentUsers = $team->users;
+        
+        if($currentUsers){
+            foreach($currentUsers as $user){
+                ApigeeService::removeDeveloperFromCompany($team, $user);
+            }
+
+            $team->users()->detach($teamMembers);
+        }
+
+
+        $user = auth()->user();
+
+        $appsToDelete = App::whereNull('deleted_at')->where('team_id', $team->id)->pluck('name')->toArray();
 
         if (count($appsToDelete) > 0) {
-			App::whereIn('aid', array_keys($appsToDelete))->delete();
+            
+            foreach($appsToDelete as $app){
+                ApigeeService::delete("developers/{$user->email}/apps/{$app}");
+            }
+
+            foreach($appsToDelete as $app){
+                App::find($app)->delete();
+            }
 		}
-
-        // Removing team users from Apigee Company
-        $teamUsers = TeamUser::where('team_id', $team->team_id)->pluck('user_id')->toArray();
-        if($teamUsers){
-            foreach($teamUsers as $teamUser){
-                ApigeeService::removeDeveloperFromCompany($team, $teamUser);
-            }
-        }
-
-        $apps = App::Where('team_id', $team->id)->pluck('name')->toArray();
-        $user = auth()->user();
-        if($apps){
-            foreach($apps as $app){
-                ApigeeService::delete("developers/{$user->email}/apps/{$app->name}");
-            }
-        }
 
         ApigeeService::deleteCompany($team);
         $team->delete();
+
         return response()->json(['success' => true, 'code' => 200], 200);
     }
 }

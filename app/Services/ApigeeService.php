@@ -685,13 +685,7 @@ class ApigeeService
      *
      * @return     mixed         The response from the delete
      */
-    public static function deleteCompany(Team $team, ?User $user = null){
-        $user ??= $team->owner ?? $team->users->first(fn ($user) => $user->hasRole('team_admin'));
-
-        if (!$user) {
-            return;
-        }
-
+    public static function deleteCompany(Team $team){
         return self::delete("companies/{$team->name}");
     }
 
