@@ -504,21 +504,20 @@ class CompanyTeamsController extends Controller
      */
     public function delete(Team $team)
     {
-        abort_if($team->owner_id !== auth()->user()->id, 401, 'You are not this teams owner');
+        $user = auth()->user();
+
+        abort_if($team->owner_id !== $user->id, 401, 'You are not this teams owner');
 
         $teamMembers = $team->users->pluck('id')->toArray();
         $currentUsers = $team->users;
         
         if($currentUsers){
-            foreach($currentUsers as $user){
-                ApigeeService::removeDeveloperFromCompany($team, $user);
+            foreach($currentUsers as $teamUser){
+                ApigeeService::removeDeveloperFromCompany($team, $teamUser);
             }
 
             $team->users()->detach($teamMembers);
         }
-
-
-        $user = auth()->user();
 
         $appsToDelete = App::whereNull('deleted_at')->where('team_id', $team->id)->pluck('name')->toArray();
 
