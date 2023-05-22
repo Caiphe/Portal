@@ -83,12 +83,17 @@ class SyncProducts extends Command
 				unset($productsToBeDeleted[$product['name']]);
 			}
 
+			$category = Category::firstOrCreate([
+				'title' => ucfirst(strtolower(trim($attributes['Category'] ?? "Misc")))
+			]);
+
 			if (!is_null($prod)) {
 				$prod->update([
 					'pid' => $product['name'],
 					'name' => $product['name'],
 					'display_name' => preg_replace('/[_]+/', ' ', ltrim($product['displayName'], "$allow ")),
 					'environments' => implode(',', $productEnvironments),
+					'category_cid' => strtolower($category->cid),
 					'access' => $attributes['Access'] ?? null,
 					'locations' => $attributes['Locations'] ?? null,
 					'attributes' => json_encode($attributes),
@@ -101,10 +106,6 @@ class SyncProducts extends Command
 
 				continue;
 			}
-
-			$category = Category::firstOrCreate([
-				'title' => ucfirst(strtolower(trim($attributes['Category'] ?? "Misc")))
-			]);
 
 			$prod = Product::create(
 				[
