@@ -521,7 +521,7 @@ class CompanyTeamsController extends Controller
 
         $appsToDelete = App::whereNull('deleted_at')->where('team_id', $team->id)->pluck('name')->toArray();
 
-        if (count($appsToDelete) > 0) {
+        if($appsToDelete) {
             
             foreach($appsToDelete as $app){
                 ApigeeService::delete("developers/{$user->email}/apps/{$app}");
