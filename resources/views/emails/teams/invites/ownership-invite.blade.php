@@ -5,12 +5,8 @@ Hi {{ $invitee->first_name }}
 
 You have been requested to be the owner of **{{ $team->name }}** team.
 
-@component('mail::button', [ 'url' => route('teams.invite.accept', [ 'token' => $tokens['accept_token'] ]) ])
-    Accept Invite
-@endcomponent
-
-@component('mail::button', ['url' => route('teams.invite.deny', [ 'token' => $tokens['reject_token'] ]) ])
-    Reject Invite
+@component('mail::button', [ 'url' => route('team.show', $team->id) ])
+    Complete Action
 @endcomponent
 
 Thanks,<br>
