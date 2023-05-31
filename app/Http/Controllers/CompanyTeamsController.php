@@ -474,8 +474,6 @@ class CompanyTeamsController extends Controller
         
         abort_if($invite->email !== auth()->user()->email, 401, 'You have not been invited to this team');
 
-        abort_if($invite->email !== auth()->user()->email, 401, 'You have not been invited to this team');
-
         $inviteType = ucfirst($invite->type);
 
         if ($invite) {
