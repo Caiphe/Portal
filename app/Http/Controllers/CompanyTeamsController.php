@@ -471,7 +471,7 @@ class CompanyTeamsController extends Controller
     {
         $invite = Teamwork::getInviteFromDenyToken($request->get('token'));
         abort_if(!$invite, 404, 'Invite was not found');
-
+        
         abort_if($invite->email !== auth()->user()->email, 401, 'You have not been invited to this team');
 
         $inviteType = ucfirst($invite->type);
