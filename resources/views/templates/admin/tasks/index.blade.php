@@ -75,7 +75,7 @@
                     </div>
 
                     <div class="countries-requested-block">
-                        <h4>Countries requested</h4>
+                        <h4>County requested</h4>
 
                         @foreach (explode(',', $request->countries) as $country)
                             <div class="each-country">
