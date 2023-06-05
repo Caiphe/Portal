@@ -24,7 +24,7 @@
     <label id="uploader">
         @svg('loading-blue')
         <span>{{ $hasSwagger ? 'Replace' : 'Upload' }} swagger</span>
-        <input id="uploader-input" type="file" name="uploader" hidden accept=".yaml,yml">
+        <input id="uploader-input" type="file" name="uploader" hidden accept=".yaml,.yml,.json">
     </label>
     @endcan
     
