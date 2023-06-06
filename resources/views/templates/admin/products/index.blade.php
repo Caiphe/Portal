@@ -24,7 +24,7 @@
         <label class="filter-item" for="product-group">
             Product Group
             <select class="product-group" id="product-group" name="group">
-                <option value="">All products group</option>
+                <option value="">All product groups</option>
                 @foreach ($productGroup as $group)
                 <option value="{{ $group }}">{{ $group }}</option>
                 @endforeach
