@@ -8,9 +8,10 @@
 @section('title', 'Products')
 
 @section('content')
-    <h1>Products</h1>
+    <h1>Products Here</h1>
 
     <x-admin.filter searchTitle="Product name">
+
         <label class="filter-item" for="access">
             Access level
             <select name="access" class="access-level" id="access-level">
@@ -19,6 +20,17 @@
                 <option value="private" @if(request()->get('access') === 'private') selected @endif>Private</option>
             </select>
         </label>
+
+        <label class="filter-item" for="product-group">
+            Product Group
+            <select class="product-group" id="product-group" name="group">
+                <option value="">All products group</option>
+                @foreach ($productGroup as $group)
+                <option value="{{ $group }}">{{ $group }}</option>
+                @endforeach
+            </select>
+        </label>
+
     </x-admin.filter>
 
     <div id="table-data">
@@ -37,6 +49,7 @@
     function updateFilters(params) {
         document.getElementById('search-page').value = params['q'] || '';
         document.querySelector('#access-level').value = params['access'] || '';
+        document.getElementById('#product-group').value = params['group'] || '';
     }
 </script>
 @endpush
