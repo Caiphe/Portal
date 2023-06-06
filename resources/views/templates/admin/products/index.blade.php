@@ -8,7 +8,7 @@
 @section('title', 'Products')
 
 @section('content')
-    <h1>Products Here</h1>
+    <h1>Products</h1>
 
     <x-admin.filter searchTitle="Product name">
 
