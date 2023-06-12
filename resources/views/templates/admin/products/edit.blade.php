@@ -56,7 +56,7 @@
 
             <label class="editor-field-label">
                 <h3>Group</h3>
-                <input type="text" name="group" value="{{ $product->group ?? 'MTN' }}">
+                <input type="text" class="non-editable" name="group" value="{{ $product->group ?? 'MTN' }}" readonly />
             </label>
 
             <label class="editor-field-label loactions-container">
