@@ -389,7 +389,7 @@ class ApigeeService
                 $attribute['value'] = '';
 	    
 	   }
-            $value = $key === 'Group' ? Str::studly($value) : $value;
+            $value = $key === 'Group' ? $value : $value;
       
             $a[$key] = $value;
         }
