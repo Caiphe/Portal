@@ -95,6 +95,7 @@ class SyncProducts extends Command
 					'environments' => implode(',', $productEnvironments),
 					'category_cid' => strtolower($category->cid),
 					'access' => $attributes['Access'] ?? null,
+					'group' => $attributes['Group'] ?? "MTN",
 					'locations' => $attributes['Locations'] ?? null,
 					'attributes' => json_encode($attributes),
 				]);
