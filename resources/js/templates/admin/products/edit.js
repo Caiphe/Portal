@@ -53,7 +53,7 @@
             errors.push("You can only add one file.");
         }
 
-        if (!/\.yml$|\.yaml$/.test(files[0].name)) {
+        if (!/\.yml$|\.yaml$|\.json$/.test(files[0].name)) {
             errors.push("The file isn't the correct type.");
         }
 

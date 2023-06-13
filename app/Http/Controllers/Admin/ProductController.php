@@ -17,7 +17,9 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $access = $request->get('access', "");
+        $group = $request->get('group', "");
         $numberPerPage = (int)$request->get('number_per_page', '15');
+
         $products = Product::with('category')
             ->select([
                 'products.*',
@@ -37,7 +39,10 @@ class ProductController extends Controller
             })
             ->when($access !== "" && !is_null($access), function ($q) use ($request) {
                 $q->where('access', $request->get('access'));
-            });
+            })
+            ->when($group !== "" && !is_null($group), function ($q) use ($request) {
+                $q->where('group', $request->get('group'));
+            });;
         $order = $request->get('order', 'desc');
         $sort = '';
 
@@ -52,6 +57,8 @@ class ProductController extends Controller
 
             $order = ['asc' => 'desc', 'desc' => 'asc'][$order] ?? 'desc';
         }
+
+        $productGroup = Product::pluck('group')->unique()->toArray();
 
         if ($request->ajax()) {
             return response()
@@ -68,6 +75,7 @@ class ProductController extends Controller
         return view('templates.admin.products.index', [
             'products' => $products->orderBy('display_name')->paginate($numberPerPage),
             'order' => $order,
+            'productGroup' => $productGroup,
         ]);
     }
 
