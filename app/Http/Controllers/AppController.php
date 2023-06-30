@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\CreateAppRequest;
 use App\Http\Requests\DeleteAppRequest;
 use App\Http\Requests\CustomAttributesRequest;
+use phpDocumentor\Reflection\PseudoTypes\False_;
 
 class AppController extends Controller
 {
@@ -66,6 +67,20 @@ class AppController extends Controller
             'teamInvite' => $teamInvite,
             'team' => $team,
         ]);
+    }
+
+    public function checkAppName (Request $request)
+    {
+        $user = $request->user();
+        $appName = Str::slug($request->name);
+        $appNameCheck = App::where('name', $appName)->where('developer_id', $user->developer_id)->exists();
+
+        if($appNameCheck){
+            return response()->json(['success' => true], 200);
+
+        }else{
+            return response()->json(['success' => false], 422);
+        }    
     }
 
     public function create(Request $request)

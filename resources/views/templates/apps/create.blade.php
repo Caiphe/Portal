@@ -250,10 +250,41 @@
                         elements['name'].value = '';
                         errors.push({msg: 'Please provide a valid app name', el: elements['name']});
                     } 
-                    else {
-                        elements['name'].nextElementSibling.textContent = '';
-                    }
+                    else{
+                        var appName =  elements['name'].value;
+                        var checkUrl = "{{ route('app.name.check') }}";
 
+                        var app = {
+                            name: appName,
+                        }
+
+                        var xhr = new XMLHttpRequest();
+                        addLoading('checking App name...');
+
+                        xhr.open('POST', checkUrl, true);
+                        xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+                        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+                        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+                        xhr.send(JSON.stringify(app));
+
+                        xhr.onload = function() {
+                            var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+                            console.log(xhr.status, result);
+                            removeLoading();
+
+                            if (xhr.status === 200) {
+                                errors.push({msg: `App name ${elements['name'].value} exists already`, el: elements['name']});
+                                elements['name'].value = '';
+                                return void addAlert('error', 'App Name exists already.')
+                            }
+                            else if(xhr.status === 422) {
+                                elements['name'].nextElementSibling.textContent = '';
+                            }
+                        };
+                    }
+                    
 
                     if(urlValue !== '' && !/https?:\/\/.*\..*/.test(urlValue)) {
                         errors.push({msg: 'Please add a valid url. Eg. https://callback.com', el: elements['url']});
