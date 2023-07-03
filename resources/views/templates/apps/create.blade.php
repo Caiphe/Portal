@@ -244,13 +244,20 @@
                 event.preventDefault();
 
                 if(form.firstElementChild.classList.contains('active')) {
+
+                    if(urlValue !== '' && !/https?:\/\/.*\..*/.test(urlValue)) {
+                        errors.push({msg: 'Please add a valid url. Eg. https://callback.com', el: elements['url']});
+                    } else {
+                        elements['url'].nextElementSibling.textContent = '';
+                    }
+
                     if(elements['name'].value === '') {
                         errors.push({msg: 'Please add your app name', el: elements['name']});
                     } else if(elements['name'].value.length === 1){
                         elements['name'].value = '';
                         errors.push({msg: 'Please provide a valid app name', el: elements['name']});
-                    } 
-                    else{
+                    } else if(elements['name'].value !== '' && elements['name'].value.length > 1 ){
+
                         var appName =  elements['name'].value;
                         var checkUrl = "{{ route('app.name.check') }}";
 
@@ -259,7 +266,7 @@
                         }
 
                         var xhr = new XMLHttpRequest();
-                        addLoading('checking App name...');
+                        addLoading("checking app's name...");
 
                         xhr.open('POST', checkUrl, true);
                         xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
@@ -269,43 +276,28 @@
                         xhr.send(JSON.stringify(app));
 
                         xhr.onload = function() {
-                            var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
-
-                            console.log(xhr.status, result);
                             removeLoading();
 
-                            if (xhr.status === 200) {
-                                errors.push({msg: `App name ${elements['name'].value} exists already`, el: elements['name']});
+                            if(xhr.status === 409){
                                 elements['name'].value = '';
-                                return void addAlert('error', 'App Name exists already.')
+                                errors.push({msg: `App name ${elements['name'].value} exists already`, el: elements['name']});
                             }
-                            else if(xhr.status === 422) {
-                                elements['name'].nextElementSibling.textContent = '';
+
+                            if(errors.length > 0){
+                                for (var i = errors.length - 1; i >= 0; i--) {
+                                    errors[i].el.nextElementSibling.textContent = errors[i].msg;
+                                }
+
+                                return;
                             }
+                            
+                            nav.querySelector('a').nextElementSibling.classList.add('active');
+                            form.firstElementChild.classList.remove('active');
+                            form.firstElementChild.style.display = 'none';
+                            form.firstElementChild.nextElementSibling.classList.add('active');
                         };
                     }
-                    
-
-                    if(urlValue !== '' && !/https?:\/\/.*\..*/.test(urlValue)) {
-                        errors.push({msg: 'Please add a valid url. Eg. https://callback.com', el: elements['url']});
-                    } else {
-                        elements['url'].nextElementSibling.textContent = '';
-                    }
-
-                    if(errors.length > 0){
-                        for (var i = errors.length - 1; i >= 0; i--) {
-                            errors[i].el.nextElementSibling.textContent = errors[i].msg;
-                        }
-
-                        return;
-                    }
-
-                    nav.querySelector('a').nextElementSibling.classList.add('active');
-
-                    form.firstElementChild.classList.remove('active');
-                    form.firstElementChild.style.display = 'none';
-                    form.firstElementChild.nextElementSibling.classList.add('active');
-
+                   
                 } else if (form.firstElementChild.nextElementSibling.classList.contains('active')) {
                     if(document.querySelectorAll('.country-checkbox:checked').length === 0) {
                         return void addAlert('error', 'Please select a country');

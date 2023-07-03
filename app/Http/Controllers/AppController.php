@@ -76,11 +76,10 @@ class AppController extends Controller
         $appNameCheck = App::where('name', $appName)->where('developer_id', $user->developer_id)->exists();
 
         if($appNameCheck){
-            return response()->json(['success' => true], 200);
+            return response()->json(['success' => true], 409);
+        }
 
-        }else{
-            return response()->json(['success' => false], 422);
-        }    
+        return response()->json(['success' => false], 422);
     }
 
     public function create(Request $request)
