@@ -279,7 +279,6 @@
                             removeLoading();
 
                             if(xhr.status === 409){
-                                elements['name'].value = '';
                                 errors.push({msg: `App name ${elements['name'].value} exists already`, el: elements['name']});
                             }
 
