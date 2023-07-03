@@ -23,7 +23,6 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\CreateAppRequest;
 use App\Http\Requests\DeleteAppRequest;
 use App\Http\Requests\CustomAttributesRequest;
-use phpDocumentor\Reflection\PseudoTypes\False_;
 
 class AppController extends Controller
 {
