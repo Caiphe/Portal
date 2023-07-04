@@ -686,7 +686,7 @@ class ApigeeService
      * @return     mixed         The response from the delete
      */
     public static function deleteCompany(Team $team){
-        return self::delete("companies/{$team->name}");
+        return self::delete("companies/{$team->username}");
     }
 
     /**

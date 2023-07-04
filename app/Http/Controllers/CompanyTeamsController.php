@@ -510,7 +510,7 @@ class CompanyTeamsController extends Controller
     {
         $user = auth()->user();
 
-        abort_if($team->owner_id !== $user->id, 401, 'You are not this teams owner');
+        abort_if($team->owner_id !== $user->id, 401, "You are not this team's owner");
 
         $teamMembers = $team->users->pluck('id')->toArray();
         $currentUsers = $team->users;
@@ -523,16 +523,16 @@ class CompanyTeamsController extends Controller
             $team->users()->detach($teamMembers);
         }
 
-        $appsToDelete = App::whereNull('deleted_at')->where('team_id', $team->id)->pluck('name')->toArray();
+        $appNamesToDelete = App::where('team_id', $team->id)->pluck('name')->toArray();
 
-        if($appsToDelete) {
+        if($appNamesToDelete) {
             
-            foreach($appsToDelete as $app){
-                ApigeeService::delete("developers/{$user->email}/apps/{$app}");
-            }
+            foreach($appNamesToDelete as $appName){
+                $deletedApps = ApigeeService::delete("companies/{$team->username}/apps/{$appName}");
 
-            foreach($appsToDelete as $app){
-                App::find($app)->delete();
+                if($deletedApps->successful()){
+                    App::find($appName)->delete();
+                }
             }
 		}
 
