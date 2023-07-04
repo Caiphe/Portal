@@ -531,7 +531,7 @@ class CompanyTeamsController extends Controller
                 $deletedApps = ApigeeService::delete("companies/{$team->username}/apps/{$appName}");
 
                 if($deletedApps->successful()){
-                    App::find($appName)->delete();
+                    App::where('name', $appName)->delete();
                 }
             }
 		}
