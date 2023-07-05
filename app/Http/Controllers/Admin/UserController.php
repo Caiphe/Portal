@@ -91,11 +91,19 @@ class UserController extends Controller
         $groups = array_merge(['MTN' => 'General'], $groups->toArray());
         $privateProducts = Product::where('access', 'private')->pluck('display_name', 'pid');
 
+        $locations = Product::isPublic()
+                ->WhereNotNull('locations')
+                ->Where('locations', '!=', 'all')
+                ->pluck('locations');
+
+        $locations = array_unique(explode(',', $locations));
+        $countries = Country::whereIn('code', $locations)->orderBy('name')->get();
+
         return view(
             'templates.admin.users.create',
             [
                 'roles' => Role::where('name', 'not like', 'team%')->get(),
-                'countries' => Country::orderBy('name')->get(),
+                'countries' => $countries,
                 'groups' => $groups,
                 'isAdminUser' => auth()->user()->hasRole('admin'),
                 'privateProducts' => $privateProducts,
@@ -150,9 +158,17 @@ class UserController extends Controller
             $order = ['asc' => 'desc', 'desc' => 'asc'][$request->get('order', 'desc')] ?? 'desc';
         }
 
+        $locations = Product::isPublic()
+            ->WhereNotNull('locations')
+            ->Where('locations', '!=', 'all')
+            ->pluck('locations');
+
+        $locations = array_unique(explode(',', $locations));
+        $countries = Country::whereIn('code', $locations)->orderBy('name')->get();
+
         return view('templates.admin.users.edit', [
             'selectedCountryFilter' => $countrySelectFilterCode,
-            'countries' => Country::orderBy('name')->get(),
+            'countries' => $countries,
             'roles' => Role::where('name', 'not like', 'team%')->get(),
             'groups' => $groups,
             'user' => $user,
