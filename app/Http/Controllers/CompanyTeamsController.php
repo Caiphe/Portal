@@ -502,4 +502,43 @@ class CompanyTeamsController extends Controller
 
         return response()->json(['success' => $updated]);
     }
+
+    /**
+     * Delete Team
+     */
+    public function delete(Team $team)
+    {
+        $user = auth()->user();
+
+        abort_if($team->owner_id !== $user->id, 401, "You are not this team's owner");
+
+        $teamMembers = $team->users->pluck('id')->toArray();
+        $currentUsers = $team->users;
+        
+        if($currentUsers){
+            foreach($currentUsers as $teamUser){
+                ApigeeService::removeDeveloperFromCompany($team, $teamUser);
+            }
+
+            $team->users()->detach($teamMembers);
+        }
+
+        $appNamesToDelete = App::where('team_id', $team->id)->pluck('name')->toArray();
+
+        if($appNamesToDelete) {
+            
+            foreach($appNamesToDelete as $appName){
+                $deletedApps = ApigeeService::delete("companies/{$team->username}/apps/{$appName}");
+
+                if($deletedApps->successful()){
+                    App::where('name', $appName)->delete();
+                }
+            }
+		}
+
+        ApigeeService::deleteCompany($team);
+        $team->delete();
+
+        return response()->json(['success' => true, 'code' => 200], 200);
+    }
 }

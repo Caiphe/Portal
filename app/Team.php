@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Support\Facades\Config;
 use Mpociot\Teamwork\TeamworkTeam;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Team
@@ -13,6 +14,8 @@ use Illuminate\Support\Str;
  */
 class Team extends TeamworkTeam
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'name',
         'owner_id',
