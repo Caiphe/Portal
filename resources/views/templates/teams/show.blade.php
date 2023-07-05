@@ -44,7 +44,7 @@ My team
         </div>
 
         <div class="teammate-error-message">Valid email required!</div>
-    
+
         <div class="form-team-leave bottom-shadow-container button-container">
             <button type="" class="btn invite-btn primary inactive" data-teamid="{{ $team->id }}">INVITE</button>
             <button type="button" class="btn black-bordered mr-10 close-add-teammate-btn">CANCEL</button>
@@ -55,8 +55,8 @@ My team
 
 
 {{-- Transfer ownership Dialog --}}
-<x-dialog-box dialogTitle="Transfer ownership" class="ownweship-modal-container">
-   
+<x-dialog-box dialogTitle="Transfer Ownership" class="ownweship-modal-container">
+
     <p class="remove-user-text dialog-text-padding">Which team member would you like to transfer ownership to? </p>
 
     <div class="scrollable-users-container">
@@ -182,11 +182,35 @@ My team
             <div class="team-logo"  style="background-image: url({{ $team['logo'] }})"></div>
             <h2 class="team-name">{{ $team->name }} </h2>
         </div>
-
-        @if ($team->users->count() > 1 && $isOwner)
+        <div class="teams-action-button-container">
+            @if ($team->users->count() > 1 && $isOwner)
             <button class="btn dark make-owner">Select a new owner</button>
-        @endif
+            @endif
+
+            @if($isOwner)
+                <button class="btn red-button delete-team-btn">Delete team</button>
+            @endif
+
+        </div>
     </div>
+       
+    <x-dialog-box dialogTitle="Delete team" class="deny-role-modal delete-team-modal">
+        <div class="dialog-custom-form">
+            
+            <p class="dialog-text-padding">Are you sure you want to delete this team?</p>
+            <div class="dialog-text-padding team-name-to-delete"><strong>{{ $team->name }}</strong></div>
+            <p class="dialog-text-padding">All team members and applications will be removed from the team.</p>
+            
+            <form class="custom-modal-form bottom-shadow-container button-container mt-40 delete-team-form" method="post" action="{{ route('teams.delete', $team->id) }}">
+                @csrf()
+                {{-- @method('DELETE') --}}
+                <input type="hidden" name="team_id" value="{{ $team->id }}" />
+                <input type="hidden" name="team_name" value="{{ $team->name }}" />
+                <button type="" class="btn primary submit-team-delete">CONFIRM</button>
+                <button type="button" class="btn black-bordered mr-10 cancel-delete-team-btn">CANCEL</button>
+            </form>
+        </div>
+    </x-dialog-box>
 
     <h5>Team bio</h5>
     <p>{{ $team->description }}</p>

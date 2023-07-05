@@ -252,10 +252,11 @@
                     }
 
                     if(elements['name'].value === '') {
-                        errors.push({msg: 'Please add your app name', el: elements['name']});
+                        addAlert('error', 'Please add your app name');
+                        elements['name'].focus();
                     } else if(elements['name'].value.length === 1){
-                        elements['name'].value = '';
-                        errors.push({msg: 'Please provide a valid app name', el: elements['name']});
+                        elements['name'].focus();
+                        addAlert('warning', 'Please provide a valid app name');
                     } else if(elements['name'].value !== '' && elements['name'].value.length > 1 ){
 
                         var appName =  elements['name'].value;
@@ -279,7 +280,8 @@
                             removeLoading();
 
                             if(xhr.status === 409){
-                                errors.push({msg: `App name ${elements['name'].value} exists already`, el: elements['name']});
+                                elements['name'].focus();
+                                errors.push({msg: `App name " ${elements['name'].value} " exists already`, el: elements['name']});
                             }
 
                             if(errors.length > 0){
