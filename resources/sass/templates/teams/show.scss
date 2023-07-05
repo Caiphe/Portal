@@ -756,7 +756,7 @@ button {
 
     h2 {
         margin-top: 8px;
-        width: 70%;
+        width: 65%;
 
         @media(max-width: 960px) {
             width: 50%;
@@ -767,12 +767,44 @@ button {
         }
     }
 
-    button {
+    .teams-action-button-container{
         position: absolute;
-        right: 20px;
+        right: 0;
         top: 0px;
+        display: flex;
+
+        @media(max-width: 1024px){
+            flex-direction: column;
+            width: 190px;
+        }
+
+        @media(max-width: 768px){
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            width: 190px;
+        }
+    }
+
+    button {
         border: none;
         transition: all 0.3s ease-in-out;
+
+        &.delete-team-btn{
+            z-index: 2;
+            margin-left: 15px;
+            margin-right: 20px;
+
+            @media(max-width: 1024px){
+               margin-top: 15px;
+            }
+
+            @media(max-width: 768px){
+                position: relative;
+                margin-left: 0px;
+                margin-bottom: 30px;
+            }
+        }
 
         @media(max-width: 768px) {
             position: relative;
@@ -1104,4 +1136,8 @@ button {
     pointer-events: none;
     cursor: none;
     border: solid 2px #E9E9E9;
+}
+
+.team-name-to-delete{
+    margin-top: -10px;
 }

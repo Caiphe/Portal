@@ -679,6 +679,17 @@ class ApigeeService
     }
 
     /**
+     * Delete a company.
+     *
+     * @param      \App\Company  $company  The company
+     *
+     * @return     mixed         The response from the delete
+     */
+    public static function deleteCompany(Team $team){
+        return self::delete("companies/{$team->username}");
+    }
+
+    /**
      * Adds a developer to company.
      *
      * @param      \App\Company  $company  The company
