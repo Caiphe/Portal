@@ -64,22 +64,22 @@
             @csrf
 
             <div class="group">
-                <label for="name">Name your team</label>
+                <label for="name">Name your team *</label>
                 <input type="text" name="name" value="{{ old('name') }}" id="team-name" class="form-field" placeholder="Enter team name" maxlength="100" autofocus>
             </div>
 
             <div class="group">
-                <label for="url">Enter team URL</label>
-                <input type="text" name="url" value="{{ old('url') }}" id="team-url" placeholder="Enter team URL" maxlength="100">
+                <label for="url">Enter team URL *</label>
+                <input type="text" name="url" value="{{ old('url') }}" id="team-url" placeholder="Enter team URL (Eg. https://url.com)" maxlength="100">
             </div>
 
             <div class="group">
-                <label for="contact">Enter team contact number</label>
-                <input type="text" name="contact" value="{{ old('contact') }}" id="team-contact" placeholder="Enter team contact number" maxlength="16">
+                <label for="contact">Enter team contact number *</label>
+                <input type="text" name="contact" value="{{ old('contact') }}" id="team-contact" placeholder="Team contact number (e.g +243740000000)" maxlength="16">
             </div>
 
             <div class="group countries">
-                <label for="country">Which country are you based in?</label>
+                <label for="country">Which country are you based in? *</label>
                 <div class="country-block-container">
                     <select id="team-country" name="country" value="{{ old('country') }}" autocomplete="off">
                         <option value="">Select country</option>

@@ -43,25 +43,25 @@
             @csrf
 
             <div class="group">
-                <label for="name">Enter team name</label>
+                <label for="name">Enter team name *</label>
                 <input type="text" name="name" value="{{ $team->name }}" id="team-name" class="form-field" placeholder="Enter team name" maxlength="100">
             </div>
 
             <div class="group">
-                <label for="url">Enter team URL</label>
-                <input type="text" name="url" id="url" placeholder="Enter team URL" maxlength="100" value="{{ $team->url }}">
+                <label for="url">Enter team URL *</label>
+                <input type="text" name="url" id="url" placeholder="Enter team URL (Eg. https://url.com)" maxlength="100" value="{{ $team->url }}">
             </div>
 
             <div class="group">
-                <label for="contact">Enter team contact number</label>
-                <input type="text" name="contact" id="contact" placeholder="Enter team contact number" maxlength="15" value="{{ $team->contact }}">
+                <label for="contact">Enter team contact number *</label>
+                <input type="text" name="contact" id="team-contact" placeholder="Enter team contact number (e.g +243740000000)" maxlength="15" value="{{ $team->contact }}">
             </div>
 
             <div class="group countries">
                 <label for="country">Which country are you based in?</label>
                 <div class="country-block-container">
                     <select id="country" name="country">
-                        <option value="">Select country</option>
+                        <option value="">Select country *</option>
                         @foreach($countries as $code => $name)
                             <option value="{{ $code }}" @if($code === $team->country) selected @endif>{{ $name }}</option>
                         @endforeach
