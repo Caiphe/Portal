@@ -508,12 +508,22 @@ class CompanyTeamsController extends Controller
      */
     public function delete(Team $team)
     {
+
         $user = auth()->user();
 
         abort_if($team->owner_id !== $user->id, 401, "You are not this team's owner");
 
         $teamMembers = $team->users->pluck('id')->toArray();
         $currentUsers = $team->users;
+
+        $teamsInvites = TeamInvite::where('team_id', $team->id)->get();
+
+        if($teamsInvites){
+            foreach($teamsInvites as $invite){
+                $invite->delete();
+            }
+        }
+
         
         if($currentUsers){
             foreach($currentUsers as $teamUser){
