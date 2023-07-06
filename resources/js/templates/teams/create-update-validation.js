@@ -28,7 +28,7 @@ function createTeam(event){
     var errors = [];
     var urlValue = form['url'].value;
     var contactNumber = form['contact'].value;
-    var phoneRegex = /^\+|00(?:[0-9] ?){6,14}[0-9]$/;
+    var phoneRegex = /^\+|0(?:[0-9] ?){6,14}[0-9]$/;
 
     if(form['name'].value === ''){
         errors.push("Name required");
