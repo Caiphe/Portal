@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateStatusRequest;
+use App\Services\ApigeeService;
 use App\App;
-use App\User;
 use App\Country;
 use App\Product;
-use App\Mail\ProductAction;
-use \Illuminate\Http\Request;
 use App\Mail\KycStatusUpdate;
-use App\Services\ApigeeService;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Contracts\View\Factory;
+use App\Mail\ProductAction;
 use App\Services\ProductLocationService;
-use App\Http\Requests\UpdateStatusRequest;
+use App\User;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Support\Facades\Mail;
+use \Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -120,9 +120,9 @@ class DashboardController extends Controller
         }
 
         $locations = Product::isPublic()
-        ->WhereNotNull('locations')
-        ->Where('locations', '!=', 'all')
-        ->pluck('locations');
+            ->WhereNotNull('locations')
+            ->Where('locations', '!=', 'all')
+            ->pluck('locations');
 
         $locations = array_unique(explode(',', $locations));
         $countries = Country::whereIn('code', array_unique($locations))->orderBy('name')->pluck('name', 'code');
