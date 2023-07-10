@@ -27,6 +27,7 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 	Route::get('apps/create', 'AppController@create')->name('app.create');
 	Route::get('apps/{app:slug}/edit', 'AppController@edit')->name('app.edit');
 	Route::post('apps', 'AppController@store')->name('app.store');
+	Route::post('app/name-check', 'AppController@checkAppName')->name('app.name.check');
 
 	Route::put('apps/{app:slug}', 'AppController@update')->name('app.update');
 	Route::put('apps/{app:aid}/custom-attributes', 'AppController@updateCustomAttributes')->name('app.update.attributes');
@@ -60,6 +61,7 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
     Route::any('teams/reject', 'CompanyTeamsController@reject')->name('teams.invite.deny');
     Route::any('teams/{team}/ownership', 'CompanyTeamsController@ownership')->middleware('can:administer-team-by-owner,team')->name('teams.ownership.invite');
     Route::post('teams/{id}/user/role', 'CompanyTeamsController@roleUpdate')->middleware('can:administer-team,id')->name('teams.user.role');
+    Route::post('teams/{team}/delete', 'CompanyTeamsController@delete')->middleware('can:administer-team-by-owner,team')->name('teams.delete');
 
 	// Opco admin role request
 	Route::post('/opco-admin-role-request/store', 'OpcoRoleRequestController@store')->middleware(['can:request-opco-admin-role'])->name('opco-admin-role.store');

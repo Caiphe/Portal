@@ -39,7 +39,7 @@
                 <div class="header button-container">
                     <button class="deny-btn">@svg('close', '#000') Deny</button>
 
-                    <x-dialog-box dialogTitle="Reason for denial" class="deny-role-modal">
+                    <x-dialog-box dialogTitle="Reason for Denial" class="deny-role-modal">
 
                         <form class="dialog-custom-form deny-form" method="post" action="{{ route('admin.opco.deny', $request->id) }}">
                             @csrf
@@ -61,7 +61,7 @@
 
                         <div class="approval-form-container"></div>
                     </form>
-                   
+
                 </div>
 
             </div>
@@ -91,7 +91,7 @@
                     </div>
                 </div>
             </div>
-        </div>   
+        </div>
         @endforeach
 
         @if(count($opco_role_requests) < 1)

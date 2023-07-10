@@ -9,21 +9,45 @@ function removeSpecialCharacters(){
     }
 }
 
+document.querySelector('#team-contact').addEventListener('keyup', validatePhoneNumber);
+function validatePhoneNumber(){
+    var specialChrs = /[a-z`~!)@#$%(^&*|=?;:±§'",.<>\{\}\[\]\\\/]/gi;
+    var containsNonDigits = specialChrs.test(this.value);
+
+    if(containsNonDigits){
+        addAlert('warning', 'Character not allowed');
+    }
+
+    this.value = this.value.replace(specialChrs, "");
+}
+
+
 document.querySelector('#form-create-team').addEventListener('submit', createTeam);
 function createTeam(event){
     var form = this.elements;
     var errors = [];
+    var urlValue = form['url'].value;
+    var contactNumber = form['contact'].value;
+    var phoneRegex = /^\+|00(?:[0-9] ?){6,14}[0-9]$/;
 
     if(form['name'].value === ''){
         errors.push("Name required");
     }
 
-    if(form['url'].value === ''){
+    if(urlValue === ''){
         errors.push("Team URL required");
+    } 
+    
+    if(urlValue !== '' && !/https?:\/\/.*\..*/.test(urlValue)) {
+        errors.push('Please add a valid team url. Eg. https://url.com');
     }
 
-    if(form['contact'].value === ''){
+    if(contactNumber === ''){
         errors.push("Contact number required");
+    }
+    
+    if(contactNumber !== '' && !phoneRegex.test(contactNumber)){
+        errors.push("Valid phone number required");
     }
 
     if(form['country'].value === ''){

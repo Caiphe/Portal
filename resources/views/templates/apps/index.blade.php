@@ -47,7 +47,7 @@
 
     <x-twofa-warning></x-twofa-warning>
 
-    @if($teamInvite &&  !$team->hasUser($user))
+    @if($teamInvite && !$team->hasUser($user))
     {{-- Top ownerhip block container --}}
     <div class="top-invite-banner show">
         <div class="message-container">You have been requested to be part of {{ $team->name }}.</div>

@@ -68,6 +68,19 @@ class AppController extends Controller
         ]);
     }
 
+    public function checkAppName (Request $request)
+    {
+        $user = $request->user();
+        $appName = Str::slug($request->name);
+        $appNameCheck = App::where('name', $appName)->where('developer_id', $user->developer_id)->exists();
+
+        if($appNameCheck){
+            return response()->json(['success' => true], 409);
+        }
+
+        return response()->json(['success' => false], 422);
+    }
+
     public function create(Request $request)
     {
         $user = $request->user();

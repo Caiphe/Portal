@@ -244,16 +244,6 @@
                 event.preventDefault();
 
                 if(form.firstElementChild.classList.contains('active')) {
-                    if(elements['name'].value === '') {
-                        errors.push({msg: 'Please add your app name', el: elements['name']});
-                    } else if(elements['name'].value.length === 1){
-                        elements['name'].value = '';
-                        errors.push({msg: 'Please provide a valid app name', el: elements['name']});
-                    } 
-                    else {
-                        elements['name'].nextElementSibling.textContent = '';
-                    }
-
 
                     if(urlValue !== '' && !/https?:\/\/.*\..*/.test(urlValue)) {
                         errors.push({msg: 'Please add a valid url. Eg. https://callback.com', el: elements['url']});
@@ -261,20 +251,54 @@
                         elements['url'].nextElementSibling.textContent = '';
                     }
 
-                    if(errors.length > 0){
-                        for (var i = errors.length - 1; i >= 0; i--) {
-                            errors[i].el.nextElementSibling.textContent = errors[i].msg;
+                    if(elements['name'].value === '') {
+                        addAlert('error', 'Please add your app name');
+                        elements['name'].focus();
+                    } else if(elements['name'].value.length === 1){
+                        elements['name'].focus();
+                        addAlert('warning', 'Please provide a valid app name');
+                    } else if(elements['name'].value !== '' && elements['name'].value.length > 1 ){
+
+                        var appName =  elements['name'].value;
+                        var checkUrl = "{{ route('app.name.check') }}";
+
+                        var app = {
+                            name: appName,
                         }
 
-                        return;
+                        var xhr = new XMLHttpRequest();
+                        addLoading("checking app's name...");
+
+                        xhr.open('POST', checkUrl, true);
+                        xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+                        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+                        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+                        xhr.send(JSON.stringify(app));
+
+                        xhr.onload = function() {
+                            removeLoading();
+
+                            if(xhr.status === 409){
+                                elements['name'].focus();
+                                errors.push({msg: `App name " ${elements['name'].value} " exists already`, el: elements['name']});
+                            }
+
+                            if(errors.length > 0){
+                                for (var i = errors.length - 1; i >= 0; i--) {
+                                    errors[i].el.nextElementSibling.textContent = errors[i].msg;
+                                }
+
+                                return;
+                            }
+                            
+                            nav.querySelector('a').nextElementSibling.classList.add('active');
+                            form.firstElementChild.classList.remove('active');
+                            form.firstElementChild.style.display = 'none';
+                            form.firstElementChild.nextElementSibling.classList.add('active');
+                        };
                     }
-
-                    nav.querySelector('a').nextElementSibling.classList.add('active');
-
-                    form.firstElementChild.classList.remove('active');
-                    form.firstElementChild.style.display = 'none';
-                    form.firstElementChild.nextElementSibling.classList.add('active');
-
+                   
                 } else if (form.firstElementChild.nextElementSibling.classList.contains('active')) {
                     if(document.querySelectorAll('.country-checkbox:checked').length === 0) {
                         return void addAlert('error', 'Please select a country');
