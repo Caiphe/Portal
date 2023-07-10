@@ -281,7 +281,7 @@
 
                             if(xhr.status === 409){
                                 elements['name'].focus();
-                                errors.push({msg: `App name " ${elements['name'].value} " exists already`, el: elements['name']});
+                                errors.push({msg: "App name already exists", el: elements['name']});
                             }
 
                             if(errors.length > 0){
