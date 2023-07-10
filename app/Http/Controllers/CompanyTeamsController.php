@@ -514,6 +514,14 @@ class CompanyTeamsController extends Controller
 
         $teamMembers = $team->users->pluck('id')->toArray();
         $currentUsers = $team->users;
+
+        $teamsInvites = TeamInvite::where('team_id', $team->id)->get();
+
+        if($teamsInvites){
+            foreach($teamsInvites as $invite){
+                $invite->delete();
+            }
+        }
         
         if($currentUsers){
             foreach($currentUsers as $teamUser){
