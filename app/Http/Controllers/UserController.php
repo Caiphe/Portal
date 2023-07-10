@@ -37,7 +37,7 @@ class UserController extends Controller
 		}
 		$inlineUrl = TwofaService::getInlineUrl($key, $user->email);
 
-		$locations = Product::isPublic()
+		$productLocations = Product::isPublic()
 			->WhereNotNull('locations')
 			->Where('locations', '!=', 'all')
 			->select('locations')
@@ -51,7 +51,7 @@ class UserController extends Controller
 			'user' => $user,
 			'userLocations' => $user->countries->pluck('code')->toArray(),
 			'responsibleCountries' => $user->responsibleCountries->pluck('code')->toArray(),
-			'locations' => array_unique(explode(',', $locations)),
+			'locations' => array_unique(explode(',', $productLocations)),
 			'key' => $key,
 			'inlineUrl' => $inlineUrl,
 			'teamInvite' => $teamInvite,
