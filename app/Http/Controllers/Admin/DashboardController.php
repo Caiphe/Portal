@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateStatusRequest;
 use App\Services\ApigeeService;
 use App\App;
 use App\Country;
+use App\Product;
 use App\Mail\KycStatusUpdate;
 use App\Mail\ProductAction;
 use App\Services\ProductLocationService;
@@ -118,9 +119,17 @@ class DashboardController extends Controller
                 ->header('Content-Type', 'text/html');
         }
 
+        $locations = Product::isPublic()
+            ->WhereNotNull('locations')
+            ->Where('locations', '!=', 'all')
+            ->pluck('locations');
+
+        $locations = array_unique(explode(',', $locations));
+        $countries = Country::whereIn('code', array_unique($locations))->orderBy('name')->pluck('name', 'code');
+
         return view('templates.admin.dashboard.index', [
             'apps' => $apps,
-            'countries' => Country::orderBy('name')->pluck('name', 'code'),
+            'countries' => $countries,
             'selectedCountry' => $request->get('countries', ''),
             'appStatus' => $request->get('app-status', 'pending'),
             'productStatus' => $request->get('product-status', 'pending'),
