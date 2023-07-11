@@ -137,12 +137,14 @@ class CompanyTeamsController extends Controller
         $user->load(['responsibleCountries']);
 
         $locations = Product::isPublic()
-        ->WhereNotNull('locations')
-        ->Where('locations', '!=', 'all')
-        ->pluck('locations');
+            ->WhereNotNull('locations')
+            ->Where('locations', '!=', 'all')
+            ->select('locations')
+            ->get()
+            ->implode('locations', ',');
 
         $locations = array_unique(explode(',', $locations));
-        $countries = Country::whereIn('code', array_unique($locations))->orderBy('name')->pluck('name', 'code');
+        $countries = Country::whereIn('code', $locations)->orderBy('name')->pluck('name', 'code');
 
         $teamInvite = $this->getInviteByEmail($user->email);
 
@@ -370,9 +372,11 @@ class CompanyTeamsController extends Controller
         $user->load(['responsibleCountries']);
 
         $locations = Product::isPublic()
-        ->WhereNotNull('locations')
-        ->Where('locations', '!=', 'all')
-        ->pluck('locations');
+            ->WhereNotNull('locations')
+            ->Where('locations', '!=', 'all')
+            ->select('locations')
+            ->get()
+            ->implode('locations', ',');
 
         $locations = array_unique(explode(',', $locations));
         $countries = Country::whereIn('code', $locations)->orderBy('name')->pluck('name', 'code');
@@ -523,7 +527,6 @@ class CompanyTeamsController extends Controller
                 $invite->delete();
             }
         }
-
         
         if($currentUsers){
             foreach($currentUsers as $teamUser){

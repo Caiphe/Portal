@@ -119,13 +119,16 @@ class DashboardController extends Controller
                 ->header('Content-Type', 'text/html');
         }
 
-        $locations = Product::isPublic()
+
+        $productLocations = Product::isPublic()
             ->WhereNotNull('locations')
             ->Where('locations', '!=', 'all')
-            ->pluck('locations');
+            ->select('locations')
+            ->get()
+            ->implode('locations', ',');
 
-        $locations = array_unique(explode(',', $locations));
-        $countries = Country::whereIn('code', array_unique($locations))->orderBy('name')->pluck('name', 'code');
+        $locations = array_unique(explode(',', $productLocations));
+        $countries = Country::whereIn('code', $locations)->orderBy('name')->pluck('name', 'code');
 
         return view('templates.admin.dashboard.index', [
             'apps' => $apps,
