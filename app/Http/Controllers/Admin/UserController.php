@@ -91,12 +91,14 @@ class UserController extends Controller
         $groups = array_merge(['MTN' => 'General'], $groups->toArray());
         $privateProducts = Product::where('access', 'private')->pluck('display_name', 'pid');
 
-        $locations = Product::isPublic()
-                ->WhereNotNull('locations')
-                ->Where('locations', '!=', 'all')
-                ->pluck('locations');
+        $productLocations = Product::isPublic()
+            ->WhereNotNull('locations')
+            ->Where('locations', '!=', 'all')
+            ->select('locations')
+            ->get()
+            ->implode('locations', ',');
 
-        $locations = array_unique(explode(',', $locations));
+        $locations = array_unique(explode(',', $productLocations));
         $countries = Country::whereIn('code', $locations)->orderBy('name')->get();
 
         return view(
@@ -158,13 +160,17 @@ class UserController extends Controller
             $order = ['asc' => 'desc', 'desc' => 'asc'][$request->get('order', 'desc')] ?? 'desc';
         }
 
-        $locations = Product::isPublic()
+
+        $productLocations = Product::isPublic()
             ->WhereNotNull('locations')
             ->Where('locations', '!=', 'all')
-            ->pluck('locations');
+            ->select('locations')
+            ->get()
+            ->implode('locations', ',');
 
-        $locations = array_unique(explode(',', $locations));
+        $locations = array_unique(explode(',', $productLocations));
         $countries = Country::whereIn('code', $locations)->orderBy('name')->get();
+
 
         return view('templates.admin.users.edit', [
             'selectedCountryFilter' => $countrySelectFilterCode,
