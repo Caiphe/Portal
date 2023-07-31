@@ -32,6 +32,7 @@ class ProductController extends Controller
 		$content = Content::where('contentable_type', 'Products')->get();
 		$hasPrivateProduct = $products->contains('access', 'private');
 		$hasInternalProduct = $products->contains('access', 'internal');
+		$productGroups = $products->pluck('group')->unique()->toArray();
 
 		return view('templates.products.index', [
 			'productsCollection' => $productsCollection,
@@ -41,6 +42,7 @@ class ProductController extends Controller
 			'content' => $content,
 			'hasPrivateProduct' => $hasPrivateProduct,
 			'hasInternalProduct' => $hasInternalProduct,
+			'productGroups' => $productGroups
 		]);
 	}
 

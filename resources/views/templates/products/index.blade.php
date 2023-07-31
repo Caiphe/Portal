@@ -36,6 +36,11 @@
             <h3>Country</h3>
             <x-multiselect id="filter-country" name="filter-country" label="Select country" :options="$countries" />
         </div>
+
+        <div class="group-filter">
+            <h3>Group</h3>  
+            <x-multiselect id="filter-group" name="filter-group" label="Select group" :options="$productGroups" />
+        </div>
         <button id="filter-clear" class="dark outline"
                 @isset($selectedCategory)
                     style="display:block"
@@ -76,7 +81,8 @@
                                         :data-group="$product->group"
                                         :data-access="$product->access"
                                         :data-category="$product->category_cid"
-                                        :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}</x-card-product>
+                                        :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}
+                        </x-card-product>
                     @endforeach
                 </div>
             @endforeach
