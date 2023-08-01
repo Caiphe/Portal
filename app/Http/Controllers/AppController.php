@@ -149,6 +149,15 @@ class AppController extends Controller
             $team = Team::find($validated['team_id']);
         }
 
+        $countTeamApps = 0;
+        if($team){
+            $countTeamApps = App::where('team_id', $team->id)
+                ->where('created_at', '>=', Carbon::now()->startOfDay())
+                ->count();
+        }
+        
+        abort_if($countTeamApps > 5 , 429, "Action not allowed.");
+
         $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
         $attributes = ApigeeService::formatToApigeeAttributes($attributes);
 

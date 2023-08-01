@@ -11,7 +11,7 @@ use App\Product;
 
 use App\TeamUser;
 use Illuminate\Http\Request;
-
+use Carbon\Carbon;
 use App\Services\ApigeeService;
 use Mpociot\Teamwork\TeamInvite;
 use App\Concerns\Teams\InviteActions;
@@ -344,6 +344,12 @@ class CompanyTeamsController extends Controller
         $data['name'] = preg_replace('/[-_±§@#$%^&*()+=!]+/', '', $data['name']);
 
         $data['logo'] = $this->processLogoFile($request);
+
+        $teamCount = Team::where('owner_id', $user->id)
+            ->where('created_at', '>=', Carbon::now()->startOfDay())
+            ->count();
+
+        abort_if($teamCount > 2, 429, "Action not allowed.");
 
         $team = $this->createTeam($user, $data);
 
