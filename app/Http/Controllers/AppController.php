@@ -438,10 +438,12 @@ class AppController extends Controller
     {
         $user = auth()->user();
         $userTeams = $user->teams()->pluck('id')->toArray();
+
         $app = App::where('slug', $app)->where(
             fn ($q) => $q->where('developer_id', $user->developer_id)
                 ->orWhereIn('team_id', $userTeams)
         )->firstOrFail();
+        
         $validated = $request->validated();
 
         ApigeeService::delete("developers/{$user->email}/apps/{$validated['name']}");
