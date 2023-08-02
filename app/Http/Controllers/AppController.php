@@ -8,7 +8,6 @@ use App\Team;
 use App\User;
 use App\Country;
 use App\Product;
-use Carbon\Carbon;
 use App\Mail\NewApp;
 use App\Mail\UpdateApp;
 use App\Mail\GoLiveMail;
@@ -120,7 +119,7 @@ class AppController extends Controller
     {
         $user = $request->user();
         $count = App::where('developer_id', auth()->user()->developer_id)
-                ->where('created_at', '>=', Carbon::now()->startOfDay())
+                ->where('created_at', '>=', now()->startOfDay())
                 ->count();
         
         $userRoles = array_unique(explode(',', $user->getRolesListAttribute()));
@@ -152,11 +151,11 @@ class AppController extends Controller
         $countTeamApps = 0;
         if($team){
             $countTeamApps = App::where('team_id', $team->id)
-                ->where('created_at', '>=', Carbon::now()->startOfDay())
+                ->where('created_at', '>=', now()->startOfDay())
                 ->count();
         }
         
-        abort_if($countTeamApps > 5 , 429, "Action not allowed.");
+        abort_if($countTeamApps >= 5 , 429, "Action not allowed.");
 
         $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
         $attributes = ApigeeService::formatToApigeeAttributes($attributes);
