@@ -2,8 +2,21 @@
     var filterProductsEls = document.querySelectorAll('.filter-products');
     var timeout = null;
 
+    var currentCategory = localStorage.getItem("category");
+    if(currentCategory){
+        var categoriesChecks = document.querySelectorAll('.filter-category');
+
+        categoriesChecks.forEach(function(checkbox) {
+            if (!checkbox.checked && checkbox.nextElementSibling.innerHTML === currentCategory)  {
+                checkbox.checked = true;
+                filterProducts();
+            }
+        });
+    }
+
     document.getElementById('filter-text').addEventListener('input', debounce);
     document.getElementById('filter-country').addEventListener('change', filterProducts);
+    document.getElementById('filter-group').addEventListener('change', filterProducts);
     document.getElementById('filter-clear').addEventListener('click', clearFilters);
 
     for (var i = filterProductsEls.length - 1; i >= 0; i--) {
@@ -25,7 +38,9 @@
 
         document.getElementById('filter-text').value = '';
         document.getElementById('filter-country').value = '';
+        document.getElementById('filter-group').value = '';
         document.getElementById('filter-country-tags').innerHTML = '';
+        document.getElementById('filter-group-tags').innerHTML = '';
 
         for (var i = categories.length - 1; i >= 0; i--) {
             categories[i].checked = false;
@@ -44,7 +59,7 @@
         var categoryHeadingsShow = [];
 
         for (var i = cards.length - 1; i >= 0; i--) {
-            if (testFilterText(cards[i]) && testCategories(cards[i]) && testAccess(cards[i]) && testLocation(cards[i])) {
+            if (testFilterText(cards[i]) && testCategories(cards[i]) && testAccess(cards[i]) && testLocation(cards[i]) && testGroup(cards[i])) {
                 cards[i].style.display = 'inherit';
                 categoryHeadingsShow.push(cards[i].dataset.category);
                 continue;
@@ -81,7 +96,9 @@
         if (categories.length === 0) return true;
 
         for (var i = categories.length - 1; i >= 0; i--) {
-            if (categories[i].value.indexOf(card.dataset.category) !== -1) return true;
+            if (categories[i].value === card.dataset.category) {
+                return true;
+            }
         }
 
         return false;
@@ -102,7 +119,7 @@
     function testLocation(card) {
         var locations = document.querySelectorAll('#filter-country :checked');
         
-        if (locations.length === 0 || card.dataset.locations === undefined) return false;
+        if (locations.length === 0 || card.dataset.locations === undefined) return true;
 
         for (var i = locations.length - 1; i >= 0; i--) {
             if (card.dataset.locations.split(',').indexOf(locations[i].value) !== -1) return true;
@@ -110,4 +127,23 @@
 
         return false;
     }
+
+
+    function testGroup(card) {
+        var groups = document.querySelectorAll('#filter-group :checked');
+        if (groups.length === 0 || card.dataset.group === undefined) return true;
+
+        for (var i = groups.length - 1; i >= 0; i--) {
+            if (groups[i].innerHTML === card.dataset.group) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }());
+
+window.addEventListener('load', function(){
+    localStorage.removeItem("category");
+})

@@ -241,3 +241,64 @@ button.show-password {
     display: flex;
     align-items: center;
 }
+
+.auth-method-block{
+    padding: 20px;
+
+    .auth-block{
+        display: flex;
+    }
+
+    span{
+        font-size: 15px;
+    }
+
+    .status-dot{
+        margin-left: 100px;
+        position: relative;
+        font-size: 15px;
+
+        &:after{
+            content: '';
+            position: absolute;
+            left: -30px;
+            width: 17px;
+            height: 17px;
+            margin-top: 3px;
+            border-radius: 50%;
+        }
+
+        &.Enabled{
+            &:after{
+                background-color: #19AC4A;
+            }
+        }
+
+        &.Disabled{
+            &:after{
+                background-color: #FF0000;
+            }
+        }
+    }
+
+    .reset-2fa{
+        font-size: 14px;
+        margin: 17px 0px 10px;
+        border: solid 1px #bbbbbb;
+        color: #bbbbbb;
+        cursor: none;
+        pointer-events: none;
+
+        &.blue{
+            color: #0c678f;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+    }
+}
+
+.two-note {
+    font-size: 16px;
+    color: #333;
+    padding: 20px;
+}

@@ -113,37 +113,62 @@ Update profile
         @endisset
 
         {{-- Opco Admin Role request by a developer --}}
-        @can('request-opco-admin-role')
+        @if(!in_array('Admin', $userRoles))
+            @can('request-opco-admin-role')
+                <form class="opco-role-request-form" id="opco-role-request-form" method="POST" action="{{ route('opco-admin-role.store') }}">
+                    @csrf
+                    <h2>Apply for admin role</h2>
+                    <p class="align-left">
+                        If you would like to request the addition of the OpCo Admin Role to your profile, please supply a motivation below why you should be granted this role, including the applicable countries you are requesting permission for.
+                    </p>
 
-            <form class="opco-role-request-form" id="opco-role-request-form" method="POST" action="{{ route('opco-admin-role.store') }}">
-                @csrf
-                <h2>Apply for Admin Role</h2>
-                <p class="align-left">
-                    If you would like to request the addition of the OpCo Admin Role to your profile, please supply a motivation below why you should be granted this role, including the applicable countries you are requesting permission for.
-                </p>
+                    <p>
+                        Your application will be received by existing Admins, assigned to the countries you have and will be reviewed accordingly.
+                    </p>
 
-                <p>
-                    Your application will be received by existing Admins, assigned to the countries you have and will be reviewed accordingly.
-                </p>
+                    <p>
+                        You can only select one country per request when applying for an opco admin role. Please make another request if you would like to apply for more than one country 
+                    </p>
 
-                <h2>Motivation for Admin Role</h2>
-                <textarea class="" rows="4" name="message" placeholder='Please motivate the reason for your request of the OpCo Admin role e.g.  "Applying for the OpCo administrative role as I have been promoted to team lead of country X. "'></textarea>
-                <h2>Your selected countries</h2>
-                
-                <div class="locations">
-                    @foreach($countries as $country)
-                    <label for="user-{{ $country['code'] }}">
-                        <input type="checkbox" name="countries[]" value="{{ $country['code'] }}" id="user-{{ $country['code'] }}" autocomplete="off">
-                        <img src="/images/locations/{{ $country['code'] }}.svg" alt="{{ $country['code'] }}" title="{{ $country['name'] }}">
-                    </label>
+                    <h2>Select a country to be an Opco admin for</h2>
+                    <div class="locations">
+                        @foreach($locations as $location)
+                        <label for="user-{{ $location }}" class="each-country @if(in_array($location, $responsibleCountries)) hide @endif">
+                            <input type="radio" value="{{ $location }}" id="user-{{ $location }}" autocomplete="off" @if(in_array($location, $responsibleCountries)) name="locations[]" checked @else name="countries[]" @endif>
+                            <img src="/images/locations/{{ $location }}.svg" alt="{{ $location }}" title="{{ $location }}">
+                        </label>
+                        @endforeach
+                    </div>
+
+                    <h2>Motivation for admin role</h2>
+                    <textarea class="" rows="4" name="message" placeholder='Please motivate the reason for your request of the OpCo Admin role e.g.  "Applying for the OpCo administrative role as I have been promoted to team lead of country X. "'></textarea>
+                    
+                    @php
+                        $titleDisplayed = false;
+                    @endphp
+
+                    @foreach($locations as $location)
+                        @if(in_array($location, $responsibleCountries) && !$titleDisplayed)
+                            <h2>Your selected countries</h2>
+                            @php
+                                $titleDisplayed = true;
+                            @endphp
+                        @endif
                     @endforeach
-                </div>
+                    
+                    <div class="locations selected-country">
+                        @foreach($locations as $location)
+                        <label for="user-{{ $location }}" class="each-country @if(in_array($location, $responsibleCountries)) show @endif">
+                            <input type="checkbox" value="{{ $location }}" autocomplete="off" @if(in_array($location, $responsibleCountries)) name="locations[]" checked @else name="countries[]" class="show" @endif>
+                            <img src="/images/locations/{{ $location }}.svg" alt="{{ $location }}" title="{{ $location }}">
+                        </label>
+                        @endforeach
+                    </div>
 
-                <button type="submit" class="primary">Apply Now</button>
-
-            </form>
-        @endcan
-
+                    <button type="submit" class="primary">Apply now</button>
+                </form>
+            @endcan
+        @endif
 
     </div>
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\App;
+use App\Product;
 use App\User;
 use App\Country;
 use App\Notification;
@@ -119,9 +120,20 @@ class DashboardController extends Controller
                 ->header('Content-Type', 'text/html');
         }
 
+
+        $productLocations = Product::isPublic()
+            ->WhereNotNull('locations')
+            ->Where('locations', '!=', 'all')
+            ->select('locations')
+            ->get()
+            ->implode('locations', ',');
+
+        $locations = array_unique(explode(',', $productLocations));
+        $countries = Country::whereIn('code', $locations)->orderBy('name')->pluck('name', 'code');
+
         return view('templates.admin.dashboard.index', [
             'apps' => $apps,
-            'countries' => Country::orderBy('name')->pluck('name', 'code'),
+            'countries' => $countries,
             'selectedCountry' => $request->get('countries', ''),
             'appStatus' => $request->get('app-status', 'pending'),
             'productStatus' => $request->get('product-status', 'pending'),

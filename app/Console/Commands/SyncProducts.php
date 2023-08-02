@@ -83,26 +83,36 @@ class SyncProducts extends Command
 				unset($productsToBeDeleted[$product['name']]);
 			}
 
+			$category = Category::firstOrCreate([
+				'title' => ucfirst(strtolower(trim($attributes['Category'] ?? "Misc")))
+			]);
+
 			if (!is_null($prod)) {
 				$prod->update([
 					'pid' => $product['name'],
 					'name' => $product['name'],
+					'display_name' => preg_replace('/[_]+/', ' ', ltrim($product['displayName'], "$allow ")),
 					'environments' => implode(',', $productEnvironments),
+					'category_cid' => strtolower($category->cid),
 					'access' => $attributes['Access'] ?? null,
+					'group' => $attributes['Group'] ?? "MTN",
+					'locations' => $attributes['Locations'] ?? null,
 					'attributes' => json_encode($attributes),
 				]);
+
+				if (isset($attributes['Locations'])) {
+					$locations = $attributes['Locations'] !== 'all' ? preg_split('/, ?/', $attributes['Locations']) : $allCountries;
+					$prod->countries()->sync($locations);
+				}
+
 				continue;
 			}
-
-			$category = Category::firstOrCreate([
-				'title' => ucfirst(strtolower(trim($attributes['Category'] ?? "Misc")))
-			]);
 
 			$prod = Product::create(
 				[
 					'pid' => $product['name'],
 					'name' => $product['name'],
-					'display_name' => preg_replace('/[-_]+/', ' ', ltrim($product['displayName'], "$allow ")),
+					'display_name' => preg_replace('/[_]+/', ' ', ltrim($product['displayName'], "$allow ")),
 					'description' => $product['description'],
 					'environments' => implode(',', $productEnvironments),
 					'group' => $attributes['Group'] ?? "MTN",
@@ -132,7 +142,7 @@ class SyncProducts extends Command
 			$attr = json_decode($product->attributes, true);
 			$attr['ProductionProduct'] = $sandboxProductAttribute[$product->name];
 			$product->update([
-				'attributes' => $attr
+				'attributes' => $attr 
 			]);
 		});
 

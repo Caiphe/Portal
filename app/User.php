@@ -312,4 +312,9 @@ class User extends Authenticatable implements MustVerifyEmail
             $this->attributes['password'] = bcrypt($password);
         }
     }
+
+	public function twoFaResetRequest()
+	{
+		return $this->hasMany(TwofaResetRequest::class);
+	}
 }

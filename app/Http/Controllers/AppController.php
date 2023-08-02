@@ -68,18 +68,33 @@ class AppController extends Controller
         ]);
     }
 
+    public function checkAppName (Request $request)
+    {
+        $user = $request->user();
+        $appName = Str::slug($request->name);
+        $appNameCheck = App::where('name', $appName)->where('developer_id', $user->developer_id)->exists();
+
+        if($appNameCheck){
+            return response()->json(['success' => true], 409);
+        }
+
+        return response()->json(['success' => false], 422);
+    }
+
     public function create(Request $request)
     {
         $user = $request->user();
         $userOwnTeams = $user->teams;
         $product = null;
+        $product_sanitized = Str::slug(htmlspecialchars($request->product, ENT_NOQUOTES));
 
         $assignedProducts = $user->assignedProducts()->with('category')->get();
         $products = Product::with(['category', 'countries'])
             ->where('category_cid', '!=', 'misc')
             ->basedOnUser($user)
-            ->when($request->has('product'), function($q) use($request, &$product){
-                $product = Product::with(['countries'])->where('slug', $request->product)->first();
+            ->when($request->has('product'), function($q) use(&$product, $product_sanitized){
+                $product = Product::with(['countries'])->where('slug', $product_sanitized)->first();
+                abort_if($product === null, 404);
                 $productLocations = $product->countries->pluck('code')->toArray();
                 $q->byLocations($productLocations);
             })
@@ -103,8 +118,18 @@ class AppController extends Controller
 
     public function store(CreateAppRequest $request)
     {
-        $validated = $request->validated();
         $user = $request->user();
+        $count = App::where('developer_id', auth()->user()->developer_id)
+                ->where('created_at', '>=', now()->startOfDay())
+                ->count();
+        
+        $userRoles = array_unique(explode(',', $user->getRolesListAttribute()));
+
+        if($count >= 5 && !in_array('Admin', $userRoles)){
+            abort('429');
+        }
+
+        $validated = $request->validated();
         $countriesByCode = Country::pluck('iso', 'code');
         $products = Product::whereIn('name', $validated['products'])->pluck('attributes', 'name');
         $productIds = [];
@@ -123,6 +148,15 @@ class AppController extends Controller
         if (isset($validated['team_id']) && $validated['team_id']) {
             $team = Team::find($validated['team_id']);
         }
+
+        $countTeamApps = 0;
+        if($team){
+            $countTeamApps = App::where('team_id', $team->id)
+                ->where('created_at', '>=', now()->startOfDay())
+                ->count();
+        }
+        
+        abort_if($countTeamApps >= 5 , 429, "Action not allowed.");
 
         $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
         $attributes = ApigeeService::formatToApigeeAttributes($attributes);
@@ -423,10 +457,12 @@ class AppController extends Controller
     {
         $user = auth()->user();
         $userTeams = $user->teams()->pluck('id')->toArray();
+
         $app = App::where('slug', $app)->where(
             fn ($q) => $q->where('developer_id', $user->developer_id)
                 ->orWhereIn('team_id', $userTeams)
         )->firstOrFail();
+        
         $validated = $request->validated();
 
         ApigeeService::delete("developers/{$user->email}/apps/{$validated['name']}");
@@ -446,12 +482,30 @@ class AppController extends Controller
         return redirect(route('app.index'));
     }
 
+    public function saveCustomAttributeFromApigee(App $app, Request $request)
+    {
+        $apigeeAttributes = ApigeeService::getApigeeAppAttributes($app);
+        $attrs= ApigeeService::formatToApigeeAttributes($apigeeAttributes);
+        $attributes = ApigeeService::formatAppAttributes($attrs);
+
+        $app->attributes = $attributes;
+        $app->save();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'id' => $app->aid,
+                'formHtml' => view('partials.custom-attributes.form', ['app' => $app])->render(),
+                'listHtml' => view('partials.custom-attributes.list', ['app' => $app])->render()
+            ]);
+        }
+    }
+
     public function updateCustomAttributes(App $app, CustomAttributesRequest $request)
     {
         $validated = $request->validated();
         $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
-        $apigeeAttributes = ApigeeService::getApigeeAppAttributes($app);
-        $appAttributes = array_merge($apigeeAttributes, $app->attributes);
+        $appAttributes = $app->attributes;
+
         $previousCustomAttributes = $app->filterCustomAttributes($appAttributes);
         $appAttributes = array_diff($appAttributes, $previousCustomAttributes);
         $appAttributes = array_merge($appAttributes, $app->filterCustomAttributes($attributes));
@@ -478,10 +532,13 @@ class AppController extends Controller
         
         $attributes = ApigeeService::formatAppAttributes($updatedResponse['attributes']);
 
-        $app->update(['attributes' =>  $attributes]);
+        $attributesWithoutSpaces = array_combine(array_keys($attributes), $attributes);
+
+
+        $app->update(['attributes' =>  $attributesWithoutSpaces]);
 
         if ($request->ajax()) {
-            return response()->json(['attributes' => $attributes]);
+            return response()->json(['attributes' => $attributesWithoutSpaces]);
         }
     }
 
@@ -508,7 +565,11 @@ class AppController extends Controller
      */
     public function requestRenewCredentials(App $app, string $type)
     {
-        Mail::to(auth()->user())->send(new CredentialRenew($app, $type));
+        if($app->team){
+            Mail::to($app->team->email)->send(new CredentialRenew($app, $type));
+        }else{
+            Mail::to(auth()->user())->send(new CredentialRenew($app, $type));
+        }
 
         return redirect()->route('app.index')->with('alert', 'success:You will receive an email to renew your apps credentials');
     }
@@ -526,7 +587,9 @@ class AppController extends Controller
         $credentialsType = 'consumerKey-' . $type;
         $consumerKey = $this->getCredentials($app, $credentialsType, 'string');
 
-        $updatedApp = ApigeeService::renewCredentials(auth()->user(), $app, $consumerKey);
+        $entity = $app->getEntity();
+
+        $updatedApp = ApigeeService::renewCredentials($entity, $app, $consumerKey);
 
         if ($updatedApp->failed()) {
             $reasonMsg = $updatedApp['message'] ?? 'There was a problem renewing the credentials. Please try again later.';

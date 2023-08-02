@@ -65,6 +65,7 @@ class UserUpdateRequest extends FormRequest
     {
         return [
             'responsible_countries.required' => 'Please select at least one country this Opco admin is responsible for.',
+            'country.required' => 'Please select a country of operation.',
         ];
     }
 }

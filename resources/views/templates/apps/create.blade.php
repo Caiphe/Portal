@@ -205,6 +205,20 @@
         handleBackButtonClick();
     }
 
+    document.querySelector('#name').addEventListener('keyup', appNameValidate);
+
+    function appNameValidate(){
+        var specialChrs = /[`~!@#$%^&*|+=?;:±§'",.<>\{\}\[\]\\\/]/gi;
+
+        this.value = this.value.replace(/  +/g, ' ');
+
+        if(specialChrs.test(this.value)){
+            this.value = this.value.replace(specialChrs, '');
+            addAlert('warning', 'Application name cannot contain special characters.');
+        }
+    }
+
+
     default_option.addEventListener('click', function(){
         select_wrap.classList.toggle('active');
     });
@@ -224,18 +238,12 @@
     function handleButtonClick() {
         var elements = form.elements;
         for (var i = 0; i < buttons.length; i++) {
-
             buttons[i].addEventListener('click', function (event) {
                 var errors = [];
                 var urlValue = elements['url'].value;
                 event.preventDefault();
 
                 if(form.firstElementChild.classList.contains('active')) {
-                    if(elements['name'].value === '') {
-                        errors.push({msg: 'Please add a name for your app', el: elements['name']});
-                    } else {
-                        elements['name'].nextElementSibling.textContent = '';
-                    }
 
                     if(urlValue !== '' && !/https?:\/\/.*\..*/.test(urlValue)) {
                         errors.push({msg: 'Please add a valid url. Eg. https://callback.com', el: elements['url']});
@@ -243,20 +251,54 @@
                         elements['url'].nextElementSibling.textContent = '';
                     }
 
-                    if(errors.length > 0){
-                        for (var i = errors.length - 1; i >= 0; i--) {
-                            errors[i].el.nextElementSibling.textContent = errors[i].msg;
+                    if(elements['name'].value === '') {
+                        addAlert('error', 'Please add your app name');
+                        elements['name'].focus();
+                    } else if(elements['name'].value.length === 1){
+                        elements['name'].focus();
+                        addAlert('warning', 'Please provide a valid app name');
+                    } else if(elements['name'].value !== '' && elements['name'].value.length > 1 ){
+
+                        var appName =  elements['name'].value;
+                        var checkUrl = "{{ route('app.name.check') }}";
+
+                        var app = {
+                            name: appName,
                         }
 
-                        return;
+                        var xhr = new XMLHttpRequest();
+                        addLoading("checking app's name...");
+
+                        xhr.open('POST', checkUrl, true);
+                        xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
+                        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+                        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+                        xhr.send(JSON.stringify(app));
+
+                        xhr.onload = function() {
+                            removeLoading();
+
+                            if(xhr.status === 409){
+                                elements['name'].focus();
+                                errors.push({msg: "App name already exists", el: elements['name']});
+                            }
+
+                            if(errors.length > 0){
+                                for (var i = errors.length - 1; i >= 0; i--) {
+                                    errors[i].el.nextElementSibling.textContent = errors[i].msg;
+                                }
+
+                                return;
+                            }
+                            
+                            nav.querySelector('a').nextElementSibling.classList.add('active');
+                            form.firstElementChild.classList.remove('active');
+                            form.firstElementChild.style.display = 'none';
+                            form.firstElementChild.nextElementSibling.classList.add('active');
+                        };
                     }
-
-                    nav.querySelector('a').nextElementSibling.classList.add('active');
-
-                    form.firstElementChild.classList.remove('active');
-                    form.firstElementChild.style.display = 'none';
-                    form.firstElementChild.nextElementSibling.classList.add('active');
-
+                   
                 } else if (form.firstElementChild.nextElementSibling.classList.contains('active')) {
                     if(document.querySelectorAll('.country-checkbox:checked').length === 0) {
                         return void addAlert('error', 'Please select a country');
@@ -400,8 +442,19 @@
             if (xhr.status === 200) {
                 addAlert('success', ['Application created successfully', 'You will be redirected to your app page shortly.'], function(){
                     window.location.href = "{{ route('app.index') }}";
+                });}
+            else if(xhr.status === 429){
+                addAlert('warning', ['This action is not allowed.', 'Please contact your admin.'], function(){
+                    window.location.href = "{{ route('app.index') }}";
                 });
-            } else {
+            }
+            else if(xhr.status === 422){
+                addAlert('error', [`An application with the name '${elements['name'].value}' already exists. Please wait, you will be redirected back to the app creation page where you can try a different name.`])
+                setTimeout(function(){
+                    location.reload(); 
+                }, 6000);
+            }
+             else {
                 var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
                 if(result.errors) {

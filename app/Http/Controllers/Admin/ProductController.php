@@ -17,7 +17,9 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $access = $request->get('access', "");
+        $group = $request->get('group', "");
         $numberPerPage = (int)$request->get('number_per_page', '15');
+
         $products = Product::with('category')
             ->select([
                 'products.*',
@@ -37,7 +39,10 @@ class ProductController extends Controller
             })
             ->when($access !== "" && !is_null($access), function ($q) use ($request) {
                 $q->where('access', $request->get('access'));
-            });
+            })
+            ->when($group !== "" && !is_null($group), function ($q) use ($request) {
+                $q->where('group', $request->get('group'));
+            });;
         $order = $request->get('order', 'desc');
         $sort = '';
 
@@ -52,6 +57,8 @@ class ProductController extends Controller
 
             $order = ['asc' => 'desc', 'desc' => 'asc'][$order] ?? 'desc';
         }
+
+        $productGroup = Product::pluck('group')->unique()->toArray();
 
         if ($request->ajax()) {
             return response()
@@ -68,6 +75,7 @@ class ProductController extends Controller
         return view('templates.admin.products.index', [
             'products' => $products->orderBy('display_name')->paginate($numberPerPage),
             'order' => $order,
+            'productGroup' => $productGroup,
         ]);
     }
 
@@ -96,13 +104,9 @@ class ProductController extends Controller
         $logs = [];
 
         $product->update([
-            'display_name' => $data['display_name'],
-            'locations' =>  implode(',', $data['locations']),
             'group' => $data['group'] ?? 'MTN',
             'category_cid' => $request['category_cid'],
         ]);
-
-        $product->countries()->sync($request->get('locations', Country::all()));
 
         for ($i = 0; $i < count($tabs['title']); $i++) {
             if ($tabs['title'][$i] === null || $tabs['body'][$i] === null) continue;
@@ -125,8 +129,6 @@ class ProductController extends Controller
 
             for($i = 0; $i < count($updatedFields); $i++){
                 if($updatedFields[$i] === 'category_cid') $messages .= '&#x2022; Product category updated ' .'<br/>';
-                if($updatedFields[$i] === 'display_name')  $messages .= '&#x2022; Product name updated ' .'<br/>';
-                if($updatedFields[$i] === 'locations')  $messages .= '&#x2022; Locations updated ' .'<br />';
                 if($updatedFields[$i] === 'group')  $messages .= '&#x2022; Group updated ' .'<br />';
             }
 
@@ -155,6 +157,12 @@ class ProductController extends Controller
 
         $addedColumn = array_diff($currentColumn, $updatedColumn);
         $removedColumn = array_diff($updatedColumn, $currentColumn);
+
+        foreach($addedColumn as $key=>$column){
+            if(isset($currentContent[$column]['body']) && empty($currentContent[$column]['body'])){
+                unset($addedColumn[$key]);
+            }
+        }
 
         if(!empty($addedColumn)){
             $updated .= '&#x2022; ' . implode(', ', $addedColumn) .' was added <br />';

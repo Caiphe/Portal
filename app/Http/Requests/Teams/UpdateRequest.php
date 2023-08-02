@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Teams;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -29,12 +30,12 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'url' => 'required',
-            'contact' => 'required',
-            'country' => 'required',
-            'logo_file' => 'sometimes|file',
-            'description' => 'required',
+            'name' => ['required'],
+            'url' => ['required'],
+            'contact' => ['required'],
+            'country' => ['required'],
+            'logo_file' => ['sometimes','file', 'max:5120', 'dimensions:max_width=2000,max_height=2000', 'mimes:jpeg,jpg,png'],
+            'description' => ['sometimes', 'max:512'],
         ];
     }
 
@@ -46,11 +47,19 @@ class UpdateRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'name' => filter_var($this->name, FILTER_SANITIZE_STRING),
-            'url' => filter_var($this->url, FILTER_SANITIZE_STRING),
-            'contact' => filter_var($this->contact, FILTER_SANITIZE_STRING),
-            'country' => filter_var($this->country, FILTER_SANITIZE_STRING),
-            'description' => filter_var($this->description, FILTER_SANITIZE_STRING),
+            'name' => htmlspecialchars($this->name, ENT_NOQUOTES),
+            'url' => htmlspecialchars($this->url, ENT_NOQUOTES),
+            'contact' => htmlspecialchars($this->contact, ENT_NOQUOTES),
+            'country' => htmlspecialchars($this->country, ENT_NOQUOTES),
+            'description' => htmlspecialchars($this->description, ENT_NOQUOTES),
         ]);
+    }
+
+    public function messages()
+    {
+        return [
+            'logo_file.max' => 'The logo file size is more than the allowed 5MB limit',
+            'logo_file.dimensions' => 'The logo dimentions are too large, please make sure the width and height are less than 2000',
+        ];
     }
 }

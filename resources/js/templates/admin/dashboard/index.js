@@ -27,7 +27,7 @@
         }
 
         for (var i = 0; i < customAttributes.length; i++) {
-            customAttributes[i].addEventListener('click', customAttributesDialog);
+            customAttributes[i].addEventListener('click', fetchAttributes);
         }
 
         for (var m = 0; m < productStatusButtons.length; m++) {
@@ -81,13 +81,66 @@
         noteDialog.classList.add('show');
     }
 
-    function customAttributesDialog(){
+    function fetchAttributes(){
+        var token = document.querySelector('meta[name="csrf-token"]').content;
         var id = this.dataset.id;
+        var url = this.dataset.route;
+
+        var app = {
+            _method: 'PUT',
+            _token: token,
+            aid: id
+        };
+
+        var xhr = new XMLHttpRequest();
+
+        addLoading('Fetching custom attributes...');
+
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('X-CSRF-TOKEN', token);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+        xhr.send(JSON.stringify(app));
+
+        xhr.onload = function() {
+            removeLoading();
+            var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+            var attributeDialog = document.getElementById(`custom-attributes-${result['id']}`);
+
+            if (xhr.status === 200) {
+                document.querySelector(`#custom-attributes-list-partial-${result['id']}`).innerHTML = result['listHtml'];
+                document.querySelector(`#custom-attributes-form-partial-${result['id']}`).innerHTML = result['formHtml'];
+
+                var eachAttributeBlock = attributeDialog.querySelector('.each-attribute-block');
+                if(eachAttributeBlock){
+                    attributeDialog.querySelector('.attributes-heading').classList.add('show');
+                }
+
+                customAttributesDialog(result['id']);
+                return;
+               
+            } else {
+
+                if(result.errors) {
+                    result.message = [];
+                    for(var error in result.errors){
+                        result.message.push(result.errors[error]);
+                    }
+                }
+
+                addAlert('error', result.message || 'Sorry there was a problem updating your app. Please try again.');
+            }
+        };
+    }
+    
+
+    function customAttributesDialog(id){
         var customAttributeDialog = document.getElementById('custom-attributes-' + id);
         if (!customAttributeDialog) return;
         customAttributeDialog.classList.add('show');
         var addAttributeBtn = customAttributeDialog.querySelector('.add-attribute');
-        var attributesList = customAttributeDialog.querySelector('.custom-attributes-list');
+        var attributesList = customAttributeDialog.querySelector('.custom-attributes-form-list');
         var currentAttributeName = customAttributeDialog.querySelector('.attribute-name');
         var currentAttributevalue = customAttributeDialog.querySelector('.attribute-value');
 
@@ -98,18 +151,35 @@
             attrNames = [attrNames];
         }
 
+        if(attrNames){
+            for(var i = 0; i < attrNames.length; i++){
+                attrNames[i].addEventListener('change', checkNameExists.bind(attrNames[i], id));
+            }
+        }
+
         currentAttributeName.addEventListener('change', checkNameExists.bind(currentAttributeName, id));
 
         currentAttributevalue.addEventListener('change', removeQuote.bind(currentAttributevalue));
 
-        addAttributeBtn.addEventListener('click', addNewAttribute.bind(customAttributeDialog, attributesList));
+        addAttributeBtn.addEventListener('click', addNewAttribute.bind(customAttributeDialog, id));
         
         customAttributeDialog.addEventListener('dialog-closed', submitNewAttribute.bind(attributesList, id));
-
     }
 
     function checkNameExists(id){
-        this.value = this.value.replaceAll(/["']/g, "");
+        if(this.value.length <= 1){
+            addAlert('warning', 'Please provide a valid attribute name.');
+            this.value = '';
+            return;
+        }
+
+        if(this.value.includes(' ')){
+            addAlert('warning', 'White spaces are not allowed to be used in attribute names and have been automatically removed.');
+        }
+
+        var pattern = new RegExp('[ ]+', 'g');
+        this.value = this.value.replaceAll(/["']/g, "").replace(pattern, '');
+
         var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName', 'Notes'];
 
         for(var i = 0; i < existingNames.length; i++){
@@ -121,7 +191,7 @@
         }
 
         var customAttributeDialog = document.getElementById('custom-attributes-' + id);
-        var elements = customAttributeDialog.querySelector('.custom-attributes-list').elements;
+        var elements = customAttributeDialog.querySelector('.custom-attributes-form-list').elements;
 
         var attrNames = elements['attribute[name][]'];
 
@@ -131,13 +201,17 @@
 
         if(attrNames){
             for(var i = 0; i < attrNames.length; i++){
-                if(attrNames[i].value.toLowerCase() === this.value.toLowerCase()){
+                if(attrNames[i] !== this && attrNames[i].value.toLowerCase() === this.value.toLowerCase()){
                     this.value = '';
+                    this.focus();
                     addAlert('warning', 'Attribute name exists already.');
                     break;
                 }
             }
         }
+
+        var pattern = new RegExp('[ ]+', 'g');
+        this.value = this.value.replaceAll(/["']/g, "").replace(pattern, '');
     }
 
     function submitNewAttribute(id){
@@ -229,7 +303,7 @@
     function updateAppAttributesHtml(attributes, id){
         var attrHtml = '';
         for (key in attributes) {
-            if(key !== 'Notes'){
+            if(key !== 'Notes' && attributes[key] !== ''){
                 attrHtml += `
                 <div class="attribute-display">
                     <span class="attr-name bold">${key} : </span>
@@ -237,40 +311,42 @@
                 </div>
                 `;
             }
-           
         }
         document.querySelector('#wrapper-'+id+' .list-custom-attributes').innerHTML = attrHtml;
     }
 
-    function addNewAttribute(attributesList){
+    function addNewAttribute(id){
         var attributeName = this.querySelector('.attribute-name');
         var attributeValue = this.querySelector('.attribute-value');
         var attributeErrorMessage = this.querySelector('.attribute-error');
+        var customAttributeDialog = document.getElementById('custom-attributes-' + id);
+        var attributesList =  customAttributeDialog.querySelector('.custom-attributes-form-list');
 
         if(attributeName.value === "" || attributeValue.value === ''){
             attributeErrorMessage.classList.add('show');
+
             setTimeout(function(){
                 attributeErrorMessage.classList.remove('show');
             }, 4000);
+
             return;
         }
 
         attributesList.classList.add('active');
-        attributeErrorMessage.classList.remove('show');
         var customAttributeBlock = document.getElementById('custom-attribute').innerHTML;
         customAttributeBlock = document.createRange().createContextualFragment(customAttributeBlock);
         customAttributeBlock.querySelector('.name').value = attributeName.value;
         customAttributeBlock.querySelector('.value').value = attributeValue.value;
+        customAttributeDialog.querySelector('.attributes-heading').classList.add('show');
         attributesList.appendChild(customAttributeBlock);
-        this.querySelector('.attributes-heading').classList.add('show');
         attributeName.value = '';
         attributeValue.value = '';
+        return;
     }
 
-    function removeQuote()
-    {
-        this.value = this.value.replaceAll(/["']/g, "");
-        console.log("Hello testing");
+    function removeQuote(){
+        this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, '');
+        return;
     }
 
     function showProductNoteDialog() {

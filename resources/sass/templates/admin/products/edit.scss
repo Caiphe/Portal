@@ -200,4 +200,11 @@
             }
         }
     }
+
+    .non-editable{
+        border-bottom: none !important;
+        background-color: rgb(242, 242, 242) !important;
+        padding-left: 5px !important;
+        background-image: none !important;
+    } 
 }

@@ -18,7 +18,7 @@ class CreateAppRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Get the validation rules that apply to the request. 
      *
      * @return array
      */
@@ -55,7 +55,7 @@ class CreateAppRequest extends FormRequest
     {
         return [
             'products.required' => 'Please select at least one product.',
-            'team_id.sometimes' => 'Please provide a team for your app.'
+            'team_id.sometimes' => 'Please provide a team for your app.',
         ];
     }
 

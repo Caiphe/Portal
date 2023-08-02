@@ -6,7 +6,7 @@
     <p class="column-app-name">App name</p>
     <p class="column-country">Country</p>
     <p class="column-developer-company">Developer/company</p>
-    <p class="column-go-live">Go live</p>
+    <p class="column-go-live">Created at</p>
     <p class="column-status">Status</p>
 </div>
 
@@ -50,18 +50,9 @@
             </div>
 
             {{-- Custom Attributes list --}}
-            <form class="custom-attributes-list" method="post" action="{{ route('app.update.attributes', $app) }}">
-                @csrf
-                @method('PUT')
-
-                <input type="hidden" name="remove-check" class="remove-check" value=""/>
-                @foreach ($app->custom_attributes as $key => $value)
-                    @if($key !== 'Notes' && $key !== 'ApprovedAt' && $value !== '') 
-                        <x-apps.custom-attribute :nameValue="$key" :valueValue="$value"></x-apps.custom-attribute>
-                    @endif
-                @endforeach
-                <div class="no-attribute">None defined</div>
-            </form>
+            <div id="custom-attributes-form-partial-{{ $app->aid }}">
+                @include('partials.custom-attributes.form', ['app' => $app])
+            </div>
         </div>
 
             {{-- Custom attributes form --}}

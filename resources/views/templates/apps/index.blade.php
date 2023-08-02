@@ -47,7 +47,7 @@
 
     <x-twofa-warning></x-twofa-warning>
 
-    @if($teamInvite &&  !$team->hasUser($user))
+    @if($teamInvite && !$team->hasUser($user))
     {{-- Top ownerhip block container --}}
     <div class="top-invite-banner show">
         <div class="message-container">You have been requested to be part of {{ $team->name }}.</div>
@@ -74,6 +74,20 @@
             </div>
         </div>
     @else
+
+
+    <x-dialog-box dialogTitle="App delete" class="">
+        <p class="dialog-text-padding">Are you sure you want to delete this app?</p>
+        <p class="modal-app-name mb-20 boder-text dialog-text-padding"></p>
+        <form class="delete bottom-shadow-container button-container">
+            @method('DELETE')
+            @csrf
+            <input type="hidden" value="" name="app-name" class="hidden-app-name"/>
+            <button type="button" class="btn primary app-delete">DELETE</button>
+            <button type="button" class="btn black-bordered mr-10 cancel-btn">CANCEL</button>
+        </form>
+    </x-dialog-box>
+
         <div class="app-main-container">
             <div class="container" id="app-index">
                 <div class="row">
@@ -185,6 +199,25 @@
 @push('scripts')
     <script>
         var headings = document.querySelectorAll('.heading-app');
+        var appDeleteShowModalBtn = document.querySelectorAll('.app-delete-modal');
+        var modalContainer = document.querySelector('.mdp-dialog-box');
+
+        document.querySelector('.cancel-btn').addEventListener('click', hideModal);
+        function hideModal() {
+            modalContainer.classList.remove('show');
+        }
+
+        for (var i = 0; i < appDeleteShowModalBtn.length; i++) {
+            appDeleteShowModalBtn[i].addEventListener('click', showDeleteAppModal);
+        }
+
+        function showDeleteAppModal(){
+            modalContainer.classList.add('show');
+            document.querySelector('.modal-app-name').innerHTML = this.dataset.displayname;
+            document.querySelector('.hidden-app-name').value = this.dataset.appname;
+            document.querySelector(".modal.show").classList.remove('show');
+            document.querySelector(".menu.show").classList.remove('show');
+        }
 
         for (var i = 0; i < headings.length; i++) {
             headings[i].addEventListener('click', handleHeadingClick)
@@ -228,28 +261,21 @@
             })
         }
 
-        var deleteButtons = document.querySelectorAll('.app-delete');
-        for (var m = 0; m < modals.length; m ++) {
-            deleteButtons[m].addEventListener('click', handleDeleteMenuClick);
-        }
+        var deleteButtons = document.querySelector('.app-delete');
+        deleteButtons.addEventListener('click', handleDeleteMenuClick);
 
         function handleDeleteMenuClick(event) {
             event.preventDefault();
 
-            var app = event.currentTarget;
+            var app = document.querySelector('.hidden-app-name').value;
 
             var data = {
-                name: app.dataset.name,
+                name: app,
                 _method: 'DELETE'
             };
 
-            var url = '/apps/' + app.dataset.name;
+            var url = '/apps/' + app;
             var xhr = new XMLHttpRequest();
-
-            if(!confirm('Are you sure you want to delete this app?')) {
-                document.querySelector(".menu.show").classList.remove('show');
-                return;
-            }
 
             addLoading('Deleting app...');
 
@@ -260,13 +286,19 @@
                 xhr.send(JSON.stringify(data));
 
                 xhr.onload = function() {
+                    removeLoading();
+
                     if (xhr.status === 200) {
-                        window.location.href = "{{ route('app.index') }}";
                         addAlert('success', 'Application deleted successfully');
+                        setTimeout(reloadTimeOut, 4000);
                     }
                 };
 
             document.querySelector(".menu.show").classList.remove('show');
+        }
+
+        function reloadTimeOut(){
+            location.reload();
         }
 
         document.getElementById('create').addEventListener('click', handleCreateAppClick);

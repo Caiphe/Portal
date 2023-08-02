@@ -19,11 +19,15 @@
         'dark',
         'no-swagger' => !$hasSwagger
     ]) href="/openapi/{{ $product->swagger }}" download>Download swagger</a>
+
+     @can('administer-content')
     <label id="uploader">
         @svg('loading-blue')
         <span>{{ $hasSwagger ? 'Replace' : 'Upload' }} swagger</span>
-        <input id="uploader-input" type="file" name="uploader" hidden accept=".yaml,yml">
+        <input id="uploader-input" type="file" name="uploader" hidden accept=".yaml,.yml,.json">
     </label>
+    @endcan
+    
 </div>
 
 <form id="admin-form" action="{{ route('admin.product.update', $product->slug) }}" method="POST">
@@ -37,12 +41,12 @@
 
             <label class="editor-field-label">
                 <h3>Display name</h3>
-                <input type="text" name="display_name" value="{{ $product->display_name }}" maxlength="140">
+                <input type="text" class="non-editable" name="display_name" value="{{ $product->display_name }}" maxlength="140" readonly />
             </label>
 
             <label class="editor-field-label">
                 <h3>Category</h3>
-                <select name="category_cid" id="category_cid" class="mb-1" autocomplete="off">
+                <select name="category_cid" id="category_cid" class="mb-1" autocomplete="off" />
                     <option value="" selected disabled="">Select category</option>
                     @foreach($categories as $cid => $category)
                     <option value="{{ $cid }}" @if($cid === $product->category_cid) selected @endif>{{ $category }}</option>
@@ -52,12 +56,11 @@
 
             <label class="editor-field-label">
                 <h3>Group</h3>
-                <input type="text" name="group" value="{{ $product->group ?? 'MTN' }}">
+                <input type="text" class="non-editable" name="group" value="{{ $product->group ?? 'MTN' }}" readonly />
             </label>
 
-            <label class="editor-field-label">
-                <h3>Locations</h3>
-                <x-multiselect id="locations" name="locations" label="Select location" :options="$countries->pluck('name', 'code')->toArray()" :selected="$product->locations === 'all' ? [] : $product->countries()->pluck('code')->toArray()"/>
+            <label class="editor-field-label loactions-container">
+                <x-black-tab id="locations" class="non-editable" disabled="true" name="locations" label="Locations" :options="$countries->pluck('name', 'code')->toArray()" :selected="$product->locations === 'all' ? [] : $product->countries()->pluck('code')->toArray()"/>
             </label>
 
             <button class="button outline blue save-button">Apply changes</button>

@@ -9,16 +9,77 @@ var deleteUserActionBtn = document.querySelector('.remove-user-from-team');
 var teamInviteUserBtn = document.querySelector('.invite-btn');
 var transferOwnsershipBtn = document.querySelector('#transfer-btn');
 var makeOwnershipBtn = document.querySelector('#make-owner-btn');
+var deleteTeamBtn = document.querySelector('.delete-team-btn');
+var deleteTeamModal = document.querySelector('.delete-team-modal');
 var addTeamMobile;
 var addTeammateBtn;
+
+document.querySelector('.delete-team-form').addEventListener('submit', deleteTeamAction);
+document.querySelector('.cancel-delete-team-btn').addEventListener('click', hideDeleteTeamModal);
+
+function hideDeleteTeamModal(){
+    deleteTeamModal.classList.remove('show');
+}
+
+function deleteTeamAction(event){
+    event.preventDefault();
+
+    var formToken = this.elements['_token'].value;
+    var team_id = this.elements['team_id'].value;
+    var team_name = this.elements['team_name'].value;
+
+    var data = {
+        _method: 'POST',
+        _token: formToken,
+        team: team_id
+    }
+
+    var xhr = new XMLHttpRequest();
+    addLoading('Sending team deletion request...');
+
+    xhr.open('POST', this.action, true);
+    xhr.setRequestHeader('X-CSRF-TOKEN', formToken);
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.send(JSON.stringify(data));
+
+    xhr.onload = function() {
+        removeLoading();
+        if (xhr.status === 200) {
+            addAlert('success', [`Team ${team_name}  Deleted Successfully.`], function(){
+                window.location.href = '/teams';
+            });
+            return;
+
+        } else {
+            var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+            if(result.errors) {
+                result.message = [];
+                for(var error in result.errors){
+                    result.message.push(result.errors[error]);
+                }
+            }
+
+            addAlert('error', result.message || 'Sorry there was a problem with your opco admin request. Please try again.');
+        }
+    };
+}
 
 for (var i = 0; i < btnActions.length; i++) {
     btnActions[i].addEventListener('click', showUserAction);
 }
 
+if(deleteTeamBtn){
+    deleteTeamBtn.addEventListener('click', showDeleteTeamPopup)
+}
+
 function showUserAction() {
     this.previousElementSibling.classList.add("show");
     this.nextElementSibling.classList.add('show');
+}
+
+function showDeleteTeamPopup() {
+    deleteTeamModal.classList.add('show');
 }
 
 for (var i = 0; i < hideMenuBlock.length; i++) {
@@ -217,6 +278,13 @@ function showUserModalFunc() {
     makeUserRole.value = this.dataset.userrole;
 
     document.querySelector('.make-user-name').textContent = this.dataset.username;
+    var userRole = userModal.querySelector('.dialog-heading');
+
+    if(this.dataset.userrole !== 'team_user'){
+        userRole.innerHTML = "Make administrator";
+    }else{
+        userRole.innerHTML = 'Make user';
+    }
 
     userModal.querySelector('.team-head').textContent = textLookup[(this.dataset.userrole + '_header')];
     userModal.querySelector('.teammate-text strong').textContent = textLookup[(this.dataset.userrole + '_role')];
@@ -317,15 +385,22 @@ function handleDeleteMenuClick(event) {
     );
 
     xhr.send(JSON.stringify(data));
+    addLoading('Deleting app...');
 
     xhr.onload = function () {
+        removeLoading();
+
         if (xhr.status === 200) {
-            window.location.href = "{{ route('app.index') }}";
             addAlert('success', 'Application deleted successfully');
+            setTimeout(reloadTimeOut, 4000);
         }
     };
 
     document.querySelector(".menu.show").classList.remove('show');
+}
+
+function reloadTimeOut(){
+    location.reload();
 }
 
 var keys = document.querySelectorAll('.copy');
@@ -378,17 +453,18 @@ function copyToClipboard(text) {
     document.body.removeChild(dummy);
 }
 
-deleteUserActionBtn.addEventListener('click', function (event) {
+deleteUserActionBtn.addEventListener('click', removeUser);
+function removeUser(event){
     var xhr = new XMLHttpRequest();
     var data = {
         team_id: hiddenTeamId.value,
         user_id: hiddenTeamUserId.value
     }
-    var url = "/teams/" + data.team_id + "/leave";
+    var url = "/teams/" + data.team_id + "/remove";
 
     event.preventDefault();
 
-    addLoading('Leaving...');
+    addLoading('Removing...');
 
     xhr.open('POST', url);
 
@@ -420,7 +496,7 @@ deleteUserActionBtn.addEventListener('click', function (event) {
 
         removeLoading();
     };
-});
+};
 
 var teamMateInvitEmail = document.querySelector('.teammate-email');
 teamMateInvitEmail.value = "";

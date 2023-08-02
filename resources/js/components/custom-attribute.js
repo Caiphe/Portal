@@ -7,16 +7,14 @@ function attributeRemove(button){
     attribute.parentNode.removeChild(attribute);
 
     if(formContainer.querySelectorAll('.each-attribute-block').length === 0){
-        var addedAttributeForm =  document.querySelector('.custom-attributes-list');
         document.querySelector('.attributes-heading').classList.remove('show');
-        addedAttributeForm.classList.remove('active');
-        addedAttributeForm.classList.add('non-active');
         var listContainert = document.querySelector('.custom-attribute-list-container');
         if(listContainert) listContainert.classList.remove('active');
+        formContainer.parentNode.previousElementSibling.classList.remove('show');
+        return;
     }
 }
 
-function removeQuote(field)
-{
-    field.value = field.value.replaceAll(/["']/g, "");
+function removeQuote(field){
+    field.value = field.value.replaceAll(/["']/g, "").replaceAll(/  +/g, ' ');
 }

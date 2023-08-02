@@ -543,10 +543,24 @@
         resize: vertical;
         height: 170px;
         resize: none;
+
+        @media(max-width: 600px){
+            height: 80%;
+        }
     }
 
     .status-dialog-button {
         margin-top: 20px;
+    }
+}
+
+.mdp-dialog-box {
+    .dialog-content {
+        .dialog-heading{
+            @media(max-width: 350px){
+                font-size: 15px;
+            }
+        }
     }
 }
 
@@ -648,7 +662,7 @@
     }
 
     // Custom attributes list
-    .custom-attributes-list{
+    .custom-attributes-form-list{
         width: 98%;
         height: 188px;
         padding: 0px 16px 0px 15px;
@@ -663,10 +677,17 @@
             }
         }
 
-        @media(max-width: 550px){
-            height: 245px;
+        @media(max-widh: 700px){
+            height: 450px;
         }
 
+        @media(max-width: 560px){
+            height: 329px;
+        }
+
+        @media(max-width: 350px){
+            height: 235px;
+        }
         .attribute-remove-btn{
             @media(max-width: 768px){
                 padding: 0px;

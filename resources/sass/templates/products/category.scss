@@ -313,6 +313,10 @@ section.yellow-bg {
                 flex: 0 0 auto;
             }
         }
+
+        .view-products-list{
+            margin-top: 20px;
+        }
     }
 
     @media #{variables.$small} {
@@ -717,12 +721,10 @@ section.yellow-bg {
         }
 
         .button {
-            background-color: #FFF;
-            border: 2px solid #FFF;
             color: variables.$grey900;
 
             svg {
-                fill: variables.$grey900;
+                fill: #fff;
             }
         }
     }

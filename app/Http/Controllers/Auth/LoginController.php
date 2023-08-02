@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\User;
+use App\LogIp;
+use Illuminate\Http\Request;
+use App\Services\ApigeeUserService;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
-use App\Services\ApigeeUserService;
-use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -57,7 +57,7 @@ class LoginController extends Controller
             'last_name' => $data['last_name'],
             'email' => $data['email'],
             'developer_id' => $data['developer_id'],
-            'password' => Hash::make($data['password']),
+            'password' => $data['password'],
             'profile_picture' => '/storage/profile/profile-' . rand(1, 32) . '.svg',
         ]);
 
@@ -78,6 +78,11 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $user)
     {
+        LogIp::updateOrCreate(
+            ['user_id' => $request->user()->id],
+            ['ip' => $request->ip()]
+        );
+
         if (!is_null($user->developer_id)) return;
 
         ApigeeUserService::setupUser($user);
