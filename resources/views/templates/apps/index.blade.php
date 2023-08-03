@@ -75,7 +75,6 @@
         </div>
     @else
 
-
     <x-dialog-box dialogTitle="App delete" class="">
         <p class="dialog-text-padding">Are you sure you want to delete this app?</p>
         <p class="modal-app-name mb-20 boder-text dialog-text-padding"></p>
