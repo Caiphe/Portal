@@ -358,6 +358,18 @@ My team
     </div>
     @endif
 
+    <x-dialog-box dialogTitle="App delete" class="delete-app-modal">
+        <p class="dialog-text-padding">Are you sure you want to delete this app?</p>
+        <p class="modal-app-name mb-20 boder-text dialog-text-padding"></p>
+        <form class="delete bottom-shadow-container button-container">
+            @method('DELETE')
+            @csrf
+            <input type="hidden" value="" name="app-name" class="hidden-app-name"/>
+            <button type="button" class="btn primary app-delete">DELETE</button>
+            <button type="button" class="btn black-bordered mr-10 cancel-btn">CANCEL</button>
+        </form>
+    </x-dialog-box>
+
     <div class="column" id="app-index">
         <div class="row">
             <div class="approved-apps">
