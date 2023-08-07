@@ -100,37 +100,35 @@
                     {{-- Transfer ownership ends --}}
 
                     <tr class="team-app-list">
-
-
-                            <td class="company-logo-name word-wrap-text">
-                                <div class="company-logo" style="background-image: url({{ $team->logo }})"></div>
-                                <a class="company-name-a bold" href="{{route('team.show', [ 'id' => $team->id ])}}">{{ $team->name }}</a>
-                            </td>
-                            <td>{{ $team->teamCountry->name }}</td>
-                            <td>{{ $team->users_count }}</td>
-                            <td>{{ $team->apps_count }}</td>
-                            <td>
-                                @if($team->users->count() > 1)
-                                <button
-                                    type="button"
-                                    class="button red-button leave-team-transfer"
-                                    data-teamname="{{ $team->name }}"
-                                    data-teamid="{{ $team->id }}"
-                                    data-teamuser="{{ $user->id }}">
-                                    LEAVE M
-                                </button>
-                                @else
-                                <button
-                                    type="button"
-                                    class="button red-button leave-team"
-                                    data-teamname="{{ $team->name }}"
-                                    data-teamid="{{ $team->id }}"
-                                    data-teamuser="{{ $user->id }}">
-                                    LEAVE S
-                                </button>
-                                @endif
-                            </td>
-                        </tr>
+                        <td class="company-logo-name word-wrap-text">
+                            <div class="company-logo" style="background-image: url({{ $team->logo }})"></div>
+                            <a class="company-name-a bold" href="{{route('team.show', [ 'id' => $team->id ])}}">{{ $team->name }}</a>
+                        </td>
+                        <td>{{ $team->teamCountry->name }}</td>
+                        <td>{{ $team->users_count }}</td>
+                        <td>{{ $team->apps_count }}</td>
+                        <td>
+                            @if($team->users->count() > 1)
+                            <button
+                                type="button"
+                                class="button red-button leave-team-transfer"
+                                data-teamname="{{ $team->name }}"
+                                data-teamid="{{ $team->id }}"
+                                data-teamuser="{{ $user->id }}">
+                                LEAVE M
+                            </button>
+                            @else
+                            <button
+                                type="button"
+                                class="button red-button leave-team"
+                                data-teamname="{{ $team->name }}"
+                                data-teamid="{{ $team->id }}"
+                                data-teamuser="{{ $user->id }}">
+                                LEAVE S
+                            </button>
+                            @endif
+                        </td>
+                    </tr>
                     @endforeach
                 </table>
             </div>
