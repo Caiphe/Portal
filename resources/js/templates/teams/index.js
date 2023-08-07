@@ -6,13 +6,42 @@ var leaveTeamForm = document.getElementById('form-team-leave');
 var leaveTeamActionBtn = document.querySelector('.leave-team-btn');
 var hiddenTeamId = document.querySelector('.hidden-team-id');
 var hiddenTeamUserId = document.querySelector('.hidden-team-user-id');
+var leaveTeamTransferBtn = document.querySelectorAll('.leave-team-transfer');
+
+var ownershipModal = document.querySelector('.ownweship-modal-container');
+var ownershipModalShow = document.querySelector('.make-owner');
+
+for (var i = 0; i < leaveTeamTransferBtn.length; i++) {
+    leaveTeamTransferBtn[i].addEventListener('click', showOwnershipModalFunc);
+}
+
+function showOwnershipModalFunc() {
+    var eachteam = this.parentNode.parentNode;
+    console.log(eachteam.previousSibling);
+
+    eachteam.previousSibling.classList.add('show');
+    // console.log('leave a team and transfer');
+}
+
+
+var radiosList = document.querySelectorAll('input[name="transfer-ownership-check"]');
+for (var i = 0; i < radiosList.length; i++) {
+    radiosList[i].addEventListener('click', checkedRadio);
+}
+
+function checkedRadio() {
+    if (this.checked) {
+        transferOwnsershipBtn.classList.remove('inactive');
+        transferOwnsershipBtn.setAttribute('data-useremail', this.value);
+    }
+}
+
+cancelBtn.addEventListener('click', hideModal);
 
 
 for (var i = 0; i < leaveTeamBtn.length; i++) {
     leaveTeamBtn[i].addEventListener('click', showLeaveTeamModal);
 }
-
-cancelBtn.addEventListener('click', hideModal);
 
 function showLeaveTeamModal(){
     modalContainer.classList.add('show');

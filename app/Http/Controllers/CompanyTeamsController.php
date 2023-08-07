@@ -70,13 +70,16 @@ class CompanyTeamsController extends Controller
     /**
      * Leave/Delete endpoint(s)
      */
+    public function leaveTransferOwnership(LeavingRequest $teamRequest, Team $team)
+    {
+        
+    }
     public function leave(LeavingRequest $teamRequest, Team $team)
     {
         $usersCount = $team->users->count();
         $data = $teamRequest->validated();
 
         if($team->owner_id === auth()->user()->id && $usersCount === 1){
-            dd('Yes', $usersCount);
 
             $teamsInvites = TeamInvite::where('team_id', $team->id)->get();
             if($teamsInvites){
@@ -95,6 +98,10 @@ class CompanyTeamsController extends Controller
                     }
                 }
             }
+        }
+
+        if($team->owner_id === auth()->user()->id && $usersCount > 1){
+
         }
 
         // $team = $this->getTeam($data['team_id']);
