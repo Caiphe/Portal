@@ -16,6 +16,7 @@
 
     document.getElementById('filter-text').addEventListener('input', debounce);
     document.getElementById('filter-country').addEventListener('change', filterProducts);
+    document.getElementById('filter-group').addEventListener('change', filterProducts);
     document.getElementById('filter-clear').addEventListener('click', clearFilters);
 
     for (var i = filterProductsEls.length - 1; i >= 0; i--) {
@@ -37,7 +38,9 @@
 
         document.getElementById('filter-text').value = '';
         document.getElementById('filter-country').value = '';
+        document.getElementById('filter-group').value = '';
         document.getElementById('filter-country-tags').innerHTML = '';
+        document.getElementById('filter-group-tags').innerHTML = '';
 
         for (var i = categories.length - 1; i >= 0; i--) {
             categories[i].checked = false;
@@ -56,7 +59,7 @@
         var categoryHeadingsShow = [];
 
         for (var i = cards.length - 1; i >= 0; i--) {
-            if (testFilterText(cards[i]) && testCategories(cards[i]) && testAccess(cards[i]) && testLocation(cards[i])) {
+            if (testFilterText(cards[i]) && testCategories(cards[i]) && testAccess(cards[i]) && testLocation(cards[i]) && testGroup(cards[i])) {
                 cards[i].style.display = 'inherit';
                 categoryHeadingsShow.push(cards[i].dataset.category);
                 continue;
@@ -124,6 +127,21 @@
 
         return false;
     }
+
+
+    function testGroup(card) {
+        var groups = document.querySelectorAll('#filter-group :checked');
+        if (groups.length === 0 || card.dataset.group === undefined) return true;
+
+        for (var i = groups.length - 1; i >= 0; i--) {
+            if (groups[i].innerHTML === card.dataset.group) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }());
 
 window.addEventListener('load', function(){
