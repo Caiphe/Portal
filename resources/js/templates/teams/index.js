@@ -7,24 +7,21 @@ var leaveTeamActionBtn = document.querySelector('.leave-team-btn');
 var hiddenTeamId = document.querySelector('.hidden-team-id');
 var hiddenTeamUserId = document.querySelector('.hidden-team-user-id');
 var leaveTeamTransferBtn = document.querySelectorAll('.leave-team-transfer');
-
+var transferOwnsershipBtn = document.querySelector('#transfer-btn');
+var closeOwnership = document.querySelector('.dialog-close');
 var ownershipModal = document.querySelector('.ownweship-modal-container');
 var ownershipModalShow = document.querySelector('.make-owner');
+var radiosList = document.querySelectorAll('input[name="transfer-ownership-check"]');
 
 for (var i = 0; i < leaveTeamTransferBtn.length; i++) {
     leaveTeamTransferBtn[i].addEventListener('click', showOwnershipModalFunc);
 }
 
 function showOwnershipModalFunc() {
-    var eachteam = this.parentNode.parentNode;
-    console.log(eachteam.previousSibling);
-
-    eachteam.previousSibling.classList.add('show');
-    // console.log('leave a team and transfer');
+    var owneshipTransferModal = this.previousElementSibling;
+    owneshipTransferModal.classList.add('show');
 }
 
-
-var radiosList = document.querySelectorAll('input[name="transfer-ownership-check"]');
 for (var i = 0; i < radiosList.length; i++) {
     radiosList[i].addEventListener('click', checkedRadio);
 }
@@ -35,9 +32,6 @@ function checkedRadio() {
         transferOwnsershipBtn.setAttribute('data-useremail', this.value);
     }
 }
-
-cancelBtn.addEventListener('click', hideModal);
-
 
 for (var i = 0; i < leaveTeamBtn.length; i++) {
     leaveTeamBtn[i].addEventListener('click', showLeaveTeamModal);
@@ -53,6 +47,7 @@ function showLeaveTeamModal(){
     hiddenTeamUserId.value = this.dataset.teamuser;
 }
 
+cancelBtn.addEventListener('click', hideModal);
 function hideModal() {
     modalContainer.classList.remove('show');
 }
@@ -104,7 +99,6 @@ leaveTeamActionBtn.addEventListener('click', function(event){
 
 });
 
-
 var btnAcceptInvite = document.querySelector('.accept-team-invite');
 if(btnAcceptInvite){
 
@@ -127,7 +121,6 @@ if(btnRejectInvite){
         handleInvite('/teams/reject', data, event);
     });
 }
-
 
 function handleInvite(url, data, event) {
     var xhr = new XMLHttpRequest();

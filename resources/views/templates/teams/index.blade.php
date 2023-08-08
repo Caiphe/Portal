@@ -68,37 +68,6 @@
                     </tr>
                     @foreach($teams as $team)
 
-                    {{-- Transfer ownership Dialog --}}
-                    <x-dialog-box dialogTitle="Transfer Ownership" class="ownweship-modal-container">
-
-                        <p class="remove-user-text dialog-text-padding">Which team member would you like to transfer ownership to? </p>
-
-                        <div class="scrollable-users-container">
-                            <ul class="list-users-container">
-                            @if ($team->users)
-                                @foreach($team->users as $teamUser)
-                                    @if(!$teamUser->isTeamOwner($team))
-                                        <li class="each-user">
-                                            <div class="users-thumbnail" style="background-image: url({{ $teamUser->profile_picture }})"></div>
-                                            <div class="user-full-name">{{ $teamUser->full_name }}</div>
-                                            <div class="check-container">
-                                                <x-radio-round-two name="transfer-ownership-check" id="{{ $teamUser->id }}" value="{{ $teamUser->email }}"></x-radio-round-two>
-                                            </div>
-                                        </li>
-                                    @endif
-                                @endforeach
-                            @endif
-                            </ul>
-                        </div>
-
-                        <form class="custom-modal-form bottom-shadow-container button-container mt-40">
-                            <button type="button" id="transfer-btn" data-teamid="{{ $team->id }}" class="inactive">TRANSFER</button>
-                            <button type="button" class="btn black-bordered mr-10 ownership-removal-btn">CANCEL</button>
-                        </form>
-
-                    </x-dialog-box>
-                    {{-- Transfer ownership ends --}}
-
                     <tr class="team-app-list">
                         <td class="company-logo-name word-wrap-text">
                             <div class="company-logo" style="background-image: url({{ $team->logo }})"></div>
@@ -108,23 +77,53 @@
                         <td>{{ $team->users_count }}</td>
                         <td>{{ $team->apps_count }}</td>
                         <td>
-                            @if($team->users->count() > 1)
+                            @if($team->users->count() > 1 && auth()->user()->isTeamOwner($team))
+                            <x-dialog-box dialogTitle="Transfer Ownership" class="ownweship-modal-container">
+
+                                <p class="remove-user-text dialog-text-padding">Which team member would you like to transfer ownership to before you leave this team? </p>
+
+                                <div class="scrollable-users-container">
+                                    <ul class="list-users-container">
+                                    @if ($team->users)
+                                        @foreach($team->users as $teamUser)
+                                            @if(!$teamUser->isTeamOwner($team))
+                                                <li class="each-user">
+                                                    <div class="users-thumbnail" style="background-image: url({{ $teamUser->profile_picture }})"></div>
+                                                    <div class="user-full-name">{{ $teamUser->full_name }}</div>
+                                                    <div class="check-container">
+                                                        <x-radio-round-two name="transfer-ownership-check" id="{{ $teamUser->id }}" value="{{ $teamUser->email }}"></x-radio-round-two>
+                                                    </div>
+                                                </li>
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                    </ul>
+                                </div>
+
+                                <form class="custom-modal-form bottom-shadow-container button-container mt-40">
+                                    <button type="button" id="transfer-btn" data-teamid="{{ $team->id }}" class="inactive">TRANSFER</button>
+                                    <button type="button" class="btn black-bordered mr-10 ownership-removal-btn">CANCEL</button>
+                                </form>
+                            </x-dialog-box>
+
                             <button
                                 type="button"
                                 class="button red-button leave-team-transfer"
                                 data-teamname="{{ $team->name }}"
                                 data-teamid="{{ $team->id }}"
                                 data-teamuser="{{ $user->id }}">
-                                LEAVE M
+                                LEAVE
                             </button>
                             @else
+
+
                             <button
                                 type="button"
                                 class="button red-button leave-team"
                                 data-teamname="{{ $team->name }}"
                                 data-teamid="{{ $team->id }}"
                                 data-teamuser="{{ $user->id }}">
-                                LEAVE S
+                                LEAVE
                             </button>
                             @endif
                         </td>

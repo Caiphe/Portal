@@ -72,15 +72,23 @@ class CompanyTeamsController extends Controller
      */
     public function leaveTransferOwnership(LeavingRequest $teamRequest, Team $team)
     {
-        
+        $usersCount = $team->users->count();
+        $data = $teamRequest->validated();
+        $team = $this->getTeam($data['team_id']);
+        $user = $this->getTeamUser(auth()->user()->id);
     }
+
     public function leave(LeavingRequest $teamRequest, Team $team)
     {
         $usersCount = $team->users->count();
         $data = $teamRequest->validated();
+        $team = $this->getTeam($data['team_id']);
+        $user = $this->getTeamUser(auth()->user()->id);
+
+        abort_if(!$team, 424, 'The team could not be found');
+        abort_if(!$user, 424, 'Your user could not be found');
 
         if($team->owner_id === auth()->user()->id && $usersCount === 1){
-
             $teamsInvites = TeamInvite::where('team_id', $team->id)->get();
             if($teamsInvites){
                 foreach($teamsInvites as $invite){
@@ -98,31 +106,22 @@ class CompanyTeamsController extends Controller
                     }
                 }
             }
+
+            ApigeeService::removeDeveloperFromCompany($team, $user);
+            ApigeeService::deleteCompany($team);
+            $team->delete();
+
+            return response()->json([
+                'success' => true,
+                'success:message' => $user->full_name . ' has successfully left ' . $team->name
+            ]);
+
         }
 
-        if($team->owner_id === auth()->user()->id && $usersCount > 1){
-
-        }
-
-        // $team = $this->getTeam($data['team_id']);
-        // abort_if(!$team, 424, 'The team could not be found');
-
-        // $user = $this->getTeamUser(auth()->user()->id);
-        // abort_if(!$user, 424, 'Your user could not be found');
-
-        // if ($team->hasUser($user) && $this->memberLeavesTeam($team, $user)) {
-            
-        //     ApigeeService::removeDeveloperFromCompany($team, $user);
-        //     return response()->json([
-        //         'success' => true,
-        //         'success:message' => $user->full_name . ' has successfully left ' . $team->name
-        //     ]);
-        // }
-
-        // return response()->json([
-        //     'success' => false,
-        //     'error:message' => $user->full_name . ' could not leave ' . $team->name
-        // ]);
+        return response()->json([
+            'success' => false,
+            'error:message' => $user->full_name . ' could not leave ' . $team->name
+        ]);
     }
 
     public function remove(LeavingRequest $teamRequest, Team $team){
