@@ -119,6 +119,7 @@ class DashboardController extends Controller
                 ->header('Content-Type', 'text/html');
         }
 
+
         $productLocations = Product::isPublic()
             ->WhereNotNull('locations')
             ->Where('locations', '!=', 'all')

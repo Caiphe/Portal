@@ -8,7 +8,6 @@ use App\Team;
 use App\User;
 use App\Country;
 use App\Product;
-use Carbon\Carbon;
 use App\Mail\NewApp;
 use App\Mail\UpdateApp;
 use App\Mail\GoLiveMail;
@@ -120,7 +119,7 @@ class AppController extends Controller
     {
         $user = $request->user();
         $count = App::where('developer_id', auth()->user()->developer_id)
-                ->where('created_at', '>=', Carbon::now()->startOfDay())
+                ->where('created_at', '>=', now()->startOfDay())
                 ->count();
         
         $userRoles = array_unique(explode(',', $user->getRolesListAttribute()));
@@ -148,6 +147,15 @@ class AppController extends Controller
         if (isset($validated['team_id']) && $validated['team_id']) {
             $team = Team::find($validated['team_id']);
         }
+
+        $countTeamApps = 0;
+        if($team){
+            $countTeamApps = App::where('team_id', $team->id)
+                ->where('created_at', '>=', now()->startOfDay())
+                ->count();
+        }
+        
+        abort_if($countTeamApps >= 5 , 429, "Action not allowed.");
 
         $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
         $attributes = ApigeeService::formatToApigeeAttributes($attributes);
@@ -429,10 +437,12 @@ class AppController extends Controller
     {
         $user = auth()->user();
         $userTeams = $user->teams()->pluck('id')->toArray();
+
         $app = App::where('slug', $app)->where(
             fn ($q) => $q->where('developer_id', $user->developer_id)
                 ->orWhereIn('team_id', $userTeams)
         )->firstOrFail();
+        
         $validated = $request->validated();
 
         ApigeeService::delete("developers/{$user->email}/apps/{$validated['name']}");

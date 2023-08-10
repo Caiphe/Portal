@@ -315,11 +315,10 @@
             @endcan
         @else
             <a href="{{ route('app.edit', $app['slug']) }}">Edit</a>
-            <form class="delete">
-                @method('DELETE')
-                @csrf
-                <button class="app-delete" data-name="{{ $app['name'] }}">Delete</button>
-            </form>
+            <button class="app-delete-modal" 
+                data-appname="{{ $app['name'] }}"
+                data-displayname="{{ $app['display_name'] }}">Delete
+            </button>
         @endif
     </nav>
     <div class="modal"></div>

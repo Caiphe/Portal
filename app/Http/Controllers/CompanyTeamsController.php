@@ -11,7 +11,6 @@ use App\Product;
 
 use App\TeamUser;
 use Illuminate\Http\Request;
-
 use App\Services\ApigeeService;
 use Mpociot\Teamwork\TeamInvite;
 use App\Concerns\Teams\InviteActions;
@@ -345,6 +344,12 @@ class CompanyTeamsController extends Controller
 
         $data['logo'] = $this->processLogoFile($request);
 
+        $teamCount = Team::where('owner_id', $user->id)
+            ->where('created_at', '>=', now()->startOfDay())
+            ->count();
+
+        abort_if($teamCount >= 2, 429, "Action not allowed.");
+
         $team = $this->createTeam($user, $data);
 
         if (!$team) {
@@ -512,6 +517,7 @@ class CompanyTeamsController extends Controller
      */
     public function delete(Team $team)
     {
+
         $user = auth()->user();
 
         abort_if($team->owner_id !== $user->id, 401, "You are not this team's owner");

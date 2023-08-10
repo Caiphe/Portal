@@ -19,7 +19,7 @@
 @endpush
 @endonce
 
-@props(['title','countries','tags', 'href', 'showAddButton' => 'false', 'selected' => false, 'addButtonId', 'addUrl', 'target' => '_blank'])
+@props(['title','countries', 'tags', 'href', 'showAddButton' => 'false', 'selected' => false, 'addButtonId', 'addUrl', 'target' => '_blank'])
 
 @isset($addButtonId)
 <input id="{{ $addButtonId }}" type="checkbox" class="add-product" name="add_product[]" value="{{ $dataTitle }}" @if($selected) checked @endif hidden autocomplete="off">
