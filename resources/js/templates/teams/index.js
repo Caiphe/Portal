@@ -20,17 +20,68 @@ for (var i = 0; i < leaveTeamTransferBtn.length; i++) {
 function showOwnershipModalFunc() {
     var owneshipTransferModal = this.previousElementSibling;
     owneshipTransferModal.classList.add('show');
-}
+    var radiosList = owneshipTransferModal.querySelectorAll('input[name="transfer-ownership-check"]');
+    var transBtn = owneshipTransferModal.querySelector('#transfer-btn');
+    var cancelBtn = owneshipTransferModal.querySelector('.cancel-transfer');
+    cancelBtn.addEventListener('click', hideOwnershipModal);
+    transBtn.classList.add('inactive');
 
-for (var i = 0; i < radiosList.length; i++) {
-    radiosList[i].addEventListener('click', checkedRadio);
-}
-
-function checkedRadio() {
-    if (this.checked) {
-        transferOwnsershipBtn.classList.remove('inactive');
-        transferOwnsershipBtn.setAttribute('data-useremail', this.value);
+    for (var i = 0; i < radiosList.length; i++) {
+        radiosList[i].checked = false;
+        radiosList[i].addEventListener('click', checkedTeamRadio.bind(radiosList[i], transBtn));
     }
+}
+
+function hideOwnershipModal() {
+    document.querySelector('.ownweship-modal-container.show').classList.remove('show');
+}
+
+function checkedTeamRadio(transBtn){
+    transBtn.classList.remove('inactive');
+    transBtn.style.pointerEvents = 'auto';
+    transBtn.setAttribute('data-useremail', this.value);
+    transBtn.addEventListener('click', transferOwnershipProcess)
+}
+
+function transferOwnershipProcess(event){
+    event.preventDefault();
+    var url =  this.parentNode.action
+
+    var data = {
+        team_id: this.dataset.teamid,
+        user_email: this.dataset.useremail
+    };
+
+    var xhr = new XMLHttpRequest();
+
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.setRequestHeader("X-CSRF-TOKEN",document.getElementsByName("csrf-token")[0].content);
+    xhr.send(JSON.stringify(data));
+
+    addLoading('Changing ownership ...');
+
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            hideOwnershipModal();
+            addAlert('success', "Ownership transfered successfully.");
+            setTimeout(reloadTimeOut, 4000);
+        } else {
+            var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+            if (result.errors) {
+                result.message = [];
+                for (var error in result.errors) {
+                    result.message.push(result.errors[error]);
+                }
+            }
+
+            addAlert('error', result.message || 'Sorry there was a problem. Please try again.');
+        }
+
+        removeLoading();
+    };
 }
 
 for (var i = 0; i < leaveTeamBtn.length; i++) {
@@ -164,4 +215,8 @@ function handleInvite(url, data, event) {
 
         removeLoading();
     };
+}
+
+function reloadTimeOut(){
+    location.reload();
 }

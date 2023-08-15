@@ -20,6 +20,7 @@ use App\Http\Requests\Teams\UpdateRequest;
 use App\Http\Requests\Teams\RoleUpdateRequest;
 use App\Http\Requests\Teams\Invites\InviteRequest;
 use App\Http\Requests\Teams\Invites\LeavingRequest;
+use App\Http\Requests\Teams\MakeOwnerRequest;
 use App\Http\Requests\Teams\Request as TeamRequest;
 
 /**
@@ -70,12 +71,24 @@ class CompanyTeamsController extends Controller
     /**
      * Leave/Delete endpoint(s)
      */
-    public function leaveTransferOwnership(LeavingRequest $teamRequest, Team $team)
+    public function leaveMakeOwner(MakeOwnerRequest $teamRequest , Team $team)
     {
-        $usersCount = $team->users->count();
         $data = $teamRequest->validated();
-        $team = $this->getTeam($data['team_id']);
         $user = $this->getTeamUser(auth()->user()->id);
+        $team = $this->getTeam($data['team_id']);
+        $newOwner = $this->getTeamUserByEmail($data['user_email']);
+
+        abort_if($team->owner_id !== $user->id, 401, "You are not this team's owner");
+        abort_if(!$user, 401, 'Your user could not be found');
+        abort_if(!$team, 404, 'The team could not be found');
+        abort_if(!$newOwner, 404, 'This user is not known');
+
+        $newOwner->teams()->updateExistingPivot($team, ['role_id' => 7]);
+        ApigeeService::removeDeveloperFromCompany($team, $user);
+        $team->update(['owner_id' => $newOwner->id]);
+        $team->users()->detach($user);
+
+        return response()->json(['success' => true, 'code' => 200], 200);
     }
 
     public function leave(LeavingRequest $teamRequest, Team $team)
@@ -111,17 +124,13 @@ class CompanyTeamsController extends Controller
             ApigeeService::deleteCompany($team);
             $team->delete();
 
-            return response()->json([
-                'success' => true,
-                'success:message' => $user->full_name . ' has successfully left ' . $team->name
-            ]);
+            return response()->json(['success' => true, 'code' => 200], 200);
 
+        }else{
+            ApigeeService::removeDeveloperFromCompany($team, $user);
+            $team->users()->detach($user);
+            return response()->json(['success' => true, 'code' => 200], 200);
         }
-
-        return response()->json([
-            'success' => false,
-            'error:message' => $user->full_name . ' could not leave ' . $team->name
-        ]);
     }
 
     public function remove(LeavingRequest $teamRequest, Team $team){
@@ -547,9 +556,7 @@ class CompanyTeamsController extends Controller
      */
     public function delete(Team $team)
     {
-
         $user = auth()->user();
-
         abort_if($team->owner_id !== $user->id, 401, "You are not this team's owner");
 
         $teamMembers = $team->users->pluck('id')->toArray();

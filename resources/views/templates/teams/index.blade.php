@@ -100,9 +100,11 @@
                                     </ul>
                                 </div>
 
-                                <form class="custom-modal-form bottom-shadow-container button-container mt-40">
-                                    <button type="button" id="transfer-btn" data-teamid="{{ $team->id }}" class="inactive">TRANSFER</button>
-                                    <button type="button" class="btn black-bordered mr-10 ownership-removal-btn">CANCEL</button>
+                                <form class="custom-modal-form bottom-shadow-container button-container mt-40" action="{{ route('teams.leave.make.owner', $team->id) }}">
+                                    @csrf
+                                    <input type="hidden" value="{{ $team->id }}" name="team_id" />
+                                    <button type="button" id="transfer-btn" data-teamid="{{ $team->id }}" class="transfer-btn inactive">TRANSFER</button>
+                                    <button type="button" class="btn black-bordered mr-10 cancel-transfer">CANCEL</button>
                                 </form>
                             </x-dialog-box>
 
