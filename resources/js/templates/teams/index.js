@@ -90,10 +90,13 @@ for (var i = 0; i < leaveTeamBtn.length; i++) {
 
 function showLeaveTeamModal(){
     modalContainer.classList.add('show');
+    var teamsModal = document.querySelector('.leave-team-modal-container.show');
 
-    teamNameText.innerHTML = this.dataset.teamname;
+    if(this.dataset.teamuserscount == 1){
+        teamsModal.querySelector('.one-member-text').innerHTML = 'All applications will be removed from the team.';
+    }
 
-    //Hidden fields to track the Team being left
+    teamsModal.querySelector('.boder-text').innerHTML = this.dataset.teamname
     hiddenTeamId.value = this.dataset.teamid;
     hiddenTeamUserId.value = this.dataset.teamuser;
 }
