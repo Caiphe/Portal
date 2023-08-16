@@ -133,7 +133,7 @@ class CompanyTeamsController extends Controller
             if($appCreated->count() >= 1){
                 foreach($appCreated as $app){
                     $app->update([
-                        'developer_id' => $teamOwnerDeveloperId
+                        'developer_id' => $teamOwnerDeveloperId[0]
                     ]);
                 }
             }
