@@ -127,6 +127,17 @@ class CompanyTeamsController extends Controller
             return response()->json(['success' => true, 'code' => 200], 200);
 
         }else{
+            $appCreated = App::where('developer_id', $user->developer_id)->where('team_id', $team->id)->get();
+            $teamOwnerDeveloperId = User::where('id', $team->owner_id)->pluck('developer_id')->toArray();
+            
+            if($appCreated->count() >= 1){
+                foreach($appCreated as $app){
+                    $app->update([
+                        'developer_id' => $teamOwnerDeveloperId
+                    ]);
+                }
+            }
+
             ApigeeService::removeDeveloperFromCompany($team, $user);
             $team->users()->detach($user);
             return response()->json(['success' => true, 'code' => 200], 200);
