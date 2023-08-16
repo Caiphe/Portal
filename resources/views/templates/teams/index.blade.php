@@ -125,7 +125,10 @@
                                 class="button red-button leave-team"
                                 data-teamname="{{ $team->name }}"
                                 data-teamid="{{ $team->id }}"
+<<<<<<< HEAD
                                 data-teamuserscount="{{ $team->users->count() }}"
+=======
+>>>>>>> remotes/origin/develop
                                 data-teamuser="{{ $user->id }}">
                                 LEAVE
                             </button>
