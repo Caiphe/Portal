@@ -47,7 +47,7 @@
     <x-dialog-box dialogTitle="Leave team" class="leave-team-modal-container">
         <p class="dialog-text-padding">Are you sure you want to leave this team ?</p>
         <p class="app-name team-name mb-20 boder-text dialog-text-padding"></p>
-        <p class="dialog-text-padding one-member-text"></p>
+        <p class="dialog-text-padding one-member-text" id="one-member-text"></p>
         <form class="form-team-leave bottom-shadow-container button-container">
             <input type="hidden" value="" name="team_id" class="hidden-team-id"/>
             <input type="hidden" value="" name="team_user_id" class="hidden-team-user-id"/>

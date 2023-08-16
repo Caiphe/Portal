@@ -93,7 +93,7 @@ function showLeaveTeamModal(){
     var teamsModal = document.querySelector('.leave-team-modal-container.show');
 
     if(this.dataset.teamuserscount == 1){
-        teamsModal.querySelector('.one-member-text').innerHTML = 'All applications will be removed from the team.';
+        teamsModal.querySelector('#one-member-text').innerHTML = 'All applications will be removed from the team.';
     }
 
     teamsModal.querySelector('.boder-text').innerHTML = this.dataset.teamname
