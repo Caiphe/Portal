@@ -83,6 +83,16 @@ class CompanyTeamsController extends Controller
         abort_if(!$team, 404, 'The team could not be found');
         abort_if(!$newOwner, 404, 'This user is not known');
 
+        $appCreated = App::where('developer_id', $user->developer_id)->where('team_id', $team->id)->get();
+        
+        if($appCreated->count() >= 1){
+            foreach($appCreated as $app){
+                $app->update([
+                    'developer_id' => $newOwner->developer_id
+                ]);
+            }
+        }
+
         $newOwner->teams()->updateExistingPivot($team, ['role_id' => 7]);
         ApigeeService::removeDeveloperFromCompany($team, $user);
         $team->update(['owner_id' => $newOwner->id]);
