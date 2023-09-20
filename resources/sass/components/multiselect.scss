@@ -6,9 +6,11 @@
     margin-top: 4px;
     display: flex;
     flex-wrap: wrap;
+    pointer-events: none;
 
     .tag {
         margin-right: 4px;
         margin-bottom: 4px;
+        pointer-events: auto;
     }
 }
