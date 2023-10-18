@@ -25,7 +25,6 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => ['required', Rule::unique('categories', 'cid')->ignore($this->route('category')->cid ?? '', 'cid')],
             'heading-title' => 'required'
         ];
     }
@@ -39,7 +38,6 @@ class CategoryRequest extends FormRequest
     {
         $tags = '<strong><a><em><i><del><img><ul><ol><li><pre><br><p><table><tbody><thead><tr><td><h2><h3><h4><s><blockquote><u>';
         $this->merge([
-            'title' => filter_var($this->title, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'heading-title' => filter_var($this->get('heading-title'), FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'heading-body' => filter_var($this->get('heading-body'), FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES),
             'benefits-body' => strip_tags($this->get('benefits-body'), $tags),
