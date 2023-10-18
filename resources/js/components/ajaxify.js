@@ -56,8 +56,6 @@ ajaxifyComplete = [];
                     if (el.dataset.func !== undefined) {
                         func = el.dataset.func.replace(/\(.*/, '');
                         args = el.dataset.func.match(/\(([^\)]*)\)/)[1];
-
-                        window[func](args);
                     }
 
                     if (el.dataset.replace !== undefined || isPager) {
@@ -70,6 +68,15 @@ ajaxifyComplete = [];
                         addAlert('success', (result.body || "Success"));
                     }
 
+                    var searchField =  document.querySelector('#search-page');
+                    setTimeout(function(){
+                        if(searchField){
+                            searchField.value = "";
+                        }
+
+                        location.reload();
+                    }, 3000)
+                   
                     runAjaxifyComplete();
 
                 } else {

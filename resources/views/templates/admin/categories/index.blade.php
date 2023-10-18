@@ -10,10 +10,6 @@
 <h1>Categories</h1>
     <x-admin.filter searchTitle="Category name"></x-admin.filter>
 
-    <div class="page-actions">
-        <a href="{{ route('admin.category.create') }}" class="button primary page-actions-create" aria-label="Create category"></a>
-    </div>
-
     <div id="table-data">
         @include('components.admin.list', [
             'collection' => $categories,

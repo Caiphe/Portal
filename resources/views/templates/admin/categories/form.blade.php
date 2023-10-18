@@ -16,7 +16,7 @@
 
     <label class="editor-field-label">
         <h3>Title</h3>
-        <input type="text" class="long" name="title" placeholder="Title" value="{{ $category->title ?? old('title') }}" autocomplete="off">
+        <div class="long non-editable">{{ $category->title ?? old('title') }}</div>
     </label>
 
     <label class="editor-field-label">

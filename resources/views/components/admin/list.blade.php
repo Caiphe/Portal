@@ -28,13 +28,15 @@
                 <a href="{{ route("{$modelName}.show", $model->slug) }}" target="_blank" rel="noreferrer">@svg('eye') View</a>
                 @endif
                 <a href="{{ route("admin.{$modelName}.edit", $model->slug) }}">@svg('pencil') Edit</a>
-                @if(Route::has("admin.{$modelName}.delete"))
+
+                @if(Route::has("admin.{$modelName}.delete") && $modelName !== 'category')
                 <form class="delete-form ajaxify" action="{{ route("admin.{$modelName}.delete", $model->slug) }}" method="POST" data-func="removeRow({{ $model->slug }})" data-confirm="Are you sure you want to delete this?">
                     @method('DELETE')
                     @csrf
                     <button class="sl-button">@svg('trash') Delete</button>
                 </form>
                 @endif
+
                 <button class="sl-button reset mobile-action">@svg('more-vert')@svg('chevron-right')</button>
             </td>
         </tr>
