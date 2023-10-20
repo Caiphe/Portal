@@ -120,7 +120,6 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 	Route::get('categories', 'CategoryController@index')->middleware('can:administer-content')->name('admin.category.index');
 	Route::get('categories/{category:slug}/edit', 'CategoryController@edit')->middleware('can:administer-content')->name('admin.category.edit');
 	Route::put('categories/{category:slug}/update', 'CategoryController@update')->middleware('can:administer-content')->name('admin.category.update');
-	Route::get('categories/create', 'CategoryController@create')->middleware('can:administer-content')->name('admin.category.create');
 	Route::post('categories', 'CategoryController@store')->middleware('can:administer-content')->name('admin.category.store');
 
 	// Dashboard
