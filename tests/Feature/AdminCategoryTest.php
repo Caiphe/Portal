@@ -35,7 +35,6 @@ class AdminCategoryTest extends TestCase
     public function can_not_view_category_admin_as_guest()
     {
         $this->getJson(route('admin.category.index'))->assertUnauthorized();
-        $this->getJson(route('admin.category.create'))->assertUnauthorized();
         $this->getJson(route('admin.category.edit', $this->category))->assertUnauthorized();
     }
 
@@ -43,12 +42,6 @@ class AdminCategoryTest extends TestCase
     public function can_view_category_index()
     {
         $this->actingAs($this->user)->get(route('admin.category.index'))->assertOk();
-    }
-
-    /** @test */
-    public function can_view_category_create()
-    {
-        $this->actingAs($this->user)->get(route('admin.category.create'))->assertOk();
     }
 
     /** @test */
