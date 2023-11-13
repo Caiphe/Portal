@@ -5,7 +5,7 @@ pre:not(.sl-code-viewer) {
     background-color: variables.$grey600;
     border-radius: 8px;
     padding: variables.$gutterSmall;
-    font-family: "Montserrat";
+    font-family: variables.$MTN-Regular;
     word-break: break-word;
     white-space: break-spaces;
 }

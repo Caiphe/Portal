@@ -17,6 +17,7 @@ button.show-password {
     &.reset{
         background-image: url("/images/icons/visible.svg");
         background-position: center center;
+        background-color: #fff;
 
         &.password-visible{
             background-image: url('/images/icons/hidden.svg');

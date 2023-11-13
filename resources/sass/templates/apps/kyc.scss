@@ -75,7 +75,7 @@
                 font-size: 1.8rem;
                 text-align: left;
                 margin: variables.$gutter 0 variables.$gutterSmall;
-                font-family: "Montserrat";
+                font-family: variables.$MTN-Regular;
 
                 &:first-of-type {
                     margin: 0 0 variables.$gutterSmall;
@@ -97,7 +97,7 @@
                 position: relative;
             }
 
-            p.bold,
+            p.bold
                 {
                 margin-bottom: 0;
             }
