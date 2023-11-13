@@ -45,14 +45,14 @@
                     </div>
 
                     <div class="apps-button-container">
-                        <button type="button" class="btn dark outline" id="assign-to-me">Assign to me</button>
-                        <button type="button" class="btn dark outline remove-thumbnail" id="remove-assignee">Remove assignee</button>
+                        <button type="button" class="linkBtn" id="assign-to-me">Assign to me</button>
+                        <button type="button" class="linkBtn remove-thumbnail" id="remove-assignee">Remove assignee</button>
                     </div>
                 </div>
 
                 <div class="actions-btn-container">
-                    <a class="btn dark outline" href="{{ url()->previous() }}">Cancel</a>
-                    <button id="next-app-owner" class="btn dark next" type="button">Next</button>
+                    <a class="button white" href="{{ url()->previous() }}">Cancel</a>
+                    <button id="next-app-owner" class="btn primary next" type="button">Next</button>
                 </div>
             </div>
 
@@ -107,15 +107,15 @@
                         <label for="value">Value</label>
                         <input type="text" value="" name="attribute_value" id="attribute-value" class="attribute-field attribute-value" placeholder="New value"/>
                     </div>
-                    <button type="button" class="button add-attribute" id="add-attribute">Add</button>
+                    <button type="button" class="button btn dark outline add-attribute" id="add-attribute">Add</button>
                 </div>
                 <div class="attribute-error" id="attribute-error">Attribute name and value required</div>
 
                 {{-- Custom attributes ends --}}
 
                 <div class="actions-btn-container">
-                    <button type="button" class="btn dark outline back">Back</button>
-                    <button type="button" id="next-app-details" class="dark next apps-create-btn">Select country</button>
+                    <button type="button" class="button white back">Back</button>
+                    <button type="button" id="next-app-details" class="btn primary next apps-create-btn">Select country</button>
                 </div>
             </div>
 
@@ -138,8 +138,8 @@
                 </div>
 
                 <div class="actions-btn-container">
-                    <button type="button" class="btn dark outline back">Back</button>
-                    <button type="button" id="next-select-products" class="btn dark next" id="select-products-button"> Select products</button>
+                    <button type="button" class="button btn white back">Back</button>
+                    <button type="button" id="next-select-products" class="btn primary next" id="select-products-button"> Select products</button>
                 </div>
             </div>
 
@@ -183,8 +183,8 @@
                 </div>
 
                 <div class="actions-btn-container">
-                    <button type="button" class="btn dark outline back">Back</button>
-                    <button type="button" id="next-create-app" class="btn dark next">Create app</button>
+                    <button type="button" class="btn button white back">Back</button>
+                    <button type="button" id="next-create-app" class="btn primary next">Create app</button>
                 </div>
             </div>
 
