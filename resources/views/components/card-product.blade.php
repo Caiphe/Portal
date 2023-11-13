@@ -29,10 +29,10 @@
         <div class="card__content">
             @isset($tags)
                 @foreach ($tags as $tag)
-                    <span class="tag outline yellow">{{ $tag }}</span>
+                    <span class="tag grey">{{ $tag }}</span>
                 @endforeach
                 @if(isset($dataAccess) && $dataAccess !== 'public')
-                <span class="tag outline {{ $dataAccess }}">{{ $dataAccess }}</span>
+                <span class="tag grey {{ $dataAccess }}">{{ $dataAccess }}</span>
                 @endif
             @endisset
             @isset($title)

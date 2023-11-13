@@ -115,7 +115,7 @@
                 @else
                 <button class="reset app-status-action" data-id="{{ $app['aid'] }}" data-app-display-name="{{ $app['display_name'] }}" data-status="approved" data-action="{{ route('admin.app.status-update', $app) }}">@svg('approve') Approve application</button>
                 @endif
-                <button class="log-notes reset" data-id="{{ $app['aid'] }}">@svg('view') View application log notes</button>
+                <button class="log-notes reset" data-id="{{ $app['aid'] }}">@svg('eye') View application log notes</button>
                 <button class="custom-attributes reset" data-id="{{ $app['aid'] }}" data-route="{{ route('app.save.attributes', $app) }}">@svg('tag') Custom attributes</button>
             </div>
         </div>

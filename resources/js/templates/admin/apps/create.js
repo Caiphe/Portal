@@ -311,7 +311,7 @@
             this.classList.remove("active");
             creatorEmail.innerHTML = 'No creator assigned';
             searchField.value = '';
-            ownerAvatar.style.backgroundImage = "url(/images/yellow-vector.svg)";
+            ownerAvatar.style.backgroundImage = "url(/images/app-profile.png)";
             this.style.display = 'none';
             buttonsContainer.classList.remove("on-show");
         });
