@@ -67,7 +67,7 @@
                 {{-- Section Heading ends --}}
 
                 <div class="group">
-                    <label for="name">Name your app *</label>
+                    <label for="name">Application Name *</label>
                     <input type="text" name="name" id="name" placeholder="Enter name" maxlength="100" autocomplete="off" required>
                     <div class="error"></div>
                 </div>
