@@ -78,7 +78,8 @@
             align-items: center;
             border: 2px solid variables.$grey300;
             border-radius: 10px;
-            margin-top: 20px;
+            margin: 20px auto;
+
 
             @media screen and (min-width: 768px) {
                 padding: 40px;
@@ -86,6 +87,7 @@
 
             @media screen and (max-width: 768px) {
                 padding: 20px;
+                width: 100%;
             }
 
             >div {
@@ -132,28 +134,16 @@
 
             button {
                 display: flex;
-                justify-content: space-between;
                 align-items: center;
             }
 
             .groups {
                 width: 100%;
-
-                @media screen and (min-width: 768px) {
-                    display: flex;
-                    flex-wrap: wrap;
-                    justify-content: space-between;
-                    max-width: 720px;
-                }
             }
 
             .group {
                 display: flex;
                 flex-direction: column;
-
-                @media screen and (min-width: 768px) {
-                    width: calc(50% - 20px);
-                }
 
                 @media screen and (max-width: 767px) {
                     width: 100%;
@@ -189,7 +179,7 @@
                     position: relative;
 
                     @media screen and (min-width: 768px) {
-                        width: 13%;
+                        width: 16%;
                     }
 
                     @media screen and (max-width: 768px) {
@@ -320,6 +310,16 @@
             .form-actions {
                 display: flex;
 
+                .button{
+                    width: 170px;
+                    text-align: center;
+                }
+
+                .button{
+                    &:nth-child(1){
+                        margin-right: 20px;
+                    }
+                }
                 button:nth-of-type(1) {
                     margin-right: 20px;
                 }
