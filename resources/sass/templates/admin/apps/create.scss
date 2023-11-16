@@ -1,6 +1,12 @@
 @use '../../../variables'as *;
 
 #main {
+
+    .create-form{
+        width: 700px;
+        margin: 40px auto;
+    }
+
     h1 {
         @media screen and (max-width: 767px) {
             margin-bottom: 0;
