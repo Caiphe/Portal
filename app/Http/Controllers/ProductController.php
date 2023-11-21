@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use App\Content;
 use App\Country;
 use App\Product;
@@ -34,6 +35,9 @@ class ProductController extends Controller
 		$hasInternalProduct = $products->contains('access', 'internal');
 		$productGroups = $products->pluck('group')->unique()->toArray();
 
+		$categoryWithCount = Category::withCount('products')->get();
+		// dd($categoryWithCount->toArray());
+
 		return view('templates.products.index', [
 			'productsCollection' => $productsCollection,
 			'productCategories' => $productCategories,
@@ -42,6 +46,7 @@ class ProductController extends Controller
 			'content' => $content,
 			'hasPrivateProduct' => $hasPrivateProduct,
 			'hasInternalProduct' => $hasInternalProduct,
+			'products' => $products,
 			'productGroups' => $productGroups
 		]);
 	}

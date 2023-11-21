@@ -41,6 +41,7 @@
             <h3>Group</h3>  
             <x-multiselect id="filter-group" name="filter-group" label="Select group" :options="$productGroups" />
         </div>
+        
         <button id="filter-clear" class="dark outline"
                 @isset($selectedCategory)
                     style="display:block"
@@ -62,6 +63,7 @@
     </div>
 
     <div class="content">
+        <div class="products-count" id="products-count">Displaying {{ $products->count() }} results</div>
         <div class="products">
             @foreach ($productsCollection as $category => $products)
                 <div class="category"
@@ -69,7 +71,10 @@
                      style="display:none"
                     @endif
                 >
-                    <h3 class="category-title" data-category="{{ $products[0]->category_cid }}">{{ $category }}</h3>
+                    <h3 class="category-title" data-category="{{ $products[0]->category_cid }}">{{ $category }} 
+                        <span class="heasder-count">{{ $products->count() }} products</span>
+                    </h3>
+                  
                     @foreach ($products as $product)
                         <x-card-product :title="$product->display_name"
                                         :href="route('product.show', $product->slug)"

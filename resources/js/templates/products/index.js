@@ -1,5 +1,6 @@
 (function () {
     var filterProductsEls = document.querySelectorAll('.filter-products');
+    var cardsCount = document.querySelector('#products-count');
     var timeout = null;
 
     var currentCategory = localStorage.getItem("category");
@@ -41,6 +42,7 @@
         document.getElementById('filter-group').value = '';
         document.getElementById('filter-country-tags').innerHTML = '';
         document.getElementById('filter-group-tags').innerHTML = '';
+        cardsCount.classList.remove('hide');
 
         for (var i = categories.length - 1; i >= 0; i--) {
             categories[i].checked = false;
@@ -62,6 +64,7 @@
             if (testFilterText(cards[i]) && testCategories(cards[i]) && testAccess(cards[i]) && testLocation(cards[i]) && testGroup(cards[i])) {
                 cards[i].style.display = 'inherit';
                 categoryHeadingsShow.push(cards[i].dataset.category);
+                cardsCount.classList.add('hide');
                 continue;
             }
 
