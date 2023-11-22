@@ -33,7 +33,12 @@ function toggleFilter() {
 }
 
 function syncProductsThenApps() {
-    syncProducts(syncApps);
+    addAlert('success', ['Syncing Products and Apps. You will be mailed once complete']);
+
+    setTimeout(function(){
+        syncProducts(syncApps);
+    }, 5000)
+    // syncProducts(syncApps);
 }
 
 function syncApps() {

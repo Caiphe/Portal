@@ -32,6 +32,7 @@ class SyncController extends Controller
 
     public function syncApps()
     {
+        dd('Sync apps takes place here');
         Artisan::call('sync:apps');
 
         return response()->json(['success' => true]);        
