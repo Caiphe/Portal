@@ -67,6 +67,7 @@
         function bladeLookupAdmin(key) {
             return {
                 syncApiUrl: "{{ route('api.sync') }}",
+                syncAllApiUrl: "{{ route('api.sync.all') }}",
                 syncAppApiUrl: "{{ route('api.sync.apps') }}",
                 syncProductApiUrl: "{{ route('api.sync.products') }}",
             }[key] || null;

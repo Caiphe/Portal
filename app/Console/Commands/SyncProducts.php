@@ -46,7 +46,6 @@ class SyncProducts extends Command
 
 		$allow = config('apigee.apigee_allow_prefix');
 		$deny = explode(',', config('apigee.apigee_deny_prefix'));
-
 		$products = ApigeeService::get('apiproducts?expand=true')['apiProduct'];
 
 		$attributes = [];
