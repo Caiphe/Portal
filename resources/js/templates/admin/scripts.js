@@ -32,17 +32,7 @@ function toggleFilter() {
     document.getElementById('search-form').classList.toggle('show');
 }
 
-function syncProductsThenApps() {
-    addAlert('success', ['Syncing Products and Apps. You will be mailed once complete']);
-
-    setTimeout(function(){
-        syncAll();
-    }, 5000);
-    
-    // syncProducts(syncApps);
-}
-
-function syncAll() {
+function createSyncJob() {
     var xhr = new XMLHttpRequest();
 
     addLoading('Syncing products and app...');
@@ -52,7 +42,7 @@ function syncAll() {
             removeLoading();
 
             if (xhr.status === 200) {
-                addAlert('success', ['Syncing complete!', 'Refresh the page to see if there is anything new.']);
+                addAlert('success', ["We are currently handling your request and will notify you via email once the process is complete."]);
             } else {
                 var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
                 addAlert('error', (result || 'There was a problem syncing.'));

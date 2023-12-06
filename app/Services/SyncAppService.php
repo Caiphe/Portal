@@ -6,30 +6,31 @@
     use App\Product;
     use App\Country;
     use App\Services\ApigeeService;
-    use Exception;
 
     class SyncAppService
     {
-
-        public static function syncApps(): void
+        public static function syncApps()
         {
             $countries = Country::get();
             $countryArray = Country::get()->toArray();
             $apps = ApigeeService::getOrgApps('all', 0);
             $products = Product::pluck('name')->toArray();
             $appsToBeDeleted = App::whereNull('deleted_at')->pluck('display_name', 'aid')->toArray();
+            $appsSyncResult = [];
+            $appsSyncResult['totalApps'] = count($apps);
+            $appsSyncResult['deletedApps'] = count($appsToBeDeleted);
 
             foreach ($apps as $app) {
                 $apiProducts = [];
 
                 if (count($app['credentials']) === 0) {
-                    throw new Exception("No creds: {$app['name']}");
+                    $appsSyncResult['no-creds'][] = $app['name'];
                     continue;
                 };
 
                 foreach ($app['credentials'][0]['apiProducts'] as $product) {
                     if (!in_array($product['apiproduct'], $products)) {
-                        throw new Exception("No product: {$app['name']}");
+                        $appsSyncResult['no-products'][] = $app['name'];
                         continue 2;
                     }
                     $apiProducts[$product['apiproduct']] = ['status' => $product['status']];
@@ -38,14 +39,12 @@
                 if (count($app['credentials']) > 1) {
                     foreach (end($app['credentials'])['apiProducts'] as $product) {
                         if (!in_array($product['apiproduct'], $products)) {
-                            throw new Exception("No sandbox product: {$app['name']}");
+                            $appsSyncResult['no-sandbox'][] = $app['name'];
                             continue 2;
                         }
                         $apiProducts[$product['apiproduct']] = ['status' => $product['status']];
                     }
                 }
-
-                throw new Exception("Syncing {$app['name']}");
 
                 $attributes = ApigeeService::formatAppAttributes($app['attributes']);
 
@@ -91,11 +90,11 @@
                 $a->products()->sync($apiProducts);
             }
 
-            throw new Exception('Total apps to be deleted: ' . count($appsToBeDeleted));
-
             if (count($appsToBeDeleted) > 0) {
                 App::whereIn('aid', array_keys($appsToBeDeleted))->delete();
             }
+
+            return $appsSyncResult;
         }
     }
     
