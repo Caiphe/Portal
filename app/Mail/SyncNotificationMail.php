@@ -41,6 +41,6 @@ class SyncNotificationMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Sync All Notification')->markdown('emails.sync-notification');
+        return $this->subject('Sync all notification')->markdown('emails.sync-notification');
     }
 }

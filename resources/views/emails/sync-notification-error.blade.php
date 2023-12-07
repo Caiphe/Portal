@@ -1,8 +1,10 @@
 @component('mail::message')
 
-# Sync failed .
-Potential Reason :
+# Warning
+- {{ $message }}
 
-- 
+@component('mail::button', ['url' => route('admin.dashboard.index')])
+Go to the dashboard
+@endcomponent
 
 @endcomponent

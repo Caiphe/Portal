@@ -10,16 +10,16 @@ class SyncNotificationErrorMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $errorMessage;
+    public $message;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($errorMessage)
+    public function __construct($message)
     {
-        $this->errorMessage = $errorMessage;
+        $this->message = $message;
     }
 
     /**
@@ -29,6 +29,6 @@ class SyncNotificationErrorMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Sync Notification Error')->markdown('emails.sync-notification-error');
+        return $this->subject('Sync notification error')->markdown('emails.sync-notification-error');
     }
 }

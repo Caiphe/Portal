@@ -2,16 +2,16 @@
 
 namespace App\Jobs;
 
-use App\Mail\SyncNotificationErrorMail;
 use Illuminate\Bus\Queueable;
+use App\Services\SyncAppService;
 use App\Mail\SyncNotificationMail;
+use App\Services\SyncProductService;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Queue\SerializesModels;
+use App\Mail\SyncNotificationErrorMail;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Services\SyncAppService;
-use App\Services\SyncProductService;
 
 class SyncAll implements ShouldQueue
 {
@@ -19,7 +19,7 @@ class SyncAll implements ShouldQueue
 
 
     protected $user;
-    public $tries = 2;
+    public $tries = 1;
 
     /**
      * Create a new job instance.
@@ -55,8 +55,9 @@ class SyncAll implements ShouldQueue
         ));
     }
 
-    public function failed(\Exception $e)
+    public function failed()
     {
-        Mail::to($this->user->email)->send(new SyncNotificationErrorMail($e->getMessage()));
+        $message = 'The sync process has failed please try again.';
+        Mail::to($this->user->email)->send(new SyncNotificationErrorMail($message));
     }
 }
