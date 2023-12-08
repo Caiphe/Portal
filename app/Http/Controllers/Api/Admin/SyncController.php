@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Jobs\SyncAll;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Artisan;
 
@@ -35,5 +36,11 @@ class SyncController extends Controller
         Artisan::call('sync:apps');
 
         return response()->json(['success' => true]);        
+    }
+
+    public function syncData()
+    {
+        SyncAll::dispatch();   
+        return response()->json(['success' => true]);
     }
 }

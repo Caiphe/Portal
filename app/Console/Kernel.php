@@ -13,7 +13,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\SyncProducts::class,
+        Commands\SyncBundle::class,
+        Commands\SyncApps::class,
     ];
 
     /**

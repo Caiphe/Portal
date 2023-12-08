@@ -895,3 +895,18 @@
         }
     }
 }
+
+.tag {
+    padding: 4px;
+    font-size: 12px;
+    line-height: 1;
+    font-weight: normal;
+    white-space: nowrap;
+    color: #ffffff;
+    background-color: #999999;
+    border-radius: 3px;
+
+    &.grey{
+        background-color: #1a1a1a;
+    }
+}
