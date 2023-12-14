@@ -35,9 +35,6 @@ class ProductController extends Controller
 		$hasInternalProduct = $products->contains('access', 'internal');
 		$productGroups = $products->pluck('group')->unique()->toArray();
 
-		$categoryWithCount = Category::withCount('products')->get();
-		// dd($categoryWithCount->toArray());
-
 		return view('templates.products.index', [
 			'productsCollection' => $productsCollection,
 			'productCategories' => $productCategories,
