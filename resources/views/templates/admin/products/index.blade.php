@@ -9,6 +9,7 @@
 
 @section('content')
     <h1>Products</h1>
+    <div class="products-number">Displaying <span class="display-count"> {{ $products->count() }} </span> of {{ $productsCount }} products</div>
 
     <x-admin.filter searchTitle="Product name">
 
@@ -27,6 +28,16 @@
                 <option value="">All product groups</option>
                 @foreach ($productGroup as $group)
                 <option value="{{ $group }}">{{ $group }}</option>
+                @endforeach
+            </select>
+        </label>
+
+        <label class="filter-item" for="product-category">
+            Category
+            <select class="product-category" id="product-category" name="category">
+                <option value="">All product categories</option>
+                @foreach ($productCategory as $category)
+                <option value="{{ $category }}">{{ $category }}</option>
                 @endforeach
             </select>
         </label>
@@ -50,6 +61,7 @@
         document.getElementById('search-page').value = params['q'] || '';
         document.querySelector('#access-level').value = params['access'] || '';
         document.getElementById('#product-group').value = params['group'] || '';
+        document.getElementById('#product-category').value = params['category'] || '';
     }
 </script>
 @endpush
