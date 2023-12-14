@@ -42,7 +42,6 @@
         document.getElementById('filter-group').value = '';
         document.getElementById('filter-country-tags').innerHTML = '';
         document.getElementById('filter-group-tags').innerHTML = '';
-        cardsCount.classList.remove('hide');
 
         for (var i = categories.length - 1; i >= 0; i--) {
             categories[i].checked = false;
@@ -53,6 +52,12 @@
         }
 
         filterProducts();
+
+        cardsCount.classList.remove('hide');
+        var filterCounts = document.querySelectorAll('.filters-count');
+        for(var i = 0; i < filterCounts.length; i++){
+            filterCounts[i].classList.remove('show');
+        }
     }
 
     function filterProducts() {
@@ -63,11 +68,13 @@
         for (var i = cards.length - 1; i >= 0; i--) {
             if (testFilterText(cards[i]) && testCategories(cards[i]) && testAccess(cards[i]) && testLocation(cards[i]) && testGroup(cards[i])) {
                 cards[i].style.display = 'inherit';
+                cards[i].classList.add('display-cards');
                 categoryHeadingsShow.push(cards[i].dataset.category);
                 cardsCount.classList.add('hide');
                 continue;
             }
 
+            cards[i].classList.remove('display-cards');
             cards[i].style.display = 'none';
         }
 
@@ -77,7 +84,20 @@
                 continue;
             }
 
+            cards[i].classList.remove('display-cards');
             categoryHeadings[i].style.display = 'none';
+        }
+
+        var allCategories = document.querySelectorAll('.category');
+
+        for(var i =0; i < allCategories.length; i++){
+            var cardsDisplay = allCategories[i].querySelectorAll('.display-cards');
+
+            if(cardsDisplay){
+                var filterCounts = allCategories[i].querySelector('.filters-count');
+                filterCounts.classList.add('show');
+                filterCounts.innerHTML =`${cardsDisplay.length} of `;
+            }
         }
     }
 
@@ -149,4 +169,6 @@
 
 window.addEventListener('load', function(){
     localStorage.removeItem("category");
+    var cards = document.querySelectorAll('.card--product');
+    console.log(cards.length);
 })

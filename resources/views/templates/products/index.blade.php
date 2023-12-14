@@ -72,6 +72,7 @@
                     @endif
                 >
                     <h3 class="category-title" data-category="{{ $products[0]->category_cid }}">{{ $category }} 
+                        <span class="filters-count"></span>
                         <span class="heasder-count">{{ $products->count() }} products</span>
                     </h3>
                   

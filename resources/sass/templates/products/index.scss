@@ -154,9 +154,21 @@ h3 {
 
             span{
                 font-size: 13px;
-                margin-left: 10px;
                 color: #969696;
                 font-family: variables.$MTN-Regular;
+            }
+
+            .filters-count{
+                display: none;
+
+                &.show{
+                    display: block;
+                    margin-left: 10px;
+                }
+            }
+
+            .heasder-count{
+                margin-left: 10px;
             }
         }
 
