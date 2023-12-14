@@ -18,7 +18,9 @@ class ProductController extends Controller
     {
         $access = $request->get('access', "");
         $group = $request->get('group', "");
+        $category = $request->get('category', "");
         $numberPerPage = (int)$request->get('number_per_page', '15');
+        $category = Str::slug($category);
 
         $products = Product::with('category')
             ->select([
@@ -40,9 +42,12 @@ class ProductController extends Controller
             ->when($access !== "" && !is_null($access), function ($q) use ($request) {
                 $q->where('access', $request->get('access'));
             })
+            ->when($category !== "" && !is_null($category), function ($q) use ($category) {
+                $q->where('category_cid', $category);
+            })
             ->when($group !== "" && !is_null($group), function ($q) use ($request) {
                 $q->where('group', $request->get('group'));
-            });;
+            });
         $order = $request->get('order', 'desc');
         $sort = '';
 
@@ -59,7 +64,9 @@ class ProductController extends Controller
         }
 
         $productGroup = Product::pluck('group')->unique()->toArray();
-
+        $productCat = Product::pluck('category_cid')->unique()->toArray();
+        $productCategory = Category::whereIn('slug', $productCat)->pluck('title')->unique()->toArray();
+        
         if ($request->ajax()) {
             return response()
                 ->view('components.admin.list', [
@@ -76,6 +83,8 @@ class ProductController extends Controller
             'products' => $products->orderBy('display_name')->paginate($numberPerPage),
             'order' => $order,
             'productGroup' => $productGroup,
+            'productCategory' => $productCategory,
+            'productsCount' => $products->count(),
         ]);
     }
 

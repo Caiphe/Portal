@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use App\Content;
 use App\Country;
 use App\Product;
@@ -42,6 +43,7 @@ class ProductController extends Controller
 			'content' => $content,
 			'hasPrivateProduct' => $hasPrivateProduct,
 			'hasInternalProduct' => $hasInternalProduct,
+			'products' => $products,
 			'productGroups' => $productGroups
 		]);
 	}
