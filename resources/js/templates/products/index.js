@@ -84,7 +84,6 @@
                 continue;
             }
 
-            cards[i].classList.remove('display-cards');
             categoryHeadings[i].style.display = 'none';
         }
 
