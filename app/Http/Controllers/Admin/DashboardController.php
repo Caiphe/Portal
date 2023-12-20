@@ -64,17 +64,8 @@ class DashboardController extends Controller
             })
             ->when($hasSearchTerm, function ($q) use ($searchTerm) {
                 $q->where(function ($query) use ($searchTerm) {
-                    $query->where('display_name', 'like', $searchTerm)
-                        ->orWhere('aid', 'like', $searchTerm)
-                        ->orWhereHas('developer', function ($q) use ($searchTerm) {
-                            $q->where('first_name', 'like', $searchTerm)
-                                ->orWhere('last_name', 'like', $searchTerm)
-                                ->orWhere('email', 'like', $searchTerm);
-                        });
+                    $query->where('display_name', 'like', $searchTerm);
                 });
-            })
-            ->when($appStatus !== 'all', function ($q) use ($appStatus) {
-                $q->where('status', $appStatus);
             })
             ->when($productStatus !== 'all' && !$hasAid, function ($q) use ($productStatus) {
                 switch ($productStatus) {
