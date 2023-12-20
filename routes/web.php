@@ -120,9 +120,7 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 	Route::get('categories', 'CategoryController@index')->middleware('can:administer-content')->name('admin.category.index');
 	Route::get('categories/{category:slug}/edit', 'CategoryController@edit')->middleware('can:administer-content')->name('admin.category.edit');
 	Route::put('categories/{category:slug}/update', 'CategoryController@update')->middleware('can:administer-content')->name('admin.category.update');
-	Route::get('categories/create', 'CategoryController@create')->middleware('can:administer-content')->name('admin.category.create');
 	Route::post('categories', 'CategoryController@store')->middleware('can:administer-content')->name('admin.category.store');
-	Route::delete('categories{category:slug}/delete', 'CategoryController@destroy')->middleware('can:administer-content')->name('admin.category.delete');
 
 	// Dashboard
 	Route::get('dashboard', 'DashboardController@index')->middleware('can:administer-dashboard')->name('admin.dashboard.index');
@@ -152,6 +150,8 @@ Route::namespace('Api\Admin')->prefix('api/admin')->group(function () {
 	Route::post('sync', 'SyncController@sync')->middleware('can:administer-dashboard')->name('api.sync');
 	Route::post('sync/products', 'SyncController@syncProducts')->middleware('can:administer-dashboard')->name('api.sync.products');
 	Route::post('sync/apps', 'SyncController@syncApps')->middleware('can:administer-dashboard')->name('api.sync.apps');
+
+	Route::post('sync-all/', 'SyncController@syncData')->middleware('can:administer-dashboard')->name('api.sync.all');
 });
 
 Route::post('profile/2fa/verify', 'UserController@verify2fa')->middleware('throttle:3,5')->name('user.2fa.verify');

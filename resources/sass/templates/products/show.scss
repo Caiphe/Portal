@@ -395,7 +395,7 @@
         height: 40px;
         overflow: hidden;
         font-size: 12px;
-        font-family: "Montserrat-Light";
+        font-family: "mtn-Light";
         padding-left: 22px;
 
         &.open {
@@ -407,7 +407,7 @@
         }
 
         h5 {
-            font-family: "Montserrat";
+            font-family: "mtn-regular";
             margin-bottom: 5px;
             cursor: pointer;
 
@@ -420,7 +420,7 @@
             }
 
             .tag {
-                font-family: "Montserrat-Light";
+                font-family: "mtn-Light";
                 font-size: 10px;
             }
         }
@@ -460,7 +460,7 @@
             border-radius: 5px;
             margin: 0 0 5px;
             font-size: 10px;
-            font-family: "Montserrat";
+            font-family: variables.$MTN-Regular;
             cursor: pointer;
         }
 

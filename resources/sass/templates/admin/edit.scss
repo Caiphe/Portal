@@ -159,14 +159,17 @@ h1 {
         .editor-field-copy {
             background-color: transparent;
             border: none;
-            border-bottom: 1px solid variables.$grey800;
+            border: 1px solid variables.$grey400;
             font-size: 14px;
             font-family: variables.$MTN-Regular;
-            padding: 8px 0;
+            padding: 8px 0px 8px 8px;
             display: block;
             width: 100%;
             height: 36px;
             line-height: 1;
+            box-sizing: border-box;
+            border-radius: 4px;
+
         }
 
         select {
@@ -177,6 +180,17 @@ h1 {
             -moz-appearance: none;
             -webkit-appearance: none;
             appearance: none;
+            position: relative;
+
+            &:after{
+                content: '';
+                position: absolute;
+                top: 0;
+                right: 25px;
+                height: 36px;
+                width: 2px;
+                background-color: red;
+            }
         }
 
         .ck-editor {
@@ -276,3 +290,14 @@ h1 {
 input, select{
     outline: none;
 }
+
+.non-editable{
+    border-bottom: none !important;
+    background-color: rgb(242, 242, 242) !important;
+    padding-left: 5px !important;
+    background-image: none !important;
+    cursor: none;
+    pointer-events: none;
+    font-size: 15px;
+    padding: 5px 10px;
+} 
