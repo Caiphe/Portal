@@ -84,7 +84,7 @@ class ProductController extends Controller
             'order' => $order,
             'productGroup' => $productGroup,
             'productCategory' => $productCategory,
-            'productsCount' => $products->count(),
+            'productsCount' => Product::count(),
         ]);
     }
 
