@@ -53,7 +53,6 @@
 
     function updateFilters(params) {
         document.getElementById('search-page').value = params['q'] || '';
-        document.getElementById('app-filter-status').value = params['app-status'] || '';
         document.getElementById('product-filter-status').value = params['product-status'] || '';
         document.getElementById('filter-country').value = params['countries'] || '';
     }

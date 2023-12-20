@@ -19,15 +19,6 @@
 
 <x-admin.filter searchTitle="App or developer name">
     <div class="filter-item">
-        App status
-        <select id="app-filter-status" name="app-status" autocomplete="off">
-            <option @if($appStatus === 'all') selected @endif value="all">All app status</option>
-            <option @if($appStatus === 'approved') selected @endif value="approved">Approved apps</option>
-            <option @if($appStatus === 'revoked') selected @endif value="revoked">Revoked apps</option>
-        </select>
-    </div>
-
-    <div class="filter-item">
         Product status
         <select id="product-filter-status" name="product-status" autocomplete="off">
             <option @if($productStatus === 'all') selected @endif value="all">All product status</option>
