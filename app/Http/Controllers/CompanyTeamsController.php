@@ -408,23 +408,20 @@ class CompanyTeamsController extends Controller
             ->where('created_at', '>=', now()->startOfDay())
             ->count();
 
-        abort_if($teamCount >= 2, 429, "Action not allowed.");
+        if($teamCount >= 2){
+            return response()->json(['success' => true], 429);
+        }
 
         $team = $this->createTeam($user, $data);
 
-        if (!$team) {
-            return back()->with('alert', 'error:There was a problem creating your team;Please try again.');
-        }
-
         if (!empty($data['team_members'])) {
-            $this->sendInvites($data['team_members'], $team);
+            $teamInviteEmails = explode(',', $data['team_members']);
+            $this->sendInvites($teamInviteEmails, $team);
         }
 
-        if (strpos(url()->previous(), 'teams/create') !== false) {
-            return redirect()->route('teams.listing')->with('alert', "success:{$team->name} has been created");
+        if($team){
+            return response()->json(['success' => true], 200);
         }
-
-        return redirect()->back()->with('alert', "success:{$team->name} has been created");
     }
 
     /**
@@ -463,7 +460,10 @@ class CompanyTeamsController extends Controller
         $teamLogo = $team->logo;
 
         $teamAdmin = auth()->user()->hasTeamRole($team, 'team_admin');
-        abort_if(!$teamAdmin, 424, "You are not this team's admin");
+
+        if(!$teamAdmin){
+            return response()->json(['success' => true], 424);
+        }
 
         if($request->has('logo_file')){
             $teamLogo = $this->processLogoFile($request);
@@ -484,13 +484,12 @@ class CompanyTeamsController extends Controller
         unset($updatedFields['updated_at']);
 
         if(empty($updatedFields)){
-            return redirect()->route('team.show', $team->id);
+            return response()->json(['success' => true], 304);
         }
 
         ApigeeService::updateCompany($team);
-
-        return redirect()->route('team.show', $team->id)
-            ->with('alert', 'success:Your team was successfully updated.');
+        
+        return response()->json(['success' => true], 200);
     }
 
     /**
