@@ -50,8 +50,8 @@
                 </form>
             </li>
             <li>
-                @if($user->can('administer-products'))
-                <button id="sync" class="button yellow outline" onclick="syncProductsThenApps()">Sync all</button>
+                @if($user->can('administer-content'))
+                <button id="sync" class="button yellow outline" onclick="createSyncJob()">Sync all</button>
                 @endif
             </li>
         </ul>
@@ -75,6 +75,7 @@
         function bladeLookupAdmin(key) {
             return {
                 syncApiUrl: "{{ route('api.sync') }}",
+                syncAllApiUrl: "{{ route('api.sync.all') }}",
                 syncAppApiUrl: "{{ route('api.sync.apps') }}",
                 syncProductApiUrl: "{{ route('api.sync.products') }}",
             }[key] || null;

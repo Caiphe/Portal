@@ -291,7 +291,7 @@
 
         a,
         form,
-        button,
+        button
             {
             display: inline-flex;
             align-items: center;
@@ -304,14 +304,14 @@
 
         a+*,
         form+*,
-        button+*,
+        button+*
             {
             margin-left: 16px;
         }
 
         svg {
             fill: variables.$blue;
-            height: 16px;
+            height: 20px;
             margin-right: 4px;
         }
 

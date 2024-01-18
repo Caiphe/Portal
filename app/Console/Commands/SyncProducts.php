@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Product;
 use App\Category;
 use App\Country;
+use App\Log;
 use App\Services\ApigeeService;
 use Illuminate\Console\Command;
 
@@ -45,7 +46,6 @@ class SyncProducts extends Command
 
 		$allow = config('apigee.apigee_allow_prefix');
 		$deny = explode(',', config('apigee.apigee_deny_prefix'));
-
 		$products = ApigeeService::get('apiproducts?expand=true')['apiProduct'];
 
 		$attributes = [];
@@ -92,6 +92,7 @@ class SyncProducts extends Command
 					'pid' => $product['name'],
 					'name' => $product['name'],
 					'display_name' => preg_replace('/[_]+/', ' ', ltrim($product['displayName'], "$allow ")),
+					'description' => $product['description'],
 					'environments' => implode(',', $productEnvironments),
 					'category_cid' => strtolower($category->cid),
 					'access' => $attributes['Access'] ?? null,
@@ -133,7 +134,18 @@ class SyncProducts extends Command
 		$this->info('Total products to be deleted: ' . count($productsToBeDeleted));
 
 		if (count($productsToBeDeleted) > 0) {
-			Product::whereIn('pid', array_keys($productsToBeDeleted))->delete();
+			$toDeleProduct = Product::whereIn('pid', array_keys($productsToBeDeleted))->pluck('name')->toArray();
+
+			foreach($toDeleProduct as $prod){
+				Log::create([
+					'user_id' => auth()->user()->id,
+					'logable_id' =>  $prod,
+					'logable_type' => 'App\Product',
+					'message' => "Product name {$prod} has been deleted",
+				]);
+			}
+
+			Product::whereIn('pid', array_keys($productsToBeDeleted))->forceDelete();
 		}
 
 		if (empty($sandboxProductAttribute)) return;

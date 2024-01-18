@@ -3,7 +3,8 @@
 #main {
     .each-attribute-block{
         input{
-            border: none;
+            box-sizing: border-box;
+            border: 1px solid #E6E6E6;
         }
     }
 }
@@ -21,7 +22,7 @@
         font-family: variables.$MTN-Regular;
         font-weight: 400;
         margin-right: 8px;
-        border-radius: 10px;
+        border-radius: 6px;
         box-sizing: border-box;
         color: #969696;
         border: none;

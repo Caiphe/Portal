@@ -1,6 +1,12 @@
 @use '../../../variables'as *;
 
 #main {
+
+    .create-form{
+        width: 700px;
+        margin: 40px auto;
+    }
+
     h1 {
         @media screen and (max-width: 767px) {
             margin-bottom: 0;
@@ -175,10 +181,10 @@
                         height: 100%;
                         position: relative;
                         border-radius: 50%;
-                        background-color: $yellow;
                         background-size: cover;
                         background-repeat: no-repeat;
                         background-position: center center;
+                        background-image: url('/images/app-profile.png');
                     }
 
                     .remove-thumbnail {
@@ -241,7 +247,16 @@
 
                     .apps-button-container {
                         text-align: center;
-                        font-size: 13px;
+                        margin-top: -20px;
+                        margin-bottom: -13px;
+
+                        .linkBtn{
+                            color: #00678F;
+                            background-color: transparent;
+                            font-size: 14px;
+                            font-weight: bold;
+                            border: none;
+                        }
 
                         &.on-show {
                             display: flex;
@@ -252,7 +267,7 @@
                         height: 40px;
                         appearance: none;
                         width: 100%;
-                        border: solid 1px #707070;
+                        border: solid 1px #E6E6E6;
                     }
 
                     button {
@@ -483,6 +498,7 @@
 
             textarea {
                 resize: none;
+                height: 120px;
             }
 
             .groups {
@@ -526,7 +542,7 @@
                     align-items: center;
                     justify-content: flex-start;
                     background-color: #FFF;
-                    border: 1px solid $grey850;
+                    border: 1px solid $grey400;
                     border-radius: 8px;
                     padding: 20px;
                     margin-right: 10px;
@@ -682,9 +698,12 @@
 
     input,
     textarea {
-        padding: 8px;
+        padding: 11px;
         border-radius: 8px;
-        border: 1px solid $grey850;
+        border: 1px solid #E6E6E6;
+        height: 40px;
+        box-sizing: border-box;
+        outline: none;
     }
 
     // custom attributes
@@ -814,13 +833,16 @@
             .attribute-field{
                 border: none;
                 outline: none;
-                background-color: transparent;
+                background-color: #fff;
                 font-size: 15px;
                 font-family: $MTN-Regular;
-                border-bottom: 1px solid #969696;
+                border: 1px solid #E6E6E6;
                 color: #464646;
                 border-radius: 0px;
-                padding: 0px 5px 2px 0px;
+                box-sizing: border-box;
+                padding: 0px 5px 2px 11px;
+                height: 40px;
+                border-radius: 5px;
             }
         }
 
@@ -871,5 +893,20 @@
             background-color: #fc0;
             transition: all 0.3s ease-in-out;
         }
+    }
+}
+
+.tag {
+    padding: 4px;
+    font-size: 12px;
+    line-height: 1;
+    font-weight: normal;
+    white-space: nowrap;
+    color: #ffffff;
+    background-color: #999999;
+    border-radius: 3px;
+
+    &.grey{
+        background-color: #1a1a1a;
     }
 }

@@ -45,7 +45,7 @@
             </a>
         </nav>
 
-        <form id="form-create-app">
+        <form id="form-create-app" class="create-form">
 
             <div class="active">
                 <div class="user-thumbnails">
@@ -58,7 +58,7 @@
 
                 <div class="groups">
                     <div class="group">
-                        <label for="name">Name your app *</label>
+                        <label for="name">Application name *</label>
                         <input type="text" name="name" id="name" placeholder="Enter name" maxlength="100" autocomplete="off" required>
                         <div class="error">{{ isset($error) && $error->get('display_name', '') }}</div>
                     </div>
@@ -110,10 +110,11 @@
                     </div>
                 </div>
 
-                <button class="dark next">
-                    Select country
-                    @svg('arrow-forward', '#ffffff')
-                </button>
+                <div class="form-actions">
+                    <a class="button dark outline" href="{{ route('app.index') }}">Cancel</a>
+                   <button class="button primary next" type="button">Select country</button>
+                </div>
+
             </div>
 
             <div class="select-countries">
@@ -131,10 +132,9 @@
                 </div>
 
                 <div class="form-actions">
-                    <button class="dark outline back">Back</button>
-                    <button class="dark next" id="select-products-button">
+                    <button class="button dark outline back">Back</button>
+                    <button class="button primary next" id="select-products-button">
                         Select products
-                        @svg('arrow-forward', '#ffffff')
                     </button>
                 </div>
             </div>
@@ -175,14 +175,11 @@
                 </div>
 
                 <div class="form-actions">
-                    <button class="dark outline back">Back</button>
-                    <button class="dark" id="create">
-                        Create app
-                    </button>
+                    <button class="button dark outline back">Back</button>
+                    <button class="button primary" id="create">Create app</button>
                 </div>
             </div>
         </form>
-        <a class="cancel" href="{{ route('app.index') }}">Cancel</a>
     </div>
 @endsection
 

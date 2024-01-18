@@ -11,11 +11,30 @@ var transferOwnsershipBtn = document.querySelector('#transfer-btn');
 var makeOwnershipBtn = document.querySelector('#make-owner-btn');
 var deleteTeamBtn = document.querySelector('.delete-team-btn');
 var deleteTeamModal = document.querySelector('.delete-team-modal');
+var appDeleteShowModalBtn = document.querySelectorAll('.app-delete-modal');
+var modalContainer = document.querySelector('.delete-app-modal');
 var addTeamMobile;
 var addTeammateBtn;
 
 document.querySelector('.delete-team-form').addEventListener('submit', deleteTeamAction);
 document.querySelector('.cancel-delete-team-btn').addEventListener('click', hideDeleteTeamModal);
+
+document.querySelector('.cancel-btn').addEventListener('click', hideModal);
+function hideModal() {
+    modalContainer.classList.remove('show');
+}
+
+for (var i = 0; i < appDeleteShowModalBtn.length; i++) {
+    appDeleteShowModalBtn[i].addEventListener('click', showDeleteAppModal);
+}
+
+function showDeleteAppModal(){
+    modalContainer.classList.add('show');
+    document.querySelector('.modal-app-name').innerHTML = this.dataset.displayname;
+    document.querySelector('.hidden-app-name').value = this.dataset.appname;
+    document.querySelector(".modal.show").classList.remove('show');
+    document.querySelector(".menu.show").classList.remove('show');
+}
 
 function hideDeleteTeamModal(){
     deleteTeamModal.classList.remove('show');
@@ -355,28 +374,19 @@ for (var l = 0; l < modals.length; l++) {
     })
 }
 
-var deleteButtons = document.querySelectorAll('.app-delete');
-for (var m = 0; m < modals.length; m++) {
-    deleteButtons[m].addEventListener('click', handleDeleteMenuClick);
-}
-
+document.querySelector('.app-delete').addEventListener('click', handleDeleteMenuClick);
 function handleDeleteMenuClick(event) {
     event.preventDefault();
 
-    var app = event.currentTarget;
+    var app = document.querySelector('.hidden-app-name').value;
 
     var data = {
-        name: app.dataset.name,
+        name: app,
         _method: 'DELETE'
     };
 
-    var url = '/apps/' + app.dataset.name;
+    var url = '/apps/' + app;
     var xhr = new XMLHttpRequest();
-
-    if (!confirm('Are you sure you want to delete this app?')) {
-        document.querySelector(".menu.show").classList.remove('show');
-        return;
-    }
 
     xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
@@ -396,7 +406,6 @@ function handleDeleteMenuClick(event) {
         }
     };
 
-    document.querySelector(".menu.show").classList.remove('show');
 }
 
 function reloadTimeOut(){

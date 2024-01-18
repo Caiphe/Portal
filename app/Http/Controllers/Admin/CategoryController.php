@@ -64,7 +64,7 @@ class CategoryController extends Controller
         $now = date('Y-m-d H:i:s');
         $categoryData = $request->only(['title', 'theme']);
         $categoryData['description'] = $request->input('heading-title', '');
-        $updateRelationships = $categoryData['title'] !== $category->title;
+        $updateRelationships = $category->title;
         $relationships = [];
 
         if ($updateRelationships) {

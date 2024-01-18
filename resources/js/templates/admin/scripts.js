@@ -32,8 +32,28 @@ function toggleFilter() {
     document.getElementById('search-form').classList.toggle('show');
 }
 
-function syncProductsThenApps() {
-    syncProducts(syncApps);
+function createSyncJob() {
+    var xhr = new XMLHttpRequest();
+
+    addLoading('Syncing products and app...');
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            removeLoading();
+
+            if (xhr.status === 200) {
+                addAlert('success', ["We are currently handling your request and will notify you via email once the process is complete."]);
+            } else {
+                var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+                addAlert('error', (result || 'There was a problem syncing.'));
+            }
+        }
+    };
+
+    xhr.open("POST", bladeLookupAdmin('syncAllApiUrl'));
+    xhr.setRequestHeader('X-CSRF-TOKEN', document.getElementsByName("csrf-token")[0].content);
+
+    xhr.send();
 }
 
 function syncApps() {
