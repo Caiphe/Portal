@@ -269,6 +269,9 @@ function createTeam(event){
                 window.location.href = "/teams";
             });
         }
+        else if(xhr.status === 413){
+            addAlert('warning', ["The logo dimentions are too large, please make sure the width and height are less than 2000."]);
+        }
         else {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
