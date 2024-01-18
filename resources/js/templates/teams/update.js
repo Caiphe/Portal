@@ -89,3 +89,98 @@ function handleTimeInvite(url, data, event) {
         removeLoading();
     };
 }
+
+document.querySelector('#form-create-team').addEventListener('submit', createTeam);
+function createTeam(event){
+    event.preventDefault();
+    var form = this.elements;
+    var errors = [];
+    var urlValue = form['url'].value;
+    var teamName = form['name'].value;
+    var contactNumber = form['contact'].value;
+    var phoneRegex = /^\+|0(?:[0-9] ?){6,14}[0-9]$/;
+    var teamId = form['team-id-value'].value;
+
+    if(form['name'].value === ''){
+        errors.push("Name required");
+    }
+
+    if(urlValue === ''){
+        errors.push("Team URL required");
+    } 
+    
+    if(urlValue !== '' && !/https?:\/\/.*\..*/.test(urlValue)) {
+        errors.push('Please add a valid team url. Eg. https://url.com');
+    }
+
+    if(contactNumber === ''){
+        errors.push("Contact number required");
+    }
+    
+    if(contactNumber !== '' && !phoneRegex.test(contactNumber)){
+        errors.push("Valid phone number required");
+    }
+
+    if(form['country'].value === ''){
+        errors.push("Country required");
+    }
+
+    if (errors.length > 0) {
+        return void addAlert('error', errors.join('<br>'));
+    }
+
+    var _token = form['_token'].value;
+    var formData = new FormData();
+    var updatedTeamLogo = document.getElementById("logo-file").files[0]
+
+    formData.append('_token', _token);
+    formData.append('name', teamName);
+    formData.append('url', urlValue);
+    formData.append('contact', contactNumber);
+    formData.append('country', form['country'].value);
+    formData.append('description', form['description'].value);
+    formData.append('_method', 'PUT');
+
+    if(updatedTeamLogo){
+        formData.append('logo_file', updatedTeamLogo);
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', this.action, true);
+    xhr.setRequestHeader('X-CSRF-TOKEN', _token);
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+    xhr.send(formData);
+    addLoading('updating the team...');
+
+    xhr.onload = function() {
+        removeLoading();
+
+        if (xhr.status === 200) {
+            addAlert('success', [`Your team was succefully updated`], function(){
+                window.location.href = `/teams/${teamId}/team`;
+            });
+        }
+        else if(xhr.status === 424){
+            addAlert('warning', ["You are not this team's admin."], function(){
+                window.location.href = "/teams";
+            });
+        }
+        else if(xhr.status === 304){
+            addAlert('info', ["You did not make any changes."], function(){
+                window.location.href = `/teams/${teamId}/team`;
+            });
+        }
+        else {
+            var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+            if(result.errors) {
+                result.message = [];
+                for(var error in result.errors){
+                    result.message.push(result.errors[error]);
+                }
+            }
+            addAlert('error', result.message || 'Sorry there was a problem creating your team. Please try again.');
+        }
+    };
+}
