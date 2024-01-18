@@ -189,3 +189,99 @@ function handleTimeInvite(url, data, event) {
         removeLoading();
     };
 }
+
+document.querySelector('#form-create-team').addEventListener('submit', createTeam);
+function createTeam(event){
+    event.preventDefault();
+    var form = this.elements;
+    var errors = [];
+    var teamName = form['name'].value;
+    var urlValue = form['url'].value;
+    var contactNumber = form['contact'].value;
+    var phoneRegex = /^\+|0(?:[0-9] ?){6,14}[0-9]$/;
+
+    if(form['name'].value === ''){
+        errors.push("Name required");
+    }
+
+    if(urlValue === ''){
+        errors.push("Team URL required");
+    } 
+    
+    if(urlValue !== '' && !/https?:\/\/.*\..*/.test(urlValue)) {
+        errors.push('Please add a valid team url. Eg. https://url.com');
+    }
+
+    if(contactNumber === ''){
+        errors.push("Contact number required");
+    }
+    
+    if(contactNumber !== '' && !phoneRegex.test(contactNumber)){
+        errors.push("Valid phone number required");
+    }
+
+    if(form['country'].value === ''){
+        errors.push("Country required");
+    }
+
+    if (errors.length > 0) {
+        return void addAlert('error', errors.join('<br>'));
+    }
+
+    var _token = form['_token'].value;
+    var inviteEmailField = form['team_members[]'];
+    var emailList = [];
+
+    if(inviteEmailField && inviteEmailField.length > 0){
+        for(var i = 0; i < inviteEmailField.length; i++){
+            emailList.push(inviteEmailField[i].value);
+        }
+    }
+
+    var formData = new FormData();
+    formData.append('_token', _token);
+    formData.append('name', teamName);
+    formData.append('url', urlValue);
+    formData.append('contact', contactNumber);
+    formData.append('country', form['country'].value);
+    formData.append('logo_file', document.getElementById("logo-file").files[0]);
+    formData.append('team_members', emailList);
+    formData.append('description', form['description'].value);
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', this.action, true);
+    xhr.setRequestHeader('X-CSRF-TOKEN', _token);
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+    xhr.send(formData);
+    addLoading('Creating a new team...');
+
+    xhr.onload = function() {
+        removeLoading();
+
+        if (xhr.status === 200) {
+            addAlert('success', [`${teamName} has been succefully created, You will be redirected to your teams page shortly.`], function(){
+                window.location.href = "/teams";
+            });
+        }
+        else if(xhr.status === 429){
+            addAlert('warning', ["You are not allowed to created more than 2 teams per day."], function(){
+                window.location.href = "/teams";
+            });
+        }
+        else if(xhr.status === 413){
+            addAlert('warning', ["The logo dimentions are too large, please make sure the width and height are less than 2000."]);
+        }
+        else {
+            var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+            if(result.errors) {
+                result.message = [];
+                for(var error in result.errors){
+                    result.message.push(result.errors[error]);
+                }
+            }
+            addAlert('error', result.message || 'Sorry there was a problem creating your team. Please try again.');
+        }
+    };
+}
