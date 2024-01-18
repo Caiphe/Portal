@@ -166,6 +166,9 @@ function createTeam(event){
                 window.location.href = "/teams";
             });
         }
+        else if(xhr.status === 413){
+            addAlert('warning', ["The logo dimentions are too large, please make sure the width and height are less than 2000."]);
+        }
         else if(xhr.status === 304){
             addAlert('info', ["You did not make any changes."], function(){
                 window.location.href = `/teams/${teamId}/team`;
