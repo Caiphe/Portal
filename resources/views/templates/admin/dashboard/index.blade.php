@@ -17,7 +17,7 @@
     <a class="button primary page-actions-create" href="{{ route('admin.app.create') }}" aria-label="Create new application"></a>
 </div>
 
-<x-admin.filter searchTitle="App or developer name">
+<x-admin.filter searchTitle="App name">
     <div class="filter-item">
         Product status
         <select id="product-filter-status" name="product-status" autocomplete="off">
