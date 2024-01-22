@@ -230,6 +230,7 @@ function createTeam(event){
 
     var _token = form['_token'].value;
     var inviteEmailField = form['team_members[]'];
+    var updatedTeamLogo = document.getElementById("logo-file").files[0]
     var emailList = [];
 
     if(inviteEmailField && inviteEmailField.length > 0){
@@ -244,9 +245,12 @@ function createTeam(event){
     formData.append('url', urlValue);
     formData.append('contact', contactNumber);
     formData.append('country', form['country'].value);
-    formData.append('logo_file', document.getElementById("logo-file").files[0]);
     formData.append('team_members', emailList);
     formData.append('description', form['description'].value);
+
+    if(updatedTeamLogo){
+        formData.append('logo_file', updatedTeamLogo);
+    }
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', this.action, true);
