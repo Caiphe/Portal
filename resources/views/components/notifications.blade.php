@@ -186,7 +186,6 @@
                         allNotifications[i].classList.add('read');
                         document.querySelector('.notification-count').innerHTML = 0;
                     }
-
                     addAlert('success', [`All notifications marked as read.`]);
                     return;
                 
