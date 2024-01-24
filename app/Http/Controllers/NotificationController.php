@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Notification;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+
 class NotificationController extends Controller
 {
-
     public function fetchNotification(){
         $notifications = Notification::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         return response()->json(['notifications' => $notifications]);

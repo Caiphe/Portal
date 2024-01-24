@@ -2,19 +2,6 @@ var notificationMainContainer = document.getElementById('notification-main-conta
 var notificationMenu = document.querySelector('.notification-menu');
 var notificationsContainer = document.querySelector('#second-container');
 
-document.querySelector('.toggle-notification').addEventListener('click', toggleShowNotification);
-function toggleShowNotification(){
-    notificationMainContainer.classList.toggle('show');
-    notificationMenu.classList.toggle('active');
-    var mainMenu = document.querySelectorAll('.main-menu li');
-
-    for(var i =0; i <= mainMenu.length; i++){
-        if(mainMenu[i].classList.contains('active')){
-            mainMenu[i].classList.toggle('non-active');
-        }
-    }
-}
-
 document.getElementById('close-notification').addEventListener('click',  closeFunc);
 notificationMainContainer.addEventListener('click', closeNotification);
 
@@ -27,7 +14,9 @@ function closeNotification(e){
 
 function closeFunc(){
     notificationMainContainer.classList.remove('show');
-    notificationMenu.classList.remove('active');
+    if(notificationMenu){
+        notificationMenu.classList.remove('active');
+    }
 }
 
 fetch('/admin/notifications/fetch-all').then(function(data) {
@@ -36,11 +25,8 @@ fetch('/admin/notifications/fetch-all').then(function(data) {
     var content = "";
     var entries = notifications.notifications;
 
-    console.log(entries.length, typeof entries.length);
-
     if(entries.lenth === 0){
         document.querySelector('#no-notifications').classList.add('show');
-        console.log('No notifications');
         return;
     }
 
@@ -86,7 +72,7 @@ function toggleRead(e){
 
     var xhr = new XMLHttpRequest();
 
-    // addLoading('marking as read...');
+    addLoading('marking as read...');
 
     xhr.open("POST", url, true);
     xhr.setRequestHeader('X-CSRF-TOKEN', formToken);
@@ -160,7 +146,6 @@ function readAllFunc(ev){
                 allNotifications[i].classList.add('read');
                 document.querySelector('.notification-count').innerHTML = 0;
             }
-
             addAlert('success', [`All notifications marked as read.`]);
             return;
         

@@ -240,6 +240,10 @@ textarea{
                 border-radius: 50%;
                 text-align: center;
                 padding-top: 14px;
+
+                &.hide{
+                    display: none;
+                }
             }
         }
     }

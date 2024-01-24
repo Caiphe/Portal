@@ -53,11 +53,14 @@
             <div id="notification-menu" class="hidden">
                 <div class="notification-container shadow">
                     <span class="toggle-notification"></span>
-                    <span class="notification-count"></span>
                     <span id="notificationMenu"></span>
                 </div>
 
-                <button id="notification-btn" class="button hidden notification-btn">@svg('notifications')</button>
+                <div class="notification-count-bell">
+                    <span class="notification-count" id="notification-count"></span>
+                    <button id="notification-btn" class="button hidden notification-btn">@svg('notifications')</button>
+                </div>
+
                 <x-notifications></x-notifications>
                 
             </div>
@@ -111,10 +114,23 @@
     </ul>
 </header>
 
+@push('scripts')
+<script src="{{ mix('/js/components/alert.js') }}" defer></script>
+@endpush
 <script>
 document.querySelector('.menu-button').addEventListener('click', function(e) {
     document.querySelector('.mobile-menu').classList.toggle('active');
     document.getElementById('close').classList.toggle('block');
     document.getElementById('open').classList.toggle('hidden');
 });
+
+    var request = new XMLHttpRequest();
+    request.onload = requestListener;
+
+    function requestListener(){
+        var data = JSON.parse(this.responseText);
+        console.log(data.count);
+        document.querySelector('.notification-count').textContent = data.count;
+    }
+
 </script>

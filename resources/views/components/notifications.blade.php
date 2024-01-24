@@ -19,6 +19,10 @@
         <div class="no-notifications @if(!$notifications->count()) show @endif" id="no-notifications">You have no notifications</div>
         <div class="notification-list" id="second-container"></div>
 
+        @if($notifications->count() > 0)
+            <div class="end-of-notification">End of notifications</div>
+        @endif
+
     </div>
 </div>
 
@@ -27,19 +31,6 @@
         var notificationMainContainer = document.getElementById('notification-main-container');
         var notificationMenu = document.querySelector('.notification-menu');
         var notificationsContainer = document.querySelector('#second-container');
-        
-        document.querySelector('.toggle-notification').addEventListener('click', toggleShowNotification);
-        function toggleShowNotification(){
-            notificationMainContainer.classList.toggle('show');
-            notificationMenu.classList.toggle('active');
-            var mainMenu = document.querySelectorAll('.main-menu li');
-
-            for(var i =0; i <= mainMenu.length; i++){
-                if(mainMenu[i].classList.contains('active')){
-                    mainMenu[i].classList.toggle('non-active');
-                }
-            }
-        }
 
         document.getElementById('close-notification').addEventListener('click',  closeFunc);
         notificationMainContainer.addEventListener('click', closeNotification);
@@ -53,20 +44,19 @@
 
         function closeFunc(){
             notificationMainContainer.classList.remove('show');
-            notificationMenu.classList.remove('active');
+            if(notificationMenu){
+                notificationMenu.classList.remove('active');
+            }
         }
         
-        fetch('/admin/notifications/fetch-all').then(function(data) {
+        fetch('/notifications/fetch-all').then(function(data) {
             return data.json();
         }).then(function(notifications){
             var content = "";
             var entries = notifications.notifications;
 
-            console.log(entries.length, typeof entries.length);
-
             if(entries.lenth === 0){
                 document.querySelector('#no-notifications').classList.add('show');
-                console.log('No notifications');
                 return;
             }
 
@@ -81,7 +71,7 @@
                     <div class="more-details">
                         <span class="date-time">${values.formattedDate}</span>
                         <button type="sbmit" data-status="${values.read_at ? 'unread' : 'read'}"
-                                data-url ="/admin/notification/${values.id}/read"
+                                data-url ="/notification/${values.id}/read"
                                 data-notification="${values.id}" onclick="toggleRead(this);" 
                                 class="mark-as-read new-read">
                         </button>

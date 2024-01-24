@@ -17,7 +17,7 @@
         <a class="logo" href="/">@svg('logo', '', '/images/') Admin Portal</a>
         <button id="hide-menu" class="reset">@svg('close')</button>
 
-        <ul class="main-menu">
+        <ul class="main-menu" id="main-menu">
             <li @class(['menu-applications', 'active' => Request::is('admin/dashboard') || Request::is('admin/apps/create') || Request::is('admin/apps/create/*')])><a href="{{ route('admin.dashboard.index') }}">@svg('applications') Applications</a></li>
             <li @class(['menu-products', 'active' => (Request::is('admin/products') || Request::is('admin/products/*'))])><a href="{{ route('admin.product.index') }}">@svg('products') Products</a></li>
             <li @class(['menu-products', 'active' => (Request::is('admin/tasks'))])><a href="{{ route('admin.task.index') }}">@svg('task') Tasks</a></li>
@@ -81,15 +81,6 @@
             }[key] || null;
         }
 
-        // fetch("{{ route('notifications.count') }}").then(function(data){
-        //     return data.json();
-        // }).then(function(data){
-        //     console.log(data.count);
-        //     document.querySelector('.notification-count').textContent = data.count;
-        // }).catch(function(error) {
-        //     // 
-        // });
-
         var request = new XMLHttpRequest();
         request.onload = requestListener;
         request.onerror = requestError;
@@ -97,12 +88,27 @@
         request.send();
 
         function requestListener(){
+            var noticationCount = document.querySelector('.notification-count');
             var data = JSON.parse(this.responseText);
-            document.querySelector('.notification-count').textContent = data.count;
+            noticationCount.textContent = data.count;
+            console.log(data.count);
+
+            if(data.count === 0){
+                noticationCount.classList.add('hide');
+            }
         }
 
         function requestError(){
             console.log('Error here');
+        }
+
+        // Toggle the active menu on notification menu click
+        document.querySelector('.toggle-notification').addEventListener('click', toggleShowNotification);
+        function toggleShowNotification(){
+            notificationMainContainer.classList.toggle('show');
+            notificationMenu.classList.toggle('active');
+            var mainMenu = document.querySelector('#main-menu li.active');
+            mainMenu.classList.toggle('non-active');
         }
 
     </script>

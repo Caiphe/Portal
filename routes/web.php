@@ -65,6 +65,13 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
     Route::post('teams/{team}/leave/owner', 'CompanyTeamsController@leaveMakeOwner')->middleware('can:administer-team-by-owner,team')->name('teams.leave.make.owner');
 
 
+	// Notification
+	Route::post('notification/{notification:id}/read', 'NotificationController@read')->name('notification.read');
+	Route::post('notifications/read-all', 'NotificationController@readAll')->name('notification.read.all');
+	Route::post('notifications/clear-all', 'NotificationController@clearAll')->name('notification.clear.all');
+	Route::get('notifications/fetch-all', 'NotificationController@fetchNotification')->name('notification.fetch.all');
+	Route::get('notifications/count', 'NotificationController@notificationsCount')->name('notifications.count');
+
 	// Opco admin role request
 	Route::post('/opco-admin-role-request/store', 'OpcoRoleRequestController@store')->middleware(['can:request-opco-admin-role'])->name('opco-admin-role.store');
 });
@@ -73,12 +80,6 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa', 'can:view-admin'])->group(function () {
 	Route::get('/', 'HomeController')->name('admin.home');
 
-	// Notification
-	Route::post('/notification/{notification:id}/read', 'NotificationController@read')->middleware(['auth', 'verified', '2fa'])->name('notification.read');
-	Route::post('/notifications/read-all', 'NotificationController@readAll')->middleware(['auth', 'verified', '2fa'])->name('notification.read.all');
-	Route::post('/notifications/clear-all', 'NotificationController@clearAll')->middleware(['auth', 'verified', '2fa'])->name('notification.clear.all');
-	Route::get('/notifications/fetch-all', 'NotificationController@fetchNotification')->middleware(['auth', 'verified', '2fa'])->name('notification.fetch.all');
-	Route::get('/notifications/count', 'NotificationController@notificationsCount')->middleware(['auth', 'verified', '2fa'])->name('notifications.count');
 
 	// Tasks
 	Route::get('/tasks', 'TaskController@index')->middleware(['auth', 'verified', '2fa', 'can:administer-task-panel'])->name('admin.task.index');
