@@ -19,9 +19,9 @@
         <div class="no-notifications @if(!$notifications->count()) show @endif" id="no-notifications">You have no notifications</div>
         <div class="notification-list" id="second-container"></div>
 
-        @if($notifications->count() > 0)
+        {{-- @if($notifications->count() > 0)
             <div class="end-of-notification">End of notifications</div>
-        @endif
+        @endif --}}
 
     </div>
 </div>
@@ -119,10 +119,15 @@
                     var noteState = '';
 
                     if(e.closest('.single-notification').classList.contains('read')) {
-                        notificationCount.innerHTML = Number(notificationCount.innerHTML) - 1;
+                        if(notificationCount){
+                            notificationCount.innerHTML = Number(notificationCount.innerHTML) - 1;
+                        }
+
                         noteState = 'read';
                     }else{
-                        notificationCount.innerHTML = Number(notificationCount.innerHTML) + 1;
+                        if(notificationCount){
+                            notificationCount.innerHTML = Number(notificationCount.innerHTML) + 1;
+                        }
                         noteState = 'unread';
                     }
 

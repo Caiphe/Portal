@@ -56,8 +56,8 @@
                     <span id="notificationMenu"></span>
                 </div>
 
-                <div class="notification-count-bell">
-                    <span class="notification-count" id="notification-count"></span>
+                <div class="notification-button-block">
+                    <span class="notification-red-dot" id="notification-red-dot"></span>
                     <button id="notification-btn" class="button hidden notification-btn">@svg('notifications')</button>
                 </div>
 
@@ -130,7 +130,7 @@ document.querySelector('.menu-button').addEventListener('click', function(e) {
     function requestListener(){
         var data = JSON.parse(this.responseText);
         console.log(data.count);
-        document.querySelector('.notification-count').textContent = data.count;
+        document.querySelector('.notification-red-dot').textContent = data.count;
     }
 
 </script>
