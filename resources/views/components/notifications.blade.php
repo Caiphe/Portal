@@ -27,7 +27,11 @@
 </div>
 
 @push('scripts')
-    <script>
+<script src="{{ mix('/js/components/notifications.js') }}" defer></script>
+@endpush
+
+@push('scripts')
+    {{-- <script>
         var notificationMainContainer = document.getElementById('notification-main-container');
         var notificationMenu = document.querySelector('.notification-menu');
         var notificationsContainer = document.querySelector('#second-container');
@@ -101,8 +105,6 @@
             };
 
             var xhr = new XMLHttpRequest();
-
-            addLoading('marking as read...');
 
             xhr.open("POST", url, true);
             xhr.setRequestHeader('X-CSRF-TOKEN', formToken);
@@ -251,5 +253,5 @@
             };
         }
 
-    </script>
+    </script> --}}
 @endpush

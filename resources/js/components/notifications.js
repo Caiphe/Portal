@@ -19,7 +19,7 @@ function closeFunc(){
     }
 }
 
-fetch('/admin/notifications/fetch-all').then(function(data) {
+fetch('/notifications/fetch-all').then(function(data) {
     return data.json();
 }).then(function(notifications){
     var content = "";
@@ -41,7 +41,7 @@ fetch('/admin/notifications/fetch-all').then(function(data) {
             <div class="more-details">
                 <span class="date-time">${values.formattedDate}</span>
                 <button type="sbmit" data-status="${values.read_at ? 'unread' : 'read'}"
-                        data-url ="/admin/notification/${values.id}/read"
+                        data-url ="/notification/${values.id}/read"
                         data-notification="${values.id}" onclick="toggleRead(this);" 
                         class="mark-as-read new-read">
                 </button>
@@ -72,8 +72,6 @@ function toggleRead(e){
 
     var xhr = new XMLHttpRequest();
 
-    addLoading('marking as read...');
-
     xhr.open("POST", url, true);
     xhr.setRequestHeader('X-CSRF-TOKEN', formToken);
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
@@ -89,10 +87,15 @@ function toggleRead(e){
             var noteState = '';
 
             if(e.closest('.single-notification').classList.contains('read')) {
-                notificationCount.innerHTML = Number(notificationCount.innerHTML) - 1;
+                if(notificationCount){
+                    notificationCount.innerHTML = Number(notificationCount.innerHTML) - 1;
+                }
+
                 noteState = 'read';
             }else{
-                notificationCount.innerHTML = Number(notificationCount.innerHTML) + 1;
+                if(notificationCount){
+                    notificationCount.innerHTML = Number(notificationCount.innerHTML) + 1;
+                }
                 noteState = 'unread';
             }
 

@@ -235,6 +235,14 @@ class AppController extends Controller
 
         if ($team) {
             event(new TeamAppCreated($team));
+
+            $appUsers = $team->users->pluck('id')->toArray();
+            foreach($appUsers as $user){
+                Notification::create([
+                    'user_id' => $user,
+                    'notification' => "New app {$app->display_name} have been created for your team {$team->name}. Please nagivate to your apps to view it",
+                ]);
+            }
         }
 
         $app->products()->sync(
@@ -407,7 +415,7 @@ class AppController extends Controller
             foreach($appUsers as $user){
                 Notification::create([
                     'user_id' => $user,
-                    'notification' => "Your App {$app->display_name} has been updated please nagivate to your apps to view the changes",
+                    'notification' => "Your team's App {$app->display_name} has been updated please nagivate to your apps to view the changes",
                 ]);
             }
         }
