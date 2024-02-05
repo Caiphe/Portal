@@ -89,6 +89,20 @@ h3 {
             @media #{variables.$medium} {
                 color: variables.$black;
             }
+
+            .available-products-count{
+                font-size: 20px;
+
+                @media #{variables.$small} {
+                    display: block;
+                    margin-top: 15px;
+                }
+    
+                @media #{variables.$medium} {
+                    display: block;
+                    margin-top: 15px;
+                }
+            }
         }
 
         p {
@@ -167,7 +181,7 @@ h3 {
                 }
             }
 
-            .heasder-count{
+            .header-count{
                 margin-left: 10px;
             }
         }

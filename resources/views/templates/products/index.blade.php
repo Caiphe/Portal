@@ -57,13 +57,13 @@
 
 @section('content')
     <div class="header-block">
-        <h1>{{ $content[0]['title']}}</h1>
+        <h1>{{ $content[0]['title']}} <span class="available-products-count">( {{ $products->count() }} available )</span></h1>
         {!! $content[0]['body'] !!}
         @svg('people', null, 'images/illustrations')
     </div>
 
     <div class="content">
-        <div class="products-count" id="products-count">Displaying {{ $products->count() }} results</div>
+        <div class="products-count" id="products-count">Displaying {{ $products->count() }} products</div>
         <div class="products">
             @foreach ($productsCollection as $category => $products)
                 <div class="category"
@@ -73,7 +73,7 @@
                 >
                     <h3 class="category-title" data-category="{{ $products[0]->category_cid }}">{{ $category }} 
                         <span class="filters-count"></span>
-                        <span class="heasder-count">{{ $products->count() }} products</span>
+                        <span class="header-count">{{ $products->count() }} products</span>
                     </h3>
                   
                     @foreach ($products as $product)
