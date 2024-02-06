@@ -57,7 +57,7 @@
 
 @section('content')
     <div class="header-block">
-        <h1>{{ $content[0]['title']}} <span class="available-products-count">( {{ $products->count() }} available )</span></h1>
+        <h1>{{ $content[0]['title']}} <span class="available-products-count">({{ $products->count() }} available)</span></h1>
         {!! $content[0]['body'] !!}
         @svg('people', null, 'images/illustrations')
     </div>
