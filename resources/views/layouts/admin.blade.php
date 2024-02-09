@@ -83,7 +83,6 @@
 
         var request = new XMLHttpRequest();
         request.onload = requestListener;
-        request.onerror = requestError;
         request.open('GET', "{{ route('notifications.count') }}", true);
         request.send();
 
@@ -91,19 +90,15 @@
             var noticationCount = document.querySelector('.notification-count');
             var data = JSON.parse(this.responseText);
             noticationCount.textContent = data.count;
-            console.log(data.count);
 
             if(data.count === 0){
                 noticationCount.classList.add('hide');
             }
         }
 
-        function requestError(){
-            console.log('Error here');
-        }
-
         // Toggle the active menu on notification menu click
         document.querySelector('.toggle-notification').addEventListener('click', toggleShowNotification);
+
         function toggleShowNotification(){
             notificationMainContainer.classList.toggle('show');
             notificationMenu.classList.toggle('active');
@@ -111,6 +106,21 @@
             mainMenu.classList.toggle('non-active');
         }
 
+        (function () {
+            var notificationMainContainer = document.getElementById('notification-main-container');
+            var markAsReadButtons = document.querySelectorAll('.mark-as-read');
+            var notificationMenu = document.querySelector('.notification-menu');
+
+            document.querySelector('.toggle-notification').addEventListener('click', toggleShowNotification);
+            function toggleShowNotification(){
+                notificationMainContainer.classList.toggle('show');
+                notificationMenu.classList.toggle('active');
+            }
+
+        });
+
     </script>
     <script src="{{ mix('/js/templates/admin/scripts.js') }}" defer></script>
+    <script src="{{ mix('/js/templates/admin/notifications.js') }}" defer></script>
+
 @endprepend

@@ -1,12 +1,7 @@
 var notificationMainContainer = document.getElementById('notification-main-container');
 var notificationMenu = document.querySelector('.notification-menu');
 var notificationsContainer = document.querySelector('#second-container');
-var notificationCount = document.querySelector('.notification-count');
-var notificationRedDot = document.querySelector('#notification-red-dot');
-var notificationFrontCount = document.querySelector('.front-notification-count');
-var toggleNotificationMobileBtn = document.querySelector('#notification-btn');
 
-toggleNotificationMobileBtn.addEventListener('click', openNotificationContainer);
 document.getElementById('close-notification').addEventListener('click',  closeFunc);
 notificationMainContainer.addEventListener('click', closeNotification);
 
@@ -18,12 +13,14 @@ function closeNotification(e){
 }
 
 function closeFunc(){
-    console.log('close the notification board');
-    notificationMainContainer.classList.add('hide');
-}
+    notificationMainContainer.classList.remove('show');
+    if(notificationMenu){
+        notificationMenu.classList.remove('active');
 
-function openNotificationContainer(){
-    console.log('Open Notification container');
+        var mainMenu = document.querySelector('#main-menu li.non-active');
+        mainMenu.classList.remove('non-active');
+        mainMenu.classList.add('active');
+    }
 }
 
 fetch('/notifications/fetch-all').then(function(data) {
@@ -86,7 +83,10 @@ function toggleRead(e){
     xhr.send(JSON.stringify(notificationData));
 
     xhr.onload = function() {
+        removeLoading();
         if (xhr.status === 200) {
+
+            var notificationCount = document.querySelector('.notification-count');
 
             var noteState = '';
 
@@ -96,14 +96,6 @@ function toggleRead(e){
 
                     if(Number(notificationCount.innerHTML) < 1){
                         notificationCount.classList.add('hide');
-                    }
-                }
-
-                if(notificationRedDot){
-                    notificationFrontCount.value = Number(notificationFrontCount.value) - 1
-
-                    if(notificationFrontCount.value < 1){
-                        notificationRedDot.classList.add('hide');
                     }
                 }
 
@@ -118,16 +110,17 @@ function toggleRead(e){
                     }
                 }
 
-                if(notificationRedDot){
-                    notificationFrontCount.value = Number(notificationFrontCount.value) + 1
-                    if(notificationFrontCount.value > 0){
-                        notificationRedDot.classList.remove('hide');
-                    }
-                }
+             
                 noteState = 'unread';
             }
 
             addAlert('success', [`Notification marked as ${noteState}.`]);
+
+            var notificationCount = document.querySelector('.notification-count');
+            if(notificationCount && Number(notificationCount.innerHTML) < 1){
+                notificationCount.classList.add('hide');
+            }
+
             return;
 
         } else {
@@ -171,22 +164,18 @@ function readAllFunc(ev){
         removeLoading();
         if (xhr.status === 200) {
             var allNotifications = document.querySelectorAll('.single-notification');
-            console.log(allNotifications.length);
             
             for(var i = 0; i < allNotifications.length; i++){
                 if(allNotifications[i].classList.contains('read')) continue;
                 allNotifications[i].classList.add('read');
+                document.querySelector('.notification-count').innerHTML = 0;
             }
-
-            if(notificationRedDot){
-                notificationFrontCount.value = Number(notificationFrontCount.value) - 1
-
-                if(notificationFrontCount.value < 1){
-                    notificationRedDot.classList.add('hide');
-                }
-            }
-
             addAlert('success', [`All notifications marked as read.`]);
+
+            var notificationCount = document.querySelector('.notification-count');
+            if(notificationCount && Number(notificationCount.innerHTML) < 1){
+                notificationCount.classList.add('hide');
+            }
 
             return;
         

@@ -50,7 +50,7 @@
                 </ul>
             </div>
 
-            <div id="notification-menu" class="hidden">
+            <div id="notification-menu">
                 <div class="notification-container shadow">
                     <span class="toggle-notification"></span>
                     <span id="notificationMenu"></span>
@@ -58,9 +58,12 @@
 
                 <div class="notification-button-block">
                     <span class="notification-red-dot" id="notification-red-dot"></span>
-                    <button id="notification-btn" class="button hidden notification-btn">@svg('notifications')</button>
+                    <input type="hidden" class="front-notification-count" value="" />
+                    <button id="notification-btn" class="button notification-btn">@svg('notifications')</button>
                 </div>
 
+                
+                {{-- Notification section --}}
                 <x-notifications></x-notifications>
                 
             </div>
@@ -97,6 +100,9 @@
         <li>
             <a href="{{ route('teams.listing') }}">My teams</a>
         </li>
+        <li>
+            <a href="#" class="mobile-show">Notifications</a>
+        </li>
         @can('view-admin')
             <li><a href="{{ route('admin.home') }}">Admin</a></li>
         @endcan
@@ -114,23 +120,29 @@
     </ul>
 </header>
 
-@push('scripts')
-<script src="{{ mix('/js/components/alert.js') }}" defer></script>
-@endpush
+
 <script>
-document.querySelector('.menu-button').addEventListener('click', function(e) {
-    document.querySelector('.mobile-menu').classList.toggle('active');
-    document.getElementById('close').classList.toggle('block');
-    document.getElementById('open').classList.toggle('hidden');
-});
+    document.querySelector('.menu-button').addEventListener('click', function(e) {
+        document.querySelector('.mobile-menu').classList.toggle('active');
+        document.getElementById('close').classList.toggle('block');
+        document.getElementById('open').classList.toggle('hidden');
+    });
 
-    var request = new XMLHttpRequest();
-    request.onload = requestListener;
+    window.addEventListener('load', function(){
+        var request = new XMLHttpRequest();
+        request.onload = requestListener;
+        request.open('GET', "{{ route('notifications.count') }}", true);
+        request.send();
 
-    function requestListener(){
-        var data = JSON.parse(this.responseText);
-        console.log(data.count);
-        document.querySelector('.notification-red-dot').textContent = data.count;
-    }
+        function requestListener(){
+            var notificationDot = document.querySelector('.notification-red-dot');
+            var data = JSON.parse(this.responseText);
+            document.querySelector('.front-notification-count').value = data.count;
 
+            if(data.count === 0){
+                notificationDot.classList.add('hide');
+            }
+        }
+    })
+    
 </script>
