@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Schema;
 use phpDocumentor\Reflection\Types\Null_;
 
@@ -94,6 +95,9 @@ class DeleteUsers extends Command
                         'twoFaResetRequest',
                     ]);
 
+                    //APIGEE code must go here
+                    //$this->deleteApigeeUsers();
+
                     // Delete non-verified user
                     $user->delete();
                     $deletedUserCount++;
@@ -114,7 +118,6 @@ class DeleteUsers extends Command
                         'twoFaResetRequest',
                     ]);
 
-                    // Loop through relationships and display counts
                     foreach ($user->getRelations() as $relationName => $relation) {
 
                         if ($relation instanceof \Illuminate\Database\Eloquent\Relations\Relation) {
@@ -135,6 +138,32 @@ class DeleteUsers extends Command
         } else {
             $this->info('The delete process is terminated!');
         }
+    }
+
+    /**
+     * This code should to the helper or service
+     * @return void
+     */
+    public function deleteApigeeUsers()
+    {
+        $endpoint = config('your_api_endpoint'); // Replace with your actual API endpoint
+        $org = 'your_organization'; // Replace with your actual organization
+        $email = 'user@example.com'; // Replace with the user's email
+        $token = 'your_access_token'; // Replace with your actual access token
+
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer ' . $token,
+        ])
+            ->delete("$endpoint/v1/o/$org/userroles/zoneadmin/users/$email", [
+                'role' => [
+                    ['name' => 'zoneadmin']
+                ]
+            ]);
+
+        // Access the response as needed, for example:
+        $status = $response->status();
+        $data = $response->json();
     }
 
 
