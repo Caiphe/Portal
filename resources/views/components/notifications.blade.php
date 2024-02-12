@@ -1,6 +1,6 @@
 <meta class="csrf-token" name="_token" content="{{ csrf_token() }}">
 
-<div class="notification-main-container animated" id="notification-main-container">
+<div class="notification-main-container" id="notification-main-container">
     <div class="notification-content">
         <div class="top-buttons">
             <form method="POST" action="{{ route('notification.clear.all') }}" class="clear-all-notification">
@@ -26,7 +26,3 @@
     </div>
 </div>
 
-@push('scripts')
-<script src="{{ mix('/js/components/notifications.js') }}" defer></script>
-<script src="{{ mix('/js/components/alert.js') }}" defer></script>
-@endpush

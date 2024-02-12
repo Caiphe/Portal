@@ -58,15 +58,15 @@
 
                 <div class="notification-button-block">
                     <span class="notification-red-dot" id="notification-red-dot"></span>
-                    <input type="hidden" class="front-notification-count" value="" />
+                    <input type="hidden" class="front-notification-count" id="front-notification-count" value="" />
                     <button id="notification-btn" class="button notification-btn">@svg('notifications')</button>
                 </div>
 
-                
                 {{-- Notification section --}}
                 <x-notifications></x-notifications>
                 
             </div>
+
 
         @else
             <a href="{{route('login')}}" class="button dark outline mr-1 hidden" role="button">Login</a>
@@ -120,6 +120,10 @@
     </ul>
 </header>
 
+@once
+@push('scripts')
+<script src="{{ mix('/js/components/notifications.js') }}" defer></script>
+<script src="{{ mix('/js/components/alert.js') }}" defer></script>
 
 <script>
     document.querySelector('.menu-button').addEventListener('click', function(e) {
@@ -127,22 +131,6 @@
         document.getElementById('close').classList.toggle('block');
         document.getElementById('open').classList.toggle('hidden');
     });
-
-    window.addEventListener('load', function(){
-        var request = new XMLHttpRequest();
-        request.onload = requestListener;
-        request.open('GET', "{{ route('notifications.count') }}", true);
-        request.send();
-
-        function requestListener(){
-            var notificationDot = document.querySelector('.notification-red-dot');
-            var data = JSON.parse(this.responseText);
-            document.querySelector('.front-notification-count').value = data.count;
-
-            if(data.count === 0){
-                notificationDot.classList.add('hide');
-            }
-        }
-    })
-    
 </script>
+@endpush
+@endonce

@@ -1,14 +1,17 @@
 var notificationMainContainer = document.getElementById('notification-main-container');
-var notificationMenu = document.querySelector('.notification-menu');
 var notificationsContainer = document.querySelector('#second-container');
-var notificationCount = document.querySelector('.notification-count');
 var notificationRedDot = document.querySelector('#notification-red-dot');
 var notificationFrontCount = document.querySelector('.front-notification-count');
 var toggleNotificationMobileBtn = document.querySelector('#notification-btn');
 
-toggleNotificationMobileBtn.addEventListener('click', openNotificationContainer);
 document.getElementById('close-notification').addEventListener('click',  closeFunc);
 notificationMainContainer.addEventListener('click', closeNotification);
+toggleNotificationMobileBtn.addEventListener('click', showNotificationContainer);
+
+function showNotificationContainer(){
+    notificationMainContainer.classList.remove('hide');
+    notificationMainContainer.classList.add('display');
+}
 
 function closeNotification(e){
     e = window.event || e;
@@ -18,13 +21,11 @@ function closeNotification(e){
 }
 
 function closeFunc(){
-    console.log('close the notification board');
     notificationMainContainer.classList.add('hide');
+    notificationMainContainer.classList.remove('display');
+    window.location.reload();
 }
 
-function openNotificationContainer(){
-    console.log('Open Notification container');
-}
 
 fetch('/notifications/fetch-all').then(function(data) {
     return data.json();
@@ -91,37 +92,24 @@ function toggleRead(e){
             var noteState = '';
 
             if(e.closest('.single-notification').classList.contains('read')) {
-                if(notificationCount){
-                    notificationCount.innerHTML = Number(notificationCount.innerHTML) - 1;
-
-                    if(Number(notificationCount.innerHTML) < 1){
-                        notificationCount.classList.add('hide');
-                    }
-                }
 
                 if(notificationRedDot){
-                    notificationFrontCount.value = Number(notificationFrontCount.value) - 1
+                    notificationFrontCount.value = Number(notificationFrontCount.value) - 1;
 
-                    if(notificationFrontCount.value < 1){
-                        notificationRedDot.classList.add('hide');
+                    if(Number(notificationFrontCount.value) < 1){
+                        notificationRedDot.classList.remove('show');
                     }
                 }
 
                 noteState = 'read';
 
             }else{
-                if(notificationCount){
-                    notificationCount.innerHTML = Number(notificationCount.innerHTML) + 1;
-
-                    if(Number(notificationCount.innerHTML) > 0){
-                        notificationCount.classList.remove('hide');
-                    }
-                }
-
+  
                 if(notificationRedDot){
-                    notificationFrontCount.value = Number(notificationFrontCount.value) + 1
+                    notificationFrontCount.value = Number(notificationFrontCount.value) + 1;
+
                     if(notificationFrontCount.value > 0){
-                        notificationRedDot.classList.remove('hide');
+                        notificationRedDot.classList.add('show');
                     }
                 }
                 noteState = 'unread';
@@ -171,7 +159,6 @@ function readAllFunc(ev){
         removeLoading();
         if (xhr.status === 200) {
             var allNotifications = document.querySelectorAll('.single-notification');
-            console.log(allNotifications.length);
             
             for(var i = 0; i < allNotifications.length; i++){
                 if(allNotifications[i].classList.contains('read')) continue;
@@ -182,7 +169,7 @@ function readAllFunc(ev){
                 notificationFrontCount.value = Number(notificationFrontCount.value) - 1
 
                 if(notificationFrontCount.value < 1){
-                    notificationRedDot.classList.add('hide');
+                    notificationRedDot.classList.remove('show');
                 }
             }
 
@@ -232,7 +219,6 @@ function clearAll(ev){
         removeLoading();
         if (xhr.status === 200) {
 
-            document.querySelector('.notification-count').innerHTML = 0;
             notificationsContainer.classList.add('hide');
             document.querySelector('#no-notifications').classList.add('show');
             
@@ -256,3 +242,22 @@ function clearAll(ev){
         }
     };
 }
+
+window.addEventListener('load', function(){
+    fetch('/notifications/count').then(function(data) {
+        return data.json();
+    }).then(function(notifications){
+        var count = notifications.count;
+        var notificationDot = document.querySelector('.notification-red-dot');
+        var notificationFrontCount = document.querySelector('.front-notification-count');
+        notificationFrontCount.value = 0;
+
+        if(count > 0){
+            notificationDot.classList.add('show');
+            notificationFrontCount.value = count;
+        }
+    
+    }).catch(function(error){
+        console.log(error);
+    });
+})
