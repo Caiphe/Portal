@@ -269,7 +269,7 @@ function createTeam(event){
             });
         }
         else if(xhr.status === 429){
-            addAlert('warning', ["You are not allowed to created more than 2 teams per day."], function(){
+            addAlert('warning', ["You are not allowed to create more than 2 teams per day."], function(){
                 window.location.href = "/teams";
             });
         }

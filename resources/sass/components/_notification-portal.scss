@@ -1,0 +1,267 @@
+@use "../variables";
+
+
+#notification-menu{
+    position: relative;
+    margin-left: 20px;
+    cursor: pointer;
+    height: 80px;
+    overflow: hidden;
+
+    @media(max-width: 768px){
+        margin-left: 10px;
+    }
+
+    &:hover{
+        overflow: revert;
+
+         .notification-main-container {
+            transform: translate(0, 18px);
+            opacity: 1;
+            pointer-events: auto;
+         }
+    }
+}
+
+.notification-main-container{
+    position: absolute;
+    list-style: none;
+    padding: 20px;
+    width: 480px;
+    height: 608px;
+    background-color: #ffffff;
+    top: 67px;
+    right: -42px;
+    margin-left: -26px;
+    opacity: 0;
+    pointer-events: none;
+    border-radius: 16px;
+    transition: opacity 0.356s, transform 0.356s;
+    box-sizing: border-box;
+    box-shadow: 10px 5px 10px 0px rgba(0, 0, 0, 0.10);
+
+    &.hide{
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.356s, transform 0.356s;
+    }
+
+    @media(max-width: 768px){
+        &.display{
+            opacity: 1;
+            pointer-events: auto;
+            transition: all 0.1s ease-in-out;
+        }
+    }
+
+    @media(max-width: 650px){
+        right: 10px;
+    }
+
+    @media(max-width: 500px){
+        width: 450px;
+        right: 10px;
+        height: auto;
+    }
+
+    @media(max-width: 450px){
+        width: 370px;
+    }
+
+    &:before{
+        content: "";
+        display: block;
+        position: absolute;
+        right: 58px;
+        top: -9px;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 10px solid #ffffff;
+    }
+
+    .notification-content {
+        background-color: #ffffff;
+        z-index: 2;
+        padding: 5px 20px 2px 17px;
+        box-sizing: border-box;
+        transition: all 0.3s ease-in-out;
+
+        .top-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            background-color: #fff;
+            border: none;
+            padding: 0px;
+            color: #00678f;
+            cursor: pointer;
+            font-size: 12px;
+            height: auto;
+
+            &.non-active{
+                color: #969696;
+                pointer-events: none;
+
+            }
+
+            &:hover {
+                background-color: #fff;
+                border: none;
+                outline: none;
+            }
+        }
+
+        .no-notifications{
+            text-align: center;
+            color: #969696;
+            border-top: solid 1px #cdcdcd;
+            display: none;
+            pointer-events: none;
+            opacity: 0;
+            transition: all .3s ease;
+
+            &.show{
+                display: block;
+                pointer-events: auto;
+                opacity: 1;
+                transition: all .3s ease;
+                padding-top: 15px;
+                margin-top: 20px;
+            }
+        }
+
+        .notification-list {
+            overflow-y: scroll;
+            height: 530px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            padding: 0px 20px 20px 0px;
+
+            .single-notification {
+                border-bottom: solid 1px #cdcdcd;
+                padding-bottom: 15px;
+
+                .more-details {
+                    display: flex;
+                    justify-content: space-between;
+
+                    .date-time {
+                        font-weight: 700;
+                        position: relative;
+                        padding-left: 15px;
+
+                        &:before {
+                            position: absolute;
+                            content: "";
+                            width: 8px;
+                            height: 8px;
+                            background-color: #10b630;
+                            left: 0;
+                            top: 7px;
+                            border-radius: 50%;
+                        }
+                    }
+
+                    .mark-as-read {
+                        font-size: 15px;
+                        position: relative;
+
+                        &:after{
+                            content: 'Mark as read';
+                            font-size: 15px;
+                        }
+                    }
+                }
+                
+                &.read {
+                    .notification-message {
+                        color: #969696;
+                    }
+
+                    .more-details {
+                        .date-time {
+                            padding-left: 0px;
+                            color: #969696;
+                            font-weight: 400;
+
+                            &:before {
+                                display: none;
+                            }
+                        }
+                    }
+
+                    .mark-as-read {
+
+                        &:after{
+                            content: 'Mark as unread';
+                        }
+                    }
+                }
+            }
+
+            &.hide{
+                display: none;
+            }
+        }
+    }
+
+    &.show {
+        opacity: 1;
+        pointer-events: auto;
+        transition: all 0.1s ease-in-out;
+
+        .notification-content {
+            left: 320px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        @media(max-width: 1100px){
+            
+            .notification-content{
+                left: 0px;
+                border-radius: 0px;
+                transition: all 0.3s ease-in-out;
+            }
+        }
+    }
+}
+
+.notification-button-block{
+    position: relative;
+    width: 55px;
+    height: 40px;
+}
+.notification-red-dot{
+    height: 10px;
+    width: 10px;
+    background-color: #F00;
+    position: absolute;
+    right: 16px;
+    bottom: -11px;
+    border-radius: 50%;
+    color: #F00;
+    text-align: center;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+    display: none;
+
+    &.show{
+        display: block;
+    }
+}
+
+#notification-btn{
+    border: none;
+    background-color: transparent;
+    margin-top: 21px;
+    position: relative;
+    width: 53px;
+    outline: none;
+
+    &:hover{
+        background-color: transparent;
+    }
+}

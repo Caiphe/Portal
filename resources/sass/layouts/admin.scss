@@ -33,6 +33,7 @@ textarea{
         width: 320px;
         padding: 32px;
         bottom: 0;
+        z-index: 3;
     }
 
     @media screen and (max-width: 1099px) {
@@ -118,7 +119,7 @@ textarea{
             }
 
             a {
-                padding: 5px 8px;
+                padding: 3px 8px;
                 transition: all .2s ease;
             }
 
@@ -131,6 +132,20 @@ textarea{
                 svg {
                     fill: variables.$dark;
                 }
+
+            }
+
+            &.non-active{
+                background-color: transparent;
+
+                a{
+                    color: white;
+                    background-color: transparent;
+
+                    svg{
+                        fill: #fff;
+                    }
+                }
             }
         }
     }
@@ -139,18 +154,28 @@ textarea{
         margin: 6px 0;
         line-height: 0px;
 
+        &.logout-menu{
+            svg{
+                @media screen and (max-height: 814px) {
+                    width: 28px;
+                    height: 28px;
+                    margin-top: -2px;
+                }
+            }
+        }
+
         a,
         button {
             display: flex;
             align-items: center;
             color: #fff;
             border-radius: 8px;
-            font-size: 18px;
+            font-size: 16px;
             font-family: variables.$MTN-Regular;
             cursor: pointer;
 
             @media screen and (min-width: 1100px) {
-                padding: 8px;
+                padding: 6px 8px;
             }
 
             @media screen and (max-width: 1099px) {
@@ -163,12 +188,12 @@ textarea{
             margin-right: 12px;
 
             @media screen and (min-height: 815px) {
-                width: 32px;
+                width: 28px;
             }
 
             @media screen and (max-height: 814px) {
-                width: 28px;
-                height: 28px;
+                width: 24px;
+                height: 24px;
             }
         }
     }
@@ -180,6 +205,46 @@ textarea{
         button {
             background-color: transparent;
             border: none;
+        }
+
+        .notification-menu{
+            border-radius: 10px;
+            position: relative;
+            transition: all .3s ease-in-out;
+
+            &:hover,
+            &.active{
+                background-color: variables.$yellow;
+                transition: all .3s ease-in-out;
+
+                a{
+                    color: #000;
+                }
+
+                svg{
+                    fill: #000;
+                }
+            }
+
+            .notification-count{
+                width: 28px;
+                height: 28px;
+                background-color: red;
+                color: #fff;
+                font-size: 14px;
+                display: block;
+                position: absolute;
+                right: 10px;
+                top: 5px;
+                box-sizing: border-box;
+                border-radius: 50%;
+                text-align: center;
+                padding-top: 14px;
+
+                &.hide{
+                    display: none;
+                }
+            }
         }
     }
 
@@ -211,7 +276,7 @@ textarea{
         justify-content: center;
         width: 100%;
         color: variables.$dark;
-        margin-top: 18px;
+        margin-top: 12px;
     }
 }
 
@@ -227,7 +292,7 @@ textarea{
     }
 
     @media screen and (max-height: 814px) {
-        margin-bottom: 24px;
+        margin-bottom: 17px;
     }
 
     @media screen and (max-width: 1099px) {

@@ -49,6 +49,25 @@
                     <li><form action="{{route('logout')}}" method="post">@csrf<button>Sign out</button></form></li>
                 </ul>
             </div>
+
+            <div id="notification-menu">
+                <div class="notification-container shadow">
+                    <span class="toggle-notification"></span>
+                    <span id="notificationMenu"></span>
+                </div>
+
+                <div class="notification-button-block">
+                    <span class="notification-red-dot" id="notification-red-dot"></span>
+                    <input type="hidden" class="front-notification-count" id="front-notification-count" value="" />
+                    <button id="notification-btn" class="button notification-btn">@svg('notifications')</button>
+                </div>
+
+                {{-- Notification section --}}
+                <x-notifications></x-notifications>
+                
+            </div>
+
+
         @else
             <a href="{{route('login')}}" class="button dark outline mr-1 hidden" role="button">Login</a>
             <a href="{{route('register')}}" class="button dark hidden" role="button">Register</a>
@@ -81,6 +100,9 @@
         <li>
             <a href="{{ route('teams.listing') }}">My teams</a>
         </li>
+        <li>
+            <a href="#" class="mobile-show">Notifications</a>
+        </li>
         @can('view-admin')
             <li><a href="{{ route('admin.home') }}">Admin</a></li>
         @endcan
@@ -98,10 +120,17 @@
     </ul>
 </header>
 
+@once
+@push('scripts')
+<script src="{{ mix('/js/components/notifications.js') }}" defer></script>
+<script src="{{ mix('/js/components/alert.js') }}" defer></script>
+
 <script>
-document.querySelector('.menu-button').addEventListener('click', function(e) {
-    document.querySelector('.mobile-menu').classList.toggle('active');
-    document.getElementById('close').classList.toggle('block');
-    document.getElementById('open').classList.toggle('hidden');
-});
+    document.querySelector('.menu-button').addEventListener('click', function(e) {
+        document.querySelector('.mobile-menu').classList.toggle('active');
+        document.getElementById('close').classList.toggle('block');
+        document.getElementById('open').classList.toggle('hidden');
+    });
 </script>
+@endpush
+@endonce

@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateStatusRequest;
-use App\Services\ApigeeService;
 use App\App;
-use App\Country;
 use App\Product;
-use App\Mail\KycStatusUpdate;
-use App\Mail\ProductAction;
-use App\Services\ProductLocationService;
 use App\User;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Support\Facades\Mail;
+use App\Country;
+use App\Notification;
+use App\Mail\ProductAction;
 use \Illuminate\Http\Request;
+use App\Mail\KycStatusUpdate;
+use App\Services\ApigeeService;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Contracts\View\Factory;
+use App\Services\ProductLocationService;
+use App\Http\Requests\UpdateStatusRequest;
 
 class DashboardController extends Controller
 {
@@ -247,6 +248,23 @@ class DashboardController extends Controller
         }
 
         $response = ApigeeService::pushAppNote($app, $attributes, $status);
+
+        if($app->developer){
+            Notification::create([
+                'user_id' => $app->developer->id,
+                'notification' => "Your App {$app->display_name}'s status has been changed. Please nagivate to your apps to view the changes",
+            ]);
+        }
+
+        if($app->team){
+            $appUsers = $app->team->users->pluck('id')->toArray();
+            foreach($appUsers as $user){
+                Notification::create([
+                    'user_id' => $user,
+                    'notification' => "Your team App {$app->display_name}'s status has been updated. Please nagivate to your apps to view the changes.",
+                ]);
+            }
+        }
 
         if (200 === $response->status()) {
             $attributes = ApigeeService::getAppAttributes($response['attributes']);
