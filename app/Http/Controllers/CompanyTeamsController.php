@@ -7,10 +7,10 @@ use App\Role;
 use App\Team;
 use App\User;
 use App\Country;
-use App\Product;
-
 use App\TeamUser;
+use App\Notification;
 use Illuminate\Http\Request;
+use App\Product;
 use App\Services\ApigeeService;
 use Mpociot\Teamwork\TeamInvite;
 use App\Concerns\Teams\InviteActions;
@@ -488,6 +488,13 @@ class CompanyTeamsController extends Controller
         }
 
         ApigeeService::updateCompany($team);
+
+        foreach($team->users as $user){
+            Notification::create([
+                'user_id' => $user->id,
+                'notification' => "Your team $team->name has been updated please navigate to your team to view the changes",
+            ]);
+        }
         
         return response()->json(['success' => true], 200);
     }

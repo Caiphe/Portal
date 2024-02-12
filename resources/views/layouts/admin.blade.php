@@ -9,6 +9,7 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/layouts/admin.css') }}">
+    <link rel="stylesheet" href="{{ mix('/css/components/notification-admin.css') }}">
 @endpush
 
 @section('body')
@@ -16,7 +17,7 @@
         <a class="logo" href="/">@svg('logo', '', '/images/') Admin Portal</a>
         <button id="hide-menu" class="reset">@svg('close')</button>
 
-        <ul class="main-menu">
+        <ul class="main-menu" id="main-menu">
             <li @class(['menu-applications', 'active' => Request::is('admin/dashboard') || Request::is('admin/apps/create') || Request::is('admin/apps/create/*')])><a href="{{ route('admin.dashboard.index') }}">@svg('applications') Applications</a></li>
             <li @class(['menu-products', 'active' => (Request::is('admin/products') || Request::is('admin/products/*'))])><a href="{{ route('admin.product.index') }}">@svg('products') Products</a></li>
             <li @class(['menu-products', 'active' => (Request::is('admin/tasks'))])><a href="{{ route('admin.task.index') }}">@svg('task') Tasks</a></li>
@@ -33,10 +34,14 @@
 
         <ul class="secondary-menu">
             <li><a href="{{ route('user.profile') }}"><div class="profile-picture" style="background-image: url({{ $user->profile_picture }})"></div> {{ $user->full_name }}</a></li>
-            <li>
+            <li class="notification-menu">
+                <a class="toggle-notification">@svg('notifications') Notifications</a>
+                <div class="notification-count"></div>
+            </li>
+            <li class="logout-menu">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button>@svg('signout') Sign out</button>
+                    <button class="logout-button">@svg('signout') Sign out</button>
                 </form>
             </li>
             <li>
@@ -55,6 +60,9 @@
         <a class="logo" href="/">@svg('logo', '', '/images/') Admin Portal</a>
         <button id="menu-button" class="reset">@svg('menu')</button>
     </header>
+    
+    <x-notifications></x-notifications>
+    
     <main id="main">
         @yield("content")
     </main>
@@ -72,6 +80,47 @@
                 syncProductApiUrl: "{{ route('api.sync.products') }}",
             }[key] || null;
         }
+
+        var request = new XMLHttpRequest();
+        request.onload = requestListener;
+        request.open('GET', "{{ route('notifications.count') }}", true);
+        request.send();
+
+        function requestListener(){
+            var noticationCount = document.querySelector('.notification-count');
+            var data = JSON.parse(this.responseText);
+            noticationCount.textContent = data.count;
+
+            if(data.count === 0){
+                noticationCount.classList.add('hide');
+            }
+        }
+
+        // Toggle the active menu on notification menu click
+        document.querySelector('.toggle-notification').addEventListener('click', toggleShowNotification);
+
+        function toggleShowNotification(){
+            notificationMainContainer.classList.toggle('show');
+            notificationMenu.classList.toggle('active');
+            var mainMenu = document.querySelector('#main-menu li.active');
+            mainMenu.classList.toggle('non-active');
+        }
+
+        (function () {
+            var notificationMainContainer = document.getElementById('notification-main-container');
+            var markAsReadButtons = document.querySelectorAll('.mark-as-read');
+            var notificationMenu = document.querySelector('.notification-menu');
+
+            document.querySelector('.toggle-notification').addEventListener('click', toggleShowNotification);
+            function toggleShowNotification(){
+                notificationMainContainer.classList.toggle('show');
+                notificationMenu.classList.toggle('active');
+            }
+
+        });
+
     </script>
     <script src="{{ mix('/js/templates/admin/scripts.js') }}" defer></script>
+    <script src="{{ mix('/js/templates/admin/notifications.js') }}" defer></script>
+
 @endprepend

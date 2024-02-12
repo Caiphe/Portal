@@ -6,6 +6,7 @@ use DB;
 use App\App;
 use App\Team;
 use App\User;
+use App\Notification;
 use App\Country;
 use App\Product;
 use App\Mail\NewApp;
@@ -234,6 +235,14 @@ class AppController extends Controller
 
         if ($team) {
             event(new TeamAppCreated($team));
+
+            $appUsers = $team->users->pluck('id')->toArray();
+            foreach($appUsers as $user){
+                Notification::create([
+                    'user_id' => $user,
+                    'notification' => "New app {$app->display_name} have been created for your team {$team->name}. Please nagivate to your apps to view it",
+                ]);
+            }
         }
 
         $app->products()->sync(
@@ -311,6 +320,7 @@ class AppController extends Controller
             fn ($q) => $q->where('developer_id', $user->developer_id)
                 ->orWhereIn('team_id', $userTeams)
         )->firstOrFail();
+
         $validated = $request->validated();
         $app->load('products', 'team');
         $appTeam = $app->team ?? null;
@@ -399,6 +409,24 @@ class AppController extends Controller
             'country_code' => $validated['country'],
         ]);
 
+        // Notification creation on apps update
+        if($app->team){
+            $appUsers = $app->team->users->pluck('id')->toArray();
+            foreach($appUsers as $user){
+                Notification::create([
+                    'user_id' => $user,
+                    'notification' => "Your team's App {$app->display_name} has been updated please nagivate to your apps to view the changes",
+                ]);
+            }
+        }
+
+        if($app->developer){
+            Notification::create([
+                'user_id' => $app->developer->id,
+                'notification' => "Your App {$app->display_name} has been updated please nagivate to your apps to view the changes",
+            ]);
+        }
+
         $app->products()->sync(
             array_reduce(
                 ApigeeService::getLatestCredentials($updatedResponse['credentials'])['apiProducts'],
@@ -446,6 +474,16 @@ class AppController extends Controller
         $validated = $request->validated();
 
         ApigeeService::delete("developers/{$user->email}/apps/{$validated['name']}");
+
+        $appUsers = $app->team->users->pluck('id')->toArray();
+        if($appUsers){
+            foreach($appUsers as $user){
+                Notification::create([
+                    'user_id' => $user,
+                    'notification' => "Your team App {$app->display_name} has been deleted.",
+                ]);
+            }
+        }
 
         $app->delete();
 
