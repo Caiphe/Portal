@@ -79,6 +79,11 @@
         border-bottom: 10px solid #ffffff;
     }
 
+    a{
+        color: #00678f;
+        text-decoration: underline;
+    }
+
     .notification-content {
         background-color: #ffffff;
         z-index: 2;
@@ -142,6 +147,11 @@
             .single-notification {
                 border-bottom: solid 1px #cdcdcd;
                 padding-bottom: 15px;
+
+                a{
+                    color: #00678f;
+                    text-decoration: underline;
+                }
 
                 .more-details {
                     display: flex;
