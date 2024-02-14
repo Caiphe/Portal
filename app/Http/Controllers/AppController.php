@@ -240,7 +240,7 @@ class AppController extends Controller
             foreach($appUsers as $user){
                 Notification::create([
                     'user_id' => $user,
-                    'notification' => "New app {$app->display_name} have been created for your team {$team->name}. Please nagivate to your apps to view it",
+                    'notification' => "New app {$app->display_name} has been created under your team {$team->name}. Please nagivate to your <a href='/apps'>apps</a> to view.",
                 ]);
             }
         }
@@ -415,7 +415,7 @@ class AppController extends Controller
             foreach($appUsers as $user){
                 Notification::create([
                     'user_id' => $user,
-                    'notification' => "Your team's App {$app->display_name} has been updated please nagivate to your apps to view the changes",
+                    'notification' => "Your team's App {$app->display_name} has been updated please nagivate to your <a href='/apps'>apps</a> to view the changes",
                 ]);
             }
         }
@@ -423,7 +423,7 @@ class AppController extends Controller
         if($app->developer){
             Notification::create([
                 'user_id' => $app->developer->id,
-                'notification' => "Your App {$app->display_name} has been updated please nagivate to your apps to view the changes",
+                'notification' => "Your App {$app->display_name} has been updated please nagivate to your <a href='/apps'>apps</a> to view the changes",
             ]);
         }
 

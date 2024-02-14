@@ -178,6 +178,11 @@ class CompanyTeamsController extends Controller
             ]);
         }
 
+        Notification::create([
+            'user_id' => $user->id,
+            'notification' => "You have been successfully removed from the team ". $team->name,
+        ]);
+
         return response()->json([
             'success' => false,
             'error:message' => $user->full_name . ' could not be removed from ' . $team->name
@@ -314,6 +319,11 @@ class CompanyTeamsController extends Controller
         }
 
         if ($inviteSent) {
+            Notification::create([
+                'user_id' => $user->id,
+                'notification' => 'You have been invited to the team ' . $team->name . '.  Click <a href="/apps">here</a> to accept or revoke the invite.',
+            ]);
+
             return response()->json([
                 'success' => true,
                 'success:message' => 'Invite successfully sent to prospective team member of ' . $team->name . '.'
@@ -492,7 +502,7 @@ class CompanyTeamsController extends Controller
         foreach($team->users as $user){
             Notification::create([
                 'user_id' => $user->id,
-                'notification' => "Your team $team->name has been updated please navigate to your team to view the changes",
+                'notification' => "Your team $team->name has been updated please click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team to view the changes",
             ]);
         }
         
@@ -589,6 +599,7 @@ class CompanyTeamsController extends Controller
         $teamMembers = $team->users->pluck('id')->toArray();
         $currentUsers = $team->users;
 
+
         $teamsInvites = TeamInvite::where('team_id', $team->id)->get();
 
         if($teamsInvites){
@@ -598,8 +609,17 @@ class CompanyTeamsController extends Controller
         }
         
         if($currentUsers){
+            $userIds = $currentUsers->pluck('id')->toArray();
+
             foreach($currentUsers as $teamUser){
                 ApigeeService::removeDeveloperFromCompany($team, $teamUser);
+            }
+
+            foreach($userIds as $id){
+                Notification::create([
+                    'user_id' => $id,
+                    'notification' => "Your team $team->name has been succefully deleted",
+                ]);
             }
 
             $team->users()->detach($teamMembers);
