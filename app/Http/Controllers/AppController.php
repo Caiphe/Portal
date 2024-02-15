@@ -240,7 +240,7 @@ class AppController extends Controller
             foreach($appUsers as $user){
                 Notification::create([
                     'user_id' => $user,
-                    'notification' => "New app {$app->display_name} has been created under your team {$team->name}. Please nagivate to your <a href='/apps'>apps</a> to view.",
+                    'notification' => "New app <strong> {$app->display_name} </strong> has been created under your team <strong> {$team->name} </strong>. Please nagivate to your <a href='/apps'>apps</a> to view.",
                 ]);
             }
         }
@@ -415,7 +415,7 @@ class AppController extends Controller
             foreach($appUsers as $user){
                 Notification::create([
                     'user_id' => $user,
-                    'notification' => "Your team's App {$app->display_name} has been updated please nagivate to your <a href='/apps'>apps</a> to view the changes",
+                    'notification' => "Your team's App <strong> {$app->display_name} </strong> has been updated please nagivate to your <a href='/apps'>apps</a> to view the changes",
                 ]);
             }
         }
@@ -423,7 +423,7 @@ class AppController extends Controller
         if($app->developer){
             Notification::create([
                 'user_id' => $app->developer->id,
-                'notification' => "Your App {$app->display_name} has been updated please nagivate to your <a href='/apps'>apps</a> to view the changes",
+                'notification' => "Your App <strong> {$app->display_name} </strong> has been updated please nagivate to your <a href='/apps'>apps</a> to view the changes",
             ]);
         }
 
@@ -467,24 +467,28 @@ class AppController extends Controller
         $userTeams = $user->teams()->pluck('id')->toArray();
 
         $app = App::where('slug', $app)->where(
-            fn ($q) => $q->where('developer_id', $user->developer_id)
+            fn ($q) => $q->where('developer_id', auth()->user()->developer_id)
                 ->orWhereIn('team_id', $userTeams)
         )->firstOrFail();
-        
-        $validated = $request->validated();
 
-        ApigeeService::delete("developers/{$user->email}/apps/{$validated['name']}");
+        if($app->team_id && $app->team_id !== null){
+            $appUsers = $app->team->users->pluck('id')->toArray();
+            $team = $app->team->name;
 
-        $appUsers = $app->team->users->pluck('id')->toArray();
-        if($appUsers){
-            foreach($appUsers as $user){
-                Notification::create([
-                    'user_id' => $user,
-                    'notification' => "Your team App {$app->display_name} has been deleted.",
-                ]);
+            if($appUsers){
+                foreach($appUsers as $user){
+                    Notification::create([
+                        'user_id' => $user,
+                        'notification' => "An app <strong> {$app->display_name} </strong> from your team <strong> {$team} </strong>  has been deleted.",
+                    ]);
+                }
             }
         }
-
+        
+        $validated = $request->validated() ;
+        $developerEmail = $user->email ?? $app->team->email;
+       
+        ApigeeService::delete("developers/{$developerEmail}/apps/{$validated['name']}");
         $app->delete();
 
         return redirect(route('app.index'));
