@@ -252,7 +252,7 @@ class DashboardController extends Controller
         if($app->developer){
             Notification::create([
                 'user_id' => $app->developer->id,
-                'notification' => "Your App {$app->display_name}'s status has been changed. Please nagivate to your apps to view the changes",
+                'notification' => "Your App <strong>{$app->display_name}</strong>'s status has been changed. Please nagivate to your <a href='/apps'>apps</a> to view the changes",
             ]);
         }
 
@@ -261,7 +261,7 @@ class DashboardController extends Controller
             foreach($appUsers as $user){
                 Notification::create([
                     'user_id' => $user,
-                    'notification' => "Your team App {$app->display_name}'s status has been updated. Please nagivate to your apps to view the changes.",
+                    'notification' => "Your team App <strong>{$app->display_name}</strong>'s status from your team <strong>{$app->team->name}</strong> has been updated. Please nagivate to your <a href='/apps'>apps</a> to view the changes.",
                 ]);
             }
         }

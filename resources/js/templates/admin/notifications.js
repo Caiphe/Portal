@@ -169,13 +169,11 @@ function readAllFunc(ev){
                 if(allNotifications[i].classList.contains('read')) continue;
                 allNotifications[i].classList.add('read');
                 document.querySelector('.notification-count').innerHTML = 0;
-            }
-            addAlert('success', [`All notifications marked as read.`]);
 
-            var notificationCount = document.querySelector('.notification-count');
-            if(notificationCount && Number(notificationCount.innerHTML) < 1){
-                notificationCount.classList.add('hide');
             }
+
+            notificationCount.classList.add('hide');
+            addAlert('success', [`All notifications marked as read.`]);
 
             return;
         

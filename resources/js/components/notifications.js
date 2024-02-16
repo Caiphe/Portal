@@ -165,14 +165,7 @@ function readAllFunc(ev){
                 allNotifications[i].classList.add('read');
             }
 
-            if(notificationRedDot){
-                notificationFrontCount.value = Number(notificationFrontCount.value) - 1
-
-                if(notificationFrontCount.value < 1){
-                    notificationRedDot.classList.remove('show');
-                }
-            }
-
+            notificationRedDot.classList.remove('show');
             addAlert('success', [`All notifications marked as read.`]);
 
             return;
@@ -226,6 +219,7 @@ function clearAll(ev){
                 activeBtn[i].classList.add('non-active');
             }
 
+            notificationRedDot.classList.remove('show');
             addAlert('success', [`All notifications cleared successfully.`]);
             return;
         
