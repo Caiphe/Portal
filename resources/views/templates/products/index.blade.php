@@ -63,6 +63,7 @@
     </div>
 
     <div class="content">
+        <div class="products-count" id="products-count">Displaying {{ $products->count() }} products</div>
         <div class="products">
             @foreach ($productsCollection as $category => $products)
                 <div class="category"
