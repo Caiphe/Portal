@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\App;
 use App\Product;
+use App\Notification;
 use App\Services\ApigeeService;
 use App\Http\Controllers\Controller;
 
 class AppController extends Controller
 {
     public function approve(App $app)
-    {
+    {        
         $app->load(['products', 'country']);
         $currentUser = \Auth::user();
         $updatedApiProducts = [];
@@ -71,6 +72,24 @@ class AppController extends Controller
             'attributes' => $data['attributes'],
             'credentials' => $resp['credentials']
         ]);
+
+        
+        if($app->team){
+            $appUsers = $app->team->users->pluck('id')->toArray();
+            foreach($appUsers as $user){
+                Notification::create([
+                    'user_id' => $user,
+                    'notification' => "Your App <strong>{$app->display_name}</strong> from your team {$app->team->name} has been updated. Please nagivate to your <a href='/apps'>apps</a> to view the changes.",
+                ]);
+            }
+        }
+
+        if($app->developer){
+            Notification::create([
+                'user_id' => $app->developer->id,
+                'notification' => "Your App {$app->display_name} has been updated. Please nagivate to your <a href='/apps'>apps</a> to view the changes",
+            ]);
+        }
 
         $app->products()->sync($updatedApiProducts);
 

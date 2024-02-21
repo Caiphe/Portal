@@ -4,13 +4,14 @@ namespace App;
 
 use App\Role;
 use App\Country;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Notification;
 use Mpociot\Teamwork\TeamInvite;
+use Illuminate\Notifications\Notifiable;
 use Mpociot\Teamwork\Traits\UserHasTeams;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Notifications\ResetPasswordNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -219,6 +220,11 @@ class User extends Authenticatable implements MustVerifyEmail
 	public function teams()
 	{
 		return $this->belongsToMany(Team::class);
+	}
+
+	public function notifications()
+	{
+		return $this->hasMany(Notification::class);
 	}
 
 	/**

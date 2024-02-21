@@ -293,7 +293,6 @@
                     }
                 };
 
-            document.querySelector(".menu.show").classList.remove('show');
         }
 
         function reloadTimeOut(){

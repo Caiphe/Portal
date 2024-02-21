@@ -316,7 +316,7 @@
         @else
             <a href="{{ route('app.edit', $app['slug']) }}">Edit</a>
             <button class="app-delete-modal" 
-                data-appname="{{ $app['name'] }}"
+                data-appname="{{ $app['slug'] }}"
                 data-displayname="{{ $app['display_name'] }}">Delete
             </button>
         @endif

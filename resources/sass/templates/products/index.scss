@@ -89,6 +89,21 @@ h3 {
             @media #{variables.$medium} {
                 color: variables.$black;
             }
+
+            .available-products-count{
+                font-size: 24px;
+                font-family: variables.$MTN-Regular;
+
+                @media #{variables.$small} {
+                    display: block;
+                    margin-top: 15px;
+                }
+    
+                @media #{variables.$medium} {
+                    display: block;
+                    margin-top: 15px;
+                }
+            }
         }
 
         p {
@@ -132,7 +147,8 @@ h3 {
             color: #969696;
             font-size: 14px;
             margin-bottom: 20px;
-            display: block;
+            display: none;
+            height: 0px;
 
             &.hide{
                 display: none;
@@ -167,7 +183,7 @@ h3 {
                 }
             }
 
-            .heasder-count{
+            .header-count{
                 margin-left: 10px;
             }
         }
@@ -179,7 +195,7 @@ h3 {
             .category {
                 display: flex;
                 flex-flow: row wrap;
-                margin-bottom: 10px;
+                margin-bottom: 0px;
                 width: 100%;
 
                 @media screen and (min-width: 768px) and (max-width: 1099px) {

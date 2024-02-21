@@ -396,7 +396,7 @@ class ApigeeService
 
         return $a;
     }
-
+    
     public static function getApigeeAppAttributes(App $app)
     {
         $attr = self::get('apps/' . $app->aid)['attributes'] ?? [];

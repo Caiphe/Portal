@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateStatusRequest;
-use App\Services\ApigeeService;
 use App\App;
-use App\Country;
 use App\Product;
-use App\Mail\KycStatusUpdate;
-use App\Mail\ProductAction;
-use App\Services\ProductLocationService;
 use App\User;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Support\Facades\Mail;
+use App\Country;
+use App\Notification;
+use App\Mail\ProductAction;
 use \Illuminate\Http\Request;
+use App\Mail\KycStatusUpdate;
+use App\Services\ApigeeService;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Contracts\View\Factory;
+use App\Services\ProductLocationService;
+use App\Http\Requests\UpdateStatusRequest;
 
 class DashboardController extends Controller
 {
@@ -138,6 +139,7 @@ class DashboardController extends Controller
         $isTeamApp = !is_null($app->team);
         $product = $app->products()->where('name', $validated['product'])->first();
         $currentUser = $request->user();
+
         $status = [
             'approve' => 'approved',
             'revoke' => 'revoked',
@@ -147,6 +149,23 @@ class DashboardController extends Controller
         $statusNoteRequest = $request->get('statusNote', 'No note given.') ?: 'No note given';
         $statusNote = $product->pivot->status_note ?? '';
         $statusNote = date('d F Y') . "\n" . ucfirst($status) . " by {$currentUser->full_name}" . "\n\n{$statusNoteRequest}\n\n{$statusNote}";
+
+        if($isTeamApp){
+            $users = $app->team->users->pluck('id')->toArray();
+
+            foreach($users as $user){
+                Notification::create([
+                    'user_id' => $user,
+                    'notification' => " <strong>{$product->name}</strong> product has been ". $status . " from your team (<strong>{$app->team->name}</strong>)'s app <strong>{$app->display_name}</strong>. Please nagivate to your <a href='/apps'>apps</a> to view the changes",
+
+                ]);
+            }
+        }else{
+            Notification::create([
+                'user_id' => $app->developer->id,
+                'notification' => "Your product <strong>{$product->name}</strong> has been ". $status . " from your app <strong>{$app->display_name}</strong>. Please nagivate to your <a href='/apps'>apps</a> to view the changes",
+            ]);
+        }
 
         $credentials = ApigeeService::getAppCredentials($app);
         $credentials = $validated['for'] === 'staging' ? $credentials[0] : end($credentials);
@@ -247,6 +266,23 @@ class DashboardController extends Controller
         }
 
         $response = ApigeeService::pushAppNote($app, $attributes, $status);
+
+        if($app->developer){
+            Notification::create([
+                'user_id' => $app->developer->id,
+                'notification' => "Your App <strong>{$app->display_name}</strong>'s status has been changed. Please nagivate to your <a href='/apps'>apps</a> to view the changes",
+            ]);
+        }
+
+        if($app->team){
+            $appUsers = $app->team->users->pluck('id')->toArray();
+            foreach($appUsers as $user){
+                Notification::create([
+                    'user_id' => $user,
+                    'notification' => "Your team App <strong>{$app->display_name}</strong>'s status from your team <strong>{$app->team->name}</strong> has been updated. Please nagivate to your <a href='/apps'>apps</a> to view the changes.",
+                ]);
+            }
+        }
 
         if (200 === $response->status()) {
             $attributes = ApigeeService::getAppAttributes($response['attributes']);
