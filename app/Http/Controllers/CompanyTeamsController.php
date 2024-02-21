@@ -77,6 +77,7 @@ class CompanyTeamsController extends Controller
         $user = $this->getTeamUser(auth()->user()->id);
         $team = $this->getTeam($data['team_id']);
         $newOwner = $this->getTeamUserByEmail($data['user_email']);
+        $userIds =  $team->users->pluck('id')->toArray();
 
         abort_if($team->owner_id !== $user->id, 401, "You are not this team's owner");
         abort_if(!$user, 401, 'Your user could not be found');
@@ -98,11 +99,23 @@ class CompanyTeamsController extends Controller
         $team->update(['owner_id' => $newOwner->id]);
         $team->users()->detach($user);
 
+        $userIds =  $team->users->pluck('id')->toArray();
+            
+        foreach($userIds as $id){
+            if($id !== auth()->user()->id){
+                Notification::create([
+                    'user_id' => $id,
+                    'notification' => "A user with the name <strong>{$user->full_name}</strong> has left your team <strong>{$team->name}</strong>. Click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team.",
+                ]);
+            }
+        }
+
         return response()->json(['success' => true, 'code' => 200], 200);
     }
 
     public function leave(LeavingRequest $teamRequest, Team $team)
     {
+        
         $usersCount = $team->users->count();
         $data = $teamRequest->validated();
         $team = $this->getTeam($data['team_id']);
@@ -141,7 +154,7 @@ class CompanyTeamsController extends Controller
 
             return response()->json(['success' => true, 'code' => 200], 200);
 
-        }else{
+        }else{          
             $appCreated = App::where('developer_id', $user->developer_id)->where('team_id', $team->id)->get();
             $teamOwnerDeveloperId = User::where('id', $team->owner_id)->pluck('developer_id')->toArray();
             
@@ -158,17 +171,20 @@ class CompanyTeamsController extends Controller
                 }
             }
 
+            ApigeeService::removeDeveloperFromCompany($team, $user);
+            $team->users()->detach($user);
+
             $userIds =  $team->users->pluck('id')->toArray();
             
             foreach($userIds as $id){
-                Notification::create([
-                    'user_id' => $id,
-                    'notification' => "A user with the name <strong>{$user->full_name}</strong> has left your team <strong>{$team->name}</strong>.",
-                ]);
+                if($id !== $user->id){
+                    Notification::create([
+                        'user_id' => $id,
+                        'notification' => "A user with the name <strong>{$user->full_name}</strong> has left your team <strong>{$team->name}</strong>. Click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team.",
+                    ]);
+                }
             }
 
-            ApigeeService::removeDeveloperFromCompany($team, $user);
-            $team->users()->detach($user);
             return response()->json(['success' => true, 'code' => 200], 200);
         }
     }
@@ -340,7 +356,7 @@ class CompanyTeamsController extends Controller
         if ($inviteSent) {
             Notification::create([
                 'user_id' => $user->id,
-                'notification' => "You have been invited to the team <strong>{$team->name}</strong>  Click <a href='/apps'>here</a> to accept or revoke the invite.",
+                'notification' => "You have been invited to the team <strong>{$team->name}</strong> . Click <a href='/apps'>here</a> to accept or revoke the invite.",
             ]);
 
             return response()->json([
@@ -521,7 +537,7 @@ class CompanyTeamsController extends Controller
         foreach($team->users as $user){
             Notification::create([
                 'user_id' => $user->id,
-                'notification' => "Your team <stron>{$team->name}</stron> has been updated please click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team to view the changes",
+                'notification' => "Your team <strong>{$team->name}</strong> has been updated please click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team to view the changes",
             ]);
         }
         

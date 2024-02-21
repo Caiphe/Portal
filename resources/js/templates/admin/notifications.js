@@ -43,7 +43,7 @@ fetch('/notifications/fetch-all').then(function(data) {
         <div class="single-notification ${values.read_at ? 'read' : ''}">
             <p class="notification-message">${values.notification}</p>
             <div class="more-details">
-                <span class="date-time">${values.formattedDate}</span>
+                <span class="date-time">${values.createdAt}</span>
                 <button type="sbmit" data-status="${values.read_at ? 'unread' : 'read'}"
                         data-url ="/notification/${values.id}/read"
                         data-notification="${values.id}" onclick="toggleRead(this);" 
@@ -139,6 +139,7 @@ function toggleRead(e){
 
 // Mark all notifications unread as read
 document.querySelector('.mark-read-all-form').addEventListener('submit', readAllFunc);
+
 function readAllFunc(ev){
     ev.preventDefault();
 
@@ -168,11 +169,11 @@ function readAllFunc(ev){
             for(var i = 0; i < allNotifications.length; i++){
                 if(allNotifications[i].classList.contains('read')) continue;
                 allNotifications[i].classList.add('read');
-                document.querySelector('.notification-count').innerHTML = 0;
-
             }
 
-            notificationCount.classList.add('hide');
+            document.querySelector('.notification-count').innerHTML = 0;
+            document.querySelector('.notification-count').classList.add('hide');
+
             addAlert('success', [`All notifications marked as read.`]);
 
             return;
