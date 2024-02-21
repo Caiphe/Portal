@@ -1,6 +1,5 @@
 (function () {
     var filterProductsEls = document.querySelectorAll('.filter-products');
-    var cardsCount = document.querySelector('#products-count');
     var timeout = null;
 
     var currentCategory = localStorage.getItem("category");
@@ -53,7 +52,6 @@
 
         filterProducts();
 
-        cardsCount.classList.remove('hide');
         var filterCounts = document.querySelectorAll('.filters-count');
         for(var i = 0; i < filterCounts.length; i++){
             filterCounts[i].classList.remove('show');
@@ -70,7 +68,6 @@
                 cards[i].style.display = 'inherit';
                 cards[i].classList.add('display-cards');
                 categoryHeadingsShow.push(cards[i].dataset.category);
-                cardsCount.classList.add('hide');
                 continue;
             }
 

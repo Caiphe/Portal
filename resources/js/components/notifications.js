@@ -47,7 +47,7 @@ fetch('/notifications/fetch-all').then(function(data) {
         <div class="single-notification ${values.read_at ? 'read' : ''}">
             <p class="notification-message">${values.notification}</p>
             <div class="more-details">
-                <span class="date-time">${values.formattedDate}</span>
+                <span class="date-time">${values.created_at}</span>
                 <button type="sbmit" data-status="${values.read_at ? 'unread' : 'read'}"
                         data-url ="/notification/${values.id}/read"
                         data-notification="${values.id}" onclick="toggleRead(this);" 
@@ -165,14 +165,7 @@ function readAllFunc(ev){
                 allNotifications[i].classList.add('read');
             }
 
-            if(notificationRedDot){
-                notificationFrontCount.value = Number(notificationFrontCount.value) - 1
-
-                if(notificationFrontCount.value < 1){
-                    notificationRedDot.classList.remove('show');
-                }
-            }
-
+            notificationRedDot.classList.remove('show');
             addAlert('success', [`All notifications marked as read.`]);
 
             return;
@@ -226,6 +219,7 @@ function clearAll(ev){
                 activeBtn[i].classList.add('non-active');
             }
 
+            notificationRedDot.classList.remove('show');
             addAlert('success', [`All notifications cleared successfully.`]);
             return;
         
