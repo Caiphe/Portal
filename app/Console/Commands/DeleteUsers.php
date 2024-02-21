@@ -71,7 +71,6 @@ class DeleteUsers extends Command
 
         $nonVerifiedUserCount = $nonVerifiedUsers->count();
 
-
         $skippedModels = []; // Store the model names that are skipped
 
         $deleteConfirmation = $this->confirm('Are you sure you want to delete ' . $nonVerifiedUserCount . ' non-verified users');
@@ -82,6 +81,7 @@ class DeleteUsers extends Command
             $deletedUserCount = 0;
 
             foreach ($nonVerifiedUsers as $user) {
+
                 try {
                    $user->load([
                         'roles',
@@ -95,12 +95,10 @@ class DeleteUsers extends Command
                         'twoFaResetRequest',
                     ]);
 
-                    //APIGEE code must go here
-                    //$this->deleteApigeeUsers();
-
-                    // Delete non-verified user
-                    $user->delete();
+                    $user->delete(); // Delete non-verified user
+                    $this->deleteApigeeUsers($user->email); //APIGEE delete users
                     $deletedUserCount++;
+
                 } catch (\Illuminate\Database\QueryException $e) {
                     // Handle foreign key constraint violation
                     $skippedModels[] = get_class($user);
@@ -144,26 +142,22 @@ class DeleteUsers extends Command
      * This code should to the helper or service
      * @return void
      */
-    public function deleteApigeeUsers()
+    public function deleteApigeeUsers($userEmail)
     {
-        $endpoint = config('your_api_endpoint'); // Replace with your actual API endpoint
-        $org = 'your_organization'; // Replace with your actual organization
-        $email = 'user@example.com'; // Replace with the user's email
-        $token = 'your_access_token'; // Replace with your actual access token
+        $endpoint = config('apigee.base'); // Replace with your actual API endpoint
 
         $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . $token,
-        ])
-            ->delete("$endpoint/v1/o/$org/userroles/zoneadmin/users/$email", [
-                'role' => [
-                    ['name' => 'zoneadmin']
-                ]
-            ]);
+            'Authorization' => 'Bearer YOUR_ACCESS_TOKEN', // Replace with your actual access token
+        ])->delete($endpoint ."users/" . $userEmail);
 
-        // Access the response as needed, for example:
-        $status = $response->status();
-        $data = $response->json();
+        if ($response->successful()) {
+            // The request was successful
+            $this->info('The user delete successfully!');
+        } else {
+            // The request failed
+            $this->info('The user failed delete process!');
+            // Optionally, you can also get the response body using $response->body()
+        }
     }
 
 
