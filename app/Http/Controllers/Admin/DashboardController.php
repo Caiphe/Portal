@@ -139,6 +139,7 @@ class DashboardController extends Controller
         $isTeamApp = !is_null($app->team);
         $product = $app->products()->where('name', $validated['product'])->first();
         $currentUser = $request->user();
+
         $status = [
             'approve' => 'approved',
             'revoke' => 'revoked',
@@ -148,6 +149,23 @@ class DashboardController extends Controller
         $statusNoteRequest = $request->get('statusNote', 'No note given.') ?: 'No note given';
         $statusNote = $product->pivot->status_note ?? '';
         $statusNote = date('d F Y') . "\n" . ucfirst($status) . " by {$currentUser->full_name}" . "\n\n{$statusNoteRequest}\n\n{$statusNote}";
+
+        if($isTeamApp){
+            $users = $app->team->users->pluck('id')->toArray();
+
+            foreach($users as $user){
+                Notification::create([
+                    'user_id' => $user,
+                    'notification' => " <strong>{$product->name}</strong> product has been ". $status . " from your team (<strong>{$app->team->name}</strong>)'s app <strong>{$app->display_name}</strong>. Please nagivate to your <a href='/apps'>apps</a> to view the changes",
+
+                ]);
+            }
+        }else{
+            Notification::create([
+                'user_id' => $app->developer->id,
+                'notification' => "Your product <strong>{$product->name}</strong> has been ". $status . " from your app <strong>{$app->display_name}</strong>. Please nagivate to your <a href='/apps'>apps</a> to view the changes",
+            ]);
+        }
 
         $credentials = ApigeeService::getAppCredentials($app);
         $credentials = $validated['for'] === 'staging' ? $credentials[0] : end($credentials);

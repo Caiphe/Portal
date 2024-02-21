@@ -130,6 +130,11 @@ class CompanyTeamsController extends Controller
                 }
             }
 
+            Notification::create([
+                'user_id' => $user->id,
+                'notification' => "You have successfully left your team <strong>{$team->name}</strong>.",
+            ]);
+
             ApigeeService::removeDeveloperFromCompany($team, $user);
             ApigeeService::deleteCompany($team);
             $team->delete();
@@ -140,12 +145,26 @@ class CompanyTeamsController extends Controller
             $appCreated = App::where('developer_id', $user->developer_id)->where('team_id', $team->id)->get();
             $teamOwnerDeveloperId = User::where('id', $team->owner_id)->pluck('developer_id')->toArray();
             
+            Notification::create([
+                'user_id' => $user->id,
+                'notification' => "You have successfully left your team <strong>{$team->name}</strong>.",
+            ]);
+
             if($appCreated->count() >= 1){
                 foreach($appCreated as $app){
                     $app->update([
                         'developer_id' => $teamOwnerDeveloperId[0]
                     ]);
                 }
+            }
+
+            $userIds =  $team->users->pluck('id')->toArray();
+            
+            foreach($userIds as $id){
+                Notification::create([
+                    'user_id' => $id,
+                    'notification' => "A user with the name <strong>{$user->full_name}</strong> has left your team <strong>{$team->name}</strong>.",
+                ]);
             }
 
             ApigeeService::removeDeveloperFromCompany($team, $user);
@@ -282,7 +301,7 @@ class CompanyTeamsController extends Controller
         abort_if($user->belongsToTeam($team), 403, 'user is already member of this team');
 
         $isAlreadyInvited = false;
-        if ($user) {
+        if ($user) {   
             $isAlreadyInvited = TeamInvite::where('email', $user->email)->where('team_id', $team->id)->exists();
         }
 
@@ -321,7 +340,7 @@ class CompanyTeamsController extends Controller
         if ($inviteSent) {
             Notification::create([
                 'user_id' => $user->id,
-                'notification' => 'You have been invited to the team ' . $team->name . '.  Click <a href="/apps">here</a> to accept or revoke the invite.',
+                'notification' => "You have been invited to the team <strong>{$team->name}</strong>  Click <a href='/apps'>here</a> to accept or revoke the invite.",
             ]);
 
             return response()->json([
@@ -502,7 +521,7 @@ class CompanyTeamsController extends Controller
         foreach($team->users as $user){
             Notification::create([
                 'user_id' => $user->id,
-                'notification' => "Your team $team->name has been updated please click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team to view the changes",
+                'notification' => "Your team <stron>{$team->name}</stron> has been updated please click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team to view the changes",
             ]);
         }
         
@@ -545,6 +564,17 @@ class CompanyTeamsController extends Controller
         }
 
         if (!$invite->exists) {
+
+            $userIds = $team->users->pluck('id')->toArray();
+            $user = auth()->user();
+
+            foreach($userIds as $id){
+                Notification::create([
+                    'user_id' => $id,
+                    'notification' => "A new user <strong>{$user->name}</strong> have been added to your team from your team (<strong>{$team->name}</strong>). Please nagivate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
+                ]);
+            }
+
             return redirect()->route('teams.listing')->with('alert', 'success:' . $inviteType . ' was successfully accepted.');
         }
     }
@@ -618,7 +648,7 @@ class CompanyTeamsController extends Controller
             foreach($userIds as $id){
                 Notification::create([
                     'user_id' => $id,
-                    'notification' => "Your team $team->name has been succefully deleted",
+                    'notification' => "Your team <strong>{$team->name}</strong> has been succefully deleted.",
                 ]);
             }
 
