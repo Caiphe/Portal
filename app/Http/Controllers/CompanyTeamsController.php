@@ -587,7 +587,7 @@ class CompanyTeamsController extends Controller
             foreach($userIds as $id){
                 Notification::create([
                     'user_id' => $id,
-                    'notification' => "A new user <strong>{$user->name}</strong> have been added to your team from your team (<strong>{$team->name}</strong>). Please nagivate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
+                    'notification' => "<strong>{$user->name}</strong> is now the owner of your team (<strong>{$team->name}</strong>). Please nagivate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
                 ]);
             }
 
