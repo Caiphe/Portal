@@ -690,6 +690,17 @@ class ApigeeService
     }
 
     /**
+     * Delete a Developer / User.
+     *
+     * @param      \App\User  $user  The user
+     *
+     * @return     mixed         The response from the delete
+     */
+    public static function deleteUser(User $user){
+        return self::delete("users/{$user->email}");
+    }
+
+    /**
      * Adds a developer to company.
      *
      * @param      \App\Company  $company  The company

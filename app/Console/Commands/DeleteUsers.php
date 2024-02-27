@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Services\ApigeeService;
 use App\User;
+use App\Notification;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
@@ -83,20 +85,28 @@ class DeleteUsers extends Command
             foreach ($nonVerifiedUsers as $user) {
 
                 try {
-                   $user->load([
-                        'roles',
-                        'apps',
-                        'assignedProducts',
-                        'teams',
-                        'countries',
-                        'responsibleCountries',
-                        'responsibleGroups',
-                        'authentications',
-                        'twoFaResetRequest',
-                    ]);
+                    if($user->notifications()){
+                        foreach($user->notifications as $notification){
+                            $notification->delete();
+                        }
+                    }
+    
+                    if($user->authentications()){
+                        foreach($user->authentications as $authLog){
+                            $authLog->delete();
+                        }
+                    }
+    
+                    if($user->assignedProducts()){
+                        $user->assignedProducts()->detach();
+                    }
+    
+                    if($user->roles()){
+                        $user->roles()->detach();
+                    }    
 
+                    ApigeeService::deleteUser($user);
                     $user->delete(); // Delete non-verified user
-                    $this->deleteApigeeUsers($user->email); //APIGEE delete users
                     $deletedUserCount++;
 
                 } catch (\Illuminate\Database\QueryException $e) {
@@ -137,28 +147,4 @@ class DeleteUsers extends Command
             $this->info('The delete process is terminated!');
         }
     }
-
-    /**
-     * This code should to the helper or service
-     * @return void
-     */
-    public function deleteApigeeUsers($userEmail)
-    {
-        $endpoint = config('apigee.base'); // Replace with your actual API endpoint
-
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer YOUR_ACCESS_TOKEN', // Replace with your actual access token
-        ])->delete($endpoint ."users/" . $userEmail);
-
-        if ($response->successful()) {
-            // The request was successful
-            $this->info('The user delete successfully!');
-        } else {
-            // The request failed
-            $this->info('The user failed delete process!');
-            // Optionally, you can also get the response body using $response->body()
-        }
-    }
-
-
 }
