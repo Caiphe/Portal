@@ -47,7 +47,9 @@
         transition: opacity 0.356s, transform 0.356s;
     }
 
-    @media(max-width: 768px){
+    @media(max-width: 768px){       
+        top: 83px;
+
         &.display{
             opacity: 1;
             pointer-events: auto;
@@ -57,6 +59,7 @@
 
     @media(max-width: 650px){
         right: 10px;
+        border-radius: 5px;
     }
 
     @media(max-width: 500px){
@@ -78,6 +81,10 @@
         border-left: 10px solid transparent;
         border-right: 10px solid transparent;
         border-bottom: 10px solid #ffffff;
+
+        @media(max-width: 768px){
+            display: none;
+        }
     }
 
     a{
