@@ -344,7 +344,7 @@ class ApigeeService
     /**
      * Revoke credentials
      *
-     * @param      \Illuminate\Database\Eloquent\Model       $entity   The user or team 
+     * @param      \Illuminate\Database\Eloquent\Model       $entity   The user or team
      * @param      \App\App                                 $app      The application
      * @param      string                                   $key      The key
      *
@@ -360,17 +360,17 @@ class ApigeeService
     public static function getAppAttributes(array $attributes)
     {
         $a = [];
-        
+
         foreach ($attributes as $attribute) {
             $key = $attribute['name'];
             $value = trim($attribute['value']);
 
             if (!isset($value)) {
                 $attribute['value'] = '';
-	    
+
 	   }
             $value = $key === 'Group' ? Str::studly($value) : $value;
-      
+
             $a[$key] = $value;
         }
 
@@ -387,16 +387,16 @@ class ApigeeService
 
             if (!isset($value)) {
                 $attribute['value'] = '';
-	    
+
 	   }
             $value = $key === 'Group' ? $value : $value;
-      
+
             $a[$key] = $value;
         }
 
         return $a;
     }
-    
+
     public static function getApigeeAppAttributes(App $app)
     {
         $attr = self::get('apps/' . $app->aid)['attributes'] ?? [];

@@ -57,7 +57,7 @@ class DeleteUsers extends Command
         // Generate an array of years based on user input
         $years = [];
         for ($i = $currentYear; $i >= $currentYear - $numberOfYears; $i--) {
-            $years[] = (string) $i;
+            $years[] = (string)$i;
         }
 
         // Allow the user to choose from the generated array of years
@@ -68,7 +68,8 @@ class DeleteUsers extends Command
 
         // Get users that are not verified and registered between the day before yesterday and yesterday
         $nonVerifiedUsers = User::whereNull('email_verified_at')
-            ->whereBetween('created_at', [$choice_of_year.'-01-01', $yesterday])
+            ->whereDoesntHave('apps')
+            ->whereBetween('created_at', [$choice_of_year . '-01-01', $yesterday])
             ->get();
 
         $nonVerifiedUserCount = $nonVerifiedUsers->count();
@@ -85,56 +86,56 @@ class DeleteUsers extends Command
             foreach ($nonVerifiedUsers as $user) {
 
                 try {
-                    if($user->notifications()){
-                        foreach($user->notifications as $notification){
-                            $notification->delete();
+                    if ($user->notifications()) {
+                            foreach ($user->notifications as $notification) {
+                                $notification->delete();
+                            }
+                        }
+
+                        if ($user->authentications()) {
+                            foreach ($user->authentications as $authLog) {
+                                $authLog->delete();
+                            }
+                        }
+
+                        if ($user->assignedProducts()) {
+                            $user->assignedProducts()->detach();
+                        }
+
+                        if ($user->roles()) {
+                            $user->roles()->detach();
+                        }
+
+                        ApigeeService::deleteUser($user);
+                        $user->delete(); // Delete non-verified user
+                        $deletedUserCount++;
+
+                    } catch (\Illuminate\Database\QueryException $e) {
+                        // Handle foreign key constraint violation
+                        $skippedModels[] = get_class($user);
+                        $this->info('Skipped deletion of user ' . $user->id . ' due to foreign key constraint violation.');
+
+                        $user->load([
+                            'roles',
+                            'apps',
+                            'assignedProducts',
+                            'teams',
+                            'countries',
+                            'responsibleCountries',
+                            'responsibleGroups',
+                            'authentications',
+                            'twoFaResetRequest',
+                        ]);
+
+                        foreach ($user->getRelations() as $relationName => $relation) {
+
+                            if ($relation instanceof \Illuminate\Database\Eloquent\Relations\Relation) {
+                                $relatedModel = get_class($relation->getRelated());
+                                $relatedCount = $relatedModel::where('user_id', $user->id)->count();
+                                $this->info($relatedCount . ' records in ' . $relatedModel . ' related to user ' . $user->id);
+                            }
                         }
                     }
-    
-                    if($user->authentications()){
-                        foreach($user->authentications as $authLog){
-                            $authLog->delete();
-                        }
-                    }
-    
-                    if($user->assignedProducts()){
-                        $user->assignedProducts()->detach();
-                    }
-    
-                    if($user->roles()){
-                        $user->roles()->detach();
-                    }    
-
-                    ApigeeService::deleteUser($user);
-                    $user->delete(); // Delete non-verified user
-                    $deletedUserCount++;
-
-                } catch (\Illuminate\Database\QueryException $e) {
-                    // Handle foreign key constraint violation
-                    $skippedModels[] = get_class($user);
-                    $this->info('Skipped deletion of user ' . $user->id . ' due to foreign key constraint violation.');
-
-                    $user->load([
-                        'roles',
-                        'apps',
-                        'assignedProducts',
-                        'teams',
-                        'countries',
-                        'responsibleCountries',
-                        'responsibleGroups',
-                        'authentications',
-                        'twoFaResetRequest',
-                    ]);
-
-                    foreach ($user->getRelations() as $relationName => $relation) {
-
-                        if ($relation instanceof \Illuminate\Database\Eloquent\Relations\Relation) {
-                            $relatedModel = get_class($relation->getRelated());
-                            $relatedCount = $relatedModel::where('user_id', $user->id)->count();
-                            $this->info($relatedCount . ' records in ' . $relatedModel . ' related to user ' . $user->id);
-                        }
-                    }
-                }
             }
 
             $this->info($deletedUserCount . ' users deleted.');
