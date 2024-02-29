@@ -20,7 +20,7 @@ class Notification extends Model
     public function getCreatedAtAttribute($value)
     {
         $createdAt = Carbon::parse($value);
-
+        
         return $createdAt->format('M d, h:i');
     }
 

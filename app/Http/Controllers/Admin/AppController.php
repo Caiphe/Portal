@@ -73,6 +73,7 @@ class AppController extends Controller
             'credentials' => $resp['credentials']
         ]);
 
+        $app->products()->sync($updatedApiProducts);
         
         if($app->team){
             $appUsers = $app->team->users->pluck('id')->toArray();
@@ -90,8 +91,6 @@ class AppController extends Controller
                 'notification' => "Your App {$app->display_name} has been updated. Please nagivate to your <a href='/apps'>apps</a> to view the changes",
             ]);
         }
-
-        $app->products()->sync($updatedApiProducts);
 
         return redirect()->route('admin.dashboard.index')->with('alert', "success:App has been approved");
     }
