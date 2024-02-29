@@ -233,6 +233,15 @@ class AppController extends Controller
             "created_at" => date('Y-m-d H:i:s', $createdResponse['createdAt'] / 1000),
         ]);
 
+        if (($user->hasRole('admin') || $user->hasRole('opco')) && $request->has('app_owner')) {
+            $appOwner = User::where('email', $request->get('app_owner'))->first();
+
+            Notification::create([
+                'user_id' => $appOwner['id'],
+                'notification' => "An admin has created an app <strong>{$validated['display_name']}</strong> for you please nagivate to your <a href='/apps'>apps</a> for more info.",
+            ]);
+        }
+
         if ($team) {
             event(new TeamAppCreated($team));
 
