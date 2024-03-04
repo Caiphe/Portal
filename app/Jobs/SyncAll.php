@@ -63,11 +63,12 @@ class SyncAll implements ShouldQueue
     public function failed()
     {
         $message = 'The sync process has failed please try again.';
-        Mail::to($this->user->email)->send(new SyncNotificationErrorMail($message));
 
         Notification::create([
             'user_id' => $this->user->id,
-            'notification' => "The Sync process has failed! Please proceed to the dashboard and try again.",
+            'notification' => "The Sync process has failed. Please proceed to the dashboard and try again.",
         ]);
+
+        Mail::to($this->user->email)->send(new SyncNotificationErrorMail($message));
     }
 }

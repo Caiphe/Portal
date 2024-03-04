@@ -7,6 +7,7 @@ use App\User;
 use App\Country;
 use App\Product;
 use App\RoleUser;
+use App\Notification;
 use App\TwofaResetRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -210,6 +211,11 @@ class UserController extends Controller
         $user->countries()->sync($data['country'] ?? []);
         $user->assignedProducts()->sync($data['private_products'] ?? []);
 
+        Notification::create([
+            'user_id' => $user->id,
+            'notification' => "Your profile has been updated. Please navigate to your <a href='/profile'>Profile</a> for more info.",
+        ]);
+
         return redirect()->route('admin.user.index')->with('alert', 'success:The user has been updated');
     }
 
@@ -226,6 +232,11 @@ class UserController extends Controller
         $userRequest = TwofaResetRequest::where(['user_id' => $user->id,'approved_by' => null])->first();
         $userRequest->update(['approved_by' => $admin]);
 		$user->update(['2fa'=> null]);
+
+        Notification::create([
+            'user_id' => $user->id,
+            'notification' => "Your 2fa reset request has been approved. Please navigate to your <a href='/profile#twofa'>Profile</a> and set up your 2fa. ",
+        ]);
         
 		Mail::to($user->email)->send( new TwoFaResetConfirmationMail());
 
