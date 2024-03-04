@@ -211,6 +211,11 @@ class UserController extends Controller
         $user->countries()->sync($data['country'] ?? []);
         $user->assignedProducts()->sync($data['private_products'] ?? []);
 
+        Notification::create([
+            'user_id' => $user->id,
+            'notification' => "Your profile has been updated. Please navigate to your <a href='/profile'>Profile</a> for more info.",
+        ]);
+
         return redirect()->route('admin.user.index')->with('alert', 'success:The user has been updated');
     }
 
@@ -230,7 +235,7 @@ class UserController extends Controller
 
         Notification::create([
             'user_id' => $user->id,
-            'notification' => "Your 2fa reset request has been approved, please navigate to <a href='/profile#twofa'>Profile</a> to set up your 2fa. ",
+            'notification' => "Your 2fa reset request has been approved. Please navigate to your <a href='/profile#twofa'>Profile</a> and set up your 2fa. ",
         ]);
         
 		Mail::to($user->email)->send( new TwoFaResetConfirmationMail());

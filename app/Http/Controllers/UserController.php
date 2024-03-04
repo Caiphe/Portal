@@ -223,10 +223,12 @@ class UserController extends Controller
 			}
 
 			foreach($opcoIds as $opcoId){
-				Notification::create([
-					'user_id' => $opcoId,
-					'notification' => "A developer <strong>{$user->full_name}</strong> has requested a 2fa reset. Please nagivate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
-				]);
+				if($opcoId !== $user->id){
+					Notification::create([
+						'user_id' => $opcoId,
+						'notification' => "A user <strong>{$user->full_name}</strong> has requested a 2fa reset. Please nagivate to this <a href='/admin/users/{$user->id}/edit'>user</a> profile for more info.",
+					]);
+				}
 			}
 
 			Mail::bcc($opcoEmails)->send( new TwoFaResetRequestMail($user));

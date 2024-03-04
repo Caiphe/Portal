@@ -632,7 +632,7 @@ class CompanyTeamsController extends Controller
 
             Notification::create([
                 'user_id' => $user->id,
-                'notification' => "Your role from the team <strong>{$team->name}</strong> has been updated. Please nagivate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
+                'notification' => "Your role from the team <strong>{$team->name}</strong> has been updated to <strong>{$role->label}</strong>.<br/> Please nagivate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
             ]);
         }
 
