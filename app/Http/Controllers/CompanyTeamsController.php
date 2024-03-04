@@ -569,7 +569,7 @@ class CompanyTeamsController extends Controller
                 if($id !== $user->id){
                     Notification::create([
                         'user_id' => $id,
-                        'notification' => "<strong>{$user->name}</strong> is now the owner of your team (<strong>{$team->name}</strong>). Please nagivate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
+                        'notification' => "<strong>{$user->full_name}</strong> is now the owner of your team (<strong>{$team->name}</strong>). Please nagivate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
                     ]);
                 }
             }
@@ -593,7 +593,7 @@ class CompanyTeamsController extends Controller
                 if($id !== $user->id){
                     Notification::create([
                         'user_id' => $id,
-                        'notification' => "<strong>{$user->name}</strong> is now a new member of your team (<strong>{$team->name}</strong>). Please nagivate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
+                        'notification' => "<strong>{$user->full_name}</strong> is now a new member of your team (<strong>{$team->name}</strong>). Please nagivate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
                     ]);
                 }
             }
