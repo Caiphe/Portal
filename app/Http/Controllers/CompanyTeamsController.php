@@ -556,12 +556,23 @@ class CompanyTeamsController extends Controller
 
         $inviteType = ucfirst($invite->type);
         $team = $this->getTeam($invite->team_id);
+        $userIds = $team->users->pluck('id')->toArray();
+        $user = auth()->user();
 
         if ($invite->type === 'ownership') {
             $owner = $this->getTeamUserByEmail($invite->email);
 
             $team->update(['owner_id' => $owner->id]);
             $owner->teams()->updateExistingPivot($team, ['role_id' => 7]);
+
+            foreach($userIds as $id){
+                if($id !== $user->id){
+                    Notification::create([
+                        'user_id' => $id,
+                        'notification' => "<strong>{$user->name}</strong> is now the owner of your team (<strong>{$team->name}</strong>). Please nagivate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
+                    ]);
+                }
+            }
 
             Teamwork::acceptInvite($invite);
         } else {
@@ -577,20 +588,18 @@ class CompanyTeamsController extends Controller
             Teamwork::acceptInvite($invite);
             $roleId = Role::where('name', $invite->role)->first()->id ?? 8;
             $team->users()->updateExistingPivot($invite->user, ['role_id' => $roleId]);
+
+            foreach($userIds as $id){
+                if($id !== $user->id){
+                    Notification::create([
+                        'user_id' => $id,
+                        'notification' => "<strong>{$user->name}</strong> is now a new member of your team (<strong>{$team->name}</strong>). Please nagivate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
+                    ]);
+                }
+            }
         }
 
         if (!$invite->exists) {
-
-            $userIds = $team->users->pluck('id')->toArray();
-            $user = auth()->user();
-
-            foreach($userIds as $id){
-                Notification::create([
-                    'user_id' => $id,
-                    'notification' => "<strong>{$user->name}</strong> is now the owner of your team (<strong>{$team->name}</strong>). Please nagivate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
-                ]);
-            }
-
             return redirect()->route('teams.listing')->with('alert', 'success:' . $inviteType . ' was successfully accepted.');
         }
     }
