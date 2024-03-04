@@ -85,6 +85,7 @@ class DeleteUsers extends Command
 
             foreach ($nonVerifiedUsers as $user) {
 
+                //dd(ApigeeService::deleteUser($user));
                 try {
                     if ($user->notifications()) {
                             foreach ($user->notifications as $notification) {
@@ -107,7 +108,7 @@ class DeleteUsers extends Command
                         }
 
                         ApigeeService::deleteUser($user);
-                        $user->delete(); // Delete non-verified user
+                        //$user->delete(); // Delete non-verified user
                         $deletedUserCount++;
 
                     } catch (\Illuminate\Database\QueryException $e) {
