@@ -226,7 +226,7 @@ class UserController extends Controller
 				if($opcoId !== $user->id){
 					Notification::create([
 						'user_id' => $opcoId,
-						'notification' => "A user <strong>{$user->full_name}</strong> has requested a 2fa reset. Please nagivate to this <a href='/admin/users/{$user->id}/edit'>user</a> profile for more info.",
+						'notification' => "A user <strong>{$user->full_name}</strong> has requested a 2fa reset. Please navigate to this <a href='/admin/users/{$user->id}/edit'>user</a> profile for more info.",
 					]);
 				}
 			}

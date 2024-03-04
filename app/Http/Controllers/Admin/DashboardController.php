@@ -180,14 +180,14 @@ class DashboardController extends Controller
             foreach($users as $user){
                 Notification::create([
                     'user_id' => $user,
-                    'notification' => " <strong>{$product->name}</strong> product has been ". $status . " from your team (<strong>{$app->team->name}</strong>)'s app <strong>{$app->display_name}</strong>. Please nagivate to your <a href='/apps'>apps</a> to view the changes",
+                    'notification' => " <strong>{$product->name}</strong> product has been ". $status . " from your team (<strong>{$app->team->name}</strong>)'s app <strong>{$app->display_name}</strong>. Please navigate to your <a href='/apps'>apps</a> to view the changes",
 
                 ]);
             }
         }else{
             Notification::create([
                 'user_id' => $app->developer->id,
-                'notification' => "Your product <strong>{$product->name}</strong> has been ". $status . " from your app <strong>{$app->display_name}</strong>. Please nagivate to your <a href='/apps'>apps</a> to view the changes",
+                'notification' => "Your product <strong>{$product->name}</strong> has been ". $status . " from your app <strong>{$app->display_name}</strong>. Please navigate to your <a href='/apps'>apps</a> to view the changes",
             ]);
         }
 
@@ -270,7 +270,7 @@ class DashboardController extends Controller
         if($app->developer){
             Notification::create([
                 'user_id' => $app->developer->id,
-                'notification' => "Your App <strong>{$app->display_name}</strong>'s status has been changed. Please nagivate to your <a href='/apps'>apps</a> to view the changes",
+                'notification' => "Your App <strong>{$app->display_name}</strong>'s status has been changed. Please navigate to your <a href='/apps'>apps</a> to view the changes",
             ]);
         }
 
@@ -279,7 +279,7 @@ class DashboardController extends Controller
             foreach($appUsers as $user){
                 Notification::create([
                     'user_id' => $user,
-                    'notification' => "Your team App <strong>{$app->display_name}</strong>'s status from your team <strong>{$app->team->name}</strong> has been updated. Please nagivate to your <a href='/apps'>apps</a> to view the changes.",
+                    'notification' => "Your team App <strong>{$app->display_name}</strong>'s status from your team <strong>{$app->team->name}</strong> has been updated. Please navigate to your <a href='/apps'>apps</a> to view the changes.",
                 ]);
             }
         }
