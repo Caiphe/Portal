@@ -97,6 +97,12 @@ class CompanyTeamsController extends Controller
         $newOwner->teams()->updateExistingPivot($team, ['role_id' => 7]);
         ApigeeService::removeDeveloperFromCompany($team, $user);
         $team->update(['owner_id' => $newOwner->id]);
+
+        Notification::create([
+            'user_id' => $newOwner->id,
+            'notification' => "The ownership of the team <strong>{$team->name}</strong> has been transfered to you. Click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team.",
+        ]);
+
         $team->users()->detach($user);
 
         $userIds =  $team->users->pluck('id')->toArray();
