@@ -4,12 +4,8 @@ namespace App\Console\Commands;
 
 use App\Services\ApigeeService;
 use App\User;
-use App\Notification;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Schema;
-use phpDocumentor\Reflection\Types\Null_;
 
 class DeleteUsers extends Command
 {
@@ -48,7 +44,7 @@ class DeleteUsers extends Command
      */
     public function deleteUsers()
     {
-        // Get the current year
+        // Check all which date to delete from except users created on today
         $currentYear = Carbon::now()->year;
         $yesterday = Carbon::yesterday();
 
@@ -85,63 +81,69 @@ class DeleteUsers extends Command
 
             foreach ($nonVerifiedUsers as $user) {
 
-                //dd(ApigeeService::deleteUser($user));
+                //Delete all data relating to the user.
                 try {
                     if ($user->notifications()) {
-                            foreach ($user->notifications as $notification) {
-                                $notification->delete();
-                            }
-                        }
-
-                        if ($user->authentications()) {
-                            foreach ($user->authentications as $authLog) {
-                                $authLog->delete();
-                            }
-                        }
-
-                        if ($user->assignedProducts()) {
-                            $user->assignedProducts()->detach();
-                        }
-
-                        if ($user->roles()) {
-                            $user->roles()->detach();
-                        }
-
-                        ApigeeService::deleteUser($user);
-                        //$user->delete(); // Delete non-verified user
-                        $deletedUserCount++;
-
-                    } catch (\Illuminate\Database\QueryException $e) {
-                        // Handle foreign key constraint violation
-                        $skippedModels[] = get_class($user);
-                        $this->info('Skipped deletion of user ' . $user->id . ' due to foreign key constraint violation.');
-
-                        $user->load([
-                            'roles',
-                            'apps',
-                            'assignedProducts',
-                            'teams',
-                            'countries',
-                            'responsibleCountries',
-                            'responsibleGroups',
-                            'authentications',
-                            'twoFaResetRequest',
-                        ]);
-
-                        foreach ($user->getRelations() as $relationName => $relation) {
-
-                            if ($relation instanceof \Illuminate\Database\Eloquent\Relations\Relation) {
-                                $relatedModel = get_class($relation->getRelated());
-                                $relatedCount = $relatedModel::where('user_id', $user->id)->count();
-                                $this->info($relatedCount . ' records in ' . $relatedModel . ' related to user ' . $user->id);
-                            }
+                        foreach ($user->notifications as $notification) {
+                            $notification->delete();
                         }
                     }
+
+                    if ($user->authentications()) {
+                        foreach ($user->authentications as $authLog) {
+                            $authLog->delete();
+                        }
+                    }
+
+                    if ($user->assignedProducts()) {
+                        $user->assignedProducts()->detach();
+                    }
+
+                    if ($user->roles()) {
+                        $user->roles()->detach();
+                    }
+
+                    //delete users in APIGEE and Portal
+                    ApigeeService::deleteUser($user);
+                    $this->info('==================================================');
+                    $this->info('Deleted this non-verified user ' . $user->email );
+                    $this->info('==================================================');
+                    $user->delete(); // Delete non-verified user
+                    $deletedUserCount++;
+
+                } catch (\Illuminate\Database\QueryException $e) {
+                    // Handle foreign key constraint violation
+                    $skippedModels[] = get_class($user);
+                    $this->info('Skipped deletion of user ' . $user->id . ' due to foreign key constraint violation.');
+
+                    $user->load([
+                        'roles',
+                        'apps',
+                        'assignedProducts',
+                        'teams',
+                        'countries',
+                        'responsibleCountries',
+                        'responsibleGroups',
+                        'authentications',
+                        'twoFaResetRequest',
+                    ]);
+
+                    //Check models that relate to user with relation errors
+                    foreach ($user->getRelations() as $relationName => $relation) {
+
+                        if ($relation instanceof \Illuminate\Database\Eloquent\Relations\Relation) {
+                            $relatedModel = get_class($relation->getRelated());
+                            $relatedCount = $relatedModel::where('user_id', $user->id)->count();
+                            $this->info($relatedCount . ' records in ' . $relatedModel . ' related to user ' . $user->id);
+                        }
+                    }
+                }
             }
 
             $this->info($deletedUserCount . ' users deleted.');
             $this->info('Deletion process completed.');
 
+            //check all related models that have foreign key constrain violation
             if (!empty($skippedModels)) {
                 $this->info('Error: Models skipped due to foreign key constraint violation: ' . implode(', ', array_unique($skippedModels)));
             }
