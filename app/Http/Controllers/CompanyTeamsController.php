@@ -97,6 +97,12 @@ class CompanyTeamsController extends Controller
         $newOwner->teams()->updateExistingPivot($team, ['role_id' => 7]);
         ApigeeService::removeDeveloperFromCompany($team, $user);
         $team->update(['owner_id' => $newOwner->id]);
+
+        Notification::create([
+            'user_id' => $newOwner->id,
+            'notification' => "The ownership of the team <strong>{$team->name}</strong> has been transfered to you. Click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team.",
+        ]);
+
         $team->users()->detach($user);
 
         $userIds =  $team->users->pluck('id')->toArray();
@@ -215,7 +221,7 @@ class CompanyTeamsController extends Controller
 
         Notification::create([
             'user_id' => $user->id,
-            'notification' => "You have been successfully removed from the team ". $team->name,
+            'notification' => "You have been successfully removed from the team <strong>{$team->name}</strong> ",
         ]);
 
         return response()->json([
@@ -281,6 +287,11 @@ class CompanyTeamsController extends Controller
         if ($invite) {
 
             $this->sendOwnershipInvite($team, $user, $invite);
+
+            Notification::create([
+                'user_id' => $user->id,
+                'notification' => "You have been requested to become the owner of the team <strong>{$team->name}</strong> . Click <a href='/teams/{$team->id}/team'>here</a> to accept or revoke the request.",
+            ]);
 
             return response()->json([
                 'success' => true,
@@ -556,12 +567,23 @@ class CompanyTeamsController extends Controller
 
         $inviteType = ucfirst($invite->type);
         $team = $this->getTeam($invite->team_id);
+        $userIds = $team->users->pluck('id')->toArray();
+        $user = auth()->user();
 
         if ($invite->type === 'ownership') {
             $owner = $this->getTeamUserByEmail($invite->email);
 
             $team->update(['owner_id' => $owner->id]);
             $owner->teams()->updateExistingPivot($team, ['role_id' => 7]);
+
+            foreach($userIds as $id){
+                if($id !== $user->id){
+                    Notification::create([
+                        'user_id' => $id,
+                        'notification' => "<strong>{$user->full_name}</strong> is now the owner of your team (<strong>{$team->name}</strong>). Please navigate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
+                    ]);
+                }
+            }
 
             Teamwork::acceptInvite($invite);
         } else {
@@ -577,20 +599,18 @@ class CompanyTeamsController extends Controller
             Teamwork::acceptInvite($invite);
             $roleId = Role::where('name', $invite->role)->first()->id ?? 8;
             $team->users()->updateExistingPivot($invite->user, ['role_id' => $roleId]);
+
+            foreach($userIds as $id){
+                if($id !== $user->id){
+                    Notification::create([
+                        'user_id' => $id,
+                        'notification' => "<strong>{$user->full_name}</strong> is now a new member of your team (<strong>{$team->name}</strong>). Please navigate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
+                    ]);
+                }
+            }
         }
 
         if (!$invite->exists) {
-
-            $userIds = $team->users->pluck('id')->toArray();
-            $user = auth()->user();
-
-            foreach($userIds as $id){
-                Notification::create([
-                    'user_id' => $id,
-                    'notification' => "A new user <strong>{$user->name}</strong> have been added to your team from your team (<strong>{$team->name}</strong>). Please nagivate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
-                ]);
-            }
-
             return redirect()->route('teams.listing')->with('alert', 'success:' . $inviteType . ' was successfully accepted.');
         }
     }
@@ -629,6 +649,11 @@ class CompanyTeamsController extends Controller
         $updated = false;
         if ($team->hasUser($user)) {
             $updated = $user->teams()->updateExistingPivot($team, ['role_id' => $role->id]);
+
+            Notification::create([
+                'user_id' => $user->id,
+                'notification' => "Your role from the team <strong>{$team->name}</strong> has been updated to <strong>{$role->label}</strong>.<br/> Please navigate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
+            ]);
         }
 
         return response()->json(['success' => $updated]);
@@ -664,7 +689,7 @@ class CompanyTeamsController extends Controller
             foreach($userIds as $id){
                 Notification::create([
                     'user_id' => $id,
-                    'notification' => "Your team <strong>{$team->name}</strong> has been succefully deleted.",
+                    'notification' => "Your team <strong>{$team->name}</strong> has been deleted.",
                 ]);
             }
 

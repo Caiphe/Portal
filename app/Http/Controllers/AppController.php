@@ -233,6 +233,15 @@ class AppController extends Controller
             "created_at" => date('Y-m-d H:i:s', $createdResponse['createdAt'] / 1000),
         ]);
 
+        if (($user->hasRole('admin') || $user->hasRole('opco')) && $request->has('app_owner')) {
+            $appOwner = User::where('email', $request->get('app_owner'))->first();
+
+            Notification::create([
+                'user_id' => $appOwner['id'],
+                'notification' => "An admin has created an app <strong>{$validated['display_name']}</strong> for you please navigate to your <a href='/apps'>apps</a> for more info.",
+            ]);
+        }
+
         if ($team) {
             event(new TeamAppCreated($team));
 
@@ -240,7 +249,7 @@ class AppController extends Controller
             foreach($appUsers as $user){
                 Notification::create([
                     'user_id' => $user,
-                    'notification' => "New app <strong> {$app->display_name} </strong> has been created under your team <strong> {$team->name} </strong>. Please nagivate to your <a href='/apps'>apps</a> to view.",
+                    'notification' => "New app <strong> {$app->display_name} </strong> has been created under your team <strong> {$team->name} </strong>. Please navigate to your <a href='/apps'>apps</a> to view.",
                 ]);
             }
         }
@@ -415,7 +424,7 @@ class AppController extends Controller
             foreach($appUsers as $user){
                 Notification::create([
                     'user_id' => $user,
-                    'notification' => "Your team's App <strong> {$app->display_name} </strong> has been updated please nagivate to your <a href='/apps'>apps</a> to view the changes",
+                    'notification' => "Your team's App <strong> {$app->display_name} </strong> has been updated please navigate to your <a href='/apps'>apps</a> to view the changes",
                 ]);
             }
         }
@@ -423,7 +432,7 @@ class AppController extends Controller
         if($app->developer){
             Notification::create([
                 'user_id' => $app->developer->id,
-                'notification' => "Your App <strong> {$app->display_name} </strong> has been updated please nagivate to your <a href='/apps'>apps</a> to view the changes",
+                'notification' => "Your App <strong> {$app->display_name} </strong> has been updated please navigate to your <a href='/apps'>apps</a> to view the changes",
             ]);
         }
 

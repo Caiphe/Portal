@@ -32,7 +32,7 @@ class OpcoRoleRequestActionController extends Controller
 
         Notification::create([
             'user_id' => $requestId,
-            'notification' => "Your opco admin role request for the location ".$countryApproved. "has been approved.",
+            'notification' => "Your opco admin role request for the location <strong>{$countryApproved}</strong> has been approved.",
         ]);
 
         Mail::to($user->email)->send(new OpcoAdminRoleApproved($countryApproved));
@@ -60,7 +60,7 @@ class OpcoRoleRequestActionController extends Controller
 
         Notification::create([
             'user_id' => $requestId,
-            'notification' => "Your opco admin role for the location ".$country. "has been denied.",
+            'notification' => "Your opco admin role for the location <strong>{$country}</strong> has been denied.",
         ]);
 
         Mail::to($roleRequest->user->email)->send(new OpcoAdminRoleDenial($data));

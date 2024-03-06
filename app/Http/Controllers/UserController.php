@@ -6,6 +6,7 @@ use App\User;
 use Google2FA;
 use App\Country;
 use App\Product;
+use App\Notification;
 use App\Mail\UpdateUser;
 use App\TwofaResetRequest;
 use Illuminate\Http\Request;
@@ -214,10 +215,20 @@ class UserController extends Controller
 
 		if($usersCountries){
 			$opcoEmails = $usersCountries->load('opcoUser')->pluck('opcoUser')->flatten()->pluck('email')->unique()->values();
+			$opcoIds = $usersCountries->load('opcoUser')->pluck('opcoUser')->flatten()->pluck('id')->unique()->values();
 
 			if(count($opcoEmails) === 0 || count($opcoEmails) === 1 && $opcoEmails[0] = $user->email){
 				Mail::bcc($adminUsers)->send( new TwoFaResetRequestMail($user));
 				return response()->json(['success' => true, 'code' => 200], 200);
+			}
+
+			foreach($opcoIds as $opcoId){
+				if($opcoId !== $user->id){
+					Notification::create([
+						'user_id' => $opcoId,
+						'notification' => "A user <strong>{$user->full_name}</strong> has requested a 2fa reset. Please navigate to this <a href='/admin/users/{$user->id}/edit'>user</a> profile for more info.",
+					]);
+				}
 			}
 
 			Mail::bcc($opcoEmails)->send( new TwoFaResetRequestMail($user));

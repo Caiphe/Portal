@@ -43,7 +43,7 @@ fetch('/notifications/fetch-all').then(function(data) {
         <div class="single-notification ${values.read_at ? 'read' : ''}">
             <p class="notification-message">${values.notification}</p>
             <div class="more-details">
-                <span class="date-time">${values.createdAt}</span>
+                <span class="date-time">${values.created_at}</span>
                 <button type="sbmit" data-status="${values.read_at ? 'unread' : 'read'}"
                         data-url ="/notification/${values.id}/read"
                         data-notification="${values.id}" onclick="toggleRead(this);" 
