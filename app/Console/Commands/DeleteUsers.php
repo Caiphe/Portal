@@ -50,7 +50,7 @@ class DeleteUsers extends Command
 
         $numberOfYears = $this->ask('How many years back do you want to delete non-verified users?');
 
-        // Generate an array of years based on user input
+        // Generate an array of years based on developer input
         $years = [];
         for ($i = $currentYear; $i >= $currentYear - $numberOfYears; $i--) {
             $years[] = (string)$i;
@@ -75,7 +75,7 @@ class DeleteUsers extends Command
         $deleteConfirmation = $this->confirm('Are you sure you want to delete ' . $nonVerifiedUserCount . ' non-verified users');
 
         if ($deleteConfirmation) {
-            $this->info('Starting to delete users...');
+            $this->info('Starting to delete developers...');
 
             $deletedUserCount = 0;
 
