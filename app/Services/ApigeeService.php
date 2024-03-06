@@ -6,6 +6,7 @@ use App\App;
 use App\Team;
 use App\User;
 use App\Country;
+use GuzzleHttp\Promise\PromiseInterface;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Client\Response;
@@ -151,6 +152,7 @@ class ApigeeService
 
         return $resp;
     }
+
 
     /**
      * @param  string $url
@@ -344,7 +346,7 @@ class ApigeeService
     /**
      * Revoke credentials
      *
-     * @param      \Illuminate\Database\Eloquent\Model       $entity   The user or team 
+     * @param      \Illuminate\Database\Eloquent\Model       $entity   The user or team
      * @param      \App\App                                 $app      The application
      * @param      string                                   $key      The key
      *
@@ -360,17 +362,17 @@ class ApigeeService
     public static function getAppAttributes(array $attributes)
     {
         $a = [];
-        
+
         foreach ($attributes as $attribute) {
             $key = $attribute['name'];
             $value = trim($attribute['value']);
 
             if (!isset($value)) {
                 $attribute['value'] = '';
-	    
+
 	   }
             $value = $key === 'Group' ? Str::studly($value) : $value;
-      
+
             $a[$key] = $value;
         }
 
@@ -387,16 +389,16 @@ class ApigeeService
 
             if (!isset($value)) {
                 $attribute['value'] = '';
-	    
+
 	   }
             $value = $key === 'Group' ? $value : $value;
-      
+
             $a[$key] = $value;
         }
 
         return $a;
     }
-    
+
     public static function getApigeeAppAttributes(App $app)
     {
         $attr = self::get('apps/' . $app->aid)['attributes'] ?? [];
@@ -687,6 +689,36 @@ class ApigeeService
      */
     public static function deleteCompany(Team $team){
         return self::delete("companies/{$team->username}");
+    }
+
+
+    /**
+     * This function is for deleting user with no encoded url
+     * @param string $url
+     * @return PromiseInterface|Response
+     */
+    public static function destroyUser(string $url)
+    {
+        $url = $url;
+        $resp = self::HttpWithToken()->delete(config('apigee.base') . $url);
+
+        if ($resp->status() === 401 || $resp->status() === 403) {
+            $resp = self::HttpWithToken('refresh_token')->delete(config('apigee.base') . $url);
+        }
+
+        self::checkForErrors($resp, $url);
+
+        return $resp;
+    }
+    /**
+     * Delete a Developer / User.
+     *
+     * @param      \App\User  $user  The user
+     *
+     * @return     mixed         The response from the delete
+     */
+    public static function deleteUser(User $user){
+        return self::destroyUser("developers/{$user->email}");
     }
 
     /**
