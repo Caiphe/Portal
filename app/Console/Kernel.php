@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
         Commands\SyncProducts::class,
         Commands\SyncBundle::class,
         Commands\SyncApps::class,
+        Commands\DeleteUsers::class,
     ];
 
     /**
