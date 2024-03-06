@@ -46,7 +46,7 @@ class DeleteUsers extends Command
     {
         // Check all which date to delete from except users created on today
         $currentYear = Carbon::now()->year;
-        $yesterday = Carbon::yesterday();
+        $oneMonthAgo = Carbon::now()->subMonth(); //Sub one month;
 
         $numberOfYears = $this->ask('How many years back do you want to delete non-verified users?');
 
@@ -65,7 +65,7 @@ class DeleteUsers extends Command
         // Get users that are not verified and registered between the day before yesterday and yesterday
         $nonVerifiedUsers = User::whereNull('email_verified_at')
             ->whereDoesntHave('apps')
-            ->whereBetween('created_at', [$choice_of_year . '-01-01', $yesterday])
+            ->whereBetween('created_at', [$choice_of_year . '-01-01', $oneMonthAgo])
             ->get();
 
         $nonVerifiedUserCount = $nonVerifiedUsers->count();
