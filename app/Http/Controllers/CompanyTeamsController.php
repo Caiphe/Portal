@@ -221,7 +221,7 @@ class CompanyTeamsController extends Controller
 
         Notification::create([
             'user_id' => $user->id,
-            'notification' => "You have been successfully removed from the team ". $team->name,
+            'notification' => "You have been successfully removed from the team <strong>{$team->name}</strong> ",
         ]);
 
         return response()->json([
@@ -689,7 +689,7 @@ class CompanyTeamsController extends Controller
             foreach($userIds as $id){
                 Notification::create([
                     'user_id' => $id,
-                    'notification' => "Your team <strong>{$team->name}</strong> has been succefully deleted.",
+                    'notification' => "Your team <strong>{$team->name}</strong> has been successfully deleted.",
                 ]);
             }
 
