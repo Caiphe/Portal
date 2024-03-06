@@ -689,7 +689,7 @@ class CompanyTeamsController extends Controller
             foreach($userIds as $id){
                 Notification::create([
                     'user_id' => $id,
-                    'notification' => "Your team <strong>{$team->name}</strong> has been successfully deleted.",
+                    'notification' => "Your team <strong>{$team->name}</strong> has been deleted.",
                 ]);
             }
 
