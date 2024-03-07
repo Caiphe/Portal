@@ -213,16 +213,17 @@ class CompanyTeamsController extends Controller
 
         if ($team->hasUser($user) && $this->memberLeavesTeam($team, $user)) {
             ApigeeService::removeDeveloperFromCompany($team, $user);
+
+            Notification::create([
+                'user_id' => $user->id,
+                'notification' => "You have been removed from the team <strong>{$team->name}</strong>. "
+            ]);
+
             return response()->json([
                 'success' => true,
                 'success:message' => $user->full_name . ' has been successfully removed from ' . $team->name
             ]);
         }
-
-        Notification::create([
-            'user_id' => $user->id,
-            'notification' => "You have been successfully removed from the team <strong>{$team->name}</strong> ",
-        ]);
 
         return response()->json([
             'success' => false,

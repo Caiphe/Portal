@@ -39,7 +39,7 @@ class OpcoRoleRequestController extends Controller
            foreach($requestedCountryOpcoIds as $opcoId){
                 Notification::create([
                     'user_id' => $opcoId,
-                    'notification' => "A user $user->full_name from your location ( $requestedCountry->name ) has requested an opco admin role. Please navigate to task panel to view the request.",
+                    'notification' => "A user <stong>{$user->full_name}</stong> from your location <stong>( {$requestedCountry->name} )</stong> has requested an opco admin role. Please navigate to <a href='/admin/tasks'>task panel</a> to view the request.",
                 ]);
            }
 
