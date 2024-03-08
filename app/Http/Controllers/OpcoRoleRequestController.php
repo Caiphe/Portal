@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Country;
+use App\Notification;
 use App\OpcoRoleRequest;
 use App\Mail\OpcoAdminRoleRequest;
 use Illuminate\Support\Facades\Mail;
@@ -30,9 +31,17 @@ class OpcoRoleRequestController extends Controller
         OpcoRoleRequest::create($data);
 
         $requestedCountry = Country::where('code', $requestCountryCodes)->first();
-        
+
         if($requestedCountry->opcoUser){
             $requestedCountryOpcoEmail = $requestedCountry->opcoUser->flatten()->pluck('email')->toArray();
+            $requestedCountryOpcoIds = $requestedCountry->opcoUser->flatten()->pluck('id')->toArray();
+
+           foreach($requestedCountryOpcoIds as $opcoId){
+                Notification::create([
+                    'user_id' => $opcoId,
+                    'notification' => "A user <stong>{$user->full_name}</stong> from your location <stong>( {$requestedCountry->name} )</stong> has requested an opco admin role. Please navigate to <a href='/admin/tasks'>task panel</a> to view the request.",
+                ]);
+           }
 
             Mail::bcc($requestedCountryOpcoEmail)->send(new OpcoAdminRoleRequest($user, $countries));
             return response()->json(['success' => true, 'code' => 200], 200);

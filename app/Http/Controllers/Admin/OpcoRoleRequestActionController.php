@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Country;
+use App\Notification;
 use App\OpcoRoleRequest;
 use App\OpcoRoleRequestAction;
 use App\Mail\OpcoAdminRoleDenial;
@@ -28,6 +29,12 @@ class OpcoRoleRequestActionController extends Controller
         $user->responsibleCountries()->syncWithoutDetaching($requestCountryCodes);
         
         $countryApproved = Country::whereIn('code', $requestCountryCodes)->pluck('name');
+
+        Notification::create([
+            'user_id' => $requestId,
+            'notification' => "Your opco admin role request for the location <strong>{$countryApproved}</strong> has been approved.",
+        ]);
+
         Mail::to($user->email)->send(new OpcoAdminRoleApproved($countryApproved));
 
         OpcoRoleRequestAction::create([
@@ -48,6 +55,14 @@ class OpcoRoleRequestActionController extends Controller
         $requestId = $data['request_id'];
 
         $roleRequest = OpcoRoleRequest::find($requestId);
+        $requestCountryCodes = explode(',', $roleRequest->countries);
+        $country = Country::whereIn('code', $requestCountryCodes)->pluck('name');
+
+        Notification::create([
+            'user_id' => $requestId,
+            'notification' => "Your opco admin role for the location <strong>{$country}</strong> has been denied.",
+        ]);
+
         Mail::to($roleRequest->user->email)->send(new OpcoAdminRoleDenial($data));
 
         OpcoRoleRequestAction::create([

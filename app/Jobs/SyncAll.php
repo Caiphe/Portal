@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Jobs;
-
+use App\Notification;
 use Illuminate\Bus\Queueable;
 use App\Services\SyncAppService;
 use App\Mail\SyncNotificationMail;
@@ -53,11 +53,22 @@ class SyncAll implements ShouldQueue
         Mail::to($this->user->email)->send(new SyncNotificationMail(
             $deletedProducts, $totalProducts, $addedProducts, $totalApps, $noCredsApps, $noProdApps
         ));
+
+        Notification::create([
+            'user_id' => $this->user->id,
+            'notification' => "The Sync completed successfully, an email has been sent to you with all the details.",
+        ]);
     }
 
     public function failed()
     {
         $message = 'The sync process has failed please try again.';
+
+        Notification::create([
+            'user_id' => $this->user->id,
+            'notification' => "The Sync process has failed. Please proceed to the dashboard and try again.",
+        ]);
+
         Mail::to($this->user->email)->send(new SyncNotificationErrorMail($message));
     }
 }

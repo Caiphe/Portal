@@ -1,0 +1,178 @@
+@use "../variables";
+
+.notification-main-container {
+    width: calc(100% - 320px);
+    height: 100vh;
+    background-color: transparent;
+    position: fixed;
+    z-index: 2;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.5s ease;
+
+    .notification-content {
+        width: 360px;
+        height: 100vh;
+        position: fixed;
+        left: 0px;
+        background-color: #fff;
+        top: 0;
+        z-index: 2;
+        box-shadow: 0px -8px 16px rgba(0, 0, 0, 0.1);
+        border-radius: 0px 16px 16px 0px;
+        padding: 24px 21px 24px 24px;
+        box-sizing: border-box;
+        transition: all 0.3s ease-in-out;
+
+        @media(max-width: 1100px){
+            width: 100%;
+        }
+
+        .top-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            background-color: #fff;
+            border: none;
+            padding: 0px;
+            color: #00678f;
+            cursor: pointer;
+            font-size: 12px;
+            height: auto;
+
+            &.non-active{
+                color: #969696;
+                pointer-events: none;
+
+            }
+
+            &:hover {
+                background-color: #fff;
+                border: none;
+                outline: none;
+            }
+        }
+
+        .no-notifications{
+            text-align: center;
+            color: #969696;
+            border-top: solid 1px #cdcdcd;
+            display: none;
+            pointer-events: none;
+            opacity: 0;
+            transition: all .3s ease;
+
+            &.show{
+                display: block;
+                pointer-events: auto;
+                opacity: 1;
+                transition: all .3s ease;
+                padding-top: 15px;
+                margin-top: 20px;
+            }
+        }
+
+        .notification-list {
+            overflow-y: scroll;
+            height: 95%;
+            margin-top: 20px;
+            margin-bottom: 60px;
+            padding: 0px 20px 20px 0px;
+
+            .single-notification {
+                border-bottom: solid 1px #cdcdcd;
+                padding-bottom: 15px;
+
+                a{
+                    color: #00678f;
+                    text-decoration: underline;
+                }
+
+                .more-details {
+                    display: flex;
+                    justify-content: space-between;
+
+                    .date-time {
+                        font-weight: 700;
+                        position: relative;
+                        padding-left: 15px;
+
+                        &:before {
+                            position: absolute;
+                            content: "";
+                            width: 8px;
+                            height: 8px;
+                            background-color: #10b630;
+                            left: 0;
+                            top: 7px;
+                            border-radius: 50%;
+                        }
+                    }
+
+                    .mark-as-read {
+                        font-size: 15px;
+                        position: relative;
+
+                        &:after{
+                            content: 'Mark as read';
+                            font-size: 15px;
+                        }
+                    }
+                }
+                
+                &.read {
+                    .notification-message {
+                        color: #969696;
+                    }
+
+                    .more-details {
+                        .date-time {
+                            padding-left: 0px;
+                            color: #969696;
+                            font-weight: 400;
+
+                            &:before {
+                                display: none;
+                            }
+                        }
+                    }
+
+                    .mark-as-read {
+
+                        &:after{
+                            content: 'Mark as unread';
+                        }
+                    }
+                }
+            }
+
+            &.hide{
+                display: none;
+            }
+        }
+    }
+
+    &.show {
+        opacity: 1;
+        pointer-events: auto;
+        transition: all 0.1s ease-in-out;
+
+        .notification-content {
+            left: 320px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        @media(max-width: 1100px){
+            
+            .notification-content{
+                left: 0px;
+                border-radius: 0px;
+                transition: all 0.3s ease-in-out;
+            }
+        }
+    }
+}

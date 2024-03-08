@@ -7,10 +7,10 @@ use App\Role;
 use App\Team;
 use App\User;
 use App\Country;
-use App\Product;
-
 use App\TeamUser;
+use App\Notification;
 use Illuminate\Http\Request;
+use App\Product;
 use App\Services\ApigeeService;
 use Mpociot\Teamwork\TeamInvite;
 use App\Concerns\Teams\InviteActions;
@@ -77,6 +77,7 @@ class CompanyTeamsController extends Controller
         $user = $this->getTeamUser(auth()->user()->id);
         $team = $this->getTeam($data['team_id']);
         $newOwner = $this->getTeamUserByEmail($data['user_email']);
+        $userIds =  $team->users->pluck('id')->toArray();
 
         abort_if($team->owner_id !== $user->id, 401, "You are not this team's owner");
         abort_if(!$user, 401, 'Your user could not be found');
@@ -96,13 +97,31 @@ class CompanyTeamsController extends Controller
         $newOwner->teams()->updateExistingPivot($team, ['role_id' => 7]);
         ApigeeService::removeDeveloperFromCompany($team, $user);
         $team->update(['owner_id' => $newOwner->id]);
+
+        Notification::create([
+            'user_id' => $newOwner->id,
+            'notification' => "The ownership of the team <strong>{$team->name}</strong> has been transfered to you. Click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team.",
+        ]);
+
         $team->users()->detach($user);
+
+        $userIds =  $team->users->pluck('id')->toArray();
+            
+        foreach($userIds as $id){
+            if($id !== auth()->user()->id){
+                Notification::create([
+                    'user_id' => $id,
+                    'notification' => "A user with the name <strong>{$user->full_name}</strong> has left your team <strong>{$team->name}</strong>. Click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team.",
+                ]);
+            }
+        }
 
         return response()->json(['success' => true, 'code' => 200], 200);
     }
 
     public function leave(LeavingRequest $teamRequest, Team $team)
     {
+        
         $usersCount = $team->users->count();
         $data = $teamRequest->validated();
         $team = $this->getTeam($data['team_id']);
@@ -130,16 +149,26 @@ class CompanyTeamsController extends Controller
                 }
             }
 
+            Notification::create([
+                'user_id' => $user->id,
+                'notification' => "You have successfully left your team <strong>{$team->name}</strong>.",
+            ]);
+
             ApigeeService::removeDeveloperFromCompany($team, $user);
             ApigeeService::deleteCompany($team);
             $team->delete();
 
             return response()->json(['success' => true, 'code' => 200], 200);
 
-        }else{
+        }else{          
             $appCreated = App::where('developer_id', $user->developer_id)->where('team_id', $team->id)->get();
             $teamOwnerDeveloperId = User::where('id', $team->owner_id)->pluck('developer_id')->toArray();
             
+            Notification::create([
+                'user_id' => $user->id,
+                'notification' => "You have successfully left your team <strong>{$team->name}</strong>.",
+            ]);
+
             if($appCreated->count() >= 1){
                 foreach($appCreated as $app){
                     $app->update([
@@ -150,6 +179,18 @@ class CompanyTeamsController extends Controller
 
             ApigeeService::removeDeveloperFromCompany($team, $user);
             $team->users()->detach($user);
+
+            $userIds =  $team->users->pluck('id')->toArray();
+            
+            foreach($userIds as $id){
+                if($id !== $user->id){
+                    Notification::create([
+                        'user_id' => $id,
+                        'notification' => "A user with the name <strong>{$user->full_name}</strong> has left your team <strong>{$team->name}</strong>. Click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team.",
+                    ]);
+                }
+            }
+
             return response()->json(['success' => true, 'code' => 200], 200);
         }
     }
@@ -172,6 +213,12 @@ class CompanyTeamsController extends Controller
 
         if ($team->hasUser($user) && $this->memberLeavesTeam($team, $user)) {
             ApigeeService::removeDeveloperFromCompany($team, $user);
+
+            Notification::create([
+                'user_id' => $user->id,
+                'notification' => "You have been removed from the team <strong>{$team->name}</strong>. "
+            ]);
+
             return response()->json([
                 'success' => true,
                 'success:message' => $user->full_name . ' has been successfully removed from ' . $team->name
@@ -242,6 +289,11 @@ class CompanyTeamsController extends Controller
 
             $this->sendOwnershipInvite($team, $user, $invite);
 
+            Notification::create([
+                'user_id' => $user->id,
+                'notification' => "You have been requested to become the owner of the team <strong>{$team->name}</strong> . Click <a href='/teams/{$team->id}/team'>here</a> to accept or revoke the request.",
+            ]);
+
             return response()->json([
                 'success' => true,
                 'success:message' => $user->full_name . ' has been successfully requested to take ownership of ' . $team->name
@@ -277,7 +329,7 @@ class CompanyTeamsController extends Controller
         abort_if($user->belongsToTeam($team), 403, 'user is already member of this team');
 
         $isAlreadyInvited = false;
-        if ($user) {
+        if ($user) {   
             $isAlreadyInvited = TeamInvite::where('email', $user->email)->where('team_id', $team->id)->exists();
         }
 
@@ -314,6 +366,11 @@ class CompanyTeamsController extends Controller
         }
 
         if ($inviteSent) {
+            Notification::create([
+                'user_id' => $user->id,
+                'notification' => "You have been invited to the team <strong>{$team->name}</strong> . Click <a href='/apps'>here</a> to accept or revoke the invite.",
+            ]);
+
             return response()->json([
                 'success' => true,
                 'success:message' => 'Invite successfully sent to prospective team member of ' . $team->name . '.'
@@ -488,6 +545,13 @@ class CompanyTeamsController extends Controller
         }
 
         ApigeeService::updateCompany($team);
+
+        foreach($team->users as $user){
+            Notification::create([
+                'user_id' => $user->id,
+                'notification' => "Your team <strong>{$team->name}</strong> has been updated please click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team to view the changes",
+            ]);
+        }
         
         return response()->json(['success' => true], 200);
     }
@@ -504,12 +568,23 @@ class CompanyTeamsController extends Controller
 
         $inviteType = ucfirst($invite->type);
         $team = $this->getTeam($invite->team_id);
+        $userIds = $team->users->pluck('id')->toArray();
+        $user = auth()->user();
 
         if ($invite->type === 'ownership') {
             $owner = $this->getTeamUserByEmail($invite->email);
 
             $team->update(['owner_id' => $owner->id]);
             $owner->teams()->updateExistingPivot($team, ['role_id' => 7]);
+
+            foreach($userIds as $id){
+                if($id !== $user->id){
+                    Notification::create([
+                        'user_id' => $id,
+                        'notification' => "<strong>{$user->full_name}</strong> is now the owner of your team (<strong>{$team->name}</strong>). Please navigate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
+                    ]);
+                }
+            }
 
             Teamwork::acceptInvite($invite);
         } else {
@@ -525,6 +600,15 @@ class CompanyTeamsController extends Controller
             Teamwork::acceptInvite($invite);
             $roleId = Role::where('name', $invite->role)->first()->id ?? 8;
             $team->users()->updateExistingPivot($invite->user, ['role_id' => $roleId]);
+
+            foreach($userIds as $id){
+                if($id !== $user->id){
+                    Notification::create([
+                        'user_id' => $id,
+                        'notification' => "<strong>{$user->full_name}</strong> is now a new member of your team (<strong>{$team->name}</strong>). Please navigate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
+                    ]);
+                }
+            }
         }
 
         if (!$invite->exists) {
@@ -566,6 +650,11 @@ class CompanyTeamsController extends Controller
         $updated = false;
         if ($team->hasUser($user)) {
             $updated = $user->teams()->updateExistingPivot($team, ['role_id' => $role->id]);
+
+            Notification::create([
+                'user_id' => $user->id,
+                'notification' => "Your role from the team <strong>{$team->name}</strong> has been updated to <strong>{$role->label}</strong>.<br/> Please navigate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
+            ]);
         }
 
         return response()->json(['success' => $updated]);
@@ -582,6 +671,7 @@ class CompanyTeamsController extends Controller
         $teamMembers = $team->users->pluck('id')->toArray();
         $currentUsers = $team->users;
 
+
         $teamsInvites = TeamInvite::where('team_id', $team->id)->get();
 
         if($teamsInvites){
@@ -591,8 +681,17 @@ class CompanyTeamsController extends Controller
         }
         
         if($currentUsers){
+            $userIds = $currentUsers->pluck('id')->toArray();
+
             foreach($currentUsers as $teamUser){
                 ApigeeService::removeDeveloperFromCompany($team, $teamUser);
+            }
+
+            foreach($userIds as $id){
+                Notification::create([
+                    'user_id' => $id,
+                    'notification' => "Your team <strong>{$team->name}</strong> has been deleted.",
+                ]);
             }
 
             $team->users()->detach($teamMembers);
