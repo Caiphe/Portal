@@ -19,6 +19,7 @@ Route::get('search', 'SearchController')->name('search');
 
 Route::middleware(['auth', 'verified'])->group(function () {
 	Route::post('user/2fa/reset-request', 'UserController@reset2farequest')->name('2fa.reset.request');
+    Route::get('profile', 'UserController@show')->name('user.profile');
 });
 
 Route::middleware(['auth', 'verified', '2fa'])->group(function () {
@@ -41,7 +42,7 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 	Route::post('apps/{app:aid}/credentials/request/renew/{type}', 'AppController@requestRenewCredentials')->middleware('can:access-own-app,app')->name('app.credentials.request-renew');
 	Route::get('apps/{app:aid}/credentials/renew/{type}', 'AppController@renewCredentials')->middleware(['can:access-own-app,app', 'signed'])->name('app.credentials.renew');
 
-	Route::get('profile', 'UserController@show')->name('user.profile');
+
 	Route::put('profile/update', 'UserController@update')->name('user.profile.update');
 	Route::post('profile/update/picture', 'UserController@updateProfilePicture')->name('user.profile.update.picture');
 
@@ -90,7 +91,7 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 	Route::post('/opco-role-request/{id}/approve', 'OpcoRoleRequestActionController@approve')->name('admin.opco.approve');
 	Route::post('/opco-role-request/{id}/deny', 'OpcoRoleRequestActionController@deny')->name('admin.opco.deny');
 
-	// Tasks Panel 
+	// Tasks Panel
 	Route::get('/tasks', 'TaskController@index')->name('admin.task.index');
 
 	// Products

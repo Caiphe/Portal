@@ -17,12 +17,22 @@ class TwoFA
      */
     public function handle(Request $request, Closure $next)
     {
-        $authenticator = app(Authenticator::class)->boot($request);
+        if (auth()->check()) {
+            $user = auth()->user();
 
-        if (skip_2fa() || $authenticator->isAuthenticated()) {
-            return $next($request);
+            if ($user->{'2fa'} === null) {
+                return redirect()->route('user.profile');
+            } else {
+                // User does not have 2FA set up, redirect to profile setup
+                $authenticator = app(Authenticator::class)->boot($request);
+
+                if (skip_2fa() || $authenticator->isAuthenticated()) {
+                    return $next($request);
+                }
+                return $authenticator->makeRequestOneTimePasswordResponse();
+            }
+        } else {
+            return redirect()->route('login');
         }
-
-        return $authenticator->makeRequestOneTimePasswordResponse();
     }
 }
