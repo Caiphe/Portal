@@ -303,3 +303,37 @@ button.show-password {
     color: #333;
     padding: 20px;
 }
+
+
+.users-deletion-data{
+    position: relative;
+    padding: 25px;
+    display: flex;
+    width: 100%;
+
+    .main-data-section{
+        width: 78%;
+
+        .bold-text{
+            font-family: variables.$MTN-Bold;
+            font-size: 16px;
+        }
+
+        p{
+            font-size: 15px;
+            margin-top: 1px;
+        }
+    }
+
+    .button-block{
+        width: 20%;
+
+        button{
+            background-color: variables.$red;
+            border: none;
+            color: #fff;
+            padding: 7px;
+            width: 203px;
+        }
+    }
+}

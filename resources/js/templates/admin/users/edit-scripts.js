@@ -163,3 +163,12 @@ function twoFaResetConfirmation(ev){
         removeLoading();
     };
 }
+
+var requestDeletionBtn = document.getElementById('request-deletion');
+if(requestDeletionBtn){
+    requestDeletionBtn.addEventListener('click', requestDeletionFunc);
+
+    function requestDeletionFunc(){
+        console.log('You request the deletion');
+    }
+}

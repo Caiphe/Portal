@@ -2,6 +2,22 @@
 
 @include('templates.admin.users.form')
 
+<div class="editor-field ">
+    <h2>User Deletion</h2>
+
+    <div class="users-deletion-data">
+        <div class="main-data-section">
+            <div class="bold-text">Only super admins can delete users from the portal.</div>
+            <p>Please request a deletion of this user if you would like delete this user.</p>
+        </div>
+
+        <div class="button-block">
+            <button class="button red" id="request-deletion" type="button">Request user deletion</button>
+        </div>
+
+    </div>
+</div>
+
 <div class="apps-filter">
     <h2>Developer's apps</h2>
     <label>
