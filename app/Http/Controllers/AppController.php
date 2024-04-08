@@ -122,7 +122,7 @@ class AppController extends Controller
         $count = App::where('developer_id', auth()->user()->developer_id)
                 ->where('created_at', '>=', now()->startOfDay())
                 ->count();
-        
+
         $userRoles = array_unique(explode(',', $user->getRolesListAttribute()));
 
         if($count >= 5 && !in_array('Admin', $userRoles)){
@@ -155,7 +155,7 @@ class AppController extends Controller
                 ->where('created_at', '>=', now()->startOfDay())
                 ->count();
         }
-        
+
         abort_if($countTeamApps >= 5 , 429, "Action not allowed.");
 
         $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
@@ -493,10 +493,10 @@ class AppController extends Controller
                 }
             }
         }
-        
+
         $validated = $request->validated() ;
         $developerEmail = $user->email ?? $app->team->email;
-       
+
         ApigeeService::delete("developers/{$developerEmail}/apps/{$validated['name']}");
         $app->delete();
 
@@ -550,7 +550,7 @@ class AppController extends Controller
 
             return redirect()->back()->with('alert', "error:{$reasonMsg}");
         }
-        
+
         $attributes = ApigeeService::formatAppAttributes($updatedResponse['attributes']);
 
         $attributesWithoutSpaces = array_combine(array_keys($attributes), $attributes);
