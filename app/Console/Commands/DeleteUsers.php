@@ -104,7 +104,7 @@ class DeleteUsers extends Command
                     }
 
                     //delete users in APIGEE and Portal
-                    // ApigeeService::deleteUser($user);
+                    //ApigeeService::deleteUser($user);
                     $this->info('==================================================');
                     $this->info('Deleted this non-verified user ' . $user->email );
                     $this->info('==================================================');
