@@ -516,6 +516,8 @@ class CompanyTeamsController extends Controller
         $team = Team::findOrFail($id);
         $teamLogo = $team->logo;
 
+        $oldName = $team->name;
+
         $teamAdmin = auth()->user()->hasTeamRole($team, 'team_admin');
 
         if(!$teamAdmin){
@@ -547,10 +549,17 @@ class CompanyTeamsController extends Controller
         ApigeeService::updateCompany($team);
 
         foreach($team->users as $user){
-            Notification::create([
-                'user_id' => $user->id,
-                'notification' => "Your team <strong>{$team->name}</strong> has been updated please click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team to view the changes",
-            ]);
+            if($oldName !== $team->name){
+                Notification::create([
+                    'user_id' => $user->id,
+                    'notification' => "Your team <strong> {$oldName} </strong> has been updated to <strong>{$team->name}</strong>, please click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team to view the changes",
+                ]);
+            }else{
+                Notification::create([
+                    'user_id' => $user->id,
+                    'notification' => "Your team <strong>{$team->name}</strong> has been updated please click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team to view the changes",
+                ]);
+            }
         }
         
         return response()->json(['success' => true], 200);

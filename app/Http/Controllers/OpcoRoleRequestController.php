@@ -26,7 +26,11 @@ class OpcoRoleRequestController extends Controller
         $countries = Country::whereIn('code', $requestCountryCodes)->pluck('name')->toArray();
         $adminUsers = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))->pluck('email')->toArray();
        
-        abort_if(OpcoRoleRequest::whereDoesntHave('action')->where('user_id', $data['user_id'])->where('countries', $requestCountryCodes)->first(), 412, 'You have already requested an Opco role for this country');
+        abort_if(
+            OpcoRoleRequest::whereDoesntHave('action')
+            ->where('user_id', $data['user_id'])->where('countries', $requestCountryCodes)
+            ->first(), 412, 'You have already requested an Opco role for this country'
+        );
        
         OpcoRoleRequest::create($data);
 
@@ -38,8 +42,8 @@ class OpcoRoleRequestController extends Controller
 
            foreach($requestedCountryOpcoIds as $opcoId){
                 Notification::create([
-                    'user_id' => $opcoId,
-                    'notification' => "A user <stong>{$user->full_name}</stong> from your location <stong>( {$requestedCountry->name} )</stong> has requested an opco admin role. Please navigate to <a href='/admin/tasks'>task panel</a> to view the request.",
+                    "user_id" => $opcoId,
+                    "notification" => "<strong> {$user->full_name} </strong> has requested to change their user role to OpCo Admin for <strong> {$requestedCountry->name} </strong>. Action this request in the <a href='/admin/tasks'>tasks panel</a>.",
                 ]);
            }
 
