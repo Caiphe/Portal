@@ -27,6 +27,7 @@ class UserController extends Controller
 	 */
 	public function show(Request $request)
 	{
+		// dd(now()->format('d m Y H:i' ));
 		$user = $request->user();
 		$user->load('countries');
 
@@ -226,7 +227,7 @@ class UserController extends Controller
 				if($opcoId !== $user->id){
 					Notification::create([
 						'user_id' => $opcoId,
-						'notification' => "A user <strong>{$user->full_name}</strong> has requested a 2fa reset. Please navigate to this <a href='/admin/users/{$user->id}/edit'>user</a> profile for more info.",
+						'notification' => "<strong>{$user->full_name}</strong> has requested a Two-factor Authentication reset. Please navigate to <a href='/admin/users/{$user->id}/edit'>user</a> profile for more info.",
 					]);
 				}
 			}

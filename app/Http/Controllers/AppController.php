@@ -330,6 +330,8 @@ class AppController extends Controller
                 ->orWhereIn('team_id', $userTeams)
         )->firstOrFail();
 
+        $previewName = $app->display_name;
+
         $validated = $request->validated();
         $app->load('products', 'team');
         $appTeam = $app->team ?? null;
@@ -421,11 +423,20 @@ class AppController extends Controller
         // Notification creation on apps update
         if($app->team){
             $appUsers = $app->team->users->pluck('id')->toArray();
-            foreach($appUsers as $user){
-                Notification::create([
-                    'user_id' => $user,
-                    'notification' => "Your team's App <strong> {$app->display_name} </strong> has been updated please navigate to your <a href='/apps'>apps</a> to view the changes",
-                ]);
+            if($previewName !== $app->display_name){
+                foreach($appUsers as $user){
+                    Notification::create([
+                        'user_id' => $user,
+                        'notification' => "Your team's App <strong> {$previewName} </strong> has been updated to <strong> {$app->display_name} </strong> please navigate to your <a href='/apps'>apps</a> to view the changes",
+                    ]);
+                }
+            }else{
+                foreach($appUsers as $user){
+                    Notification::create([
+                        'user_id' => $user,
+                        'notification' => "Your team's App <strong> {$app->display_name} </strong> has been updated please navigate to your <a href='/apps'>apps</a> to view the changes",
+                    ]);
+                }
             }
         }
 
