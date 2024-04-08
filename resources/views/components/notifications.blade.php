@@ -5,7 +5,7 @@
         <div class="top-buttons">
             <form method="POST" action="{{ route('notification.clear.all') }}" class="clear-all-notification">
                 @csrf
-                <button type="submit" class="text-button @if(!$notifications->count()) non-active @endif">Clear notifiations</button>
+                <button type="submit" class="text-button @if(!$notifications->count()) non-active @endif">Clear notifications</button>
             </form>
 
             <form method="POST" action="{{ route('notification.read.all') }}" class="mark-read-all-form">
