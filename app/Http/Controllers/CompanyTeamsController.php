@@ -287,12 +287,12 @@ class CompanyTeamsController extends Controller
         $invite = $this->createTeamInvite($team, $user->email, 'ownership');
         if ($invite) {
 
-            $this->sendOwnershipInvite($team, $user, $invite);
-
             Notification::create([
                 'user_id' => $user->id,
-                'notification' => "You have been requested to become the owner of the team <strong>{$team->name}</strong> . Click <a href='/teams/{$team->id}/team'>here</a> to accept or revoke the request.",
+                'notification' => "You have been requested to become owner of the team <strong>{$team->name}</strong> . Click <a href='/teams/{$team->id}/team'>here</a> to accept or revoke the request.",
             ]);
+
+            $this->sendOwnershipInvite($team, $user, $invite);
 
             return response()->json([
                 'success' => true,
