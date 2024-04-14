@@ -213,13 +213,14 @@ class UserController extends Controller
 
 		$usersCountries = $user->countries;
 		$adminUsers = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))->pluck('email')->toArray();
+		$countries = $user->countries->pluck('name')->toArray();
 
 		if($usersCountries){
 			$opcoEmails = $usersCountries->load('opcoUser')->pluck('opcoUser')->flatten()->pluck('email')->unique()->values();
 			$opcoIds = $usersCountries->load('opcoUser')->pluck('opcoUser')->flatten()->pluck('id')->unique()->values();
 
 			if(count($opcoEmails) === 0 || count($opcoEmails) === 1 && $opcoEmails[0] = $user->email){
-				Mail::bcc($adminUsers)->send( new TwoFaResetRequestMail($user));
+				Mail::bcc($adminUsers)->send( new TwoFaResetRequestMail($user, $countries));
 				return response()->json(['success' => true, 'code' => 200], 200);
 			}
 
@@ -232,11 +233,11 @@ class UserController extends Controller
 				}
 			}
 
-			Mail::bcc($opcoEmails)->send( new TwoFaResetRequestMail($user));
+			Mail::bcc($opcoEmails)->send( new TwoFaResetRequestMail($user, $countries));
 			return response()->json(['success' => true, 'code' => 200], 200);
 		}
 	
-		Mail::bcc($adminUsers)->send( new TwoFaResetRequestMail($user));
+		Mail::bcc($adminUsers)->send( new TwoFaResetRequestMail($user, $countries));
 
         return response()->json(['success' => true, 'code' => 200], 200);
 	}
