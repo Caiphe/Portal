@@ -38,7 +38,7 @@ class SyncAll implements ShouldQueue
     {
         Notification::create([
             "user_id" => $this->user->id,
-            "notification" => "The Sync process has started, an email will be been sent upon completion with all the details.",
+            "notification" => "The Sync process has started, an email will be sent upon completion with all the details.",
         ]);
 
         $syncProductService = new SyncProductService();
