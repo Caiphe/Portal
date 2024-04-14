@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Jobs;
-use App\User;
 use App\Notification;
 use Illuminate\Bus\Queueable;
 use App\Services\SyncAppService;
@@ -38,10 +37,10 @@ class SyncAll implements ShouldQueue
     public function handle()
     {
         Notification::create([
-            'user_id' => $this->user->id,
-            'notification' => "The Sync process has started, an email will be  been sent upon completion with all the details.",
+            "user_id" => $this->user->id,
+            "notification" => "The Sync process has started, an email will be been sent upon completion with all the details.",
         ]);
-        
+
         $syncProductService = new SyncProductService();
         $productsResult = $syncProductService->syncProducts();
 
@@ -61,17 +60,18 @@ class SyncAll implements ShouldQueue
         ));
 
         Notification::create([
-            'user_id' => $this->user->id,
-            'notification' => "The Sync completed successfully, an email has been sent to you with all the details.",
+            "user_id" => $this->user->id,
+            "notification" => "The Sync completed successfully, an email has been sent to you with all the details.",
         ]);
     }
 
     public function failed()
     {
-        $message = 'The sync process has failed please try again.';
+        $message = "The sync process has failed please try again.";
+
         Notification::create([
-            'user_id' => $this->user->id,
-            'notification' => "The Sync process has failed. Please proceed to the dashboard and try again.",
+            "user_id" => $this->user->id,
+            "notification" => "The Sync process has failed. Please proceed to the dashboard and try again.",
         ]);
 
         Mail::to($this->user->email)->send(new SyncNotificationErrorMail($message));
