@@ -119,7 +119,7 @@ class RegisterController extends Controller
 
 		return $request->wantsJson()
 			? new Response('', 201)
-			: redirect()->route('login')->with('verify', 'A confirmation email has been sent to your email address. Please click on the link in the email and login to verify your email address.');
+			: redirect()->route('login')->with('verify', 'A confirmation email has been sent to your email address. Please click on the link in the email and login to verify your email address. Any account not verified within one month of registration will be deleted.');
 	}
 
 	/**
