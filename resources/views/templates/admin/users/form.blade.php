@@ -15,7 +15,7 @@
 
     <label class="editor-field-label">
         <h3>Email address</h3>
-        <input type="text" name="email" placeholder="Email" value="{{ $user->email ?? old('email') }}" autocomplete="off" maxlength="140">
+        <input type="text" name="email" id="email" placeholder="Email" value="{{ $user->email ?? old('email') }}" autocomplete="off" maxlength="140">
     </label>
 
     @if(isset($user))
