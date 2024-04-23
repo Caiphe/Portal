@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Validation\Rule;
+use App\Rules\CustomEmailValidationRule;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -32,6 +33,7 @@ class UserStoreRequest extends FormRequest
             'password' => [
                 'required',
                 'confirmed',
+                new CustomEmailValidationRule,
                 Password::min(12)
                 ->letters()
                 ->mixedCase()

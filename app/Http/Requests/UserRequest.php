@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Rule;
+use App\Rules\CustomEmailValidationRule;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UserRequest extends FormRequest
 {
@@ -28,7 +29,12 @@ class UserRequest extends FormRequest
         return [
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => ['email:rfc,dns', Rule::unique('users')->ignore(auth()->id())],
+            'email' => [
+                'required',
+                'email:rfc,dns', 
+                new CustomEmailValidationRule,
+                Rule::unique('users')->ignore(auth()->id())
+            ],
             'password' => [
                 'nullable',
                 'confirmed',
