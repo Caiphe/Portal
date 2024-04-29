@@ -1,33 +1,3 @@
-document.querySelector('#email').addEventListener('keyup', removeSpecialCharacters);
-function removeSpecialCharacters(){
-    var email = this.value.trim();
-    // remove the first dot on the email
-    if (email.startsWith(".")) {
-        this.value = this.value.replace('.', '');
-        addAlert('warning', 'First character cannot be a dot.');
-    }
-    // remove the last dot on the email
-    setTimeout(function(){
-        var emailValue = document.querySelector('#email').value;
-        if (emailValue.endsWith(".")) {
-            emailValue = emailValue.slice(0, -1);
-            addAlert('warning', 'Last character cannot be a dot.');
-        }
-    }, 2000)
-    
-    // Check for consecutive dots and remove one
-    if (email.includes('..')) {
-        this.value = this.value.replace('..', '.');
-        addAlert('warning', 'Consecutive dots not allowed.');
-    }
-    var specialChrs = /[`~!)#$%(^&*|=?;:±§'",<>\{\}\[\]\\\/]/gi;
-    this.value = this.value.replace(/  +/g, ' ');
-    if(specialChrs.test(this.value)){
-        this.value = this.value.replace(specialChrs, '');
-        addAlert('warning', 'Email cannot contain special characters.');
-    }
-}
-
 (function () {
     var countryAppFilter = document.getElementById('country-filter');
     var passwordEl = document.getElementById('password');

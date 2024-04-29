@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Validation\Rule;
+use App\Rules\CustomEmailValidationRule;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -28,7 +29,6 @@ class UserUpdateRequest extends FormRequest
         return [
             'first_name' => ['required', 'max:140'],
             'last_name' => ['required', 'max:140'],
-            'email' => ['email:rfc,dns', Rule::unique('users')->ignore($this->route('user')->id ?? 0), 'exists:users'],
             'password' => [
                 'sometimes',
                 'nullable',
@@ -52,7 +52,6 @@ class UserUpdateRequest extends FormRequest
         $this->merge([
             'first_name' => htmlspecialchars($this->first_name, ENT_NOQUOTES),
             'last_name' => htmlspecialchars($this->last_name, ENT_NOQUOTES),
-            'email' => filter_var($this->email, FILTER_SANITIZE_EMAIL),
             'roles' => array_map(fn($item) =>  htmlspecialchars($item, ENT_NOQUOTES), $this->roles ?? []),
             'country' => array_map(fn($item) =>  htmlspecialchars($item, ENT_NOQUOTES), $this->country ?? []),
             'responsible_countries' => array_map(fn($item) =>  htmlspecialchars($item, ENT_NOQUOTES), $this->responsible_countries ?? []),
