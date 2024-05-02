@@ -12,9 +12,9 @@
         @csrf
         <section class="section-0">
             <a class="try-somewhere-else yellow t-small" href="{{route('login')}}"><span>Already have an account?</span> Log in here @svg('arrow-forward', '#fc0')</a></div>
-            <h1 class="t-large">Y’ello there!</h1>
-            <p>Let’s get you registered and on your way to building some awesome new apps.</p>
-            <label for="first-name">What’s your first name? *</label>
+            <h1 class="t-large">Y'ello there!</h1>
+            <p>Let's get you registered and on your way to building some awesome new apps.</p>
+            <label for="first-name">What's your first name? *</label>
             <input type="text" name="first_name" id="first-name" class="alt @error('name') invalid @enderror" value="{{ old('first_name') }}" required placeholder="First name" autocomplete="first_name" autofocus>
             <span class="invalid-feedback" role="alert">@error('first_name') {{ $message }} @enderror</span>
             <label for="email">What is your email address? *</label>
@@ -74,6 +74,11 @@
     <x-auth.carousel />
 @endsection
 
+<x-alert/>
+
 @push('scripts')
+    <script src="{{ mix('/js/components/emailValidation.js') }}"></script>
+    <script src="{{ mix('/js/components/alert.js') }}" defer></script>
     <script src="{{ mix('/js/templates/auth/register.js') }}"></script>
+
 @endpush

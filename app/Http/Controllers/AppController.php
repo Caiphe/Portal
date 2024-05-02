@@ -122,7 +122,7 @@ class AppController extends Controller
         $count = App::where('developer_id', auth()->user()->developer_id)
                 ->where('created_at', '>=', now()->startOfDay())
                 ->count();
-        
+
         $userRoles = array_unique(explode(',', $user->getRolesListAttribute()));
 
         if($count >= 5 && !in_array('Admin', $userRoles)){
@@ -155,7 +155,7 @@ class AppController extends Controller
                 ->where('created_at', '>=', now()->startOfDay())
                 ->count();
         }
-        
+
         abort_if($countTeamApps >= 5 , 429, "Action not allowed.");
 
         $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
@@ -330,6 +330,8 @@ class AppController extends Controller
                 ->orWhereIn('team_id', $userTeams)
         )->firstOrFail();
 
+        $previewName = $app->display_name;
+
         $validated = $request->validated();
         $app->load('products', 'team');
         $appTeam = $app->team ?? null;
@@ -421,11 +423,20 @@ class AppController extends Controller
         // Notification creation on apps update
         if($app->team){
             $appUsers = $app->team->users->pluck('id')->toArray();
-            foreach($appUsers as $user){
-                Notification::create([
-                    'user_id' => $user,
-                    'notification' => "Your team's App <strong> {$app->display_name} </strong> has been updated please navigate to your <a href='/apps'>apps</a> to view the changes",
-                ]);
+            if($previewName !== $app->display_name){
+                foreach($appUsers as $user){
+                    Notification::create([
+                        'user_id' => $user,
+                        'notification' => "Your team's App <strong> {$previewName} </strong> has been updated to <strong> {$app->display_name} </strong> please navigate to your <a href='/apps'>apps</a> to view the changes",
+                    ]);
+                }
+            }else{
+                foreach($appUsers as $user){
+                    Notification::create([
+                        'user_id' => $user,
+                        'notification' => "Your team's App <strong> {$app->display_name} </strong> has been updated please navigate to your <a href='/apps'>apps</a> to view the changes",
+                    ]);
+                }
             }
         }
 
@@ -493,10 +504,10 @@ class AppController extends Controller
                 }
             }
         }
-        
+
         $validated = $request->validated() ;
         $developerEmail = $user->email ?? $app->team->email;
-       
+
         ApigeeService::delete("developers/{$developerEmail}/apps/{$validated['name']}");
         $app->delete();
 
@@ -550,7 +561,7 @@ class AppController extends Controller
 
             return redirect()->back()->with('alert', "error:{$reasonMsg}");
         }
-        
+
         $attributes = ApigeeService::formatAppAttributes($updatedResponse['attributes']);
 
         $attributesWithoutSpaces = array_combine(array_keys($attributes), $attributes);

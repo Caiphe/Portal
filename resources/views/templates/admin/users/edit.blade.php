@@ -66,4 +66,5 @@
 
 @push('scripts')
     <script src="{{ mix('/js/templates/admin/users/edit-scripts.js') }}"></script>
+    <script src="{{ mix('/js/components/emailValidation.js') }}"></script>
 @endpush

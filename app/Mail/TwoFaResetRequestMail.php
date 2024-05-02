@@ -13,15 +13,17 @@ class TwoFaResetRequestMail extends Mailable
     use Queueable, SerializesModels;
 
     public $user;
+    public $countries;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct(User $user, $countries)
     {
         $this->user = $user;
+        $this->countries = $countries;
     }
 
     /**

@@ -287,12 +287,12 @@ class CompanyTeamsController extends Controller
         $invite = $this->createTeamInvite($team, $user->email, 'ownership');
         if ($invite) {
 
-            $this->sendOwnershipInvite($team, $user, $invite);
-
             Notification::create([
                 'user_id' => $user->id,
-                'notification' => "You have been requested to become the owner of the team <strong>{$team->name}</strong> . Click <a href='/teams/{$team->id}/team'>here</a> to accept or revoke the request.",
+                'notification' => "You have been requested to become owner of the team <strong>{$team->name}</strong> . Click <a href='/teams/{$team->id}/team'>here</a> to accept or revoke the request.",
             ]);
+
+            $this->sendOwnershipInvite($team, $user, $invite);
 
             return response()->json([
                 'success' => true,
@@ -516,6 +516,8 @@ class CompanyTeamsController extends Controller
         $team = Team::findOrFail($id);
         $teamLogo = $team->logo;
 
+        $oldName = $team->name;
+
         $teamAdmin = auth()->user()->hasTeamRole($team, 'team_admin');
 
         if(!$teamAdmin){
@@ -547,10 +549,17 @@ class CompanyTeamsController extends Controller
         ApigeeService::updateCompany($team);
 
         foreach($team->users as $user){
-            Notification::create([
-                'user_id' => $user->id,
-                'notification' => "Your team <strong>{$team->name}</strong> has been updated please click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team to view the changes",
-            ]);
+            if($oldName !== $team->name){
+                Notification::create([
+                    'user_id' => $user->id,
+                    'notification' => "Your team <strong> {$oldName} </strong> has been updated to <strong>{$team->name}</strong>, please click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team to view the changes",
+                ]);
+            }else{
+                Notification::create([
+                    'user_id' => $user->id,
+                    'notification' => "Your team <strong>{$team->name}</strong> has been updated please click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team to view the changes",
+                ]);
+            }
         }
         
         return response()->json(['success' => true], 200);
@@ -653,7 +662,7 @@ class CompanyTeamsController extends Controller
 
             Notification::create([
                 'user_id' => $user->id,
-                'notification' => "Your role from the team <strong>{$team->name}</strong> has been updated to <strong>{$role->label}</strong>.<br/> Please navigate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
+                'notification' => "Your role in the team <strong>{$team->name}</strong> has been updated to <strong>{$role->label}</strong>.<br/> Please navigate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
             ]);
         }
 

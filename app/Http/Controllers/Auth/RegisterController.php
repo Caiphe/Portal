@@ -13,6 +13,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Rules\CustomEmailValidationRule;
 
 class RegisterController extends Controller
 {
@@ -78,7 +79,10 @@ class RegisterController extends Controller
 		return Validator::make($data, [
 			'first_name' => ['required', 'string', 'max:255'],
 			'last_name' => ['required', 'string', 'max:255'],
-			'email' => ['required', 'string', 'email:rfc,dns', 'max:255', 'unique:users,email'],
+			'email' => ['required', 'string', 'email:rfc,dns', 
+			new CustomEmailValidationRule,
+			'max:255', 'unique:users,email',
+		],
 			'terms' => ['required'],
 			'password' => [
 				'required',
@@ -119,7 +123,7 @@ class RegisterController extends Controller
 
 		return $request->wantsJson()
 			? new Response('', 201)
-			: redirect()->route('login')->with('verify', 'A confirmation email has been sent to your email address. Please click on the link in the email and login to verify your email address.');
+			: redirect()->route('login')->with('verify', 'A confirmation email has been sent to your email address. Please click on the link in the email and login to verify your email address. Any account not verified within one month of registration will be deleted.');
 	}
 
 	/**

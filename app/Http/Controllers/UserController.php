@@ -27,6 +27,7 @@ class UserController extends Controller
 	 */
 	public function show(Request $request)
 	{
+		// dd(now()->format('d m Y H:i' ));
 		$user = $request->user();
 		$user->load('countries');
 
@@ -212,13 +213,14 @@ class UserController extends Controller
 
 		$usersCountries = $user->countries;
 		$adminUsers = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))->pluck('email')->toArray();
+		$countries = $user->countries->pluck('name')->toArray();
 
 		if($usersCountries){
 			$opcoEmails = $usersCountries->load('opcoUser')->pluck('opcoUser')->flatten()->pluck('email')->unique()->values();
 			$opcoIds = $usersCountries->load('opcoUser')->pluck('opcoUser')->flatten()->pluck('id')->unique()->values();
 
 			if(count($opcoEmails) === 0 || count($opcoEmails) === 1 && $opcoEmails[0] = $user->email){
-				Mail::bcc($adminUsers)->send( new TwoFaResetRequestMail($user));
+				Mail::bcc($adminUsers)->send( new TwoFaResetRequestMail($user, $countries));
 				return response()->json(['success' => true, 'code' => 200], 200);
 			}
 
@@ -226,16 +228,16 @@ class UserController extends Controller
 				if($opcoId !== $user->id){
 					Notification::create([
 						'user_id' => $opcoId,
-						'notification' => "A user <strong>{$user->full_name}</strong> has requested a 2fa reset. Please navigate to this <a href='/admin/users/{$user->id}/edit'>user</a> profile for more info.",
+						'notification' => "<strong>{$user->full_name}</strong> has requested a Two-factor Authentication reset. Please navigate to <a href='/admin/users/{$user->id}/edit'>user</a> profile for more info.",
 					]);
 				}
 			}
 
-			Mail::bcc($opcoEmails)->send( new TwoFaResetRequestMail($user));
+			Mail::bcc($opcoEmails)->send( new TwoFaResetRequestMail($user, $countries));
 			return response()->json(['success' => true, 'code' => 200], 200);
 		}
 	
-		Mail::bcc($adminUsers)->send( new TwoFaResetRequestMail($user));
+		Mail::bcc($adminUsers)->send( new TwoFaResetRequestMail($user, $countries));
 
         return response()->json(['success' => true, 'code' => 200], 200);
 	}
