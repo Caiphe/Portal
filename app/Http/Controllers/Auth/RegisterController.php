@@ -13,6 +13,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Rules\CustomEmailValidationRule;
 
 class RegisterController extends Controller
 {
@@ -78,7 +79,10 @@ class RegisterController extends Controller
 		return Validator::make($data, [
 			'first_name' => ['required', 'string', 'max:255'],
 			'last_name' => ['required', 'string', 'max:255'],
-			'email' => ['required', 'string', 'email:rfc,dns', 'max:255', 'unique:users,email'],
+			'email' => ['required', 'string', 'email:rfc,dns', 
+			new CustomEmailValidationRule,
+			'max:255', 'unique:users,email',
+		],
 			'terms' => ['required'],
 			'password' => [
 				'required',

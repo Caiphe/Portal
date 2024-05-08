@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Validation\Rule;
+use App\Rules\CustomEmailValidationRule;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -28,7 +29,9 @@ class UserStoreRequest extends FormRequest
         return [
             'first_name' => ['required','max:140'],
             'last_name' => ['required','max:140'],
-            'email' => ['email:rfc,dns', 'unique:users,email'],
+            'email' => ['email:rfc,dns', 
+            new CustomEmailValidationRule,
+            'unique:users,email'],
             'password' => [
                 'required',
                 'confirmed',

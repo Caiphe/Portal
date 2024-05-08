@@ -74,6 +74,11 @@
     <x-auth.carousel />
 @endsection
 
+<x-alert/>
+
 @push('scripts')
+    <script src="{{ mix('/js/components/emailValidation.js') }}"></script>
+    <script src="{{ mix('/js/components/alert.js') }}" defer></script>
     <script src="{{ mix('/js/templates/auth/register.js') }}"></script>
+
 @endpush

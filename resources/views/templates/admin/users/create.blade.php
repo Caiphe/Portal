@@ -21,5 +21,6 @@
 @endsection
 
 @push('scripts')
+<script src="{{ mix('/js/components/emailValidation.js') }}"></script>
 <script src="{{ mix('/js/templates/admin/users/scripts.js') }}"></script>
 @endpush
