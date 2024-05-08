@@ -164,11 +164,20 @@ function twoFaResetConfirmation(ev){
     };
 }
 
-var requestDeletionBtn = document.getElementById('request-deletion');
+var requestDeletionBtn = document.getElementById('request-user-deletion');
 if(requestDeletionBtn){
     requestDeletionBtn.addEventListener('click', requestDeletionFunc);
 
     function requestDeletionFunc(){
-        console.log('You request the deletion');
+        var userDeleteModal = document.querySelector('.user-deletion-confirm');
+        var userDeleteConfirmBtn = document.querySelector('#confirm-user-deletion-btn');
+        userDeleteModal.classList.add('show');
+        userDeleteConfirmBtn.addEventListener('click', requestDeletionConfirmation);
     }
+
+    function requestDeletionConfirmation(ev){
+        ev.preventDefault();
+        console.log('Confirm user delettion');
+    }
+    
 }

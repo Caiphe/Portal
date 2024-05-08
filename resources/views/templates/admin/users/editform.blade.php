@@ -12,7 +12,7 @@
         </div>
 
         <div class="button-block">
-            <button class="button red" id="request-deletion" type="button">Request user deletion</button>
+            <button class="button red" id="request-user-deletion" type="button">Request user deletion</button>
         </div>
 
     </div>

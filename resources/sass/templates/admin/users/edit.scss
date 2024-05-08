@@ -311,8 +311,16 @@ button.show-password {
     display: flex;
     width: 100%;
 
+    @media(max-width: 768px){
+        flex-direction: column;
+    }
+
     .main-data-section{
         width: 78%;
+        
+        @media(max-width: 768px){
+            width: 100%;
+        }
 
         .bold-text{
             font-family: variables.$MTN-Bold;
@@ -327,6 +335,12 @@ button.show-password {
 
     .button-block{
         width: 20%;
+
+        @media(max-width: 768px){
+            width: 100%;
+            margin-bottom: 20px;
+            margin-top: 15px;
+        }
 
         button{
             background-color: variables.$red;

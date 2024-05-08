@@ -58,6 +58,23 @@
     </div>
 </x-dialog-box>
 
+<x-dialog-box class="user-deletion-confirm" dialogTitle="Delete User">
+    <div class="data-container">
+        <span>
+            You have requested a deletion of {{ $user->email }}. <br/>  
+            A super admin will be notified
+        </span>
+    </div>
+
+    <div class="bottom-shadow-container button-container">
+        <form id="confirm-user-deletion-request-form" method="POST" action="#">
+            @csrf
+            <input type="hidden" name="user" value="{{ $user->id }}" />
+            <button type="submit" id="confirm-user-deletion-btn" class="btn primary">Confirm</button>
+        </form>
+    </div>
+</x-dialog-box>
+
 <form id="admin-form" action="{{ route('admin.user.update', $user->slug) }}" method="POST">
     @method('PUT')
     @include('templates.admin.users.editform')
