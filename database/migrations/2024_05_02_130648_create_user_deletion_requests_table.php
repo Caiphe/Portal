@@ -15,9 +15,11 @@ class CreateUserDeletionRequestsTable extends Migration
     {
         Schema::create('user_deletion_requests', function (Blueprint $table) {
             $table->id();
-            $table->string('countries');
+            $table->string('countries')->nullable();
             $table->string('request_by');
             $table->foreignId('user_id')->constrained('users')->onDelete('CASCADE');
+            $table->string('approved_by')->nullable();
+            $table->dateTime('approved_at')->nullable();
             $table->timestamps();
         });
     }

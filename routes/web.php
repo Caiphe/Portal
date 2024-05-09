@@ -86,6 +86,9 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 	Route::get('/tasks', 'TaskController@index')->middleware(['auth', 'verified', '2fa', 'can:administer-task-panel'])->name('admin.task.index');
 	Route::post('user/{user}/2fa/reset-confirm', 'UserController@resetTwofaConfirm')->name('2fa.reset.confirm');
 
+	// User deletion request & Action
+	Route::post('user/{user}/delete-request', 'UserController@requestUserDeletion')->name('user.delete.request');
+
 
 	// Opco role status
 	Route::post('/opco-role-request/{id}/approve', 'OpcoRoleRequestActionController@approve')->name('admin.opco.approve');

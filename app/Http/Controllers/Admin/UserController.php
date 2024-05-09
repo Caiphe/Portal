@@ -9,12 +9,14 @@ use App\Product;
 use App\RoleUser;
 use App\Notification;
 use App\TwofaResetRequest;
+use App\UserDeletionRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TwoFaResetConfirmationMail;
 use App\Http\Requests\Admin\UserStoreRequest;
 use App\Http\Requests\Admin\UserUpdateRequest;
+use App\Mail\UserDeletionRequestMail;
 
 class UserController extends Controller
 {
@@ -228,7 +230,7 @@ class UserController extends Controller
 
     public function resetTwofaConfirm(User $user)
 	{
-		$admin = auth()->user()->first_name . ' '. auth()->user()->last_name;
+        $admin = auth()->user()->full_name;
         $userRequest = TwofaResetRequest::where(['user_id' => $user->id,'approved_by' => null])->first();
         $userRequest->update(['approved_by' => $admin]);
 		$user->update(['2fa'=> null]);
@@ -242,4 +244,30 @@ class UserController extends Controller
 
         return response()->json(['success' => true, 'code' => 200], 200);
 	}
+
+    public function requestUserDeletion(User $user)
+    {
+        $requestBy = auth()->user()->full_name;
+		$adminUsers = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))->pluck('email')->toArray();
+        $usersCountries = $user->countries->pluck('name')->toArray();
+        $countries = $user->countries->pluck('name')->implode(', ');
+
+        $checkExists = UserDeletionRequest::where('user_id', $user->id)->first();
+
+        if($checkExists){
+            return response()->json([
+                'success' => false, 'code' => 400, 
+                'message' => 'User deletion request already exists.'
+            ], 400);
+        }
+
+        UserDeletionRequest::create([
+            'countries' => $countries,
+            'request_by' => $requestBy,
+            'user_id' => $user->id,
+        ]);
+
+        Mail::bcc($adminUsers)->send(new UserDeletionRequestMail($user, $usersCountries));
+        return response()->json(['success' => true, 'code' => 200], 200);
+    }
 }

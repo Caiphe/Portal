@@ -170,14 +170,56 @@ if(requestDeletionBtn){
 
     function requestDeletionFunc(){
         var userDeleteModal = document.querySelector('.user-deletion-confirm');
-        var userDeleteConfirmBtn = document.querySelector('#confirm-user-deletion-btn');
+        var userDeleteConfirmForm = document.querySelector('#confirm-user-deletion-request-form');
         userDeleteModal.classList.add('show');
-        userDeleteConfirmBtn.addEventListener('click', requestDeletionConfirmation);
+        userDeleteConfirmForm.addEventListener('submit', requestDeletionConfirmation);
     }
 
     function requestDeletionConfirmation(ev){
         ev.preventDefault();
-        console.log('Confirm user delettion');
-    }
+        var form = this.elements;
+        var _token = form['_token'].value;
+        var user = form['user'].value;
+        var url = this.action;
     
+        var data ={
+            'user': user,
+            '_token': _token
+        }
+
+        var xhr = new XMLHttpRequest();
+        addLoading('Confirming users 2FA reset...');
+    
+        xhr.open('POST', url);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.setRequestHeader("X-CSRF-TOKEN", _token);
+    
+        xhr.send(JSON.stringify(data));
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                addAlert('success', [`Your request has been sent to the admin.`], function () {
+                    window.location.href = '/admin/users';
+                });
+            } else if(xhr.status === 400){
+                addAlert('error', [`User deletion request alreadyexists.`], function () {
+                    window.location.href = '/admin/users';
+                });
+            }else {
+                var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+    
+                if (result.errors) {
+                    result.message = [];
+                    for (var error in result.errors) {
+                        result.message.push(result.errors[error]);
+                    }
+                }
+    
+                addAlert('error', result.message || 'Sorry there was a problem removing team. Please try again.');
+            }
+    
+            removeLoading();
+        };
+    }
 }

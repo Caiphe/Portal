@@ -43,21 +43,6 @@
 </x-dialog-box>
 
 {{-- User Deletion request --}}
-<x-dialog-box dialogTitle="User Deletion Request" class="user-deletion-request-modal">
-    <div class="two-note">
-        You have requested a deletion of {{ $user->email }}.  <br/>
-        A super admin will be notified
-    </div>
-
-    <div class="bottom-shadow-container button-container">
-        <form id="confirm-user-deletion-request-form" method="POST" action="#">
-            @csrf
-            <input type="hidden" name="user" value="{{ $user->id }}" />
-            <button type="submit" id="confirm-two-fa-btn" class="btn primary">Confirm</button>
-        </form>
-    </div>
-</x-dialog-box>
-
 <x-dialog-box class="user-deletion-confirm" dialogTitle="Delete User">
     <div class="data-container">
         <span>
@@ -67,7 +52,7 @@
     </div>
 
     <div class="bottom-shadow-container button-container">
-        <form id="confirm-user-deletion-request-form" method="POST" action="#">
+        <form id="confirm-user-deletion-request-form" method="POST" action="{{ route('user.delete.request', $user) }}">
             @csrf
             <input type="hidden" name="user" value="{{ $user->id }}" />
             <button type="submit" id="confirm-user-deletion-btn" class="btn primary">Confirm</button>
