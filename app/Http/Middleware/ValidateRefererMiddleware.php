@@ -21,9 +21,7 @@ class ValidateRefererMiddleware
         $referer = preg_replace('#^https?://#', '', $referer);
         $referer = preg_replace('#^www\.#', '', $referer);
         
-        if (!$referer || strpos($referer, config('app.url').'/profile') !== 0) {
-            abort(403, 'Invalid Referer');
-        }
+        abort_if(!$referer || !str_contains($referer, config('app.url')), 403, 'Invalid Referer');
         
         return $next($request);
     }
