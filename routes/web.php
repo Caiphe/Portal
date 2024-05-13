@@ -43,7 +43,7 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 	Route::get('apps/{app:aid}/credentials/renew/{type}', 'AppController@renewCredentials')->middleware(['can:access-own-app,app', 'signed'])->name('app.credentials.renew');
 
 
-	Route::put('profile/update', 'UserController@update')->name('user.profile.update');
+	Route::put('profile/update', 'UserController@update')->middleware('validateReferer')->name('user.profile.update');
 	Route::post('profile/update/picture', 'UserController@updateProfilePicture')->name('user.profile.update.picture');
 
 	Route::post('profile/2fa/enable', 'UserController@enable2fa')->name('user.2fa.enable');
