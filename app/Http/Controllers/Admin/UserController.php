@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Role;
+use App\Services\ApigeeService;
 use App\User;
 use App\Country;
 use App\Product;
@@ -79,7 +80,7 @@ class UserController extends Controller
                 ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         }
-        
+
         return view('templates.admin.users.index', [
             'users' => $users->paginate($numberPerPage),
             'order' => $order,
@@ -161,7 +162,6 @@ class UserController extends Controller
             $order = ['asc' => 'desc', 'desc' => 'asc'][$request->get('order', 'desc')] ?? 'desc';
         }
 
-
         $productLocations = Product::isPublic()
             ->WhereNotNull('locations')
             ->Where('locations', '!=', 'all')
@@ -199,8 +199,12 @@ class UserController extends Controller
     public function update(User $user, UserUpdateRequest $request)
     {
         $data = $request->validated();
+
+       /* $status = ApigeeService::setDeveloperStatus('mtn-preprod', $user->email, $data['status']);
+        dd($status);*/
+
         $user->update($data);
-        
+
         if($request->user()->hasRole('admin'))
         {
             $user->roles()->sync($data['roles'] ?? []);
@@ -237,7 +241,7 @@ class UserController extends Controller
             'user_id' => $user->id,
             'notification' => "Your 2fa reset request has been approved. Please navigate to your <a href='/profile#twofa'>Profile</a> and set up your 2fa. ",
         ]);
-        
+
 		Mail::to($user->email)->send( new TwoFaResetConfirmationMail());
 
         return response()->json(['success' => true, 'code' => 200], 200);

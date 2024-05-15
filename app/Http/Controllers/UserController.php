@@ -201,7 +201,7 @@ class UserController extends Controller
 
 		return back()->with('alert', $message);
 	}
-	
+
 	public function reset2farequest(Request $request)
 	{
 		$user = $request->user();
@@ -236,7 +236,7 @@ class UserController extends Controller
 			Mail::bcc($opcoEmails)->send( new TwoFaResetRequestMail($user, $countries));
 			return response()->json(['success' => true, 'code' => 200], 200);
 		}
-	
+
 		Mail::bcc($adminUsers)->send( new TwoFaResetRequestMail($user, $countries));
 
         return response()->json(['success' => true, 'code' => 200], 200);

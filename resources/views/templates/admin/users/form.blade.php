@@ -57,6 +57,14 @@
         <x-multiselect id="private_products" name="private_products" label="Select private product" :options="$privateProducts" :selected="old('private_products') ?: $userAssignedProducts ?? []"/>
     </label>
 
+    <label class="editor-field-label">
+        <h3>User Status</h3>
+        <select name="status" id="status">
+            <option value="active" {{ $user->user_status === 'active' ? 'selected' : '' }}>Active</option>
+            <option value="inactive" {{ $user->user_status !== 'active' ? 'selected' : '' }}>Inactive</option>
+        </select>
+    </label>
+
     <button class="button outline blue save-button">Apply changes</button>
 </div>
 
