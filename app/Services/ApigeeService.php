@@ -38,7 +38,7 @@ class ApigeeService
             return $grantType === 'refresh_token' ? self::HttpWithTokenRefreshToken() : self::HttpWithTokenPassword();
         });
 
-        return $token['access_token']; //Http::withToken($token['access_token']);
+        return Http::withToken($token['access_token']);
     }
 
     protected static function HttpWithTokenPassword()

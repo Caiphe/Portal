@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Log;
 use App\Role;
 use App\Services\ApigeeService;
 use App\User;
@@ -200,10 +201,22 @@ class UserController extends Controller
     {
         $data = $request->validated();
 
-       /* $status = ApigeeService::setDeveloperStatus('mtn-preprod', $user->email, $data['status']);
+        /*$status = ApigeeService::setDeveloperStatus('mtn-preprod', $user->email, $data['status']);
         dd($status);*/
 
         $user->update($data);
+
+        $logs[]= [
+            'user_id' => $user->id,
+            'message' => 'User status has been updated to '.$data['status'],
+            'logable_type' => 'App\User',
+            'logable_id' => 'User Status',
+            'action' => 'update',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+
+        Log::insert($logs);
 
         if($request->user()->hasRole('admin'))
         {
