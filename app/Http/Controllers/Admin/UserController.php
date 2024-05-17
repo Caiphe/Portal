@@ -201,8 +201,12 @@ class UserController extends Controller
     {
         $data = $request->validated();
 
-        /*$status = ApigeeService::setDeveloperStatus('mtn-preprod', $user->email, $data['status']);
-        dd($status);*/
+        $status = ApigeeService::setDeveloperStatus('mtn-preprod', $user->email, $data['status']);
+        dd($status);
+
+        if ($status->getStatusCode() == 404 || $status->getStatusCode() == 400) {
+            return redirect()->back()->with('alert', 'success:User not found in Apigee');
+        }
 
         $user->update($data);
 
@@ -250,10 +254,10 @@ class UserController extends Controller
         $userRequest->update(['approved_by' => $admin]);
 		$user->update(['2fa'=> null]);
 
-        Notification::create([
+        Notification::create(array(
             'user_id' => $user->id,
             'notification' => "Your 2fa reset request has been approved. Please navigate to your <a href='/profile#twofa'>Profile</a> and set up your 2fa. ",
-        ]);
+        ));
 
 		Mail::to($user->email)->send( new TwoFaResetConfirmationMail());
 

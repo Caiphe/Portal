@@ -862,21 +862,21 @@ dd($httpToken);
      * @param array $headers
      * @return PromiseInterface|Response|JsonResponse
      */
-    /*protected static function makePostRequest(string $url, array $data, array $headers)
+    protected static function makePostRequest(string $url, array $data, array $headers)
     {
-
         try {
-            return Http::withHeaders($headers)
+            return self::HttpWithToken()
+                ->withHeaders($headers)
                 ->post('https://api.enterprise.apigee.com/v1/' . $url, $data);
         } catch (\Throwable $e) {
             return response()->json(['error' => 'Failed to make POST request'], 500);
         }
-    }*/
+    }
 
     public static function setDeveloperStatus(string $orgName, string $developerEmail, string $active)
     {
         // Construct the URL
-        $url = "/organizations/{$orgName}/developers/{$developerEmail}";
+        $url = "organizations/{$orgName}/developers/{$developerEmail}?action={$active}";
 
         // Prepare the data
         $data = [
@@ -888,10 +888,9 @@ dd($httpToken);
         ];
 
         // Call your existing post function
-        $resp = self::post($url, $data, $headers);
+        //$resp = self::post($url, $data, $headers); //The base url is already set in the environment file and is different from the doc
+        $resp = self::makePostRequest($url, '', $headers);
 
-        // Check for errors and handle token refresh if necessary
-        // Assuming you have these methods implemented already
         self::checkForErrors($resp, $url);
 
         return $resp;
