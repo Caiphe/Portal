@@ -74,8 +74,8 @@
     <div class="editor-field">
         <h2>User Status</h2>
         <div class="user-status-block">
-            <label class="">
-                <select name="status" id="status">
+            <label class="editor-field-label">
+                <select name="action" id="action">
                     <option value="active" {{ $user->user_status === 'active' ? 'selected' : '' }}>Active</option>
                     <option value="inactive" {{ $user->user_status !== 'active' ? 'selected' : '' }}>Inactive</option>
                 </select>

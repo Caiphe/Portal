@@ -882,11 +882,12 @@ class ApigeeService
 
     public static function setDeveloperStatus(string $developerEmail, string $action)
     {
-        $url = "developers/{$developerEmail}";
-        $url = self::encodeUrl($url);
-        $data = [ 'action' => $action ];
+        // $url = "developers/{$developerEmail}";
+        // $data = [ 'action' => $action ];
 
-        return self::makePostRequest($url, $data);
+        // return self::makePostRequest($url, $data);
+
+        return self::post("developers/{$developerEmail}", [ 'action' => $action ], ['Content-Type' => 'application/json']);
     }
 
 }

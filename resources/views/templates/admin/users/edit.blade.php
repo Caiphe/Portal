@@ -42,6 +42,21 @@
     </div>
 </x-dialog-box>
 
+{{-- Change user status modal --}}
+<x-dialog-box dialogTitle="Change user status" class="user-status-modal-container">
+    <div class="two-note">
+        Would you like to confirm the reset of the user's 2FA ? They will be required to set it up on their next login.
+    </div>
+
+    <div class="bottom-shadow-container button-container">
+        <form id="change-user-status-form" method="POST" action="{{ route('admin.user.status', $user) }}">
+            @csrf
+            <input type="hidden" name="user" value="{{ $user->id }}" />
+            <button type="submit" id="confirm-two-fa-btn" class="btn primary">Confirm</button>
+        </form>
+    </div>
+</x-dialog-box>
+
 <form id="admin-form" action="{{ route('admin.user.update', $user->slug) }}" method="POST">
     @method('PUT')
     @include('templates.admin.users.editform')

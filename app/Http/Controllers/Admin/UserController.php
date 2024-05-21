@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\TwoFaResetConfirmationMail;
 use App\Http\Requests\Admin\UserStoreRequest;
 use App\Http\Requests\Admin\UserUpdateRequest;
+use App\Http\Requests\UserStatusRequest;
 
 class UserController extends Controller
 {
@@ -263,4 +264,11 @@ class UserController extends Controller
 
         return response()->json(['success' => true, 'code' => 200], 200);
 	}
+
+    public function changeStatus(User $user, UserStatusRequest $request)
+    {
+        $data = $request->validated();
+        $status = ApigeeService::setDeveloperStatus($user->email, $data['action']);
+        dd($status);
+    }
 }

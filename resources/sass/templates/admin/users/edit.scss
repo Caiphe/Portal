@@ -306,14 +306,21 @@ button.show-password {
 
 .user-status-block {
     padding-bottom: 20px;
-    width: 98%;
     box-sizing: border-box;
+    width: 98%;
 
+    @media(max-width: 768px){
+        width: 92%;
+    }
 
-    select{
-        margin-top: 20px;
-        width: 100%;
-        display: block;
+    .editor-field-label{
+        box-sizing: border-box;
+
+        select{
+            margin-top: 20px;
+            max-width: 95%;
+            display: block;
+        }
     }
 
     #user-status-btn {
