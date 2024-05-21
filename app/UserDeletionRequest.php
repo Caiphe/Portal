@@ -11,8 +11,10 @@ class UserDeletionRequest extends Model
 
     protected $fillable = [
         'countries',
-        'request_by',
+        'requested_by',
         'user_id',
+        'user_email',
+        'user_name',
         'approved_by',
         'approved_at'
     ];

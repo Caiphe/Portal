@@ -25,6 +25,7 @@ class ProductController extends Controller
 			->basedOnUser($request->user())
 			->get()
 			->merge($assignedProducts);
+			
 		$productCategories = $products->pluck('category.title', 'category.slug');
 		$productsCollection = $products->sortBy('display_name')->groupBy('category.title')->sortKeys();
 		$productLocations = $products->pluck('locations')->implode(',');

@@ -188,7 +188,7 @@ if(requestDeletionBtn){
         }
 
         var xhr = new XMLHttpRequest();
-        addLoading('Confirming users 2FA reset...');
+        addLoading('Sending user deletion request...');
     
         xhr.open('POST', url);
         xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
@@ -203,7 +203,7 @@ if(requestDeletionBtn){
                     window.location.href = '/admin/users';
                 });
             } else if(xhr.status === 400){
-                addAlert('error', [`User deletion request alreadyexists.`], function () {
+                addAlert('error', [`User deletion request already exists.`], function () {
                     window.location.href = '/admin/users';
                 });
             }else {
@@ -222,4 +222,67 @@ if(requestDeletionBtn){
             removeLoading();
         };
     }
+}
+
+var deleteUserActionBtn = document.getElementById('confirm-user-deletion');
+if(deleteUserActionBtn){
+    deleteUserActionBtn.addEventListener('click', deleteUserActionFunc);
+}
+
+function deleteUserActionFunc(){
+    console.log("show the confirm delete");
+    var userDeleteConfirmModal = document.querySelector('.user-deletion-action');
+    var userDeleteActionForm = document.querySelector('#confirm-user-deletion-action-form');
+    userDeleteConfirmModal.classList.add('show');
+    userDeleteActionForm.addEventListener('submit', deleteUserConfirm);
+}
+
+function deleteUserConfirm(ev){
+    ev.preventDefault();
+    console.log("hello test");
+
+    var form = this.elements;
+    var _token = form['_token'].value;
+    var user = form['user'].value;
+    var url = this.action;
+
+    var data ={
+        'user': user,
+        '_token': _token
+    }
+
+    var xhr = new XMLHttpRequest();
+    addLoading('Deleting the user...');
+    
+    xhr.open('POST', url);
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.setRequestHeader("X-CSRF-TOKEN", _token);
+
+    xhr.send(JSON.stringify(data));
+
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            addAlert('success', [`The user has been successfully deleted.`], function () {
+                window.location.href = '/admin/users';
+            });
+        } else if(xhr.status === 400){
+            addAlert('error', [`User could not be deleted. Please contact APIGEE admin`], function () {
+                window.location.href = '/admin/users';
+            });
+        }else {
+            var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+            if (result.errors) {
+                result.message = [];
+                for (var error in result.errors) {
+                    result.message.push(result.errors[error]);
+                }
+            }
+
+            addAlert('error', result.message || 'Sorry there was a problem removing team. Please try again.');
+        }
+
+        removeLoading();
+    };
 }

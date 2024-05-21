@@ -15,4 +15,9 @@ class OpcoRoleRequestAction extends Model
         'approved',
         'message'
     ];
+
+    public function OpcoRoleRequest()
+    {
+        return $this->belongsTo(OpcoRoleRequest::class, 'request_id', 'id');
+    }
 }

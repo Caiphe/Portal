@@ -304,50 +304,86 @@ button.show-password {
     padding: 20px;
 }
 
-
-.users-deletion-data{
-    position: relative;
+.main-delete-container{
     padding: 25px;
-    display: flex;
     width: 100%;
 
-    @media(max-width: 768px){
-        flex-direction: column;
+    .delete-warning{
+        width: 100%;
+        border: solid 1px #FF1A1A;
+        color: variables.$red;
+        font-size: 15px;
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 15px;
+        background-color: #bb1e502e; 
+        display: flex;
+
+        svg{
+            margin-top: 5px;
+        }
+
+        span{
+            margin-left: 10px;
+            color: #FF1A1A;
+        }  
     }
 
-    .main-data-section{
-        width: 78%;
-        
+    .users-deletion-data{
+        position: relative;
+        display: flex;
+        width: 100%;
+    
         @media(max-width: 768px){
-            width: 100%;
+            flex-direction: column;
         }
-
-        .bold-text{
-            font-family: variables.$MTN-Bold;
-            font-size: 16px;
+    
+        .main-data-section{
+            width: 78%;
+            
+            @media(max-width: 768px){
+                width: 100%;
+            }
+    
+            .bold-text{
+                font-family: variables.$MTN-Bold;
+                font-size: 16px;
+            }
+    
+            p{
+                font-size: 15px;
+                margin-top: 1px;
+            }
         }
-
-        p{
-            font-size: 15px;
-            margin-top: 1px;
-        }
-    }
-
-    .button-block{
-        width: 20%;
-
-        @media(max-width: 768px){
-            width: 100%;
-            margin-bottom: 20px;
-            margin-top: 15px;
-        }
-
-        button{
-            background-color: variables.$red;
-            border: none;
-            color: #fff;
-            padding: 7px;
-            width: 203px;
+    
+        .button-block{
+            width: 20%;
+    
+            @media(max-width: 768px){
+                width: 100%;
+                margin-bottom: 20px;
+                margin-top: 15px;
+            }
+    
+            button{
+                background-color: variables.$red;
+                border: none;
+                color: #fff;
+                padding: 7px;
+                width: 203px;
+    
+                &.gray{
+                    background-color: #E6E6E6;
+                    color: #969696;
+                    pointer-events: none;
+                }
+    
+                &.confirm-user-deletion{
+                    width: 135px;
+                }
+            }
         }
     }
 }
+
+

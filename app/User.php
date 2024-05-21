@@ -317,4 +317,14 @@ class User extends Authenticatable implements MustVerifyEmail
 	{
 		return $this->hasMany(TwofaResetRequest::class);
 	}
+
+	public function deletionRequest()
+	{
+		return $this->hasOne(UserDeletionRequest::class);
+	}
+
+	public function OpcoRoleRequest()
+	{
+		return $this->hasMany(OpcoRoleRequest::class);
+	}
 }

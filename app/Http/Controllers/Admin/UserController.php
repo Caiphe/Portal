@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\App;
 use App\Role;
 use App\User;
 use App\Country;
@@ -11,12 +12,14 @@ use App\Notification;
 use App\TwofaResetRequest;
 use App\UserDeletionRequest;
 use Illuminate\Http\Request;
+use App\Services\ApigeeService;
+use Mpociot\Teamwork\TeamInvite;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\UserDeletionRequestMail;
 use App\Mail\TwoFaResetConfirmationMail;
 use App\Http\Requests\Admin\UserStoreRequest;
 use App\Http\Requests\Admin\UserUpdateRequest;
-use App\Mail\UserDeletionRequestMail;
 
 class UserController extends Controller
 {
@@ -151,7 +154,7 @@ class UserController extends Controller
     {
         $countrySelectFilterCode = $request->get('country-filter', 'all');
         $currentUser = $request->user();
-        $user->load('roles', 'countries', 'responsibleCountries', 'responsibleGroups', 'assignedProducts');
+        $user->load('roles', 'countries', 'responsibleCountries', 'responsibleGroups', 'assignedProducts', 'deletionRequest');
         $groups = Product::select('group')->where('group', '!=', 'Partner')->where('group', '!=', 'MTN')->groupBy('group')->get()->pluck('group', 'group');
         $groups = array_merge(['MTN' => 'General'], $groups->toArray());
         $privateProducts = Product::where('access', 'private')->pluck('display_name', 'pid');
@@ -162,7 +165,6 @@ class UserController extends Controller
         if ($request->has('sort')) {
             $order = ['asc' => 'desc', 'desc' => 'asc'][$request->get('order', 'desc')] ?? 'desc';
         }
-
 
         $productLocations = Product::isPublic()
             ->WhereNotNull('locations')
@@ -194,7 +196,8 @@ class UserController extends Controller
             'userApps' => $user->getApps($countrySelectFilterCode, $order, $request->get('sort', 'name')),
             'privateProducts' => $privateProducts,
             'userAssignedProducts' => $user->assignedProducts->pluck('pid')->toArray(),
-			'user_twofa_reset_request' => $userTwoFaRequest
+			'user_twofa_reset_request' => $userTwoFaRequest,
+			'adminRoles' => array_unique(explode(',', $currentUser->getRolesListAttribute()))
         ]);
     }
 
@@ -247,27 +250,118 @@ class UserController extends Controller
 
     public function requestUserDeletion(User $user)
     {
-        $requestBy = auth()->user()->full_name;
+        $requestedBy = auth()->user()->full_name;
 		$adminUsers = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))->pluck('email')->toArray();
         $usersCountries = $user->countries->pluck('name')->toArray();
         $countries = $user->countries->pluck('name')->implode(', ');
 
         $checkExists = UserDeletionRequest::where('user_id', $user->id)->first();
-
         if($checkExists){
-            return response()->json([
-                'success' => false, 'code' => 400, 
-                'message' => 'User deletion request already exists.'
-            ], 400);
+            return response()->json(['success' => false, 'code' => 400], 400);
         }
 
         UserDeletionRequest::create([
             'countries' => $countries,
-            'request_by' => $requestBy,
+            'requested_by' => $requestedBy,
             'user_id' => $user->id,
+            'user_email' => $user->email,
+            'user_name' => $user->full_name,
         ]);
 
         Mail::bcc($adminUsers)->send(new UserDeletionRequestMail($user, $usersCountries));
+        return response()->json(['success' => true, 'code' => 200], 200);
+    }
+
+    public function delectionAction(User $user)
+    {    
+        $deleted = ApigeeService::deleteDeveloper($user);
+        dd($deleted->body());
+
+        if($deleted->status() === 400){
+            return response()->json(['success' => false, 'code' => 400], 400);
+        }
+
+        // Detach user's roles
+        if($user->roles){
+            $user->roles()->detach();
+        }
+
+        // Detach user's countries
+        if($user->countries){
+            $user->countries()->detach();
+        }
+
+        if($user->responsibleCountries){
+            $user->responsibleCountries()->detach();
+        }
+
+        // Detach the user from the private products
+        if($user->assignedProducts){
+            $user->assignedProducts()->detach();
+        }
+
+        // Delete user's apps
+        if($user->apps){
+            $user->apps()->delete();
+        }
+
+        // Delete users authentication logs
+        if($user->authentications){
+            $user->authentications()->delete();
+        }
+
+        if($user->twoFaResetRequest){
+            $user->twoFaResetRequest()->delete();
+        }
+
+        if($user->OpcoRoleRequest){
+
+            if($user->OpcoRoleRequest->action){
+                $user->OpcoRoleRequest->action()->delete();
+            }
+
+            $user->OpcoRoleRequest()->delete();
+        }
+
+        // Delete users teams / and delete apps associated with the team
+        if($user->team){
+            $user->team()->detach();
+
+            foreach($user->team as $team){
+                // Delete team apps
+                $appNamesToDelete = App::where('team_id', $team->id)->pluck('name')->toArray();
+                if($appNamesToDelete) {
+                    App::whereIn('name', $appNamesToDelete)->delete();
+                }
+
+                // Delete team invites if any
+                $teamsInvites = TeamInvite::where('team_id', $team->id)->get();
+                if($teamsInvites){
+                    $teamsInvites->each->delete();
+                }
+
+                // removes members from the team
+                $teamMembers = $team->users->pluck('id')->toArray();
+                if($teamMembers){
+                    $team->users()->detach($teamMembers);
+                }
+
+                $team->delete();
+            }
+        }
+
+        // delete users notification
+        if($user->notifications){
+            $user->notifications()->forceDelete();
+        }
+
+        $user->delete();
+
+        $user->deletionRequest()->update(
+            ['approved_by' => auth()->user()->full_name, 
+            'approved_at' => now()]
+        );
+
         return response()->json(['success' => true, 'code' => 200], 200);
     }
 }
