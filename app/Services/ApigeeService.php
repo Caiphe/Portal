@@ -7,7 +7,6 @@ use App\Team;
 use App\User;
 use App\Country;
 use GuzzleHttp\Promise\PromiseInterface;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Client\Response;
@@ -831,66 +830,63 @@ class ApigeeService
     }
 
 
-    /*public static function setDeveloperStatus(string $developerEmail, string $active)
+    public static function httpBasicAuth()
     {
-        // Construct the URL
-        $url = "organizations/mtn-preprod/developers/{$developerEmail}";
-        $url = self::encodeUrl($url);
+        // Check if the token is already cached
+        $token = Cache::get('apigee_access_token');
+        if ($token) {
+            return $token;
+        }
 
-        // Prepare the data
-        $data = [
-            'action' => $active
-        ];
+        // Token is not cached, retrieve it from the API
+        $response = Http::withHeaders([
+            'Accept' => 'application/json;charset=utf-8',
+            'Authorization' => 'Basic ZWRnZWNsaTplZGdlY2xpc2VjcmV0'
+        ])->asForm()
+            ->post('https://login.apigee.com/oauth/token', [
+                'grant_type' => 'password',
+                'username' => config('apigee.username'),
+                'password' => config('apigee.password'),
+            ]);
 
-        $httpToken = self::HttpWithTokenRefreshToken();
-dd($httpToken);
-        // Set headers
-        $headers = [
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . $httpToken
-        ];
-
-        //dd($url, $data, $headers);
-        $response = self::makePostRequest($url, $data, $headers);
-
-        return $response;
+        if ($response->successful()) {
+            $token = $response->json()['access_token'];
+            // Cache the token for 1 hour
+            Cache::put('apigee_access_token', $token, now()->addHour());
+            return $token;
+        } else {
+            return 'Error: ' . $response->status() . ' - ' . $response->body();
+        }
     }
 
-    /**
-     * @param string $url
-     * @param array $data
-     * @param array $headers
-     * @return PromiseInterface|Response|JsonResponse
-     */
-    protected static function makePostRequest(string $url, array $data, array $headers)
+    protected static function makePostRequest(string $url, array $data)
     {
-        try {
-            return self::HttpWithToken()
-                ->withHeaders($headers)
-                ->post('https://api.enterprise.apigee.com/v1/' . $url, $data);
-        } catch (\Throwable $e) {
-            return response()->json(['error' => 'Failed to make POST request'], 500);
+        $token = self::httpBasicAuth();
+
+
+        if (strpos($token, 'Error') !== false) {
+            return $token;
         }
+
+        $headers = [
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer ' . $token
+            ];
+
+        $response = Http::withHeaders($headers)
+            ->post(config()->get('apigee.base') . $url, $data);
+
+        return $response->json();
     }
 
     public static function setDeveloperStatus(string $developerEmail, string $action)
     {
-        // Construct the URL
-        $url = "developers/{$developerEmail}?action={$action}";
+        $url = "developers/{$developerEmail}";
+        $url = self::encodeUrl($url);
+        $data = [ 'action' => $action ];
 
-        // Prepare the data
-        $data = [
-            'action' => $action
-        ];
-
-        // Call your existing post function
-        $resp = self::post($url, $data); //The base url is already set in the environment file and is different from the doc
-        //$resp = self::makePostRequest($url, $data, $headers);
-
-        self::checkForErrors($resp, $url);
-
-        return $resp;
+        return self::makePostRequest($url, $data);
     }
-
 
 }

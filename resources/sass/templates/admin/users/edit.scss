@@ -303,3 +303,21 @@ button.show-password {
     color: #333;
     padding: 20px;
 }
+
+.user-status-block {
+    padding-bottom: 20px;
+    width: 98%;
+    box-sizing: border-box;
+
+
+    select{
+        margin-top: 20px;
+        width: 100%;
+        display: block;
+    }
+
+    #user-status-btn {
+       margin-left: 20px;
+    }
+}
+

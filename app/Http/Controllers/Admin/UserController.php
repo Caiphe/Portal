@@ -201,7 +201,7 @@ class UserController extends Controller
     {
         $data = $request->validated();
 
-        $status = ApigeeService::setDeveloperStatus('mtn-preprod', $user->email, $data['status']);
+        $status = ApigeeService::setDeveloperStatus($user->email, $data['status']);
         dd($status);
 
         if ($status->getStatusCode() == 404 || $status->getStatusCode() == 400) {
