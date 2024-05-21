@@ -873,23 +873,19 @@ dd($httpToken);
         }
     }
 
-    public static function setDeveloperStatus(string $orgName, string $developerEmail, string $active)
+    public static function setDeveloperStatus(string $developerEmail, string $action)
     {
         // Construct the URL
-        $url = "organizations/{$orgName}/developers/{$developerEmail}?action={$active}";
+        $url = "developers/{$developerEmail}?action={$action}";
 
         // Prepare the data
         $data = [
-            'action' => $active
-        ];
-
-        $headers = [
-            'Content-Type' => 'application/json',
+            'action' => $action
         ];
 
         // Call your existing post function
-        //$resp = self::post($url, $data, $headers); //The base url is already set in the environment file and is different from the doc
-        $resp = self::makePostRequest($url, '', $headers);
+        $resp = self::post($url, $data); //The base url is already set in the environment file and is different from the doc
+        //$resp = self::makePostRequest($url, $data, $headers);
 
         self::checkForErrors($resp, $url);
 
