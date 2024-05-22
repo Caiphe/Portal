@@ -10,7 +10,7 @@
 |First Name                            |    | **{{ $user->first_name }}** |
 |Last Name                             |    | **{{ $user->last_name }}** |
 |Email                                 |    | **{{ $user->email }}** |
-|Country                               |    | @foreach ($countries as $key => $country) {{ $country }} @if ($count > 1 && $key < $count - 1) , @endif @endforeach |
+@if($countries) |Country                               |    | @foreach ($countries as $key => $country) {{ $country }} @if ($count > 1 && $key < $count - 1) , @endif @endforeach | @endif
 
 
 @component('mail::button', ['url' => route('admin.task.index')])

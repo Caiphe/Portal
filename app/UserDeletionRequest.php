@@ -19,8 +19,4 @@ class UserDeletionRequest extends Model
         'approved_at'
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 }

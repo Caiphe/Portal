@@ -315,6 +315,7 @@ button.show-password {
         font-size: 15px;
         padding: 15px;
         border-radius: 10px;
+        margin-top: 20px;
         margin-top: 15px;
         background-color: #bb1e502e; 
         display: flex;
@@ -331,7 +332,6 @@ button.show-password {
 
     .users-deletion-data{
         position: relative;
-        display: flex;
         width: 100%;
     
         @media(max-width: 768px){
@@ -339,11 +339,8 @@ button.show-password {
         }
     
         .main-data-section{
-            width: 78%;
-            
-            @media(max-width: 768px){
-                width: 100%;
-            }
+            width: 100%;
+        
     
             .bold-text{
                 font-family: variables.$MTN-Bold;
@@ -351,19 +348,15 @@ button.show-password {
             }
     
             p{
-                font-size: 15px;
+                font-size: 14px;
                 margin-top: 1px;
             }
         }
     
         .button-block{
-            width: 20%;
-    
-            @media(max-width: 768px){
-                width: 100%;
-                margin-bottom: 20px;
-                margin-top: 15px;
-            }
+            width: 100%;
+            margin-top: 15px;
+            margin-bottom: 20px;
     
             button{
                 background-color: variables.$red;

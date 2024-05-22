@@ -17,7 +17,6 @@ class CreateUserDeletionRequestsTable extends Migration
             $table->id();
             $table->string('countries')->nullable();
             $table->string('requested_by');
-            $table->foreignId('user_id')->constrained('users')->onDelete('CASCADE');
             $table->string('user_email');
             $table->string('user_name');
             $table->string('approved_by')->nullable();

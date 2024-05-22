@@ -154,7 +154,7 @@ class UserController extends Controller
     {
         $countrySelectFilterCode = $request->get('country-filter', 'all');
         $currentUser = $request->user();
-        $user->load('roles', 'countries', 'responsibleCountries', 'responsibleGroups', 'assignedProducts', 'deletionRequest');
+        $user->load('roles', 'countries', 'responsibleCountries', 'responsibleGroups', 'assignedProducts');
         $groups = Product::select('group')->where('group', '!=', 'Partner')->where('group', '!=', 'MTN')->groupBy('group')->get()->pluck('group', 'group');
         $groups = array_merge(['MTN' => 'General'], $groups->toArray());
         $privateProducts = Product::where('access', 'private')->pluck('display_name', 'pid');
@@ -197,7 +197,8 @@ class UserController extends Controller
             'privateProducts' => $privateProducts,
             'userAssignedProducts' => $user->assignedProducts->pluck('pid')->toArray(),
 			'user_twofa_reset_request' => $userTwoFaRequest,
-			'adminRoles' => array_unique(explode(',', $currentUser->getRolesListAttribute()))
+			'adminRoles' => array_unique(explode(',', $currentUser->getRolesListAttribute())),
+            'deletionRequest' => UserDeletionRequest::where('user_email', $user->email)->first()
         ]);
     }
 
@@ -255,7 +256,7 @@ class UserController extends Controller
         $usersCountries = $user->countries->pluck('name')->toArray();
         $countries = $user->countries->pluck('name')->implode(', ');
 
-        $checkExists = UserDeletionRequest::where('user_id', $user->id)->first();
+        $checkExists = UserDeletionRequest::where('user_email', $user->email)->first();
         if($checkExists){
             return response()->json(['success' => false, 'code' => 400], 400);
         }
@@ -263,7 +264,6 @@ class UserController extends Controller
         UserDeletionRequest::create([
             'countries' => $countries,
             'requested_by' => $requestedBy,
-            'user_id' => $user->id,
             'user_email' => $user->email,
             'user_name' => $user->full_name,
         ]);
@@ -275,7 +275,6 @@ class UserController extends Controller
     public function delectionAction(User $user)
     {    
         $deleted = ApigeeService::deleteDeveloper($user);
-        dd($deleted->body());
 
         if($deleted->status() === 400){
             return response()->json(['success' => false, 'code' => 400], 400);
@@ -315,11 +314,6 @@ class UserController extends Controller
         }
 
         if($user->OpcoRoleRequest){
-
-            if($user->OpcoRoleRequest->action){
-                $user->OpcoRoleRequest->action()->delete();
-            }
-
             $user->OpcoRoleRequest()->delete();
         }
 
@@ -355,12 +349,15 @@ class UserController extends Controller
             $user->notifications()->forceDelete();
         }
 
-        $user->delete();
+        $deletionRequest = UserDeletionRequest::where('user_email', $user->email)->first();
+        if(!isset($deletionRequest->approved_by)){
+            $deletionRequest->update([
+                'approved_by' => auth()->user()->full_name, 
+                'approved_at' => now()
+            ]);
+        }
 
-        $user->deletionRequest()->update(
-            ['approved_by' => auth()->user()->full_name, 
-            'approved_at' => now()]
-        );
+        $user->delete();
 
         return response()->json(['success' => true, 'code' => 200], 200);
     }
