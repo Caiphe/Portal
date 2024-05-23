@@ -17,7 +17,7 @@ class CreateUserDeletionRequestsTable extends Migration
             $table->id();
             $table->string('countries')->nullable();
             $table->string('requested_by');
-            $table->string('user_email');
+            $table->string('user_email')->unique();
             $table->string('user_name');
             $table->string('approved_by')->nullable();
             $table->dateTime('approved_at')->nullable();

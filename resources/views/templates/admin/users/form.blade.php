@@ -96,9 +96,7 @@
         </div>
     </div>
 
-    @if($deletionRequest && in_array('Admin', $adminRoles) 
-    // && $currentUser->full_name !== $deletionRequest->requested_by
-    )
+    @if($deletionRequest && in_array('Admin', $adminRoles))
     <div class="editor-field">
         <h2>User Deletion</h2>
         <div class="main-delete-container">

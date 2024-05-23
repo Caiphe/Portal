@@ -199,12 +199,10 @@ if(requestDeletionBtn){
         xhr.onload = function () {
             if (xhr.status === 200) {
                 addAlert('info', [`An admin has been notified of your deletion request.`], function () {
-                    window.location.href = '/admin/users';
+                    location. reload();
                 });
             } else if(xhr.status === 400){
-                addAlert('error', [`User deletion request already exists.`], function () {
-                    window.location.href = '/admin/users';
-                });
+                addAlert('error', 'User deletion request already exists.');
             }else {
                 var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
     
@@ -264,9 +262,7 @@ function deleteUserConfirm(ev){
                 window.location.href = '/admin/users';
             });
         } else if(xhr.status === 400){
-            addAlert('error', [`User could not be deleted. Please contact APIGEE admin`], function () {
-                window.location.href = '/admin/users';
-            });
+            addAlert('error', 'User could not be deleted. Please contact the admin');
         }else {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
