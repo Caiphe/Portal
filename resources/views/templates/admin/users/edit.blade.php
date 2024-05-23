@@ -42,6 +42,48 @@
     </div>
 </x-dialog-box>
 
+{{-- User Deletion request --}}
+<x-dialog-box class="user-deletion-confirm" dialogTitle="Delete User">
+    <div class="data-container">
+        <span>
+            You have requested a deletion of {{ $user->email }}. <br/>  
+            A super admin will be notified
+        </span>
+    </div>
+
+    <div class="bottom-shadow-container button-container">
+        <form id="confirm-user-deletion-request-form" method="POST" action="{{ route('user.delete.request', $user) }}">
+            @csrf
+            <input type="hidden" name="user" value="{{ $user->id }}" />
+            <button type="submit" id="confirm-user-deletion-request-btn" class="btn primary">Okay</button>
+        </form>
+    </div>
+</x-dialog-box>
+
+{{-- User Deletion action --}}
+<x-dialog-box class="user-deletion-action" dialogTitle="Delete User">
+    <div class="data-container">
+        <p>Are you sure you want to remove this user?</p>
+        <span><strong>Important Information:</strong></span>
+        <br/>
+        <p>1. This user's applications will be transferred to the designated administrative contact.</p>
+        <p>2.This user will be removed from all associated teams. If they hold a leadership position within any team, the relevant administrative contact will be appointed as their replacement.</p>
+    </div>
+
+    <div class="bottom-shadow-container">
+        <form id="confirm-user-deletion-action-form" method="POST" action="{{ route('user.delete.action', $user) }}">
+            @csrf
+            <input type="hidden" name="user" value="{{ $user->id }}" />
+            <input type="hidden" name="user_email" id="deletion_user_email" value="{{ $user->email }}" />
+
+            <div class="button-container">
+                <button type="submit" class="primary">Confirm</button>
+                <button type="button" class="cancel" onclick="closeDialogBox(this);">Cancel</button>
+            </div>
+        </form>
+    </div>
+</x-dialog-box>
+
 <form id="admin-form" action="{{ route('admin.user.update', $user->slug) }}" method="POST">
     @method('PUT')
     @include('templates.admin.users.editform')

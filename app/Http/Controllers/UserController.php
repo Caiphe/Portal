@@ -27,7 +27,6 @@ class UserController extends Controller
 	 */
 	public function show(Request $request)
 	{
-		// dd(now()->format('d m Y H:i' ));
 		$user = $request->user();
 		$user->load('countries');
 
