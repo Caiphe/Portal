@@ -40,21 +40,21 @@
         var spanRoles = document.getElementById('roles-tags').querySelectorAll('span');
         var spanCountry = document.getElementById('responsible_countries-tags').querySelectorAll('span');
 
-        if(spanRoles.length < 1){
+        if (spanRoles.length < 1) {
             addAlert('warning', 'Please assign at least one role to this user.');
             e.preventDefault();
             return;
-        } 
+        }
 
-        for(var i = 0; i < spanRoles.length; i++){
-            if(spanRoles[i].innerHTML === 'Opco' && spanCountry.length < 1){
+        for (var i = 0; i < spanRoles.length; i++) {
+            if (spanRoles[i].innerHTML === 'Opco' && spanCountry.length < 1) {
                 addAlert('warning', 'Please select at least one country this Opco admin is responsible for.');
                 e.preventDefault();
                 return;
             }
         }
 
-        if(spanCountry.length !== 0) return;
+        if (spanCountry.length !== 0) return;
 
         if ((passwordEl.value !== "" || confirmEl.value !== "") && passwordScore !== 6) {
             addAlert('error', 'Please make sure your password is correct.');
@@ -81,25 +81,25 @@ var btnSubmit = document.querySelectorAll('.save-button');
 var roleError = document.querySelector('.role-error');
 
 
-if(roleTags){
+if (roleTags) {
     var adminDialog = document.querySelector('.admin-removal-confirm');
     roleTags.addEventListener('click', checkAdminRemoved);
-    
-    function checkAdminRemoved(event){
-        if(event.target.dataset.index !== undefined && event.target.dataset.index !== '1') return;
+
+    function checkAdminRemoved(event) {
+        if (event.target.dataset.index !== undefined && event.target.dataset.index !== '1') return;
         adminDialog.classList.add('show');
-        document.querySelector('.admin-removal-confirm').addEventListener('dialog-closed', adminRestore, {once:true});
+        document.querySelector('.admin-removal-confirm').addEventListener('dialog-closed', adminRestore, {once: true});
     }
 }
 
-function adminRestore(e){
+function adminRestore(e) {
     addTag('1', document.getElementById('roles-select'));
-    for(var i = 0; i < btnSubmit.length; i++) {
+    for (var i = 0; i < btnSubmit.length; i++) {
         btnSubmit[i].classList.remove('non-active');
     }
 }
 
-function closeAdminRestore(){
+function closeAdminRestore() {
     adminDialog.classList.remove('show');
 }
 
@@ -117,7 +117,7 @@ function showConfirmTwoAF() {
     document.getElementById('confirm-twofa-form').addEventListener('submit', twoFaResetConfirmation);
 }
 
-function twoFaResetConfirmation(ev){
+function twoFaResetConfirmation(ev) {
     ev.preventDefault();
     var form = this.elements;
     var _token = form['_token'].value;
@@ -125,7 +125,7 @@ function twoFaResetConfirmation(ev){
     var fullName = document.querySelector('.header-username').innerHTML;
     var url = this.action;
 
-    var data ={
+    var data = {
         'user': user,
         '_token': _token
     }
@@ -167,12 +167,12 @@ function twoFaResetConfirmation(ev){
 document.querySelector('#user-status-btn').addEventListener('click', showConfirmStatusChange);
 var statusModal = document.querySelector('.user-status-modal-container');
 
-function showConfirmStatusChange(){
+function showConfirmStatusChange() {
     statusModal.classList.add('show');
     document.getElementById('change-user-status-form').addEventListener('submit', confirmStatusChange);
 }
 
-function confirmStatusChange(ev){
+function confirmStatusChange(ev) {
     ev.preventDefault();
     var action = document.querySelector('#action').value;
 
@@ -181,14 +181,14 @@ function confirmStatusChange(ev){
     var user = form['user'].value;
     var url = this.action;
 
-    var data ={
+    var data = {
         'user': user,
         'action': action,
         '_token': _token
     }
 
     var xhr = new XMLHttpRequest();
-    
+
     addLoading('Changing users status...');
 
     xhr.open('POST', url);
@@ -199,25 +199,22 @@ function confirmStatusChange(ev){
     xhr.send(JSON.stringify(data));
 
     xhr.onload = function () {
-        if (xhr.status === 200) {
-            addAlert('success', [`User status update`], function () {
-                window.location.href = '/admin/users';
-                statusModal.classList.remove('show');
-            });
+        // Parse the JSON response
+        var status = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
+        // Check the status code of the response
+        if (status.statusCode === 204) {
+            addAlert('success', `User status updated successfully.`);
+        } else if(status.statusCode === 404) {
+            addAlert('error', 'Sorry, The user is not found in the organisation.');
         } else {
-            var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
-
-            if (result.errors) {
-                result.message = [];
-                for (var error in result.errors) {
-                    result.message.push(result.errors[error]);
-                }
-            }
-
-            addAlert('error', result.message || 'Sorry there was a problem removing team. Please try again.');
+            console.log(status.statusCode);
+            // Handle non-200 responses
+            addAlert('error', 'Sorry, there was a problem updating the user status. Please try again.');
         }
-
+        // Remove the loading indicator
+        statusModal.classList.remove('show');
         removeLoading();
     };
+
 }

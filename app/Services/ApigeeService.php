@@ -6,13 +6,18 @@ use App\App;
 use App\Team;
 use App\User;
 use App\Country;
+use GuzzleHttp\Client;
 use GuzzleHttp\Promise\PromiseInterface;
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
+use GuzzleHttp\Exception\RequestException;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * This is a helper service to connect to Apigee.
@@ -830,6 +835,9 @@ class ApigeeService
     }
 
 
+    /**
+     * @return mixed|string
+     */
     public static function httpBasicAuth()
     {
         // Check if the token is already cached
@@ -859,35 +867,48 @@ class ApigeeService
         }
     }
 
-    protected static function makePostRequest(string $url, array $data)
+    /**
+     * @param string $url
+     * @param $action
+     * @return int|mixed|string
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    protected static function makePostRequest(string $url, $action)
     {
         $token = self::httpBasicAuth();
-
 
         if (strpos($token, 'Error') !== false) {
             return $token;
         }
 
+        $client = new Client();
         $headers = [
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . $token
-            ];
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json'
+        ];
 
-        $response = Http::withHeaders($headers)
-            ->post(config()->get('apigee.base') . $url, $data);
+        try {
+            $request = new Request('POST', config()->get('apigee.base') . $url. '?action='. $action, $headers);
+            $response = $client->sendAsync($request)->wait();
+            return $response->getStatusCode();
+        } catch (RequestException $e) {
 
-        return $response->json();
+            $response = $e->getResponse();
+            return $response->getStatusCode();
+        }
     }
 
+    /**
+     * @param string $developerEmail
+     * @param string $action
+     * @return int|mixed|string
+     */
     public static function setDeveloperStatus(string $developerEmail, string $action)
     {
-        // $url = "developers/{$developerEmail}";
-        // $data = [ 'action' => $action ];
-
-        // return self::makePostRequest($url, $data);
-
-        return self::post("developers/{$developerEmail}", [ 'action' => $action ], ['Content-Type' => 'application/json']);
+        $url = "developers/{$developerEmail}";
+        $url = self::encodeUrl($url);
+        return self::makePostRequest($url, $action);
     }
 
 }

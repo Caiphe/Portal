@@ -11,6 +11,7 @@ use App\Product;
 use App\RoleUser;
 use App\Notification;
 use App\TwofaResetRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
@@ -202,26 +203,7 @@ class UserController extends Controller
     {
         $data = $request->validated();
 
-        $status = ApigeeService::setDeveloperStatus($user->email, $data['status']);
-        dd($status);
-
-        if ($status->getStatusCode() == 404 || $status->getStatusCode() == 400) {
-            return redirect()->back()->with('alert', 'success:User not found in Apigee');
-        }
-
         $user->update($data);
-
-        $logs[]= [
-            'user_id' => $user->id,
-            'message' => 'User status has been updated to '.$data['status'],
-            'logable_type' => 'App\User',
-            'logable_id' => 'User Status',
-            'action' => 'update',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ];
-
-        Log::insert($logs);
 
         if($request->user()->hasRole('admin'))
         {
@@ -265,10 +247,40 @@ class UserController extends Controller
         return response()->json(['success' => true, 'code' => 200], 200);
 	}
 
+    /**
+     * @param User $user
+     * @param UserStatusRequest $request
+     * @return JsonResponse
+     */
     public function changeStatus(User $user, UserStatusRequest $request)
     {
         $data = $request->validated();
-        $status = ApigeeService::setDeveloperStatus($user->email, $data['action']);
-        dd($status);
+
+        $results = ApigeeService::setDeveloperStatus($user->email, $data['action']);
+
+        if ($results !== 204) {
+            return response()->json([
+                'statusCode' => $results
+            ]);
+        }
+
+        $user->update(['status' => $data['action']]);
+
+        $logs = [
+            'user_id' => $user->id,
+            'message' => 'User status has been updated to '.$data['action'],
+            'logable_type' => 'App\User',
+            'logable_id' => 'User Status',
+            'action' => 'update',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+
+        Log::insert($logs);
+
+        return response()->json([
+            'statusCode' => $results
+        ]);
+
     }
 }

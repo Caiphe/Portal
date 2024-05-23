@@ -67,7 +67,6 @@
     </label>
 
 
-
     <button class="button outline blue save-button">Apply changes</button>
     </div>
     {{--User status--}}
@@ -81,7 +80,7 @@
                 </select>
             </label>
             <button type="button" id="user-status-btn"
-                    class="button primary  change-status"> Change Status
+                    class="button outline blue save-button"> Change Status
             </button>
         </div>
     </div>

@@ -45,11 +45,14 @@
 {{-- Change user status modal --}}
 <x-dialog-box dialogTitle="Change user status" class="user-status-modal-container">
     <div class="two-note">
-        Would you like to confirm the reset of the user's 2FA ? They will be required to set it up on their next login.
+        <p><strong>Are you sure you want to change this user's status?</strong></p>
+        <p>An active user can log into the portal and continue with functionality as normal.<br><br>
+        Inactive users are unable to log into the portal but no data in that users account is affected. All of the developers apps and teams will function as normal.<p>
     </div>
 
     <div class="bottom-shadow-container button-container">
         <form id="change-user-status-form" method="POST" action="{{ route('admin.user.status', $user) }}">
+            @method('POST')
             @csrf
             <input type="hidden" name="user" value="{{ $user->id }}" />
             <button type="submit" id="confirm-two-fa-btn" class="btn primary">Confirm</button>
