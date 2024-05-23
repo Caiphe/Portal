@@ -181,7 +181,7 @@ if(requestDeletionBtn){
         var _token = form['_token'].value;
         var user = form['user'].value;
         var url = this.action;
-    
+
         var data ={
             'user': user,
             '_token': _token
@@ -194,12 +194,11 @@ if(requestDeletionBtn){
         xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
         xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
         xhr.setRequestHeader("X-CSRF-TOKEN", _token);
-    
         xhr.send(JSON.stringify(data));
 
         xhr.onload = function () {
             if (xhr.status === 200) {
-                addAlert('success', [`Your request has been sent to the admin.`], function () {
+                addAlert('info', [`An admin has been notified of your deletion request.`], function () {
                     window.location.href = '/admin/users';
                 });
             } else if(xhr.status === 400){
@@ -230,7 +229,6 @@ if(deleteUserActionBtn){
 }
 
 function deleteUserActionFunc(){
-    console.log("show the confirm delete");
     var userDeleteConfirmModal = document.querySelector('.user-deletion-action');
     var userDeleteActionForm = document.querySelector('#confirm-user-deletion-action-form');
     userDeleteConfirmModal.classList.add('show');
@@ -239,12 +237,12 @@ function deleteUserActionFunc(){
 
 function deleteUserConfirm(ev){
     ev.preventDefault();
-    console.log("hello test");
 
     var form = this.elements;
     var _token = form['_token'].value;
     var user = form['user'].value;
     var url = this.action;
+    var userEmail = form['user_email'].value;
 
     var data ={
         'user': user,
@@ -258,12 +256,11 @@ function deleteUserConfirm(ev){
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     xhr.setRequestHeader("X-CSRF-TOKEN", _token);
-
     xhr.send(JSON.stringify(data));
 
     xhr.onload = function () {
         if (xhr.status === 200) {
-            addAlert('success', [`The user has been successfully deleted.`], function () {
+            addAlert('warning', [`${userEmail} has been deleted.`], function () {
                 window.location.href = '/admin/users';
             });
         } else if(xhr.status === 400){

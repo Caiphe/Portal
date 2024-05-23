@@ -74,6 +74,7 @@
         <form id="confirm-user-deletion-action-form" method="POST" action="{{ route('user.delete.action', $user) }}">
             @csrf
             <input type="hidden" name="user" value="{{ $user->id }}" />
+            <input type="hidden" name="user_email" id="deletion_user_email" value="{{ $user->email }}" />
 
             <div class="button-container">
                 <button type="submit" class="primary">Confirm</button>
