@@ -304,6 +304,30 @@ button.show-password {
     padding: 20px;
 }
 
+.user-status-block {
+    padding-bottom: 20px;
+    box-sizing: border-box;
+    width: 98%;
+
+    @media(max-width: 768px){
+        width: 92%;
+    }
+
+    .editor-field-label{
+        box-sizing: border-box;
+
+        select{
+            margin-top: 20px;
+            max-width: 95%;
+            display: block;
+        }
+    }
+
+    #user-status-btn {
+       margin-left: 20px;
+    }
+}
+
 .main-delete-container{
     padding: 25px;
     width: 100%;
@@ -378,5 +402,3 @@ button.show-password {
         }
     }
 }
-
-

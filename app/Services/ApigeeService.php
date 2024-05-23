@@ -6,13 +6,18 @@ use App\App;
 use App\Team;
 use App\User;
 use App\Country;
+use GuzzleHttp\Client;
 use GuzzleHttp\Promise\PromiseInterface;
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
+use GuzzleHttp\Exception\RequestException;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
  * This is a helper service to connect to Apigee.
@@ -84,7 +89,7 @@ class ApigeeService
         preg_match('/\?.*/', $url, $get);
         $url = preg_replace('/\?.*/', '', $url);
         $url = explode('/', $url);
-        $url = array_map(fn ($arg) => rawurlencode($arg), $url);
+        $url = array_map(fn($arg) => rawurlencode($arg), $url);
         $url = implode('/', $url);
         return $url . ($get[0] ?? '');
     }
@@ -155,7 +160,7 @@ class ApigeeService
 
 
     /**
-     * @param  string $url
+     * @param string $url
      *
      * @return mixed
      */
@@ -268,9 +273,9 @@ class ApigeeService
         }
 
         if ($typeAndEnvironment[1] === 'production') {
-            $credentials =  $creds['production'][$typeAndEnvironment[0]] ?? '';
+            $credentials = $creds['production'][$typeAndEnvironment[0]] ?? '';
         } else if ($typeAndEnvironment[1] === 'sandbox') {
-            $credentials =  $creds['sandbox'][$typeAndEnvironment[0]] ?? '';
+            $credentials = $creds['sandbox'][$typeAndEnvironment[0]] ?? '';
         } else if ($type !== 'all') {
             $credentials = $credentials[0][$typeAndEnvironment[0]] ?? '';
         }
@@ -287,13 +292,13 @@ class ApigeeService
     /**
      * Revoke credentials and then add a set of new credentials
      *
-     * @param      \Illuminate\Database\Eloquent\Model         $entity The user or team
-     * @param      \App\App                                   $app    The application
-     * @param      string                                     $key    The key
+     * @param \Illuminate\Database\Eloquent\Model $entity The user or team
+     * @param \App\App $app The application
+     * @param string $key The key
      *
      * @return     \Illuminate\Http\Client\Response  The client response
      */
-    public static function renewCredentials(Model $entity , App $app, string $key)
+    public static function renewCredentials(Model $entity, App $app, string $key)
     {
         $apiProducts = [];
         $attributes = [];
@@ -306,7 +311,7 @@ class ApigeeService
             }
         }
 
-        $appProducts = $app->products->filter(fn ($prod) => in_array($prod->name, $apiProducts));
+        $appProducts = $app->products->filter(fn($prod) => in_array($prod->name, $apiProducts));
 
         foreach ($app->attributes as $name => $value) {
             $attributes[] = [
@@ -346,9 +351,9 @@ class ApigeeService
     /**
      * Revoke credentials
      *
-     * @param      \Illuminate\Database\Eloquent\Model       $entity   The user or team
-     * @param      \App\App                                 $app      The application
-     * @param      string                                   $key      The key
+     * @param \Illuminate\Database\Eloquent\Model $entity The user or team
+     * @param \App\App $app The application
+     * @param string $key The key
      *
      * @return     \Illuminate\Http\Client\Response  The client response
      */
@@ -370,7 +375,7 @@ class ApigeeService
             if (!isset($value)) {
                 $attribute['value'] = '';
 
-	   }
+            }
             $value = $key === 'Group' ? Str::studly($value) : $value;
 
             $a[$key] = $value;
@@ -390,7 +395,7 @@ class ApigeeService
             if (!isset($value)) {
                 $attribute['value'] = '';
 
-	   }
+            }
             $value = $key === 'Group' ? $value : $value;
 
             $a[$key] = $value;
@@ -413,7 +418,7 @@ class ApigeeService
             if (!isset($attribute['value'])) {
                 $attribute['value'] = '';
             }
-	   $value = $attribute['name'] === 'Group' ? Str::studly($attribute['value']) : $attribute['value'];
+            $value = $attribute['name'] === 'Group' ? Str::studly($attribute['value']) : $attribute['value'];
             $a[$attribute['name']] = $value;
         }
         return $a;
@@ -445,7 +450,7 @@ class ApigeeService
             $lastAppId = count($apps) === 0 ? '' : end($apps)['appId'];
             $startKey = empty($lastAppId) ? '' : '&startKey=' . $lastAppId;
 
-            $appRows =  self::getOrgAppsRows($status, 300, $startKey);
+            $appRows = self::getOrgAppsRows($status, 300, $startKey);
 
             if (count($appRows) === 0) break;
 
@@ -553,7 +558,7 @@ class ApigeeService
     /**
      * Gets the latest credentials.
      *
-     * @param      array  $credentials  The credentials
+     * @param array $credentials The credentials
      *
      * @return     array  The latest credentials.
      */
@@ -573,7 +578,7 @@ class ApigeeService
     /**
      * Sorts credentials by issued date
      *
-     * @param      array  $credentials  The credentials
+     * @param array $credentials The credentials
      *
      * @return     array  The sorted credentials
      */
@@ -604,7 +609,7 @@ class ApigeeService
     public static function formatAppCredentials(array $credentials): array
     {
         for ($i = 0; $i < count($credentials); $i++) {
-            $credentials[$i]['apiProducts'] = array_map(fn ($apiProduct) => $apiProduct['apiproduct'], $credentials[$i]['apiProducts']);
+            $credentials[$i]['apiProducts'] = array_map(fn($apiProduct) => $apiProduct['apiproduct'], $credentials[$i]['apiProducts']);
         }
 
         return $credentials;
@@ -615,7 +620,7 @@ class ApigeeService
     /**
      * Creates a company.
      *
-     * @param      \App\Company  $company  The company
+     * @param \App\Company $company The company
      *
      * @return     mixed         The response from the post
      */
@@ -646,13 +651,13 @@ class ApigeeService
     /**
      * Updates a company.
      *
-     * @param      \App\Company  $company  The company
+     * @param \App\Company $company The company
      *
      * @return     mixed         The response from the post
      */
     public static function updateCompany(Team $team, ?User $user = null)
     {
-        $user ??= $team->owner ?? $team->users->first(fn ($user) => $user->hasRole('team_admin'));
+        $user ??= $team->owner ?? $team->users->first(fn($user) => $user->hasRole('team_admin'));
 
         if (!$user) {
             return null;
@@ -683,11 +688,12 @@ class ApigeeService
     /**
      * Delete a company.
      *
-     * @param      \App\Company  $company  The company
+     * @param \App\Company $company The company
      *
      * @return     mixed         The response from the delete
      */
-    public static function deleteCompany(Team $team){
+    public static function deleteCompany(Team $team)
+    {
         return self::delete("companies/{$team->username}");
     }
 
@@ -710,10 +716,11 @@ class ApigeeService
 
         return $resp;
     }
+
     /**
      * Delete a Developer / User.
      *
-     * @param      \App\User  $user  The user
+     * @param \App\User $user The user
      *
      * @return     mixed         The response from the delete
      */
@@ -724,9 +731,9 @@ class ApigeeService
     /**
      * Adds a developer to company.
      *
-     * @param      \App\Company  $company  The company
-     * @param      \App\User     $user     The user
-     * @param      string        $role     The role
+     * @param \App\Company $company The company
+     * @param \App\User $user The user
+     * @param string $role The role
      *
      * @return     mixed         The response from the post
      */
@@ -745,8 +752,8 @@ class ApigeeService
     /**
      * Adds a developer to company.
      *
-     * @param      \App\Company  $company  The company
-     * @param      \App\User     $user     The user
+     * @param \App\Company $company The company
+     * @param \App\User $user The user
      *
      * @return     mixed         The response from the post
      */
@@ -778,8 +785,8 @@ class ApigeeService
     /**
      * Sort by issued at
      *
-     * @param      int   $a      First sort variable
-     * @param      int   $b      Second sort variable
+     * @param int $a First sort variable
+     * @param int $b Second sort variable
      *
      * @return     int   The sort order
      */
@@ -795,8 +802,8 @@ class ApigeeService
     /**
      * Sort by issued at
      *
-     * @param      int   $a      First sort variable
-     * @param      int   $b      Second sort variable
+     * @param int $a First sort variable
+     * @param int $b Second sort variable
      *
      * @return     int   The sort order
      */
@@ -825,4 +832,82 @@ class ApigeeService
             "callbackUrl" => $app->callbackUrl ?? '',
         ]);
     }
+
+
+    /**
+     * @return mixed|string
+     */
+    public static function httpBasicAuth()
+    {
+        // Check if the token is already cached
+        $token = Cache::get('apigee_access_token');
+        if ($token) {
+            return $token;
+        }
+
+        // Token is not cached, retrieve it from the API
+        $response = Http::withHeaders([
+            'Accept' => 'application/json;charset=utf-8',
+            'Authorization' => 'Basic ZWRnZWNsaTplZGdlY2xpc2VjcmV0'
+        ])->asForm()
+            ->post('https://login.apigee.com/oauth/token', [
+                'grant_type' => 'password',
+                'username' => config('apigee.username'),
+                'password' => config('apigee.password'),
+            ]);
+
+        if ($response->successful()) {
+            $token = $response->json()['access_token'];
+            // Cache the token for 1 hour
+            Cache::put('apigee_access_token', $token, now()->addHour());
+            return $token;
+        } else {
+            return 'Error: ' . $response->status() . ' - ' . $response->body();
+        }
+    }
+
+    /**
+     * @param string $url
+     * @param $action
+     * @return int|mixed|string
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    protected static function makePostRequest(string $url, $action)
+    {
+        $token = self::httpBasicAuth();
+
+        if (strpos($token, 'Error') !== false) {
+            return $token;
+        }
+
+        $client = new Client();
+        $headers = [
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json'
+        ];
+
+        try {
+            $request = new Request('POST', config()->get('apigee.base') . $url. '?action='. $action, $headers);
+            $response = $client->sendAsync($request)->wait();
+            return $response->getStatusCode();
+        } catch (RequestException $e) {
+
+            $response = $e->getResponse();
+            return $response->getStatusCode();
+        }
+    }
+
+    /**
+     * @param string $developerEmail
+     * @param string $action
+     * @return int|mixed|string
+     */
+    public static function setDeveloperStatus(string $developerEmail, string $action)
+    {
+        $url = "developers/{$developerEmail}";
+        $url = self::encodeUrl($url);
+        return self::makePostRequest($url, $action);
+    }
+
 }

@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Log;
 use App\App;
 use App\Role;
+use App\Services\ApigeeService;
 use App\User;
 use App\Country;
 use App\Product;
 use App\RoleUser;
 use App\Notification;
 use App\TwofaResetRequest;
+use Illuminate\Http\JsonResponse;
 use App\UserDeletionRequest;
 use Illuminate\Http\Request;
-use App\Services\ApigeeService;
 use Mpociot\Teamwork\TeamInvite;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
@@ -20,6 +22,7 @@ use App\Mail\UserDeletionRequestMail;
 use App\Mail\TwoFaResetConfirmationMail;
 use App\Http\Requests\Admin\UserStoreRequest;
 use App\Http\Requests\Admin\UserUpdateRequest;
+use App\Http\Requests\UserStatusRequest;
 
 class UserController extends Controller
 {
@@ -84,7 +87,7 @@ class UserController extends Controller
                 ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         }
-        
+
         return view('templates.admin.users.index', [
             'users' => $users->paginate($numberPerPage),
             'order' => $order,
@@ -205,8 +208,9 @@ class UserController extends Controller
     public function update(User $user, UserUpdateRequest $request)
     {
         $data = $request->validated();
+
         $user->update($data);
-        
+
         if($request->user()->hasRole('admin'))
         {
             $user->roles()->sync($data['roles'] ?? []);
@@ -243,11 +247,47 @@ class UserController extends Controller
             'user_id' => $user->id,
             'notification' => "Your 2fa reset request has been approved. Please navigate to your <a href='/profile#twofa'>Profile</a> and set up your 2fa. ",
         ]);
-        
+
 		Mail::to($user->email)->send( new TwoFaResetConfirmationMail());
 
         return response()->json(['success' => true, 'code' => 200], 200);
 	}
+
+    /**
+     * @param User $user
+     * @param UserStatusRequest $request
+     * @return JsonResponse
+     */
+    public function changeStatus(User $user, UserStatusRequest $request)
+    {
+        $data = $request->validated();
+
+        $results = ApigeeService::setDeveloperStatus($user->email, $data['action']);
+
+        if ($results !== 204) {
+            return response()->json([
+                'statusCode' => $results
+            ]);
+        }
+
+        $user->update(['status' => $data['action']]);
+
+        $logs = [
+            'user_id' => $user->id,
+            'message' => 'User status has been updated to '.$data['action'],
+            'logable_type' => 'App\User',
+            'logable_id' => 'User Status',
+            'action' => 'update',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+
+        Log::insert($logs);
+
+        return response()->json([
+            'statusCode' => $results
+        ]);
+    }
 
     public function requestUserDeletion(User $user)
     {

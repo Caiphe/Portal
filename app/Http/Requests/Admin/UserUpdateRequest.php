@@ -44,6 +44,7 @@ class UserUpdateRequest extends FormRequest
             'responsible_countries' => ['nullable', 'array', Rule::requiredIf(in_array(3, $this->roles))],
             'responsible_groups' => ['nullable', 'array'],
             'private_products' => ['nullable', 'array'],
+            'status' => ['required'],
         ];
     }
 
