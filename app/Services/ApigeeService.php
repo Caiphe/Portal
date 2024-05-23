@@ -724,9 +724,8 @@ class ApigeeService
      *
      * @return     mixed         The response from the delete
      */
-    public static function deleteUser(User $user)
-    {
-        return self::destroyUser("developers/{$user->email}");
+    public static function deleteDeveloper(User $user){
+        return self::delete("developers/{$user->email}");
     }
 
     /**

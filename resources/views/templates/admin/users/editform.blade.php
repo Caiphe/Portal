@@ -2,6 +2,7 @@
 
 @include('templates.admin.users.form')
 
+
 <div class="apps-filter">
     <h2>Developer's apps</h2>
     <label>

@@ -72,6 +72,7 @@
     {{--User status--}}
     <div class="editor-field">
         <h2>User Status</h2>
+    
         <div class="user-status-block">
             <label class="editor-field-label">
                 <select name="action" id="action">
@@ -130,6 +131,23 @@
         </div>
     @endif
 
+    {{-- This is available only to super admin --}}
+    @if(!$deletionRequest)
+    <div class="editor-field">
+        <h2>User Deletion</h2>
+        <div class="main-delete-container">
+            <div class="users-deletion-data">
+                <div class="main-data-section">
+                    <div class="bold-text">Only super admins can delete users from the portal.</div>
+                    <p>Please request a deletion of this user if you would like delete this user.</p>
+                </div>
+                <div class="button-block">
+                    <button class="button red" id="request-user-deletion" type="button">Request user deletion</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
 </div>
 
 

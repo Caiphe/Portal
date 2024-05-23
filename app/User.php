@@ -330,4 +330,8 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->attributes['status'] === 'active' ? 'active' : 'inactive';
     }
+	public function OpcoRoleRequest()
+	{
+		return $this->hasMany(OpcoRoleRequest::class);
+	}
 }
