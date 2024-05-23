@@ -255,6 +255,8 @@ class UserController extends Controller
 		$adminUsers = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))->pluck('email')->toArray();
         $usersCountries = $user->countries->pluck('name')->toArray();
         $countries = $user->countries->pluck('name')->implode(', ');
+		$adminUserIds = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))->pluck('id')->toArray();
+
 
         $checkExists = UserDeletionRequest::where('user_email', $user->email)->first();
         if($checkExists){
@@ -267,6 +269,18 @@ class UserController extends Controller
             'user_email' => $user->email,
             'user_name' => $user->full_name,
         ]);
+
+
+        collect($adminUserIds)
+            ->filter(function($adminId) {
+                return $adminId !== auth()->user()->id;
+            })
+            ->each(function($adminId) use ($user) {
+                Notification::create([
+                    'user_id' => $adminId,
+                    'notification' => "A user deletion has been requested for <strong>{$user->full_name}</strong>. Please navigate to <a href='/admin/users/'>users</a>.",
+                ]);
+        });
 
         Mail::bcc($adminUsers)->send(new UserDeletionRequestMail($user, $usersCountries));
         return response()->json(['success' => true, 'code' => 200], 200);
