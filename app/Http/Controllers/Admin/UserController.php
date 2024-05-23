@@ -371,6 +371,32 @@ class UserController extends Controller
             ]);
         }
 
+        $usersCountries = $user->countries;
+        if($usersCountries){
+            $opcoIds = $usersCountries->load('opcoUser')->pluck('opcoUser')->flatten()->pluck('id')->unique()->values();
+
+            foreach($opcoIds as $opcoId){
+				if($opcoId !== $user->id){
+					Notification::create([
+						'user_id' => $opcoId,
+						'notification' => "<strong>{$user->full_name}</strong> has been deleted.",
+					]);
+				}
+			}
+
+            collect($opcoIds)
+            ->filter(function($opcoId) {
+                return $opcoId !== auth()->user()->id;
+            })
+            ->each(function($opcoId) use ($user) {
+                Notification::create([
+                    'user_id' => $opcoId,
+                    'notification' => "<strong>{$user->full_name}</strong> has been deleted.",
+                ]);
+            });
+
+        }
+
         $user->delete();
 
         return response()->json(['success' => true, 'code' => 200], 200);
