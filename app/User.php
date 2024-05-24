@@ -22,7 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['first_name', 'last_name', 'email', 'password', 'developer_id', 'email_verified_at', 'profile_picture', '2fa', 'recovery_codes'];
+	protected $fillable = ['first_name', 'last_name', 'email', 'password', 'developer_id', 'email_verified_at', 'profile_picture', '2fa', 'recovery_codes', 'status'];
 
 	/**
 	 * The attributes that should be hidden for arrays.
@@ -38,7 +38,8 @@ class User extends Authenticatable implements MustVerifyEmail
 	 */
 	protected $casts = [
 		'email_verified_at' => 'datetime',
-		'recovery_codes' => 'array'
+		'recovery_codes' => 'array',
+        'status' => 'string',
 	];
 
 	public function apps()
@@ -316,5 +317,21 @@ class User extends Authenticatable implements MustVerifyEmail
 	public function twoFaResetRequest()
 	{
 		return $this->hasMany(TwofaResetRequest::class);
+	}
+
+    /**
+     * This code defines an accessor function getUserStatusAttribute in the User model
+     * that returns the status as 'active' if the user's status attribute is 'active',
+     * otherwise it returns 'inactive'.
+     *
+     * @return string
+     */
+    public function getUserStatusAttribute()
+    {
+        return $this->attributes['status'] === 'active' ? 'active' : 'inactive';
+    }
+	public function OpcoRoleRequest()
+	{
+		return $this->hasMany(OpcoRoleRequest::class);
 	}
 }
