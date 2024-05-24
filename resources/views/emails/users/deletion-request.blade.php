@@ -13,8 +13,8 @@
 @if($countries) |Country                               |    | @foreach ($countries as $key => $country) {{ $country }} @if ($count > 1 && $key < $count - 1) , @endif @endforeach | @endif
 
 
-@component('mail::button', ['url' => route('admin.task.index')])
-Proceed to user profile
+@component('mail::button', ['url' => route('admin.user.edit', $user)])
+    Proceed to user profile
 @endcomponent
 
 Thanks,<br>
