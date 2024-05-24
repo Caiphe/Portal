@@ -201,7 +201,11 @@
         var appDeleteShowModalBtn = document.querySelectorAll('.app-delete-modal');
         var modalContainer = document.querySelector('.mdp-dialog-box');
 
-        document.querySelector('.cancel-btn').addEventListener('click', hideModal);
+        var cancelBtn = document.querySelector('.cancel-btn');
+        if(cancelBtn){
+            cancelBtn.addEventListener('click', hideModal);
+        }
+
         function hideModal() {
             modalContainer.classList.remove('show');
         }
@@ -363,7 +367,6 @@
                 OwnershipRequest.classList.add('hide');
             }
         }
-
 
         // Invits functionality
         var btnAcceptInvite = document.querySelector('.accept-team-invite');
