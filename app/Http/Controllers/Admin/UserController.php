@@ -179,7 +179,6 @@ class UserController extends Controller
         $locations = array_unique(explode(',', $productLocations));
         $countries = Country::whereIn('code', $locations)->orderBy('name')->get();
 
-
         return view('templates.admin.users.edit', [
             'selectedCountryFilter' => $countrySelectFilterCode,
             'countries' => $countries,
@@ -201,7 +200,7 @@ class UserController extends Controller
             'userAssignedProducts' => $user->assignedProducts->pluck('pid')->toArray(),
 			'user_twofa_reset_request' => $userTwoFaRequest,
 			'adminRoles' => array_unique(explode(',', $currentUser->getRolesListAttribute())),
-            'deletionRequest' => UserDeletionRequest::where('user_email', $user->email)->first()
+            'deletionRequest' => UserDeletionRequest::where('user_email', $user->email)->whereNull('approved_by')->first()
         ]);
     }
 
@@ -297,7 +296,6 @@ class UserController extends Controller
         $countries = $user->countries->pluck('name')->implode(', ');
 		$adminUserIds = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))->pluck('id')->toArray();
 
-
         $checkExists = UserDeletionRequest::where('user_email', $user->email)->first();
         if($checkExists){
             return response()->json(['success' => false, 'code' => 400], 400);
@@ -309,7 +307,6 @@ class UserController extends Controller
             'user_email' => $user->email,
             'user_name' => $user->full_name,
         ]);
-
 
         collect($adminUserIds)
             ->filter(function($adminId) {
@@ -415,15 +412,6 @@ class UserController extends Controller
         if($usersCountries){
             $opcoIds = $usersCountries->load('opcoUser')->pluck('opcoUser')->flatten()->pluck('id')->unique()->values();
 
-            foreach($opcoIds as $opcoId){
-				if($opcoId !== $user->id){
-					Notification::create([
-						'user_id' => $opcoId,
-						'notification' => "<strong>{$user->full_name}</strong> has been deleted.",
-					]);
-				}
-			}
-
             collect($opcoIds)
             ->filter(function($opcoId) {
                 return $opcoId !== auth()->user()->id;
@@ -431,10 +419,9 @@ class UserController extends Controller
             ->each(function($opcoId) use ($user) {
                 Notification::create([
                     'user_id' => $opcoId,
-                    'notification' => "<strong>{$user->full_name}</strong> has been deleted.",
+                    'notification' => "User <strong>{$user->full_name}</strong> has been deleted.",
                 ]);
             });
-
         }
 
         $user->delete();
