@@ -147,7 +147,7 @@
                 </div>
             </div>
             <div class="delete-warning">
-                @svg('full-warning') <span>This user has a pending delete request.</span>
+                <img src="/images/warning-red.svg"> <span>This user has a pending delete request.</span>
             </div>
         </div>
     </div>
