@@ -132,6 +132,27 @@
     @endif
 
     {{-- This is available only to super admin --}}
+    @if($deletionRequest && in_array('Admin', $adminRoles))
+    <div class="editor-field">
+        <h2>User Deletion</h2>
+        <div class="main-delete-container">
+            <div class="users-deletion-data">
+                <div class="main-data-section">
+                    <div class="bold-text">Please exercise caution when deleting users. </div>
+                    <p>Related user data such as teams and applications will be affected.</p>
+                </div>
+        
+                <div class="button-block">
+                    <button class="button red confirm-user-deletion" id="confirm-user-deletion" type="button">Delete user</button>
+                </div>
+            </div>
+            <div class="delete-warning">
+                <img src="/images/warning-red.svg"> <span>This user has a pending delete request.</span>
+            </div>
+        </div>
+    </div>
+    @endif
+
     @if(!$deletionRequest)
     <div class="editor-field">
         <h2>User Deletion</h2>
