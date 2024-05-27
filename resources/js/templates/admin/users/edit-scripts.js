@@ -225,9 +225,9 @@ var deleteUserActionBtn = document.getElementById('confirm-user-deletion');
 if(deleteUserActionBtn){
     deleteUserActionBtn.addEventListener('click', deleteUserActionFunc);
 }
+var userDeleteConfirmModal = document.querySelector('.user-deletion-action');
 
 function deleteUserActionFunc(){
-    var userDeleteConfirmModal = document.querySelector('.user-deletion-action');
     var userDeleteActionForm = document.querySelector('#confirm-user-deletion-action-form');
     userDeleteConfirmModal.classList.add('show');
     userDeleteActionForm.addEventListener('submit', deleteUserConfirm);
@@ -277,6 +277,7 @@ function deleteUserConfirm(ev){
         }
 
         removeLoading();
+        userDeleteConfirmModal.classList.remove('show');
     };
 }
 
@@ -325,7 +326,6 @@ function confirmStatusChange(ev) {
         } else if(status.statusCode === 404) {
             addAlert('error', 'Sorry, The user is not found in the organisation.');
         } else {
-            console.log(status.statusCode);
             // Handle non-200 responses
             addAlert('error', 'Sorry, there was a problem updating the user status. Please try again.');
         }
