@@ -64,8 +64,8 @@
 <x-dialog-box class="user-deletion-confirm" dialogTitle="Delete User">
     <div class="data-container">
         <span>
-            You have requested a deletion of {{ $user->email }}. <br/>  
-            A super admin will be notified
+            Are you sure you want to request a deletion of <strong> {{ $user->email }} </strong> ? <br/>  
+            A super admin will be notified.
         </span>
     </div>
 
@@ -73,7 +73,7 @@
         <form id="confirm-user-deletion-request-form" method="POST" action="{{ route('user.delete.request', $user) }}">
             @csrf
             <input type="hidden" name="user" value="{{ $user->id }}" />
-            <button type="submit" id="confirm-user-deletion-request-btn" class="btn primary">Okay</button>
+            <button type="submit" id="confirm-user-deletion-request-btn" class="btn primary">Confirm</button>
         </form>
     </div>
 </x-dialog-box>
@@ -81,7 +81,7 @@
 {{-- User Deletion action --}}
 <x-dialog-box class="user-deletion-action" dialogTitle="Delete User">
     <div class="data-container">
-        <p>Are you sure you want to remove this user?</p>
+        <p>Are you sure you want to remove this user ?</p>
         <span><strong>Important Information:</strong></span>
         <br/>
         <p>1. This user's applications will be transferred to the designated administrative contact.</p>
