@@ -4,7 +4,7 @@
 - {{ $message }}
 
 @component('mail::button', ['url' => route('admin.dashboard.index')])
-Go to the dashboard
+Proceed to the dashboard
 @endcomponent
 
 @endcomponent
