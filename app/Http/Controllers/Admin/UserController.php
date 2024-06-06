@@ -276,7 +276,6 @@ class UserController extends Controller
             'message' => 'User status has been updated to '.$data['action'],
             'logable_type' => 'App\User',
             'logable_id' => 'User Status',
-            'action' => 'update',
             'created_at' => now(),
             'updated_at' => now(),
         ];

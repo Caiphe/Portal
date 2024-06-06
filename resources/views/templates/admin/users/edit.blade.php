@@ -45,9 +45,8 @@
 {{-- Change user status modal --}}
 <x-dialog-box dialogTitle="Change user status" class="user-status-modal-container">
     <div class="two-note">
-        <p><strong>Are you sure you want to change this user's status?</strong></p>
-        <p>An active user can log into the portal and continue with functionality as normal.<br><br>
-        Inactive users are unable to log into the portal but no data in that users account is affected. All of the developers apps and teams will function as normal.<p>
+        <p><strong>Are you sure you want to change this user's status?</strong></p> 
+        <p>Inactive developers can still sign in to the developer portal and create apps; however, new application keys that are created won't be valid until this developer is set back to active.<p>
     </div>
 
     <div class="bottom-shadow-container button-container">
