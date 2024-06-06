@@ -83,8 +83,7 @@
         <p>Are you sure you want to remove this user ?</p>
         <span><strong>Important Information:</strong></span>
         <br/>
-        <p>1. This user's applications will be transferred to the designated administrative contact.</p>
-        <p>2.This user will be removed from all associated teams. If they hold a leadership position within any team, the relevant administrative contact will be appointed as their replacement.</p>
+        <p>Please note that this user will be completely removed from the portal.</p>
     </div>
 
     <div class="bottom-shadow-container">

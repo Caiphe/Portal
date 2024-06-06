@@ -70,6 +70,8 @@
     <button class="button outline blue save-button">Apply changes</button>
     </div>
     {{--User status--}}
+
+    @if(isset($user))
     <div class="editor-field">
         <h2>User Status</h2>
     
@@ -85,6 +87,8 @@
             </button>
         </div>
     </div>
+
+    @endif
 </div>
 
 
@@ -132,42 +136,44 @@
     @endif
 
     {{-- This is available only to super admin --}}
-    @if($deletionRequest && in_array('Admin', $adminRoles))
-    <div class="editor-field">
-        <h2>User Deletion</h2>
-        <div class="main-delete-container">
-            <div class="users-deletion-data">
-                <div class="main-data-section">
-                    <div class="bold-text">Please exercise caution when deleting users. </div>
-                    <p>Related user data such as teams and applications will be affected.</p>
+    @if(isset($user))
+        @if($deletionRequest && in_array('Admin', $adminRoles))
+        <div class="editor-field">
+            <h2>User Deletion</h2>
+            <div class="main-delete-container">
+                <div class="users-deletion-data">
+                    <div class="main-data-section">
+                        <div class="bold-text">Please exercise caution when deleting users. </div>
+                        <p>Related user data such as teams and applications will be affected.</p>
+                    </div>
+            
+                    <div class="button-block">
+                        <button class="button red confirm-user-deletion" id="confirm-user-deletion" type="button">Delete user</button>
+                    </div>
                 </div>
-        
-                <div class="button-block">
-                    <button class="button red confirm-user-deletion" id="confirm-user-deletion" type="button">Delete user</button>
+                <div class="delete-warning">
+                    <img src="/images/warning-red.svg"> <span>This user has a pending delete request.</span>
                 </div>
-            </div>
-            <div class="delete-warning">
-                <img src="/images/warning-red.svg"> <span>This user has a pending delete request.</span>
             </div>
         </div>
-    </div>
-    @endif
+        @endif
 
-    @if(!$deletionRequest)
-    <div class="editor-field">
-        <h2>User Deletion</h2>
-        <div class="main-delete-container">
-            <div class="users-deletion-data">
-                <div class="main-data-section">
-                    <div class="bold-text">Only super admins can delete users from the portal.</div>
-                    <p>Please request a deletion of this user if you would like delete this user.</p>
-                </div>
-                <div class="button-block">
-                    <button class="button red" id="request-user-deletion" type="button">Request user deletion</button>
+        @if(!$deletionRequest)
+        <div class="editor-field">
+            <h2>User Deletion</h2>
+            <div class="main-delete-container">
+                <div class="users-deletion-data">
+                    <div class="main-data-section">
+                        <div class="bold-text">Only super admins can delete users from the portal.</div>
+                        <p>Please request a deletion of this user if you would like delete this user.</p>
+                    </div>
+                    <div class="button-block">
+                        <button class="button red" id="request-user-deletion" type="button">Request user deletion</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+        @endif
     @endif
 </div>
 
