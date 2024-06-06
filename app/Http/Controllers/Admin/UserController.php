@@ -276,7 +276,6 @@ class UserController extends Controller
             'message' => 'User status has been updated to '.$data['action'],
             'logable_type' => 'App\User',
             'logable_id' => 'User Status',
-            'action' => 'update',
             'created_at' => now(),
             'updated_at' => now(),
         ];
@@ -296,7 +295,7 @@ class UserController extends Controller
         $countries = $user->countries->pluck('name')->implode(', ');
 		$adminUserIds = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))->pluck('id')->toArray();
 
-        $checkExists = UserDeletionRequest::where('user_email', $user->email)->first();
+        $checkExists = UserDeletionRequest::where('user_email', $user->email)->whereNull('approved_by')->first();
         if($checkExists){
             return response()->json(['success' => false, 'code' => 400], 400);
         }
