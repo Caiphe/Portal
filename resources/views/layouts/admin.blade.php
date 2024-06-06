@@ -28,6 +28,7 @@
                 <li @class(['menu-pages', 'active' => (Request::is('admin/pages') || Request::is('admin/pages/*'))])><a href="{{ route('admin.page.index') }}">@svg('pages') Pages</a></li>
                 <li @class(['menu-categories', 'active' => (Request::is('admin/categories') || Request::is('admin/categories/*'))])><a href="{{ route('admin.category.index') }}">@svg('categories') Categories</a></li>
                 <li @class(['menu-documentation', 'active' => (Request::is('admin/docs') || Request::is('admin/docs/*'))])><a href="{{ route('admin.doc.index') }}">@svg('documentation') Documentation</a></li>
+                <li @class(['menu-documentation', 'active' => (Request::is('admin/settings/maintenance') || Request::is('admin/settings/maintenance/*'))])><a href="{{ route('admin.setting.maintenance') }}">@svg('setting') Settings</a></li>
             @endcan
 
         </ul>

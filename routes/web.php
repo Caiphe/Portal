@@ -72,7 +72,6 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 	Route::post('notifications/clear-all', 'NotificationController@clearAll')->name('notification.clear.all');
 	Route::get('notifications/fetch-all', 'NotificationController@fetchNotification')->name('notification.fetch.all');
 	Route::get('notifications/count', 'NotificationController@notificationsCount')->name('notifications.count');
-
 	// Opco admin role request
 	Route::post('/opco-admin-role-request/store', 'OpcoRoleRequestController@store')->middleware(['can:request-opco-admin-role'])->name('opco-admin-role.store');
 });
@@ -95,6 +94,10 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 
 	// Tasks Panel
 	Route::get('/tasks', 'TaskController@index')->name('admin.task.index');
+
+	// Maintenance banner
+	Route::get('/settings/maintenance', 'MaintenanceController@create')->middleware('can:administer-content')->name('admin.setting.maintenance');
+	Route::post('/settings/maintenance-create', 'MaintenanceController@store')->middleware('can:administer-content')->name('admin.maintenance.store');
 
 	// Products
 	Route::get('products', 'ProductController@index')->middleware('can:administer-products')->name('admin.product.index');

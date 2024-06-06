@@ -6,7 +6,7 @@ use App\Notification;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use App\Maintenance;
 
 class NotificationController extends Controller
 {
