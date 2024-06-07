@@ -314,7 +314,7 @@ class UserController extends Controller
             ->each(function($adminId) use ($user) {
                 Notification::create([
                     'user_id' => $adminId,
-                    'notification' => "A user deletion has been requested for <strong>{$user->full_name}</strong>. Please navigate to <a href='/admin/users/'>users</a>.",
+                    'notification' => "A user deletion has been requested for <strong>{$user->email}</strong>. Please navigate to <a href='/admin/users/'>users</a> and search for the user.",
                 ]);
         });
 
