@@ -27,7 +27,7 @@ class AlterUserDeletionRequestsTableChangeColumnUserEmail extends Migration
     public function down()
     {
         Schema::table('user_deletion_requests', function (Blueprint $table) {
-            $table->dropColumn('user_email');
+            $table->dropColumn('user_email')->change();
         });
     }
 }

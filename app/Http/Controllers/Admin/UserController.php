@@ -399,7 +399,7 @@ class UserController extends Controller
             $user->notifications()->forceDelete();
         }
 
-        $deletionRequest = UserDeletionRequest::where('user_email', $user->email)->first();
+        $deletionRequest = UserDeletionRequest::where('user_email', $user->email)->latest()->first();
         if(!isset($deletionRequest->approved_by)){
             $deletionRequest->update([
                 'approved_by' => auth()->user()->full_name, 
