@@ -1,20 +1,29 @@
 var notificationBanner = document.getElementById('notification-banner');
+var closeNotificationBtn = document.getElementById('close-banner-btn');
 
 window.addEventListener('load', hideNotificationBanner);
 function hideNotificationBanner(){
     var notificationBannerData = localStorage.getItem('notification-banner-expiry');
     var now = new Date();
 
-    if(notificationBannerData && now.getTime() < notificationBannerData){
-        notificationBanner.classList.add('hide');
+    if(!closeNotificationBtn){
+        console.log('No close button found');
+        localStorage.removeItem('notification-banner-expiry');
         return;
     }
 
-    localStorage.removeItem(notificationBannerData);
-    notificationBanner.classList.remove('hide');
+    if(closeNotificationBtn && notificationBannerData && now.getTime() < notificationBannerData){
+        notificationBanner.classList.add('hide');
+        return;
+    } 
+    
+    if(notificationBannerData && now.getTime() > notificationBannerData){
+        localStorage.removeItem('notification-banner-expiry');
+        return;
+    }
+
 }
 
-var closeNotificationBtn = document.getElementById('close-banner-btn');
 if(closeNotificationBtn){
     closeNotificationBtn.addEventListener('click', closeBanner);
 }
