@@ -276,7 +276,6 @@ class UserController extends Controller
             'message' => 'User status has been updated to '.$data['action'],
             'logable_type' => 'App\User',
             'logable_id' => 'User Status',
-            'action' => 'update',
             'created_at' => now(),
             'updated_at' => now(),
         ];
@@ -296,7 +295,7 @@ class UserController extends Controller
         $countries = $user->countries->pluck('name')->implode(', ');
 		$adminUserIds = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))->pluck('id')->toArray();
 
-        $checkExists = UserDeletionRequest::where('user_email', $user->email)->first();
+        $checkExists = UserDeletionRequest::where('user_email', $user->email)->whereNull('approved_by')->first();
         if($checkExists){
             return response()->json(['success' => false, 'code' => 400], 400);
         }
@@ -315,7 +314,7 @@ class UserController extends Controller
             ->each(function($adminId) use ($user) {
                 Notification::create([
                     'user_id' => $adminId,
-                    'notification' => "A user deletion has been requested for <strong>{$user->full_name}</strong>. Please navigate to <a href='/admin/users/'>users</a>.",
+                    'notification' => "A user deletion has been requested for <strong>{$user->email}</strong>. Please navigate to <a href='/admin/users/'>users</a> and search for the user.",
                 ]);
         });
 
@@ -400,7 +399,7 @@ class UserController extends Controller
             $user->notifications()->forceDelete();
         }
 
-        $deletionRequest = UserDeletionRequest::where('user_email', $user->email)->first();
+        $deletionRequest = UserDeletionRequest::where('user_email', $user->email)->latest()->first();
         if(!isset($deletionRequest->approved_by)){
             $deletionRequest->update([
                 'approved_by' => auth()->user()->full_name, 

@@ -262,7 +262,7 @@ function deleteUserConfirm(ev){
                 window.location.href = '/admin/users';
             });
         } else if(xhr.status === 400){
-            addAlert('error', 'User could not be deleted. Please contact the admin');
+            addAlert('error', 'The user has active apps/teams, please remove them from APIGEE and try again.');
         }else {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
