@@ -427,14 +427,14 @@ class AppController extends Controller
                 foreach($appUsers as $user){
                     Notification::create([
                         'user_id' => $user,
-                        'notification' => "Your team's App <strong> {$previewName} </strong> has been updated to <strong> {$app->display_name} </strong> please navigate to your <a href='/apps'>apps</a> to view the changes",
+                        'notification' => "Your team's App <strong> {$previewName} </strong> has been updated to <strong> {$app->display_name} </strong>. Please navigate to your <a href='/teams'>team</a> for more info",
                     ]);
                 }
             }else{
                 foreach($appUsers as $user){
                     Notification::create([
                         'user_id' => $user,
-                        'notification' => "Your team's App <strong> {$app->display_name} </strong> has been updated please navigate to your <a href='/apps'>apps</a> to view the changes",
+                        'notification' => "Your team's App <strong> {$app->display_name} </strong> has been updated. Please navigate to your <a href='/teams'>team</a> for more info",
                     ]);
                 }
             }

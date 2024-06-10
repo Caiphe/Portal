@@ -81,11 +81,13 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa', 'can:view-admin'])->group(function () {
 	Route::get('/', 'HomeController')->name('admin.home');
 
-
 	// Tasks
 	Route::get('/tasks', 'TaskController@index')->middleware(['auth', 'verified', '2fa', 'can:administer-task-panel'])->name('admin.task.index');
 	Route::post('user/{user}/2fa/reset-confirm', 'UserController@resetTwofaConfirm')->name('2fa.reset.confirm');
 
+	// User deletion request & Action
+	Route::post('user/{user}/delete-request', 'UserController@requestUserDeletion')->name('user.delete.request');
+	Route::post('user/{user}/delete-action', 'UserController@delectionAction')->middleware('can:administer-content')->name('user.delete.action');
 
 	// Opco role status
 	Route::post('/opco-role-request/{id}/approve', 'OpcoRoleRequestActionController@approve')->name('admin.opco.approve');
@@ -150,6 +152,7 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 	Route::get('users', 'UserController@index')->middleware('can:administer-users')->name('admin.user.index');
 	Route::get('users/{user}/edit', 'UserController@edit')->middleware('can:administer-users')->name('admin.user.edit');
 	Route::put('users/{user}/update', 'UserController@update')->middleware('can:administer-users')->name('admin.user.update');
+	Route::post('users/{user}/change-status', 'UserController@changeStatus')->middleware('can:administer-users')->name('admin.user.status');
 	Route::get('users/create', 'UserController@create')->middleware('can:administer-users')->name('admin.user.create');
 	Route::post('users/store', 'UserController@store')->middleware('can:administer-users')->name('admin.user.store');
 });

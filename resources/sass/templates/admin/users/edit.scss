@@ -303,3 +303,102 @@ button.show-password {
     color: #333;
     padding: 20px;
 }
+
+.user-status-block {
+    padding-bottom: 20px;
+    box-sizing: border-box;
+    width: 98%;
+
+    @media(max-width: 768px){
+        width: 92%;
+    }
+
+    .editor-field-label{
+        box-sizing: border-box;
+
+        select{
+            margin-top: 20px;
+            max-width: 95%;
+            display: block;
+        }
+    }
+
+    #user-status-btn {
+       margin-left: 20px;
+    }
+}
+
+.main-delete-container{
+    padding: 25px;
+    width: 100%;
+
+    .delete-warning{
+        width: 100%;
+        border: solid 1px #FF1A1A;
+        color: variables.$red;
+        font-size: 15px;
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 20px;
+        margin-top: 15px;
+        background-color: #bb1e502e; 
+        display: flex;
+
+        svg{
+            margin-top: 5px;
+        }
+
+        span{
+            margin-left: 10px;
+            color: #FF1A1A;
+        }  
+    }
+
+    .users-deletion-data{
+        position: relative;
+        width: 100%;
+    
+        @media(max-width: 768px){
+            flex-direction: column;
+        }
+    
+        .main-data-section{
+            width: 100%;
+        
+    
+            .bold-text{
+                font-family: variables.$MTN-Bold;
+                font-size: 16px;
+            }
+    
+            p{
+                font-size: 14px;
+                margin-top: 1px;
+            }
+        }
+    
+        .button-block{
+            width: 100%;
+            margin-top: 15px;
+            margin-bottom: 20px;
+    
+            button{
+                background-color: variables.$red;
+                border: none;
+                color: #fff;
+                padding: 7px;
+                width: 203px;
+    
+                &.gray{
+                    background-color: #E6E6E6;
+                    color: #969696;
+                    pointer-events: none;
+                }
+    
+                &.confirm-user-deletion{
+                    width: 135px;
+                }
+            }
+        }
+    }
+}

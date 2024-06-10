@@ -2,19 +2,27 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Log;
+use App\App;
 use App\Role;
+use App\Services\ApigeeService;
 use App\User;
 use App\Country;
 use App\Product;
 use App\RoleUser;
 use App\Notification;
 use App\TwofaResetRequest;
+use Illuminate\Http\JsonResponse;
+use App\UserDeletionRequest;
 use Illuminate\Http\Request;
+use Mpociot\Teamwork\TeamInvite;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\UserDeletionRequestMail;
 use App\Mail\TwoFaResetConfirmationMail;
 use App\Http\Requests\Admin\UserStoreRequest;
 use App\Http\Requests\Admin\UserUpdateRequest;
+use App\Http\Requests\UserStatusRequest;
 
 class UserController extends Controller
 {
@@ -79,7 +87,7 @@ class UserController extends Controller
                 ->header('Vary', 'X-Requested-With')
                 ->header('Content-Type', 'text/html');
         }
-        
+
         return view('templates.admin.users.index', [
             'users' => $users->paginate($numberPerPage),
             'order' => $order,
@@ -161,7 +169,6 @@ class UserController extends Controller
             $order = ['asc' => 'desc', 'desc' => 'asc'][$request->get('order', 'desc')] ?? 'desc';
         }
 
-
         $productLocations = Product::isPublic()
             ->WhereNotNull('locations')
             ->Where('locations', '!=', 'all')
@@ -171,7 +178,6 @@ class UserController extends Controller
 
         $locations = array_unique(explode(',', $productLocations));
         $countries = Country::whereIn('code', $locations)->orderBy('name')->get();
-
 
         return view('templates.admin.users.edit', [
             'selectedCountryFilter' => $countrySelectFilterCode,
@@ -192,15 +198,18 @@ class UserController extends Controller
             'userApps' => $user->getApps($countrySelectFilterCode, $order, $request->get('sort', 'name')),
             'privateProducts' => $privateProducts,
             'userAssignedProducts' => $user->assignedProducts->pluck('pid')->toArray(),
-			'user_twofa_reset_request' => $userTwoFaRequest
+			'user_twofa_reset_request' => $userTwoFaRequest,
+			'adminRoles' => array_unique(explode(',', $currentUser->getRolesListAttribute())),
+            'deletionRequest' => UserDeletionRequest::where('user_email', $user->email)->whereNull('approved_by')->first()
         ]);
     }
 
     public function update(User $user, UserUpdateRequest $request)
     {
         $data = $request->validated();
+
         $user->update($data);
-        
+
         if($request->user()->hasRole('admin'))
         {
             $user->roles()->sync($data['roles'] ?? []);
@@ -228,7 +237,7 @@ class UserController extends Controller
 
     public function resetTwofaConfirm(User $user)
 	{
-		$admin = auth()->user()->first_name . ' '. auth()->user()->last_name;
+        $admin = auth()->user()->full_name;
         $userRequest = TwofaResetRequest::where(['user_id' => $user->id,'approved_by' => null])->first();
         $userRequest->update(['approved_by' => $admin]);
 		$user->update(['2fa'=> null]);
@@ -237,9 +246,185 @@ class UserController extends Controller
             'user_id' => $user->id,
             'notification' => "Your 2fa reset request has been approved. Please navigate to your <a href='/profile#twofa'>Profile</a> and set up your 2fa. ",
         ]);
-        
+
 		Mail::to($user->email)->send( new TwoFaResetConfirmationMail());
 
         return response()->json(['success' => true, 'code' => 200], 200);
 	}
+
+    /**
+     * @param User $user
+     * @param UserStatusRequest $request
+     * @return JsonResponse
+     */
+    public function changeStatus(User $user, UserStatusRequest $request)
+    {
+        $data = $request->validated();
+
+        $results = ApigeeService::setDeveloperStatus($user->email, $data['action']);
+
+        if ($results !== 204) {
+            return response()->json([
+                'statusCode' => $results
+            ]);
+        }
+
+        $user->update(['status' => $data['action']]);
+
+        $logs = [
+            'user_id' => $user->id,
+            'message' => 'User status has been updated to '.$data['action'],
+            'logable_type' => 'App\User',
+            'logable_id' => 'User Status',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+
+        Log::insert($logs);
+
+        return response()->json([
+            'statusCode' => $results
+        ]);
+    }
+
+    public function requestUserDeletion(User $user)
+    {
+        $requestedBy = auth()->user()->full_name;
+		$adminUsers = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))->pluck('email')->toArray();
+        $usersCountries = $user->countries->pluck('name')->toArray();
+        $countries = $user->countries->pluck('name')->implode(', ');
+		$adminUserIds = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))->pluck('id')->toArray();
+
+        $checkExists = UserDeletionRequest::where('user_email', $user->email)->whereNull('approved_by')->first();
+        if($checkExists){
+            return response()->json(['success' => false, 'code' => 400], 400);
+        }
+
+        UserDeletionRequest::create([
+            'countries' => $countries,
+            'requested_by' => $requestedBy,
+            'user_email' => $user->email,
+            'user_name' => $user->full_name,
+        ]);
+
+        collect($adminUserIds)
+            ->filter(function($adminId) {
+                return $adminId !== auth()->user()->id;
+            })
+            ->each(function($adminId) use ($user) {
+                Notification::create([
+                    'user_id' => $adminId,
+                    'notification' => "A user deletion has been requested for <strong>{$user->email}</strong>. Please navigate to <a href='/admin/users/'>users</a> and search for the user.",
+                ]);
+        });
+
+        Mail::bcc($adminUsers)->send(new UserDeletionRequestMail($user, $usersCountries));
+        return response()->json(['success' => true, 'code' => 200], 200);
+    }
+
+    public function delectionAction(User $user)
+    {    
+        $deleted = ApigeeService::deleteDeveloper($user);
+
+        if($deleted->status() === 400){
+            return response()->json(['success' => false, 'code' => 400], 400);
+        }
+
+        // Detach user's roles
+        if($user->roles){
+            $user->roles()->detach();
+        }
+
+        // Detach user's countries
+        if($user->countries){
+            $user->countries()->detach();
+        }
+
+        if($user->responsibleCountries){
+            $user->responsibleCountries()->detach();
+        }
+
+        // Detach the user from the private products
+        if($user->assignedProducts){
+            $user->assignedProducts()->detach();
+        }
+
+        // Delete user's apps
+        if($user->apps){
+            $user->apps()->delete();
+        }
+
+        // Delete users authentication logs
+        if($user->authentications){
+            $user->authentications()->delete();
+        }
+
+        if($user->twoFaResetRequest){
+            $user->twoFaResetRequest()->delete();
+        }
+
+        if($user->OpcoRoleRequest){
+            $user->OpcoRoleRequest()->delete();
+        }
+
+        // Delete users teams / and delete apps associated with the team
+        if($user->team){
+            $user->team()->detach();
+
+            foreach($user->team as $team){
+                // Delete team apps
+                $appNamesToDelete = App::where('team_id', $team->id)->pluck('name')->toArray();
+                if($appNamesToDelete) {
+                    App::whereIn('name', $appNamesToDelete)->delete();
+                }
+
+                // Delete team invites if any
+                $teamsInvites = TeamInvite::where('team_id', $team->id)->get();
+                if($teamsInvites){
+                    $teamsInvites->each->delete();
+                }
+
+                // removes members from the team
+                $teamMembers = $team->users->pluck('id')->toArray();
+                if($teamMembers){
+                    $team->users()->detach($teamMembers);
+                }
+
+                $team->delete();
+            }
+        }
+
+        // delete users notification
+        if($user->notifications){
+            $user->notifications()->forceDelete();
+        }
+
+        $deletionRequest = UserDeletionRequest::where('user_email', $user->email)->latest()->first();
+        if(!isset($deletionRequest->approved_by)){
+            $deletionRequest->update([
+                'approved_by' => auth()->user()->full_name, 
+                'approved_at' => now()
+            ]);
+        }
+
+        $usersCountries = $user->countries;
+        if($usersCountries){
+            $opcoIds = $usersCountries->load('opcoUser')->pluck('opcoUser')->flatten()->pluck('id')->unique()->values();
+
+            collect($opcoIds)
+            ->filter(function($opcoId) {
+                return $opcoId !== auth()->user()->id;
+            })
+            ->each(function($opcoId) use ($user) {
+                Notification::create([
+                    'user_id' => $opcoId,
+                    'notification' => "User <strong>{$user->full_name}</strong> has been deleted.",
+                ]);
+            });
+        }
+
+        $user->delete();
+
+        return response()->json(['success' => true, 'code' => 200], 200);
+    }
 }

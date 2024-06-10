@@ -40,21 +40,21 @@
         var spanRoles = document.getElementById('roles-tags').querySelectorAll('span');
         var spanCountry = document.getElementById('responsible_countries-tags').querySelectorAll('span');
 
-        if(spanRoles.length < 1){
+        if (spanRoles.length < 1) {
             addAlert('warning', 'Please assign at least one role to this user.');
             e.preventDefault();
             return;
-        } 
+        }
 
-        for(var i = 0; i < spanRoles.length; i++){
-            if(spanRoles[i].innerHTML === 'Opco' && spanCountry.length < 1){
+        for (var i = 0; i < spanRoles.length; i++) {
+            if (spanRoles[i].innerHTML === 'Opco' && spanCountry.length < 1) {
                 addAlert('warning', 'Please select at least one country this Opco admin is responsible for.');
                 e.preventDefault();
                 return;
             }
         }
 
-        if(spanCountry.length !== 0) return;
+        if (spanCountry.length !== 0) return;
 
         if ((passwordEl.value !== "" || confirmEl.value !== "") && passwordScore !== 6) {
             addAlert('error', 'Please make sure your password is correct.');
@@ -81,25 +81,25 @@ var btnSubmit = document.querySelectorAll('.save-button');
 var roleError = document.querySelector('.role-error');
 
 
-if(roleTags){
+if (roleTags) {
     var adminDialog = document.querySelector('.admin-removal-confirm');
     roleTags.addEventListener('click', checkAdminRemoved);
-    
-    function checkAdminRemoved(event){
-        if(event.target.dataset.index !== undefined && event.target.dataset.index !== '1') return;
+
+    function checkAdminRemoved(event) {
+        if (event.target.dataset.index !== undefined && event.target.dataset.index !== '1') return;
         adminDialog.classList.add('show');
-        document.querySelector('.admin-removal-confirm').addEventListener('dialog-closed', adminRestore, {once:true});
+        document.querySelector('.admin-removal-confirm').addEventListener('dialog-closed', adminRestore, {once: true});
     }
 }
 
-function adminRestore(e){
+function adminRestore(e) {
     addTag('1', document.getElementById('roles-select'));
-    for(var i = 0; i < btnSubmit.length; i++) {
+    for (var i = 0; i < btnSubmit.length; i++) {
         btnSubmit[i].classList.remove('non-active');
     }
 }
 
-function closeAdminRestore(){
+function closeAdminRestore() {
     adminDialog.classList.remove('show');
 }
 
@@ -117,7 +117,7 @@ function showConfirmTwoAF() {
     document.getElementById('confirm-twofa-form').addEventListener('submit', twoFaResetConfirmation);
 }
 
-function twoFaResetConfirmation(ev){
+function twoFaResetConfirmation(ev) {
     ev.preventDefault();
     var form = this.elements;
     var _token = form['_token'].value;
@@ -125,7 +125,7 @@ function twoFaResetConfirmation(ev){
     var fullName = document.querySelector('.header-username').innerHTML;
     var url = this.action;
 
-    var data ={
+    var data = {
         'user': user,
         '_token': _token
     }
@@ -160,6 +160,177 @@ function twoFaResetConfirmation(ev){
             addAlert('error', result.message || 'Sorry there was a problem removing team. Please try again.');
         }
 
+        removeLoading();
+    };
+}
+
+var requestDeletionBtn = document.getElementById('request-user-deletion');
+if(requestDeletionBtn){
+    requestDeletionBtn.addEventListener('click', requestDeletionFunc);
+
+    function requestDeletionFunc(){
+        var userDeleteModal = document.querySelector('.user-deletion-confirm');
+        var userDeleteConfirmForm = document.querySelector('#confirm-user-deletion-request-form');
+        userDeleteModal.classList.add('show');
+        userDeleteConfirmForm.addEventListener('submit', requestDeletionConfirmation);
+    }
+
+    function requestDeletionConfirmation(ev){
+        ev.preventDefault();
+        var form = this.elements;
+        var _token = form['_token'].value;
+        var user = form['user'].value;
+        var url = this.action;
+
+        var data ={
+            'user': user,
+            '_token': _token
+        }
+
+        var xhr = new XMLHttpRequest();
+        addLoading('Sending user deletion request...');
+
+        xhr.open('POST', url);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.setRequestHeader("X-CSRF-TOKEN", _token);
+        xhr.send(JSON.stringify(data));
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                addAlert('info', [`An admin has been notified of your deletion request.`], function () {
+                    location. reload();
+                });
+            } else if(xhr.status === 400){
+                addAlert('error', 'User deletion request already exists.');
+            }else {
+                var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+                if (result.errors) {
+                    result.message = [];
+                    for (var error in result.errors) {
+                        result.message.push(result.errors[error]);
+                    }
+                }
+
+                addAlert('error', result.message || 'Sorry there was a problem removing team. Please try again.');
+            }
+
+            removeLoading();
+        };
+    }
+}
+
+var deleteUserActionBtn = document.getElementById('confirm-user-deletion');
+if(deleteUserActionBtn){
+    deleteUserActionBtn.addEventListener('click', deleteUserActionFunc);
+}
+var userDeleteConfirmModal = document.querySelector('.user-deletion-action');
+
+function deleteUserActionFunc(){
+    var userDeleteActionForm = document.querySelector('#confirm-user-deletion-action-form');
+    userDeleteConfirmModal.classList.add('show');
+    userDeleteActionForm.addEventListener('submit', deleteUserConfirm);
+}
+
+function deleteUserConfirm(ev){
+    ev.preventDefault();
+
+    var form = this.elements;
+    var _token = form['_token'].value;
+    var user = form['user'].value;
+    var url = this.action;
+    var userEmail = form['user_email'].value;
+
+    var data ={
+        'user': user,
+        '_token': _token
+    }
+
+    var xhr = new XMLHttpRequest();
+    addLoading('Deleting the user...');
+
+    xhr.open('POST', url);
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.setRequestHeader("X-CSRF-TOKEN", _token);
+    xhr.send(JSON.stringify(data));
+
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            addAlert('warning', [`${userEmail} has been deleted.`], function () {
+                window.location.href = '/admin/users';
+            });
+        } else if(xhr.status === 400){
+            addAlert('error', 'The user has active apps/teams, please remove them from APIGEE and try again.');
+        }else {
+            var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+            if (result.errors) {
+                result.message = [];
+                for (var error in result.errors) {
+                    result.message.push(result.errors[error]);
+                }
+            }
+
+            addAlert('error', result.message || 'Sorry there was a problem removing team. Please try again.');
+        }
+
+        removeLoading();
+        userDeleteConfirmModal.classList.remove('show');
+    };
+}
+
+
+document.querySelector('#user-status-btn').addEventListener('click', showConfirmStatusChange);
+var statusModal = document.querySelector('.user-status-modal-container');
+
+function showConfirmStatusChange() {
+    statusModal.classList.add('show');
+    document.getElementById('change-user-status-form').addEventListener('submit', confirmStatusChange);
+}
+
+function confirmStatusChange(ev) {
+    ev.preventDefault();
+    var action = document.querySelector('#action').value;
+
+    var form = this.elements;
+    var _token = form['_token'].value;
+    var user = form['user'].value;
+    var url = this.action;
+
+    var data = {
+        'user': user,
+        'action': action,
+        '_token': _token
+    }
+
+    var xhr = new XMLHttpRequest();
+
+    addLoading('Changing users status...');
+
+    xhr.open('POST', url);
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.setRequestHeader("X-CSRF-TOKEN", _token);
+
+    xhr.send(JSON.stringify(data));
+
+    xhr.onload = function () {
+        // Parse the JSON response
+        var status = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
+        // Check the status code of the response
+        if (status.statusCode === 204) {
+            addAlert('success', `User status updated successfully.`);
+        } else if(status.statusCode === 404) {
+            addAlert('error', 'Sorry, The user is not found in the organisation.');
+        } else {
+            // Handle non-200 responses
+            addAlert('error', 'Sorry, there was a problem updating the user status. Please try again.');
+        }
+        // Remove the loading indicator
+        statusModal.classList.remove('show');
         removeLoading();
     };
 }
