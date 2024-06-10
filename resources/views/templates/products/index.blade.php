@@ -52,7 +52,12 @@
 @endsection
 
 @section('banner')
-    <div id="banner"></div>
+    <div id="banner">
+        <div class="banner-content">
+            <h1>{{ $content[0]['title'] }}</h1>
+            {!! $content[0]['body'] !!}
+        </div>
+    </div>
 @endsection
 
 @section('content')
