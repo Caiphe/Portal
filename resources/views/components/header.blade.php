@@ -1,4 +1,4 @@
-<header>
+<header class="parent-header">
     <x-banner  />
     
     <div id="header">

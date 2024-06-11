@@ -334,3 +334,50 @@ function confirmStatusChange(ev) {
         removeLoading();
     };
 }
+
+//User Verification
+document.querySelector('#user-verify-btn').addEventListener('click', showUserVerificationModal);
+var verifyUserModal = document.querySelector('.verify-user-modal');
+
+function showUserVerificationModal() {
+    verifyUserModal.classList.add('show');
+    document.getElementById('verify-user-form').addEventListener('submit', verifyUserEmail);
+}
+
+function verifyUserEmail(ev) {
+    ev.preventDefault();
+    var form = this.elements;
+    var _token = form['_token'].value;
+    var verify_email_url = this.action;
+
+    var data = {
+        'action': verify_email_url,
+        '_token': _token
+    }
+    var xhr = new XMLHttpRequest();
+    addLoading('Verifying user\'s email...');
+    xhr.open('PUT', verify_email_url);
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.setRequestHeader("X-CSRF-TOKEN", _token);
+    xhr.send(JSON.stringify(data));
+    xhr.onload = function () {
+        var status = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+        // Check the status code of the response
+        if (status.code === 200) {
+            addAlert('success', 'User verified successfully.', function(){
+                location.reload();
+            });
+        } else {
+            addAlert('error', 'Sorry, the user is not found.');
+        }
+
+        verifyUserModal.classList.remove('show');
+        removeLoading();
+    };
+    xhr.onerror = function () {
+        addAlert('error', 'Request failed. Please check your network connection and try again.');
+        verifyUserModal.classList.remove('show');
+        removeLoading();
+    };
+}

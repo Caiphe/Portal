@@ -14,8 +14,8 @@
         @csrf
 
         <div class="editor-field">
-            <h2>Maintenace banner</h2>
-    
+            <h2>Maintenance banner</h2>
+            <p class="editor-field-label">Please disable previous maintenance notification before creating a new one.</p>
             <div class="editor-field-label" id="radio-base-container">
                 <h3>Enable the maintenance banner?</h3>
                 <div class="radio-container">
