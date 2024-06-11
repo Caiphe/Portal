@@ -7,7 +7,6 @@ function hideNotificationBanner(){
     var now = new Date();
 
     if(!closeNotificationBtn){
-        console.log('No close button found');
         localStorage.removeItem('notification-banner-expiry');
         return;
     }
@@ -15,13 +14,12 @@ function hideNotificationBanner(){
     if(closeNotificationBtn && notificationBannerData && now.getTime() < notificationBannerData){
         notificationBanner.classList.add('hide');
         return;
-    } 
+    }
     
     if(notificationBannerData && now.getTime() > notificationBannerData){
         localStorage.removeItem('notification-banner-expiry');
         return;
     }
-
 }
 
 if(closeNotificationBtn){

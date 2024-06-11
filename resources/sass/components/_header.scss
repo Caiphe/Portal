@@ -1,11 +1,11 @@
 @use "../variables";
 
 
-.animated {
-    -webkit-animation-duration: 0.5s;
-    animation-duration: 0.5s;
-    -webkit-animation-fill-mode: both;
-    animation-fill-mode: both;
+.parent-header{
+    @media(max-width: 966px){
+        position: fixed;
+        z-index: 3;
+    }
 }
 
 .notification-banner{
@@ -25,6 +25,7 @@
 
     @media(max-width: 768px){
         padding: 20px 20px;
+        position: relative;
         flex-direction: column;
     }
 

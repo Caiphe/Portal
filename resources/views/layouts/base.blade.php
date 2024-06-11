@@ -30,6 +30,14 @@
     <meta name="twitter:image:alt" content="MTN Developer Portal">
 </head>
 <body class="@yield('body-class')">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-3TZ4G43S"
+            height="0" width="0" style="display:none;visibility:hidden">
+        </iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    
     @yield('body')
     @stack("scripts")
 </body>
