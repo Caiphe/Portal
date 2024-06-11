@@ -8,7 +8,7 @@
 
 @section('sidebar')
     <div class="filter-sidebar">
-        <input type="text" name="filter-text" id="filter-text" class="filter-text" placeholder="Search" autofocus autocomplete="off" />
+        <h2>Filters</h2>
 
         <h3>Categories</h3>
         @foreach ($productCategories as $slug => $title)
@@ -17,6 +17,7 @@
                 <label class="filter-label" for="category-{{ $slug }}">{{ $title }}</label>
             </div>
         @endforeach
+
         @if($hasPrivateProduct || $hasInternalProduct)
             <h3>Access</h3>
             @if($hasInternalProduct)
@@ -32,6 +33,7 @@
                 </div>
             @endif
         @endif
+        
         <div class="country-filter">
             <h3>Country</h3>
             <x-multiselect id="filter-country" name="filter-country" label="Select country" :options="$countries" />
@@ -55,20 +57,22 @@
     <div id="banner">
         <div class="banner-content">
             <h1>{{ $content[0]['title'] }}</h1>
-            {!! $content[0]['body'] !!}
+            <p>Browse <strong>{{ $products->count() }}</strong> products across <strong>{{ $countries->count() }}</strong> countries </p>
         </div>
     </div>
 @endsection
 
 @section('content')
+{{-- 
     <div class="header-block">
         <h1>{{ $content[0]['title']}} <span class="available-products-count">({{ $products->count() }} available)</span></h1>
         {!! $content[0]['body'] !!}
         @svg('people', null, 'images/illustrations')
     </div>
+ --}}
 
     <div class="content">
-        <div class="products-count" id="products-count">Displaying {{ $products->count() }} products</div>
+        <input type="text" name="filter-text" id="filter-text" class="filter-text" placeholder="search for products" autofocus="" autocomplete="off">
         <div class="products">
             @foreach ($productsCollection as $category => $products)
                 <div class="category"

@@ -25,14 +25,16 @@
 <input id="{{ $addButtonId }}" type="checkbox" class="add-product" name="add_product[]" value="{{ $dataTitle }}" @if($selected) checked @endif hidden autocomplete="off">
 @endisset
 <div {{ $attributes->merge(['class' => 'card card--product']) }} >
+    <div class="card__inner_container">
+
     <a href="{{ $href }}" target="{{ $target }}">
         <div class="card__content">
             @isset($tags)
                 @foreach ($tags as $tag)
-                    <span class="tag grey">{{ $tag }}</span>
+                    <span class="tag">{{ $tag }}</span>
                 @endforeach
                 @if(isset($dataAccess) && $dataAccess !== 'public')
-                <span class="tag grey {{ $dataAccess }}">{{ $dataAccess }}</span>
+                <span class="tag {{ $dataAccess }}">{{ $dataAccess }}</span>
                 @endif
             @endisset
             @isset($title)
@@ -44,6 +46,10 @@
                 {{ $slot }}
             </p>
             @isset($countries)
+
+            <span class="enpoints-counts">12 Endpoints @svg('eye')</span>
+            <p class="card__header__mini">Available in</p>
+
             <div class="country-selector">
                 <div class="countries">
                     @foreach ($countries as $name => $country)
@@ -54,11 +60,12 @@
                     <div class="view-more">+ {{count($countries )-1}} more</div>
                 @endif
             </div>
+
             @endisset
         </div>
     </a>
     <div class="buttons">
-        <a class="flex button" target="_blank" href="{{ $href }}" role="button">View</a>
+        <a class="flex button dark outline" target="_blank" href="{{ $href }}" role="button">View product</a>
         @isset($addButtonId)
         <label class="flex button fab dark" for="{{ $addButtonId }}">
             @svg('plus', '#FFF')
@@ -66,4 +73,6 @@
         </label>
         @endisset
     </div>
+</div>
+
 </div>
