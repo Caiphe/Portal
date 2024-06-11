@@ -2,19 +2,18 @@ document.getElementById('maintenance-form').addEventListener('submit', createNot
 
 function createNotification(e) {
     e.preventDefault();
-
     var formToken = this.elements['_token'].value;
+    var enabled = this.elements['maintenance'].value;
 
     var data = {
         _method: 'POST',
         _token: formToken,
         message: this.elements['message'].value,
-        enabled: this.elements['maintenance'].value,
+        enabled: enabled,
     };
 
     var xhr = new XMLHttpRequest();
-
-    addLoading('creating a new banner notification...');
+    addLoading('updating notification banner ...');
 
     xhr.open('POST', this.action);
     xhr.setRequestHeader('X-CSRF-TOKEN', formToken);
@@ -26,10 +25,17 @@ function createNotification(e) {
         removeLoading();
 
         if (xhr.status === 200) {
-            addAlert('success', [`Banner notification created successfully.`]);
+            if(enabled === 'disabled'){
+                addAlert('warning', [`Notification banner has been disabled.`]);
+            }else{
+                addAlert('success', [`Notification banner has been enabled.`]);
+            }
+
             return;
+
         } else {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+
             if(result.errors) {
                 result.message = [];
                 for(var error in result.errors){
