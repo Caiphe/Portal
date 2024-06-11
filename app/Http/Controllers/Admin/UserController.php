@@ -427,4 +427,10 @@ class UserController extends Controller
 
         return response()->json(['success' => true, 'code' => 200], 200);
     }
+
+    public function verifyEmail(User $user): JsonResponse
+    {
+        $user->update(['email_verified_at' => now()]);
+        return response()->json(['success' => true, 'code' => 200], 200);
+    }
 }
