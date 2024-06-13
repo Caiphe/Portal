@@ -2,8 +2,9 @@
 
 namespace App\Observers;
 
-use App\Services\ApigeeService;
 use App\User;
+use App\Services\ApigeeService;
+use App\Services\ApigeeUserService;
 
 class UserObserver
 {
@@ -26,24 +27,7 @@ class UserObserver
      */
     public function updated(User $user)
     {
-        $email = $user->getOriginal('email');
-
-        ApigeeService::post("developers/{$email}", [
-            "email" => $user->email,
-            "firstName" => $user->first_name,
-            "lastName" => $user->last_name,
-            "userName" => $user->first_name . $user->last_name,
-            "attributes" => [
-                [
-                    "name" => "MINT_DEVELOPER_LEGAL_NAME",
-                    "value" => $user->first_name . " " . $user->last_name
-                ],
-                [
-                    "name" => "MINT_BILLING_TYPE",
-                    "value" => "PREPAID"
-                ]
-            ]
-        ]);
+        ApigeeUserService::setupUser($user);
     }
 
     /**
