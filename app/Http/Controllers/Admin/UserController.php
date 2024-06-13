@@ -2,27 +2,28 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Log;
 use App\App;
+use App\Log;
 use App\Role;
-use App\Services\ApigeeService;
 use App\User;
 use App\Country;
 use App\Product;
 use App\RoleUser;
 use App\Notification;
 use App\TwofaResetRequest;
-use Illuminate\Http\JsonResponse;
 use App\UserDeletionRequest;
 use Illuminate\Http\Request;
+use App\Services\ApigeeService;
 use Mpociot\Teamwork\TeamInvite;
+use Illuminate\Http\JsonResponse;
+use App\Services\ApigeeUserService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UserDeletionRequestMail;
+use App\Http\Requests\UserStatusRequest;
 use App\Mail\TwoFaResetConfirmationMail;
 use App\Http\Requests\Admin\UserStoreRequest;
 use App\Http\Requests\Admin\UserUpdateRequest;
-use App\Http\Requests\UserStatusRequest;
 
 class UserController extends Controller
 {
@@ -224,6 +225,8 @@ class UserController extends Controller
             'user_id' => $user->id,
             'notification' => "Your profile has been updated. Please navigate to your <a href='/profile'>Profile</a> for more info.",
         ]);
+        
+        ApigeeUserService::setupUser($user);
 
         return redirect()->route('admin.user.index')->with('alert', 'success:The user has been updated');
     }
@@ -431,6 +434,7 @@ class UserController extends Controller
     public function verifyEmail(User $user): JsonResponse
     {
         $user->update(['email_verified_at' => now()]);
+        ApigeeUserService::setupUser($user);
         return response()->json(['success' => true, 'code' => 200], 200);
     }
 }

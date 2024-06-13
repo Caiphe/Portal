@@ -159,7 +159,7 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 	Route::get('users/create', 'UserController@create')->middleware('can:administer-users')->name('admin.user.create');
 	Route::post('users/store', 'UserController@store')->middleware('can:administer-users')->name('admin.user.store');
 
-	Route::put('user/{user}/verify', 'UserController@verifyEmail')->middleware('can:can:administer-content')->name('user.verify');
+	Route::put('users/{user}/verify', 'UserController@verifyEmail')->middleware('can:administer-content')->name('admin.user.verify');
 });
 
 Route::namespace('Api\Admin')->prefix('api/admin')->group(function () {

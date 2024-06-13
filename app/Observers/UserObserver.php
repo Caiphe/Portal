@@ -26,7 +26,7 @@ class UserObserver
      */
     public function updated(User $user)
     {
-        ApigeeUserService::setupUser($user);
+        // ApigeeUserService::setupUser($user);
     }
 
     /**
