@@ -33,10 +33,6 @@ class ApigeeUserService
 			]
 		])->json();
 
-		if (isset($apigeeDeveloper['code'])) {
-			$apigeeDeveloper = ApigeeService::get('developers/' . $user->email);
-		}
-
 		if (isset($apigeeDeveloper['developerId'])) {
 			$user->update(['developer_id' => $apigeeDeveloper['developerId']]);
 		}
