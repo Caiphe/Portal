@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\User;
-use App\Services\ApigeeService;
 use App\Services\ApigeeUserService;
 
 class UserObserver
