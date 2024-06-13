@@ -107,7 +107,7 @@
     </div>
 
     <div class="bottom-shadow-container button-container">
-        <form id="verify-user-form" method="post" action="{{ route('user.verify', $user->id) }}">
+        <form id="verify-user-form" method="post" action="{{ route('admin.user.verify', $user) }}">
             @method('PUT')
             @csrf
 
