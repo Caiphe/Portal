@@ -5,6 +5,7 @@
 @endpush
 
 @section('title', 'Products')
+<div class="view-country-body-container"></div>
 
 @section('sidebar')
     <div class="filter-sidebar">
@@ -80,9 +81,12 @@
                      style="display:none"
                     @endif
                 >
+
                     <h3 class="category-title" data-category="{{ $products[0]->category_cid }}">{{ $category }} 
-                        <span class="filters-count"></span>
-                        <span class="header-count">{{ $products->count() }} products</span>
+                        <div class="count-contenaire">
+                            <span class="filters-count"></span>
+                            <span class="header-count">{{ $products->count() }} products</span>
+                        </div>
                     </h3>
                   
                     @foreach ($products as $product)
@@ -90,7 +94,7 @@
                                         :href="route('product.show', $product->slug)"
                                         :countries="$product->countries->pluck('code', 'name')"
                                         :class="'access-' . $product->access"
-                                        :tags="[$product->group, $category]"
+                                        :tags="[$category]"
                                         target="_self"
                                         :data-title="$product->display_name"
                                         :data-group="$product->group"
@@ -103,6 +107,8 @@
             @endforeach
         </div>
     </div>
+
+
 @endsection
 
 @push('scripts')

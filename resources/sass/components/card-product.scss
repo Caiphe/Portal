@@ -1,6 +1,8 @@
 @use "../variables";
 
 .card--product {
+    position: relative;
+
     .card__content {
         // padding-bottom: 15px;
 
@@ -35,14 +37,15 @@
 
             .countries {
                 display: flex;
-                width: 15px;
-                // max-height: 15px;
+                width: 114px;
                 overflow: hidden;
 
                 img {
                     height: 15px;
                     margin-right: 5px;
                     margin-bottom: 5px;
+                    border-radius: 2px;
+                    border: 1px solid #E4E4E4;
                 }
             }
 
@@ -50,21 +53,25 @@
                 margin-left: 5px;
                 display: flex;
                 color: #000000;
+                background-color: #E6E6E6;
+                padding: 2px 8px;
+                border-radius: 6px;
+                margin-top: -5px;
             }
 
-            &:hover {
-                >.countries {
-                    flex: 1;
-                    flex-flow: row wrap;
-                    //max-height: 50px;
-                    //-webkit-transition: max-height 0.5s;
-                    transition: max-height 1s;
-                }
+            // &:hover {
+            //     >.countries {
+            //         flex: 1;
+            //         flex-flow: row wrap;
+            //         //max-height: 50px;
+            //         //-webkit-transition: max-height 0.5s;
+            //         transition: max-height 1s;
+            //     }
 
-                >.view-more {
-                    display: none;
-                }
-            }
+            //     >.view-more {
+            //         display: none;
+            //     }
+            // }
         }
     }
 
@@ -102,6 +109,48 @@
     .tag.internal {
         border: 1px solid #ffffff;
         color: #ffffff;
+    }
+
+    .view-more-country-container{
+        position: absolute;
+        min-width: 333px;
+        background-color: #ffffff;
+        border-radius: 16px;
+        min-height: 200px;
+        box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.16);
+        top: 120px;
+        left: 100px;
+        pointer-events: none;
+        z-index: -1;
+        transition: all 0.2s ease-in-out;
+        opacity: 0;
+        overflow: hidden;
+
+        &.show{
+            pointer-events: auto;
+            z-index: 3;
+            opacity: 1;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .each-country{
+            width: 100%;
+            display: flex;
+            border-radius: 2px;
+            background: #FFF;
+            box-shadow: 0px 8px 8px 0px rgba(0, 0, 0, 0.04);
+            margin-bottom: 6px;
+            padding: 10px;
+
+            img{
+                width: 24px;
+                margin-right: 15px;
+            }
+    
+            span{
+                font-size: 15px;
+            }
+        }
     }
 }
 

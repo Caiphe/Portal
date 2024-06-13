@@ -37,17 +37,21 @@
                 <span class="tag {{ $dataAccess }}">{{ $dataAccess }}</span>
                 @endif
             @endisset
+
             @isset($title)
             <h3 class="card__header">
                 {{ Str::limit(str_replace("_", " ", $title), 80) }}
             </h3>
             @endisset
+
             <p class="card__body">
                 {{ $slot }}
             </p>
-            @isset($countries)
 
             <span class="enpoints-counts">12 Endpoints @svg('eye')</span>
+            
+            @isset($countries)
+
             <p class="card__header__mini">Available in</p>
 
             <div class="country-selector">
@@ -56,12 +60,25 @@
                         <img src="/images/locations/{{ $country }}.svg" title="{{ gettype($name) === 'string' ? $name : $country }} flag" alt="{{ $country }} flag">
                     @endforeach
                 </div>
-                @if (count($countries ) > 1)
-                    <div class="view-more">+ {{count($countries )-1}} more</div>
+
+                @if (count($countries ) > 4)
+                    <div class="view-more">+ {{count($countries )-1}}</div>
                 @endif
             </div>
 
+            @if (count($countries ) > 4)
+                <div class="view-more-country-container">
+                    @foreach ($countries as $name => $country)
+                    <div class="each-country">
+                        <img src="/images/locations/{{ $country }}.svg" title="{{ gettype($name) === 'string' ? $name : $country }} flag" alt="{{ $country }} flag">
+                        <span>{{ $name }}</span>
+                    </div>
+                    @endforeach
+                </div>
+            @endif
+
             @endisset
+
         </div>
     </a>
     <div class="buttons">
