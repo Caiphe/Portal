@@ -11,7 +11,11 @@
     <div class="filter-sidebar">
         <h2>Filters</h2>
 
-        <h3>Categories</h3>
+        <div class="filter-head">
+            <h3>Categories</h3>
+            <button class="clear-category custom-clear">Clear</button>
+        </div>
+
         @foreach ($productCategories as $slug => $title)
             <div class="filter-checkbox">
                 <input type="checkbox" name="{{ $slug }}" id="category-{{ $slug }}" class="filter-products filter-category" value="{{ $slug }}" @if(isset($selectedCategory) && $selectedCategory === $title) checked=checked @endif autocomplete="off" />
@@ -34,21 +38,38 @@
                 </div>
             @endif
         @endif
-        
-        <div class="country-filter">
-            <h3>Country</h3>
-            <x-multiselect id="filter-country" name="filter-country" label="Select country" :options="$countries" />
-        </div>
 
         <div class="group-filter">
-            <h3>Group</h3>  
-            <x-multiselect id="filter-group" name="filter-group" label="Select group" :options="$productGroups" />
+
+            <div class="filter-head">
+                <h3>Group</h3>  
+                <button class="clear-group custom-clear">Clear</button>
+            </div>
+            <div class="custom-select-block">
+                <x-multiselect id="filter-group" name="filter-group" label="Select group" :options="$productGroups" />
+                <img class="select-icon" src="/images/select-arrow.svg" />
+            </div>
         </div>
         
+        <div class="country-filter">
+            <div class="filter-head">
+                <h3>Country</h3>  
+                <button class="clear-country custom-clear">Clear</button>
+            </div>
+
+            @foreach ($countries as $code => $name)
+                <div class="filter-checkbox country-check-box-filters">
+                    <input type="checkbox" name="{{ $code }}" id="country-{{ $code }}" class="filter-products filter-country" value="{{ $code }}" autocomplete="off" />
+                    <label class="filter-label" for="country-{{ $code }}">
+                        <img src="/images/locations/{{ $code }}.svg" title="{{ $name }} flag" alt="{{ $code }} flag">
+                        {{ $name }}
+                    </label>
+                </div>
+            @endforeach
+        </div>
+
         <button id="filter-clear" class="dark outline"
-                @isset($selectedCategory)
-                    style="display:block"
-                @endisset>
+            @isset($selectedCategory) style="display:block" @endisset>
             Clear filters
         </button>
     </div>

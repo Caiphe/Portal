@@ -62,21 +62,21 @@
                 </div>
 
                 @if (count($countries ) > 4)
+                <div class="view-more-block">
                     <div class="view-more">+ {{count($countries )-1}}</div>
+                    <div class="view-more-country-container">
+                        @foreach ($countries as $name => $country)
+                        <div class="each-country">
+                            <img src="/images/locations/{{ $country }}.svg" title="{{ gettype($name) === 'string' ? $name : $country }} flag" alt="{{ $country }} flag">
+                            <span>{{ $name }}</span>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                    
                 @endif
             </div>
-
-            @if (count($countries ) > 4)
-                <div class="view-more-country-container">
-                    @foreach ($countries as $name => $country)
-                    <div class="each-country">
-                        <img src="/images/locations/{{ $country }}.svg" title="{{ gettype($name) === 'string' ? $name : $country }} flag" alt="{{ $country }} flag">
-                        <span>{{ $name }}</span>
-                    </div>
-                    @endforeach
-                </div>
-            @endif
-
             @endisset
 
         </div>

@@ -27,7 +27,7 @@ h3 {
         #sidebar {
             background-color: #FFFFFF !important;
             border-radius: 10px;
-            padding-top: 0px !important;
+            padding: 15px 28px 52px 34px !important;
             
             @media #{variables.$small} {
                 display: none;
@@ -36,6 +36,51 @@ h3 {
             @media #{variables.$medium} {
                 display: none;
             }
+        }
+    }
+
+    .custom-select-block{
+        position: relative;
+
+        .select-icon{
+            position: absolute;
+            right: 3px;
+            top: 5px;
+            height: 30px;
+            pointer-events: none;
+        }
+
+        select{
+            border: 2px solid #000000;
+            position: relative;
+            width: 100%;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        &::after{
+            content: "";
+            height: 38px;
+            width: 2px;
+            background-color: #000000;
+            position: absolute;
+            top: 2px;
+            right: 42px;
+        }
+    }
+
+    .country-check-box-filters{
+        .filter-label{
+            margin-top: -1px;
+            display: flex;
+        }
+
+        img{
+            width: 24px;
+            margin-top: 2px;
+            margin-right: 10px;
+            margin-left: 6px;
         }
     }
 }
@@ -298,8 +343,26 @@ h3 {
 }
 
 .filter-sidebar {
-    h3 {
-        font-size: 12px;
+   
+
+    .filter-head{
+        display: flex;
+        align-items: center;
+        margin-top: -14px;
+        justify-content: space-between;
+
+        h3 {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .custom-clear{
+            background-color: transparent;
+            color: #00678F;
+            border: none;
+            font-size: 15px;
+            font-weight: bolder;
+        }
     }
 
     .filter-checkbox {
@@ -325,6 +388,7 @@ h3 {
 
     #filter-clear {
         margin-top: 30px;
+        width: 100%;
     }
 }
 
