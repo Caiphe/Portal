@@ -82,13 +82,15 @@
         </div>
     </a>
     <div class="buttons">
-        <a class="flex button dark outline" target="_blank" href="{{ $href }}" role="button">View product</a>
+
         @isset($addButtonId)
-        <label class="flex button fab dark" for="{{ $addButtonId }}">
+        <label class="flex button" for="{{ $addButtonId }}">
             @svg('plus', '#FFF')
             @svg('done', '#FFF')
         </label>
         @endisset
+
+        <a class="flex button dark outline  @isset($addButtonId) blue @endisset" target="_blank" href="{{ $href }}" role="button">View product</a>
     </div>
 </div>
 

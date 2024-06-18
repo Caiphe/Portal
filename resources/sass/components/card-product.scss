@@ -48,29 +48,31 @@
                     border: 1px solid #E4E4E4;
                 }
             }
-
-            // &:hover {
-            //     >.countries {
-            //         flex: 1;
-            //         flex-flow: row wrap;
-            //         //max-height: 50px;
-            //         //-webkit-transition: max-height 0.5s;
-            //         transition: max-height 1s;
-            //     }
-
-            //     >.view-more {
-            //         display: none;
-            //     }
-            // }
         }
     }
 
     .buttons {
         display: flex;
+        flex-direction: column;
         align-items: center;
         position: relative;
         width: 100%;
         margin-top: 15px;
+
+        .blue{
+            background-color: transparent;
+            border: none;
+            color: variables.$blue;
+            margin-top: 10px;
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+
+            &:hover{
+                background-color: variables.$blue !important;
+                color: #ffffff;
+                transition: all 0.3s ease-in-out;
+            }
+        }
 
         a {
             margin-right: 5px;
@@ -81,6 +83,13 @@
         }
 
         label {
+            width: 100%;
+            box-sizing: border-box;
+
+            &:hover{
+                background-color: variables.$yellow500;
+            }
+
             svg {
                 margin: 0;
             }
@@ -149,7 +158,7 @@
 }
 
 .add-product:checked+.card--product {
-    border-color: variables.$grey900;
+    border: solid 2px #fc0;
 
     label {
         svg {

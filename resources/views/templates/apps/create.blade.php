@@ -126,7 +126,7 @@
                             @svg('$key', '#000000', 'images/locations')
                             <input type="radio" id="country-{{ $loop->index + 1 }}" class="country-checkbox" name="country-checkbox" value="{{ $key }}" data-location="{{ $key }}" autocomplete="off">
                             <div class="country-checked"></div>
-                            {{ $country }}
+                            <span>{{ $country }}</span>
                         </label>
                     @endforeach
                 </div>
@@ -161,7 +161,7 @@
                                                 class="product-block"
                                                 :href="route('product.show', $prod->slug)"
                                                 target="_blank"
-                                                :tags="[$prod->group, $prod->category->title]"
+                                                :tags="[$prod->category->title]"
                                                 :addButtonId="$prod->slug"
                                                 :data-title="$prod->name"
                                                 :data-group="$prod->group"
