@@ -4,7 +4,11 @@
     position: relative;
 
     .card__content {
-        // padding-bottom: 15px;
+
+        .tag{
+            color: #000000;
+            background-color: transparent;
+        }
 
         h3 {
             margin: 10px 0 0;
@@ -107,7 +111,8 @@
 
     .tag.internal {
         border: 1px solid #ffffff;
-        color: #ffffff;
+        color: #000000;
+        background-color: transparent;
     }
 
     .view-more-country-container{

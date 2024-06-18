@@ -85,8 +85,8 @@
 
         @isset($addButtonId)
         <label class="flex button" for="{{ $addButtonId }}">
-            @svg('plus', '#FFF')
-            @svg('done', '#FFF')
+            @svg('plus', '#000')
+            @svg('done', '#000')
         </label>
         @endisset
 
