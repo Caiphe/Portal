@@ -15,7 +15,6 @@
     }
 
     document.getElementById('filter-text').addEventListener('input', debounce);
-    document.getElementById('filter-country').addEventListener('change', filterProducts);
     document.getElementById('filter-group').addEventListener('change', filterProducts);
     document.getElementById('filter-clear').addEventListener('click', clearFilters);
 
@@ -34,16 +33,19 @@
 
     function clearFilters() {
         var categories = document.querySelectorAll('.filter-category:checked');
+        var countries = document.querySelectorAll('.filter-country:checked');
         var access = document.querySelectorAll('.filter-access:checked');
 
         document.getElementById('filter-text').value = '';
-        document.getElementById('filter-country').value = '';
         document.getElementById('filter-group').value = '';
-        document.getElementById('filter-country-tags').innerHTML = '';
         document.getElementById('filter-group-tags').innerHTML = '';
 
         for (var i = categories.length - 1; i >= 0; i--) {
             categories[i].checked = false;
+        }
+
+        for (var i = countries.length - 1; i >= 0; i--) {
+            countries[i].checked = false;
         }
 
         for (var i = access.length - 1; i >= 0; i--) {
@@ -51,7 +53,45 @@
         }
 
         filterProducts();
+        removeFilteredCount();
+    }
 
+    // Clear category
+    document.querySelector('.clear-category').addEventListener('click', clearCategory);
+    function clearCategory(){
+        var categories = document.querySelectorAll('.filter-category:checked');
+
+        for (var i = categories.length - 1; i >= 0; i--) {
+            categories[i].checked = false;
+        }
+
+        filterProducts();
+        removeFilteredCount();
+    }
+
+    document.querySelector('.clear-group').addEventListener('click', clearGroup);
+    function clearGroup(){
+        document.getElementById('filter-group').value = '';
+        document.getElementById('filter-group-tags').innerHTML = '';
+
+        filterProducts();
+        removeFilteredCount();
+    }
+
+    document.querySelector('.clear-country').addEventListener('click', clearCountry);
+    function clearCountry(){
+        var countries = document.querySelectorAll('.filter-country:checked');
+
+        for (var i = countries.length - 1; i >= 0; i--) {
+            countries[i].checked = false;
+        }
+
+        filterProducts();
+        removeFilteredCount();
+    }
+
+
+    function removeFilteredCount(){
         var filterCounts = document.querySelectorAll('.filters-count');
         for(var i = 0; i < filterCounts.length; i++){
             filterCounts[i].classList.remove('show');
@@ -95,6 +135,16 @@
                 filterCounts.innerHTML =`${cardsDisplay.length} of `;
             }
         }
+
+        var countDisplayCards = document.querySelectorAll('.display-cards');
+        var noProducts = document.querySelector('.no-products-available');
+
+        if(countDisplayCards.length === 0){
+            noProducts.classList.add('show');
+            return;
+        }
+
+        noProducts.classList.remove('show');
     }
 
     function testFilterText(card) {
@@ -136,7 +186,7 @@
     }
 
     function testLocation(card) {
-        var locations = document.querySelectorAll('#filter-country :checked');
+        var locations = document.querySelectorAll('.filter-country:checked');
         
         if (locations.length === 0 || card.dataset.locations === undefined) return true;
 
@@ -157,7 +207,6 @@
                 return true;
             }
         }
-
         return false;
     }
 
@@ -166,5 +215,22 @@
 window.addEventListener('load', function(){
     localStorage.removeItem("category");
     var cards = document.querySelectorAll('.card--product');
-    console.log(cards.length);
 })
+
+// var viewProductsBtn = document.querySelectorAll('.view-more');
+// for (var i = 0; i < viewProductsBtn.length; i++) {
+//     viewProductsBtn[i].addEventListener('mouseover', showCountriesContainer);
+// }
+
+// var countryFixedBlock = document.querySelector('.view-country-body-container');
+// function showCountriesContainer(){
+//     var countriesContainer = this.closest('.card--product').querySelector('.view-more-country-container');
+//     countryFixedBlock.classList.add('show');
+//     countriesContainer.classList.add('show');
+//     countryFixedBlock.addEventListener('mouseover', hideCountiresContainer);
+// }
+
+// function hideCountiresContainer(){
+//     document.querySelector('.view-more-country-container.show').classList.remove('show');
+//     countryFixedBlock.classList.remove('show');
+// }
