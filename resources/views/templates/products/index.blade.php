@@ -127,6 +127,8 @@
                 </div>
             @endforeach
         </div>
+
+        <div class="no-products-available">No product available</div>
     </div>
 
 

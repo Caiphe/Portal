@@ -48,7 +48,7 @@
                 {{ $slot }}
             </p>
 
-            <span class="enpoints-counts">12 Endpoints @svg('eye')</span>
+            {{-- <span class="enpoints-counts">12 Endpoints @svg('eye')</span> --}}
             
             @isset($countries)
 

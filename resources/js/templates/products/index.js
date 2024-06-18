@@ -135,6 +135,16 @@
                 filterCounts.innerHTML =`${cardsDisplay.length} of `;
             }
         }
+
+        var countDisplayCards = document.querySelectorAll('.display-cards');
+        var noProducts = document.querySelector('.no-products-available');
+
+        if(countDisplayCards.length === 0){
+            noProducts.classList.add('show');
+            return;
+        }
+
+        noProducts.classList.remove('show');
     }
 
     function testFilterText(card) {
