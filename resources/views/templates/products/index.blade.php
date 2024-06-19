@@ -9,8 +9,8 @@
 
 @section('sidebar')
     <div class="filter-sidebar">
-        <h2>Filters</h2>
 
+        <h2 class="filter-title-heading filter-show-mobile"> <img alt="filter-icon" src="/images/filter.svg" /> Filters</h2>
         <div class="filter-head">
             <h3>Categories</h3>
             <button class="clear-category custom-clear">Clear</button>
@@ -128,7 +128,7 @@
             @endforeach
         </div>
 
-        <div class="no-products-available">No product available</div>
+        <div class="no-products-available">No products available. Please try other filters.</div>
     </div>
 
 
