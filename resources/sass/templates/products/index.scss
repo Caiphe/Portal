@@ -22,15 +22,40 @@ h3 {
     
         &.container{
             width: 90%;
+
+            @media #{variables.$small} {
+                display: flex;
+                flex-direction: column;
+                margin-top: 107px;
+            }
         }
 
-        #sidebar {
-            background-color: #FFFFFF !important;
+        .site-sidebar {
             border-radius: 10px;
-            padding: 15px 28px 52px 34px !important;
-            
-            @media #{variables.$small} {
-                display: none;
+
+            &.product-side-bar{
+                background-color: #FFFFFF;
+                padding: 15px 28px 52px 34px;
+
+                @media #{variables.$small} {
+                    display: block;
+                    max-width: 100%;
+                    max-width: 100%;
+                    padding: 4px 14px 22px 17px;
+                    height: 50px;
+                    flex: revert;
+                    height: 60px;
+                    overflow: hidden;
+                    transition: all .5s ease-in-out;
+    
+                    &.collapse{
+                        flex: 1;
+                        height: 100%;
+                        transition: all .5s ease-in-out;
+                        overflow: revert;
+                        width: 100%;
+                    }
+                }
             }
         
             @media #{variables.$medium} {
@@ -343,8 +368,25 @@ h3 {
 }
 
 .filter-sidebar {
-   
 
+    .filter-title-heading{
+        display: flex;
+
+        img{
+            margin-right: 5px;
+            display: none;
+
+            @media(max-width: 768px){
+                display: block;
+            }
+        }
+
+        @media(max-width: 768px){
+            cursor: pointer;
+            font-size: 18px;
+        }
+    }
+   
     .filter-head{
         display: flex;
         align-items: center;
@@ -411,12 +453,22 @@ h3 {
 
 .no-products-available{
     font-size: 16px;
-    color: #000000;
+    color: #787878;
     opacity: 0;
     z-index: 0;
+    text-align: center;
+    padding: 14px;
+    border-radius: 4px;
+    border: 1px solid #E6E6E6;
 
     &.show{
         opacity: 1;
         z-index: 2;
     }
+}
+
+@media screen and (max-width: 769px) {
+  .layout-sidebar #main {
+    margin-top: 20px !important;
+  }
 }

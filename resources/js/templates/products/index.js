@@ -217,20 +217,10 @@ window.addEventListener('load', function(){
     var cards = document.querySelectorAll('.card--product');
 })
 
-// var viewProductsBtn = document.querySelectorAll('.view-more');
-// for (var i = 0; i < viewProductsBtn.length; i++) {
-//     viewProductsBtn[i].addEventListener('mouseover', showCountriesContainer);
-// }
+var filterButton = document.querySelector('.filter-show-mobile');
+filterButton.addEventListener('click', collapseSidebar);
 
-// var countryFixedBlock = document.querySelector('.view-country-body-container');
-// function showCountriesContainer(){
-//     var countriesContainer = this.closest('.card--product').querySelector('.view-more-country-container');
-//     countryFixedBlock.classList.add('show');
-//     countriesContainer.classList.add('show');
-//     countryFixedBlock.addEventListener('mouseover', hideCountiresContainer);
-// }
-
-// function hideCountiresContainer(){
-//     document.querySelector('.view-more-country-container.show').classList.remove('show');
-//     countryFixedBlock.classList.remove('show');
-// }
+function collapseSidebar(){
+    var sideBar = document.querySelector('#sidebar');
+    sideBar.classList.toggle('collapse');
+}

@@ -15,10 +15,10 @@
     <x-header/>
     @yield('banner')
     <div class="wrapper container">
-        <nav id="sidebar">
+        <nav id="sidebar" class="site-sidebar product-side-bar">
             @yield('sidebar')
         </nav>
-        <main id="main">
+        <main id="main" class="main-container">
             @yield("content")
         </main>
     </div>
