@@ -63,7 +63,7 @@
 
                 @if (count($countries ) > 4)
                 <div class="view-more-block">
-                    <div class="view-more">+ {{count($countries )-1}}</div>
+                    <div class="view-more">+ {{count($countries )-4}}</div>
                     <div class="view-more-country-container">
                         @foreach ($countries as $name => $country)
                         <div class="each-country">
@@ -73,7 +73,6 @@
                         @endforeach
                     </div>
                 </div>
-
                     
                 @endif
             </div>
