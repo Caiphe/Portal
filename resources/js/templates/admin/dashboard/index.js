@@ -279,12 +279,12 @@
                     elements['remove-check'].value = '';
                     document.querySelector('#wrapper-'+id+' .list-custom-attributes').innerHTML = '<div class="no-custom-attribute">None defined</div>';
                     addAlert('success', ['Custom attributes removed successfully']);
-                    return;
+                   location.reload();
                }else{
                     updateAppAttributesHtml(result['attributes'], id);
                     elements['remove-check'].value = '';
                     addAlert('success', ['Custom attributes added successfully',]);
-                    return;
+                    location.reload();
                }
             } else {
                 if(result.errors) {
@@ -292,6 +292,7 @@
                     for(var error in result.errors){
                         result.message.push(result.errors[error]);
                     }
+                    location.reload();
                 }
 
                 addAlert('error', result.message || 'Sorry there was a problem updating your app. Please try again.');
