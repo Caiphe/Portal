@@ -118,7 +118,7 @@
 
                 customAttributesDialog(result['id']);
                 return;
-               
+
             } else {
 
                 if(result.errors) {
@@ -132,7 +132,7 @@
             }
         };
     }
-    
+
 
     function customAttributesDialog(id){
         var customAttributeDialog = document.getElementById('custom-attributes-' + id);
@@ -161,7 +161,7 @@
         currentAttributevalue.addEventListener('change', removeQuote.bind(currentAttributevalue));
 
         addAttributeBtn.addEventListener('click', addNewAttribute.bind(customAttributeDialog, id));
-        
+
         customAttributeDialog.addEventListener('dialog-closed', submitNewAttribute.bind(attributesList, id));
     }
 
@@ -214,6 +214,7 @@
     }
 
     function submitNewAttribute(id){
+
         var elements = this.elements;
         var attrNames = elements['attribute[name][]'];
         var attrValues = elements['attribute[value][]'];
@@ -277,7 +278,7 @@
                if(Object.values(result['attributes']).length < 1){
                     elements['remove-check'].value = '';
                     document.querySelector('#wrapper-'+id+' .list-custom-attributes').innerHTML = '<div class="no-custom-attribute">None defined</div>';
-                    addAlert('success', ['Custom attributes removed successfully',]);
+                    addAlert('success', ['Custom attributes removed successfully']);
                     return;
                }else{
                     updateAppAttributesHtml(result['attributes'], id);
@@ -286,7 +287,6 @@
                     return;
                }
             } else {
-
                 if(result.errors) {
                     result.message = [];
                     for(var error in result.errors){
