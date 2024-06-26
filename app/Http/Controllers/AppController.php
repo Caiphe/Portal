@@ -544,6 +544,7 @@ class AppController extends Controller
 
         $team = $app->team ?? null;
         $developerEmail = $app->developer->email;
+        //TODO does the url expect a company name or developer email?
         $accessUrl = $team ? "companies/{$team->username}" : "developers/{$developerEmail}";
 
         $updatedResponse = ApigeeService::put("{$accessUrl}/apps/{$app->name}", [
