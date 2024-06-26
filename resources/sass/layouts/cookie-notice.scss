@@ -1,0 +1,84 @@
+.cookie-consent {
+    position: fixed;
+    bottom: 20px; /* Slightly above the bottom to add a margin */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Center the element */
+    background-color: #222; /* Dark background color */
+    color: #fff; /* White text color */
+    padding: 20px 30px; /* Padding around the content */
+    z-index: 9999; /* Ensures it stays on top of other elements */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Shadow for a floating effect */
+    border-radius: 8px; /* Rounded corners */
+    max-width: 980px; /* Maximum width to ensure it doesn't get too wide */
+    width: 90%; /* Width as a percentage to make it responsive */
+    display: flex; /* Flexbox for aligning content */
+    align-items: center; /* Vertically center the content */
+    justify-content: space-between; /* Space between the message and the button */
+}
+
+.cookie-consent__message {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    font-size: 10px;
+    line-height: 4px;
+}
+
+.cookie-consent__agree {
+    background-color: #f1c40f;
+    color: #222;
+    border: none;
+    padding: 10px 50px !important;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    margin-left: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.cookie-consent__agree:hover {
+    background-color: #e1b60e;
+}
+
+.cookie-consent-header {
+    color: #f2f2f2;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.cookie-policy {
+    color: #f2f2f2;
+    text-underline: #f2f2f2;
+    text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+    .cookie-consent {
+        bottom: 10px;
+        padding: 15px 20px;
+        flex-direction: column;
+    }
+
+    .cookie-consent__message {
+        font-size: 13px;
+        line-height: 1;
+        margin-bottom: 10px;
+    }
+
+    .cookie-consent__agree {
+        padding: 10px 20px !important;
+        font-size: 14px;
+        margin-left: 0;
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 20px;
+    }
+
+
+    .cookie-consent-header {
+        color: #f2f2f2;
+        font-size: 16px;
+        line-height: 0px;
+        font-weight: 400;
+    }
+}

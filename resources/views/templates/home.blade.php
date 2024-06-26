@@ -4,6 +4,7 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/styles.css') }}">
+
     <link rel="stylesheet" href="{{ mix('/css/templates/home.css') }}">
     <link rel="preload" href="/fonts/MTNBrighterSans-Regular.woff2" as="font" type="font/woff2">
     <link rel="preload" href="/fonts/MTNBrighterSans-Bold.woff2" as="font" type="font/woff2">

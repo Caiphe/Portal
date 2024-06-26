@@ -4,6 +4,7 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/search.css') }}">
+
 @endpush
 
 @section('content')
@@ -12,4 +13,4 @@
         'action' => route('search'),
         'results' => $results
     ])
-@endsection 
+@endsection

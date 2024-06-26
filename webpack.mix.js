@@ -54,6 +54,7 @@ mix.scripts("resources/js/scripts.js", "public/js/scripts.js")
     .copy("resources/js/vendor/ckeditor.js.map", "public/js/components/ckeditor.js.map")
     .copyDirectory("resources/js/vendor/translations", "public/js/components/translations")
     .sass("resources/sass/layouts/admin.scss", "public/css/layouts")
+    .sass("resources/sass/layouts/cookie-notice.scss", "public/css/layouts")
     .sass("resources/sass/auth/login.scss", "public/css/auth")
     .sass("resources/sass/auth/register.scss", "public/css/auth")
     .sass("resources/sass/auth/verify.scss", "public/css/auth")
@@ -117,4 +118,5 @@ mix.scripts("resources/js/scripts.js", "public/js/scripts.js")
     .sass("resources/sass/styles.scss", "public/css")
     .sass("resources/sass/templates/admin/tasks/index.scss", "public/css/templates/admin/tasks/index.css")
     .sass("resources/sass/vendor/stoplight.scss", "public/css/vendor")
+
     .version();
