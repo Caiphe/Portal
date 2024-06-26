@@ -36,6 +36,16 @@
 
     removeThumbnail.style.display = 'none';
 
+    var productAddBtns = document.querySelectorAll('.add-product-btn');
+    for (var i = 0; i < productAddBtns.length; i++) {
+        productAddBtns[i].addEventListener('click', addProductFunc);
+    }
+
+    function addProductFunc() {
+        var product = this.parentElement.parentElement;
+        product.classList.toggle('selected');
+    }
+
     function assignToMe() {
         select(appCreatorEmail);
         removeThumbnail.style.display = '';
@@ -146,11 +156,11 @@
 
         for (var i = 0; i < locations.length; i++) {
             if (locations[i].dataset.location === selected) {
-                locations[i].style.opacity = "1";
+                locations[i].style.display = "block";
                 continue;
             }
 
-            locations[i].style.opacity = "0.15";
+            locations[i].style.display = "none";
         }
     }
 

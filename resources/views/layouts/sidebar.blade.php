@@ -18,7 +18,7 @@
         <nav id="sidebar" class="site-sidebar product-side-bar">
             @yield('sidebar')
         </nav>
-        <main id="main" class="main-container">
+        <main id="main" class="main-container product-page">
             @yield("content")
         </main>
     </div>

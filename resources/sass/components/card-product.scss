@@ -3,13 +3,36 @@
 .card--product {
     position: relative;
 
-    .card__content {
+    .card__inner_container{
 
-        .tag{
-            color: #000000;
-            background-color: transparent;
+        .remove_prod{
+            display: none;
         }
 
+        .add_prod{
+            display: block;
+        }
+
+        &.selected{
+            .remove_prod{
+                display: flex;
+                align-items: center;
+
+                svg{
+                    margin-left: 5px;
+                    transform: rotate(45deg);
+                    min-width: 32px;
+                    height: 28px;
+                }
+            }
+    
+            .add_prod{
+                display: none;
+            }
+        }
+    }
+
+    .card__content {
         h3 {
             margin: 10px 0 0;
             word-break: break-word;
@@ -93,14 +116,6 @@
             &:hover{
                 background-color: variables.$yellow500;
             }
-
-            svg {
-                margin: 0;
-            }
-
-            svg+svg {
-                display: none;
-            }
         }
     }
 
@@ -112,7 +127,6 @@
     .tag.internal {
         border: 1px solid #ffffff;
         color: #000000;
-        background-color: transparent;
     }
 
     .view-more-country-container{
@@ -163,17 +177,7 @@
 }
 
 .add-product:checked+.card--product {
-    border: solid 2px #fc0;
-
-    label {
-        svg {
-            display: none;
-        }
-
-        svg+svg {
-            display: inline;
-        }
-    }
+    border: solid 1px #fc0;
 }
 
 .view-more {
