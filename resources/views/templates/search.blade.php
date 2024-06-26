@@ -12,4 +12,4 @@
         'action' => route('search'),
         'results' => $results
     ])
-@endsection 
+@endsection
