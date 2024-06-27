@@ -31,7 +31,7 @@
         <div class="card__content">
             @isset($tags)
                 @foreach ($tags as $tag)
-                    <span class="tag">{{ $tag }}</span>
+                    <span class="tag grey">{{ $tag }}</span>
                 @endforeach
                 @if(isset($dataAccess) && $dataAccess !== 'public')
                 <span class="tag {{ $dataAccess }}">{{ $dataAccess }}</span>
@@ -83,9 +83,9 @@
     <div class="buttons">
 
         @isset($addButtonId)
-        <label class="flex button" for="{{ $addButtonId }}">
-            @svg('plus', '#000')
-            @svg('done', '#000')
+        <label class="flex button add-product-btn" for="{{ $addButtonId }}">
+            <span class="add_prod">Add</span>
+            <span class="remove_prod">Remove @svg('plus', "#000")</span>
         </label>
         @endisset
 

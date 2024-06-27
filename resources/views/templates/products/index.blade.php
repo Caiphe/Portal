@@ -10,7 +10,8 @@
 @section('sidebar')
     <div class="filter-sidebar">
 
-        <h2 class="filter-title-heading filter-show-mobile"> <img alt="filter-icon" src="/images/filter.svg" /> Filters</h2>
+        <h2 class="filter-title-heading filter-show-mobile"> 
+            <img alt="filter-icon" src="/images/filter.svg" /> Filters</h2>
         <div class="filter-head">
             <h3>Categories</h3>
             <button class="clear-category custom-clear">Clear</button>
@@ -115,7 +116,7 @@
                                         :href="route('product.show', $product->slug)"
                                         :countries="$product->countries->pluck('code', 'name')"
                                         :class="'access-' . $product->access"
-                                        :tags="[$category]"
+                                        :tags="[$category, $product->group]"
                                         target="_self"
                                         :data-title="$product->display_name"
                                         :data-group="$product->group"
