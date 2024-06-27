@@ -26,7 +26,7 @@
 @endpush
 @endonce
 
-<div id="heading">
+<div id="heading" class="custom-heading">
     @if(!empty($breadcrumbs))
     <ul class="breadcrumbs">
         @foreach($breadcrumbs as $label => $href)

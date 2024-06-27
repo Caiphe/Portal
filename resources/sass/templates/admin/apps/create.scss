@@ -532,28 +532,33 @@
             .countries {
                 display: flex;
                 flex-flow: row wrap;
-                justify-content: space-between;
                 margin-top: 20px;
                 margin-bottom: 40px;
 
                 .country {
                     display: flex;
-                    flex-direction: column;
                     align-items: center;
                     justify-content: flex-start;
                     background-color: #FFF;
-                    border: 1px solid $grey400;
+                    border: 1px solid #cecece;
                     border-radius: 8px;
-                    padding: 20px;
-                    margin-right: 10px;
+                    padding: 12px 10px 12px 7px;
+                    margin-right: 8px;
                     margin-bottom: 20px;
                     font-size: 14px;
                     text-align: center;
                     cursor: pointer;
                     position: relative;
+                    box-sizing: border-box;
+                    transition: all 0.3s ease-in-out;
+
+                    &:hover {
+                        background-color: #f5f5f5;
+                        transition: all 0.3s ease-in-out;
+                    }
 
                     @media screen and (min-width: 768px) {
-                        width: 13%;
+                        width: 24%;
                     }
 
                     @media screen and (max-width: 767px) {
@@ -561,10 +566,13 @@
                     }
 
                     svg {
-                        margin-bottom: 15px;
 
                         @media screen and (min-width: 768px) {
-                            width: 60%;
+                            width: 43px;
+                            height: 31px;
+                            margin-bottom: 0px;
+                            margin-right: 7px;
+                            border-radius: 4px;
                         }
 
                         @media screen and (max-width: 767px) {

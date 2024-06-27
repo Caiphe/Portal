@@ -100,19 +100,28 @@ class AppController extends Controller
             })
             ->get()
             ->merge($assignedProducts);
+        
+        $prodGroup = Product::with(['category', 'countries'])
+			->where('category_cid', '!=', 'misc')
+			->basedOnUser($request->user())
+			->get()
+			->merge($assignedProducts);
 
         $locations = $product->locations ?? $products->pluck('locations')->implode(',');
         $locations = array_unique(explode(',', $locations));
         $countries = Country::whereIn('code', $locations)->pluck('name', 'code');
         $products = $products->sortBy('display_name')->groupBy('category.title')->sortKeys();
+		$productGroups = $prodGroup->pluck('group')->unique()->toArray();
+		$productCategories = $prodGroup->pluck('category.title', 'category.slug');
 
         return view('templates.apps.create', [
             'productSelected' => $product,
             'products' => $products,
-            'productCategories' => array_keys($products->toArray()),
+            'productCategories' => $productCategories,
             'teams' => $userOwnTeams,
             'countries' => $countries ?? '',
-            'user' => $user
+            'user' => $user,
+			'productGroups' => $productGroups
         ]);
     }
 
