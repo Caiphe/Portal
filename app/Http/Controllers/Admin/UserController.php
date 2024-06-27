@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\App;
-use App\Log;
 use App\Role;
 use App\User;
 use App\Country;
@@ -225,7 +224,7 @@ class UserController extends Controller
             'user_id' => $user->id,
             'notification' => "Your profile has been updated. Please navigate to your <a href='/profile'>Profile</a> for more info.",
         ]);
-        
+
         ApigeeUserService::setupUser($user);
 
         return redirect()->route('admin.user.index')->with('alert', 'success:The user has been updated');
@@ -326,7 +325,7 @@ class UserController extends Controller
     }
 
     public function delectionAction(User $user)
-    {    
+    {
         $deleted = ApigeeService::deleteDeveloper($user);
 
         if($deleted->status() === 400){
@@ -405,7 +404,7 @@ class UserController extends Controller
         $deletionRequest = UserDeletionRequest::where('user_email', $user->email)->latest()->first();
         if(!isset($deletionRequest->approved_by)){
             $deletionRequest->update([
-                'approved_by' => auth()->user()->full_name, 
+                'approved_by' => auth()->user()->full_name,
                 'approved_at' => now()
             ]);
         }
