@@ -21,7 +21,10 @@
     padding: 0;
     display: inline-block;
     font-size: 10px;
-    line-height: 4px;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
 }
 
 .cookie-consent__agree {
@@ -42,27 +45,35 @@
 
 .cookie-consent-header {
     color: #f2f2f2;
-    font-size: 16px;
+    font-size: 21px;
     font-weight: 400;
+    margin-top: 0px;
+    line-height: 22px;
+    margin-bottom: 10px;
 }
 
 .cookie-policy {
     color: #f2f2f2;
     text-underline: #f2f2f2;
     text-decoration: underline;
+    transition: all .3s ease-in-out;
+
+    &:hover{
+        color: #e1b60e;
+    }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     .cookie-consent {
         bottom: 10px;
-        padding: 15px 20px;
+        padding: 35px 20px;
         flex-direction: column;
     }
 
     .cookie-consent__message {
         font-size: 13px;
-        line-height: 1;
-        margin-bottom: 10px;
+        line-height: 1.5;
+        margin-bottom: 0px;
     }
 
     .cookie-consent__agree {
@@ -77,8 +88,9 @@
 
     .cookie-consent-header {
         color: #f2f2f2;
-        font-size: 16px;
+        font-size: 21px;
         line-height: 0px;
         font-weight: 400;
+        margin-bottom: 24px;
     }
 }
