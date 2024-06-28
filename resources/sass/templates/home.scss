@@ -83,11 +83,11 @@ body > #main {
     }
 
     @media #{variables.$small} {
-        margin-top: 80px;
+        margin-top: 0px;
     }
 
     @media #{variables.$medium-portrait} {
-        margin-top: 80px;
+        margin-top: 0px;
     }
 }
 

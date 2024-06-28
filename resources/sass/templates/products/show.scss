@@ -4,6 +4,21 @@
 .layout-master>main#main {
     margin-bottom: 60px;
 
+    .content{
+        margin-top: -30px;
+        z-index: 2;
+    }
+
+    .breadcrumb::before{
+        color: variables.$blue;
+    }
+
+    #heading .breadcrumb{
+        a{
+            color: variables.$blue;
+        }
+    }
+
     elements-api div {
         position: initial;
     }
@@ -15,6 +30,7 @@
 
     #heading {
         margin-bottom: 20px;
+        background-color: #FFFFFF;
 
         h4 {
             font-size: 10px;
@@ -167,49 +183,154 @@
     }
 }
 
+#button-specification{
+    background-color: transparent !important;
+    color: #000000;
+    font-size: 17px;
+    padding: 0px;
+}
+
+.endpoint-available{
+    margin-top: -19px;
+}
+
 #product-sections {
-    .product-section-button {
-        @media screen and (min-width: 768px) {
-            display: inline-block;
-            margin: variables.$gutterSmall 6px variables.$gutter 0;
+    // Products top block
+    .product-top-block{
+        width: calc(100% + 80px);
+        box-shadow: 0px 10px 8px 0px rgba(0, 0, 0, 0.04);
+        display: flex;
+        margin-left: -40px;
+        padding: 0px 40px;
+
+        @media(max-width: 768px){
+            flex-direction: column;
         }
 
-        @media screen and (max-width: 768px) {
-            width: 100%;
-            height: 30px;
-            margin-bottom: 10px;
-        }
-    }
+        .each-product-block{
+            width: 50%;
+            height: 100%;
+            padding-bottom: 20px;
 
-    // create app from the product button
-    .create-app-from-product-swagger-btn{
-        position: absolute;
-        right: 20px;
-        top: 10px;
+            @media(max-width: 768px){
+                width: 100%;
+            }
 
-        .button{
-            margin-left: 10px;
-        }
-
-        @media(max-width: 945px){
-            position: relative;
-            right: revert;
-            top: 0px;
-            margin-bottom: 10px;
-            width: 100%;
-
-            .button{
-                margin-left: 0px;
+            &:nth-child(1){
                 margin-right: 10px;
             }
         }
 
-        @media(max-width:768px){
-            .button{
-                width: 100%;
-                margin-right: 0px;
+        .flags{
+            display: flex;
+            flex-wrap: wrap;
+
+            .each-country{
+                display: flex;
+                align-items: center;
+                width: 23%;
+                border-radius: 2px;
+                background: #FFF;
+                box-shadow: 0px 8px 8px 0px rgba(0, 0, 0, 0.04);
                 margin-bottom: 10px;
+                margin-right: 8px;
+
+                img{
+                    width: 36px;
+                    height: 24px;
+                    margin-right: 10px;
+                    border-radius: 2px;
+                    border: 1px solid #E4E4E4;
+                }
+
+                .country-name{
+                    font-size: 12px;
+                }
+
+                @media(max-width: 768px){
+                    width: 48%;
+
+                    .country-name{
+                        font-size: 14px;
+                    }
+                }
             }
+        }
+
+        .each-call-to-action{
+            border-radius: 8px;
+            border: 1px solid #E6E6E6;
+            width: 100%;
+            margin-bottom: 16px;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            transition: all .3s ease-in-out;
+
+            &:hover{
+                transition: all .3s ease-in-out;
+                cursor: pointer;
+                background-color: variables.$yellow;
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12), 0 3px 6px rgba(0, 0, 0, 0.16);
+            }
+
+            .left-data{
+                width: calc(100% - 230px);
+            }
+
+            @media(max-width: 768px){
+                flex-direction: column;
+
+                .left-data{
+                    width: 100%;
+                }
+            }
+
+            .block-header{
+                font-size: 16px;
+                font-weight: 700;
+                line-height: 16px;
+                margin-top: 11px;
+                margin-bottom: -11px;
+            }
+
+            p{
+                font-size: 16px;
+                line-height: 22px;
+                margin-bottom: 5px;
+            }
+
+            .action-btn-product{
+                width: 214px;
+                height: 45px;
+                margin-top: 10px;
+
+                @media(max-width: 768px){
+                    width: 100%;
+                }
+            }
+        }
+    }
+
+    .product-section-button {
+        @media screen and (min-width: 768px) {
+            display: inline-block;
+            margin: 30px 6px 0px 0;
+            background-color: #FFF;
+            border: none;
+            font-size: 17px;
+            padding: 0px;
+
+            &:hover{
+                background-color: #FFF;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            height: 30px;
+            margin-bottom: 10px;
+            border: none;
+            margin-top: 40px;
         }
     }
 
@@ -251,23 +372,15 @@
 
     }
 
-    &.product-docs #button-docs,
-    &.product-overview #button-overview,
-    &.product-specification #button-specification {
-        background-color: variables.$grey700;
-        color: #FFF;
-
-        &:hover {
-            background-color: color.mix(#FFFFFF, variables.$grey700, 20%);
-            border-color: color.mix(#FFFFFF, variables.$grey700, 20%);
-            color: #FFF;
-        }
-    }
-
     &.product-docs #product-docs,
     &.product-overview #product-overview,
     &.product-specification #product-specification {
         display: block;
+        margin-top: 30px;
+
+        @media(max-width: 768px){
+            margin-top: -16px;
+        }
     }
 
     .key-features {
