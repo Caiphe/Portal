@@ -5,13 +5,13 @@
     <link rel="stylesheet" href="{{ mix('/css/templates/products/show.css') }}">
     <script src="{{ mix('/js/vendor/stoplight.js') }}"></script>
     @if(!empty($content))
-        {{-- <style>
+        <style>
             @foreach($content['all'] as $tab)
             #product-sections.product-{{$tab->slug}} #product-{{$tab->slug}}{
                 display: block;
             }
             @endforeach
-        </style> --}}
+        </style>
     @endif
 @endpush
 
