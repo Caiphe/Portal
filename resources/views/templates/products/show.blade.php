@@ -7,19 +7,8 @@
     @if(!empty($content))
         <style>
             @foreach($content['all'] as $tab)
-    #product-sections.product-{{$tab->slug}} #product-{{$tab->slug}}{
+            #product-sections.product-{{$tab->slug}} #product-{{$tab->slug}}{
                 display: block;
-            }
-            #product-sections.product-{{$tab->slug}} #button-{{$tab->slug}},
-            #product-sections.product-{{$tab->slug}} #button-{{$tab->slug}} {
-                background-color: #666;
-                color: #FFF;
-            }
-            #product-sections.product-{{$tab->slug}} #button-{{$tab->slug}}:hover,
-            #product-sections.product-{{$tab->slug}} #button-{{$tab->slug}}:hover {
-                background-color: #858585;
-                border-color: #858585;
-                color: #FFF;
             }
             @endforeach
         </style>
@@ -29,45 +18,81 @@
 @section('title', $product->display_name)
 
 @section('content')
-    <x-heading :heading="$product->display_name" :breadcrumbs="['Products' => route('product.index'), $product->category->title => route('category.show', $product->category->slug)]" :edit="route('admin.product.edit', $product->slug)">
-        <div class="available-in">
-            <h4>AVAILABLE IN</h4>
-            <div class="flags">
-                @if($product->locations === 'all')
-                    <img class="flag" src="/images/locations/globe.svg" alt="All countries" title="All countries">
-                @else
-                    @foreach($product->countries->pluck('code', 'name') as $name => $code)
-                        <img class="flag" src="/images/locations/{{ $code }}.svg" alt="{{ $name }}" title="{{ $name }}">
-                    @endforeach
-                @endif
-            </div>
-        </div>
-    </x-heading>
+    <x-heading :heading="$product->display_name" :breadcrumbs="['Products' => route('product.index'), $product->category->title => route('category.show', $product->category->slug)]" :edit="route('admin.product.edit', $product->slug)"></x-heading>
 
     <div class="content">
         <div id="product-sections" class="{{ $startingPoint }}">
-            <div class="create-app-from-product-swagger-btn">
-                @if($specification)
-                    <a href="{{ route('product.download.swagger', [$product->slug]) }}" class="button">Download Swagger</a>
-                @endif
-                <a class="button create-app-from-product" href="{{ route('app.create', ['product' => $product->slug]) }}" role="button">Create app with product</a>
+
+            <div class="product-top-block">
+                <div class="each-product-block">
+                    @if($product->description)
+                    <p>{{ $product->description }}</p>
+                    @endif
+
+                    <p>This product is available for these countries</p>
+
+                    <div class="flags">
+                        @if($product->locations === 'all')
+                        <div class="each-country">
+                            <img class="flag" src="/images/locations/globe.svg" alt="All countries" title="All countries">
+                        </div>
+                        @else
+                            @foreach($product->countries->pluck('code', 'name') as $name => $code)
+                            <div class="each-country">
+                                <img class="flag" src="/images/locations/{{ $code }}.svg" alt="{{ $name }}" title="{{ $name }}">
+                                <span class="country-name">{{ $name }}</span>
+
+                            </div>
+                            @endforeach
+                        @endif
+                    </div>
+
+                </div>
+                <div class="each-product-block">
+                    <div class="each-call-to-action">
+                        <div class="left-data">
+                            <h5 class="block-header">Quick start</h5>
+                            <p>Use Notification {{ $product->display_name }} in your own app for the data</p>
+                        </div>
+                        <a class="button dark outline action-btn-product" href="{{ route('app.create', ['product' => $product->slug]) }}" role="button">Create app with product</a>
+                    </div>
+
+                    @if($specification)
+                    <div class="each-call-to-action">
+                        <div class="left-data">
+                            <h5 class="block-header">Advanced</h5>
+                            <p>Try an example YAML to get you started quickly</p>
+                        </div>
+
+                        <a class="button dark outline action-btn-product" href="{{ route('product.download.swagger', [$product->slug]) }}">Download Swagger</a>
+                    </div>
+                    @endif
+
+                    @foreach($content['lhs'] as $tab)
+                    @if($tab->body && strtoupper($tab->title) === "DOCS")
+
+                    <div class="each-call-to-action">
+                        <div class="left-data">
+                            <h5 class="block-header">Docs</h5>
+                            <p>Learn how to use this product in your apps</p>
+                        </div>
+                        <button id="button-{{$tab->slug}}" class="button dark outline action-btn-product" onclick="switchSection('product-{{$tab->slug}}');">Read Docs</button>
+                    </div>
+
+                    @endif
+                    @endforeach
+
+                </div>
             </div>
-
-            @foreach($content['lhs'] as $tab)
-                @if($tab->body)
-                    <button id="button-{{$tab->slug}}" class="light small outline product-section-button" onclick="switchSection('product-{{$tab->slug}}');">{{strtoupper($tab->title)}}</button>
-                @endif
-            @endforeach
-            <button id="button-specification" class="light small outline product-section-button" onclick="switchSection('product-specification');">SPECIFICATION</button>
-            @foreach($content['rhs'] as $tab)
-                <button id="button-{{$tab->slug}}" class="light small outline product-section-button" onclick="switchSection('product-{{$tab->slug}}');">{{strtoupper($tab->title)}}</button>
-            @endforeach
-
+            
+            <button id="button-specification" class="product-section-button" onclick="switchSection('product-specification');">Specifications</button>
+            
             <div id="product-specification" class="product-section">
+
                 @if($specification)
                     {{-- <a href="{{ route('product.download.postman', [$product->slug]) }}" class="button">Download Postman collection</a> --}}
 
-                    <h2 class="mt-4">Available endpoints</h2>
+                    <h2 class="endpoint-available">Available endpoints</h2>
                     <div id="elements-api-desktop">
                         <elements-api
                             apiDescriptionUrl="{{ asset("openapi/{$product->swagger}") }}"

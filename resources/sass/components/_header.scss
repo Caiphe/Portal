@@ -3,7 +3,7 @@
 
 .parent-header{
     @media(max-width: 966px){
-        position: fixed;
+        position: relative;
         z-index: 3;
     }
 }
@@ -308,7 +308,7 @@
     }
 
     @media screen and (max-width: 768px) {
-        position: fixed;
+        position: relative;
         box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .05);
     }
 }
