@@ -145,7 +145,7 @@
 
                     <div class="filter-head">
                         <h3>Categories</h3>
-                        <button class="clear-category custom-clear">Clear</button>
+                        <button type="button" class="clear-category custom-clear">Clear</button>
                     </div>
 
                     @foreach ($productCategories as $slug => $title)
@@ -158,7 +158,7 @@
                     <div class="group-filter">
                         <div class="filter-head">
                             <h3>Group</h3>  
-                            <button class="clear-group custom-clear">Clear</button>
+                            <button type="button" class="clear-group custom-clear">Clear</button>
                         </div>
                         <div class="custom-select-block">
                             <x-multiselect id="filter-group" name="filter-group" label="Select group" :options="$productGroups" />

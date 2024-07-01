@@ -241,6 +241,11 @@
 
                     @media screen and (max-width: 768px) {
                         width: 45%;
+                        font-size: 12px;
+
+                        svg{
+                            width: 27px;
+                        }
                     }
 
                     svg {
