@@ -24,7 +24,14 @@
 @isset($addButtonId)
 <input id="{{ $addButtonId }}" type="checkbox" class="add-product" name="add_product[]" value="{{ $dataTitle }}" @if($selected) checked @endif hidden autocomplete="off">
 @endisset
-<div {{ $attributes->merge(['class' => 'card card--product']) }} >
+<div {{ $attributes->merge(['class' => 'card card--product']) }}>
+    @auth
+        <img  class="product-warning" src="/images/warning-orange.svg"/>
+        <div class="product-warning-block">
+            This product is not available for the countries associated with your profile. You can still use this product but be aware of potential errors.
+        </div>
+    @endauth
+
     <div class="card__inner_container">
 
     <a href="{{ $href }}" target="{{ $target }}">

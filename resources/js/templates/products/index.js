@@ -224,3 +224,13 @@ function collapseSidebar(){
     var sideBar = document.querySelector('#sidebar');
     sideBar.classList.toggle('collapse');
 }
+
+var productWarningBtns = document.querySelectorAll('.product-warning');
+for(var i = 0; i < productWarningBtns.length; i++){
+    productWarningBtns[i].addEventListener('mouseover', showProductWarning);
+}
+
+function showProductWarning(){
+    var productWarning = this.nextElementSibling;
+    productWarning.classList.toggle('show');
+}

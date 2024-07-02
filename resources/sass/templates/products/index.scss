@@ -465,3 +465,32 @@ h3 {
   }
 }
 
+.card--product{
+    .product-warning{
+        position: absolute;
+        top: 23px;
+        right: 20px;
+    }
+
+    .product-warning-block{
+        width: 279px;
+        padding: 8px 12px;
+        background-color: #FF6B00;
+        position: absolute;
+        top: -79px;
+        right: -113px;
+        color: #FFFFFF;
+        font-size: 14px;
+        border-radius: 4px;
+        opacity: 0;
+        pointer-events: none;
+        z-index: -1;
+        cursor: pointer;
+
+        &.show{
+            opacity: 1;
+            z-index: 3;
+            pointer-events: auto;
+        }
+    }
+}
