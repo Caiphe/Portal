@@ -323,12 +323,19 @@
         var attributesList =  customAttributeDialog.querySelector('.custom-attributes-form-list');
 
         if(attributeName.value === "" || attributeValue.value === ''){
+            console.log( attributesList.childElementCount);
             attributeErrorMessage.classList.add('show');
 
             setTimeout(function(){
                 attributeErrorMessage.classList.remove('show');
             }, 4000);
 
+            return;
+        }
+
+        // check if attributes list has reached the limit 0f 18
+        if (attributesList.childElementCount >= 18) {
+            addAlert('error', 'Attributes name and value cannot exceed 18 attributes.');
             return;
         }
 
