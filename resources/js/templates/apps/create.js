@@ -4,6 +4,11 @@
         productAddBtns[i].addEventListener('click', addProductFunc);
     }
 
+    var nextBlockBtn = document.querySelector('#next-block-btn');
+    if(nextBlockBtn){
+        nextBlockBtn.addEventListener('click', filterProducts);
+    }
+
     function addProductFunc() {
         var product = this.parentElement.parentElement;
         product.classList.toggle('selected');

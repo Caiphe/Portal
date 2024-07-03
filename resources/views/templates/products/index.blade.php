@@ -23,6 +23,7 @@
                 <label class="filter-label" for="category-{{ $slug }}">{{ $title }}</label>
             </div>
         @endforeach
+        
 
         @if($hasPrivateProduct || $hasInternalProduct)
             <h3>Access</h3>
@@ -57,6 +58,16 @@
                 <h3>Country</h3>  
                 <button class="clear-country custom-clear">Clear</button>
             </div>
+
+            @if(count($userLocations) > 0)
+            <div class="filter-checkbox your-location-check-block">
+                <input type="checkbox" name="your-locations" value="" id="your-locations" class="filter-products filter-your-locations" value=""  autocomplete="off" />
+                <label class="filter-label" for="your-locations">
+                    <span>Available in my countries</span>
+                    <img src="/images/info.svg" />
+                </label>
+            </div>
+            @endif
 
             @foreach ($countries as $code => $name)
                 <div class="filter-checkbox country-check-box-filters">
@@ -112,11 +123,12 @@
                     </h3>
                   
                     @foreach ($products as $product)
-                        <x-card-product :title="$product->display_name"
+                        <x-card-product :product="$product"
+                                        :title="$product->display_name"
                                         :href="route('product.show', $product->slug)"
                                         :countries="$product->countries->pluck('code', 'name')"
                                         :class="'access-' . $product->access"
-                                        :tags="[$category, $product->group]"
+                                        :tags="[$category, $product->group ]"
                                         target="_self"
                                         :data-title="$product->display_name"
                                         :data-group="$product->group"

@@ -12,6 +12,17 @@
     The card description is passed through the $slot and link attributes can be added to the card to be applied to the a tag
 --}}
 
+@php
+    if(auth()->user()){
+        $locations = auth()->user()->countries;
+        $countryCodesString = implode(',', $locations->pluck('code')->toArray());
+        $countryCodes = $product->locations;
+        $countryCodes = explode(",", $countryCodes );
+        $countryCodesString  = explode(",", $countryCodesString);
+        $commonElements = array_intersect($countryCodes, $countryCodesString);
+    }
+@endphp
+
 @once
 @push('styles')
 <link href="{{ mix('/css/components/card-product.css') }}" rel="stylesheet"/>
@@ -19,19 +30,25 @@
 @endpush
 @endonce
 
-@props(['title','countries', 'tags', 'href', 'showAddButton' => 'false', 'selected' => false, 'addButtonId', 'addUrl', 'target' => '_blank'])
+@props(['title','countries', 'tags', 'href', 'product' => '', 'showAddButton' => 'false', 'selected' => false, 'addButtonId', 'addUrl', 'target' => '_blank'])
 
 @isset($addButtonId)
 <input id="{{ $addButtonId }}" type="checkbox" class="add-product" name="add_product[]" value="{{ $dataTitle }}" @if($selected) checked @endif hidden autocomplete="off">
 @endisset
 <div {{ $attributes->merge(['class' => 'card card--product']) }}>
+    
     @auth
-        <img  class="product-warning" src="/images/warning-orange.svg"/>
+    @if(count($commonElements) < 1)
+    <div type="button" class="product-warning">
+        <img  class="" src="/images/warning-orange.svg"/>
+
         <div class="product-warning-block">
             This product is not available for the countries associated with your profile. You can still use this product but be aware of potential errors.
         </div>
+    </div>
+    @endif
     @endauth
-
+    
     <div class="card__inner_container">
 
     <a href="{{ $href }}" target="{{ $target }}">

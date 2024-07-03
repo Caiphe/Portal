@@ -107,6 +107,7 @@ class ProductController extends Controller
     public function update(Product $product, ProductRequest $request)
     {
         $data = $request->validated();
+        // dd($data);
         $now = date('Y-m-d H:i:s');
         $contents = [];
         $tabs = $data['tab'] ?? [];
@@ -114,8 +115,8 @@ class ProductController extends Controller
         $logs = [];
 
         $product->update([
-            'group' => $data['group'] ?? 'MTN',
             'category_cid' => $request['category_cid'],
+            'description' => $data['description'],
         ]);
 
         for ($i = 0; $i < count($tabs['title']); $i++) {
@@ -138,8 +139,8 @@ class ProductController extends Controller
             $messages = '';
 
             for($i = 0; $i < count($updatedFields); $i++){
-                if($updatedFields[$i] === 'category_cid') $messages .= 'Product category updated ' .'<br/>';
-                if($updatedFields[$i] === 'group')  $messages .= 'Group updated ' .'<br />';
+                if($updatedFields[$i] === 'category_cid') $messages .= 'Category updated ' .'<br/>';
+                if($updatedFields[$i] === 'description')  $messages .= 'Description updated ' .'<br />';
             }
 
             $messages.= $contentdData;

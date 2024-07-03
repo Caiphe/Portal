@@ -194,6 +194,7 @@
                                 </h3>
                                 @foreach ($prods as $prod)
                                     <x-card-product
+                                                    :product="$prod"
                                                     :selected="!is_null($productSelected) && $productSelected->pid === $prod->pid"
                                                     :title="$prod->display_name"
                                                     class="product-block"
