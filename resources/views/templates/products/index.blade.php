@@ -60,8 +60,12 @@
             </div>
 
             @if(count($userLocations) > 0)
+            @php
+                $countriesCode = implode(",", $userLocations);
+            @endphp
+
             <div class="filter-checkbox your-location-check-block">
-                <input type="checkbox" name="your-locations" value="" id="your-locations" class="filter-products filter-your-locations" value=""  autocomplete="off" />
+                <input type="checkbox" name="your-locations" value="{{ $countriesCode }}" id="your-locations" class="filter-your-locations" value=""  autocomplete="off" />
                 <label class="filter-label" for="your-locations">
                     <span>Available in my countries</span>
                     <img src="/images/info.svg" />
