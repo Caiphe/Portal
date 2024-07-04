@@ -45,7 +45,7 @@
         <div class="row">
 
             <form id="form-edit-app">
-                <div class="app-details active">
+                <div class="app-details form-first-container active">
                     <div class="user-thumbnails">
                         <div class="thumbail" style="background-image: url({{ $user->profile_picture }})"></div>
                         <label for="user-thumb">
@@ -74,21 +74,21 @@
                     </div>
 
                     <div class="form-actions">
-                        <button class="dark next">
+                        <button class=" button primary next" id="next-block-btn">
                             Next
-                            @svg('arrow-forward', '#ffffff')
+                            @svg('arrow-forward', '#000000')
                         </button>
                     </div>
                 </div>
 
                 <div class="select-countries">
-                    <p>Select a country you would like to associate with your app *</p>
-
+                    <h3>Select a country you would like to associate with your app *</h3>
+                    
                     <div class="countries">
                         @foreach($countries as $key => $country)
                             <label class="country" for="country-{{ $loop->index + 1 }}" data-location="{{ $key }}">
                                 @svg('$key', '#000000', 'images/locations')
-                                <input type="radio" id="country-{{ $loop->index + 1 }}" class="country-checkbox" name="country-checkbox" value="{{ $key }}" @if(isset($data->country->code) && $key === $data->country->code) checked @endif data-location="{{ $key }}" autocomplete="off">
+                                <input type="radio" id="country-{{ $loop->index + 1 }}" class="country-checkbox filter-country" name="country-checkbox" value="{{ $key }}" @if(isset($data->country->code) && $key === $data->country->code) checked @endif data-location="{{ $key }}" autocomplete="off">
                                 <div class="country-checked"></div>
                                 {{ $country }}
                             </label>
@@ -105,41 +105,86 @@
                 </div>
 
                 <div class="select-products">
-                    <p>Select the products you would like to add to your app.</p>
 
-                    <p>Showing products for</p>
+                    <div class="product-filter-block">
 
-                    <div class="filtered-countries">
-                        @foreach($countries as $key => $country)
-                            <img src="/images/locations/{{$key}}.svg" title="{{$country}} flag" alt="{{$country}} flag" data-location="{{ $key }}">
-                        @endforeach
-                    </div>
-
-                    <div class="products">
-                        @foreach ($products as $category => $products)
-                            <div class="category" data-category="{{ $category }}">
-                                <h3 class="category-heading" data-category="{{ $products[0]->category_cid }}">{{ $category }}</h3>
-                                @foreach ($products as $product)
-                                    <x-card-product :title="$product->display_name"
-                                                    class="product-block"
-                                                    :href="route('product.show', $product->slug)"
-                                                    :tags="[$product->group, $product->category->title]"
-                                                    :addButtonId="$product->slug"
-                                                    :selected="in_array($product->name, $selectedProducts)"
-                                                    :data-title="$product->name"
-                                                    :data-group="$product->group"
-                                                    :data-access="$product->access"
-                                                    :data-category="$product->category_cid"
-                                                    :data-locations="$product->locations">{{ $product->description ?: 'View the product' }}
-                                    </x-card-product>
-                                @endforeach
+                        <div class="filter-head">
+                            <h3>Categories</h3>
+                            <button type="button" class="clear-category custom-clear">Clear</button>
+                        </div>
+    
+                        @foreach ($productCategories as $slug => $title)
+                            <div class="filter-checkbox">
+                                <input type="checkbox" name="{{ $slug }}" id="category-{{ $slug }}" class="filter-products filter-category" value="{{ $slug }}" @if(isset($selectedCategory) && $selectedCategory === $title) checked=checked @endif autocomplete="off" />
+                                <label class="filter-label" for="category-{{ $slug }}">{{ $title }}</label>
                             </div>
                         @endforeach
+    
+                        <div class="group-filter">
+                            <div class="filter-head">
+                                <h3>Group</h3>  
+                                <button type="button" class="clear-group custom-clear">Clear</button>
+                            </div>
+                            <div class="custom-select-block">
+                                <x-multiselect id="filter-group" name="filter-group" label="Select group" :options="$productGroups" />
+                                <img class="select-icon" src="/images/select-arrow.svg" />
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="form-actions">
-                        <button class="dark outline back">Back</button>
-                        <button class="dark" id="update">Update app</button>
+                    <div class="product-list-selection">
+                        <h3>Select the products you would like to add to your app.</h3>
+
+                        <div class="filtered-countries">
+                            @foreach($countries as $key => $country)
+                            <div class="block-location" data-location="{{ $key }}">
+                                <p>Showing products for</p>
+                                <img src="/images/locations/{{$key}}.svg" title="{{$country}} flag" alt="{{$country}} flag">
+                                <span>{{ $country }}</span>
+                            </div>
+                            @endforeach
+                        </div>
+
+                        <div class="products">
+                            @foreach ($products as $category => $products)
+                                <div class="category" data-category="{{ $category }}">
+
+                                    <h3 class="category-heading category-title" data-category="{{ $products[0]->category_cid }}">
+                                        {{ $category }}
+    
+                                        <div class="count-contenaire">
+                                            <span class="filters-count"></span>
+                                            <span class="header-count">{{ $products->count() }} products</span>
+                                        </div>
+    
+                                    </h3>
+
+                                    @foreach ($products as $product)
+                                        <x-card-product :title="$product->display_name"
+                                                        class="product-block"
+                                                        :product="$product"
+                                                        :href="route('product.show', $product->slug)"
+                                                        :tags="[$product->category->title, $product->group]"
+                                                        :addButtonId="$product->slug"
+                                                        :selected="in_array($product->name, $selectedProducts)"
+                                                        :data-title="$product->name"
+                                                        :data-group="$product->group"
+                                                        :data-access="$product->access"
+                                                        :data-category="$product->category_cid"
+                                                        :data-locations="$product->locations">{{ $product->description ?: 'View the product' }}
+                                        </x-card-product>
+                                    @endforeach
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <div class="form-actions create-apps-actions">
+                            <button class="button dark outline back">Back</button>
+                            <button class="button primary" id="update">Update app</button>
+                        </div>
+
+                        <div class="no-products-available">No products available. Please try other filters.</div>
+
                     </div>
                 </div>
 
@@ -154,6 +199,7 @@
     </div>
 @endsection
 @push('scripts')
+    <script src="{{ mix('/js/templates/apps/create.js') }}" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', init);
 
@@ -166,7 +212,6 @@
         var hasCountry = {{ +!is_null($data->country_code) }};
         var countries = document.querySelectorAll('.country');
         var update = document.getElementById('form-edit-app').addEventListener('submit', handleUpdate);
-
         function init() {
             handleButtonClick();
             handleBackButtonClick();
@@ -262,17 +307,16 @@
         @endif
 
         function filterLocations(selected) {
-
-            var locations = document.querySelectorAll('.filtered-countries img');
+            // var locations = document.querySelectorAll('.filtered-countries img');
+            var locations = document.querySelectorAll('.filtered-countries .block-location');
 
             for(var i = 0; i < locations.length; i++) {
 
-                locations[i].style.opacity = "0.15";
+                locations[i].style.display = "none";
 
                 for(var j = 0; j < selected.length; j++) {
-
                     if (locations[i].dataset.location === selected[j]) {
-                        locations[i].style.opacity = "1";
+                        locations[i].style.display = "flex";
                     }
                 }
             }

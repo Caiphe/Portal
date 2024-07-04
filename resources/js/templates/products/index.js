@@ -14,6 +14,32 @@
         });
     }
 
+    var yourLocations = document.querySelector('#your-locations');
+    yourLocations.addEventListener('click', checkedFunction);
+
+    function checkedFunction(){
+        var countryCheckboxes = document.querySelectorAll('.filter-country');
+        var yourLocations = this.value.split(',');
+
+        if(this.checked){
+            countryCheckboxes.forEach(function(checkbox) {
+                if (yourLocations.includes(checkbox.value))  {
+                    checkbox.checked = true;
+                    filterProducts();
+                    return;
+                }
+            });
+        }else{
+            countryCheckboxes.forEach(function(checkbox) {
+                if (yourLocations.includes(checkbox.value))  {
+                    checkbox.checked = false;
+                    filterProducts();
+                    return;
+                }
+            });
+        }
+    }
+
     document.getElementById('filter-text').addEventListener('input', debounce);
     document.getElementById('filter-group').addEventListener('change', filterProducts);
     document.getElementById('filter-clear').addEventListener('click', clearFilters);
@@ -214,7 +240,6 @@
 
 window.addEventListener('load', function(){
     localStorage.removeItem("category");
-    var cards = document.querySelectorAll('.card--product');
 })
 
 var filterButton = document.querySelector('.filter-show-mobile');
