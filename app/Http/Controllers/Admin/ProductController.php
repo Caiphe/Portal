@@ -107,7 +107,6 @@ class ProductController extends Controller
     public function update(Product $product, ProductRequest $request)
     {
         $data = $request->validated();
-        // dd($data);
         $now = date('Y-m-d H:i:s');
         $contents = [];
         $tabs = $data['tab'] ?? [];
