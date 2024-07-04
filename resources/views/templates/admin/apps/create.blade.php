@@ -167,6 +167,7 @@
                                     $href = route('product.show', $product->slug);
                                 @endphp
                                 <x-card-product :title="$product->display_name"
+                                                :product="$product"
                                                 class="product-block"
                                                 :href="$href"
                                                 target="_blank"

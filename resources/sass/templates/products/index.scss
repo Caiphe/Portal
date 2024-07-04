@@ -465,3 +465,26 @@ h3 {
   }
 }
 
+.your-location-check-block{
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    position: relative;
+    cursor: pointer;
+
+    .filter-label{
+        cursor: pointer;
+
+        span{
+            font-size: 13px;
+        }
+    }
+
+    img{
+        margin-right: 10px;
+        right: -15px;
+        position: absolute;
+        top: 6px;
+        cursor: pointer;
+    }
+}

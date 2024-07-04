@@ -140,6 +140,7 @@
                     <div class="alternative-cards">
                         @foreach($alternatives as $product)
                             <x-card-product :title="$product->display_name"
+                                            :product="$product"
                                             :href="route('product.show', $product->slug)"
                                             :countries="explode(',', $product->locations)"
                                             :tags="[$product->group]"

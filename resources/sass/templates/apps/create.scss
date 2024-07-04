@@ -299,6 +299,10 @@
             }
 
             .select-products {
+                .card--product .product-warning {
+                    top: 10px;
+                    right: 11px;
+                  }
 
                 .no-products-available{
                     font-size: 16px;
