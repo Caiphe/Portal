@@ -323,9 +323,7 @@
         var attributesList =  customAttributeDialog.querySelector('.custom-attributes-form-list');
 
         if(attributeName.value === "" || attributeValue.value === ''){
-            console.log( attributesList.childElementCount);
             attributeErrorMessage.classList.add('show');
-
             setTimeout(function(){
                 attributeErrorMessage.classList.remove('show');
             }, 4000);
