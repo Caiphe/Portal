@@ -25,19 +25,37 @@ class CustomAttributesRequest extends FormRequest
     public function rules()
     {
         return [
-            'attribute' => ['sometimes', 'array'],
+            'attribute' => ['sometimes', 'array', 'max:18'], // Max 18 elements
+            'attribute.*.name' => ['sometimes', 'string', 'max:1024'], // Max 1 KB
+            'attribute.*.value' => ['sometimes', 'string', 'max:2048'], // Max 2 KB
         ];
     }
 
-        /**
+    /**
+     * Custom messages for validation errors.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'attribute.array' => 'The attribute must be an array.',
+            'attribute.max' => 'The attribute array must not have more than 18 elements.',
+            'attribute.*.name.max' => 'The name must not exceed 1 KB.',
+            'attribute.*.value.max' => 'The value must not exceed 2 KB.',
+        ];
+    }
+
+    /**
      * Prepare the data for validation.
      *
      * @return void
      */
     protected function prepareForValidation()
     {
+        $attributes = $this->sanitizeAttributes($this->attribute ?? []);
         $this->merge([
-            'attribute' => $this->sanitizeAttributes($this->attribute ?? []),
+            'attribute' => $attributes,
         ]);
     }
 
