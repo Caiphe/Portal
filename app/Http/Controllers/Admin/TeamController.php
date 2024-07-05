@@ -4,15 +4,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Team;
 use Illuminate\Http\Request;
+use App\Traits\CountryTraits;
 use App\Http\Controllers\Controller;
 
 class TeamController extends Controller
 {
+    use CountryTraits;
+    
     public function index (Request $request)
     {
         $sort = '';
         $order = $request->get('order', 'desc');
         $numberPerPage = (int)$request->get('number_per_page', '15');
+        $countries = $this->getCountry();
+
         $teams = Team::all();
 
         if ($request->has('sort')) {

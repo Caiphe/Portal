@@ -8,21 +8,44 @@
         position: relative;
         display: flex;
         width: 100%;
-        justify-content: space-between;
+        margin-bottom: 15px;
 
-        .column-team-name{
-            width: 12%;
+        div{
+            font-size: 14px;
+            font-weight: 700;
         }
+    }
 
-        .column-team-country{
-            width: 71px;
-            text-align: center;
-        }
+    .value-team-name,
+    .column-team-name{
+        width: 28%;
+    }
 
-        p{
-            font-size: 16px;
-            font-weight: 600;
-        }
+    .value-team-country,
+    .column-team-country{
+        width: 10%;
+    }
+
+    .value-team-owner,
+    .column-team-owner{
+        width: 22%;
+    }
+
+    .value-team-apps,
+    .value-team-members,
+    .column-team-apps,
+    .column-team-members{
+        width: 10%;
+    }
+
+    .value-team-created_at,
+    .column-created_at{
+        width: 15%;
+    }
+
+    .value-team-actions,
+    .column-actions{
+        width: 15%;
     }
 
     .body-container{
@@ -32,22 +55,42 @@
         .each-team{
             width: 100%;
             background-color: #ffffff;
-            height: 55px;
             margin-bottom: 10px;
-            padding: 10px;
+            padding: 15px  15px 15px 20px;
             box-sizing: border-box;
             border-radius: 8px;
             display: flex;
-            justify-content: space-between;
+            font-size: 14px;
+            align-items: center;
 
-            .value-team-name{
-                width: 12%;
+            .value-team-apps,
+            .value-team-members{
+                padding-left: 10px;
+            }
+
+            .value-team-actions{
+                display: flex;
+              
+                .actions-btn{
+                    background-color: transparent;
+                    border: none;
+                    color: #0c678f;
+                    height: 25px;
+                    display: flex;
+                    width: 70px;
+                    position: relative;
+                    align-items: center;
+                    cursor: pointer;
+
+                    svg{
+                        width: 20px;
+                        height: 20px;
+                        margin-right: 5px;
+                    }
+                }
             }
 
             .value-team-country{
-                width: 71px;
-                text-align: center;
-
                 img{
                     width: 24px;
                 }
