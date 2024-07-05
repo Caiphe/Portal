@@ -158,8 +158,11 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 	Route::post('users/{user}/change-status', 'UserController@changeStatus')->middleware('can:administer-users')->name('admin.user.status');
 	Route::get('users/create', 'UserController@create')->middleware('can:administer-users')->name('admin.user.create');
 	Route::post('users/store', 'UserController@store')->middleware('can:administer-users')->name('admin.user.store');
-
 	Route::put('users/{user}/verify', 'UserController@verifyEmail')->middleware('can:administer-content')->name('admin.user.verify');
+
+	// Team - Company management
+	Route::get('teams', 'TeamController@index')->middleware('can:administer-users')->name('admin.team.index');
+
 });
 
 Route::namespace('Api\Admin')->prefix('api/admin')->group(function () {
