@@ -1,4 +1,4 @@
-<form  method="POST" action="{{ route('admin.team.store') }}" enctype="multipart/form-data"
+{{--<form  method="POST" action="{{ route('admin.team.store') }}" enctype="multipart/form-data"
       novalidate>
     @csrf
 
@@ -62,5 +62,131 @@
         </button>
 
     </label>
-</form>
+</form>--}}
+<style>
+    .title{
+        margin: 0;
+        background-color: #FFF;
+        border-radius: 8px;
+        box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.04);
+        padding: 16px;
+        font-size: 20px;
+        font-family: "mtn-regular", sans-serif;
+        font-weight: normal;
+        flex: 1 1 100%;
+    }
+   #main .form-container > h2 {
+        padding: 24px;
+        flex-wrap: wrap;
+        align-self: flex-start;
+        background-color: #FFF;
+        border-radius: 8px;
+        width: 100%;
+       margin: 0;
+       border-radius: 8px;
+       box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.04);
+       font-size: 20px;
+       font-family: "mtn-regular", sans-serif;
+       font-weight: normal;
+       flex: 1 1 100%;
 
+    }
+    .form-container h2 {
+        margin-top: 0;
+        font-size: 24px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    .form-group input[type="text"],
+    .form-group input[type="url"],
+    .form-group input[type="tel"],
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    .form-group input[type="file"] {
+        padding: 10px 0;
+    }
+    .form-group .form-info {
+        font-size: 12px;
+        color: #666;
+    }
+    .form-group button {
+        padding: 10px 20px;
+        border: none;
+        background-color: #ffcc00;
+        color: white;
+        font-size: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .form-group button:hover {
+        background-color: #e6b800;
+    }
+    .form-group .invite-button {
+        margin-top: 10px;
+    }
+</style>
+
+<div class="form-container">
+
+    <h2>Details</h2>
+
+    <form  method="POST" action="{{ route('admin.team.store') }}" enctype="multipart/form-data"
+           novalidate>
+        @csrf
+        <div class="form-group">
+            <label for="team-name">Team name*</label>
+            <input type="text" id="team-name" name="team-name" placeholder="Enter a name for your team" required>
+        </div>
+        <div class="form-group">
+            <label for="team-url">Team URL</label>
+            <input type="url" id="team-url" name="team-url" placeholder="Enter team URL (e.g. https://url.com)">
+        </div>
+        <div class="form-group">
+            <label for="contact-number">Contact number</label>
+            <input type="tel" id="contact-number" name="contact-number" placeholder="Enter your team contact number (e.g. +24374000000)">
+        </div>
+        <div class="form-group">
+            <label for="country">Country</label>
+            <select id="country" name="country">
+                <option value="">Select a country</option>
+                <!-- Add country options here -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="logo">Logo</label>
+            <input type="file" id="logo" name="logo">
+            <p class="form-info">*Max 5MB file size and Max Width of 2000 and Max Height of 2000.</p>
+        </div>
+        <div class="form-group">
+            <label for="team-members">Team members</label>
+            <input type="text" id="team-members" name="team-members" placeholder="Add one or more email address and click invite">
+            <button type="button" class="invite-button">Invite</button>
+        </div>
+        <div class="form-group">
+            <label for="team-owner">Team owner</label>
+            <select id="team-owner" name="team-owner" disabled>
+                <option value="">Please invite members to the team before selecting an owner</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" placeholder="Write a short description about your team"></textarea>
+        </div>
+        <div class="form-group">
+            <button type="submit">Complete</button>
+        </div>
+    </form>
+
+</div>

@@ -2,14 +2,20 @@
 
 namespace App\Http\Helpers\Teams;
 
+use App\Services\ApigeeService;
+use App\User;
+
 trait TeamsCompanyTrait
 {
     public function storeTeam($data)
     {
         dd($data);
 
-        $user = $request->user();
-        $data = $request->validated();
+        $owner = User::where('email', $data->team_owner)->first();
+        //Get team owner email from APIGEE
+        $user = ApigeeService::get('developers/' . $owner->email);
+        $user->load(['responsibleCountries']);
+
         $data['name'] = preg_replace('/[-_±§@#$%^&*()+=!]+/', '', $data['name']);
 
         $data['logo'] = $this->processLogoFile($request);

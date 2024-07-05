@@ -12,10 +12,9 @@
     <h1>Create a Team</h1>
 
     <div class="full">
-        <div class="editor-field">
-            <h2>Details</h2>
+
             @include('templates.admin.team.forms.create_team')
-        </div>
+
     </div>
 
 @endsection
