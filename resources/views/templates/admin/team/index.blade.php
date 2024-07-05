@@ -10,7 +10,7 @@
     <h1>Teams</h1>
 
     <div class="page-actions">
-        <a href="{{ route('admin.user.create') }}" class="button primary page-actions-create" aria-label="Create new team"></a>
+        <a href="{{ route('admin.team.create') }}" class="button primary page-actions-create" aria-label="Create new team"></a>
     </div>
 
     <x-admin.filter searchTitle="User's name / email address">
@@ -28,10 +28,10 @@
         @include('components.admin.list', [
             'collection' => $teams,
             'fields' => [
-                'Company name' => 'name', 'Country' => 'last_name|addClass:not-on-mobile', 
-                'Email' => 'email', 'Member since' => 'created_at|date:d M Y|addClass:not-on-mobile', 
-                'Role' => 'roles|implode:, >label|addClass:not-on-mobile', 
-                'Status' => 'status|splitToTag:,|addClass:not-on-mobile', 
+                'Company name' => 'name', 'Country' => 'last_name|addClass:not-on-mobile',
+                'Email' => 'email', 'Member since' => 'created_at|date:d M Y|addClass:not-on-mobile',
+                'Role' => 'roles|implode:, >label|addClass:not-on-mobile',
+                'Status' => 'status|splitToTag:,|addClass:not-on-mobile',
                 'Apps' => 'apps_count|addClass:not-on-mobile'],
             'modelName' => 'team'
         ])

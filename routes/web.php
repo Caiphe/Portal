@@ -163,6 +163,11 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 	// Team - Company management
 	Route::get('teams', 'TeamController@index')->middleware('can:administer-users')->name('admin.team.index');
 
+    Route::prefix('teams')->middleware('can:administer-users')->group(function () {
+        Route::get('create', 'TeamController@create')->name('admin.team.create');
+        Route::post('store', 'TeamController@store')->name('admin.team.store');
+    });
+
 });
 
 Route::namespace('Api\Admin')->prefix('api/admin')->group(function () {
