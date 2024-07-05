@@ -162,6 +162,7 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 
 	// Team - Company management
 	Route::get('teams', 'TeamController@index')->middleware('can:administer-users')->name('admin.team.index');
+	Route::get('teams/{team:id}/team', 'TeamController@show')->middleware('can:administer-users')->name('admin.team.show');
 
 });
 

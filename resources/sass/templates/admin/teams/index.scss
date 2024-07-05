@@ -1,0 +1,57 @@
+@use "../../../variables";
+
+#teams-table-data{
+    position: relative;
+    width: 100%;
+
+    .header{
+        position: relative;
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+
+        .column-team-name{
+            width: 12%;
+        }
+
+        .column-team-country{
+            width: 71px;
+            text-align: center;
+        }
+
+        p{
+            font-size: 16px;
+            font-weight: 600;
+        }
+    }
+
+    .body-container{
+        position: relative;
+        width: 100%;
+
+        .each-team{
+            width: 100%;
+            background-color: #ffffff;
+            height: 55px;
+            margin-bottom: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+
+            .value-team-name{
+                width: 12%;
+            }
+
+            .value-team-country{
+                width: 71px;
+                text-align: center;
+
+                img{
+                    width: 24px;
+                }
+            }
+        }
+    }
+}
