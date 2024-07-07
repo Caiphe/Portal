@@ -19,8 +19,11 @@
             Country
             <select name="status" class="users-status">
                 <option value="">Select by status</option>
-                <option value="verified" @if(request()->get('status') === 'verified') selected @endif>Verified</option>
-                <option value="not_verified" @if(request()->get('status') === 'not_verified') selected @endif>Not verified</option>
+
+                @foreach($countries as $code => $name)
+                    <option value="{{ $code }}">{{ $name }}</option>
+                @endforeach
+
             </select>
         </label>
     </x-admin.filter>

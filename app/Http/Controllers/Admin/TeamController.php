@@ -16,7 +16,6 @@ class TeamController extends Controller
         $sort = '';
         $order = $request->get('order', 'desc');
         $numberPerPage = (int)$request->get('number_per_page', '15');
-        $countries = $this->getCountry();
 
         $teams = Team::all();
 
@@ -34,6 +33,8 @@ class TeamController extends Controller
 
         return view('templates.admin.team.index', [
             'teams' => $teams,
+            'countries' => $this->getCountry(),
+
         ]);
     }
 
