@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\App;
-use App\Product;
 use App\User;
 use App\Country;
+use App\Product;
 use App\Notification;
 use App\Mail\ProductAction;
 use \Illuminate\Http\Request;
 use App\Mail\KycStatusUpdate;
+use App\Traits\CountryTraits;
 use App\Services\ApigeeService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
@@ -19,6 +20,7 @@ use App\Http\Requests\UpdateStatusRequest;
 
 class DashboardController extends Controller
 {
+    use CountryTraits;
 
     public function index(Request $request)
     {
@@ -314,6 +316,14 @@ class DashboardController extends Controller
 
         [$products, $countries] = $productLocationService->fetch();
 
+        $prodGroup = Product::with(['category', 'countries'])
+            ->where('category_cid', '!=', 'misc')
+            ->get();
+
+        $productGroups = $prodGroup->pluck('group')->unique()->toArray();
+		$productCategories = $prodGroup->pluck('category.title', 'category.slug');
+
+
         return view('templates.admin.apps.create', [
             'productCategories' => array_keys($products->toArray()),
             'appCreatorEmail' => $appCreator->email,
@@ -322,6 +332,8 @@ class DashboardController extends Controller
             'userEmails' => $emails,
             'products' => $products,
             'chosenUser' => $user,
+            'productCategories' => $productCategories,
+			'productGroups' => $productGroups
         ]);
     }
 }
