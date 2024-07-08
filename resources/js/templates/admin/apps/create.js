@@ -36,16 +36,6 @@
 
     removeThumbnail.style.display = 'none';
 
-    var productAddBtns = document.querySelectorAll('.add-product-btn');
-    for (var i = 0; i < productAddBtns.length; i++) {
-        productAddBtns[i].addEventListener('click', addProductFunc);
-    }
-
-    function addProductFunc() {
-        // var product = this.parentElement.parentElement;
-        this.parentElement.parentElement.classList.toggle('selected');
-    }
-
     function assignToMe() {
         select(appCreatorEmail);
         removeThumbnail.style.display = '';
