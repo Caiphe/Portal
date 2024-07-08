@@ -1108,14 +1108,12 @@ button {
 
 .country-name-flag {
     svg {
-        width: 16px;
+        width: 40px;
+        height: 25px;
+        border-radius: 5px;
         margin-bottom: -4px;
         margin-right: 5px;
     }
-}
-
-.custom-margin {
-    margin-right: -68px;
 }
 
 .form-team-leave {
