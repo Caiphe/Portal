@@ -17,19 +17,15 @@ class TeamController extends Controller
         $order = $request->get('order', 'desc');
         $numberPerPage = (int)$request->get('number_per_page', '15');
 
-        $teams = Team::all();
-
-        if ($request->has('sort')) {
-            $sort = $request->get('sort');
-
-            if ($sort === 'category.title') {
-                $teams->orderBy('category_title', $order);
-            } else {
-                $teams->orderBy($sort, $order);
-            }
-
-            $order = ['asc' => 'desc', 'desc' => 'asc'][$order] ?? 'desc';
-        }
+        $teams = Team::with(['apps', 'users'])
+            ->when($request->has('q'), function ($q) use ($request) {
+                $query = "%" . $request->q . "%";
+                $q->where(function ($q) use ($query) {
+                    $q->where('name', 'like', $query);
+                });
+            })
+            ->paginate($numberPerPage);
+       
 
         return view('templates.admin.team.index', [
             'teams' => $teams,

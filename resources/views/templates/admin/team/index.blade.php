@@ -17,8 +17,8 @@
     <x-admin.filter searchTitle="Team name">
         <label class="filter-item" for="status">
             Country
-            <select name="status" class="users-status">
-                <option value="">Select by status</option>
+            <select name="country" class="team-country">
+                <option value="">Select by country</option>
 
                 @foreach($countries as $code => $name)
                     <option value="{{ $code }}">{{ $name }}</option>
@@ -63,12 +63,12 @@
 
 @endsection
 @push('scripts')
-<script src="{{ mix('/js/templates/admin/index.js') }}" defer></script>
+{{-- <script src="{{ mix('/js/templates/admin/index.js') }}" defer></script> --}}
 <script>
     ajaxifyOnPopState = updateFilters;
     function updateFilters(params) {
         document.getElementById('search-page').value = params['q'] || '';
-        document.querySelector('.users-status').value = params['verified'] || '';
+        document.querySelector('.team-country').value = params['country'] || '';
     }
 </script>
 @endpush
