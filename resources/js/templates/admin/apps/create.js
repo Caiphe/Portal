@@ -42,8 +42,8 @@
     }
 
     function addProductFunc() {
-        var product = this.parentElement.parentElement;
-        product.classList.toggle('selected');
+        // var product = this.parentElement.parentElement;
+        this.parentElement.parentElement.classList.toggle('selected');
     }
 
     function assignToMe() {
