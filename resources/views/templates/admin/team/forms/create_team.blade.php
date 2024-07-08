@@ -64,17 +64,7 @@
     </label>
 </form>--}}
 <style>
-    .title{
-        margin: 0;
-        background-color: #FFF;
-        border-radius: 8px;
-        box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.04);
-        padding: 16px;
-        font-size: 20px;
-        font-family: "mtn-regular", sans-serif;
-        font-weight: normal;
-        flex: 1 1 100%;
-    }
+
    #main .form-container > h2 {
         padding: 24px;
         flex-wrap: wrap;
