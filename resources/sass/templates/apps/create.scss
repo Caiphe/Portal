@@ -240,12 +240,10 @@
                     }
 
                     @media screen and (max-width: 768px) {
-                        width: 45%;
+                        width: 44%;
                         font-size: 12px;
-
-                        svg{
-                            width: 27px;
-                        }
+                        flex-direction: column;
+                        height: auto;
                     }
 
                     svg {
@@ -255,6 +253,10 @@
                         margin-bottom: 0px;
                         margin-right: 7px;
                         border-radius: 4px;
+
+                        @media(max-width: 768px){
+                            width: 27px;
+                        }
                     }
 
                     .country-checked {

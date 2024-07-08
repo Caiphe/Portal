@@ -4,6 +4,8 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/templates/admin/apps/create.css') }}">
+    {{-- <link rel="stylesheet" href="{{ mix('/css/styles.css') }}"> --}}
+
 @endpush
 
 @section('content')
@@ -57,7 +59,7 @@
             </div>
 
             <div class="app-details-step create-app-section @if(isset($chosenUser)) active @endif" >
-                {{-- @svg('app-avatar', '#ffffff') --}}
+                
                 {{-- Section Heading --}}
                 <div class="apps-heading-container">
                     <span class="apps-top-text">Create a new app</span>
@@ -130,7 +132,7 @@
                     @foreach($countries as $key => $country)
                         <label class="country" for="country-{{ $loop->index + 1 }}" data-location="{{ $key }}">
                             @svg('$key', '#000000', 'images/locations')
-                            <input type="radio" id="country-{{ $loop->index + 1 }}" class="country-checkbox" name="country-checkbox" value="{{ $key }}" data-location="{{ $key }}" autocomplete="off">
+                            <input type="radio" id="country-{{ $loop->index + 1 }}" class="country-checkbox filter-country" name="country-checkbox" value="{{ $key }}" data-location="{{ $key }}" autocomplete="off">
                             <div class="country-checked"></div>
                             {{ $country }}
                         </label>
@@ -144,48 +146,87 @@
             </div>
 
             <div class="select-products create-app-section">
-                <div class="apps-heading-container">
-                    <span class="apps-top-text">Create a new app</span>
-                    <h2 class="app-create-heading">Select products</h2>
-                    <span class="gray-text">Select the products you would like to add to your app.</span>
-                </div>
+                <div class="product-filter-block">
 
-                <p class="showing-product-for">SHOWING PRODUCTS FOR</p>
-                <div class="filtered-countries">
-                    @foreach($countries as $key => $country)
-                        <img src="/images/locations/{{$key}}.svg" title="{{$country}} flag" alt="{{$country}} flag" data-location="{{ $key }}">
-                    @endforeach
-                </div>
+                    <div class="filter-head">
+                        <h3>Categories</h3>
+                        <button type="button" class="clear-category custom-clear">Clear</button>
+                    </div>
 
-                <div class="products">
-                    @foreach ($products as $category=>$products)
-                        <div class="category" data-category="{{ $products[0]->category_cid }}">
-                            <h3>{{ $category }}</h3>
-                            @foreach ($products as $product)
-                                @php
-                                    $tags = array($product->category->title, $product->group);
-                                    $href = route('product.show', $product->slug);
-                                @endphp
-                                <x-card-product :title="$product->display_name"
-                                                :product="$product"
-                                                class="product-block"
-                                                :href="$href"
-                                                target="_blank"
-                                                :tags="$tags"
-                                                :addButtonId="$product->slug"
-                                                :data-title="$product->name"
-                                                :data-group="$product->group"
-                                                :data-category="$product->category_cid"
-                                                :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}
-                                </x-card-product>
-                            @endforeach
+                    @foreach ($productCategories as $slug => $title)
+                        <div class="filter-checkbox">
+                            <input type="checkbox" name="{{ $slug }}" id="category-{{ $slug }}" class="filter-products filter-category" value="{{ $slug }}" @if(isset($selectedCategory) && $selectedCategory === $title) checked=checked @endif autocomplete="off" />
+                            <label class="filter-label" for="category-{{ $slug }}">{{ $title }}</label>
                         </div>
                     @endforeach
+
+                    <div class="group-filter">
+                        <div class="filter-head">
+                            <h3>Group</h3>  
+                            <button type="button" class="clear-group custom-clear">Clear</button>
+                        </div>
+                        <div class="custom-select-block">
+                            <x-multiselect id="filter-group" name="filter-group" label="Select group" :options="$productGroups" />
+                            <img class="select-icon" src="/images/select-arrow.svg" />
+                        </div>
+                    </div>
                 </div>
 
-                <div class="actions-btn-container">
-                    <button type="button" class="btn button white back">Back</button>
-                    <button type="button" id="next-create-app" class="btn primary next">Create app</button>
+
+                <div class="product-list-selection">
+                    <p class="bolded-heading">Select the products you would like to add to your app.</p>
+
+                    <div class="showing-product-for">
+                        <span class="showing-products">Showing products for</span>
+                        <div class="filtered-countries">
+                            @foreach($countries as $key => $country)
+                                <img src="/images/locations/{{$key}}.svg" title="{{$country}} flag" alt="{{$country}} flag" data-location="{{ $key }}">
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="products">
+                        @foreach ($products as $category=>$products)
+                            <div class="category" data-category="{{ $products[0]->category_cid }}">
+                                
+                                <h3 class="category-heading category-title" data-category="{{ $products[0]->category_cid }}">
+                                    {{ $category }}
+
+                                    <div class="count-contenaire">
+                                        <span class="filters-count"></span>
+                                        <span class="header-count">{{ $products->count() }} products</span>
+                                    </div>
+                                </h3>
+
+                                @foreach ($products as $product)
+                                    @php
+                                        $tags = array($product->category->title, $product->group);
+                                        $href = route('product.show', $product->slug);
+                                    @endphp
+                                    <x-card-product :title="$product->display_name"
+                                                    :product="$product"
+                                                    class="product-block"
+                                                    :href="$href"
+                                                    target="_blank"
+                                                    :tags="$tags"
+                                                    :addButtonId="$product->slug"
+                                                    :data-title="$product->name"
+                                                    :data-group="$product->group"
+                                                    :data-category="$product->category_cid"
+                                                    :data-locations="$product->locations">{{ !empty($product->description)?$product->description:'View the product' }}
+                                    </x-card-product>
+                                @endforeach
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <div class="actions-btn-container create-apps-actions">
+                        <button type="button" class="btn button outline dark back">Back</button>
+                        <button type="button" id="next-create-app" class="btn primary next">Create app</button>
+                    </div>
+
+                    <div class="no-products-available">No products available. Please try other filters.</div>
+
                 </div>
             </div>
 
@@ -211,6 +252,7 @@
 @endsection
 
 @push('scripts')
+
 <script>
     function adminAppsCreateLookup(key) {
         return {
@@ -222,5 +264,7 @@
         }[key] ?? null;
     }
 </script>
+
+<script src="{{ mix('/js/templates/apps/create.js') }}" defer></script>
 <script src="{{ mix('/js/templates/admin/apps/create.js') }}" defer></script>
 @endpush
