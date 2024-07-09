@@ -1,8 +1,8 @@
 @extends('layouts.admin')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ mix('/css/templates/admin/edit.css') }}">
-    <link rel="stylesheet" href="{{ mix('/css/templates/admin/users/edit.css') }}">
+    <link rel="stylesheet" href="{{ mix('/css/templates/teams/create.css') }}">
+    <link rel="stylesheet" href="{{ mix('/css/templates/admin/teams/forms.css') }}">
 @endpush
 
 @section('title', 'teams')
@@ -19,5 +19,6 @@
 
 @endsection
 @push('scripts')
-
+    <script src="{{ mix('/js/templates/teams/create.js') }}"></script>
+    <script src="{{ mix('/js/templates/teams/create-update-validation.js') }}"></script>
 @endpush

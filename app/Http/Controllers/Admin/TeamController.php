@@ -51,7 +51,7 @@ class TeamController extends Controller
         ]);
     }
 
-    public function create (Request $request)
+    public function create ()
     {
         $locations = Product::isPublic()
             ->WhereNotNull('locations')
@@ -72,7 +72,6 @@ class TeamController extends Controller
     public function store (TeamRequest $request)
     {
         $this->storeTeam($request);
-        //dd($test);
         return redirect()->route('admin.team.index');
     }
 

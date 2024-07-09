@@ -17,12 +17,18 @@ trait TeamsCompanyTrait
      */
     public function storeTeam($data)
     {
+        dd($data['team_members']);
+        // If it's a string, explode it
+        $teamMembers = explode(',', is_string($data['team_members']));
+        dd($teamMembers);
+
+
         //Get first team owner email from Portal and check if it exists in APIGEE
         $owner = User::where('email', $data->team_members[0])->first();
         $user = ApigeeService::get('developers/' . $owner->email);
 
         //abort action if user does not exist in APIGEE
-        if(isset($user['code'])){
+        if (isset($user['code'])) {
             return redirect()->back()->with('alert', "error:'" . $user['message'] . "'");
         }
 
@@ -34,7 +40,7 @@ trait TeamsCompanyTrait
             ->where('created_at', '>=', now()->startOfDay())
             ->count();
 
-        if($teamCount >= 2){
+        if ($teamCount >= 2) {
             return response()->json(['success' => true], 429);
         }
 
@@ -45,7 +51,7 @@ trait TeamsCompanyTrait
             $this->sendInvites($teamInviteEmails, $team);
         }
 
-        if($team){
+        if ($team) {
             return response()->json(['success' => true], 200);
         }
     }
@@ -65,11 +71,11 @@ trait TeamsCompanyTrait
         $teamOwner = User::where('id', $team->owner_id)->first();
         $teamAdmin = $teamOwner->hasTeamRole($team, 'team_admin');
 
-        if(!$teamAdmin){
+        if (!$teamAdmin) {
             return response()->json(['success' => true], 424);
         }
 
-        if(data->has('logo')){
+        if ($data->has('logo')) {
             $teamLogo = $this->processLogoFile($data);
         }
 
@@ -87,19 +93,19 @@ trait TeamsCompanyTrait
         $updatedFields = array_keys($team->getChanges());
         unset($updatedFields['updated_at']);
 
-        if(empty($updatedFields)){
+        if (empty($updatedFields)) {
             return response()->json(['success' => true], 304);
         }
 
         ApigeeService::updateCompany($team);
 
-        foreach($team->users as $user){
-            if($oldName !== $team->name){
+        foreach ($team->users as $user) {
+            if ($oldName !== $team->name) {
                 Notification::create([
                     'user_id' => $user->id,
                     'notification' => "Your team <strong> {$oldName} </strong> has been updated to <strong>{$team->name}</strong>, please click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team to view the changes",
                 ]);
-            }else{
+            } else {
                 Notification::create([
                     'user_id' => $user->id,
                     'notification' => "Your team <strong>{$team->name}</strong> has been updated please click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team to view the changes",

@@ -41,7 +41,8 @@
         <div class="each-team">
             <div class="value-team-name">{{ $team->name }}</div>
             <div class="value-team-country">
-               <img src="/images/locations/{{ $team->country }}.svg" src="team-{{ $team->country }}" />
+               <img src="/images/locations/{{ $team->country }}.svg" src="team-{{ $team->country }}.svg"
+                    alt="{{ $team->country }}"/>
             </div>
             <div class="value-team-owner">{{ $team->owner->email }}</div>
             <div class="value-team-members">{{ $team->country }}</div>
