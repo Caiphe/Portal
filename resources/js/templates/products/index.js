@@ -15,29 +15,45 @@
     }
 
     var yourLocations = document.querySelector('#your-locations');
-    yourLocations.addEventListener('click', checkedFunction);
 
-    function checkedFunction(){
+    if(yourLocations){
+        yourLocations.addEventListener('click', checkedFunction);
         var countryCheckboxes = document.querySelectorAll('.filter-country');
-        var yourLocations = this.value.split(',');
 
-        if(this.checked){
-            countryCheckboxes.forEach(function(checkbox) {
-                if (yourLocations.includes(checkbox.value))  {
-                    checkbox.checked = true;
-                    filterProducts();
-                    return;
-                }
-            });
-        }else{
-            countryCheckboxes.forEach(function(checkbox) {
-                if (yourLocations.includes(checkbox.value))  {
-                    checkbox.checked = false;
-                    filterProducts();
-                    return;
-                }
-            });
+        function checkedFunction(){
+            var yourLocations = this.value.split(',');
+
+            if(this.checked){
+                countryCheckboxes.forEach(function(checkbox) {
+                    if (yourLocations.includes(checkbox.value))  {
+                        checkbox.checked = true;
+                        filterProducts();
+                        return;
+                    }
+                });
+            }else{
+                countryCheckboxes.forEach(function(checkbox) {
+                    if (yourLocations.includes(checkbox.value))  {
+                        checkbox.checked = false;
+                        filterProducts();
+                        return;
+                    }
+                });
+            }
         }
+
+        countryCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                var values = yourLocations.value.split(',');
+                var allChecked = values.every(value => {
+                    var checkbox = document.querySelector(`input.filter-country[value="${value}"]`);
+                    console.log(checkbox.checked);
+                    return checkbox && checkbox.checked;
+                });
+
+                yourLocations.checked = allChecked;
+            });
+        });
     }
 
     document.getElementById('filter-text').addEventListener('input', debounce);
