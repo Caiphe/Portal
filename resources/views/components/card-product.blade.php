@@ -49,7 +49,7 @@
     @endif
     @endauth
     
-    <div class="card__inner_container">
+    <div class="card__inner_container @if($selected) selected @endif">
 
     <a href="{{ $href }}" target="{{ $target }}">
         <div class="card__content">
