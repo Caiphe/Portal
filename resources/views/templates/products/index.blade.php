@@ -68,7 +68,13 @@
                 <input type="checkbox" name="your-locations" value="{{ $countriesCode }}" id="your-locations" class="filter-your-locations" value=""  autocomplete="off" />
                 <label class="filter-label" for="your-locations">
                     <span>Available in my countries</span>
-                    <img src="/images/info.svg" />
+                    <div class="available-info-img">
+                        <img class="available-img" src="/images/info.svg" />
+                        <div class="available-info-block">
+                            Only show the countries that are associated with your profile. You can adjust country associations in your profile if you need to.
+                        </div>
+                    </div>
+                   
                 </label>
             </div>
             @endif
