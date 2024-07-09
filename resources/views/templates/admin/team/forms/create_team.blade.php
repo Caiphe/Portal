@@ -137,20 +137,23 @@
         @csrf
         <div class="form-group">
             <label for="team-name">Team name*</label>
-            <input type="text" id="team-name" name="team-name" placeholder="Enter a name for your team" required>
+            <input type="text" id="team-name" name="name" placeholder="Enter a name for your team" required>
         </div>
         <div class="form-group">
             <label for="team-url">Team URL</label>
-            <input type="url" id="team-url" name="team-url" placeholder="Enter team URL (e.g. https://url.com)">
+            <input type="url" id="team-url" name="url" placeholder="Enter team URL (e.g. https://url.com)">
         </div>
         <div class="form-group">
             <label for="contact-number">Contact number</label>
-            <input type="tel" id="contact-number" name="contact-number" placeholder="Enter your team contact number (e.g. +24374000000)">
+            <input type="tel" id="contact-number" name="contact" placeholder="Enter your team contact number (e.g. +24374000000)">
         </div>
         <div class="form-group">
             <label for="country">Country</label>
             <select id="country" name="country">
-                <option value="">Select a country</option>
+                <option selected value="">Select a country</option>
+                @foreach($countries as $country)
+                    <option value="{{ $country }}">{{ $country }}</option>
+                @endforeach
                 <!-- Add country options here -->
             </select>
         </div>
@@ -161,12 +164,12 @@
         </div>
         <div class="form-group">
             <label for="team-members">Team members</label>
-            <input type="text" id="team-members" name="team-members" placeholder="Add one or more email address and click invite">
+            <input type="text" id="team-members" name="team_members[]" placeholder="Add one or more email address and click invite">
             <button type="button" class="invite-button">Invite</button>
         </div>
         <div class="form-group">
             <label for="team-owner">Team owner</label>
-            <select id="team-owner" name="team-owner" disabled>
+            <select id="team-owner" name="team_owner" disabled>
                 <option value="">Please invite members to the team before selecting an owner</option>
             </select>
         </div>
