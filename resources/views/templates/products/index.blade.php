@@ -5,18 +5,26 @@
 @endpush
 
 @section('title', 'Products')
+<div class="view-country-body-container"></div>
 
 @section('sidebar')
     <div class="filter-sidebar">
-        <input type="text" name="filter-text" id="filter-text" class="filter-text" placeholder="Search" autofocus autocomplete="off" />
 
-        <h3>Categories</h3>
+        <h2 class="filter-title-heading filter-show-mobile"> 
+            <img alt="filter-icon" src="/images/filter.svg" /> Filters</h2>
+        <div class="filter-head">
+            <h3>Categories</h3>
+            <button class="clear-category custom-clear">Clear</button>
+        </div>
+
         @foreach ($productCategories as $slug => $title)
             <div class="filter-checkbox">
                 <input type="checkbox" name="{{ $slug }}" id="category-{{ $slug }}" class="filter-products filter-category" value="{{ $slug }}" @if(isset($selectedCategory) && $selectedCategory === $title) checked=checked @endif autocomplete="off" />
                 <label class="filter-label" for="category-{{ $slug }}">{{ $title }}</label>
             </div>
         @endforeach
+        
+
         @if($hasPrivateProduct || $hasInternalProduct)
             <h3>Access</h3>
             @if($hasInternalProduct)
@@ -32,38 +40,83 @@
                 </div>
             @endif
         @endif
-        <div class="country-filter">
-            <h3>Country</h3>
-            <x-multiselect id="filter-country" name="filter-country" label="Select country" :options="$countries" />
-        </div>
 
         <div class="group-filter">
-            <h3>Group</h3>  
-            <x-multiselect id="filter-group" name="filter-group" label="Select group" :options="$productGroups" />
+
+            <div class="filter-head">
+                <h3>Group</h3>  
+                <button class="clear-group custom-clear">Clear</button>
+            </div>
+            <div class="custom-select-block">
+                <x-multiselect id="filter-group" name="filter-group" label="Select group" :options="$productGroups" />
+                <img class="select-icon" src="/images/select-arrow.svg" />
+            </div>
         </div>
         
+        <div class="country-filter">
+            <div class="filter-head">
+                <h3>Country</h3>  
+                <button class="clear-country custom-clear">Clear</button>
+            </div>
+
+            @if(count($userLocations) > 0)
+            @php
+                $countriesCode = implode(",", $userLocations);
+            @endphp
+
+            <div class="filter-checkbox your-location-check-block">
+                <input type="checkbox" name="your-locations" value="{{ $countriesCode }}" id="your-locations" class="filter-your-locations" value=""  autocomplete="off" />
+                <label class="filter-label" for="your-locations">
+                    <span>Available in my countries</span>
+                    <div class="available-info-img">
+                        <img class="available-img" src="/images/info.svg" />
+                        <div class="available-info-block">
+                            Only show the countries that are associated with your profile. You can adjust country associations in your profile if you need to.
+                        </div>
+                    </div>
+                   
+                </label>
+            </div>
+            @endif
+
+            @foreach ($countries as $code => $name)
+                <div class="filter-checkbox country-check-box-filters">
+                    <input type="checkbox" name="{{ $code }}" id="country-{{ $code }}" class="filter-products filter-country" value="{{ $code }}" autocomplete="off" />
+                    <label class="filter-label" for="country-{{ $code }}">
+                        <img src="/images/locations/{{ $code }}.svg" title="{{ $name }} flag" alt="{{ $code }} flag">
+                        {{ $name }}
+                    </label>
+                </div>
+            @endforeach
+        </div>
+
         <button id="filter-clear" class="dark outline"
-                @isset($selectedCategory)
-                    style="display:block"
-                @endisset>
+            @isset($selectedCategory) style="display:block" @endisset>
             Clear filters
         </button>
     </div>
 @endsection
 
 @section('banner')
-    <div id="banner"></div>
+    <div id="banner">
+        <div class="banner-content">
+            <h1>{{ $content[0]['title'] }}</h1>
+            <p>Browse <strong>{{ $products->count() }}</strong> products across <strong>{{ $countries->count() }}</strong> countries </p>
+        </div>
+    </div>
 @endsection
 
 @section('content')
+{{-- 
     <div class="header-block">
         <h1>{{ $content[0]['title']}} <span class="available-products-count">({{ $products->count() }} available)</span></h1>
         {!! $content[0]['body'] !!}
         @svg('people', null, 'images/illustrations')
     </div>
+ --}}
 
     <div class="content">
-        <div class="products-count" id="products-count">Displaying {{ $products->count() }} products</div>
+        <input type="text" name="filter-text" id="filter-text" class="filter-text" placeholder="search for products" autofocus="" autocomplete="off">
         <div class="products">
             @foreach ($productsCollection as $category => $products)
                 <div class="category"
@@ -71,17 +124,21 @@
                      style="display:none"
                     @endif
                 >
+
                     <h3 class="category-title" data-category="{{ $products[0]->category_cid }}">{{ $category }} 
-                        <span class="filters-count"></span>
-                        <span class="header-count">{{ $products->count() }} products</span>
+                        <div class="count-contenaire">
+                            <span class="filters-count"></span>
+                            <span class="header-count">{{ $products->count() }} products</span>
+                        </div>
                     </h3>
                   
                     @foreach ($products as $product)
-                        <x-card-product :title="$product->display_name"
+                        <x-card-product :product="$product"
+                                        :title="$product->display_name"
                                         :href="route('product.show', $product->slug)"
                                         :countries="$product->countries->pluck('code', 'name')"
                                         :class="'access-' . $product->access"
-                                        :tags="[$product->group, $category]"
+                                        :tags="[$category, $product->group ]"
                                         target="_self"
                                         :data-title="$product->display_name"
                                         :data-group="$product->group"
@@ -93,7 +150,11 @@
                 </div>
             @endforeach
         </div>
+
+        <div class="no-products-available">No products available. Please try other filters.</div>
     </div>
+
+
 @endsection
 
 @push('scripts')

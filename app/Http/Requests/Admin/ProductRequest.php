@@ -24,6 +24,7 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         return [
+            'description' => ['nullable'],
             'category_cid' => ['required'],
             'group' => ['nullable'],
             'tab' => ['array'],
@@ -43,6 +44,7 @@ class ProductRequest extends FormRequest
         $this->merge([
             'locations' => array_map(fn($item) =>  htmlspecialchars($item, ENT_NOQUOTES), $this->locations ?? []),
             'group' => htmlspecialchars($this->group, ENT_NOQUOTES),
+            'description' => htmlspecialchars($this->description, ENT_NOQUOTES),
             'category_cid' => htmlspecialchars($this->category_cid, ENT_NOQUOTES),
             'tab' => $tab,
         ]);

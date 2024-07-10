@@ -71,7 +71,7 @@
     </div>
     {{--User status--}}
 
-    @if(isset($user))
+    @if(isset($user) && $isAdminUser)
     <div class="editor-field">
         <h2>User Status</h2>
     
@@ -158,6 +158,7 @@
         </div>
         @endif
 
+
         @if(!$deletionRequest)
         <div class="editor-field">
             <h2>User Deletion</h2>
@@ -177,4 +178,26 @@
     @endif
 </div>
 
+@if(isset($user) && $isAdminUser)
+    <div class="editor-field main-verification-container">
+        <h2>User Verification</h2>
 
+            <div class="user-verify-container">
+                <p class="user-verify-style">User account verification status: <span
+                        class="verify-user {{ $user->status !== 'Verified' ?'unverified' : 'verified' }}">
+                        </span><span
+                        class="user-verification-status">{{ $user->status !== 'Verified' ?'Unverified' : 'Verified' }}</span>
+                </p>
+            </div>
+
+
+            @if($user->status === 'Verified')
+                <button type="button" class="disabled-btn disabled">  Verify Account</button>
+            @else
+            <button type="button" id="user-verify-btn" class="button outline blue save-button"> 
+                Verify Account
+            </button>
+        @endif
+
+    </div>
+@endif

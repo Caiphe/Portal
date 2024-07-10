@@ -78,6 +78,7 @@
     <div class="products">
         @foreach($bundle->products as $product)
         <x-card-product
+            :product="$product"
             :title="$product->display_name" 
             :href="route('product.show', $product->slug)"
             :countries="explode(',', $product->locations)"

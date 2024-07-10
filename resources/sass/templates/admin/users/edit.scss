@@ -402,3 +402,74 @@ button.show-password {
         }
     }
 }
+
+
+.user-status-block {
+    padding-bottom: 20px;
+    box-sizing: border-box;
+    width: 98%;
+    @media(max-width: 768px){
+        width: 92%;
+    }
+    .editor-field-label{
+        box-sizing: border-box;
+        select{
+            margin-top: 20px;
+            max-width: 95%;
+            display: block;
+        }
+    }
+    #user-status-btn {
+       margin-left: 20px;
+    }
+}
+
+.main-verification-container{
+    .user-verify-container {
+        font-size: 15px;
+        margin-top: 1px;
+        padding-bottom: 10px;
+        box-sizing: border-box;
+        width: 98%;
+        padding-left: 26px;
+        padding-top: 4px;
+    
+        .verify-user {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: #19AC4A;
+            margin-left: 15px;
+            display: inline-block;
+            margin-top: 2px;
+        
+            &.unverified {
+                background-color: #FF0000;
+            }
+        }
+    }
+
+    .user-verify-style {
+        display: flex;
+        align-items: center;
+    }
+    .user-verification-status{
+        margin-left: 11px;
+        position: relative;
+        font-size: 15px;
+    }
+
+    .disabled-btn{
+        background-color: #beb1b14d;
+        cursor: none;
+        pointer-events: none;
+        color: #1a1a1a;
+        transition: all 0.3s ease-in-out;
+        width: 150px;
+        outline: none;
+        color: #cdcdcd;
+        border: 1px #beb1b14d solid;
+        margin-left: 25px;
+        margin-bottom: 40px;
+    }
+}

@@ -6,7 +6,6 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-EESWEBL5F7');
 </script>
-@endif
 
 <!-- Google Tag Manager -->
 <script>
@@ -16,4 +15,5 @@ gtag('config', 'G-EESWEBL5F7');
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-3TZ4G43S');
 </script>
-<!-- End Google Tag Manager -->
+    <!-- End Google Tag Manager -->
+@endif

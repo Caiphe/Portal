@@ -4,6 +4,7 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/styles.css') }}">
+    <link rel="stylesheet" href="{{ mix('/css/layouts/cookie-notice.css') }}">
     <link rel="preload" href="/fonts/MTNBrighterSans-Regular.woff2" as="font" type="font/woff2">
     <link rel="preload" href="/fonts/MTNBrighterSans-Bold.woff2" as="font" type="font/woff2">
     <link rel="preload" href="/fonts/MTNBrighterSans-Medium.woff2" as="font" type="font/woff2">
@@ -15,10 +16,10 @@
     <x-header/>
     @yield('banner')
     <div class="wrapper container">
-        <nav id="sidebar">
+        <nav id="sidebar" class="site-sidebar product-side-bar">
             @yield('sidebar')
         </nav>
-        <main id="main">
+        <main id="main" class="main-container product-page">
             @yield("content")
         </main>
     </div>

@@ -100,6 +100,23 @@
     </div>
 </x-dialog-box>
 
+{{-- User verification modal --}}
+<x-dialog-box dialogTitle="Verify User" class="verify-user-modal">
+    <div class="two-note">
+        <p>Are you sure you want to verify this user?</p>
+    </div>
+
+    <div class="bottom-shadow-container button-container">
+        <form id="verify-user-form" method="post" action="{{ route('admin.user.verify', $user) }}">
+            @method('PUT')
+            @csrf
+
+            <button type="submit"  class="btn primary">Confirm</button>
+            <button type="button" class="cancel" onclick="closeDialogBox(this);">Cancel</button>
+        </form>
+    </div>
+</x-dialog-box>
+
 <form id="admin-form" action="{{ route('admin.user.update', $user->slug) }}" method="POST">
     @method('PUT')
     @include('templates.admin.users.editform')

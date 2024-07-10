@@ -1,4 +1,7 @@
 @use "../../variables";
+body{
+    overflow-X: hidden;
+}
 
 h2,
 h3 {
@@ -9,20 +12,108 @@ h3 {
     color: variables.$grey300;
 }
 
-#sidebar {
-    @media #{variables.$small} {
-        display: none;
+
+.layout-sidebar{
+    width: 100%;
+    background-color: #F8F8F8;
+
+    .wrapper{
+        margin: 30px auto;
+    
+        &.container{
+            width: 90%;
+
+            @media #{variables.$small} {
+                display: flex;
+                flex-direction: column;
+                margin-top: 20px;
+            }
+        }
+
+        .site-sidebar {
+            border-radius: 10px;
+
+            &.product-side-bar{
+                background-color: #FFFFFF;
+                padding: 15px 28px 52px 34px;
+
+                @media #{variables.$small} {
+                    display: block;
+                    max-width: 100%;
+                    max-width: 100%;
+                    padding: 4px 14px 22px 17px;
+                    height: 50px;
+                    flex: revert;
+                    height: 60px;
+                    overflow: hidden;
+                    transition: all .5s ease-in-out;
+    
+                    &.collapse{
+                        flex: 1;
+                        height: 100%;
+                        transition: all .5s ease-in-out;
+                        overflow: revert;
+                        width: 100%;
+                    }
+                }
+            }
+        
+            @media #{variables.$medium} {
+                display: none;
+            }
+        }
     }
 
-    @media #{variables.$medium} {
-        display: none;
+    .custom-select-block{
+        position: relative;
+
+        .select-icon{
+            position: absolute;
+            right: 3px;
+            top: 5px;
+            height: 30px;
+            pointer-events: none;
+        }
+
+        select{
+            border: 2px solid #000000;
+            position: relative;
+            width: 100%;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        &::after{
+            content: "";
+            height: 38px;
+            width: 2px;
+            background-color: #000000;
+            position: absolute;
+            top: 2px;
+            right: 42px;
+        }
+    }
+
+    .country-check-box-filters{
+        .filter-label{
+            margin-top: -1px;
+            display: flex;
+        }
+
+        img{
+            width: 24px;
+            margin-top: 2px;
+            margin-right: 10px;
+            margin-left: 6px;
+        }
     }
 }
 
 #banner {
-    height: 300px;
+    height: 140px;
     width: 100%;
-    background: url('/images/banners/products.jpg') no-repeat center center / cover;
+    background: url('/images/banners/products-bg.png') no-repeat center center / cover;
     flex: 1 0 auto;
 
     @media #{variables.$small} {
@@ -32,10 +123,20 @@ h3 {
     @media #{variables.$medium} {
         display: none;
     }
+
+    .banner-content{
+        width: 90%;
+        margin: 25px auto;
+    }
+
+    p{
+        font-size: 16px;
+    }
 }
 
 #main {
     margin-bottom: 40px;
+    padding: 0px !important;
 
     .header-block {
         background-color: #000;
@@ -139,9 +240,16 @@ h3 {
 
     .content {
         padding-left: 40px;
-        margin-top: 40px;
+        margin-top: 0px;
         height: 100%;
-        background-color: #ffffff;
+
+        .filter-text{
+            width: 96%;
+            height: 40px;
+            display: block;
+            border: solid 1px #000000;
+            margin-bottom: 30px;
+        }
 
         .products-count{
             color: #969696;
@@ -167,10 +275,11 @@ h3 {
 
         .category-title:first-of-type {
             margin-top: 0;
+            display: flex;
 
             span{
                 font-size: 13px;
-                color: #969696;
+                color: #000000;
                 font-family: variables.$MTN-Regular;
             }
 
@@ -179,12 +288,20 @@ h3 {
 
                 &.show{
                     display: block;
-                    margin-left: 10px;
+                    margin-right: 10px;
                 }
             }
 
-            .header-count{
+            .count-contenaire{
+                display: flex;
+                align-items: center;
+                background-color: #E6E6E6;
+                padding: 3px 10px;
+                border-radius: 5px;
+                border-radius: 8px;
+                color: #000000;
                 margin-left: 10px;
+                margin-top: -4px;
             }
         }
 
@@ -217,12 +334,7 @@ h3 {
                     }
 
                     @media screen and (min-width: 768px) {
-                        padding: 16px 20px 20px;
-
-                        .tag {
-                            display: inline-block;
-                            margin-top: 4px;
-                        }
+                        padding: 32;
                     }
 
                     @media screen and (min-width: 768px) and (max-width: 1099px) {
@@ -248,8 +360,43 @@ h3 {
 }
 
 .filter-sidebar {
-    h3 {
-        font-size: 12px;
+
+    .filter-title-heading{
+        display: flex;
+
+        img{
+            margin-right: 5px;
+            display: none;
+
+            @media(max-width: 768px){
+                display: block;
+            }
+        }
+
+        @media(max-width: 768px){
+            cursor: pointer;
+            font-size: 18px;
+        }
+    }
+   
+    .filter-head{
+        display: flex;
+        align-items: center;
+        margin-top: -14px;
+        justify-content: space-between;
+
+        h3 {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .custom-clear{
+            background-color: transparent;
+            color: #00678F;
+            border: none;
+            font-size: 15px;
+            font-weight: bolder;
+        }
     }
 
     .filter-checkbox {
@@ -259,8 +406,8 @@ h3 {
 
         .filter-label {
             margin-left: 5px;
-            color: variables.$grey700;
-            font-size: 12px;
+            color: #000000;
+            font-size: 14px;
         }
     }
 
@@ -275,5 +422,112 @@ h3 {
 
     #filter-clear {
         margin-top: 30px;
+        width: 100%;
+    }
+}
+
+.view-country-body-container{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background-color: transparent;
+    z-index: 0;
+    display: none;
+    pointer-events: none;
+
+    &.show{
+        display: block;
+        cursor: pointer;
+        pointer-events: auto;
+        z-index: 2;
+    }
+}
+
+.no-products-available{
+    font-size: 16px;
+    color: #787878;
+    opacity: 0;
+    z-index: 0;
+    text-align: center;
+    padding: 14px;
+    border-radius: 4px;
+    border: 1px solid #E6E6E6;
+
+    &.show{
+        opacity: 1;
+        z-index: 2;
+    }
+}
+
+@media screen and (max-width: 769px) {
+  .layout-sidebar #main {
+    margin-top: 20px !important;
+  }
+}
+
+.your-location-check-block{
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    position: relative;
+    cursor: pointer;
+
+    .available-info-block{
+        position: absolute;
+        padding: 8px;
+        font-size: 14px;
+        font-weight: 400;
+        color: #000000;
+        background-color: #FFFFFF;
+        border-radius: 8px;
+        border: 1px solid  #969696;
+        box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.16);
+        z-index: -1;
+        opacity: 0;
+        right: -325px;
+        top: -29px;
+        pointer-events: none;
+        width: 0px;
+        transition: all 0.3s ease-in-out;
+        width: 320px;
+        height: auto;
+    }
+
+    .available-info-img{
+        margin-right: 10px;
+        right: -15px;
+        position: absolute;
+        top: 0px;
+        cursor: pointer;
+
+        img{
+            margin-right: 10px;
+            right: -15px;
+            position: absolute;
+            top: 6px;
+            cursor: pointer;
+
+            @media(max-width: 768px){
+                display: none;
+            }
+        }
+
+        &:hover{
+            .available-info-block{
+                opacity: 1;
+                z-index: 2;
+                height: auto;
+                pointer-events: auto;
+                transition: all 0.3s ease-in-out;
+            }
+        }
+    }
+
+    .filter-label{
+        cursor: pointer;
+
+        span{
+            font-size: 13px;
+        }
     }
 }

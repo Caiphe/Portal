@@ -83,11 +83,11 @@ body > #main {
     }
 
     @media #{variables.$small} {
-        margin-top: 80px;
+        margin-top: 0px;
     }
 
     @media #{variables.$medium-portrait} {
-        margin-top: 80px;
+        margin-top: 0px;
     }
 }
 
@@ -237,7 +237,7 @@ section {
 
 .steps {
     @media screen and (min-width: 768px) {
-        max-width: 1024px;        
+        max-width: 1024px;
         margin-left: auto;
         margin-right: auto;
     }
@@ -446,3 +446,4 @@ section {
         }
     }
 }
+

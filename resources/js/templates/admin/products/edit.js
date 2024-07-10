@@ -1,11 +1,8 @@
 (function () {
     var uploader = document.getElementById('uploader');
-    var newTabClone = document.querySelector('.new-tab').cloneNode(true);
-    var addCustomTab = document.getElementById('add-custom-tab');
 
     document.getElementById('uploader-input').addEventListener('change', chooseSwagger);
     document.getElementById('admin-form').addEventListener('submit', validateForm);
-    addCustomTab.addEventListener('click', newTab);
 
     ["dragenter", "dragover", "dragleave", "drop"].forEach(preventDefaultsListeners);
     ["dragenter", "dragover"].forEach(highlightListeners);
@@ -62,21 +59,6 @@
         }
 
         upload(files[0], markAsUploaded);
-    }
-
-    function newTab() {
-        var randId = rand();
-        var newTabNode = newTabClone.cloneNode(true);
-        var newTabNodeEditor = newTabNode.querySelector('.editor');
-
-        newTabNodeEditor.dataset.input = randId;
-        addCustomTab.insertAdjacentElement('beforebegin', newTabNode);
-
-        makeEditor(newTabNodeEditor);
-    }
-
-    function rand() {
-        return 'q' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     }
 
     function upload(openApi, cb) {

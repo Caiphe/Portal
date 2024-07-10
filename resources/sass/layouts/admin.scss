@@ -151,9 +151,10 @@ textarea{
     }
 
     li {
-        margin: 6px 0;
+        margin: 4px 0;
         line-height: 0px;
-
+        list-style-type: none;
+          
         &.logout-menu{
             svg{
                 @media screen and (max-height: 814px) {
@@ -267,6 +268,7 @@ textarea{
         background: url('/images/icons/search.svg') no-repeat 16px center / 18px;
         color: #000;
         filter: invert(100%);
+        outline: none;
     }
 
     #sync {

@@ -179,6 +179,7 @@ return [
          * Custome Service Providers...
          */
         App\Providers\CategoriesServiceProvider::class,
+        App\Providers\MaintenanceServiceProvider::class,
 
     ],
 

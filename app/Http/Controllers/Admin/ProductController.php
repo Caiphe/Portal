@@ -92,11 +92,12 @@ class ProductController extends Controller
     {
         $product->load('content', 'countries');
         $hasSwagger = $product->swagger !== null && \Storage::disk('app')->exists("openapi/{$product->swagger}");
+        $productLocations = Country::whereIn('code', explode(',', $product->locations))->pluck('name')->toArray();
 
         return view('templates.admin.products.edit', [
             'product' => $product,
             'content' => $product->content->groupBy('title'),
-            'countries' => Country::get(),
+            "countries" => $productLocations,
             'categories' => Category::pluck('title', 'cid'),
             'hasSwagger' => $hasSwagger,
             'logs' => $product->logs()->latest()->get(),
@@ -113,8 +114,8 @@ class ProductController extends Controller
         $logs = [];
 
         $product->update([
-            'group' => $data['group'] ?? 'MTN',
             'category_cid' => $request['category_cid'],
+            'description' => $data['description'],
         ]);
 
         for ($i = 0; $i < count($tabs['title']); $i++) {
@@ -137,8 +138,8 @@ class ProductController extends Controller
             $messages = '';
 
             for($i = 0; $i < count($updatedFields); $i++){
-                if($updatedFields[$i] === 'category_cid') $messages .= '&#x2022; Product category updated ' .'<br/>';
-                if($updatedFields[$i] === 'group')  $messages .= '&#x2022; Group updated ' .'<br />';
+                if($updatedFields[$i] === 'category_cid') $messages .= 'Category updated ' .'<br/>';
+                if($updatedFields[$i] === 'description')  $messages .= 'Description updated ' .'<br />';
             }
 
             $messages.= $contentdData;
@@ -174,11 +175,11 @@ class ProductController extends Controller
         }
 
         if(!empty($addedColumn)){
-            $updated .= '&#x2022; ' . implode(', ', $addedColumn) .' was added <br />';
+            $updated .= implode(', ', $addedColumn) .' was added <br />';
         }
 
         if(!empty($removedColumn)){
-            $updated .= '&#x2022; ' . implode(', ', $removedColumn) .' was removed <br />';
+            $updated .= implode(', ', $removedColumn) .' was removed <br />';
         }
 
         $sameColumns = array_intersect($currentColumn, $updatedColumn);
@@ -186,7 +187,7 @@ class ProductController extends Controller
         if(!empty($sameColumns)){
             foreach($sameColumns as $title){
                 if($currentContent[$title]['body'] !== $updatedContent[$title]['body']){
-                    $updated .= "&#x2022; {$title} was updated <br />";
+                    $updated .= "{$title} was updated <br />";
                 }
             }
         }
