@@ -13,11 +13,12 @@ use App\Services\ApigeeService;
 use App\Team;
 use App\User;
 use Illuminate\Http\Request;
+use App\Traits\CountryTraits;
 use App\Http\Controllers\Controller;
 
 class TeamController extends Controller
 {
-    use  InviteRequests, InviteActions, TeamsCompanyTrait;
+    use  InviteRequests, InviteActions, TeamsCompanyTrait, CountryTraits;
 
 
     public function index (Request $request)
@@ -25,28 +26,27 @@ class TeamController extends Controller
         $sort = '';
         $order = $request->get('order', 'desc');
         $numberPerPage = (int)$request->get('number_per_page', '15');
-        $teams = Team::all();
 
-        if ($request->has('sort')) {
-            $sort = $request->get('sort');
+        $teams = Team::with(['apps', 'users'])
+            ->when($request->has('q'), function ($q) use ($request) {
+                $query = "%" . $request->q . "%";
+                $q->where(function ($q) use ($query) {
+                    $q->where('name', 'like', $query);
+                });
+            })
+            ->paginate($numberPerPage);
 
-            if ($sort === 'category.title') {
-                $teams->orderBy('category_title', $order);
-            } else {
-                $teams->orderBy($sort, $order);
-            }
 
-            $order = ['asc' => 'desc', 'desc' => 'asc'][$order] ?? 'desc';
-        }
-
-        return view('templates.admin.team.index', [
+        return view('templates.admin.teams.index', [
             'teams' => $teams,
+            'countries' => $this->getCountry(),
+
         ]);
     }
 
     public function show(Team $team)
     {
-        return view('templates.admin.team.show',[
+        return view('templates.admin.teams.show',[
             'team' => $team
         ]);
     }

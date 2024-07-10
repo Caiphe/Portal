@@ -14,26 +14,29 @@
         <a href="{{ route('admin.team.create') }}" class="button primary page-actions-create" aria-label="Create new team"></a>
     </div>
 
-    <x-admin.filter searchTitle="User's name / email address">
+    <x-admin.filter searchTitle="Team name">
         <label class="filter-item" for="status">
-            User status
-            <select name="status" class="users-status">
-                <option value="">Select by status</option>
-                <option value="verified" @if(request()->get('status') === 'verified') selected @endif>Verified</option>
-                <option value="not_verified" @if(request()->get('status') === 'not_verified') selected @endif>Not verified</option>
+            Country
+            <select name="country" class="team-country">
+                <option value="">Select by country</option>
+
+                @foreach($countries as $code => $name)
+                    <option value="{{ $code }}">{{ $name }}</option>
+                @endforeach
+
             </select>
         </label>
     </x-admin.filter>
 
     <div id="teams-table-data">
       <div class="header">
-        <p class="column-team-name">Team name</p>
-        <p class="column-team-country">Country</p>
-        <p class="column-team-owner">Team Owner</p>
-        <p class="column-team-members">Members</p>
-        <p class="column-team-apps">apss</p>
-        <p class="column-created_at">Created at</p>
-        <p class="column-actions">Actions</p>
+        <div class="column-team-name">Team name</div>
+        <div class="column-team-country">Country</div>
+        <div class="column-team-owner">Team Owner</div>
+        <div class="column-team-members">Members</div>
+        <div class="column-team-apps">Apps</div>
+        <div class="column-created_at">Created at</div>
+        <div class="column-actions">Actions</div>
       </div>
 
       <div class="body-container">
@@ -49,8 +52,8 @@
             <div class="value-team-apps">{{ $team->country }}</div>
             <div class="value-team-created_at">{{ date('d M Y', strtotime($team->created_at)) }}</div>
             <div class="value-team-actions">
-                <a href="{{ route('admin.team.show', ['team' => $team]) }}" class="button"> @svg('pencil') Edit</a>
-                <button class="sl-button">@svg('trash') Delete</button>
+                <a href="{{ route('admin.team.show', $team) }}" class="actions-btn"> @svg('pencil', "#0c678f") Edit</a>
+                <a class="actions-btn">@svg('trash', "#0c678f") Delete</a>
             </div>
         </div>
         @endforeach
@@ -61,12 +64,12 @@
 
 @endsection
 @push('scripts')
-<script src="{{ mix('/js/templates/admin/index.js') }}" defer></script>
+{{-- <script src="{{ mix('/js/templates/admin/index.js') }}" defer></script> --}}
 <script>
     ajaxifyOnPopState = updateFilters;
     function updateFilters(params) {
         document.getElementById('search-page').value = params['q'] || '';
-        document.querySelector('.users-status').value = params['verified'] || '';
+        document.querySelector('.team-country').value = params['country'] || '';
     }
 </script>
 @endpush
