@@ -274,17 +274,17 @@
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
             if (xhr.status === 200) {
-               if(Object.values(result['attributes']).length < 1){
-                    elements['remove-check'].value = '';
-                    document.querySelector('#wrapper-'+id+' .list-custom-attributes').innerHTML = '<div class="no-custom-attribute">None defined</div>';
+                const attributes = Object.values(result['attributes']);
+                elements['remove-check'].value = '';
+
+                if (attributes.length < 1) {
+                    document.querySelector('#wrapper-' + id + ' .list-custom-attributes').innerHTML = '<div class="no-custom-attribute">None defined</div>';
                     addAlert('success', ['Custom attributes removed successfully']);
-                   return;
-               }else{
+                } else {
                     updateAppAttributesHtml(result['attributes'], id);
-                    elements['remove-check'].value = '';
-                    addAlert('success', ['Custom attributes added successfully',]);
-                    return;
-               }
+                    addAlert('success', ['Custom attributes added successfully']);
+                }
+
             } else {
                 if(result.errors) {
                     result.message = [];
@@ -314,23 +314,34 @@
         document.querySelector('#wrapper-'+id+' .list-custom-attributes').innerHTML = attrHtml;
     }
 
-    function addNewAttribute(id){
+    function addNewAttribute(id) {
         var attributeName = this.querySelector('.attribute-name');
         var attributeValue = this.querySelector('.attribute-value');
-        var attributeErrorMessage = this.querySelector('.attribute-error');
         var customAttributeDialog = document.getElementById('custom-attributes-' + id);
-        var attributesList =  customAttributeDialog.querySelector('.custom-attributes-form-list');
+        var attributesList = customAttributeDialog.querySelector('.custom-attributes-form-list');
 
-        if(attributeName.value === "" || attributeValue.value === ''){
-            attributeErrorMessage.classList.add('show');
-            setTimeout(function(){
-                attributeErrorMessage.classList.remove('show');
-            }, 4000);
+        var maxNameLength = 1024; // 1KB
+        var maxValueLength = 2048; // 2KB
 
+        // Validate if attributeName or attributeValue are empty
+        if (attributeName.value === "" || attributeValue.value === '') {
+            addAlert('error', 'Attribute name and value cannot be empty.');
             return;
         }
 
-        // check if attributes list has reached the limit 0f 18
+        // Validate the length of attributeName
+        if (attributeName.value.length > maxNameLength) {
+            addAlert('error', 'Attribute name cannot exceed 1KB (1024 characters).');
+            return;
+        }
+
+        // Validate the length of attributeValue
+        if (attributeValue.value.length > maxValueLength) {
+            addAlert('error', 'Attribute value cannot exceed 2KB (2048 characters).');
+            return;
+        }
+
+        // Check if attributes list has reached the limit of 18
         if (attributesList.childElementCount >= 19) {
             addAlert('error', 'Attributes name and value cannot exceed 18 attributes.');
             return;
@@ -345,7 +356,6 @@
         attributesList.appendChild(customAttributeBlock);
         attributeName.value = '';
         attributeValue.value = '';
-        return;
     }
 
     function removeQuote(){
