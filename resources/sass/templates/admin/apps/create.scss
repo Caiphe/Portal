@@ -148,33 +148,59 @@
                 }
             }
 
-            :not(.switch)>input[type="checkbox"] {
-                width: 24px;
-                height: 24px;
-                background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/><path d="M0 0h24v24H0z" fill="#000000"/></svg>');
-                background-repeat: no-repeat;
-                background-size: cover;
-                background-position: center center;
-                border: none;
-                cursor: pointer;
-            
-                &:checked {
-                    // background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>');
-                    background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/><path d="M0 0h24v24H0z" fill="#000000"/></svg>');
+            .product-filter-block{
+                .container {
+                    display: block;
+                    position: relative;
+                    padding-left: 30px;
+                    margin-bottom: 9px;
+                    cursor: pointer;
+                    font-size: 14px;
+                    user-select: none;
 
-                }
+                    input{
+                        position: absolute;
+                        opacity: 0;
+                        cursor: pointer;
+                        height: 0;
+                        width: 0;
+
+                        &:checked ~{
+                            .checkmark{
+                                background-color: #000000;
+
+                                &:after{
+                                    display: block;
+                                }
+                            }
+                        }
+                    }
+
+                    .checkmark {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        height: 17px;
+                        width: 17px;
+                        background-color: #ffffff;
+                        border: solid 2px #000000;
+                        border-radius: 3px;
+    
+                        &:after{
+                            content: "";
+                            position: absolute;
+                            display: none;
+                            left: 5px;
+                            top: 0px;
+                            width: 4px;
+                            height: 11px;
+                            border: solid white;
+                            border-width: 0 3px 3px 0;
+                            transform: rotate(45deg);
+                        }
+                      }
+                  }
             }
-
-            .filter-checkbox {
-                display: flex;
-                align-items: center;
-                margin-bottom: 10px;
-
-                label {
-                    margin-bottom: 0px;
-                    margin-left: 10px;
-                }
-              }
 
             .showing-product-for {
                 font-size: 15px;
@@ -1180,4 +1206,9 @@
     .tag {
       height: 0px;
     }
+  }
+
+  .apps-heading-container{
+    width: 100%;
+    text-align: center;
   }
