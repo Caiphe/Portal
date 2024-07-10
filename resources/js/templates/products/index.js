@@ -123,9 +123,14 @@
     document.querySelector('.clear-country').addEventListener('click', clearCountry);
     function clearCountry(){
         var countries = document.querySelectorAll('.filter-country:checked');
+        var yourLocations = document.querySelector('#your-locations:checked');
 
         for (var i = countries.length - 1; i >= 0; i--) {
             countries[i].checked = false;
+        }
+
+        if(yourLocations){
+            yourLocations.checked = false;
         }
 
         filterProducts();
