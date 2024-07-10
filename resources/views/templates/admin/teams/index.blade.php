@@ -59,11 +59,12 @@
        
       </div>
       
+      {{ $teams->withQueryString()->links() }}
     </div>
 
 @endsection
 @push('scripts')
-{{-- <script src="{{ mix('/js/templates/admin/index.js') }}" defer></script> --}}
+<script src="{{ mix('/js/templates/admin/index.js') }}" defer></script>
 <script>
     ajaxifyOnPopState = updateFilters;
     function updateFilters(params) {
