@@ -9,6 +9,7 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/layouts/admin.css') }}">
+    <link rel="stylesheet" href="{{ mix('/css/layouts/cookie-notice.css') }}">
     <link rel="stylesheet" href="{{ mix('/css/components/notification-admin.css') }}">
 @endpush
 
@@ -22,12 +23,13 @@
             <li @class(['menu-products', 'active' => (Request::is('admin/products') || Request::is('admin/products/*'))])><a href="{{ route('admin.product.index') }}">@svg('products') Products</a></li>
             <li @class(['menu-products', 'active' => (Request::is('admin/tasks'))])><a href="{{ route('admin.task.index') }}">@svg('task') Tasks</a></li>
             <li @class(['menu-users', 'active' => (Request::is('admin/users') || Request::is('admin/users/*'))])><a href="{{ route('admin.user.index') }}">@svg('users') Users</a></li>
-            
+
             @can('administer-content')
                 <li @class(['menu-faq', 'active' => (Request::is('admin/faqs') || Request::is('admin/faqs/*'))])><a href="{{ route('admin.faq.index') }}">@svg('faq') FAQ</a></li>
                 <li @class(['menu-pages', 'active' => (Request::is('admin/pages') || Request::is('admin/pages/*'))])><a href="{{ route('admin.page.index') }}">@svg('pages') Pages</a></li>
                 <li @class(['menu-categories', 'active' => (Request::is('admin/categories') || Request::is('admin/categories/*'))])><a href="{{ route('admin.category.index') }}">@svg('categories') Categories</a></li>
                 <li @class(['menu-documentation', 'active' => (Request::is('admin/docs') || Request::is('admin/docs/*'))])><a href="{{ route('admin.doc.index') }}">@svg('documentation') Documentation</a></li>
+                <li @class(['menu-documentation', 'active' => (Request::is('admin/settings/maintenance') || Request::is('admin/settings/maintenance/*'))])><a href="{{ route('admin.setting.maintenance') }}">@svg('setting') Settings</a></li>
             @endcan
 
         </ul>
@@ -60,9 +62,9 @@
         <a class="logo" href="/">@svg('logo', '', '/images/') Admin Portal</a>
         <button id="menu-button" class="reset">@svg('menu')</button>
     </header>
-    
+
     <x-notifications></x-notifications>
-    
+
     <main id="main">
         @yield("content")
     </main>

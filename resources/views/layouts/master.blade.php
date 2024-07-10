@@ -4,6 +4,7 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/styles.css') }}">
+    <link rel="stylesheet" href="{{ mix('/css/layouts/cookie-notice.css') }}">
 @endpush
 
 @section('body')

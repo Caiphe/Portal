@@ -118,7 +118,7 @@
 
                 customAttributesDialog(result['id']);
                 return;
-               
+
             } else {
 
                 if(result.errors) {
@@ -132,7 +132,7 @@
             }
         };
     }
-    
+
 
     function customAttributesDialog(id){
         var customAttributeDialog = document.getElementById('custom-attributes-' + id);
@@ -161,7 +161,7 @@
         currentAttributevalue.addEventListener('change', removeQuote.bind(currentAttributevalue));
 
         addAttributeBtn.addEventListener('click', addNewAttribute.bind(customAttributeDialog, id));
-        
+
         customAttributeDialog.addEventListener('dialog-closed', submitNewAttribute.bind(attributesList, id));
     }
 
@@ -214,6 +214,7 @@
     }
 
     function submitNewAttribute(id){
+
         var elements = this.elements;
         var attrNames = elements['attribute[name][]'];
         var attrValues = elements['attribute[value][]'];
@@ -277,8 +278,8 @@
                if(Object.values(result['attributes']).length < 1){
                     elements['remove-check'].value = '';
                     document.querySelector('#wrapper-'+id+' .list-custom-attributes').innerHTML = '<div class="no-custom-attribute">None defined</div>';
-                    addAlert('success', ['Custom attributes removed successfully',]);
-                    return;
+                    addAlert('success', ['Custom attributes removed successfully']);
+                   return;
                }else{
                     updateAppAttributesHtml(result['attributes'], id);
                     elements['remove-check'].value = '';
@@ -286,12 +287,12 @@
                     return;
                }
             } else {
-
                 if(result.errors) {
                     result.message = [];
                     for(var error in result.errors){
                         result.message.push(result.errors[error]);
                     }
+                    return;
                 }
 
                 addAlert('error', result.message || 'Sorry there was a problem updating your app. Please try again.');
@@ -323,11 +324,16 @@
 
         if(attributeName.value === "" || attributeValue.value === ''){
             attributeErrorMessage.classList.add('show');
-
             setTimeout(function(){
                 attributeErrorMessage.classList.remove('show');
             }, 4000);
 
+            return;
+        }
+
+        // check if attributes list has reached the limit 0f 18
+        if (attributesList.childElementCount >= 18) {
+            addAlert('error', 'Attributes name and value cannot exceed 18 attributes.');
             return;
         }
 

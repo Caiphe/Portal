@@ -16,6 +16,7 @@
     <link rel="preload" href="/fonts/MTNBrighterSans-Medium.woff2" as="font" type="font/woff2">
     <link rel="preload" href="/fonts/Montserrat-Regular.woff2" as="font" type="font/woff2">
     <link rel="preload" href="/fonts/Montserrat-Light.woff2" as="font" type="font/woff2">
+    <link rel="stylesheet" href="{{ mix('/css/layouts/cookie-notice.css') }}">
 
     <meta name="title" content="@yield("title", "MTN Developer Portal")">
     <meta name="description" content="@yield("meta-description", "The MTN Developer Platform is a single point of access to a rich MTN developer ecosystem that brings a number of MTN services within easy reach of partners, startups, independent developers, enterprises.")">
@@ -30,11 +31,11 @@
     <meta name="twitter:image:alt" content="MTN Developer Portal">
 </head>
 <body class="@yield('body-class')">
-    
     <!-- Google Tag Manager (noscript) -->
     <noscript>
         <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-3TZ4G43S"
-        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+            height="0" width="0" style="display:none;visibility:hidden">
+        </iframe>
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
 

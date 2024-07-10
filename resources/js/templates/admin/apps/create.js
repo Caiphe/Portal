@@ -146,11 +146,11 @@
 
         for (var i = 0; i < locations.length; i++) {
             if (locations[i].dataset.location === selected) {
-                locations[i].style.opacity = "1";
+                locations[i].style.display = "block";
                 continue;
             }
 
-            locations[i].style.opacity = "0.15";
+            locations[i].style.display = "none";
         }
     }
 

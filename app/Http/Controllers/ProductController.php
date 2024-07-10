@@ -35,6 +35,7 @@ class ProductController extends Controller
 		$hasPrivateProduct = $products->contains('access', 'private');
 		$hasInternalProduct = $products->contains('access', 'internal');
 		$productGroups = $products->pluck('group')->unique()->toArray();
+		$userLocations = $user ? $user->countries->pluck('code')->toArray() : [];
 
 		return view('templates.products.index', [
 			'productsCollection' => $productsCollection,
@@ -45,7 +46,8 @@ class ProductController extends Controller
 			'hasPrivateProduct' => $hasPrivateProduct,
 			'hasInternalProduct' => $hasInternalProduct,
 			'products' => $products,
-			'productGroups' => $productGroups
+			'productGroups' => $productGroups,
+			'userLocations' => $userLocations,
 		]);
 	}
 

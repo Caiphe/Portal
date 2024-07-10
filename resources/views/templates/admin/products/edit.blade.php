@@ -34,103 +34,92 @@
     @method('PUT')
     @csrf
 
-    <div class="one-third">
-
-        <div class="editor-field">
+    <div class="one-third" id="main-product-details">
+        <div class="editor-field product-details">
             <h2>Product details</h2>
 
-            <label class="editor-field-label">
-                <h3>Display name</h3>
-                <input type="text" class="non-editable" name="display_name" value="{{ $product->display_name }}" maxlength="140" readonly />
+            <label class="editor-field-label-product">
+                <p class="product-heading">Display name</p>
+                <span class="product-value">{{ $product->display_name }}</span>
             </label>
 
-            <label class="editor-field-label">
-                <h3>Category</h3>
-                <select name="category_cid" id="category_cid" class="mb-1" autocomplete="off" />
-                    <option value="" selected disabled="">Select category</option>
-                    @foreach($categories as $cid => $category)
-                    <option value="{{ $cid }}" @if($cid === $product->category_cid) selected @endif>{{ $category }}</option>
-                    @endforeach
-                </select>
+            <label class="editor-field-label-product">
+                <p class="product-heading">Group</p>
+                <span class="product-value">@if($product->group){{ $product->group}} @else MTN @endif</span>
             </label>
 
-            <label class="editor-field-label">
-                <h3>Group</h3>
-                <input type="text" class="non-editable" name="group" value="{{ $product->group ?? 'MTN' }}" readonly />
+            <label class="editor-field-label-product locations-list">
+                <p class="product-heading">Locations</p>
+                <span class="product-value">
+                    @foreach ($countries as $country) {{ $country }} <br /> @endforeach
+                </span> 
             </label>
-
-            <label class="editor-field-label loactions-container">
-                <x-black-tab id="locations" class="non-editable" disabled="true" name="locations" label="Locations" :options="$countries->pluck('name', 'code')->toArray()" :selected="$product->locations === 'all' ? [] : $product->countries()->pluck('code')->toArray()"/>
-            </label>
-
-            <button class="button outline blue save-button">Apply changes</button>
         </div>
-
-        @if(count($logs) > 0)
-        <div class="editor-field">
-            <h2>Product update log</h2>
-
-            <div class="product-logs-container">
-
-                @foreach ($logs as $log)
-                <div class="each-log">
-                   @svg('calendar')
-                    <div class="date-block">
-                        <p class="date">{{ date('j F Y', strtotime($log->created_at)) }}</p>
-                        <span class="time">{{ date('H:i', strtotime($log->created_at)) }}</span>
-                    </div>
-                    <div class="profile-picture" style="background-image: url('{{ $log->user->profile_picture }}')"></div>
-
-                    <div class="log-description">{!! $log->message !!}</div>
-                    <div class="logged-by"><span class="span-by">by</span> <span class="developer-name">{{ $log->user->first_name }} {{ $log->user->last_name }}</span></div>
-                </div>
-                @endforeach
-
-            </div>
-        </div>
-        @endif
 
     </div>
 
     <div id="custom-tabs" class="editor-field two-thirds">
-        <h2>Content details</h2>
+        <h2>Product Overview</h2>
 
-        <div class="editor-field-label">
+        <label class="editor-field-label">
+            <h3>Product Description</h3>
+            <textarea id="product-description" placeholder="Enter a description for this product" name="description" id="description">{{ $product->description }}</textarea>
+        </label>
+
+        <label class="editor-field-label">
+            <h3>Category</h3>
+            <select name="category_cid" id="category_cid" class="mb-1" autocomplete="off" />
+                <option value="" selected disabled="">Select category</option>
+                @foreach($categories as $cid => $category)
+                <option value="{{ $cid }}" @if($cid === $product->category_cid) selected @endif>{{ $category }}</option>
+                @endforeach
+            </select>
+        </label>
+
+        <div class="editor-field-label over-view-block">
             <h3>Overview</h3>
             <input type="hidden" name="tab[title][]" value="Overview">
             <div class="editor" data-input="{{ $product->slug }}-overview-body" data-name="tab[body][]">{!! $content['Overview'][0]['body'] ?? '' !!}</div>
         </div>
+        <button class="button outline blue save-button">Apply changes</button>
+    </div>
+
+    <div class="editor-field">
+        <h2>Docs</h2>
 
         <div class="editor-field-label">
-            <h3>Docs</h3>
             <input type="hidden" name="tab[title][]" value="Docs">
             <div class="editor" data-input="{{ $product->slug }}-docs-body" data-name="tab[body][]">{!! $content['Docs'][0]['body'] ?? '' !!}</div>
         </div>
 
-        <div class="editor-field-label">
-            <h3>Custom tabs</h3>
-            @foreach($content as $title => $c)
-            @if($title === 'Overview' || $title === 'Docs')
-                @continue
-            @endif
-            <div class="custom-tab old-tab">
-                <input class="custom-tab-title" type="text" name="tab[title][]" value="{{ $c[0]['title'] }}" placeholder="Custom tab title">
-                <div class="editor" data-input="{{ $c[0]['slug'] }}" data-name="tab[body][]" data-class="custom-tab-content">{!! $c[0]['body'] ?? '' !!}</div>
-                <button type="button" class="remove-custom-tab sl-button" onclick="removeTab(this)" aria-label="Remove custom tab">@svg('minus-circle-outline')</button>
-            </div>
-            @endforeach
-
-            <div class="custom-tab new-tab">
-                <input class="custom-tab-title" type="text" name="tab[title][]" placeholder="Custom tab title" autocomplete="off">
-                <div class="editor" data-input="{{ Str::random(8) }}" data-name="tab[body][]" data-class="custom-tab-content"></div>
-                <button type="button" class="remove-custom-tab sl-button" onclick="removeTab(this)" aria-label="Remove custom tab">@svg('minus-circle-outline')</button>
-            </div>
-
-            <button id="add-custom-tab" type="button" class="add-custom-tab sl-button" aria-label="Add new custom tab">@svg('add-circle-outline')</button>
-        </div>
-
         <button class="button outline blue save-button">Apply changes</button>
     </div>
+
+    @if(count($logs) > 0)
+    <div class="editor-field">
+       <h2>Product update log</h2>
+
+        <div class="editor-field-label">
+            @foreach ($logs as $log)
+            <div class="each-log-block">
+                <div class="log-container">
+                    <div class="date-logged">
+                        <span class="date-only">{{ date('j F Y', strtotime($log->created_at)) }}</span>
+                        <span class="">{{ date('H:i', strtotime($log->created_at)) }}</span>
+                    </div>
+                    <div class="logged-description">{!! $log->message !!}</div>
+                </div>
+                <div class="logged-by">
+                    <span class="span-by">by</span> 
+                    <span class="developer-name">{{ $log->user->full_name }}</span>
+                </div>
+
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
 </form>
 @endsection
 

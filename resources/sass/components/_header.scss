@@ -1,11 +1,69 @@
 @use "../variables";
 
+
+.parent-header{
+    @media(max-width: 966px){
+        position: relative;
+        z-index: 3;
+    }
+}
+
+.notification-banner{
+    width: 100%;
+    position: relative;
+    background-color: variables.$warning;
+    padding: 20px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;   
+    color: #FFFFFF;
+    box-sizing: border-box;
+
+    &.hide{
+        display: none;
+    }
+
+    @media(max-width: 768px){
+        padding: 20px 20px;
+        position: relative;
+        flex-direction: column;
+    }
+
+    .banner-content{
+        display: flex;
+        align-items: center;
+
+        img{
+            margin-right: 20px;
+
+            @media(max-width: 768px){
+                display: none;
+            }
+        }
+    }
+
+    #close-banner-btn{
+        margin-right: 10px;
+        color: #FFFFFF;
+
+        &:hover{
+            color: #000000;
+        }
+
+        @media(max-width: 768px){
+            width: 100%;
+            margin-top: 15px;
+        }
+    }
+}
+
 #header {
     width: 100%;
     height: 80px;
     background-color: variables.$yellow;
     position: relative;
     z-index: 3;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
 
     .header-inner {
         height: 80px;
@@ -107,11 +165,11 @@
                     background-color: variables.$grey900;
 
                     &>a {
-                        color: #fff;
+                        color: #ffffff;
                     }
 
                     &>a svg {
-                        fill: #fff;
+                        fill: #ffffff;
                     }
                 }
             }
@@ -128,7 +186,7 @@
                 &>div {
                     position: absolute;
                     top: 50px;
-                    background-color: #fff;
+                    background-color: #ffffff;
                     display: flex;
                     width: 690px;
                     margin-left: -300px;
@@ -175,7 +233,7 @@
                         }
 
                         svg {
-                            fill: #FFF;
+                            fill: #FFFFFF;
                             background-color: variables.$blue;
                             border-radius: 50%;
                             padding: 8px;
@@ -250,7 +308,7 @@
     }
 
     @media screen and (max-width: 768px) {
-        position: fixed;
+        position: relative;
         box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .05);
     }
 }
@@ -268,7 +326,7 @@
     }
 
     button {
-        background-color: #fff;
+        background-color: #ffffff;
         border: none;
         padding: 0;
         height: auto;
@@ -290,7 +348,7 @@
     list-style: none;
     padding: 20px;
     width: 70px;
-    background-color: #fff;
+    background-color: #ffffff;
     top: 36px;
     margin-left: -26px;
     opacity: 0;
@@ -308,6 +366,7 @@
     opacity: 0;
     pointer-events: none;
     transition: all .3s ease-in-out;
+    box-sizing: border-box;
 
     li {
         margin-bottom: 1.5rem;
