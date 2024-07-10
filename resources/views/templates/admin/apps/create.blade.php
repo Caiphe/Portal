@@ -4,13 +4,11 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/templates/admin/apps/create.css') }}">
-    {{-- <link rel="stylesheet" href="{{ mix('/css/styles.css') }}"> --}}
-
+    <link rel="stylesheet" href="{{ mix('/css/templates/admin/edit.css') }}">
 @endpush
 
 @section('content')
     <h1>Create app</h1>
-    {{-- <x-heading heading="Apps" tags="CREATE NEW"></x-heading> --}}
 
     <x-twofa-warning class="tall"></x-twofa-warning>
 
@@ -154,10 +152,10 @@
                     </div>
 
                     @foreach ($productCategories as $slug => $title)
-                        <div class="filter-checkbox">
-                            <input type="checkbox" name="{{ $slug }}" id="category-{{ $slug }}" class="filter-products filter-category" value="{{ $slug }}" @if(isset($selectedCategory) && $selectedCategory === $title) checked=checked @endif autocomplete="off" />
-                            <label class="filter-label" for="category-{{ $slug }}">{{ $title }}</label>
-                        </div>
+                    <label class=" filter-checkbox container">{{ $title }}
+                        <input type="checkbox" name="{{ $slug }}" id="category-{{ $slug }}" class="filter-products filter-category" value="{{ $slug }}" @if(isset($selectedCategory) && $selectedCategory === $title) checked=checked @endif autocomplete="off">
+                        <span class="checkmark"></span>
+                    </label>
                     @endforeach
 
                     <div class="group-filter">
@@ -166,7 +164,7 @@
                             <button type="button" class="clear-group custom-clear">Clear</button>
                         </div>
                         <div class="custom-select-block">
-                            <x-multiselect id="filter-group" name="filter-group" label="Select group" :options="$productGroups" />
+                            <x-multiselect id="filter-group" name="filter-group" label="Select Group" :options="$productGroups"/>
                             <img class="select-icon" src="/images/select-arrow.svg" />
                         </div>
                     </div>
