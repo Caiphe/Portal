@@ -133,7 +133,6 @@
         };
     }
 
-
     function customAttributesDialog(id){
         var customAttributeDialog = document.getElementById('custom-attributes-' + id);
         if (!customAttributeDialog) return;
@@ -332,7 +331,7 @@
         }
 
         // check if attributes list has reached the limit 0f 18
-        if (attributesList.childElementCount >= 18) {
+        if (attributesList.childElementCount >= 19) {
             addAlert('error', 'Attributes name and value cannot exceed 18 attributes.');
             return;
         }
