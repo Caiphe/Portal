@@ -27,7 +27,7 @@ class TeamController extends Controller
             ->paginate($numberPerPage);
        
 
-        return view('templates.admin.team.index', [
+        return view('templates.admin.teams.index', [
             'teams' => $teams,
             'countries' => $this->getCountry(),
 
@@ -36,7 +36,7 @@ class TeamController extends Controller
 
     public function show(Team $team)
     {
-        return view('templates.admin.team.show',[
+        return view('templates.admin.teams.show',[
             'team' => $team
         ]);
     }
