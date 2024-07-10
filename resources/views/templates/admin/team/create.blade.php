@@ -12,13 +12,10 @@
     <h1>Create a Team</h1>
 
     <div class="full">
-
-            @include('templates.admin.team.forms.create_team')
-
+        @include('templates.admin.team.forms.create_team')
     </div>
 
 @endsection
 @push('scripts')
-    <script src="{{ mix('/js/templates/teams/create.js') }}"></script>
-    <script src="{{ mix('/js/templates/teams/create-update-validation.js') }}"></script>
+    <script src="{{ mix('/js/templates/admin/teams/create_form.js') }}"></script>
 @endpush

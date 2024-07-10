@@ -17,14 +17,12 @@ trait TeamsCompanyTrait
      */
     public function storeTeam($data)
     {
-        dd($data['team_members']);
-        // If it's a string, explode it
-        $teamMembers = explode(',', is_string($data['team_members']));
-        dd($teamMembers);
 
+        // If it's a string, explode it
+        $emails = explode(',', $data->input('emails'));
 
         //Get first team owner email from Portal and check if it exists in APIGEE
-        $owner = User::where('email', $data->team_members[0])->first();
+        $owner = User::where('email', $emails[0])->first();
         $user = ApigeeService::get('developers/' . $owner->email);
 
         //abort action if user does not exist in APIGEE
@@ -47,7 +45,7 @@ trait TeamsCompanyTrait
         $team = $this->createTeam($owner, $data->request->all());
 
         if (!empty($data['team_members'])) {
-            $teamInviteEmails = explode(',', $data['team_members']);
+            $teamInviteEmails = explode(',', $emails);
             $this->sendInvites($teamInviteEmails, $team);
         }
 

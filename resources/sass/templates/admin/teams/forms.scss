@@ -92,3 +92,60 @@
     font-size: 16px;
     color: #000;
 }
+
+#email-input-container {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+#tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 5px;
+    border-radius: 5px;
+    margin-top: 10px;
+    border: hidden;
+}
+
+.email-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px;
+    margin: 2px;
+    background-color: #000000;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    color: #ffffff;
+}
+
+.email-tag span {
+    margin-right: 5px;
+}
+
+.email-tag .remove-tag {
+    cursor: pointer;
+    color: #ffffff;
+}
+
+#email-input {
+    flex: 1;
+    border: none;
+    outline: none;
+}
+
+#invite-button {
+    padding: 5px 10px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#invite-button:hover {
+    background-color: darkgray;
+}
