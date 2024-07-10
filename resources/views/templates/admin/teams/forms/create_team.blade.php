@@ -1,14 +1,10 @@
-
 <div class="form-container">
-
     <h2>Details</h2>
-
-
     <form id="create-team" method="POST" action="{{ route('admin.team.store') }}" enctype="multipart/form-data" novalidate>
         @csrf
         <div class="form-group">
-            <label for="name">Name your team *</label>
-            <input type="text" name="name" value="{{ old('name') }}" id="team-name" class="form-field" placeholder="Enter team name" maxlength="100" autofocus>
+            <label for="name">Team name *</label>
+            <input type="text" name="name" value="{{ old('name') }}" id="team-name" class="form-field" placeholder="Enter a name for your team" maxlength="100" autofocus>
         </div>
 
         <div class="form-group">
@@ -42,6 +38,8 @@
         </div>
         <small class="mb-3">*Max 5MB file size and Max Width of 2000 and Max Height of 2000.</small>
 
+        <h3>Team Members</h3>
+        <label for="country">Add members to the team *</label>
         <div id="email-input-container">
             <input type="text" id="email-input" placeholder="Enter emails" />
         </div>
@@ -51,7 +49,7 @@
 
         <div class="form-group">
             <label for="team_owner">Team owner *</label>
-            <input type="text" name="team_owner" value="{{ old('team_owner') }}" id="team-owner" class="form-field" placeholder="Enter team owner" maxlength="100" autofocus>
+            <input type="text" readonly name="team_owner" value="{{ old('team_owner') }}" id="team-owner" class="form-field" placeholder="Please invite members to the team before selecting an owner" maxlength="100" autofocus>
         </div>
         <div class="form-group">
             <label for="description">Team description</label>

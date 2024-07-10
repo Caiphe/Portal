@@ -72,12 +72,12 @@ class TeamController extends Controller
     public function store (TeamRequest $request)
     {
         $this->storeTeam($request);
-        return redirect()->route('admin.team.index');
+        return redirect()->route('admin.teams.index');
     }
 
     public function edit (Team $team)
     {
-        return view('templates.admin.team.edit', [
+        return view('templates.admin.teams.edit', [
             'team' => $team
         ]);
     }

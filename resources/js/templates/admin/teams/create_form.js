@@ -12,6 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const teamOwnerInput = document.getElementById('team-owner');
     let isFirstEmailSet = false;
 
+    // Initially disable the team owner input and set background to gray
+    teamOwnerInput.disabled = true;
+    teamOwnerInput.style.backgroundColor = '#f2f2f2';
+
     emailInput.addEventListener('keyup', function (event) {
         if (event.key === 'Enter' || event.key === ',') {
             const emails = this.value.split(',');
@@ -90,6 +94,11 @@ document.addEventListener('DOMContentLoaded', () => {
             tag.innerHTML = `<span>${email}</span><span class="remove-tag">×</span>`;
             tagsContainer.appendChild(tag);
             updateHiddenInput();
+
+            // Enable team owner input after the first email tag is created
+            if (!isFirstEmailSet) {
+                teamOwnerInput.disabled = false;
+            }
         } else {
             addAlert('warning', [`Email ${email} already exists.`]);
         }
@@ -106,6 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (teamOwnerInput.value === email) {
             teamOwnerInput.value = '';
             teamOwnerInput.readOnly = false;
+            teamOwnerInput.style.backgroundColor = '#f2f2f2';
             isFirstEmailSet = false;
             updateTeamOwner();
         }
@@ -150,11 +160,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (xhr.status === 200) {
                 addAlert('success', [`${formData.get('name')} has been successfully created. You will be redirected to your teams page shortly.`], function () {
-                    ///window.location.href = "/teams";
+                    window.location.href = "/teams";
                 });
             } else if (xhr.status === 429) {
                 addAlert('warning', ["You are not allowed to create more than 2 teams per day."], function () {
-                    //window.location.href = "/teams";
+                    window.location.href = "/teams";
                 });
             } else if (xhr.status === 413) {
                 addAlert('warning', ["The logo dimensions are too large, please make sure the width and height are less than 2000."]);
