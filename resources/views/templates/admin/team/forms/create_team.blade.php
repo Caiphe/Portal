@@ -45,8 +45,8 @@
         <div id="email-input-container">
             <input type="text" id="email-input" placeholder="Enter emails" />
         </div>
-        <button type="button" id="invite-button">INVITE</button>
         <div id="tags-container"></div>
+        <button type="button" id="invite-button">INVITE</button>
         <input type="hidden" name="emails" id="email-list">
 
         <div class="form-group">

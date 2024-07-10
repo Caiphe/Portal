@@ -17,7 +17,6 @@ trait TeamsCompanyTrait
      */
     public function storeTeam($data)
     {
-
         // If it's a string, explode it
         $emails = explode(',', $data->input('emails'));
 
@@ -44,8 +43,9 @@ trait TeamsCompanyTrait
 
         $team = $this->createTeam($owner, $data->request->all());
 
-        if (!empty($data['team_members'])) {
-            $teamInviteEmails = explode(',', $emails);
+        if (!empty($data['emails'])) {
+            $teamInviteEmails = $emails;
+
             $this->sendInvites($teamInviteEmails, $team);
         }
 
@@ -55,6 +55,7 @@ trait TeamsCompanyTrait
     }
 
     /**
+     * TODO refactor this method
      * @param $data
      * @param $id
      * @return JsonResponse

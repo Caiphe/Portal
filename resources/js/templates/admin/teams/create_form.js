@@ -1,6 +1,7 @@
 /*
 *Create team/company js
 */
+
 document.addEventListener('DOMContentLoaded', () => {
     const emailInput = document.getElementById('email-input');
     const emailContainer = document.getElementById('email-input-container');
@@ -55,13 +56,14 @@ document.addEventListener('DOMContentLoaded', () => {
     teamForm.addEventListener('submit', function (event) {
         event.preventDefault();
         const errors = validateForm(this); // Use 'this' or 'teamForm' to refer to the form element
-        if (!errors) {
+        if (errors.length === 0) {
             updateHiddenInput();
             submitForm();
         } else {
             handleFormErrors(errors);
         }
     });
+
     function validateForm(form) {
         const errors = [];
         const teamName = form['name'].value;
@@ -70,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const phoneRegex = /^\+|0(?:[0-9] ?){6,14}[0-9]$/;
         const teamOwner = form['team_owner'].value;
 
-        if (teamName === '') errors.push("Name required");
+        if (teamName === '') errors.push("Team name required");
         if (urlValue === '') errors.push("Team URL required");
         if (urlValue !== '' && !/https?:\/\/.*\..*/.test(urlValue)) errors.push('Please add a valid team URL. Eg. https://url.com');
         if (contactNumber === '') errors.push("Contact number required");
@@ -80,12 +82,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         return errors;
     }
+
     function createEmailTag(email) {
-        const tag = document.createElement('div');
-        tag.classList.add('email-tag');
-        tag.innerHTML = `<span>${email}</span><span class="remove-tag">×</span>`;
-        tagsContainer.appendChild(tag);
-        updateHiddenInput();
+        if (!isEmailTagExists(email)) {
+            const tag = document.createElement('div');
+            tag.classList.add('email-tag');
+            tag.innerHTML = `<span>${email}</span><span class="remove-tag">×</span>`;
+            tagsContainer.appendChild(tag);
+            updateHiddenInput();
+        } else {
+            addAlert('warning', [`Email ${email} already exists.`]);
+        }
+    }
+
+    function isEmailTagExists(email) {
+        const tags = document.querySelectorAll('.email-tag span:first-child');
+        return Array.from(tags).some(tag => tag.textContent === email);
     }
 
     function removeEmailTag(tag) {
@@ -138,11 +150,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (xhr.status === 200) {
                 addAlert('success', [`${formData.get('name')} has been successfully created. You will be redirected to your teams page shortly.`], function () {
-                    window.location.href = "/teams";
+                    ///window.location.href = "/teams";
                 });
             } else if (xhr.status === 429) {
                 addAlert('warning', ["You are not allowed to create more than 2 teams per day."], function () {
-                    window.location.href = "/teams";
+                    //window.location.href = "/teams";
                 });
             } else if (xhr.status === 413) {
                 addAlert('warning', ["The logo dimensions are too large, please make sure the width and height are less than 2000."]);
@@ -166,5 +178,4 @@ document.addEventListener('DOMContentLoaded', () => {
         const errorMessages = errors.map(error => `<p>${error}</p>`).join('');
         addAlert('error', [errorMessages]);
     }
-
 });
