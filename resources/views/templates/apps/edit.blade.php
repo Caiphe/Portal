@@ -272,18 +272,17 @@
         }
 
         function backButtonHandler(ev) {
-            var activeDiv = this.parentNode.parentNode;
+            var activeDiv = this.parentNode.parentNode.parentNode;
             var previousDiv = activeDiv.previousElementSibling;
-
+            
             ev.preventDefault();
 
             if(hasCountry) previousDiv = previousDiv.previousElementSibling;
 
             activeDiv.classList.remove('active');
-            document.querySelector('.nav-item.active').classList.remove('active');
-            document.querySelector('.' + previousDiv.className + '-nav').classList.add('active');
-
             previousDiv.classList.add('active');
+            document.querySelector('.nav-item.active').classList.remove('active');
+            document.querySelector('.app-details-nav').classList.add('active');
         }
 
 
