@@ -24,7 +24,7 @@
         <div class="form-group">
             <label for="country">Which country are you based in? *</label>
             <div class="country-block-container">
-                <select id="team-country" name="country" value="{{ old('country') }}" autocomplete="off">
+                <select id="team-country" name="country" autocomplete="off">
                     <option value="">Select country</option>
                     @foreach($countries as $code => $name)
                         <option value="{{ $code }}" @if(old('country') === $code) selected @endif>{{ $name }}</option>
