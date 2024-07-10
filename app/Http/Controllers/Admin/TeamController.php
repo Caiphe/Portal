@@ -63,7 +63,7 @@ class TeamController extends Controller
         $locations = array_unique(explode(',', $locations));
         $countries = Country::whereIn('code', $locations)->orderBy('name')->pluck('name', 'code');
 
-        return view('templates.admin.team.create',
+        return view('templates.admin.teams.create',
             [
                 'countries' => $countries,
             ]);
