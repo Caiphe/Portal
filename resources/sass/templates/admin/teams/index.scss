@@ -14,21 +14,45 @@
             font-size: 14px;
             font-weight: 700;
         }
+
+        @media(max-width: 768px){
+            display: none;
+        }
+    }
+
+    .mobile-action{
+        display: none;
+
+        @media(max-width: 768px){
+            display: block;
+        }
     }
 
     .value-team-name,
     .column-team-name{
         width: 28%;
+
+        @media(max-width: 768px){
+           width: 80%;
+        }
     }
 
     .value-team-country,
     .column-team-country{
         width: 10%;
+
+        @media(max-width: 768px){
+            display: none;
+        }
     }
 
     .value-team-owner,
     .column-team-owner{
         width: 22%;
+
+        @media(max-width: 768px){
+            display: none;
+        }
     }
 
     .value-team-apps,
@@ -36,21 +60,34 @@
     .column-team-apps,
     .column-team-members{
         width: 10%;
+
+        @media(max-width: 768px){
+            display: none;
+        }
     }
 
     .value-team-created_at,
     .column-created_at{
         width: 15%;
+
+        @media(max-width: 768px){
+            display: none;
+        }
     }
 
     .value-team-actions,
     .column-actions{
         width: 15%;
+
     }
 
     .body-container{
         position: relative;
         width: 100%;
+
+        @media(max-width: 768px){
+            margin-top: 15px;
+        }
 
         .each-team{
             width: 100%;
@@ -70,6 +107,10 @@
 
             .value-team-actions{
                 display: flex;
+
+                @media(max-width: 768px){
+                    display: none;
+                }
               
                 .actions-btn{
                     background-color: transparent;
@@ -93,8 +134,37 @@
             .value-team-country{
                 img{
                     width: 24px;
+                    border-radius: 2px;
                 }
             }
         }
+    }
+}
+
+.show-actions {
+    visibility: visible;
+    border-radius: 10px;
+    min-height: 48px;
+    position: absolute;
+    left: 0;
+    text-overflow: unset;
+    display: flex;
+    justify-content: flex-end;
+    width: calc(100vw - 50px);
+
+    a,
+    button,
+    form {
+        display: inline-flex;
+    }
+}
+
+.mobile-action {
+    svg {
+        display: none;
+    }
+
+    svg+svg {
+        display: initial;
     }
 }
