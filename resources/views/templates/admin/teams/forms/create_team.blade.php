@@ -49,7 +49,9 @@
 
         <div class="form-group">
             <label for="team_owner">Team owner *</label>
-            <input type="text" readonly name="team_owner" value="{{ old('team_owner') }}" id="team-owner" class="form-field" placeholder="Please invite members to the team before selecting an owner" maxlength="100" autofocus>
+            <select name="team_owner" id="team-owner" class="form-field" disabled>
+                <option value="" >Please invite members to the team before selecting an owner</option>
+            </select>
         </div>
         <div class="form-group">
             <label for="description">Team description</label>
