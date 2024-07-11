@@ -23,8 +23,10 @@ class TeamController extends Controller
 
     public function index (Request $request)
     {
+        // Autonomy mastery and acceleration 
         $sort = '';
         $order = $request->get('order', 'desc');
+        $country = $request->get('country', "");
         $numberPerPage = (int)$request->get('number_per_page', '15');
 
         $teams = Team::with(['apps', 'users'])
@@ -33,6 +35,9 @@ class TeamController extends Controller
                 $q->where(function ($q) use ($query) {
                     $q->where('name', 'like', $query);
                 });
+            })
+            ->when($country !== "" && !is_null($country), function ($q) use ($request) {
+                $q->where('country', $request->get('country'));
             })
             ->paginate($numberPerPage);
 

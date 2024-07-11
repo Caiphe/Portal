@@ -51,20 +51,25 @@
             <div class="value-team-members">{{ $team->country }}</div>
             <div class="value-team-apps">{{ $team->country }}</div>
             <div class="value-team-created_at">{{ date('d M Y', strtotime($team->created_at)) }}</div>
+
             <div class="value-team-actions">
                 <a href="{{ route('admin.team.show', $team) }}" class="actions-btn"> @svg('pencil', "#0c678f") Edit</a>
                 <a class="actions-btn">@svg('trash', "#0c678f") Delete</a>
             </div>
+
+            <button class="sl-button reset mobile-action">@svg('more-vert')@svg('chevron-right')</button>
+
         </div>
         @endforeach
 
       </div>
 
+      {{ $teams->withQueryString()->links() }}
     </div>
 
 @endsection
 @push('scripts')
-{{-- <script src="{{ mix('/js/templates/admin/index.js') }}" defer></script> --}}
+<script src="{{ mix('/js/templates/admin/index.js') }}" defer></script>
 <script>
     ajaxifyOnPopState = updateFilters;
     function updateFilters(params) {
