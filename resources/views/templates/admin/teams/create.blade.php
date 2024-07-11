@@ -3,6 +3,7 @@
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/templates/teams/create.css') }}">
     <link rel="stylesheet" href="{{ mix('/css/templates/admin/teams/forms.css') }}">
+    <link rel="stylesheet" href="{{ mix('/css/templates/admin/edit.css') }}">
 @endpush
 
 @section('title', 'teams')

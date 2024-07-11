@@ -58,19 +58,9 @@ class TeamController extends Controller
 
     public function create ()
     {
-        $locations = Product::isPublic()
-            ->WhereNotNull('locations')
-            ->Where('locations', '!=', 'all')
-            ->select('locations')
-            ->get()
-            ->implode('locations', ',');
-
-        $locations = array_unique(explode(',', $locations));
-        $countries = Country::whereIn('code', $locations)->orderBy('name')->pluck('name', 'code');
-
         return view('templates.admin.teams.create',
             [
-                'countries' => $countries,
+                'countries' => $this->getCountry(),
             ]);
     }
 

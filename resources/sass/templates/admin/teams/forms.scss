@@ -1,61 +1,170 @@
-#main .form-container > h2 {
-    padding: 24px;
-    flex-wrap: wrap;
-    align-self: flex-start;
-    background-color: #FFF;
-    border-radius: 8px;
-    width: 100%;
-    margin: 0;
-   /* border-radius: 8px;
-    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.04);*/
-    font-size: 20px;
-    font-family: "mtn-regular", sans-serif;
-    font-weight: normal;
-    flex: 1 1 100%;
+@use "../../../variables";
 
+#main {
+    #create-team{
+        width: 100%;
+        padding: 30px 30px 0px 0px;
+        box-sizing: border-box;
+
+        .editor-field-label{
+            textarea,
+            select,
+            input{
+                width: 98%;
+            }
+        }
+
+        .upload-container {
+            padding-left: 30px;
+
+            #file-upload{
+                opacity: 0;
+                z-index: 0;
+                pointer-events: none;
+                height: 0;
+                width: 0px;
+            }
+
+            .file-heading{
+                font-size: 20px;
+                font-style: normal;
+                font-weight: 500;
+                line-height: 20px;
+                margin-bottom: 0px;
+                border-radius: 50%;
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-position: center center;
+                margin-bottom: 15px;
+            }
+            .file-upload-block{
+                display: flex;
+                width: 180px;
+
+                .file-previews{
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    background-color: red;
+                    margin-right: 7px;
+                }
+
+                .upload-label{
+                    border: 3px solid #000;
+                    border-radius: 64px;
+                    background-color: #fff;
+                    width: 128px;
+                    height: 32px;
+                    box-sizing: border-box;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: 16px;
+                    font-style: normal;
+                    cursor: pointer;
+                    transition: all .3s ease-in-out;
+
+                    &:hover{
+                        background-color: #000000;
+                        color: #fff;
+                        transition: all .3s ease-in-out;
+                    }
+                }
+            }
+
+            .small-gray{
+                color: #969696;
+                font-size: 14px;
+                margin-top: 8px;
+                display: block;
+            }
+        }
+
+        .team-member-block{
+            margin-top: 30px;
+
+            .team-member-heading{
+                font-size: 20px;
+                font-style: normal;
+                font-weight: 500;
+            }
+
+            p{
+                margin-bottom: 4px;
+            }
+
+            #email-input-container {
+                border: 1px solid hsla(0, 1%, 39%, 0);
+                border-radius: 5px;
+                margin-bottom: 10px;
+                width: 100%;
+                background-color: white;
+                box-sizing: border-box;
+            }
+
+            .email-tag {
+                display: inline-flex;
+                align-items: center;
+                padding: 5px;
+                margin: 2px;
+                background-color: #000000;
+                border-radius: 5px;
+                color: #ffffff;
+
+                span{
+                    margin-right: 5px;
+                    font-size: 14px;
+                }
+
+                .remove-tag {
+                    cursor: pointer;
+                    color: #ffffff;
+                }
+            }
+
+            #invite-button {
+                background-color: #ffffff;
+                border: 3px solid #000;
+                border-radius: 50px;
+                cursor: pointer;
+                color: #000;
+                width: 128px;
+                box-sizing: border-box;
+                transition: all .3s ease-in-out;
+                margin-top: 10px;
+
+                &:hover{
+                    background-color: #000;
+                    color: #fff;
+                    transition: all .3s ease-in-out;
+                }
+            }
+        }
+
+        .submit-button {
+            border: none;
+            background-color: #ffcc00;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 300px;
+            margin: 30px;
+            width: 191px;
+            border-radius: 64px;
+            color: #000;
+            text-align: center;
+            margin: 0px 30px 30px 30px;
+            transition: all .3s ease-in-out;
+
+            &:hover{
+                background-color: #e6b800;
+                transition: all .3s ease-in-out;
+            }
+        }
+    }
 }
-.form-container h2 {
-    margin-top: 0;
-    font-size: 24px;
-}
-.form-group {
-    //margin-bottom: 15px;
-    margin-top: 20px;
-}
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-.form-group input[type="text"],
-.form-group input[type="url"],
-.form-group input[type="tel"],
-.form-group input[type="email"],
-.form-group select,
-.form-group textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-.form-group input[type="file"] {
-    padding: 10px 0;
-}
-.form-group .form-info {
-    font-size: 12px;
-    color: #666;
-}
-.submit-button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #ffcc00;
-    color: white;
-    font-size: 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 300px;
-}
+
+
 .form-group button:hover {
     background-color: #e6b800;
 }
@@ -63,25 +172,6 @@
     margin-top: 10px;
 }
 
-.upload-container {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    align-items: center;
-    border: 3px solid #000;
-    padding: 12px;
-    border-radius: 34px;
-    background-color: #fff;
-    width: 156px;
-    justify-content: center; /* Optional: Ensure content is vertically centered */
-}
-
-.upload-label {
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
 
 .image-placeholder {
     width: 100px;
@@ -96,17 +186,7 @@
     color: #000;
 }
 
-#email-input-container {
-    display: flex;
-    flex-wrap: wrap;
-    border: 1px solid hsla(0, 1%, 39%, 0);
-    border-radius: 5px;
-    margin-bottom: 10px;
-    width: 100%;
-    padding: 10px;
-    background-color: white;
-    box-sizing: border-box;
-}
+
 
 #tags-container {
     display: flex;
@@ -117,39 +197,12 @@
     border: hidden;
 }
 
-.email-tag {
-    display: inline-flex;
-    align-items: center;
-    padding: 5px;
-    margin: 2px;
-    background-color: #000000;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    color: #ffffff;
-}
 
-.email-tag span {
-    margin-right: 5px;
-}
-
-.email-tag .remove-tag {
-    cursor: pointer;
-    color: #ffffff;
-}
 
 #email-input {
     flex: 1;
     border: none;
     outline: none;
-}
-
-#invite-button {
-    padding: 18px 50px;
-    background-color: transparent;
-    border: 3px solid #000;
-    border-radius: 50px;
-    cursor: pointer;
-    color: #000;
 }
 
 #invite-button:hover {
