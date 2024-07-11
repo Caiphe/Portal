@@ -23,7 +23,7 @@ class TeamController extends Controller
 
     public function index (Request $request)
     {
-        // Autonomy mastery and acceleration 
+        // Autonomy mastery and acceleration
         $sort = '';
         $order = $request->get('order', 'desc');
         $country = $request->get('country', "");
@@ -67,7 +67,7 @@ class TeamController extends Controller
     public function store (TeamRequest $request)
     {
         $this->storeTeam($request);
-        return redirect()->route('admin.teams.index');
+        return redirect()->route('admin.team.index');
     }
 
     public function edit (Team $team)

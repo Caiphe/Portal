@@ -1,7 +1,6 @@
 /*
-*Create team/company js
+create team / company js
 */
-
 document.addEventListener('DOMContentLoaded', () => {
     const emailInput = document.getElementById('email-input');
     const emailContainer = document.getElementById('email-input-container');
@@ -9,12 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const inviteButton = document.getElementById('invite-button');
     const teamForm = document.getElementById('create-team');
     const emailListInput = document.getElementById('email-list');
-    const teamOwnerInput = document.getElementById('team-owner');
+    const teamOwnerSelect = document.getElementById('team-owner');
     let isFirstEmailSet = false;
-
-    // Initially disable the team owner input and set background to gray
-    teamOwnerInput.disabled = true;
-    teamOwnerInput.style.backgroundColor = '#f2f2f2';
 
     emailInput.addEventListener('keyup', function (event) {
         if (event.key === 'Enter' || event.key === ',') {
@@ -22,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
             emails.forEach(email => {
                 if (validateEmail(email.trim())) {
                     createEmailTag(email.trim());
+                    updateTeamOwnerOptions();
                 }
             });
             this.value = '';
@@ -32,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.target.classList.contains('remove-tag')) {
             const tag = event.target.parentElement;
             removeEmailTag(tag);
+            updateTeamOwnerOptions();
         }
     });
 
@@ -39,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.target.classList.contains('remove-tag')) {
             const tag = event.target.parentElement;
             removeEmailTag(tag);
+            updateTeamOwnerOptions();
         }
     });
 
@@ -47,10 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
         emails.forEach(email => {
             if (validateEmail(email.trim())) {
                 createEmailTag(email.trim());
-                if (!isFirstEmailSet) {
-                    setTeamOwner(email.trim());
-                    isFirstEmailSet = true;
-                }
+                updateTeamOwnerOptions();
             }
         });
         emailInput.value = '';
@@ -59,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     teamForm.addEventListener('submit', function (event) {
         event.preventDefault();
-        const errors = validateForm(this); // Use 'this' or 'teamForm' to refer to the form element
+        const errors = validateForm(this);
         if (errors.length === 0) {
             updateHiddenInput();
             submitForm();
@@ -94,11 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
             tag.innerHTML = `<span>${email}</span><span class="remove-tag">×</span>`;
             tagsContainer.appendChild(tag);
             updateHiddenInput();
-
-            // Enable team owner input after the first email tag is created
-            if (!isFirstEmailSet) {
-                teamOwnerInput.disabled = false;
-            }
         } else {
             addAlert('warning', [`Email ${email} already exists.`]);
         }
@@ -112,14 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function removeEmailTag(tag) {
         const email = tag.querySelector('span:first-child').textContent;
         tag.remove();
-        if (teamOwnerInput.value === email) {
-            teamOwnerInput.value = '';
-            teamOwnerInput.readOnly = false;
-            teamOwnerInput.style.backgroundColor = '#f2f2f2';
-            isFirstEmailSet = false;
-            updateTeamOwner();
-        }
         updateHiddenInput();
+        updateTeamOwnerOptions();
     }
 
     function updateHiddenInput() {
@@ -128,18 +112,40 @@ document.addEventListener('DOMContentLoaded', () => {
         emailListInput.value = emails.join(',');
     }
 
-    function setTeamOwner(email) {
-        teamOwnerInput.value = email;
-        teamOwnerInput.readOnly = true;
-        teamOwnerInput.style.backgroundColor = '#f2f2f2';
-    }
-
-    function updateTeamOwner() {
+    function updateTeamOwnerOptions() {
         const tags = document.querySelectorAll('.email-tag span:first-child');
-        if (tags.length > 0) {
-            const firstEmail = tags[0].textContent;
-            setTeamOwner(firstEmail);
-            isFirstEmailSet = true;
+        const emails = Array.from(tags).map(tag => tag.textContent);
+
+        // Clear existing options
+        teamOwnerSelect.innerHTML = '';
+
+        // Add placeholder option if no emails
+        if (emails.length === 0) {
+            const placeholderOption = document.createElement('option');
+            placeholderOption.value = '';
+            placeholderOption.disabled = true;
+            placeholderOption.selected = true;
+            placeholderOption.textContent = 'Please invite members to the team before selecting an owner';
+            placeholderOption.style.color = '#808080'; // Gray color
+            teamOwnerSelect.appendChild(placeholderOption);
+        }
+
+        // Add new options
+        emails.forEach((email, index) => {
+            const option = document.createElement('option');
+            option.value = email;
+            option.textContent = email;
+            teamOwnerSelect.appendChild(option);
+        });
+
+        // Set the first email as the selected owner if not already set
+        if (emails.length > 0) {
+            teamOwnerSelect.value = emails[0];
+        }
+
+        // Reset the first email set flag if there are no emails
+        if (emails.length === 0) {
+            isFirstEmailSet = false;
         }
     }
 
@@ -160,11 +166,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (xhr.status === 200) {
                 addAlert('success', [`${formData.get('name')} has been successfully created. You will be redirected to your teams page shortly.`], function () {
-                    window.location.href = "/teams";
+                    window.location.href = "/admin/teams";
                 });
             } else if (xhr.status === 429) {
                 addAlert('warning', ["You are not allowed to create more than 2 teams per day."], function () {
-                    window.location.href = "/teams";
+                    window.location.href = "/admin/teams";
                 });
             } else if (xhr.status === 413) {
                 addAlert('warning', ["The logo dimensions are too large, please make sure the width and height are less than 2000."]);
@@ -188,4 +194,5 @@ document.addEventListener('DOMContentLoaded', () => {
         const errorMessages = errors.map(error => `<p>${error}</p>`).join('');
         addAlert('error', [errorMessages]);
     }
+
 });

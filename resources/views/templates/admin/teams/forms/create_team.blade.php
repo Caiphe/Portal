@@ -58,7 +58,9 @@
 
         <label class="editor-field-label">
             <h3 for="team_owner">Team owner *</h3>
-            <input type="text" readonly name="team_owner" value="{{ old('team_owner') }}" id="team-owner" class="form-field" placeholder="Please invite members to the team before selecting an owner" maxlength="100" autofocus>
+            <select name="team_owner" id="team-owner" class="form-field" autofocus>
+                <option value=""  readonly="">Please invite members to the team before selecting an owner</option>
+            </select>
         </label>
 
         <label class="editor-field-label">
