@@ -143,12 +143,18 @@
             }
 
             .team-mobile-action {
+                display: none;
+
                 svg {
                     display: block;
                 }
 
                 svg+svg {
                     display: none;
+                }
+
+                @media(max-width: 768px){
+                    display: block;
                 }
             }
 

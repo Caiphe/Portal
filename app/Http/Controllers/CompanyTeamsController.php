@@ -121,7 +121,6 @@ class CompanyTeamsController extends Controller
 
     public function leave(LeavingRequest $teamRequest, Team $team)
     {
-        
         $usersCount = $team->users->count();
         $data = $teamRequest->validated();
         $team = $this->getTeam($data['team_id']);
