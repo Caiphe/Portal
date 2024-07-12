@@ -30,14 +30,19 @@
             </div>
         </div>
 
-        <h3>Logo</h3>
         <div class="upload-container">
-            <input type="file" id="file-upload" name="logo_file" class="logo-file" accept="image/*" hidden>
-            <label for="file-upload" class="upload-label">
-                <div class="upload-text">Browse</div>
-            </label>
+            <h3 class="file-heading">Logo</h3>
+
+            <div class="file-upload-block">
+                <div class="file-previews" id="file-previews">
+                    <img src="" alt="Preview" id="image-preview" class="image-placeholder">
+                </div>
+                <input type="file" id="file-upload" name="logo_file" class="logo-file" accept="image/*" hidden>
+                <label for="file-upload" class="upload-label">Browse</label>
+            </div>
+
+            <small class="small-gray">*Max 5MB file size and Max Width of 2000 and Max Height of 2000.</small>
         </div>
-        <small class="mb-3">*Max 5MB file size and Max Width of 2000 and Max Height of 2000.</small>
 
         <div id="email-input-container">
             <input type="text" id="email-input" placeholder="Enter emails" />

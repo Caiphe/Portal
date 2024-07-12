@@ -33,13 +33,14 @@
             <h3 class="file-heading">Logo</h3>
 
             <div class="file-upload-block">
-                <div class="file-previews"></div>
+                <div class="file-previews">
+                    <img id="image-preview" class="image-placeholder" src="" alt="Image Preview" style="display: none;">
+                </div>
                 <input type="file" id="file-upload" name="logo_file" class="logo-file" accept="image/*" hidden>
                 <label for="file-upload" class="upload-label">Browse</label>
             </div>
 
             <small class="small-gray">*Max 5MB file size and Max Width of 2000 and Max Height of 2000.</small>
-
         </div>
 
 

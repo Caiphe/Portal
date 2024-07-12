@@ -9,7 +9,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const teamForm = document.getElementById('create-team');
     const emailListInput = document.getElementById('email-list');
     const teamOwnerSelect = document.getElementById('team-owner');
+    const fileUploadInput = document.getElementById('file-upload');
+    const imagePreview = document.getElementById('image-preview');
     let isFirstEmailSet = false;
+
+    fileUploadInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            imagePreview.src = '';
+            imagePreview.style.display = 'none';
+        }
+    });
 
     emailInput.addEventListener('keyup', function (event) {
         if (event.key === 'Enter' || event.key === ',') {
