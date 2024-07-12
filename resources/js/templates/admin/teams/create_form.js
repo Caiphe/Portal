@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const imagePreview = document.getElementById('image-preview');
     let isFirstEmailSet = false;
 
+
     fileUploadInput.addEventListener('change', function(event) {
         const file = event.target.files[0];
         if (file) {
@@ -23,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             reader.readAsDataURL(file);
         } else {
-            imagePreview.src = '';
+            //imagePreview.src = '';
             imagePreview.style.display = 'none';
         }
     });

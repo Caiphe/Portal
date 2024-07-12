@@ -34,7 +34,7 @@
             <h3 class="file-heading">Logo</h3>
 
             <div class="file-upload-block">
-                <div class="file-previews" id="file-previews">
+                <div class="file-previews" id="file-previews" style="display: none;">
                     <img src="" alt="Preview" id="image-preview" class="image-placeholder">
                 </div>
                 <input type="file" id="file-upload" name="logo_file" class="logo-file" accept="image/*" hidden>
