@@ -15,7 +15,7 @@
     </div>
 
     <x-admin.filter searchTitle="Team name">
-        <label class="filter-item" for="status">
+        <div class="filter-item">
             Country
             <select name="country" class="team-country">
                 <option value="">Select by country</option>
@@ -25,10 +25,10 @@
                 @endforeach
 
             </select>
-        </label>
+        </div>
     </x-admin.filter>
 
-    <div id="teams-table-data">
+    <div id="table-data">
       <div class="header">
         <div class="column-team-name">Team name</div>
         <div class="column-team-country">Country</div>
@@ -39,7 +39,7 @@
         <div class="column-actions">Actions</div>
       </div>
 
-      <div class="body-container">
+      <div class="body body-container">
         @foreach ($teams as $team)
         <div class="each-team">
             <div class="value-team-name">{{ $team->name }}</div>
@@ -47,33 +47,32 @@
                <img src="/images/locations/{{ $team->country }}.svg" src="team-{{ $team->country }}" />
             </div>
             <div class="value-team-owner">{{ $team->owner->email }}</div>
-            <div class="value-team-members">{{ $team->country }}</div>
-            <div class="value-team-apps">{{ $team->country }}</div>
+            <div class="value-team-members">{{ count($team->users) }}</div>
+            <div class="value-team-apps">{{ count($team->apps) }}</div>
             <div class="value-team-created_at">{{ date('d M Y', strtotime($team->created_at)) }}</div>
             
             <div class="value-team-actions">
-                <a href="{{ route('admin.team.show', $team) }}" class="actions-btn"> @svg('pencil', "#0c678f") Edit</a>
+                <a href="" class="actions-btn"> @svg('pencil', "#0c678f") Edit</a>
                 <a class="actions-btn">@svg('trash', "#0c678f") Delete</a>
             </div>
 
-            <button class="sl-button reset mobile-action">@svg('more-vert')@svg('chevron-right')</button>
+            <button class="sl-button reset team-mobile-action">
+                @svg('more-vert', '#0c678f')
+                @svg('chevron-right', '#0c678f')
+            </button>
 
         </div>
         @endforeach
        
       </div>
-      
-      {{ $teams->withQueryString()->links() }}
     </div>
 
+    {{ $teams->withQueryString()->links() }}
+
+
 @endsection
+
 @push('scripts')
 <script src="{{ mix('/js/templates/admin/index.js') }}" defer></script>
-<script>
-    ajaxifyOnPopState = updateFilters;
-    function updateFilters(params) {
-        document.getElementById('search-page').value = params['q'] || '';
-        document.querySelector('.team-country').value = params['country'] || '';
-    }
-</script>
+<script src="{{ mix('/js/templates/admin/teams/index.js') }}" defer></script>
 @endpush

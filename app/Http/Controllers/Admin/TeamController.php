@@ -13,9 +13,6 @@ class TeamController extends Controller
     
     public function index (Request $request)
     {
-        // Autonomy mastery and acceleration 
-        $sort = '';
-        $order = $request->get('order', 'desc');
         $country = $request->get('country', "");
         $numberPerPage = (int)$request->get('number_per_page', '15');
 
@@ -29,8 +26,8 @@ class TeamController extends Controller
             ->when($country !== "" && !is_null($country), function ($q) use ($request) {
                 $q->where('country', $request->get('country'));
             })
+            ->orderBy('updated_at', 'desc')
             ->paginate($numberPerPage);
-       
 
         return view('templates.admin.teams.index', [
             'teams' => $teams,

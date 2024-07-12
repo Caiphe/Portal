@@ -1,6 +1,6 @@
 @use "../../../variables";
 
-#teams-table-data{
+#table-data{
     position: relative;
     width: 100%;
 
@@ -78,7 +78,6 @@
     .value-team-actions,
     .column-actions{
         width: 15%;
-
     }
 
     .body-container{
@@ -99,6 +98,11 @@
             display: flex;
             font-size: 14px;
             align-items: center;
+
+            @media(max-width: 768px){
+                justify-content: space-between;
+                min-height: 60px;
+            }
 
             .value-team-apps,
             .value-team-members{
@@ -137,6 +141,46 @@
                     border-radius: 2px;
                 }
             }
+
+            .team-mobile-action {
+                svg {
+                    display: block;
+                }
+
+                svg+svg {
+                    display: none;
+                }
+            }
+
+            &.show-action{
+                justify-content: revert;
+                position: relative;
+                width: 100%;
+
+                .value-team-name{
+                    display: none;
+                }
+
+                .value-team-actions{
+                    display: flex;
+                    margin-right: 50px;
+                    position: absolute;
+                    right: 80px;
+                }
+
+                .team-mobile-action {
+                    position: absolute;
+                    right: 20px;
+
+                    svg {
+                        display: none;
+                    }
+    
+                    svg+svg {
+                        display: block;
+                    }
+                }
+            }
         }
     }
 }
@@ -156,15 +200,5 @@
     button,
     form {
         display: inline-flex;
-    }
-}
-
-.mobile-action {
-    svg {
-        display: none;
-    }
-
-    svg+svg {
-        display: initial;
     }
 }
