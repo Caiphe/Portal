@@ -2,15 +2,25 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Concerns\Teams\InviteActions;
+use App\Concerns\Teams\InviteRequests;
+use App\Country;
+use App\Http\Helpers\Teams\TeamsCompanyTrait;
+use App\Http\Helpers\Teams\TeamsHelper;
+use App\Http\Requests\Admin\TeamRequest;
+use App\Product;
+use App\Services\ApigeeService;
 use App\Team;
+use App\User;
 use Illuminate\Http\Request;
 use App\Traits\CountryTraits;
 use App\Http\Controllers\Controller;
 
 class TeamController extends Controller
 {
-    use CountryTraits;
-    
+    use  InviteRequests, InviteActions, TeamsCompanyTrait, CountryTraits;
+
+
     public function index (Request $request)
     {
         $country = $request->get('country', "");
@@ -41,5 +51,38 @@ class TeamController extends Controller
         return view('templates.admin.teams.show',[
             'team' => $team
         ]);
+    }
+
+    public function create ()
+    {
+        return view('templates.admin.teams.create',
+            [
+                'countries' => $this->getCountry(),
+            ]);
+    }
+
+    public function store (TeamRequest $request)
+    {
+        $this->storeTeam($request);
+        return redirect()->route('admin.team.index');
+    }
+
+    public function edit (Team $team)
+    {
+        return view('templates.admin.teams.edit', [
+            'team' => $team
+        ]);
+    }
+
+    public function update (Team $team, Request $request)
+    {
+        $team->update($request->all());
+        return redirect()->route('admin.team.index');
+    }
+
+    public function destroy (Team $team)
+    {
+        $team->delete();
+        return redirect()->route('admin.team.index');
     }
 }

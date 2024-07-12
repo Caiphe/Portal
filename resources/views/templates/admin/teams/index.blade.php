@@ -11,7 +11,7 @@
     <h1>Teams</h1>
 
     <div class="page-actions">
-        <a href="{{ route('admin.user.create') }}" class="button primary page-actions-create" aria-label="Create new team"></a>
+        <a href="{{ route('admin.team.create') }}" class="button primary page-actions-create" aria-label="Create new team"></a>
     </div>
 
     <x-admin.filter searchTitle="Team name">
@@ -44,13 +44,14 @@
         <div class="each-team">
             <div class="value-team-name">{{ $team->name }}</div>
             <div class="value-team-country">
-               <img src="/images/locations/{{ $team->country }}.svg" src="team-{{ $team->country }}" />
+               <img src="/images/locations/{{ $team->country }}.svg" src="team-{{ $team->country }}.svg"
+                    alt="{{ $team->country }}"/>
             </div>
             <div class="value-team-owner">{{ $team->owner->email }}</div>
             <div class="value-team-members">{{ count($team->users) }}</div>
             <div class="value-team-apps">{{ count($team->apps) }}</div>
             <div class="value-team-created_at">{{ date('d M Y', strtotime($team->created_at)) }}</div>
-            
+
             <div class="value-team-actions">
                 <a href="" class="actions-btn"> @svg('pencil', "#0c678f") Edit</a>
                 <a class="actions-btn">@svg('trash', "#0c678f") Delete</a>
@@ -63,7 +64,7 @@
 
         </div>
         @endforeach
-       
+
       </div>
     </div>
 
