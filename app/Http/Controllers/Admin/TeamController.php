@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Concerns\Teams\InviteActions;
-use App\Concerns\Teams\InviteRequests;
-use App\Country;
-use App\Http\Helpers\Teams\TeamsCompanyTrait;
-use App\Http\Helpers\Teams\TeamsHelper;
-use App\Http\Requests\Admin\TeamRequest;
-use App\Product;
-use App\Services\ApigeeService;
+use App\App;
 use App\Team;
 use App\User;
+use App\Country;
+use App\Product;
+use App\Notification;
 use Illuminate\Http\Request;
 use App\Traits\CountryTraits;
+use App\Services\ApigeeService;
+use Mpociot\Teamwork\TeamInvite;
 use App\Http\Controllers\Controller;
+use App\Concerns\Teams\InviteActions;
+use App\Concerns\Teams\InviteRequests;
+use App\Http\Helpers\Teams\TeamsHelper;
+use App\Http\Requests\Admin\TeamRequest;
+use App\Http\Helpers\Teams\TeamsCompanyTrait;
 
 class TeamController extends Controller
 {
@@ -81,8 +84,48 @@ class TeamController extends Controller
     }
 
     public function destroy (Team $team)
-    {
+    {   
+        $teamMembers = $team->users->pluck('id')->toArray();
+        $currentUsers = $team->users;
+        $teamsInvites = TeamInvite::where('team_id', $team->id)->get();
+
+        if ($teamsInvites) {
+            $teamsInvites->each->delete();
+        }
+        
+        if($currentUsers){
+            $userIds = $currentUsers->pluck('id')->toArray();
+
+            $currentUsers->each(function ($teamUser) use ($team) {
+                ApigeeService::removeDeveloperFromCompany($team, $teamUser);
+            });
+
+            collect($userIds)->each(function ($id) use ($team) {
+                Notification::create([
+                    'user_id' => $id,
+                    'notification' => "Your team <strong>{$team->name}</strong> has been deleted.",
+                ]);
+            });
+
+            $team->users()->detach($teamMembers);
+        }
+
+        $appNamesToDelete = App::where('team_id', $team->id)->pluck('name')->toArray();
+
+        if($appNamesToDelete) {
+            
+            foreach($appNamesToDelete as $appName){
+                $deletedApps = ApigeeService::delete("companies/{$team->username}/apps/{$appName}");
+
+                if($deletedApps->successful()){
+                    App::where('name', $appName)->delete();
+                }
+            }
+		}
+
+        ApigeeService::deleteCompany($team);
         $team->delete();
-        return redirect()->route('admin.team.index');
+
+        return response()->json(['success' => true, 'code' => 200], 200);
     }
 }
