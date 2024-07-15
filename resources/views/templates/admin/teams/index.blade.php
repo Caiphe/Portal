@@ -92,7 +92,6 @@
 
     {{ $teams->withQueryString()->links() }}
 
-
 @endsection
 
 @push('scripts')

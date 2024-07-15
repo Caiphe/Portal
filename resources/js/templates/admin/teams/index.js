@@ -1,6 +1,7 @@
 init();
 ajaxifyOnPopState = updateFilters;
 ajaxifyComplete.push(init);
+
 function updateFilters(params) {
     document.getElementById('search-page').value = params['q'] || '';
     document.querySelector('.team-country').value = params['country'] || '';
@@ -14,9 +15,7 @@ for(var i = 0; i < teamMobileAction.length; i++) {
 function showActions(){
     var eachTeam = this.parentElement;
     eachTeam.classList.toggle('show-action');
-    console.log(eachTeam);
 }
-
 
 // Delete Team feature here
 var deleteTeamBtn = document.querySelectorAll('.delete-team-btn');
