@@ -167,6 +167,8 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
         Route::delete('/{team}/delete', 'TeamController@destroy')->name('admin.team.delete');
         Route::get('create', 'TeamController@create')->name('admin.team.create');
         Route::post('store', 'TeamController@store')->name('admin.team.store');
+        Route::get('/{team:id}/edit', 'TeamController@edit')->name('admin.team.edit');
+        Route::post('/{team:id}/update', 'TeamController@update')->name('admin.team.update');
     });
 
 });

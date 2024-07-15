@@ -1,8 +1,10 @@
+
 @extends('layouts.admin')
 
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/templates/teams/create.css') }}">
     <link rel="stylesheet" href="{{ mix('/css/templates/admin/teams/forms.css') }}">
+    <link rel="stylesheet" href="{{ mix('/css/templates/admin/edit.css') }}">
 @endpush
 
 @section('title', 'teams')
@@ -12,7 +14,7 @@
     <h1>Edit a Team</h1>
 
     <div class="full">
-        @include('templates.admin.teams.forms.create_team')
+        @include('templates.admin.teams.forms.edit_team')
     </div>
 
 @endsection

@@ -60,27 +60,41 @@ trait TeamsCompanyTrait
      * @param $id
      * @return JsonResponse
      */
-    public function updateTeam($data, $id)
+    public function updateTeam($team, $data)
     {
-        $team = Team::findOrFail($id);
-        $teamLogo = $team->logo;
 
+        $company = Team::findOrFail($team['id']);
+
+        $teamLogo = $team->logo;
         $oldName = $team->name;
 
-        $teamOwner = User::where('id', $team->owner_id)->first();
-        $teamAdmin = $teamOwner->hasTeamRole($team, 'team_admin');
+        $new_team_owner = User::where('id', $data['team_owner'])->first();
+        if (!$new_team_owner){
+            return redirect()->back()->with('alert', "error: user does not exist");
+        }
+
+        //Check if the team owner exists in APIGEE
+        $apigee_user = ApigeeService::get('developers/' . $new_team_owner['email']);
+
+        //abort action if user does not exist in APIGEE
+        if (isset($apigee_user['code'])) {
+            return redirect()->back()->with('alert', "error:'" . $apigee_user['message'] . "'");
+        }
+
+        $teamAdmin = $new_team_owner->hasTeamRole($team, 'team_admin');
+
 
         if (!$teamAdmin) {
             return response()->json(['success' => true], 424);
         }
 
-        if ($data->has('logo')) {
+        if ($data->has('logo_file')) {
             $teamLogo = $this->processLogoFile($data);
         }
 
         $data['name'] = preg_replace('/[-_±§@#$%^&*()+=!]+/', '', $data['name']);
 
-        $team->update([
+        $company->update([
             'name' => $data['name'],
             'url' => $data['url'],
             'contact' => $data['contact'],
@@ -89,14 +103,11 @@ trait TeamsCompanyTrait
             'description' => $data['description'],
         ]);
 
-        $updatedFields = array_keys($team->getChanges());
-        unset($updatedFields['updated_at']);
+        $companyUpdated = Team::where('id', $company->id)->first();
 
-        if (empty($updatedFields)) {
-            return response()->json(['success' => true], 304);
-        }
-
-        ApigeeService::updateCompany($team);
+        //TODO fix team update API
+        $test = ApigeeService::updateCompany($companyUpdated, $new_team_owner);
+        dd($test);
 
         foreach ($team->users as $user) {
             if ($oldName !== $team->name) {

@@ -73,18 +73,19 @@ class TeamController extends Controller
     public function edit (Team $team)
     {
         return view('templates.admin.teams.edit', [
-            'team' => $team
+            'team' => $team,
+            'countries' => $this->getCountry()
         ]);
     }
 
     public function update (Team $team, Request $request)
     {
-        $team->update($request->all());
+        $this->updateTeam($team, $request);
         return redirect()->route('admin.team.index');
     }
 
     public function destroy (Team $team)
-    {   
+    {
         $teamMembers = $team->users->pluck('id')->toArray();
         $currentUsers = $team->users;
         $teamsInvites = TeamInvite::where('team_id', $team->id)->get();
@@ -92,7 +93,7 @@ class TeamController extends Controller
         if ($teamsInvites) {
             $teamsInvites->each->delete();
         }
-        
+
         if($currentUsers){
             $userIds = $currentUsers->pluck('id')->toArray();
 
@@ -113,7 +114,7 @@ class TeamController extends Controller
         $appNamesToDelete = App::where('team_id', $team->id)->pluck('name')->toArray();
 
         if($appNamesToDelete) {
-            
+
             foreach($appNamesToDelete as $appName){
                 $deletedApps = ApigeeService::delete("companies/{$team->username}/apps/{$appName}");
 
