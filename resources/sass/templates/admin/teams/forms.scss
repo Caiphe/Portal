@@ -39,16 +39,18 @@
             .file-upload-block {
                 display: flex;
                 width: 180px;
+                margin-left: -10px;
 
                 .file-previews {
+                    display: none; /* Hide initially */
+                }
+
+                .image-placeholder {
                     width: 32px;
                     height: 32px;
+                    object-fit: cover;
                     border-radius: 10px;
-                    background-color: #9f9e9e;
-                    margin-right: 7px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
+                    margin-bottom: 10px;
                 }
 
                 .upload-label {
@@ -169,14 +171,6 @@
 
 .form-group .invite-button {
     margin-top: 10px;
-}
-
-.image-placeholder {
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-    border-radius: 10px;
-    margin-bottom: 10px;
 }
 
 .upload-text {
