@@ -1,6 +1,3 @@
-/*
-create team / company js
-*/
 document.addEventListener('DOMContentLoaded', () => {
     const emailInput = document.getElementById('email-input');
     const emailContainer = document.getElementById('email-input-container');
@@ -9,22 +6,42 @@ document.addEventListener('DOMContentLoaded', () => {
     const teamForm = document.getElementById('create-team');
     const emailListInput = document.getElementById('email-list');
     const teamOwnerSelect = document.getElementById('team-owner');
+    const fileUploadInput = document.getElementById('file-upload');
+    const imagePreview = document.getElementById('image-preview');
     let isFirstEmailSet = false;
+    const filePreviews = document.getElementById('file-previews');
 
-    emailInput.addEventListener('keyup', function (event) {
+    fileUploadInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                filePreviews.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            imagePreview.src = '';
+            filePreviews.style.display = 'none';
+        }
+    });
+
+    emailInput.addEventListener('keyup', function(event) {
         if (event.key === 'Enter' || event.key === ',') {
             const emails = this.value.split(',');
             emails.forEach(email => {
                 if (validateEmail(email.trim())) {
                     createEmailTag(email.trim());
                     updateTeamOwnerOptions();
+                } else {
+                    addAlert('warning', 'Email must be valid');
                 }
             });
             this.value = '';
         }
     });
 
-    emailContainer.addEventListener('click', function (event) {
+    emailContainer.addEventListener('click', function(event) {
         if (event.target.classList.contains('remove-tag')) {
             const tag = event.target.parentElement;
             removeEmailTag(tag);
@@ -32,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    tagsContainer.addEventListener('click', function (event) {
+    tagsContainer.addEventListener('click', function(event) {
         if (event.target.classList.contains('remove-tag')) {
             const tag = event.target.parentElement;
             removeEmailTag(tag);
@@ -40,19 +57,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    inviteButton.addEventListener('click', function () {
+    inviteButton.addEventListener('click', function() {
         const emails = emailInput.value.split(',');
         emails.forEach(email => {
             if (validateEmail(email.trim())) {
                 createEmailTag(email.trim());
                 updateTeamOwnerOptions();
+            } else {
+                addAlert('warning', 'Email must be valid');
             }
         });
         emailInput.value = '';
         updateHiddenInput();
     });
 
-    teamForm.addEventListener('submit', function (event) {
+    teamForm.addEventListener('submit', function(event) {
         event.preventDefault();
         const errors = validateForm(this);
         if (errors.length === 0) {
@@ -90,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tagsContainer.appendChild(tag);
             updateHiddenInput();
         } else {
-            addAlert('warning', [`Email ${email} already exists.`]);
+            addAlert('warning', `Email ${email} already exists.`);
         }
     }
 
@@ -161,15 +180,15 @@ document.addEventListener('DOMContentLoaded', () => {
         xhr.open('POST', teamForm.action, true);
         xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('input[name="_token"]').value);
 
-        xhr.onload = function () {
+        xhr.onload = function() {
             removeLoading();
 
             if (xhr.status === 200) {
-                addAlert('success', [`${formData.get('name')} has been successfully created. You will be redirected to your teams page shortly.`], function () {
+                addAlert('success', [`${formData.get('name')} has been successfully created. You will be redirected to your teams page shortly.`], function() {
                     window.location.href = "/admin/teams";
                 });
             } else if (xhr.status === 429) {
-                addAlert('warning', ["You are not allowed to create more than 2 teams per day."], function () {
+                addAlert('warning', ["You are not allowed to create more than 2 teams per day."], function() {
                     window.location.href = "/admin/teams";
                 });
             } else if (xhr.status === 413) {
@@ -181,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        xhr.onerror = function () {
+        xhr.onerror = function() {
             removeLoading();
             addAlert('error', ['Sorry, there was a problem creating your team. Please try again.']);
         };
