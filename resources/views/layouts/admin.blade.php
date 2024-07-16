@@ -23,6 +23,7 @@
             <li @class(['menu-products', 'active' => (Request::is('admin/products') || Request::is('admin/products/*'))])><a href="{{ route('admin.product.index') }}">@svg('products') Products</a></li>
             <li @class(['menu-products', 'active' => (Request::is('admin/tasks'))])><a href="{{ route('admin.task.index') }}">@svg('task') Tasks</a></li>
             <li @class(['menu-users', 'active' => (Request::is('admin/users') || Request::is('admin/users/*'))])><a href="{{ route('admin.user.index') }}">@svg('users') Users</a></li>
+            <li @class(['menu-users', 'active' => (Request::is('admin/teams') || Request::is('admin/teams/*'))])><a href="{{ route('admin.team.index') }}">@svg('teams') Teams</a></li>
 
             @can('administer-content')
                 <li @class(['menu-faq', 'active' => (Request::is('admin/faqs') || Request::is('admin/faqs/*'))])><a href="{{ route('admin.faq.index') }}">@svg('faq') FAQ</a></li>

@@ -158,8 +158,17 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 	Route::post('users/{user}/change-status', 'UserController@changeStatus')->middleware('can:administer-users')->name('admin.user.status');
 	Route::get('users/create', 'UserController@create')->middleware('can:administer-users')->name('admin.user.create');
 	Route::post('users/store', 'UserController@store')->middleware('can:administer-users')->name('admin.user.store');
-
 	Route::put('users/{user}/verify', 'UserController@verifyEmail')->middleware('can:administer-content')->name('admin.user.verify');
+
+	// Team - Company management
+    Route::prefix('teams')->middleware('can:administer-users')->group(function () {
+        Route::get('/', 'TeamController@index')->name('admin.team.index');
+        Route::get('/{team:id}/team', 'TeamController@show')->name('admin.team.show');
+        Route::delete('/{team}/delete', 'TeamController@destroy')->name('admin.team.delete');
+        Route::get('create', 'TeamController@create')->name('admin.team.create');
+        Route::post('store', 'TeamController@store')->name('admin.team.store');
+    });
+
 });
 
 Route::namespace('Api\Admin')->prefix('api/admin')->group(function () {
