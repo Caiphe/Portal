@@ -58,6 +58,6 @@ class Team extends TeamworkTeam
 
     public function getEmailAttribute()
     {
-        return $this->owner->email;
+        return $this->owner->email ?? '';
     }
 }
