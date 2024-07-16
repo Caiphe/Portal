@@ -1,3 +1,7 @@
+@php
+    use Illuminate\Support\Str;
+@endphp
+
 @extends('layouts.admin')
 
 @push('styles')
@@ -42,12 +46,12 @@
       <div class="body body-container">
         @foreach ($teams as $team)
         <div class="each-team">
-            <div class="value-team-name">{{ $team->name }}</div>
+            <div class="value-team-name">{{ Str::limit($team->name, 20, '...')}}</div>
             <div class="value-team-country">
                <img src="/images/locations/{{ $team->country }}.svg" src="team-{{ $team->country }}.svg"
                     alt="{{ $team->country }}"/>
             </div>
-            <div class="value-team-owner">{{ $team->owner->email }}</div>
+            <div class="value-team-owner">{{ Str::limit($team->email, 20, '...')}}</div>
             <div class="value-team-members">{{ count($team->users) }}</div>
             <div class="value-team-apps">{{ count($team->apps) }}</div>
             <div class="value-team-created_at">{{ date('d M Y', strtotime($team->created_at)) }}</div>
