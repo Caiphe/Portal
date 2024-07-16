@@ -1,0 +1,293 @@
+@use "../../../variables";
+
+.page-actions-create{
+    width: 160px;
+}
+
+.teams-details-block{
+    width: 100%;
+    padding: 20px 30px 40px 30px;
+
+    .team-edit{
+        display: block;
+        margin-top: 40px;
+        width: 210px;
+        display: flex;
+    }
+
+    .first-block{
+        position: relative;
+        display: flex;
+        margin-bottom: 25px;
+        margin-top: 20px;
+
+        .image-container{
+            height: 68px;
+            width: 68px;
+            border-radius: 50%;
+            background-color: #BB1E4F;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin-right: 20px;
+        }
+
+        .team-name-container{
+            position: relative;
+
+            .team-name{
+                font-size: 32px;
+                line-height: 32px;
+                margin-top: 0px;
+                margin-bottom: 10px;
+            }
+
+            .team-description{
+                font-size: 15px;
+                color: #000000;
+            }
+        }
+    }
+
+    .team-more-details{
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        @media(min-width: 1500px){
+            width: 80%;
+        }
+
+        .each-block-data{
+            width: 45%;
+
+            .each-details{
+                display: flex;
+                margin-top: 10px;
+
+                .detail-key{
+                    font-size: 14px;
+                    font-style: normal;
+                    font-weight: 700;
+                    width: 130px;
+                    margin-right: 70px;
+                }
+
+                .detail-value{
+                    font-size: 14px;
+                    font-style: normal;
+                }
+            
+            }
+        }
+    }
+}
+
+.team-owner{
+    width:  100%;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .button{
+        width: 200px;
+    }
+}
+
+.owner-block{
+    width: 100%;
+    background-color: #ffffff;
+    height: 70px;
+    border-radius: 7px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+
+    .member-thumbnail{
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+        margin-right: 15px;
+    }
+
+    .owner-full-name{
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 700;
+        margin-right: 15px;
+    }
+
+    .owner-email{
+        font-size: 14px;
+        font-style: normal;
+        color: #000000;
+    }
+}
+
+// Team members
+.team-custom-head{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+
+    h2{
+        margin-bottom: 3px;
+    }
+
+    .gray-text{
+        color: #b5b5b5;
+    }
+
+    .button{
+        width: 200px;
+        margin-top: 10px;
+    }
+}
+
+.memeber-list{
+    width: 100%;
+    text-align: left;
+    margin-top: 25px;
+
+    .header{
+        display: flex;
+        margin-bottom: 15px;
+        padding: 0px 20px;
+
+        div{
+            font-size: 15px;
+            font-weight: 700;
+        }
+    }
+
+    .each-member-body{
+        display: flex;
+        width: 100%;
+        background-color: #ffffff;
+        border-radius: 5px;
+        align-items: center;
+        margin-bottom: 7px;
+        box-sizing: border-box;
+        padding: 10px 20px;
+    }
+
+    .value-last-name,
+    .column-last-name,
+    .value-fist-name,
+    .column-fist-name{
+        width:18%;
+    }
+
+    .column-email,
+    .value-email{
+        width: 28%;
+    }
+
+    .column-team-role,
+    .value-team-role{
+        width: 18%;
+    }
+
+    .column-status,
+    .value-status{
+        width: 15%;
+    }
+
+    .column-actions,
+    .value-actions{
+        width: 3%;
+    }
+
+    .btn-action{
+        background: url('/images/more-vertical.svg') no-repeat transparent center / 24px;
+        border: none;
+        display: inline-block;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        padding: 0;
+        background-color: transparent;
+    }
+}
+
+#apps-list {
+    thead {
+        @media screen and (max-width: 767px) {
+            display: none;
+        }
+    }
+
+    .not-on-mobile {
+        @media screen and (max-width: 767px) {
+            display: none;
+        }
+    }
+
+    .app-status-approved {
+        color: variables.$green;
+        border: 1px solid variables.$green;
+
+        @media screen and (max-width: 767px) {
+            &::before {
+                background: url("/images/icons/done.svg") no-repeat center center / 16px;
+                width: 12px;
+                display: inline-block;
+                color: transparent;
+                filter: invert(56%) sepia(94%) saturate(2964%) hue-rotate(104deg) brightness(92%) contrast(80%);
+            }
+        }
+    }
+
+    .app-status-pending {
+        color: variables.$orange;
+        border: 1px solid variables.$orange;
+    }
+
+    .app-status-revoked {
+        color: variables.$red;
+        border: 1px solid variables.$red;
+
+        @media screen and (max-width: 767px) {
+            &::before {
+                background: url("/images/icons/close.svg") no-repeat center center / 16px;
+                width: 12px;
+                display: inline-block;
+                color: transparent;
+                filter: invert(16%) sepia(62%) saturate(4069%) hue-rotate(327deg) brightness(95%) contrast(91%);
+            }
+        }
+    }
+
+    .status {
+        box-sizing: border-box;
+        border-radius: 64px;
+        padding: 4px 12px;
+        display: inline-flex;
+
+        @media screen and (min-width: 768px) {
+            &::before {
+                content: attr(aria-label);
+            }
+        }
+
+        @media screen and (max-width: 767px) {
+            margin-right: 36px;
+
+            &::before {
+                content: attr(data-pending);
+            }
+        }
+    }
+
+    .country-flag {
+        width: 24px;
+        height: 24px;
+    }
+}
