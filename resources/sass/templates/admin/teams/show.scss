@@ -1,0 +1,504 @@
+@use "../../../variables";
+
+@media screen and (max-width: 1099px) {
+    #main {
+      overflow-x: hidden;
+    }
+  }
+  
+
+.delete-team-btn{
+    width: 160px;
+    position: absolute;
+    right: 37px;
+    top: 39px;
+
+    @media(max-width: 768px){
+        position: relative;
+        right: revert;
+        top: revert;
+        width: 100%;
+        margin-bottom: 15px;
+        margin-top: 8px;
+    }
+}
+
+.main-team{
+    margin-top: -17px !important;
+
+    @media(max-width: 768px){
+        padding: 14px 0 20px 10px !important;
+    }
+}
+
+.teams-details-block{
+    width: 100%;
+    padding: 20px 30px 40px 30px;
+
+    .team-edit{
+        display: block;
+        margin-top: 40px;
+        width: 210px;
+        display: flex;
+
+        @media(max-width: 600px){
+            width: 100%;
+            height: 40px;
+        }
+    }
+
+    .first-block{
+        position: relative;
+        display: flex;
+        margin-bottom: 25px;
+        margin-top: 20px;
+
+        .image-container{
+            height: 68px;
+            width: 68px;
+            border-radius: 50%;
+            background-color: #BB1E4F;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin-right: 20px;
+
+            @media(max-width: 768px){
+                height: 50px;
+                width: 50px;
+            }
+        }
+
+        .team-name-container{
+            position: relative;
+
+            .team-name{
+                font-size: 32px;
+                line-height: 32px;
+                margin-top: 0px;
+                margin-bottom: 10px;
+
+                @media(max-width: 768px){
+                    font-size: 24px;
+                    line-height: 24px;
+                    margin-bottom: 3px;
+                }
+            }
+
+            .team-description{
+                font-size: 15px;
+                color: #000000;
+            }
+        }
+    }
+
+    .team-more-details{
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        @media(min-width: 1500px){
+            width: 80%;
+        }
+
+        @media(max-width: 768px){
+            flex-direction: column;
+        }
+
+        .each-block-data{
+            width: 45%;
+
+
+            @media(max-width: 768px){
+                width: 100%;
+
+                &:nth-child(1){
+                    .each-details{
+                        flex-direction: column;
+                    }
+                }
+
+                &:nth-child(2){
+                    .each-details{
+                        &:nth-child(1){
+                            flex-direction: column;
+                        }
+                    }
+                }
+            }
+
+            .each-details{
+                display: flex;
+                margin-top: 10px;
+
+                .detail-key{
+                    font-size: 14px;
+                    font-style: normal;
+                    font-weight: 700;
+                    width: 130px;
+                    margin-right: 70px;
+                }
+
+                .detail-value{
+                    font-size: 14px;
+                    font-style: normal;
+                }
+            
+            }
+        }
+    }
+}
+
+.team-owner{
+    width:  100%;
+    position: relative;
+
+    .button{
+        width: 200px;
+        position: absolute;
+        right: 0;
+        top: -5px;
+
+        @media(max-width: 600px){
+            position: relative;
+            width: 97%;
+            top: revert;
+            right: revert;
+            margin: 20px auto 0px;
+            height: 42px;
+        }
+    }
+}
+
+.owner-block{
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 7px;
+    margin-top: 25px;
+    display: flex;
+    padding: 14px 20px;
+    align-items: center;
+
+    @media(max-width: 768px){
+        width: 98%;
+    }
+
+    .owner-block-profile{
+        display: flex;
+
+        @media(max-width: 768px){
+            flex-direction: column;
+        }
+    }
+
+    .member-thumbnail{
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+        margin-right: 15px;
+    }
+
+    .owner-full-name{
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 700;
+        margin-right: 15px;
+    }
+
+    .owner-email{
+        font-size: 14px;
+        font-style: normal;
+        color: #000000;
+    }
+
+}
+
+// Team members
+.team-custom-head{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+
+    @media(max-width: 768px){
+        margin-top: 20px;
+    }
+
+    h2{
+        margin-bottom: 3px;
+    }
+
+    .gray-text{
+        color: #b5b5b5;
+    }
+
+    .button{
+        width: 200px;
+        margin-top: 10px;
+
+        &.add-teammate-btn{
+            .teammate{
+                @media(max-width: 768px){
+                    display: none;
+                }
+            }
+
+            .team-cross{
+                display: none;
+
+                @media(max-width: 768px){
+                    display: block;
+                }
+            }
+
+            @media(max-width: 768px){
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+                position: absolute;
+                right: 14px;
+                top: 4px;
+            }
+        }
+    }
+}
+
+.main-member-container{
+    width: 100%;
+
+    @media(max-width: 900px){
+        width: 100%;
+        overflow-y: scroll;
+        scrollbar-width: none;
+    }
+
+    .memeber-list{
+        width: 100%;
+        text-align: left;
+        margin-top: 25px;
+
+        @media(max-width: 768px){
+            overflow-x: auto;
+            padding-bottom: 10px;
+            width: 1000px;
+        }
+        
+    
+        .header{
+            display: flex;
+            margin-bottom: 15px;
+            padding: 0px 20px;
+    
+            div{
+                font-size: 15px;
+                font-weight: 700;
+            }
+        }
+    
+        .each-member-body{
+            display: flex;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 5px;
+            align-items: center;
+            margin-bottom: 7px;
+            box-sizing: border-box;
+            padding: 10px 20px;
+        }
+    
+        .value-last-name,
+        .column-last-name,
+        .value-fist-name,
+        .column-fist-name{
+            width:18%;
+        }
+    
+        .column-email,
+        .value-email{
+            width: 28%;
+        }
+    
+        .column-team-role,
+        .value-team-role{
+            width: 18%;
+        }
+    
+        .column-status,
+        .value-status{
+            width: 15%;
+        }
+    
+        .column-actions,
+        .value-actions{
+            width: 3%;
+            position: relative;
+        }
+    
+        .btn-action{
+            background: url('/images/more-vertical.svg') no-repeat transparent center / 24px;
+            border: none;
+            display: inline-block;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            padding: 0;
+            background-color: transparent;
+        }
+    }
+}
+
+
+#apps-list {
+    thead {
+        @media screen and (max-width: 767px) {
+            display: none;
+        }
+    }
+
+    .not-on-mobile {
+        @media screen and (max-width: 767px) {
+            display: none;
+        }
+    }
+
+    .app-status-approved {
+        color: variables.$green;
+        border: 1px solid variables.$green;
+
+        @media screen and (max-width: 767px) {
+            &::before {
+                background: url("/images/icons/done.svg") no-repeat center center / 16px;
+                width: 12px;
+                display: inline-block;
+                color: transparent;
+                filter: invert(56%) sepia(94%) saturate(2964%) hue-rotate(104deg) brightness(92%) contrast(80%);
+            }
+        }
+    }
+
+    .app-status-pending {
+        color: variables.$orange;
+        border: 1px solid variables.$orange;
+    }
+
+    .app-status-revoked {
+        color: variables.$red;
+        border: 1px solid variables.$red;
+
+        @media screen and (max-width: 767px) {
+            &::before {
+                background: url("/images/icons/close.svg") no-repeat center center / 16px;
+                width: 12px;
+                display: inline-block;
+                color: transparent;
+                filter: invert(16%) sepia(62%) saturate(4069%) hue-rotate(327deg) brightness(95%) contrast(91%);
+            }
+        }
+    }
+
+    .status {
+        box-sizing: border-box;
+        border-radius: 64px;
+        padding: 4px 12px;
+        display: inline-flex;
+
+        @media screen and (min-width: 768px) {
+            &::before {
+                content: attr(aria-label);
+            }
+        }
+
+        @media screen and (max-width: 767px) {
+            margin-right: 36px;
+
+            &::before {
+                content: attr(data-pending);
+            }
+        }
+    }
+
+    .country-flag {
+        width: 24px;
+        height: 24px;
+    }
+
+    .no-teams-app{
+        text-transform: revert !important;
+    }
+
+    .go-to-app {
+        position: absolute;
+        top: 24px;
+        right: 16px;
+        display: flex;
+        align-items: center;
+    }
+}
+
+.block-actions {
+    width: 170px;
+    position: absolute;
+    background-color: #fff;
+    border-radius: 10px;
+    // border: solid 1px #cdcdcd;
+    z-index: 2;
+    top: 37px;
+    right: 11px;
+    padding: 7px 13px;
+    box-sizing: border-box;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12), 0 3px 6px rgba(0, 0, 0, 0.16);
+
+    &.show {
+        opacity: 3;
+        z-index: 4;
+        pointer-events: auto;
+        transition: all 0.3s ease;
+    }
+
+    ul {
+        padding: 0px;
+        margin: 0;
+
+        li {
+            list-style: none;
+            padding: 4px 0;
+
+            button {
+                background-color: transparent;
+                padding: 0px;
+                margin: 0;
+                border: none;
+                height: 1px;
+
+                &.non-active {
+                    pointer-events: none;
+                    color: #cdcdcd;
+                }
+            }
+
+            .user-delete {
+                color: #FF4380;
+            }
+        }
+    }
+}
+
+#main .table-list tbody tr td{
+    text-transform: revert;
+}
+
+.no-content-found{
+    width: 100%;
+    background-color: #ffffff;
+    text-align: center;
+    font-size: 16px;
+    padding: 15px 0px;
+    margin-top: 15px;
+}

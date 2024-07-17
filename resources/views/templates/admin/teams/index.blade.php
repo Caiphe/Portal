@@ -23,11 +23,9 @@
             Country
             <select name="country" class="team-country">
                 <option value="">Select by country</option>
-
                 @foreach($countries as $code => $name)
                     <option value="{{ $code }}">{{ $name }}</option>
                 @endforeach
-
             </select>
         </div>
     </x-admin.filter>
@@ -46,7 +44,12 @@
       <div class="body body-container">
         @foreach ($teams as $team)
         <div class="each-team">
-            <div class="value-team-name">{{ Str::limit($team->name, 20, '...')}}</div>
+            <div class="value-team-name">
+                <a href="{{ route('admin.team.show', $team) }}">
+                    {{ Str::limit($team->name, 20, '...')}}
+                </a>
+            </div>
+
             <div class="value-team-country">
                <img src="/images/locations/{{ $team->country }}.svg" src="team-{{ $team->country }}.svg"
                     alt="{{ $team->country }}"/>
@@ -58,7 +61,9 @@
 
             <div class="value-team-actions">
                 <a href="" class="actions-btn"> @svg('pencil', "#0c678f") Edit</a>
-                <a class="actions-btn delete-team-btn">@svg('trash', "#0c678f") Delete</a>
+                <a href="{{ route('admin.team.show', $team) }}" class="actions-btn" rel="noreferrer">@svg('eye', "#0c678f") View</a>
+
+                <a class="actions-btn delete-team-btn" >@svg('trash', "#0c678f") Delete</a>
 
                 <x-dialog-box class="team-deletion-confirm" dialogTitle="Delete team">
                     <div class="data-container">
