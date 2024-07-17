@@ -1,5 +1,8 @@
-@extends('layouts.admin')
+@php
+    use Illuminate\Support\Str;
+@endphp
 
+@extends('layouts.admin')
 @push('styles')
 <link rel="stylesheet" href="{{ mix('/css/templates/admin/edit.css') }}">
 <link rel="stylesheet" href="{{ mix('/css/templates/admin/teams/show.css') }}">
@@ -8,11 +11,33 @@
 @section('title', 'teams')
 
 @section('content')
-    <h1>{{ $team->name }}</h1>
 
-    <div class="page-actions">
-        <a href="{{ route('admin.team.create') }}" class="button red-button page-actions-create" aria-label="Delete team"></a>
-    </div>
+    <a href="{{ route('admin.team.index') }}" class="go-back">@svg('chevron-left') Back to teams</a>
+    <h1 class="main-team">{{ $team->name }}</h1>
+    <buttom type="button" class="button red-button delete-team-btn" >Delete team</buttom>
+
+
+    <x-dialog-box class="team-deletion-confirm" dialogTitle="Delete team">
+        <div class="data-container">
+            <span>
+                Are you sure you want to delete this team ? <br/>  
+                <strong> {{ $team->name }} </strong>
+            </span>
+            <p>All team members and applications will be removed from the team.</p>
+        </div>
+    
+        <div class="bottom-shadow-container button-container">
+            <form class="confirm-user-deletion-request-form" method="POST" action="{{ route('admin.team.delete', $team) }}">
+                @csrf
+                @method('DELETE')
+                <input type="hidden" name="team_id" value="{{ $team->id }}" />
+                <input type="hidden" name="team_name" value="{{ $team->name }}" />
+                <button type="submit" class="confirm-deletion-btn btn primary">Confirm</button>
+                <button type="button" class="cancel" onclick="closeDialogBox(this);">Cancel</button>
+            </form>
+        </div>
+    </x-dialog-box>
+
 
     <div class="form-container editor-field">
         <h2>Details</h2>
@@ -43,10 +68,13 @@
                 </div>
 
                 <div class="right-block each-block-data">
+                    @if($team->email)
                     <div class="each-details">
-                        <div class="detail-key">Team URL</div>
-                        <div class="detail-value">{{ $team->url }}</div>
+                        <div class="detail-key">Team owner</div>
+                        <div class="detail-value">{{ Str::limit($team->email, 20, '...')}}</div>
                     </div>
+                    @endif
+
                     <div class="each-details">
                         <div class="detail-key">Team members</div>
                         <div class="detail-value">{{ count($team->users) }}</div>
@@ -63,20 +91,25 @@
     </div>
 
     {{-- Owner block --}}
+
     <div class="team-owner">
         <h2>Team owner</h2>
+
+        <div class="owner-block">
+            @if($team->owner)
+            <div class="member-thumbnail" style="background-image: url({{ $team->owner->profile_picture }})"></div>
+            
+            <div class="owner-block-profile">
+                <span class="owner-full-name">{{ $team->owner->full_name }}</span>
+                <span class="owner-email"> ({{ $team->owner->email }})</span>
+            </div>
+            @endif
+        </div>
+
         <a class="button outline dark">Change owner</a>
+
     </div>
 
-    <div class="owner-block">
-        @foreach($team->users as $teamUser)
-        @if($teamUser->isTeamOwner($team))
-        <div class="member-thumbnail" style="background-image: url({{ $teamUser->profile_picture }})"></div>
-        <span class="owner-full-name">{{ $teamUser->full_name }}</span>
-        <span class="owner-email">({{ $teamUser->email }})</span>
-        @endif
-        @endforeach
-    </div>
 
     {{-- team members --}}
     <div class="team-custom-head">
@@ -84,33 +117,88 @@
             <h2 class="member-headings">Team members</h2>
             <span class="gray-text">{{ count($team->users) }} team members</span>
         </div>
-        <a class="button outline dark">Add a teammate</a>
+        <a class="button outline dark add-teammate-btn" href="#">
+            <span class="teammate">Add a teammate</span>
+            <span class="team-cross">@svg('plus')</span>
+        </a>
     </div>
 
-    <div class="memeber-list">
-        <div class="header">
-            <div class="column-fist-name">First name</div>
-            <div class="column-last-name">Last name</div>
-            <div class="column-email">Email address</div>
-            <div class="column-team-role">Team Role</div>
-            <div class="column-status">2FA Status</div>
-            <div class="column-actions"></div>
-          </div>
-
-        @foreach ($team->users as $user)
-        <div class="each-member-body">
-            <div class="value-fist-name">{{ $user->first_name }}</div>
-            <div class="value-last-name">{{ $user->last_name }}</div>
-            <div class="value-email">{{ $user->email }}</div>
-            <div class="value-team-role">{{ $user->teamRole($team)->label }}</div>
-            <div class="value-status">{{ $user->twoFactorStatus() }}</div>
-            <div class="value-actions">
-                <button class="btn-action"></button>
+    @if(count($team->users) > 0)
+    <div class="main-member-container">
+        <div class="memeber-list">
+            <div class="header">
+                <div class="column-fist-name">First name</div>
+                <div class="column-last-name">Last name</div>
+                <div class="column-email">Email address</div>
+                <div class="column-team-role">Team Role</div>
+                <div class="column-status">2FA Status</div>
+                <div class="column-actions"></div>
             </div>
-        </div>
-        @endforeach
-    </div>
 
+            @foreach ($team->users as $teamUser)
+            <div class="each-member-body">
+                <div class="value-fist-name">{{ $teamUser->first_name }}</div>
+                <div class="value-last-name">{{ $teamUser->last_name }}</div>
+                <div class="value-email">{{ $teamUser->email }}</div>
+                <div class="value-team-role">{{ $teamUser->teamRole($team)->label }}</div>
+                <div class="value-status">{{ $teamUser->twoFactorStatus() }}</div>
+                <div class="value-actions">
+                    <button class="btn-action"></button>
+
+                    <div class="block-actions">
+                        @php
+                            
+                        @endphp
+                        <ul>
+                            {{---  Uses the transfer endpoint--}}
+                            {{-- @if($isOwner) --}}
+                            <li>
+                                <button
+                                    class="make-admin make-owner-btn"
+                                    data-adminname="{{ $teamUser->full_name }}"
+                                    data-invite=""
+                                    data-teamid="{{ $team->id }}"
+                                    data-useremail="{{ $teamUser->email }}">
+                                    Make owner
+                                </button>
+                            </li>
+                            {{-- @endif --}}
+
+                            {{---  Uses the invite endpoint--}}
+                            <li>
+                                <button
+                                    id="change-role-{{ $teamUser->id }}"
+                                    class="make-user"
+                                    data-username="{{ $teamUser->full_name }}"
+                                    data-useremail="{{ $teamUser->email }}"
+                                    data-teamid="{{ $team->id }}"
+                                    data-teamuserid="{{ $teamUser->id }}"
+                                    data-userrole = "{{ $teamUser->teamRole($team)->name === 'team_user' ? 'team_admin' : 'team_user' }}">
+                                    {{ $teamUser->teamRole($team)->name === 'team_user' ? 'Make administrator' : 'Make user' }}
+                                </button>
+                            </li>
+
+                            {{---  Uses the leave endpoinst --}}
+                            <li>
+                                <button
+                                    class="user-delete"
+                                    data-usernamedelete="{{ $teamUser->full_name }}"
+                                    data-teamid="{{ $team->id }}"
+                                    data-teamuserid="{{ $teamUser->id }}">
+                                    Delete
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @else
+        <div class="no-content-found"> Team currently has no members</div>
+    @endif
 
     {{-- team members --}}
     <div class="team-custom-head">
@@ -121,44 +209,43 @@
     </div>
 
     {{-- apps list --}}
-<table id="apps-list" class="table-list">
-    <thead>
-        <tr>
-            <th><a href="?sort=name&order={{ $order }}">Name @svg('chevron-sorter')</a></th>
-            <th><a href="?sort=products_count&order={{ $order }}">Products @svg('chevron-sorter')</a></th>
-            <th><a href="?sort=created_at&order={{ $order }}">Registered @svg('chevron-sorter')</a></th>
-            <th><a href="?sort=country_code&order={{ $order }}">Country @svg('chevron-sorter')</a></th>
-            <th><a href="?sort=status&order={{ $order }}">Status @svg('chevron-sorter')</a></th>
-        </tr>
-    </thead>
-
     @if($teamsApps)
-        @foreach($teamsApps as $app)
-        @php
-            $productStatus = $app->product_status;
-        @endphp
+        <table id="apps-list" class="table-list">
+            <thead>
+                <tr>
+                    <th><a href="?sort=name&order={{ $order }}">Name @svg('chevron-sorter')</a></th>
+                    <th><a href="?sort=country_code&order={{ $order }}">Country @svg('chevron-sorter')</a></th>
+                    <th><a href="?sort=products_count&order={{ $order }}">Creator @svg('chevron-sorter')</a></th>
+                    <th><a href="?sort=created_at&order={{ $order }}">Create at @svg('chevron-sorter')</a></th>
+                    <th><a href="?sort=status&order={{ $order }}">Status @svg('chevron-sorter')</a></th>
+                </tr>
+            </thead>
 
-        <tr class="user-app" data-country="{{ $app->country_code }}">
-            <td><a href="{{ route('admin.dashboard.index', ['aid' => $app]) }}" class="app-link">{{ $app->display_name }}</a></td>
-            <td class="not-on-mobile">{{ $app->products_count }}</td>
-            <td class="not-on-mobile">{{ $app->created_at->format('d M Y') }}</td>
-            <td class="not-on-mobile"><img class="country-flag" src="/images/locations/{{ $app->country_code ?? 'globe' }}.svg" alt="Country flag"></td>
-            <td>
-                <div class="status app-status-{{ $productStatus['status'] }}" aria-label="{{ $productStatus['label'] }}" data-pending="{{ $productStatus['pending'] }}"></div>
-                <a class="go-to-app" href="{{ route('admin.dashboard.index', ['aid' => $app]) }}">@svg('chevron-right')</a>
-            </td>
-        </tr>
-        @endforeach
+                @foreach($teamsApps as $app)
+                @php
+                    $productStatus = $app->product_status;
+                @endphp
+
+                <tr class="user-app" data-country="{{ $app->country_code }}">
+                    <td><a href="{{ route('admin.dashboard.index', ['aid' => $app]) }}" class="app-link">{{ $app->display_name }}</a></td>
+                    <td class="not-on-mobile"><img class="country-flag" src="/images/locations/{{ $app->country_code ?? 'globe' }}.svg" alt="Country flag"></td>
+                    <td class="not-on-mobile">{{ $app->developer->email }}</td>
+                    <td class="not-on-mobile">{{ $app->created_at->format('d M Y') }}</td>
+                    <td>
+                        <div class="status app-status-{{ $productStatus['status'] }}" aria-label="{{ $productStatus['label'] }}" data-pending="{{ $productStatus['pending'] }}"></div>
+                        <a class="go-to-app" href="{{ route('admin.dashboard.index', ['aid' => $app]) }}">@svg('chevron-right')</a>
+                    </td>
+                </tr>
+                @endforeach
+        
+        </table>
     @else
-    <tr>
-        <td>Developer currently has no apps</td>
-    </tr>
+    <div class="no-content-found"> Team currently has no apps</div>
     @endif
-</table>
-
-
 
 @endsection
 
 @push('scripts')
+<script src="{{ mix('/js/templates/admin/teams/show.js') }}" defer></script>
+
 @endpush
