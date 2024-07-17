@@ -60,11 +60,7 @@ class TeamController extends Controller
 
         if($team->apps->count() > 0){
             $teamsApps = $team->apps;
-            // $teamsApps = $team->apps($order, $request->get('sort', 'name'));
         }
-
-        // dd($teamsApps);
-
 
         return view('templates.admin.teams.show',[
             'team' => $team,
