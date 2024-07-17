@@ -54,35 +54,34 @@ trait TeamsCompanyTrait
         }
     }
 
+
     /**
-     * TODO refactor this method
+     * @param $team
      * @param $data
-     * @param $id
-     * @return JsonResponse
+     * @return JsonResponse|RedirectResponse|void
      */
     public function updateTeam($team, $data)
     {
-
         $company = Team::findOrFail($team['id']);
 
         $teamLogo = $team->logo;
         $oldName = $team->name;
 
-        $new_team_owner = User::where('id', $data['team_owner'])->first();
-        if (!$new_team_owner){
+        $team_owner = User::where('id', $data['team_owner'])->first();
+
+        if (!$team_owner){
             return redirect()->back()->with('alert', "error: user does not exist");
         }
 
         //Check if the team owner exists in APIGEE
-        $apigee_user = ApigeeService::get('developers/' . $new_team_owner['email']);
+        $apigee_user = ApigeeService::get('developers/' . $team_owner['email']);
 
         //abort action if user does not exist in APIGEE
         if (isset($apigee_user['code'])) {
             return redirect()->back()->with('alert', "error:'" . $apigee_user['message'] . "'");
         }
 
-        $teamAdmin = $new_team_owner->hasTeamRole($team, 'team_admin');
-
+        $teamAdmin = $team_owner->hasTeamRole($team, 'team_admin');
 
         if (!$teamAdmin) {
             return response()->json(['success' => true], 424);
@@ -106,22 +105,22 @@ trait TeamsCompanyTrait
         $companyUpdated = Team::where('id', $company->id)->first();
 
         //TODO fix team update API
-        $test = ApigeeService::updateCompany($companyUpdated, $new_team_owner);
-        dd($test);
+        ApigeeService::updateCompany($companyUpdated, $team_owner);
 
-        foreach ($team->users as $user) {
-            if ($oldName !== $team->name) {
+        foreach ($companyUpdated->users as $user) {
+            if ($oldName !== $companyUpdated->name) {
                 Notification::create([
                     'user_id' => $user->id,
-                    'notification' => "Your team <strong> {$oldName} </strong> has been updated to <strong>{$team->name}</strong>, please click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team to view the changes",
+                    'notification' => "Your team <strong> {$oldName} </strong> has been updated to <strong>{$companyUpdated->name}</strong>, please click <a href='/teams/{$companyUpdated->id}/team'>here</a> to navigate to your team to view the changes",
                 ]);
             } else {
                 Notification::create([
                     'user_id' => $user->id,
-                    'notification' => "Your team <strong>{$team->name}</strong> has been updated please click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team to view the changes",
+                    'notification' => "Your team <strong>{$companyUpdated->name}</strong> has been updated please click <a href='/teams/{$companyUpdated->id}/team'>here</a> to navigate to your team to view the changes",
                 ]);
             }
         }
+
 
         return response()->json(['success' => true], 200);
     }

@@ -11,13 +11,12 @@
 
 @section('content')
     <a href="{{ url()->previous() }}" class="go-back">@svg('chevron-left') Back to teams</a>
-    <h1>Edit a Team</h1>
+    <h1>Team Profile</h1>
 
     <div class="full">
         @include('templates.admin.teams.forms.edit_team')
     </div>
-
 @endsection
 @push('scripts')
-    <script src="{{ mix('/js/templates/admin/teams/create_form.js') }}"></script>
+    <script src="{{ mix('/js/templates/admin/teams/edit_form.js') }}"></script>
 @endpush

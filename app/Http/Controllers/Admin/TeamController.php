@@ -3,14 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\App;
+use App\Http\Requests\TeamUpdateRequest;
 use App\Team;
 use App\User;
 use App\Country;
 use App\Product;
 use App\Notification;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Traits\CountryTraits;
 use App\Services\ApigeeService;
+use Illuminate\View\View;
 use Mpociot\Teamwork\TeamInvite;
 use App\Http\Controllers\Controller;
 use App\Concerns\Teams\InviteActions;
@@ -23,8 +27,13 @@ class TeamController extends Controller
 {
     use  InviteRequests, InviteActions, TeamsCompanyTrait, CountryTraits;
 
-
-    public function index (Request $request)
+    /**
+     * Retrieves a paginated list of teams based on the provided request parameters.
+     *
+     * @param Request $request The HTTP request object containing query parameters.
+     * @return View The view displaying the list of teams.
+     */
+    public function index (Request $request): View
     {
         $country = $request->get('country', "");
         $numberPerPage = (int)$request->get('number_per_page', '15');
@@ -49,14 +58,24 @@ class TeamController extends Controller
         ]);
     }
 
-    public function show(Team $team)
+    /**
+     * Display the specified team.
+     *
+     * @param Team $team The team to be displayed.
+     * @return View The view displaying the team details.
+     */
+    public function show(Team $team): View
     {
         return view('templates.admin.teams.show',[
             'team' => $team
         ]);
     }
-
-    public function create ()
+    /**
+     * Create a new team and return the view for creating a team.
+     *
+     * @return View The view for creating a team.
+     */
+    public function create (): View
     {
         return view('templates.admin.teams.create',
             [
@@ -64,13 +83,25 @@ class TeamController extends Controller
             ]);
     }
 
-    public function store (TeamRequest $request)
+    /**
+     * Store a new team based on the provided request.
+     *
+     * @param TeamRequest $request The request containing the team data.
+     * @return RedirectResponse Redirects to the team index page.
+     */
+    public function store (TeamRequest $request): RedirectResponse
     {
         $this->storeTeam($request);
         return redirect()->route('admin.team.index');
     }
 
-    public function edit (Team $team)
+    /**
+     * Display the edit form for the specified team.
+     *
+     * @param Team $team The team to be edited.
+     * @return View The view for editing the team.
+     */
+    public function edit (Team $team): View
     {
         return view('templates.admin.teams.edit', [
             'team' => $team,
@@ -78,13 +109,26 @@ class TeamController extends Controller
         ]);
     }
 
-    public function update (Team $team, Request $request)
+    /**
+     * Update a team based on the provided team data and request.
+     *
+     * @param Team $team The team to be updated.
+     * @param TeamRequest $request The request containing the team data.
+     * @return RedirectResponse Redirects to the team index page.
+     */
+    public function update (Team $team, TeamRequest $request): RedirectResponse
     {
         $this->updateTeam($team, $request);
         return redirect()->route('admin.team.index');
     }
 
-    public function destroy (Team $team)
+    /**
+     * Destroys a team and associated data, including users, invites, and apps.
+     *
+     * @param Team $team The team to be destroyed
+     * @return JsonResponse Returns JSON response indicating success
+     */
+    public function destroy (Team $team): JsonResponse
     {
         $teamMembers = $team->users->pluck('id')->toArray();
         $currentUsers = $team->users;
