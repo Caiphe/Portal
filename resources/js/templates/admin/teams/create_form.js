@@ -82,6 +82,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    /**
+     * Validates a form and returns an array of errors if any.
+     *
+     * @param {HTMLFormElement} form - The form element to validate.
+     * @return {string[]} An array of error messages, empty if no errors.
+     */
     function validateForm(form) {
         const errors = [];
         const teamName = form['name'].value;
@@ -101,6 +107,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return errors;
     }
 
+    /**
+     * Creates an email tag element based on the provided email.
+     *
+     * @param {string} email - The email address to be displayed in the tag.
+     */
     function createEmailTag(email) {
         if (!isEmailTagExists(email)) {
             const tag = document.createElement('div');
@@ -113,11 +124,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /**
+     * Checks if an email tag exists in the DOM.
+     *
+     * @param {string} email - The email to check for.
+     * @return {boolean} Returns true if the email tag exists, false otherwise.
+     */
     function isEmailTagExists(email) {
         const tags = document.querySelectorAll('.email-tag span:first-child');
         return Array.from(tags).some(tag => tag.textContent === email);
     }
 
+    /**
+     * Removes an email tag from the DOM and updates hidden input and team owner options.
+     *
+     * @param {Element} tag - The tag element to be removed.
+     */
     function removeEmailTag(tag) {
         const email = tag.querySelector('span:first-child').textContent;
         tag.remove();
@@ -125,12 +147,22 @@ document.addEventListener('DOMContentLoaded', () => {
         updateTeamOwnerOptions();
     }
 
+    /**
+     * Updates the hidden input field with the email addresses from the email tags.
+     *
+     * @return {void} This function does not return anything.
+     */
     function updateHiddenInput() {
         const tags = document.querySelectorAll('.email-tag span:first-child');
         const emails = Array.from(tags).map(tag => tag.textContent);
         emailListInput.value = emails.join(',');
     }
 
+    /**
+     * Updates the team owner options based on the email tags present in the DOM.
+     *
+     * @return {void} This function does not return anything.
+     */
     function updateTeamOwnerOptions() {
         const tags = document.querySelectorAll('.email-tag span:first-child');
         const emails = Array.from(tags).map(tag => tag.textContent);
@@ -168,11 +200,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    /**
+     * Validates the format of an email.
+     *
+     * @param {string} email - The email address to be validated.
+     * @return {boolean} Returns true if the email format is valid, false otherwise.
+     */
     function validateEmail(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(email);
     }
 
+    /**
+     * Submits the form data via XMLHttpRequest and handles the response accordingly.
+     */
     function submitForm() {
         const formData = new FormData(teamForm);
         const xhr = new XMLHttpRequest();
@@ -209,6 +250,11 @@ document.addEventListener('DOMContentLoaded', () => {
         xhr.send(formData);
     }
 
+    /**
+     * Handles form errors by generating error messages from the input errors array and displaying an error alert.
+     *
+     * @param {Array} errors - An array of error messages.
+     */
     function handleFormErrors(errors) {
         const errorMessages = errors.map(error => `<p>${error}</p>`).join('');
         addAlert('error', [errorMessages]);

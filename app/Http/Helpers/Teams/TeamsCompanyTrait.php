@@ -54,33 +54,46 @@ trait TeamsCompanyTrait
         }
     }
 
-    /**
-     * TODO refactor this method
-     * @param $data
-     * @param $id
-     * @return JsonResponse
-     */
-    public function updateTeam($data, $id)
-    {
-        $team = Team::findOrFail($id);
-        $teamLogo = $team->logo;
 
+    /**
+     * @param $team
+     * @param $data
+     * @return JsonResponse|RedirectResponse|void
+     */
+    public function updateTeam($team, $data)
+    {
+        $company = Team::findOrFail($team['id']);
+
+        $teamLogo = $team->logo;
         $oldName = $team->name;
 
-        $teamOwner = User::where('id', $team->owner_id)->first();
-        $teamAdmin = $teamOwner->hasTeamRole($team, 'team_admin');
+        $team_owner = User::where('id', $data['team_owner'])->first();
+
+        if (!$team_owner){
+            return redirect()->back()->with('alert', "error: user does not exist");
+        }
+
+        //Check if the team owner exists in APIGEE
+        $apigee_user = ApigeeService::get('developers/' . $team_owner['email']);
+
+        //abort action if user does not exist in APIGEE
+        if (isset($apigee_user['code'])) {
+            return redirect()->back()->with('alert', "error:'" . $apigee_user['message'] . "'");
+        }
+
+        $teamAdmin = $team_owner->hasTeamRole($team, 'team_admin');
 
         if (!$teamAdmin) {
             return response()->json(['success' => true], 424);
         }
 
-        if ($data->has('logo')) {
+        if ($data->has('logo_file')) {
             $teamLogo = $this->processLogoFile($data);
         }
 
         $data['name'] = preg_replace('/[-_±§@#$%^&*()+=!]+/', '', $data['name']);
 
-        $team->update([
+        $company->update([
             'name' => $data['name'],
             'url' => $data['url'],
             'contact' => $data['contact'],
@@ -89,28 +102,25 @@ trait TeamsCompanyTrait
             'description' => $data['description'],
         ]);
 
-        $updatedFields = array_keys($team->getChanges());
-        unset($updatedFields['updated_at']);
+        $companyUpdated = Team::where('id', $company->id)->first();
 
-        if (empty($updatedFields)) {
-            return response()->json(['success' => true], 304);
-        }
+        //TODO fix team update API
+        ApigeeService::updateCompany($companyUpdated, $team_owner);
 
-        ApigeeService::updateCompany($team);
-
-        foreach ($team->users as $user) {
-            if ($oldName !== $team->name) {
+        foreach ($companyUpdated->users as $user) {
+            if ($oldName !== $companyUpdated->name) {
                 Notification::create([
                     'user_id' => $user->id,
-                    'notification' => "Your team <strong> {$oldName} </strong> has been updated to <strong>{$team->name}</strong>, please click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team to view the changes",
+                    'notification' => "Your team <strong> {$oldName} </strong> has been updated to <strong>{$companyUpdated->name}</strong>, please click <a href='/teams/{$companyUpdated->id}/team'>here</a> to navigate to your team to view the changes",
                 ]);
             } else {
                 Notification::create([
                     'user_id' => $user->id,
-                    'notification' => "Your team <strong>{$team->name}</strong> has been updated please click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team to view the changes",
+                    'notification' => "Your team <strong>{$companyUpdated->name}</strong> has been updated please click <a href='/teams/{$companyUpdated->id}/team'>here</a> to navigate to your team to view the changes",
                 ]);
             }
         }
+
 
         return response()->json(['success' => true], 200);
     }

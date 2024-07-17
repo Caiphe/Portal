@@ -85,7 +85,7 @@ class CompanyTeamsController extends Controller
         abort_if(!$newOwner, 404, 'This user is not known');
 
         $appCreated = App::where('developer_id', $user->developer_id)->where('team_id', $team->id)->get();
-        
+
         if($appCreated->count() >= 1){
             foreach($appCreated as $app){
                 $app->update([
@@ -106,7 +106,7 @@ class CompanyTeamsController extends Controller
         $team->users()->detach($user);
 
         $userIds =  $team->users->pluck('id')->toArray();
-            
+
         foreach($userIds as $id){
             if($id !== auth()->user()->id){
                 Notification::create([
@@ -141,7 +141,7 @@ class CompanyTeamsController extends Controller
             if($appNamesToDelete) {
                 foreach($appNamesToDelete as $appName){
                     $deletedApps = ApigeeService::delete("companies/{$team->username}/apps/{$appName}");
-    
+
                     if($deletedApps->successful()){
                         App::where('name', $appName)->delete();
                     }
@@ -159,10 +159,10 @@ class CompanyTeamsController extends Controller
 
             return response()->json(['success' => true, 'code' => 200], 200);
 
-        }else{          
+        }else{
             $appCreated = App::where('developer_id', $user->developer_id)->where('team_id', $team->id)->get();
             $teamOwnerDeveloperId = User::where('id', $team->owner_id)->pluck('developer_id')->toArray();
-            
+
             Notification::create([
                 'user_id' => $user->id,
                 'notification' => "You have successfully left your team <strong>{$team->name}</strong>.",
@@ -180,7 +180,7 @@ class CompanyTeamsController extends Controller
             $team->users()->detach($user);
 
             $userIds =  $team->users->pluck('id')->toArray();
-            
+
             foreach($userIds as $id){
                 if($id !== $user->id){
                     Notification::create([
@@ -318,7 +318,7 @@ class CompanyTeamsController extends Controller
         $team = $this->getTeam($data['team_id']);
         abort_if(!$team, 404, 'Team was not found');
 
-        // Check if a user is not part of the team or a user does not have admin role of the team 
+        // Check if a user is not part of the team or a user does not have admin role of the team
         abort_if(!$user->belongsToTeam($team) || !$user->hasTeamRole($team, 'team_admin'), 403, 'Forbidden');
 
         $user = $this->getTeamUserByEmail($invitedEmail);
@@ -328,7 +328,7 @@ class CompanyTeamsController extends Controller
         abort_if($user->belongsToTeam($team), 403, 'user is already member of this team');
 
         $isAlreadyInvited = false;
-        if ($user) {   
+        if ($user) {
             $isAlreadyInvited = TeamInvite::where('email', $user->email)->where('team_id', $team->id)->exists();
         }
 
@@ -526,7 +526,7 @@ class CompanyTeamsController extends Controller
         if($request->has('logo_file')){
             $teamLogo = $this->processLogoFile($request);
         }
-        
+
         $data['name'] = preg_replace('/[-_±§@#$%^&*()+=!]+/', '', $data['name']);
 
         $team->update([
@@ -560,7 +560,7 @@ class CompanyTeamsController extends Controller
                 ]);
             }
         }
-        
+
         return response()->json(['success' => true], 200);
     }
 
@@ -631,7 +631,7 @@ class CompanyTeamsController extends Controller
     {
         $invite = Teamwork::getInviteFromDenyToken($request->get('token'));
         abort_if(!$invite, 404, 'Invite was not found');
-        
+
         abort_if($invite->email !== auth()->user()->email, 401, 'You have not been invited to this team');
 
         $inviteType = ucfirst($invite->type);
@@ -687,7 +687,7 @@ class CompanyTeamsController extends Controller
                 $invite->delete();
             }
         }
-        
+
         if($currentUsers){
             $userIds = $currentUsers->pluck('id')->toArray();
 
@@ -708,7 +708,7 @@ class CompanyTeamsController extends Controller
         $appNamesToDelete = App::where('team_id', $team->id)->pluck('name')->toArray();
 
         if($appNamesToDelete) {
-            
+
             foreach($appNamesToDelete as $appName){
                 $deletedApps = ApigeeService::delete("companies/{$team->username}/apps/{$appName}");
 

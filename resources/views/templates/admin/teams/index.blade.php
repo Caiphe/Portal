@@ -60,20 +60,19 @@
             <div class="value-team-created_at">{{ date('d M Y', strtotime($team->created_at)) }}</div>
 
             <div class="value-team-actions">
-                <a href="" class="actions-btn"> @svg('pencil', "#0c678f") Edit</a>
                 <a href="{{ route('admin.team.show', $team) }}" class="actions-btn" rel="noreferrer">@svg('eye', "#0c678f") View</a>
-
+                <a href="{{ route('admin.team.edit', $team->id) }}" class="actions-btn"> @svg('pencil', "#0c678f") Edit</a>
                 <a class="actions-btn delete-team-btn" >@svg('trash', "#0c678f") Delete</a>
 
                 <x-dialog-box class="team-deletion-confirm" dialogTitle="Delete team">
                     <div class="data-container">
                         <span>
-                            Are you sure you want to delete this team ? <br/>  
+                            Are you sure you want to delete this team ? <br/>
                             <strong> {{ $team->name }} </strong>
                         </span>
                         <p>All team members and applications will be removed from the team.</p>
                     </div>
-                
+
                     <div class="bottom-shadow-container button-container">
                         <form class="confirm-user-deletion-request-form" method="POST" action="{{ route('admin.team.delete', $team) }}">
                             @csrf
