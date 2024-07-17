@@ -45,14 +45,28 @@ class TeamController extends Controller
         return view('templates.admin.teams.index', [
             'teams' => $teams,
             'countries' => $this->getCountry(),
-
         ]);
     }
 
-    public function show(Team $team)
+    public function show(Team $team, Request $request)
     {
+        $order = 'desc';
+
+        if ($request->has('sort')) {
+            $order = ['asc' => 'desc', 'desc' => 'asc'][$request->get('order', 'desc')] ?? 'desc';
+        }
+
+        $teamsApps = [];
+
+        if($team->apps->count() > 0){
+            $teamsApps = $team->apps;
+        }
+
         return view('templates.admin.teams.show',[
-            'team' => $team
+            'team' => $team,
+            'order' => $order,
+            'teamsApps' => $teamsApps,
+            'country' => Country::where('code', $team->country)->pluck('name')->first(),
         ]);
     }
 

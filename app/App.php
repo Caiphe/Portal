@@ -91,7 +91,7 @@ class App extends Model
 
     public function developer()
     {
-        return $this->hasOne(User::class, "developer_id", "developer_id");
+        return $this->hasOne(User::class, "developer_id", "developer_id") ?? '';
     }
 
     public function country()
