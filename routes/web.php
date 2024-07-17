@@ -163,7 +163,7 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 	// Team - Company management
     Route::prefix('teams')->middleware('can:administer-users')->group(function () {
         Route::get('/', 'TeamController@index')->name('admin.team.index');
-        Route::get('/{team:id}/team', 'TeamController@show')->name('admin.team.show');
+        Route::get('/{team}/team', 'TeamController@show')->name('admin.team.show');
         Route::delete('/{team}/delete', 'TeamController@destroy')->name('admin.team.delete');
         Route::get('create', 'TeamController@create')->name('admin.team.create');
         Route::post('store', 'TeamController@store')->name('admin.team.store');
