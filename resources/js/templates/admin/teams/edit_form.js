@@ -3,12 +3,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const imagePreview = document.getElementById('image-preview');
     const filePreviews = document.getElementById('file-previews');
     const teamForm = document.getElementById('create-team'); // Changed to update-team
-
+    const teamNameInput = teamForm['name'];
+    const contactNumberInput = teamForm['contact'];
 
     // Show the existing image preview if there is one
     if (imagePreview.src) {
         filePreviews.style.display = 'block';
     }
+
+    // Team name validation
+    teamNameInput.addEventListener('input', function(event) {
+        const value = this.value;
+        const newValue = value.replace(/[^a-zA-Z\s]/g, '');
+        if (value !== newValue) {
+            this.value = newValue;
+            addAlert('warning', 'Team name should contain only letters.');
+        }
+    });
+
+    // Contact number validation
+    contactNumberInput.addEventListener('input', function(event) {
+        const value = this.value;
+        const newValue = value.replace(/[^0-9+]/g, '');
+        if (value !== newValue) {
+            this.value = newValue;
+            addAlert('warning', 'Contact number should contain only numbers and +.');
+        }
+    });
 
     // Handle file upload preview
     fileUploadInput.addEventListener('change', function(event) {
@@ -37,7 +58,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Function to validate form inputs
+    /**
+     * Validates the format of an email.
+     *
+     * @param {string} email - The email address to be validated.
+     * @return {boolean} Returns true if the email format is valid, false otherwise.
+     */
     function validateForm(form) {
         console.log("Hi we here")
         const errors = [];
@@ -47,8 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const phoneRegex = /^\+|0(?:[0-9] ?){6,14}[0-9]$/;
         const teamOwner = form['team_owner'].value;
         const description = form['description'].value;
-
-
 
         if (teamName === '') errors.push("Team name required");
         if (urlValue === '') errors.push("Team URL required");
@@ -62,7 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return errors;
     }
 
-    // Function to submit the form data
+    /**
+     * Submits the form data via XMLHttpRequest and handles the response accordingly.
+     */
     function submitForm() {
         const formData = new FormData(teamForm);
         const xhr = new XMLHttpRequest();
@@ -99,7 +125,11 @@ document.addEventListener('DOMContentLoaded', () => {
         xhr.send(formData);
     }
 
-    // Function to handle form errors
+    /**
+     * Handles form errors by generating error messages from the input errors array and displaying an error alert.
+     *
+     * @param {Array} errors - An array of error messages.
+     */
     function handleFormErrors(errors) {
         const errorMessages = errors.map(error => `<p>${error}</p>`).join('');
         addAlert('error', [errorMessages]);
