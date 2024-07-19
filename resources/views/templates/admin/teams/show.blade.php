@@ -16,7 +16,7 @@
     <h1 class="main-team">{{ $team->name }}</h1>
     <buttom type="button" class="button red-button delete-team-btn" >Delete team</buttom>
 
-
+    {{-- Delete team modal --}}
     <x-dialog-box class="team-deletion-confirm" dialogTitle="Delete team">
         <div class="data-container">
             <span>
@@ -37,6 +37,113 @@
             </form>
         </div>
     </x-dialog-box>
+
+    {{-- Transfer ownership Dialog --}}
+    <x-dialog-box dialogTitle="Transfer Ownership" class="ownweship-modal-container">
+
+        <p class="remove-user-text dialog-text-padding">Which team member would you like to transfer ownership to? </p>
+
+        <div class="scrollable-users-container">
+            <ul class="list-users-container">
+            @if ($team->users)
+                @foreach($team->users as $teamUser)
+                    @if(!$teamUser->isTeamOwner($team))
+                        <li class="each-user">
+                            <div class="users-thumbnail" style="background-image: url({{ $teamUser->profile_picture }})"></div>
+                            <div class="user-full-name">{{ $teamUser->full_name }}</div>
+                            <div class="check-container">
+                                <x-radio-round-two name="transfer-ownership-check" id="{{ $teamUser->id }}" value="{{ $teamUser->email }}"></x-radio-round-two>
+                            </div>
+                        </li>
+                    @endif
+                @endforeach
+            @endif
+            </ul>
+        </div>
+
+        <form class="custom-modal-form bottom-shadow-container button-container mt-40">
+            <button type="button" id="transfer-btn" data-teamid="{{ $team->id }}" class="inactive">TRANSFER</button>
+            <button type="button" class="btn black-bordered mr-10 ownership-removal-btn">CANCEL</button>
+        </form>
+
+    </x-dialog-box>
+    {{-- Transfer ownership ends --}}
+
+    {{-- Make Admin Modal Container --}}
+    <x-dialog-box dialogTitle="Make owner" class="make-admin-modal-container">
+        <p class="teammate-text dialog-text-padding">Would you like to make this user a new <strong>owner</strong> of this team?</p>
+        <p class="admin-user-name bolder-text dialog-text-padding"></p>
+        <form class="custom-modal-form bottom-shadow-container button-container mt-40">
+            <button type="button" id="make-owner-btn" class="btn primary admin-removal-btn"  data-teamid="{{ $team->id }}">SUBMIT</button>
+            <button type="button" class="btn black-bordered mr-10 make-admin-cancel-btn" onclick="closeDialogBox(this);">CANCEL</button>
+        </form>
+    </x-dialog-box>
+    {{-- Make admin ends --}}
+
+    {{-- Make user modal Container --}}
+    <x-dialog-box dialogTitle="Make user" class="make-user-modal-container">
+        <p class="teammate-text dialog-text-padding">Would you like to make this user a new <strong>owner</strong> of this team?</p>
+        <p class="make-user-name bolder-text dialog-text-padding"></p>
+        <h2 class="team-head" style="display: none; ">Make User</h2>
+
+        <form class="custom-modal-form bottom-shadow-container button-container mt-40" method="post" id="make-user-form">
+            @csrf()
+            <input type="hidden" name="team_id" id="each-team-id" value="" />
+            <input type="hidden" name="user_id" id="each-user-id" value="" />
+            <input type="hidden" name="user_role" id="each-user-role" value="" />
+
+            <button type="button" class="btn primary make-user-btn">SUBMIT</button>
+            <button type="button" class="btn black-bordered mr-10 user-admin-cancel-btn" onclick="closeDialogBox(this);">CANCEL</button>
+        </form>
+    </x-dialog-box>
+    {{-- Make user modal ends --}}
+
+    {{-- Delete User Modal --}}
+    <x-dialog-box dialogTitle="Remove user" class="delete-modal-container">
+
+        <p class="teammate-text dialog-text-padding">Are you sure you want to remove this user?</p>
+        <p class="user-name user-delete-name bolder-text dialog-text-padding"></p>
+
+        <form class="custom-modal-form bottom-shadow-container button-container mt-40" method="post">
+            @csrf()
+            <input type="hidden" value="" name="team_id" class="hidden-team-id"/>
+            <input type="hidden" value="" name="team_user_id" class="hidden-team-user-id"/>
+            <button type="" class="btn primary remove-user-from-team">REMOVE</button>
+            <button type="button" class="btn black-bordered mr-10 cancel-remove-user-btn" onclick="closeDialogBox(this);">CANCEL</button>
+        </form>
+
+        <div class="confirm-delete-block">
+            <button class="confirm-delete-close-modal">@svg('close-popup', '#000')</button>
+            <h2 class="team-head custom-head">Warning</h2>
+            <p class="remove-user-text">
+                <span class="user-name user-to-delete-name"></span> You are the owner/creator of this team profile. To be able to delete this account, please assign ownership to another user
+            </p>
+
+            <div class="scrollable-users-container">
+                <ul class="list-users-container">
+                @if ($team->users)
+                    @foreach($team->users as $teamUser)
+                        @if(!$teamUser->isTeamOwner($team))
+                            <li class="each-user">
+                                <div class="users-thumbnail" style="background-image: url({{ $teamUser->profile_picture }})"></div>
+                                <div class="user-full-name">{{ $teamUser->full_name }}</div>
+                                <div class="check-container">
+                                    <x-radio-round name="transfer-ownership-check" id="{{ $teamUser->id }}" value="{{ $teamUser->email }}"></x-radio-round>
+                                </div>
+                            </li>
+                        @endif
+                    @endforeach
+                @endif
+                </ul>
+            </div>
+
+            <form class="form-delete-user ">
+                <button type="button" class="btn primary">REMOVE</button>
+                <button type="button" class="btn black-bordered mr-10 cancel-removal-btn">CANCEL</button>
+            </form>
+        </div>
+    </x-dialog-box>
+    {{-- Delete User Ends --}}
 
 
     <div class="form-container editor-field">
@@ -101,12 +208,14 @@
             
             <div class="owner-block-profile">
                 <span class="owner-full-name">{{ $team->owner->full_name }}</span>
-                <span class="owner-email"> ({{ $team->owner->email }})</span>
+                <span class="owner-email">@if($team->owner->email) ({{ $team->owner->email }}) @endif</span>
             </div>
             @endif
         </div>
 
-        <a class="button outline dark">Change owner</a>
+        @if(count($team->users) > 1)
+            <a class="button outline dark">Change owner</a>
+        @endif
 
     </div>
 
@@ -137,40 +246,47 @@
 
             @foreach ($team->users as $teamUser)
             <div class="each-member-body">
-                <div class="value-fist-name">{{ $teamUser->first_name }}</div>
+                <div class="value-fist-name">{{ $teamUser->first_name }} 
+                    @if($teamUser->isTeamOwner($team))
+                        <span class="owner-tag red-tag">OWNER</span>
+                    @endif
+                </div>
                 <div class="value-last-name">{{ $teamUser->last_name }}</div>
-                <div class="value-email">{{ $teamUser->email }}</div>
-                <div class="value-team-role">{{ $teamUser->teamRole($team)->label }}</div>
+                <div class="value-email">@if($teamUser->email){{ $teamUser->email }} @endif</div>
+                <div class="value-team-role" id="team-role-{{$teamUser->id}}">@if($teamUser->teamRole($team)){{ $teamUser->teamRole($team)->label }}@endif</div>
                 <div class="value-status">{{ $teamUser->twoFactorStatus() }}</div>
                 <div class="value-actions">
-                    <button class="btn-action"></button>
 
+                    @if(!$teamUser->isTeamOwner($team))
+
+                    <div class="block-hide-menu"></div>
+                    <button type="button" class="btn-action"></button>
                     <div class="block-actions">
-                        @php
                             
-                        @endphp
                         <ul>
                             {{---  Uses the transfer endpoint--}}
-                            {{-- @if($isOwner) --}}
                             <li>
-                                <button
+                                <button type="button"
                                     class="make-admin make-owner-btn"
                                     data-adminname="{{ $teamUser->full_name }}"
                                     data-invite=""
                                     data-teamid="{{ $team->id }}"
+                                    @if($teamUser->email)
                                     data-useremail="{{ $teamUser->email }}">
+                                    @endif
                                     Make owner
                                 </button>
-                            </li>
-                            {{-- @endif --}}
 
+                            </li>
                             {{---  Uses the invite endpoint--}}
                             <li>
                                 <button
                                     id="change-role-{{ $teamUser->id }}"
                                     class="make-user"
                                     data-username="{{ $teamUser->full_name }}"
+                                    @if($teamUser->email)
                                     data-useremail="{{ $teamUser->email }}"
+                                    @endif
                                     data-teamid="{{ $team->id }}"
                                     data-teamuserid="{{ $teamUser->id }}"
                                     data-userrole = "{{ $teamUser->teamRole($team)->name === 'team_user' ? 'team_admin' : 'team_user' }}">
@@ -188,8 +304,12 @@
                                     Delete
                                 </button>
                             </li>
+
                         </ul>
+
                     </div>
+
+                    @endif
 
                 </div>
             </div>
@@ -229,7 +349,11 @@
                 <tr class="user-app" data-country="{{ $app->country_code }}">
                     <td><a href="{{ route('admin.dashboard.index', ['aid' => $app]) }}" class="app-link">{{ $app->display_name }}</a></td>
                     <td class="not-on-mobile"><img class="country-flag" src="/images/locations/{{ $app->country_code ?? 'globe' }}.svg" alt="Country flag"></td>
-                    <td class="not-on-mobile">{{ $app->developer->email }}</td>
+                    <td class="not-on-mobile">
+                        @if($app->developer->email)
+                        {{ $app->developer->email }}
+                        @endif
+                    </td>
                     <td class="not-on-mobile">{{ $app->created_at->format('d M Y') }}</td>
                     <td>
                         <div class="status app-status-{{ $productStatus['status'] }}" aria-label="{{ $productStatus['label'] }}" data-pending="{{ $productStatus['pending'] }}"></div>

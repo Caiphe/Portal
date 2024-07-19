@@ -195,20 +195,21 @@ class CompanyTeamsController extends Controller
     }
 
     public function remove(LeavingRequest $teamRequest, Team $team){
-        $data = $teamRequest->validated();
 
+        $data = $teamRequest->validated();
         $team = $this->getTeam($data['team_id']);
         abort_if(!$team, 424, 'The team could not be found');
 
-        // check requesting user is a team admin for this team
-        $admin = auth()->user();
-        $teamAdmin = $admin->hasTeamRole($team, 'team_admin');
-        abort_if(!$teamAdmin, 424, "You are not this team's admin");
-
+        $loggedInUser = auth()->user();
         $user = $this->getTeamUser($data['user_id']);
-        abort_if(!$user, 424, 'Your user could not be found');
 
-        abort_if($user->isOwnerOfTeam($team), 424, "You can not remove team's owner");
+        if (!$loggedInUser->hasRole('admin') || !$loggedInUser->hasRole('opco')){
+            // check requesting user is a team admin for this team
+            $teamAdmin = $loggedInUser->hasTeamRole($team, 'team_admin');
+            abort_if(!$teamAdmin, 424, "You are not this team's admin");
+            abort_if(!$user, 424, 'Your user could not be found');
+            abort_if($user->isOwnerOfTeam($team), 424, "You can not remove team's owner");
+        }
 
         if ($team->hasUser($user) && $this->memberLeavesTeam($team, $user)) {
             ApigeeService::removeDeveloperFromCompany($team, $user);
@@ -678,7 +679,6 @@ class CompanyTeamsController extends Controller
 
         $teamMembers = $team->users->pluck('id')->toArray();
         $currentUsers = $team->users;
-
 
         $teamsInvites = TeamInvite::where('team_id', $team->id)->get();
 
