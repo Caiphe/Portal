@@ -6,6 +6,10 @@
         padding: 30px 30px 0px 0px;
         box-sizing: border-box;
 
+        .edit-textarea {
+            height: 95px;
+        }
+
         .editor-field-label {
             textarea,
             select,
@@ -39,7 +43,7 @@
             .file-upload-block {
                 display: flex;
                 width: 180px;
-                margin-left: -10px;
+                margin-left: 0;
 
                 .file-previews {
                     display: none; /* Hide initially */
@@ -200,3 +204,5 @@
 .form-field:read-only {
     background-color: rgba(105, 104, 104, 0.45);
 }
+
+
