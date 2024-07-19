@@ -86,7 +86,7 @@
         <p class="make-user-name bolder-text dialog-text-padding"></p>
         <h2 class="team-head" style="display: none; ">Make User</h2>
 
-        <form class="custom-modal-form bottom-shadow-container button-container mt-40" method="post" id="make-user-form">
+        <form class="custom-modal-form bottom-shadow-container button-container mt-40" method="post" id="make-user-form" action="{{ route('admin.team.user.role', $team) }}">
             @csrf()
             <input type="hidden" name="team_id" id="each-team-id" value="" />
             <input type="hidden" name="user_id" id="each-user-id" value="" />
@@ -104,7 +104,7 @@
         <p class="teammate-text dialog-text-padding">Are you sure you want to remove this user?</p>
         <p class="user-name user-delete-name bolder-text dialog-text-padding"></p>
 
-        <form class="custom-modal-form bottom-shadow-container button-container mt-40" method="post">
+        <form id="remove-user-form" class="custom-modal-form bottom-shadow-container button-container mt-40" method="post" action="{{ route('admin.team.remove.user', $team) }}">
             @csrf()
             <input type="hidden" value="" name="team_id" class="hidden-team-id"/>
             <input type="hidden" value="" name="team_user_id" class="hidden-team-user-id"/>

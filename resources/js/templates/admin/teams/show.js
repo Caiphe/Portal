@@ -127,17 +127,17 @@ function hideDeleteUserModal() {
 deleteUserActionBtn.addEventListener('click', removeUser);
 function removeUser(event){
     event.preventDefault();
+    var deleteUserForm = document.querySelector('#remove-user-form');
 
     var data = {
         team_id: hiddenTeamId.value,
         user_id: hiddenTeamUserId.value
     }
 
-    var url = "/teams/" + data.team_id + "/remove";
     var xhr = new XMLHttpRequest();
 
     addLoading('Removing user...');
-    xhr.open('POST', url);
+    xhr.open('POST', deleteUserForm.action);
 
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
@@ -192,8 +192,9 @@ if (makeUserBtn) {
         };
 
         document.querySelector('.block-hide-menu.show').click();
+        var changeUserRole = document.querySelector('#make-user-form');
 
-        handleMakeUserRole('/teams/' + data.team_id + '/user/role', data, event);
+        handleMakeUserRole(changeUserRole.action, data, event);
     })
 }
 

@@ -3,25 +3,25 @@
 namespace App\Http\Controllers\Admin;
 
 use App\App;
-use App\Http\Requests\TeamUpdateRequest;
+use App\Role;
 use App\Team;
 use App\User;
 use App\Country;
-use App\Product;
 use App\Notification;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Traits\CountryTraits;
 use App\Services\ApigeeService;
-use Illuminate\View\View;
 use Mpociot\Teamwork\TeamInvite;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Concerns\Teams\InviteActions;
+use Illuminate\Http\RedirectResponse;
 use App\Concerns\Teams\InviteRequests;
-use App\Http\Helpers\Teams\TeamsHelper;
 use App\Http\Requests\Admin\TeamRequest;
 use App\Http\Helpers\Teams\TeamsCompanyTrait;
+use App\Http\Requests\Teams\RoleUpdateRequest;
+use App\Http\Requests\Teams\Invites\LeavingRequest;
 
 class TeamController extends Controller
 {
@@ -180,5 +180,63 @@ class TeamController extends Controller
         $team->delete();
 
         return response()->json(['success' => true, 'code' => 200], 200);
+    }
+
+
+    public function remove(LeavingRequest $teamRequest, Team $team)
+    {
+        $loggedInUser = auth()->user();
+        $data = $teamRequest->validated();
+        $team = $this->getTeam($data['team_id']);
+        $user = $this->getTeamUser($data['user_id']);
+
+        abort_if(!$team, 424, 'The team could not be found');
+        abort_if(!$loggedInUser->hasRole('admin') || !$loggedInUser->hasRole('opco'), 424, 'You are not authorized to remove a user from this team');
+
+        if ($team->hasUser($user) && $this->memberLeavesTeam($team, $user)) {
+            ApigeeService::removeDeveloperFromCompany($team, $user);
+
+            Notification::create([
+                'user_id' => $user->id,
+                'notification' => "You have been removed from the team <strong>{$team->name}</strong>. "
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'success:message' => $user->full_name . ' has been successfully removed from ' . $team->name
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'error:message' => $user->full_name . ' could not be removed from ' . $team->name
+        ]);
+
+    }
+
+        /**
+     * Make Team member Admin/User
+     */
+    public function roleUpdate(RoleUpdateRequest $roleRequest, Team $team)
+    {
+        $data = $roleRequest->validated();
+        $user = User::find($data['user_id']);
+        $role = Role::where('name', $data['role'])->first();
+        $loggedInUser = auth()->user();
+
+        abort_if(!$team, 424, 'The team could not be found');
+        abort_if(!$loggedInUser->hasRole('admin') || !$loggedInUser->hasRole('opco'), 424, 'You are not authorized to remove a user from this team');
+
+        $updated = false;
+        if ($team->hasUser($user)) {
+            $updated = $user->teams()->updateExistingPivot($team, ['role_id' => $role->id]);
+
+            Notification::create([
+                'user_id' => $user->id,
+                'notification' => "Your role in the team <strong>{$team->name}</strong> has been updated to <strong>{$role->label}</strong>.<br/> Please navigate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
+            ]);
+        }
+
+        return response()->json(['success' => $updated]);
     }
 }
