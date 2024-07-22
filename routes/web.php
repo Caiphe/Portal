@@ -13,6 +13,8 @@
 |
  */
 
+use App\Http\Controllers\Api\Admin\DeveloperController;
+
 Route::get('/', 'HomeController')->name('home');
 
 Route::get('search', 'SearchController')->name('search');

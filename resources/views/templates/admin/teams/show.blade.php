@@ -164,11 +164,11 @@
     {{-- Delete User Ends --}}
 
     {{--Tony  Add teammate modal --}}
-    <x-dialog-box dialogTitle="Add teammate" class="add-teammate-dialog">
+    <x-dialog-box dialogTitle="Add a team member" class="add-teammate-dialog">
         <form class="form-teammate dialog-custom-form">
             <p class="dialog-text-padding">Invite additional team members or other users</p>
             <div class="form-group-container">
-                <input type="text" class="form-control teammate-email" placeholder="Add email to invite users"/>
+                <input type="text" class="form-team-email teammate-email" placeholder="Add email to invite users" data-url="{{ route('developers.list') }}"/>
             </div>
             <div class="radio-container">
                 <x-radio-round id="user-radio" name="role_name" value="team_admin">Administrator</x-radio-round>
@@ -265,7 +265,7 @@
             <h2 class="member-headings">Team members</h2>
             <span class="gray-text">{{ count($team->users) }} team members</span>
         </div>
-        <button class="outline dark add-team-mate-btn">Add a teammate</button>
+        <a class="button outline dark add-team-mate-btn">Add a teammate</a>
     </div>
 
     @if(count($team->users) > 0)

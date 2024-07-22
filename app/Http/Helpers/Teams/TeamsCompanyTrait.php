@@ -151,7 +151,10 @@ trait TeamsCompanyTrait
         abort_if(!$invitee, 404, 'The User was not found');
         abort_if($invitee->belongsToTeam($team), 403, 'User is already a member of this team');
 
-        $isAlreadyInvited = TeamInvite::where('email', $invitedEmail)->where('team_id', $team->id)->exists();
+        $isAlreadyInvited = TeamInvite::where('email', $invitedEmail)
+            ->where('team_id', $team->id)
+            ->exists();
+
         if ($isAlreadyInvited) {
             return response()->json([
                 'success' => true,
