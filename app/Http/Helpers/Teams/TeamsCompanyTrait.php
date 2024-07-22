@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Mpociot\Teamwork\Facades\Teamwork;
 use Mpociot\Teamwork\TeamInvite;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 trait TeamsCompanyTrait
 {
