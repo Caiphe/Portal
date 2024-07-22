@@ -8,6 +8,8 @@ use App\Team;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Mpociot\Teamwork\Facades\Teamwork;
+use Mpociot\Teamwork\TeamInvite;
 
 trait TeamsCompanyTrait
 {
@@ -123,5 +125,65 @@ trait TeamsCompanyTrait
 
 
         return response()->json(['success' => true], 200);
+    }
+
+    /**
+     * Invite a teammate to a team based on the provided data and team ID.
+     *
+     * @param mixed $data The data containing the invitee information.
+     * @param int $id The ID of the team to which the teammate is invited.
+     * @throws NotFoundHttpException If the team or user is not found.
+     * @throws HttpException If the user is already a member of the team or does not have the required role.
+     * @return JsonResponse JSON response indicating the success or failure of the invitation.
+     */
+    public function inviteTeammate($data, $id): JsonResponse
+    {
+        $invitedEmail = $data['invitee'];
+        $team = $this->getTeam($id);
+
+        abort_if(!$team, 404, 'Team was not found');
+
+        $user = User::where('id', $team->owner_id)->first();
+        abort_if(!$user->belongsToTeam($team) || !$user->hasTeamRole($team, 'team_admin'), 403, 'Forbidden');
+
+        $invitee = $this->getTeamUserByEmail($invitedEmail);
+        abort_if(!$invitee, 404, 'The User was not found');
+        abort_if($invitee->belongsToTeam($team), 403, 'User is already a member of this team');
+
+        $isAlreadyInvited = TeamInvite::where('email', $invitedEmail)->where('team_id', $team->id)->exists();
+        if ($isAlreadyInvited) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Invite successfully sent to prospective team member of ' . $team->name . '.'
+            ], 200);
+        }
+
+        if ($team && !$invitee) {
+            $invite = $this->createTeamInvite($team, $invitedEmail, 'external', $data['role']);
+            if ($invite) {
+                $this->sendExternalInvite($team, $invitedEmail);
+            }
+        } elseif ($team) {
+            $invite = Teamwork::hasPendingInvite($team, $invitee->email);
+            if (!$invite) {
+                Teamwork::inviteToTeam($invitee->email, $team, function ($invite) use ($data, $team, $invitee) {
+                    $this->sendInternalInvite($team, $invitee, $invite);
+                    $invite->role = $data['role'];
+                    $invite->save();
+                });
+            } elseif ($invite && $invitee->hasTeamInvite($team)) {
+                $this->sendRemindingInvite($team, $invitee, $invite);
+            }
+        }
+
+        Notification::create([
+            'user_id' => $invitee->id,
+            'notification' => "You have been invited to the team <strong>{$team->name}</strong>. Click <a href='/apps'>here</a> to accept or revoke the invite.",
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Invite successfully sent to prospective team member of ' . $team->name . '.'
+        ], 200);
     }
 }

@@ -5,7 +5,9 @@ var btnActions = document.querySelectorAll('.btn-action');
 var hideMenuBlock = document.querySelectorAll('.block-hide-menu');
 var hiddenTeamId = document.querySelector('.hidden-team-id');
 var hiddenTeamUserId = document.querySelector('.hidden-team-user-id');
-
+//Tony's code
+var addTeammateBtn;
+var teamInviteUserBtn = document.querySelector('.invite-btn');
 
 deleteTeamBtn.addEventListener('click', deleteTeam);
 function deleteTeam(){
@@ -34,7 +36,7 @@ function confirmTeamDeletion(ev){
     xhr.setRequestHeader('X-CSRF-TOKEN', formToken);
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    
+
     xhr.send(JSON.stringify(data));
 
     xhr.onload = function() {
@@ -141,7 +143,7 @@ function removeUser(event){
 
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    xhr.setRequestHeader("X-CSRF-TOKEN", 
+    xhr.setRequestHeader("X-CSRF-TOKEN",
         document.getElementsByName("csrf-token")[0].content
     );
 
@@ -283,3 +285,96 @@ function handleMakeUserRole(url, data, event) {
         }
     };
 }
+
+
+//================================================Invite Teammate code========================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const addTeammateBtn = document.querySelector('.add-team-mate-btn');
+    const addTeammateDialog = document.querySelector('.add-teammate-dialog');
+    const teamMateInvitEmail = document.querySelector('.teammate-email');
+    const teamInviteUserBtn = document.querySelector('.invite-btn');
+    let timer = null;
+
+    if (addTeammateBtn) {
+        addTeammateBtn.addEventListener('click', () => {
+            addTeammateDialog.classList.add('show');
+            teamMateInvitEmail.value = "";
+        });
+    }
+
+    teamMateInvitEmail.addEventListener('input', () => {
+        clearTimeout(timer);
+        timer = setTimeout(emailCheck, 2000);
+    });
+
+    function emailCheck() {
+        const mailformat = /^[\w.\-+]+@[\w.\-]+\.[a-z]{2,5}$/i;
+        if (teamMateInvitEmail.value.match(mailformat)) {
+            teamInviteUserBtn.classList.add('active');
+        } else {
+            addAlert('warning', 'Please enter a valid email address.');
+            teamInviteUserBtn.classList.remove('active');
+        }
+    }
+
+    teamInviteUserBtn.addEventListener('click', function (event) {
+        event.preventDefault();
+        if (!teamInviteUserBtn.classList.contains('active')) {
+            addAlert('warning', 'Please enter a valid email address.');
+            return;
+        }
+
+        const url = this.dataset.url;
+        const teamId = this.dataset.teamid;
+        const email = teamMateInvitEmail.value;
+        const data = {
+            role: document.querySelector('input[name=role_name]:checked').value,
+            invitee: teamMateInvitEmail.value,
+            team_id: teamId
+        };
+
+        addLoading('Inviting...');
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': document.getElementsByName('csrf-token')[0].content
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                return response.json().then(result => {
+                    return {
+                        status: response.status,
+                        ok: response.ok,
+                        result
+                    };
+                });
+            })
+            .then(({status, ok, result}) => {
+                if (status === 200) {
+                    addAlert('success', `${email} has been invited to the team.`);
+                } else if (status === 404) {
+                    addAlert('error', 'The user is not found.');
+                } else if (status === 403) {
+                    addAlert('error', 'User is already a member of this team.');
+                } else {
+                    addAlert('error', result.message || 'Sorry there was a problem inviting the user to the team. Please try again.');
+                }
+                hideUserModal();
+                removeLoading();
+                addTeammateDialog.classList.remove('show');
+            })
+            .catch(() => {
+                addAlert('error', 'Sorry there was a problem inviting the user to the team. Please try again.');
+                hideUserModal();
+                removeLoading();
+                addTeammateDialog.classList.remove('show');
+            });
+
+        teamMateInvitEmail.value = "";
+    });
+
+});
