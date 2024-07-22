@@ -15,9 +15,9 @@ class DeveloperController extends Controller
      */
     public function getDevelopers(Request $request)
     {
-        return User::where('email', 'like', '%'.$request->email.'%')
+        return User::where('email', 'like', '%'. $request->email . '%')
             ->where('email_verified_at', '!=', null)
             ->where('developer_id', '!=', null)
-            ->get('email');
+            ->get(['email']);
     }
 }
