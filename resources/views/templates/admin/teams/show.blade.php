@@ -163,7 +163,7 @@
     </x-dialog-box>
     {{-- Delete User Ends --}}
 
-    {{--Tony  Add teammate modal --}}
+    {{--Add teammate modal --}}
     <x-dialog-box dialogTitle="Add a team member" class="add-teammate-dialog">
         <form class="form-teammate dialog-custom-form">
             <p class="dialog-text-padding">Invite additional team members or other users</p>
