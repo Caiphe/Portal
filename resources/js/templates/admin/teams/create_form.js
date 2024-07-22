@@ -19,12 +19,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const reader = new FileReader();
             reader.onload = function(e) {
                 imagePreview.src = e.target.result;
-                filePreviews.style.display = 'block';
+                filePreviews.classList.add('show');
             };
             reader.readAsDataURL(file);
         } else {
             imagePreview.src = '';
-            filePreviews.style.display = 'none';
+            filePreviews.classList.remove('show');
         }
     });
 

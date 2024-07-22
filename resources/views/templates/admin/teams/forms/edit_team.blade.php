@@ -66,7 +66,7 @@
             </select>
         </label>
 
-        <label class="editor-field-label">
+        <label class="editor-field-label team-description">
             <h3 for="description">Team description</h3>
             <textarea name="description" id="description" placeholder="Write a short description about your team" style="height: 90px">{{ old('description', $team->description) }}</textarea>
             @error('description')
