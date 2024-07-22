@@ -14,10 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Team name validation
     teamNameInput.addEventListener('input', function(event) {
         const value = this.value;
-        const newValue = value.replace(/[^a-zA-Z\s]/g, '');
+        const newValue = value.replace(/[^a-zA-Z0-9]/g, '');
         if (value !== newValue) {
             this.value = newValue;
-            addAlert('warning', 'Team name should contain only letters.');
+            addAlert('warning', 'Team name should contain only letters and numbers.');
         }
     });
 
@@ -65,14 +65,13 @@ document.addEventListener('DOMContentLoaded', () => {
      * @return {boolean} Returns true if the email format is valid, false otherwise.
      */
     function validateForm(form) {
-        console.log("Hi we here")
+
         const errors = [];
         const teamName = form['name'].value;
         const urlValue = form['url'].value;
         const contactNumber = form['contact'].value;
         const phoneRegex = /^\+|0(?:[0-9] ?){6,14}[0-9]$/;
         const teamOwner = form['team_owner'].value;
-        const description = form['description'].value;
 
         if (teamName === '') errors.push("Team name required");
         if (urlValue === '') errors.push("Team URL required");
@@ -81,8 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (contactNumber !== '' && !phoneRegex.test(contactNumber)) errors.push("Valid phone number required");
         if (form['country'].value === '') errors.push("Country required");
         if (teamOwner === '') errors.push("Team owner is required");
-        if (description === '') errors.push("Description required");
-        console.log(errors)
         return errors;
     }
 
@@ -100,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
             removeLoading();
 
             if (xhr.status === 200) {
-                addAlert('success', [`${formData.get('name')} has been successfully updated. You will be redirected to your teams page shortly.`], function() {
+                addAlert('success', [`${formData.get('name')} has been successfully updated.`], function() {
                     location.reload();
                 });
             } else if (xhr.status === 429) {

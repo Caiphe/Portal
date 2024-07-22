@@ -31,10 +31,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Team name validation
     teamNameInput.addEventListener('input', function(event) {
         const value = this.value;
-        const newValue = value.replace(/[^a-zA-Z\s]/g, '');
+        const newValue = value.replace(/[^a-zA-Z0-9]/g, '');
         if (value !== newValue) {
             this.value = newValue;
-            addAlert('warning', 'Team name should contain only letters.');
+            addAlert('warning', 'Team name should contain only letters and numbers.');
         }
     });
 
