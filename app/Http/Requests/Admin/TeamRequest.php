@@ -25,7 +25,7 @@ class TeamRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'max:100', Rule::unique('teams')->ignore($this->team)],
+            'name' => ['required', 'string', 'max:100', Rule::unique('teams')->ignore($this->team)],
             'url' => ['required', 'max:100'],
             'contact' => ['required', 'max:16'],
             'country' => ['required'],
@@ -49,7 +49,7 @@ class TeamRequest extends FormRequest
      *s
      * @return void
      */
-    protected function prepareForValidation()
+    /*protected function prepareForValidation()
     {
         $this->merge([
             'name' => htmlspecialchars($this->name, ENT_NOQUOTES),
@@ -58,5 +58,5 @@ class TeamRequest extends FormRequest
             'country' => htmlspecialchars($this->country, ENT_NOQUOTES),
             'description' => htmlspecialchars($this->description, ENT_NOQUOTES),
         ]);
-    }
+    }*/
 }
