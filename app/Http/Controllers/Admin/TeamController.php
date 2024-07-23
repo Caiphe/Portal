@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\App;
+use App\Http\Requests\Teams\Invites\InviteRequest;
 use App\Role;
 use App\Team;
 use App\User;
@@ -12,6 +13,7 @@ use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Traits\CountryTraits;
 use App\Services\ApigeeService;
+use Mpociot\Teamwork\Facades\Teamwork;
 use Mpociot\Teamwork\TeamInvite;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
@@ -33,7 +35,7 @@ class TeamController extends Controller
      * @param Request $request The HTTP request object containing query parameters.
      * @return View The view displaying the list of teams.
      */
-    public function index (Request $request): View
+    public function index(Request $request): View
     {
         $country = $request->get('country', "");
         $numberPerPage = (int)$request->get('number_per_page', '15');
@@ -67,23 +69,24 @@ class TeamController extends Controller
 
         $teamsApps = [];
 
-        if($team->apps->count() > 0){
+        if ($team->apps->count() > 0) {
             $teamsApps = $team->apps;
         }
 
-        return view('templates.admin.teams.show',[
+        return view('templates.admin.teams.show', [
             'team' => $team,
             'order' => $order,
             'teamsApps' => $teamsApps,
             'country' => Country::where('code', $team->country)->pluck('name')->first(),
         ]);
     }
+
     /**
      * Create a new team and return the view for creating a team.
      *
      * @return View The view for creating a team.
      */
-    public function create (): View
+    public function create(): View
     {
         return view('templates.admin.teams.create',
             [
@@ -97,7 +100,7 @@ class TeamController extends Controller
      * @param TeamRequest $request The request containing the team data.
      * @return RedirectResponse Redirects to the team index page.
      */
-    public function store (TeamRequest $request): RedirectResponse
+    public function store(TeamRequest $request): RedirectResponse
     {
         $this->storeTeam($request);
         return redirect()->route('admin.team.index');
@@ -109,7 +112,7 @@ class TeamController extends Controller
      * @param Team $team The team to be edited.
      * @return View The view for editing the team.
      */
-    public function edit (Team $team): View
+    public function edit(Team $team): View
     {
         return view('templates.admin.teams.edit', [
             'team' => $team,
@@ -124,7 +127,7 @@ class TeamController extends Controller
      * @param TeamRequest $request The request containing the team data.
      * @return RedirectResponse Redirects to the team index page.
      */
-    public function update (Team $team, TeamRequest $request): RedirectResponse
+    public function update(Team $team, TeamRequest $request): RedirectResponse
     {
         $this->updateTeam($team, $request);
         return redirect()->route('admin.team.index');
@@ -136,7 +139,7 @@ class TeamController extends Controller
      * @param Team $team The team to be destroyed
      * @return JsonResponse Returns JSON response indicating success
      */
-    public function destroy (Team $team): JsonResponse
+    public function destroy(Team $team): JsonResponse
     {
         $teamMembers = $team->users->pluck('id')->toArray();
         $currentUsers = $team->users;
@@ -146,7 +149,7 @@ class TeamController extends Controller
             $teamsInvites->each->delete();
         }
 
-        if($currentUsers){
+        if ($currentUsers) {
             $userIds = $currentUsers->pluck('id')->toArray();
 
             $currentUsers->each(function ($teamUser) use ($team) {
@@ -165,16 +168,16 @@ class TeamController extends Controller
 
         $appNamesToDelete = App::where('team_id', $team->id)->pluck('name')->toArray();
 
-        if($appNamesToDelete) {
+        if ($appNamesToDelete) {
 
-            foreach($appNamesToDelete as $appName){
+            foreach ($appNamesToDelete as $appName) {
                 $deletedApps = ApigeeService::delete("companies/{$team->username}/apps/{$appName}");
 
-                if($deletedApps->successful()){
+                if ($deletedApps->successful()) {
                     App::where('name', $appName)->delete();
                 }
             }
-		}
+        }
 
         ApigeeService::deleteCompany($team);
         $team->delete();
@@ -214,7 +217,7 @@ class TeamController extends Controller
 
     }
 
-        /**
+    /**
      * Make Team member Admin/User
      */
     public function roleUpdate(RoleUpdateRequest $roleRequest, Team $team)
@@ -238,5 +241,18 @@ class TeamController extends Controller
         }
 
         return response()->json(['success' => $updated]);
+    }
+
+    /**
+     * Invites a teammate using the provided InviteRequest data and team ID.
+     *
+     * @param InviteRequest $inviteRequest The request data for the invitation
+     * @param int $id The ID of the team to invite the teammate to
+     * @return JsonResponse
+     */
+    public function invite(InviteRequest $inviteRequest, int $id): JsonResponse
+    {
+        $data = $inviteRequest->validated();
+        return $this->inviteTeammate($data, $id);
     }
 }
