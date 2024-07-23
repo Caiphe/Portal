@@ -6,16 +6,16 @@ var hideMenuBlock = document.querySelectorAll('.block-hide-menu');
 var hiddenTeamId = document.querySelector('.hidden-team-id');
 var hiddenTeamUserId = document.querySelector('.hidden-team-user-id');
 
-
 deleteTeamBtn.addEventListener('click', deleteTeam);
-function deleteTeam(){
+
+function deleteTeam() {
     var deleteModal = document.querySelector('.team-deletion-confirm');
     deleteModal.classList.add('show');
     var deleteForm = deleteModal.querySelector('.confirm-user-deletion-request-form');
     deleteForm.addEventListener('submit', confirmTeamDeletion);
 }
 
-function confirmTeamDeletion(ev){
+function confirmTeamDeletion(ev) {
     ev.preventDefault();
     var formToken = this.elements['_token'].value;
     var team_id = this.elements['team_id'].value;
@@ -34,22 +34,22 @@ function confirmTeamDeletion(ev){
     xhr.setRequestHeader('X-CSRF-TOKEN', formToken);
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    
+
     xhr.send(JSON.stringify(data));
 
-    xhr.onload = function() {
+    xhr.onload = function () {
         removeLoading();
         if (xhr.status === 200) {
-            addAlert('success', [`Team ${team_name}  Deleted Successfully.`], function(){
+            addAlert('success', [`Team ${team_name}  Deleted Successfully.`], function () {
                 window.location.href = '/admin/teams';
             });
             return;
 
         } else {
             var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
-            if(result.errors) {
+            if (result.errors) {
                 result.message = [];
-                for(var error in result.errors){
+                for (var error in result.errors) {
                     result.message.push(result.errors[error]);
                 }
             }
@@ -125,7 +125,8 @@ function hideDeleteUserModal() {
 }
 
 deleteUserActionBtn.addEventListener('click', removeUser);
-function removeUser(event){
+
+function removeUser(event) {
     event.preventDefault();
     var deleteUserForm = document.querySelector('#remove-user-form');
 
@@ -141,7 +142,7 @@ function removeUser(event){
 
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    xhr.setRequestHeader("X-CSRF-TOKEN", 
+    xhr.setRequestHeader("X-CSRF-TOKEN",
         document.getElementsByName("csrf-token")[0].content
     );
 
@@ -212,9 +213,9 @@ function showUserModalFunc() {
     document.querySelector('.make-user-name').textContent = this.dataset.username;
     var userRole = userModal.querySelector('.dialog-heading');
 
-    if(this.dataset.userrole !== 'team_user'){
+    if (this.dataset.userrole !== 'team_user') {
         userRole.innerHTML = "Make administrator";
-    }else{
+    } else {
         userRole.innerHTML = 'Make user';
     }
 
@@ -262,7 +263,7 @@ function handleMakeUserRole(url, data, event) {
         if (xhr.status === 200) {
             roleButton = document.getElementById('change-role-' + data.user_id);
 
-            addAlert('success', "User's role has been updated", function(){
+            addAlert('success', "User's role has been updated", function () {
                 location.reload();
             });
 
@@ -283,3 +284,135 @@ function handleMakeUserRole(url, data, event) {
         }
     };
 }
+
+
+//================================================Invite Teammate code========================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const addTeammateBtn = document.querySelector('.add-team-mate-btn');
+    const addTeammateDialog = document.querySelector('.add-teammate-dialog');
+    const teamMateInviteEmail = document.querySelector('.teammate-email');
+    const teamInviteUserBtn = document.querySelector('.invite-btn');
+    const dropdown = document.createElement('div');
+    dropdown.classList.add('email-dropdown');
+    teamMateInviteEmail.parentNode.appendChild(dropdown);
+    let timer = null;
+
+    if (addTeammateBtn) {
+        addTeammateBtn.addEventListener('click', () => {
+            addTeammateDialog.classList.add('show');
+            teamMateInviteEmail.value = "";
+            dropdown.innerHTML = "";
+        });
+    }
+
+    teamMateInviteEmail.addEventListener('input', () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            const email = teamMateInviteEmail.value;
+            if (email.length >= 2) {
+                fetchDevelopers(email);
+            }
+        }, 100);
+    });
+
+    function fetchDevelopers(email) {
+        const url = teamMateInviteEmail.dataset.url;
+        const data = { email: email };
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': document.getElementsByName('csrf-token')[0].content
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(developers => {
+                updateDropdown(developers);
+            })
+            .catch(error => {
+                console.error('Error fetching developers:', error);
+                dropdown.innerHTML = "";
+            });
+    }
+
+    function updateDropdown(developers) {
+        dropdown.innerHTML = "";
+        if (developers.length > 0) {
+            developers.forEach(dev => {
+                const item = document.createElement('div');
+                item.classList.add('dropdown-item');
+                item.textContent = dev.email;
+                item.addEventListener('click', () => {
+                    teamMateInviteEmail.value = dev.email;
+                    dropdown.innerHTML = "";
+                    teamInviteUserBtn.classList.add('active');
+                });
+                dropdown.appendChild(item);
+            });
+        } else {
+            const noResults = document.createElement('div');
+            noResults.classList.add('dropdown-item');
+            noResults.textContent = 'No results found';
+            dropdown.appendChild(noResults);
+        }
+    }
+
+    teamInviteUserBtn.addEventListener('click', function (event) {
+        event.preventDefault();
+        if (!teamInviteUserBtn.classList.contains('active')) {
+            addAlert('warning', 'Please enter a valid email address.');
+            return;
+        }
+
+        const url = this.dataset.url;
+        const teamId = this.dataset.teamid;
+        const email = teamMateInviteEmail.value;
+        const data = {
+            role: document.querySelector('input[name=role_name]:checked').value,
+            invitee: teamMateInviteEmail.value,
+            team_id: teamId
+        };
+
+        addLoading('Inviting...');
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': document.getElementsByName('csrf-token')[0].content
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json().then(result => ({
+                status: response.status,
+                ok: response.ok,
+                result
+            })))
+            .then(({status, ok, result}) => {
+                if (status === 200) {
+                    addAlert('success', `${email} has been invited to the team.`);
+                } else if (status === 404) {
+                    addAlert('error', 'The user is not found.');
+                } else if (status === 403) {
+                    addAlert('error', 'User is already a member of this team.');
+                } else {
+                    addAlert('error', result.message || 'Sorry there was a problem inviting the user to the team. Please try again.');
+                }
+                hideUserModal();
+                removeLoading();
+                addTeammateDialog.classList.remove('show');
+            })
+            .catch(() => {
+                addAlert('error', 'Sorry there was a problem inviting the user to the team. Please try again.');
+                hideUserModal();
+                removeLoading();
+                addTeammateDialog.classList.remove('show');
+            });
+
+        teamMateInviteEmail.value = "";
+    });
+});
