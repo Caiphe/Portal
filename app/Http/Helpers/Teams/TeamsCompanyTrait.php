@@ -5,10 +5,10 @@ namespace App\Http\Helpers\Teams;
 use App\Notification;
 use App\Services\ApigeeService;
 use App\Team;
+use App\TeamUser;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Mpociot\Teamwork\Facades\Teamwork;
 use Mpociot\Teamwork\TeamInvite;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -57,7 +57,6 @@ trait TeamsCompanyTrait
         }
     }
 
-
     /**
      * @param $team
      * @param $data
@@ -72,7 +71,7 @@ trait TeamsCompanyTrait
 
         $team_owner = User::where('id', $data['team_owner'])->first();
 
-        if (!$team_owner){
+        if (!$team_owner) {
             return redirect()->back()->with('alert', "error: user does not exist");
         }
 
@@ -133,9 +132,9 @@ trait TeamsCompanyTrait
      *
      * @param mixed $data The data containing the invitee information.
      * @param int $id The ID of the team to which the teammate is invited.
-     * @throws NotFoundHttpException If the team or user is not found.
-     * @throws HttpException If the user is already a member of the team or does not have the required role.
      * @return JsonResponse JSON response indicating the success or failure of the invitation.
+     * @throws HttpException If the user is already a member of the team or does not have the required role.
+     * @throws NotFoundHttpException If the team or user is not found.
      */
     public function inviteTeammate($data, $id): JsonResponse
     {
@@ -189,5 +188,63 @@ trait TeamsCompanyTrait
             'success' => true,
             'message' => 'Invite successfully sent to prospective team member of ' . $team->name . '.'
         ], 200);
+    }
+
+    /**
+     * Changes the ownership of the team from the current owner to the provided user.
+     *
+     * @param array $data
+     * @param Team $team
+     * @return JsonResponse
+     */
+    public function changeOwnership(array $data, Team $team): JsonResponse
+    {
+        //Check if the user is part of the team
+        $isTeamMember = TeamUser::where('user_id', $data['new_owner_id'])
+            ->where('team_id', $team->id)
+            ->exists();
+
+        if (!$isTeamMember) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User is not part of the team'
+            ], 404);
+        }
+
+        //Get Users ID's to send notification
+        $team = $this->getTeam($team->id);
+        $userIds = $team->users->pluck('id')->toArray();
+
+        $user = User::where('id', $data['new_owner_id'])
+            ->first(['first_name', 'last_name', 'email']);
+
+        //If the user is part of the team then change ownership and send notifications to all team members
+        if ($isTeamMember) {
+            $owner = User::where('id', $data['new_owner_id'])
+                ->where('developer_id', '!=', null)
+                ->first();
+
+            $team->update(['owner_id' => $owner->id]);
+            $owner->teams()->updateExistingPivot($team, ['role_id' => 7]);
+
+            foreach ($userIds as $id) {
+                if ($id !== $owner->id) {
+                    Notification::create([
+                        'user_id' => $id,
+                        'notification' => "<strong>{$owner->full_name}</strong> is now the owner of your team (<strong>{$team->name}</strong>). Please navigate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
+                    ]);
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => $user->full_name . " has been set as this team's new owner."
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => "{$user->full_name} could not be successfully requested to take ownership of {$team->name}"
+        ], 400);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\App;
+use App\Http\Requests\TeamOwnerRequest;
 use App\Http\Requests\Teams\Invites\InviteRequest;
 use App\Role;
 use App\Team;
@@ -13,7 +14,6 @@ use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Traits\CountryTraits;
 use App\Services\ApigeeService;
-use Mpociot\Teamwork\Facades\Teamwork;
 use Mpociot\Teamwork\TeamInvite;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
@@ -185,7 +185,6 @@ class TeamController extends Controller
         return response()->json(['success' => true, 'code' => 200], 200);
     }
 
-
     public function remove(LeavingRequest $teamRequest, Team $team)
     {
         $loggedInUser = auth()->user();
@@ -254,5 +253,90 @@ class TeamController extends Controller
     {
         $data = $inviteRequest->validated();
         return $this->inviteTeammate($data, $id);
+    }
+    public function leave(LeavingRequest $teamRequest, Team $team)
+    {
+        $usersCount = $team->users->count();
+        $data = $teamRequest->validated();
+        $team = $this->getTeam($data['team_id']);
+        $user = $this->getTeamUser(auth()->user()->id);
+
+        abort_if(!$team, 424, 'The team could not be found');
+        abort_if(!$user, 424, 'Your user could not be found');
+
+        if($team->owner_id === auth()->user()->id && $usersCount === 1){
+            $teamsInvites = TeamInvite::where('team_id', $team->id)->get();
+            if($teamsInvites){
+                foreach($teamsInvites as $invite){
+                    $invite->delete();
+                }
+            }
+
+            $appNamesToDelete = App::where('team_id', $team->id)->pluck('name')->toArray();
+            if($appNamesToDelete) {
+                foreach($appNamesToDelete as $appName){
+                    $deletedApps = ApigeeService::delete("companies/{$team->username}/apps/{$appName}");
+
+                    if($deletedApps->successful()){
+                        App::where('name', $appName)->delete();
+                    }
+                }
+            }
+
+            Notification::create([
+                'user_id' => $user->id,
+                'notification' => "You have successfully left your team <strong>{$team->name}</strong>.",
+            ]);
+
+            ApigeeService::removeDeveloperFromCompany($team, $user);
+            ApigeeService::deleteCompany($team);
+            $team->delete();
+
+            return response()->json(['success' => true, 'code' => 200], 200);
+
+        }else{
+            $appCreated = App::where('developer_id', $user->developer_id)->where('team_id', $team->id)->get();
+            $teamOwnerDeveloperId = User::where('id', $team->owner_id)->pluck('developer_id')->toArray();
+
+            Notification::create([
+                'user_id' => $user->id,
+                'notification' => "You have successfully left your team <strong>{$team->name}</strong>.",
+            ]);
+
+            if($appCreated->count() >= 1){
+                foreach($appCreated as $app){
+                    $app->update([
+                        'developer_id' => $teamOwnerDeveloperId[0]
+                    ]);
+                }
+            }
+
+            ApigeeService::removeDeveloperFromCompany($team, $user);
+            $team->users()->detach($user);
+
+            $userIds =  $team->users->pluck('id')->toArray();
+
+            foreach($userIds as $id){
+                if($id !== $user->id){
+                    Notification::create([
+                        'user_id' => $id,
+                        'notification' => "A user with the name <strong>{$user->full_name}</strong> has left your team <strong>{$team->name}</strong>. Click <a href='/teams/{$team->id}/team'>here</a> to navigate to your team.",
+                    ]);
+                }
+            }
+
+            return response()->json(['success' => true, 'code' => 200], 200);
+        }
+    }
+
+    /**
+     * @param TeamOwnerRequest $requestTeamOwnership
+     * @param Team $team
+     * @return JsonResponse
+     */
+    public function ownership(TeamOwnerRequest $requestTeamOwnership, Team $team): JsonResponse
+    {
+        $data = $requestTeamOwnership->validated();
+        return $this->changeOwnership($data, $team);
     }
 }

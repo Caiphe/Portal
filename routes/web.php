@@ -174,6 +174,7 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 		Route::post('/teams/{team}/remove', 'TeamController@remove')->name('admin.team.remove.user');
 		Route::post('/teams/{team}/user/role', 'TeamController@roleUpdate')->name('admin.team.user.role');
         Route::post('/{id}/invite-teammate', 'TeamController@invite')->name('teammate.invite');
+        Route::post('change-ownership/{team}', 'TeamController@ownership')->name('ownership.change');
     });
 
 });

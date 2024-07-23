@@ -38,40 +38,6 @@
             </form>
         </div>
     </x-dialog-box>
-
-    {{-- Transfer ownership Dialog --}}
-    <x-dialog-box dialogTitle="Transfer Ownership" class="ownweship-modal-container">
-
-        <p class="remove-user-text dialog-text-padding">Which team member would you like to transfer ownership to? </p>
-
-        <div class="scrollable-users-container">
-            <ul class="list-users-container">
-                @if ($team->users)
-                    @foreach($team->users as $teamUser)
-                        @if(!$teamUser->isTeamOwner($team))
-                            <li class="each-user">
-                                <div class="users-thumbnail"
-                                     style="background-image: url({{ $teamUser->profile_picture }})"></div>
-                                <div class="user-full-name">{{ $teamUser->full_name }}</div>
-                                <div class="check-container">
-                                    <x-radio-round-two name="transfer-ownership-check" id="{{ $teamUser->id }}"
-                                                       value="{{ $teamUser->email }}"></x-radio-round-two>
-                                </div>
-                            </li>
-                        @endif
-                    @endforeach
-                @endif
-            </ul>
-        </div>
-
-        <form class="custom-modal-form bottom-shadow-container button-container mt-40">
-            <button type="button" id="transfer-btn" data-teamid="{{ $team->id }}" class="inactive">TRANSFER</button>
-            <button type="button" class="btn black-bordered mr-10 ownership-removal-btn">CANCEL</button>
-        </form>
-
-    </x-dialog-box>
-    {{-- Transfer ownership ends --}}
-
     {{-- Make Admin Modal Container --}}
     <x-dialog-box dialogTitle="Make owner" class="make-admin-modal-container">
         <p class="teammate-text dialog-text-padding">Would you like to make this user a new <strong>owner</strong> of
@@ -183,6 +149,36 @@
     </x-dialog-box>
     {{-- Add teammate ends --}}
 
+    {{--Transfer ownership Dialog --}}
+    <x-dialog-box dialogTitle="Change Ownership" class="ownweship-modal-container">
+        <p class="remove-user-text dialog-text-padding">Which team member would you like to transfer ownership to?</p>
+        <div class="scrollable-users-container">
+            <ul class="list-users-container">
+                @if ($team->users)
+                    @foreach($team->users as $teamUser)
+                        @if(!$teamUser->isTeamOwner($team))
+                            <li class="each-user">
+                                <div class="users-thumbnail" style="background-image: url({{ $teamUser->profile_picture }})"></div>
+                                <div class="user-full-name">{{ $teamUser->full_name }}</div>
+                                <div class="check-container">
+                                    <x-radio-round-two name="transfer-ownership-check" id="{{ $teamUser->id }}" value="{{ $teamUser->id }}"></x-radio-round-two>
+                                </div>
+                            </li>
+                        @endif
+                    @endforeach
+                @endif
+            </ul>
+        </div>
+
+        <form class="custom-modal-form bottom-shadow-container button-container mt-40">
+            <button type="button" id="transfer-btn" data-teamid="{{ $team->id }}"
+                    data-url="{{ route('ownership.change', $team->id) }}"
+                    class="inactive">Confirm</button>
+            <button type="button" class="btn black-bordered mr-10 ownership-removal-btn">CANCEL</button>
+        </form>
+    </x-dialog-box>
+    {{-- Transfer ownership ends --}}
+
     <div class="form-container editor-field">
         <h2>Details</h2>
 
@@ -251,9 +247,9 @@
                 </div>
             @endif
         </div>
-
+        {{-- TODO here--}}
         @if(count($team->users) > 1)
-            <a class="button outline dark">Change owner</a>
+            <a class="button outline dark make-owner">Change owner</a>
         @endif
 
     </div>
