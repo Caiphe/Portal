@@ -198,7 +198,6 @@
     </div>
 
     {{-- Owner block --}}
-
     <div class="team-owner">
         <h2>Team owner</h2>
 
@@ -350,8 +349,8 @@
                     <td><a href="{{ route('admin.dashboard.index', ['aid' => $app]) }}" class="app-link">{{ $app->display_name }}</a></td>
                     <td class="not-on-mobile"><img class="country-flag" src="/images/locations/{{ $app->country_code ?? 'globe' }}.svg" alt="Country flag"></td>
                     <td class="not-on-mobile">
-                        @if($app->developer->email)
-                        {{ $app->developer->email }}
+                        @if($app->developer)
+                            {{ $app->developer->email }}
                         @endif
                     </td>
                     <td class="not-on-mobile">{{ $app->created_at->format('d M Y') }}</td>
@@ -371,5 +370,4 @@
 
 @push('scripts')
 <script src="{{ mix('/js/templates/admin/teams/show.js') }}" defer></script>
-
 @endpush
