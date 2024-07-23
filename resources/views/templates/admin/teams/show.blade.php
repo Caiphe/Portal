@@ -247,7 +247,7 @@
                 </div>
             @endif
         </div>
-        {{-- TODO here--}}
+
         @if(count($team->users) > 1)
             <a class="button outline dark make-owner">Change owner</a>
         @endif
