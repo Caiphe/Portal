@@ -12,7 +12,7 @@
         </label>
 
         <label class="editor-field-label">
-            <h3 for="url">Team URL</h3>
+            <h3 for="url">Team URL*</h3>
             <input type="text" name="url" value="{{ old('url', $team->url) }}" id="team-url" placeholder="Enter team URL (Eg. https://url.com)" maxlength="100">
             @error('url')
             <div class="error">{{ $message }}</div>
@@ -20,7 +20,7 @@
         </label>
 
         <label class="editor-field-label">
-            <h3 for="contact">Contact number </h3>
+            <h3 for="contact">Contact number *</h3>
             <input type="text" name="contact" value="{{ old('contact', $team->contact) }}" id="team-contact" placeholder="Team contact number (e.g +243740000000)" maxlength="16">
             @error('contact')
             <div class="error">{{ $message }}</div>
@@ -28,7 +28,7 @@
         </label>
 
         <label class="editor-field-label">
-            <h3 for="country">Country</h3>
+            <h3 for="country">Country*</h3>
             <div class="country-block-container">
                 <select id="team-country" name="country" autocomplete="off">
                     <option value="">Select country</option>

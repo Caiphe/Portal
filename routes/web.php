@@ -13,6 +13,8 @@
 |
  */
 
+use App\Http\Controllers\Api\Admin\DeveloperController;
+
 Route::get('/', 'HomeController')->name('home');
 
 Route::get('search', 'SearchController')->name('search');
@@ -171,6 +173,7 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
         Route::post('/update/{team:id}', 'TeamController@update')->name('admin.team.update');
 		Route::post('/teams/{team}/remove', 'TeamController@remove')->name('admin.team.remove.user');
 		Route::post('/teams/{team}/user/role', 'TeamController@roleUpdate')->name('admin.team.user.role');
+        Route::post('/{id}/invite-teammate', 'TeamController@invite')->name('teammate.invite');
     });
 
 });
