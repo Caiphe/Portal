@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\App;
+use App\Http\Requests\TeamOwnerRequest;
 use App\Http\Requests\Teams\Invites\InviteRequest;
 use App\Role;
 use App\Team;
@@ -13,7 +14,6 @@ use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Traits\CountryTraits;
 use App\Services\ApigeeService;
-use Mpociot\Teamwork\Facades\Teamwork;
 use Mpociot\Teamwork\TeamInvite;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
@@ -189,7 +189,6 @@ class TeamController extends Controller
         return response()->json(['success' => true, 'code' => 200], 200);
     }
 
-
     public function remove(LeavingRequest $teamRequest, Team $team)
     {
         $loggedInUser = auth()->user();
@@ -258,5 +257,16 @@ class TeamController extends Controller
     {
         $data = $inviteRequest->validated();
         return $this->inviteTeammate($data, $id);
+    }
+
+    /**
+     * @param TeamOwnerRequest $requestTeamOwnership
+     * @param Team $team
+     * @return JsonResponse
+     */
+    public function ownership(TeamOwnerRequest $requestTeamOwnership, Team $team): JsonResponse
+    {
+        $data = $requestTeamOwnership->validated();
+        return $this->changeOwnership($data, $team);
     }
 }

@@ -9,7 +9,7 @@
 @section('title', 'teams')
 
 @section('content')
-    <a href="{{ url()->previous() }}" class="go-back">@svg('chevron-left') Back to teams</a>
+    <a href="{{ route('admin.team.index') }}" class="go-back">@svg('chevron-left') Back to teams</a>
     <h1>Create a Team</h1>
 
     <div class="full">

@@ -293,6 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const teamMateInviteEmail = document.querySelector('.teammate-email');
     const teamInviteUserBtn = document.querySelector('.invite-btn');
     const dropdown = document.createElement('div');
+
     dropdown.classList.add('email-dropdown');
     teamMateInviteEmail.parentNode.appendChild(dropdown);
     let timer = null;
@@ -315,9 +316,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 100);
     });
 
+    document.querySelector('.close-add-teammate-btn').addEventListener('click', hideTeammateModal);
+
+    function hideTeammateModal() {
+        addTeammateDialog.classList.remove('show');
+    }
+
+
     function fetchDevelopers(email) {
         const url = teamMateInviteEmail.dataset.url;
-        const data = { email: email };
+        const data = {email: email};
 
         fetch(url, {
             method: 'POST',
@@ -402,17 +410,96 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     addAlert('error', result.message || 'Sorry there was a problem inviting the user to the team. Please try again.');
                 }
-                hideUserModal();
                 removeLoading();
                 addTeammateDialog.classList.remove('show');
             })
             .catch(() => {
                 addAlert('error', 'Sorry there was a problem inviting the user to the team. Please try again.');
-                hideUserModal();
                 removeLoading();
                 addTeammateDialog.classList.remove('show');
             });
 
         teamMateInviteEmail.value = "";
     });
+});
+
+//================================================Change Ownership code========================================================
+document.addEventListener('DOMContentLoaded', function () {
+    const transferOwnershipBtn = document.querySelector('#transfer-btn');
+    const ownershipModal = document.querySelector('.ownweship-modal-container');
+    const ownershipModalShow = document.querySelector('.make-owner');
+    const radiosList = document.querySelectorAll('input[name="transfer-ownership-check"]');
+
+    radiosList.forEach(radio => {
+        radio.addEventListener('click', function () {
+            if (this.checked) {
+                transferOwnershipBtn.classList.remove('inactive');
+                transferOwnershipBtn.setAttribute('data-userid', this.value);
+            }
+        });
+    });
+
+    if (ownershipModalShow !== null) {
+        ownershipModalShow.addEventListener('click', showOwnershipModalFunc);
+    }
+
+    function showOwnershipModalFunc() {
+        ownershipModal.classList.add('show');
+    }
+
+    document.querySelector('.ownership-removal-btn').addEventListener('click', hideOwnershipModal);
+
+    function hideOwnershipModal() {
+        setTimeout(() => {
+            ownershipModal.classList.remove('show');
+        }, 2000);
+    }
+
+    transferOwnershipBtn.addEventListener('click', function (event) {
+        const url = this.dataset.url;
+        const data = {
+            team_id: this.dataset.teamid,
+            new_owner_id: this.dataset.userid
+        };
+        handleRequestOwnershipTransfer(url, data, event);
+    });
+
+    function handleRequestOwnershipTransfer(url, data, event) {
+        event.preventDefault();
+        addLoading('Sending ownership request...');
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': document.getElementsByName("csrf-token")[0].content
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json()
+                .then(result => ({
+                    status: response.status,
+                    ok: response.ok,
+                    result
+                })))
+            .then(({ status, result }) => {
+                if (status === 200) {
+                    addAlert('success', result.message);
+                    hideOwnershipModal();
+                    setTimeout(() => {
+                        location.reload();
+                    }, 3000);
+                } else if (status === 404) {
+                    addAlert('error', 'The user is not found.');
+                }
+
+                removeLoading();
+            })
+            .catch(() => {
+                addAlert('error', 'Sorry there was a problem inviting the user to the team. Please try again.');
+                hideOwnershipModal();
+                removeLoading();
+            });
+    }
 });
