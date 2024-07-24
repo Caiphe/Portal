@@ -37,6 +37,11 @@ class Country extends Model
         return $this->belongsToMany(User::class);
     }
 
+    public function teams()
+    {
+        return $this->hasMany(Team::class);
+    }
+
     public function products()
     {
         return $this->belongsToMany(Product::class);
