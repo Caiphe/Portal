@@ -191,6 +191,7 @@ trait TeamsCompanyTrait
     }
 
     /**
+     * TODO sync with APIGEE when is fixed from MTN
      * Changes the ownership of the team from the current owner to the provided user.
      *
      * @param array $data
