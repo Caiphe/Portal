@@ -46,7 +46,7 @@
             <h3 class="file-heading">Logo</h3>
             <div class="file-upload-block">
                 @if($team->logo)
-                    <div class="file-previews" id="file-previews">
+                    <div class="file-previews show" id="file-previews">
                         <img id="image-preview" class="image-placeholder" src="{{ asset($team->logo) }}" alt="Image Preview">
                     </div>
                 @endif

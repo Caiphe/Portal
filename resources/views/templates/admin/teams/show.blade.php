@@ -111,8 +111,11 @@
                                          style="background-image: url({{ $teamUser->profile_picture }})"></div>
                                     <div class="user-full-name">{{ $teamUser->full_name }}</div>
                                     <div class="check-container">
-                                        <x-radio-round name="transfer-ownership-check" id="{{ $teamUser->id }}"
-                                                       value="{{ $teamUser->email }}"></x-radio-round>
+                                        <x-radio-round
+                                            name="transfer-ownership-check"
+                                            id="{{ $teamUser->id }}"
+                                            value="{{ $teamUser->email }}">
+                                        </x-radio-round>
                                     </div>
                                 </li>
                             @endif
@@ -143,7 +146,7 @@
 
             <div class="form-team-leave bottom-shadow-container button-container">
                 <button type="button" class="btn invite-btn primary inactive" data-url="{{ route('teammate.invite', ['id' => $team->id]) }}" data-teamid="{{ $team->id }}">INVITE</button>
-                <button type="button" class="btn black-bordered mr-10 close-add-teammate-btn">CANCEL</button>
+                <button type="button" class="btn black-bordered mr-10 close-add-teammate-btn" onclick="closeDialogBox(this);">CANCEL</button>
             </div>
         </form>
     </x-dialog-box>
@@ -193,10 +196,13 @@
 
             <div class="team-more-details">
                 <div class="left-block each-block-data">
+                    @if($team->url )
                     <div class="each-details">
                         <div class="detail-key">Team URL</div>
                         <div class="detail-value">{{ $team->url }}</div>
                     </div>
+                    @endif
+
                     <div class="each-details">
                         <div class="detail-key">Contact number</div>
                         <div class="detail-value">{{ $team->contact }}</div>
@@ -253,7 +259,6 @@
         @endif
 
     </div>
-
 
     {{-- team members --}}
     <div class="team-custom-head">
@@ -342,7 +347,6 @@
                                         </li>
 
                                     </ul>
-
                                 </div>
 
                             @endif
@@ -371,7 +375,7 @@
             <tr>
                 <th><a href="?sort=name&order={{ $order }}">Name @svg('chevron-sorter')</a></th>
                 <th><a href="?sort=country_code&order={{ $order }}">Country @svg('chevron-sorter')</a></th>
-                <th><a href="?sort=products_count&order={{ $order }}">Creator @svg('chevron-sorter')</a></th>
+                <th><a href="?sort=url&order={{ $order }}">Callback URL @svg('chevron-sorter')</a></th>
                 <th><a href="?sort=created_at&order={{ $order }}">Create at @svg('chevron-sorter')</a></th>
                 <th><a href="?sort=status&order={{ $order }}">Status @svg('chevron-sorter')</a></th>
             </tr>
@@ -383,21 +387,25 @@
                 @endphp
 
                 <tr class="user-app" data-country="{{ $app->country_code }}">
-                    <td><a href="{{ route('admin.dashboard.index', ['aid' => $app]) }}"
-                           class="app-link">{{ $app->display_name }}</a></td>
-                    <td class="not-on-mobile"><img class="country-flag"
-                                                   src="/images/locations/{{ $app->country_code ?? 'globe' }}.svg"
-                                                   alt="Country flag"></td>
+                    <td>
+                        <a href="{{ route('admin.dashboard.index', ['aid' => $app]) }}"
+                           class="app-link">{{ $app->display_name }}
+                        </a>
+                    </td>
                     <td class="not-on-mobile">
-                        {{--@if($app->developer->email)
-                        {{ $app->developer->email }}
-                        @endif--}}
+                        <img class="country-flag"
+                            src="/images/locations/{{ $app->country_code ?? 'globe' }}.svg"
+                            alt="Country flag">
+                    </td>
+                    <td class="not-on-mobile">
+                        {{ $team->url }}
                     </td>
                     <td class="not-on-mobile">{{ $app->created_at->format('d M Y') }}</td>
                     <td>
                         <div class="status app-status-{{ $productStatus['status'] }}"
-                             aria-label="{{ $productStatus['label'] }}"
-                             data-pending="{{ $productStatus['pending'] }}"></div>
+                            aria-label="{{ $productStatus['label'] }}"
+                            data-pending="{{ $productStatus['pending'] }}">
+                        </div>
                         <a class="go-to-app" href="{{ route('admin.dashboard.index', ['aid' => $app]) }}">@svg('chevron-right')</a>
                     </td>
                 </tr>

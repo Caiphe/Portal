@@ -114,7 +114,7 @@ class DashboardController extends Controller
         }
 
         $countries = $this->getCountry();
-;
+        
         return view('templates.admin.dashboard.index', [
             'apps' => $apps,
             'countries' => $countries,

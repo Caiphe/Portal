@@ -39,8 +39,12 @@ class TeamController extends Controller
     {
         $country = $request->get('country', "");
         $numberPerPage = (int)$request->get('number_per_page', '15');
+        $currentUser = $request->user();
 
         $teams = Team::with(['apps', 'users'])
+            ->when(!$currentUser->hasRole('admin') && $currentUser->hasRole('opco'), function ($query) use ($currentUser) {
+                $query->whereHas('country', fn ($q) => $q->whereIn('code', $currentUser->responsibleCountries()->pluck('code')->toArray()));
+            })
             ->when($request->has('q'), function ($q) use ($request) {
                 $query = "%" . $request->q . "%";
                 $q->where(function ($q) use ($query) {
