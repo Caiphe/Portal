@@ -20,6 +20,6 @@ Route::middleware(['auth:sanctum', '2fa'])->group(function () {
 });
 
 Route::post('developers', [DeveloperController::class, 'getDevelopers'])
-    ->middleware('can:administer-users')
+    ->middleware('api')
     ->name('developers.list');
 
