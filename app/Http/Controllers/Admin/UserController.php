@@ -12,6 +12,7 @@ use App\Notification;
 use App\TwofaResetRequest;
 use App\UserDeletionRequest;
 use Illuminate\Http\Request;
+use App\Traits\CountryTraits;
 use App\Services\ApigeeService;
 use Mpociot\Teamwork\TeamInvite;
 use Illuminate\Http\JsonResponse;
@@ -26,6 +27,8 @@ use App\Http\Requests\Admin\UserUpdateRequest;
 
 class UserController extends Controller
 {
+    use CountryTraits;
+    
     public function index(Request $request)
     {
         $currentUser = $request->user();

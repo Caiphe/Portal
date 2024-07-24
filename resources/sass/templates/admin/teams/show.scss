@@ -821,16 +821,25 @@
     width: 100%;
     border: none;
     height: 40px;
+    padding: 13px;
+    box-sizing: border-box;
+    font-size: 15px;
+    border: solid 1px #000;
+    border-radius: 4px;
 }
 
 .email-dropdown {
     position: absolute;
     background-color: white;
     border: 1px solid #ccc;
-    width: 94%;
+    width: 93.6%;
     max-height: 200px;
     overflow-y: auto;
     z-index: 1000;
+
+    &.show{
+        border: 1px solid #ccc;
+    }
 }
 
 .email-dropdown .dropdown-item {
@@ -841,5 +850,3 @@
 .email-dropdown .dropdown-item:hover {
     background-color: #f0f0f0;
 }
-
-

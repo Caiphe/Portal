@@ -51,6 +51,11 @@ class Team extends TeamworkTeam
         return Str::slug($this->name);
     }
 
+    public function country()
+	{
+		return $this->belongsTo(Country::class, 'country', 'code');
+    }
+
     public function getFullNameAttribute()
     {
         return $this->name;
