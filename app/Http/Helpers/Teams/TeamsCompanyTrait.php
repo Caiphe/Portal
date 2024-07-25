@@ -10,6 +10,7 @@ use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Mpociot\Teamwork\TeamInvite;
+use Mpociot\Teamwork\Teamwork;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 trait TeamsCompanyTrait
@@ -136,7 +137,7 @@ trait TeamsCompanyTrait
      * @throws HttpException If the user is already a member of the team or does not have the required role.
      * @throws NotFoundHttpException If the team or user is not found.
      */
-    public function inviteTeammate($data, $id): JsonResponse
+    public function inviteTeammate($data, int $id): JsonResponse
     {
         $invitedEmail = $data['invitee'];
         $team = $this->getTeam($id);
