@@ -232,7 +232,7 @@
                 </div>
             </div>
 
-            <a class="button outline dark team-edit"> Edit team profile </a>
+            <a class="button outline dark team-edit" href="{{ route('admin.team.edit', $team) }}"> Edit team profile </a>
         </div>
     </div>
 
