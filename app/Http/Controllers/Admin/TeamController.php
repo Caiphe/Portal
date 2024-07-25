@@ -57,6 +57,13 @@ class TeamController extends Controller
             ->orderBy('updated_at', 'desc')
             ->paginate($numberPerPage);
 
+        if($request->ajax()) {
+            return view('templates.admin.teams.data', [
+                'teams' => $teams,
+                'countries' => $this->getCountry(),
+            ]);
+        }
+
         return view('templates.admin.teams.index', [
             'teams' => $teams,
             'countries' => $this->getCountry(),
