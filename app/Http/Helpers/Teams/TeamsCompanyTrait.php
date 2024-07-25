@@ -168,7 +168,6 @@ trait TeamsCompanyTrait
                 $this->sendExternalInvite($team, $invitedEmail);
             }
         } elseif ($team) {
-
             $invite = Teamwork::hasPendingInvite($invitee->email, $team);
             if (!$invite) {
                 Teamwork::inviteToTeam($invitee->email, $team, function ($invite) use ($data, $team, $invitee) {
