@@ -10,7 +10,7 @@ use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Mpociot\Teamwork\TeamInvite;
-use Mpociot\Teamwork\Teamwork;
+use Mpociot\Teamwork\Facades\Teamwork;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 trait TeamsCompanyTrait
@@ -168,7 +168,8 @@ trait TeamsCompanyTrait
                 $this->sendExternalInvite($team, $invitedEmail);
             }
         } elseif ($team) {
-            $invite = Teamwork::hasPendingInvite($team, $invitee->email);
+
+            $invite = Teamwork::hasPendingInvite($invitee->email, $team);
             if (!$invite) {
                 Teamwork::inviteToTeam($invitee->email, $team, function ($invite) use ($data, $team, $invitee) {
                     $this->sendInternalInvite($team, $invitee, $invite);
