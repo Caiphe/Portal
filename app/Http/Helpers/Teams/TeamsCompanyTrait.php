@@ -230,10 +230,21 @@ trait TeamsCompanyTrait
             $owner->teams()->updateExistingPivot($team, ['role_id' => 7]);
 
             foreach ($userIds as $id) {
-                Notification::create([
-                    'user_id' => $id,
-                    'notification' => "<strong>{$owner->full_name}</strong> is now the owner of your team (<strong>{$team->name}</strong>). Please navigate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
-                ]);
+                if($id !== $owner->id) {
+                    Notification::create([
+                        'user_id' => $id,
+                        'notification' => "<strong>{$owner->full_name}</strong> is now the owner of your team (<strong>{$team->name}</strong>). Please navigate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
+                    ]);
+                }
+
+                if($id === $owner->id) {
+                    Notification::create([
+                        'user_id' => $id,
+                        'notification' => "
+                            The admin changed your role to the owner of the team <strong>{$team->name}</strong>. 
+                            Please navigate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
+                    ]);
+                }
             }
 
             return response()->json([

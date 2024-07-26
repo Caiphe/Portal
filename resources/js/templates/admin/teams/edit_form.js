@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (xhr.status === 200) {
                 addAlert('success', [`${formData.get('name')} has been successfully updated.`], function() {
-                    location.reload();
+                    window.location.href = '/admin/teams';
                 });
             } else if (xhr.status === 429) {
                 addAlert('warning', ["You are not allowed to create more than 2 teams per day."], function() {
