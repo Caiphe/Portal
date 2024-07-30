@@ -305,20 +305,6 @@
                                 <div class="block-actions">
 
                                     <ul>
-                                        {{---  Uses the transfer endpoint--}}
-                                        <li>
-                                            <button type="button"
-                                                    class="make-admin make-owner-btn"
-                                                    data-adminname="{{ $teamUser->full_name }}"
-                                                    data-invite=""
-                                                    data-teamid="{{ $team->id }}"
-                                                    @if($teamUser->email)
-                                                        data-useremail="{{ $teamUser->email }}">
-                                                @endif
-                                                Make owner
-                                            </button>
-
-                                        </li>
                                         {{---  Uses the invite endpoint--}}
                                         <li>
                                             <button

@@ -98,6 +98,7 @@
             display: flex;
             font-size: 14px;
             align-items: center;
+            height: 58px;
 
             @media(max-width: 768px){
                 justify-content: space-between;
@@ -212,5 +213,12 @@
     button,
     form {
         display: inline-flex;
+    }
+}
+
+
+.pagination{
+    &.hide{
+        display: none;
     }
 }

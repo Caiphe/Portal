@@ -5,6 +5,7 @@ var btnActions = document.querySelectorAll('.btn-action');
 var hideMenuBlock = document.querySelectorAll('.block-hide-menu');
 var hiddenTeamId = document.querySelector('.hidden-team-id');
 var hiddenTeamUserId = document.querySelector('.hidden-team-user-id');
+var makeOwnershipBtn = document.querySelector('#make-owner-btn');
 
 deleteTeamBtn.addEventListener('click', deleteTeam);
 
