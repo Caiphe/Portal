@@ -39,6 +39,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ mix('/js/templates/admin/index.js') }}" defer></script>
 <script src="{{ mix('/js/templates/admin/teams/index.js') }}" defer></script>
 @endpush

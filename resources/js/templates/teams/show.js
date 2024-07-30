@@ -8,7 +8,6 @@ var hiddenTeamUserId = document.querySelector('.hidden-team-user-id');
 var deleteUserActionBtn = document.querySelector('.remove-user-from-team');
 var teamInviteUserBtn = document.querySelector('.invite-btn');
 var transferOwnsershipBtn = document.querySelector('#transfer-btn');
-var makeOwnershipBtn = document.querySelector('#make-owner-btn');
 var deleteTeamBtn = document.querySelector('.delete-team-btn');
 var deleteTeamModal = document.querySelector('.delete-team-modal');
 var appDeleteShowModalBtn = document.querySelectorAll('.app-delete-modal');
