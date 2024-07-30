@@ -28,25 +28,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Team name validation
-    teamNameInput.addEventListener('input', function(event) {
-        const value = this.value;
-        const newValue = value.replace(/[^a-zA-Z0-9]/g, '');
-        if (value !== newValue) {
-            this.value = newValue;
-            addAlert('warning', 'Team name should contain only letters and numbers.');
+    teamNameInput.addEventListener('keyup', removeSpecialCharacters);
+    function removeSpecialCharacters(){
+        var specialChrs = /[`~!)@#$%(^&*|+=?;:±§'",.<>\{\}\[\]\\\/]/gi;
+        this.value = this.value.replace(/  +/g, ' ');
+    
+        if(specialChrs.test(this.value)){
+            this.value = this.value.replace(specialChrs, '');
+            addAlert('warning', 'Team name cannot contain special characters.');
         }
-    });
+    }
 
     // Contact number validation
-    contactNumberInput.addEventListener('input', function(event) {
-        const value = this.value;
-        const newValue = value.replace(/[^0-9+]/g, '');
-        if (value !== newValue) {
-            this.value = newValue;
-            addAlert('warning', 'Contact number should contain only numbers and +.');
+    contactNumberInput.addEventListener('input', validatePhoneNumber);
+    function validatePhoneNumber(){
+        var specialChrs = /[a-z`~!)@#$%(^&*|=?;:±§'",.<>\{\}\[\]\\\/]/gi;
+        var containsNonDigits = specialChrs.test(this.value);
+    
+        if(containsNonDigits){
+            addAlert('warning', 'Character not allowed');
         }
-    });
+
+        this.value = this.value.replace(specialChrs, "");
+    }
 
     emailInput.addEventListener('keyup', function(event) {
         if (event.key === 'Enter' || event.key === ',') {

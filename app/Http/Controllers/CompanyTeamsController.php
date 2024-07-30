@@ -457,8 +457,7 @@ class CompanyTeamsController extends Controller
     {
         $user = $request->user();
         $data = $request->validated();
-        $data['name'] = preg_replace('/[-_±§@#$%^&*()+=!]+/', '', $data['name']);
-
+        $data['name'] = preg_replace('/[±§@#$%^&*()+=!]+/', '', $data['name']);
         $data['logo'] = $this->processLogoFile($request);
 
         $teamCount = Team::where('owner_id', $user->id)
@@ -512,10 +511,8 @@ class CompanyTeamsController extends Controller
     public function update(UpdateRequest $request, $id)
     {
         $data = $request->validated();
-
         $team = Team::findOrFail($id);
         $teamLogo = $team->logo;
-
         $oldName = $team->name;
 
         $teamAdmin = auth()->user()->hasTeamRole($team, 'team_admin');
@@ -528,7 +525,7 @@ class CompanyTeamsController extends Controller
             $teamLogo = $this->processLogoFile($request);
         }
 
-        $data['name'] = preg_replace('/[-_±§@#$%^&*()+=!]+/', '', $data['name']);
+        $data['name'] = preg_replace('/[±§@#$%^&*()+=!]+/', '', $data['name']);
 
         $team->update([
             'name' => $data['name'],

@@ -33,7 +33,7 @@ trait TeamsCompanyTrait
             return redirect()->back()->with('alert', "error:'" . $user['message'] . "'");
         }
 
-        $data['name'] = preg_replace('/[-_±§@#$%^&*()+=!]+/', '', $data['name']);
+        $data['name'] = preg_replace('/[±§@#$%^&*()+=!]+/', '', $data['name']);
 
         $data['logo'] = $this->processLogoFile($data);
 
@@ -66,10 +66,8 @@ trait TeamsCompanyTrait
     public function updateTeam($team, $data)
     {
         $company = Team::findOrFail($team['id']);
-
         $teamLogo = $team->logo;
         $oldName = $team->name;
-
         $team_owner = User::where('id', $data['team_owner'])->first();
 
         if (!$team_owner) {
@@ -94,7 +92,7 @@ trait TeamsCompanyTrait
             $teamLogo = $this->processLogoFile($data);
         }
 
-        $data['name'] = preg_replace('/[-_±§@#$%^&*()+=!]+/', '', $data['name']);
+        $data['name'] = preg_replace('/[±§@#$%^&*()+=!]+/', '', $data['name']);
 
         $company->update([
             'name' => $data['name'],
