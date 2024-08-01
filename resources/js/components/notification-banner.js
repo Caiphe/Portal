@@ -1,8 +1,8 @@
 var notificationBanner = document.getElementById('notification-banner');
 var closeNotificationBtn = document.getElementById('close-banner-btn');
 
-window.addEventListener('load', hideNotificationBanner);
-function hideNotificationBanner(){
+window.addEventListener('load', hideShowBanner);
+function hideShowBanner(){
     var notificationBannerData = localStorage.getItem('notification-banner-expiry');
     var now = new Date();
 
@@ -12,13 +12,20 @@ function hideNotificationBanner(){
     }
 
     if(closeNotificationBtn && notificationBannerData && now.getTime() < notificationBannerData){
-        notificationBanner.classList.add('hide');
+        notificationBanner.classList.remove('show');
         return;
     }
     
     if(notificationBannerData && now.getTime() > notificationBannerData){
         localStorage.removeItem('notification-banner-expiry');
         return;
+    }
+
+    var showNotification = document.querySelector('#maintenance-exist')
+    if(showNotification){
+        setTimeout(function(){
+            notificationBanner.classList.add('show');
+        }, 300);
     }
 }
 
@@ -27,7 +34,7 @@ if(closeNotificationBtn){
 }
 
 function closeBanner(){
-    notificationBanner.classList.add('hide');
+    notificationBanner.classList.remove('show');
     localStorage.removeItem('notification-banner-storage');
     setItemWithExpiry('notification-banner-expiry', 12 * 60 * 60 * 1000);
 }
