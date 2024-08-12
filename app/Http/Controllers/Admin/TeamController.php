@@ -24,7 +24,6 @@ use App\Http\Requests\Admin\TeamRequest;
 use App\Http\Helpers\Teams\TeamsCompanyTrait;
 use App\Http\Requests\Teams\RoleUpdateRequest;
 use App\Http\Requests\Teams\Invites\LeavingRequest;
-use Illuminate\Http\Response;
 
 class TeamController extends Controller
 {
