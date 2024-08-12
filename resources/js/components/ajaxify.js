@@ -68,15 +68,6 @@ ajaxifyComplete = [];
                         addAlert('success', (result.body || "Success"));
                     }
 
-                    var searchField =  document.querySelector('#search-page');
-                    setTimeout(function(){
-                        if(searchField){
-                            searchField.value = "";
-                        }
-
-                        location.reload();
-                    }, 3000)
-                   
                     runAjaxifyComplete();
 
                 } else {
