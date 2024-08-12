@@ -35,7 +35,7 @@ class TeamController extends Controller
      * @param Request $request The HTTP request object containing query parameters.
      * @return View The view displaying the list of teams.
      */
-    public function index(Request $request): View
+    public function index(Request $request)
     {
         $country = $request->get('country', "");
         $numberPerPage = (int)$request->get('number_per_page', '15');
@@ -58,10 +58,13 @@ class TeamController extends Controller
             ->paginate($numberPerPage);
 
         if($request->ajax()) {
-            return view('templates.admin.teams.data', [
-                'teams' => $teams,
-                'countries' => $this->getCountry(),
-            ]);
+            return response() 
+                ->view('templates.admin.teams.data', [
+                    'teams' => $teams,
+                    'countries' => $this->getCountry(),
+                ], 200)
+                ->header('Vary', 'X-Requested-With')
+                ->header('Content-Type', 'text/html');
         }
 
         return view('templates.admin.teams.index', [

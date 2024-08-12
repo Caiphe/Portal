@@ -9,7 +9,9 @@
   </div>
 
   <div class="body body-container">
-    @foreach ($teams as $team)
+        
+
+    @forelse ($teams as $team)
     <div class="each-team">
         <div class="value-team-name">
             <a href="{{ route('admin.team.show', $team) }}">
@@ -60,6 +62,10 @@
         </button>
 
     </div>
-    @endforeach
+    @empty
+    <p>No teams available. Please try other filters. </p>
+    @endforelse
 
   </div>
+
+  {{ $teams->withQueryString()->links() }}
