@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\DeveloperController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth:sanctum', '2fa'])->group(function () {
     Route::get('/recovery-codes', [UserController::class, 'getRecoveryCodes'])->name('api.recovery-codes');
 });
+
+Route::post('developers', [DeveloperController::class, 'getDevelopers'])
+    ->middleware('api')
+    ->name('developers.list');
+

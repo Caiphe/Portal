@@ -13,6 +13,8 @@
 |
  */
 
+use App\Http\Controllers\Api\Admin\DeveloperController;
+
 Route::get('/', 'HomeController')->name('home');
 
 Route::get('search', 'SearchController')->name('search');
@@ -158,8 +160,23 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 	Route::post('users/{user}/change-status', 'UserController@changeStatus')->middleware('can:administer-users')->name('admin.user.status');
 	Route::get('users/create', 'UserController@create')->middleware('can:administer-users')->name('admin.user.create');
 	Route::post('users/store', 'UserController@store')->middleware('can:administer-users')->name('admin.user.store');
-
 	Route::put('users/{user}/verify', 'UserController@verifyEmail')->middleware('can:administer-content')->name('admin.user.verify');
+
+	// Team - Company management
+    Route::prefix('teams')->middleware('can:administer-users')->group(function () {
+        Route::get('/', 'TeamController@index')->name('admin.team.index');
+        Route::get('/{team}/team', 'TeamController@show')->name('admin.team.show');
+        Route::delete('/{team}/delete', 'TeamController@destroy')->name('admin.team.delete');
+        Route::get('create', 'TeamController@create')->name('admin.team.create');
+        Route::post('store', 'TeamController@store')->name('admin.team.store');
+        Route::get('/{team:id}/edit', 'TeamController@edit')->name('admin.team.edit');
+        Route::post('/update/{team:id}', 'TeamController@update')->name('admin.team.update');
+		Route::post('/{team}/remove', 'TeamController@remove')->name('admin.team.remove.user');
+		Route::post('/{team}/user/role', 'TeamController@roleUpdate')->name('admin.team.user.role');
+        Route::post('/{id}/invite-teammate', 'TeamController@invite')->name('teammate.invite');
+        Route::post('change-ownership/{team}', 'TeamController@ownership')->name('ownership.change');
+    });
+
 });
 
 Route::namespace('Api\Admin')->prefix('api/admin')->group(function () {

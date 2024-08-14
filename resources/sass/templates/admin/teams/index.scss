@@ -1,0 +1,224 @@
+@use "../../../variables";
+
+#table-data{
+    position: relative;
+    width: 100%;
+
+    .head{
+        position: relative;
+        display: flex;
+        width: 100%;
+        margin-bottom: 15px;
+
+        div{
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        @media(max-width: 768px){
+            display: none;
+        }
+    }
+
+    .mobile-action{
+        display: none;
+
+        @media(max-width: 768px){
+            display: block;
+        }
+    }
+
+    .value-team-name,
+    .column-team-name{
+        width: 27%;
+
+        @media(max-width: 768px){
+           width: 80%;
+        }
+    }
+
+    .value-team-country,
+    .column-team-country{
+        width: 10%;
+
+        @media(max-width: 768px){
+            display: none;
+        }
+    }
+
+    .value-team-owner,
+    .column-team-owner{
+        width: 20%;
+
+        @media(max-width: 768px){
+            display: none;
+        }
+    }
+
+    .value-team-apps,
+    .value-team-members,
+    .column-team-apps,
+    .column-team-members{
+        width: 10%;
+
+        @media(max-width: 768px){
+            display: none;
+        }
+    }
+
+    .value-team-created_at,
+    .column-created_at{
+        width: 15%;
+
+        @media(max-width: 768px){
+            display: none;
+        }
+    }
+
+    .value-team-actions,
+    .column-actions{
+        width: 18%;
+    }
+
+    .body-container{
+        position: relative;
+        width: 100%;
+
+        @media(max-width: 768px){
+            margin-top: 15px;
+        }
+
+        .each-team{
+            width: 100%;
+            background-color: #ffffff;
+            margin-bottom: 10px;
+            padding: 15px  15px 15px 20px;
+            box-sizing: border-box;
+            border-radius: 8px;
+            display: flex;
+            font-size: 14px;
+            align-items: center;
+            height: 58px;
+
+            @media(max-width: 768px){
+                justify-content: space-between;
+                min-height: 60px;
+            }
+
+            .value-team-apps,
+            .value-team-members{
+                padding-left: 10px;
+            }
+
+            .value-team-actions{
+                display: flex;
+                font-size: 12px;
+
+                @media(max-width: 768px){
+                    display: none;
+                }
+              
+                .actions-btn{
+                    background-color: transparent;
+                    border: none;
+                    color: #0c678f;
+                    height: 25px;
+                    display: flex;
+                    width: 70px;
+                    position: relative;
+                    align-items: center;
+                    cursor: pointer;
+
+                    @media(max-width: 768px){
+                        margin-left: 10px;
+                    }
+
+                    svg{
+                        width: 17px;
+                        height: 17px;
+                        margin-right: 5px;
+                    }
+                }
+            }
+
+            .value-team-country{
+                img{
+                    width: 24px;
+                    border-radius: 2px;
+                }
+            }
+
+            .team-mobile-action {
+                display: none;
+
+                svg {
+                    display: block;
+                }
+
+                svg+svg {
+                    display: none;
+                }
+
+                @media(max-width: 768px){
+                    display: block;
+                }
+            }
+
+            &.show-action{
+                justify-content: revert;
+                position: relative;
+                width: 100%;
+
+                .value-team-name{
+                    display: none;
+                }
+
+                .value-team-actions{
+                    display: flex;
+                    margin-right: 50px;
+                    position: absolute;
+                    right: 80px;
+                    width: 30%;
+                }
+
+                .team-mobile-action {
+                    position: absolute;
+                    right: 20px;
+
+                    svg {
+                        display: none;
+                    }
+    
+                    svg+svg {
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.show-actions {
+    visibility: visible;
+    border-radius: 10px;
+    min-height: 48px;
+    position: absolute;
+    left: 0;
+    text-overflow: unset;
+    display: flex;
+    justify-content: flex-end;
+    width: calc(100vw - 50px);
+
+    a,
+    button,
+    form {
+        display: inline-flex;
+    }
+}
+
+
+.pagination{
+    &.hide{
+        display: none;
+    }
+}

@@ -18,9 +18,14 @@
     justify-content: space-between;   
     color: #FFFFFF;
     box-sizing: border-box;
+    display: none;
 
     &.hide{
         display: none;
+    }
+
+    &.show{
+        display: flex;
     }
 
     @media(max-width: 768px){

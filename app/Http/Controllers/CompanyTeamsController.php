@@ -85,7 +85,7 @@ class CompanyTeamsController extends Controller
         abort_if(!$newOwner, 404, 'This user is not known');
 
         $appCreated = App::where('developer_id', $user->developer_id)->where('team_id', $team->id)->get();
-        
+
         if($appCreated->count() >= 1){
             foreach($appCreated as $app){
                 $app->update([
@@ -106,7 +106,7 @@ class CompanyTeamsController extends Controller
         $team->users()->detach($user);
 
         $userIds =  $team->users->pluck('id')->toArray();
-            
+
         foreach($userIds as $id){
             if($id !== auth()->user()->id){
                 Notification::create([
@@ -121,7 +121,6 @@ class CompanyTeamsController extends Controller
 
     public function leave(LeavingRequest $teamRequest, Team $team)
     {
-        
         $usersCount = $team->users->count();
         $data = $teamRequest->validated();
         $team = $this->getTeam($data['team_id']);
@@ -142,7 +141,7 @@ class CompanyTeamsController extends Controller
             if($appNamesToDelete) {
                 foreach($appNamesToDelete as $appName){
                     $deletedApps = ApigeeService::delete("companies/{$team->username}/apps/{$appName}");
-    
+
                     if($deletedApps->successful()){
                         App::where('name', $appName)->delete();
                     }
@@ -160,10 +159,10 @@ class CompanyTeamsController extends Controller
 
             return response()->json(['success' => true, 'code' => 200], 200);
 
-        }else{          
+        }else{
             $appCreated = App::where('developer_id', $user->developer_id)->where('team_id', $team->id)->get();
             $teamOwnerDeveloperId = User::where('id', $team->owner_id)->pluck('developer_id')->toArray();
-            
+
             Notification::create([
                 'user_id' => $user->id,
                 'notification' => "You have successfully left your team <strong>{$team->name}</strong>.",
@@ -181,7 +180,7 @@ class CompanyTeamsController extends Controller
             $team->users()->detach($user);
 
             $userIds =  $team->users->pluck('id')->toArray();
-            
+
             foreach($userIds as $id){
                 if($id !== $user->id){
                     Notification::create([
@@ -196,20 +195,21 @@ class CompanyTeamsController extends Controller
     }
 
     public function remove(LeavingRequest $teamRequest, Team $team){
-        $data = $teamRequest->validated();
 
+        $data = $teamRequest->validated();
         $team = $this->getTeam($data['team_id']);
         abort_if(!$team, 424, 'The team could not be found');
 
-        // check requesting user is a team admin for this team
-        $admin = auth()->user();
-        $teamAdmin = $admin->hasTeamRole($team, 'team_admin');
-        abort_if(!$teamAdmin, 424, "You are not this team's admin");
-
+        $loggedInUser = auth()->user();
         $user = $this->getTeamUser($data['user_id']);
-        abort_if(!$user, 424, 'Your user could not be found');
 
-        abort_if($user->isOwnerOfTeam($team), 424, "You can not remove team's owner");
+        if (!$loggedInUser->hasRole('admin') || !$loggedInUser->hasRole('opco')){
+            // check requesting user is a team admin for this team
+            $teamAdmin = $loggedInUser->hasTeamRole($team, 'team_admin');
+            abort_if(!$teamAdmin, 424, "You are not this team's admin");
+            abort_if(!$user, 424, 'Your user could not be found');
+            abort_if($user->isOwnerOfTeam($team), 424, "You can not remove team's owner");
+        }
 
         if ($team->hasUser($user) && $this->memberLeavesTeam($team, $user)) {
             ApigeeService::removeDeveloperFromCompany($team, $user);
@@ -319,7 +319,7 @@ class CompanyTeamsController extends Controller
         $team = $this->getTeam($data['team_id']);
         abort_if(!$team, 404, 'Team was not found');
 
-        // Check if a user is not part of the team or a user does not have admin role of the team 
+        // Check if a user is not part of the team or a user does not have admin role of the team
         abort_if(!$user->belongsToTeam($team) || !$user->hasTeamRole($team, 'team_admin'), 403, 'Forbidden');
 
         $user = $this->getTeamUserByEmail($invitedEmail);
@@ -329,7 +329,7 @@ class CompanyTeamsController extends Controller
         abort_if($user->belongsToTeam($team), 403, 'user is already member of this team');
 
         $isAlreadyInvited = false;
-        if ($user) {   
+        if ($user) {
             $isAlreadyInvited = TeamInvite::where('email', $user->email)->where('team_id', $team->id)->exists();
         }
 
@@ -457,8 +457,7 @@ class CompanyTeamsController extends Controller
     {
         $user = $request->user();
         $data = $request->validated();
-        $data['name'] = preg_replace('/[-_±§@#$%^&*()+=!]+/', '', $data['name']);
-
+        $data['name'] = preg_replace('/[±§@#$%^&*()+=!]+/', '', $data['name']);
         $data['logo'] = $this->processLogoFile($request);
 
         $teamCount = Team::where('owner_id', $user->id)
@@ -512,10 +511,8 @@ class CompanyTeamsController extends Controller
     public function update(UpdateRequest $request, $id)
     {
         $data = $request->validated();
-
         $team = Team::findOrFail($id);
         $teamLogo = $team->logo;
-
         $oldName = $team->name;
 
         $teamAdmin = auth()->user()->hasTeamRole($team, 'team_admin');
@@ -527,8 +524,8 @@ class CompanyTeamsController extends Controller
         if($request->has('logo_file')){
             $teamLogo = $this->processLogoFile($request);
         }
-        
-        $data['name'] = preg_replace('/[-_±§@#$%^&*()+=!]+/', '', $data['name']);
+
+        $data['name'] = preg_replace('/[±§@#$%^&*()+=!]+/', '', $data['name']);
 
         $team->update([
             'name' => $data['name'],
@@ -561,7 +558,7 @@ class CompanyTeamsController extends Controller
                 ]);
             }
         }
-        
+
         return response()->json(['success' => true], 200);
     }
 
@@ -632,7 +629,7 @@ class CompanyTeamsController extends Controller
     {
         $invite = Teamwork::getInviteFromDenyToken($request->get('token'));
         abort_if(!$invite, 404, 'Invite was not found');
-        
+
         abort_if($invite->email !== auth()->user()->email, 401, 'You have not been invited to this team');
 
         $inviteType = ucfirst($invite->type);
@@ -680,7 +677,6 @@ class CompanyTeamsController extends Controller
         $teamMembers = $team->users->pluck('id')->toArray();
         $currentUsers = $team->users;
 
-
         $teamsInvites = TeamInvite::where('team_id', $team->id)->get();
 
         if($teamsInvites){
@@ -688,7 +684,7 @@ class CompanyTeamsController extends Controller
                 $invite->delete();
             }
         }
-        
+
         if($currentUsers){
             $userIds = $currentUsers->pluck('id')->toArray();
 
@@ -709,7 +705,7 @@ class CompanyTeamsController extends Controller
         $appNamesToDelete = App::where('team_id', $team->id)->pluck('name')->toArray();
 
         if($appNamesToDelete) {
-            
+
             foreach($appNamesToDelete as $appName){
                 $deletedApps = ApigeeService::delete("companies/{$team->username}/apps/{$appName}");
 
