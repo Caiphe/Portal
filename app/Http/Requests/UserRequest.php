@@ -31,7 +31,7 @@ class UserRequest extends FormRequest
             'last_name' => 'required',
             'email' => [
                 'required',
-                'email:rfc,dns', 
+                'email:rfc', 
                 new CustomEmailValidationRule,
                 Rule::unique('users')->ignore(auth()->id())
             ],
