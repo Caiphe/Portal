@@ -29,7 +29,7 @@ class UserStoreRequest extends FormRequest
         return [
             'first_name' => ['required','max:140'],
             'last_name' => ['required','max:140'],
-            'email' => ['email:rfc,dns', 
+            'email' => ['email:rfc', 
             new CustomEmailValidationRule,
             'unique:users,email'],
             'password' => [
