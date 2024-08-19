@@ -201,13 +201,10 @@ class TeamController extends Controller
 
     public function remove(LeavingRequest $teamRequest, Team $team)
     {
-        $loggedInUser = auth()->user();
         $data = $teamRequest->validated();
         $team = $this->getTeam($data['team_id']);
         $user = $this->getTeamUser($data['user_id']);
-
         abort_if(!$team, 424, 'The team could not be found');
-        abort_if(!$loggedInUser->hasRole('admin') || !$loggedInUser->hasRole('opco'), 424, 'You are not authorized to remove a user from this team');
 
         if ($team->hasUser($user) && $this->memberLeavesTeam($team, $user)) {
             ApigeeService::removeDeveloperFromCompany($team, $user);
