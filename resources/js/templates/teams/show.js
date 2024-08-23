@@ -517,7 +517,7 @@ teamMateInvitEmail.addEventListener('input', function () {
 
 function emailCheck() {
     var inviteTeamMateError = document.querySelector('.teammate-error-message');
-    var mailformat = /^[\w\.\-\+]+@[\w\.\-]+\.[a-z]{2,5}$/;
+    var mailformat = /^[\w\.\-\+]+@[\w\.\-]+\.[a-z]{2,8}$/;
 
     if (teamMateInvitEmail.value.match(mailformat)) {
         inviteTeamMateError.classList.remove('show');
