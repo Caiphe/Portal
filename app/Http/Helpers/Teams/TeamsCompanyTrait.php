@@ -47,6 +47,15 @@ trait TeamsCompanyTrait
 
         $team = $this->createTeam($owner, $data->request->all());
 
+        $resp = ApigeeService::addDeveloperToCompany($team, $owner, 'admin');
+
+        if ($resp->failed()) {
+            return response()->json([
+                'success' => false,
+                'message' => $resp['message'] ?? 'There was a problem syncing the team'
+            ], $resp->status());
+        }
+
         if (!empty($data['emails'])) {
             $teamInviteEmails = $emails;
 
@@ -95,7 +104,6 @@ trait TeamsCompanyTrait
         $data['name'] = preg_replace('/[±§@#$%^&*()+=!]+/', '', $data['name']);
 
         $company->update([
-            'name' => $data['name'],
             'url' => $data['url'],
             'contact' => $data['contact'],
             'country' => $data['country'],
@@ -104,9 +112,14 @@ trait TeamsCompanyTrait
         ]);
 
         $companyUpdated = Team::where('id', $company->id)->first();
+        $resp = ApigeeService::updateCompany($companyUpdated, $team_owner);
 
-        //TODO fix team update API
-        ApigeeService::updateCompany($companyUpdated, $team_owner);
+        if ($resp->failed()) {
+            return response()->json([
+                'success' => false,
+                'message' => $resp['message'] ?? 'There was a problem syncing the team'
+            ], $resp->status());
+        }
 
         foreach ($companyUpdated->users as $user) {
             if ($oldName !== $companyUpdated->name) {
@@ -239,7 +252,7 @@ trait TeamsCompanyTrait
                     Notification::create([
                         'user_id' => $id,
                         'notification' => "
-                            The admin changed your role to the owner of the team <strong>{$team->name}</strong>. 
+                            The admin changed your role to the owner of the team <strong>{$team->name}</strong>.
                             Please navigate to your <a href='/teams/{$team->id}/team'>team</a> for more info.",
                     ]);
                 }

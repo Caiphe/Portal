@@ -31,7 +31,6 @@ class TeamRequest extends FormRequest
             'country' => ['required'],
             'logo' => ['sometimes ', 'file', 'max:5120', 'dimensions:max_width=2000,max_height=2000', 'mimes:jpeg,jpg,png'],
             'team_members' => ['sometimes'],
-            //'team_owner' => 'required',
             'description' => ['sometimes', 'max:512'],
         ];
     }
