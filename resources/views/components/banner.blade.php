@@ -1,5 +1,6 @@
 @if($maintenanceData)
-<div class="notification-banner animated" id="notification-banner">
+<input type="hidden" class="maintenance-exist" id="maintenance-exist" />
+<div class="notification-banner" id="notification-banner">
     <div class="banner-content">
         <img src="/images/warning-white.svg">
         <span>{{ $maintenanceData->message }}</span>

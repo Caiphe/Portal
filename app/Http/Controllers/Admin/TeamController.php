@@ -35,7 +35,7 @@ class TeamController extends Controller
      * @param Request $request The HTTP request object containing query parameters.
      * @return View The view displaying the list of teams.
      */
-    public function index(Request $request): View
+    public function index(Request $request)
     {
         $country = $request->get('country', "");
         $numberPerPage = (int)$request->get('number_per_page', '15');
@@ -58,10 +58,13 @@ class TeamController extends Controller
             ->paginate($numberPerPage);
 
         if($request->ajax()) {
-            return view('templates.admin.teams.data', [
-                'teams' => $teams,
-                'countries' => $this->getCountry(),
-            ]);
+            return response() 
+                ->view('templates.admin.teams.data', [
+                    'teams' => $teams,
+                    'countries' => $this->getCountry(),
+                ], 200)
+                ->header('Vary', 'X-Requested-With')
+                ->header('Content-Type', 'text/html');
         }
 
         return view('templates.admin.teams.index', [
@@ -198,13 +201,10 @@ class TeamController extends Controller
 
     public function remove(LeavingRequest $teamRequest, Team $team)
     {
-        $loggedInUser = auth()->user();
         $data = $teamRequest->validated();
         $team = $this->getTeam($data['team_id']);
         $user = $this->getTeamUser($data['user_id']);
-
         abort_if(!$team, 424, 'The team could not be found');
-        abort_if(!$loggedInUser->hasRole('admin') || !$loggedInUser->hasRole('opco'), 424, 'You are not authorized to remove a user from this team');
 
         if ($team->hasUser($user) && $this->memberLeavesTeam($team, $user)) {
             ApigeeService::removeDeveloperFromCompany($team, $user);

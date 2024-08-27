@@ -34,8 +34,6 @@
         @include('templates.admin.teams.data')
     </div>
 
-    {{ $teams->withQueryString()->links() }}
-
 @endsection
 
 @push('scripts')
