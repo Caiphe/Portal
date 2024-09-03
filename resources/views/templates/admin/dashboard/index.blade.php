@@ -3,6 +3,7 @@
 @push('styles')
     <link rel="stylesheet" href="{{ mix('/css/templates/admin/index.css') }}">
     <link rel="stylesheet" href="{{ mix('/css/templates/admin/dashboard/index.css') }}">
+    <link rel="stylesheet" href="{{ mix('/css/templates/admin/dashboard/custom-attribute.css') }}">
 @endpush
 
 @section('title', 'Applications')
