@@ -45,7 +45,7 @@
 
             <div class="group">
                 <label for="name">Enter team name *</label>
-                <input type="text" name="name" value="{{ $team->name }}" id="team-name" class="form-field" placeholder="Enter team name" maxlength="100">
+                <input type="text" name="name" readonly value="{{ $team->name }}" id="team-name" class="form-field" placeholder="Enter team name" maxlength="100">
             </div>
 
             <div class="group">
