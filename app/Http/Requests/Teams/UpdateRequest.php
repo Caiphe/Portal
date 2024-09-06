@@ -30,7 +30,6 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required'],
             'url' => ['required'],
             'contact' => ['required'],
             'country' => ['required'],
