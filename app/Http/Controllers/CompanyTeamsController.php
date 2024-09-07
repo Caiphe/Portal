@@ -525,10 +525,7 @@ class CompanyTeamsController extends Controller
             $teamLogo = $this->processLogoFile($request);
         }
 
-        $data['name'] = preg_replace('/[±§@#$%^&*()+=!]+/', '', $data['name']);
-
         $team->update([
-            'name' => $data['name'],
             'url' => $data['url'],
             'contact' => $data['contact'],
             'country' => $data['country'],

@@ -5,7 +5,7 @@
 
         <label class="editor-field-label">
             <h3 for="name">Team name *</h3>
-            <input type="text" readonly name="name" value="{{ old('name', $team->name) }}" id="team-name" class="form-field" placeholder="Enter a name for your team" maxlength="100" autofocus>
+            <input type="text" readonly name="name" value="{{ old('name', $team->name) }}" id="team-name" class="form-field team_disabled_field" placeholder="Enter a name for your team" maxlength="100" autofocus>
             @error('name')
             <div class="error">{{ $message }}</div>
             @enderror
