@@ -14,7 +14,12 @@
             margin-top: 10px;
         }
 
-        .editor-field-label {
+        .team_disabled_field {
+         background-color: #EBEBE4;
+            color: #626262;
+        }
+
+        .editor-field-label,  {
             textarea,
             select,
             input {
@@ -68,7 +73,7 @@
                     display: block !important;
 
                     img{
-                        display: none; 
+                        display: none;
                     }
 
                     &.show {
