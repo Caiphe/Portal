@@ -589,6 +589,7 @@ class CompanyTeamsController extends Controller
                 }
             }
 
+            ApigeeService::updateCompany($team, $owner);
             Teamwork::acceptInvite($invite);
         } else {
             $resp = ApigeeService::addDeveloperToCompany($team, $invite->user, $invite->role);

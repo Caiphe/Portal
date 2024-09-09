@@ -9,7 +9,7 @@ var deleteUserActionBtn = document.querySelector('.remove-user-from-team');
 var teamInviteUserBtn = document.querySelector('.invite-btn');
 var transferOwnsershipBtn = document.querySelector('#transfer-btn');
 var deleteTeamBtn = document.querySelector('.delete-team-btn');
-var makeOwnershipBtn = document.querySelector('.make-owner');
+// var makeOwnershipBtn = document.querySelector('.make-owner');
 var deleteTeamModal = document.querySelector('.delete-team-modal');
 var appDeleteShowModalBtn = document.querySelectorAll('.app-delete-modal');
 var modalContainer = document.querySelector('.delete-app-modal');
@@ -608,14 +608,6 @@ transferOwnsershipBtn.addEventListener('click', function (event) {
     handleRequestOwnershipTransfer('/teams/' + this.dataset.teamid + '/ownership', data, event);
 });
 
-makeOwnershipBtn.addEventListener('click', function (event) {
-    var data = {
-        team_id: this.dataset.teamid,
-        invitee: this.dataset.useremail
-    };
-    handleRequestOwnershipTransfer('/teams/' + this.dataset.teamid + '/ownership', data, event);
-});
-
 function handleRequestOwnershipTransfer(url, data, event) {
     var xhr = new XMLHttpRequest();
 
@@ -719,22 +711,29 @@ for (var i = 0; i < adminModalShow.length; i++) {
     adminModalShow[i].addEventListener('click', showAdminModalFunc);
 }
 
+// Transfer ownership to a user from the user's list
 function showAdminModalFunc() {
-    makeOwnerBtn = document.querySelector('#make-owner-btn');
+    var makeOwnerBtn = document.querySelector('#make-owner-btn');
+    adminModal.classList.add('show');
 
     document.querySelector('.admin-user-name').innerHTML = this.dataset.adminname;
-
     makeOwnerBtn.setAttribute('data-useremail', this.dataset.useremail)
     makeOwnerBtn.setAttribute('data-userrole', this.dataset.userrole);
+    
+    makeOwnerBtn.addEventListener('click', function (event) {
+        var data = {
+            team_id: this.dataset.teamid,
+            invitee: this.dataset.useremail
+        };
+        handleRequestOwnershipTransfer('/teams/' + this.dataset.teamid + '/ownership', data, event);
+    });
 
-    adminModal.classList.add('show');
 }
 
 document.querySelector('.make-admin-cancel-btn').addEventListener('click', hideAdminModal);
 function hideAdminModal() {
     adminModal.classList.remove('show');
 }
-
 
 document.querySelector('.close-add-teammate-btn').addEventListener('click', hideTeammateDialog)
 function hideTeammateDialog() {
