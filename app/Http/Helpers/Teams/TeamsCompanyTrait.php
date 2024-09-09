@@ -237,6 +237,9 @@ trait TeamsCompanyTrait
                 ->where('developer_id', '!=', null)
                 ->first();
 
+            //Update company in APIGEE with new team owner
+            ApigeeService::updateCompany($team, $owner);
+
             $team->update(['owner_id' => $owner->id]);
             $owner->teams()->updateExistingPivot($team, ['role_id' => 7]);
 
