@@ -9,7 +9,6 @@ var deleteUserActionBtn = document.querySelector('.remove-user-from-team');
 var teamInviteUserBtn = document.querySelector('.invite-btn');
 var transferOwnsershipBtn = document.querySelector('#transfer-btn');
 var deleteTeamBtn = document.querySelector('.delete-team-btn');
-// var makeOwnershipBtn = document.querySelector('.make-owner');
 var deleteTeamModal = document.querySelector('.delete-team-modal');
 var appDeleteShowModalBtn = document.querySelectorAll('.app-delete-modal');
 var modalContainer = document.querySelector('.delete-app-modal');
