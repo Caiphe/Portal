@@ -280,6 +280,7 @@ My team
                                             data-adminname="{{ $teamUser->full_name }}"
                                             data-invite=""
                                             data-teamid="{{ $team->id }}"
+                                            data-userrole = "{{ $teamUser->teamRole($team)->name === 'team_user' ? 'team_admin' : 'team_user' }}"
                                             data-useremail="{{ $teamUser->email }}">
                                             Make owner
                                         </button>
@@ -295,7 +296,8 @@ My team
                                             data-useremail="{{ $teamUser->email }}"
                                             data-teamid="{{ $team->id }}"
                                             data-teamuserid="{{ $teamUser->id }}"
-                                            data-userrole = "{{ $teamUser->teamRole($team)->name === 'team_user' ? 'team_admin' : 'team_user' }}">
+                                            data-userrole = "{{ $teamUser->teamRole($team)->name === 'team_user' ? 'team_admin' : 'team_user' }}"
+                                            >
                                             {{ $teamUser->teamRole($team)->name === 'team_user' ? 'Make administrator' : 'Make user' }}
                                         </button>
                                     </li>
