@@ -100,7 +100,7 @@ class AppController extends Controller
             })
             ->get()
             ->merge($assignedProducts);
-        
+
         $prodGroup = Product::with(['category', 'countries'])
 			->where('category_cid', '!=', 'misc')
 			->basedOnUser($request->user())
@@ -170,6 +170,7 @@ class AppController extends Controller
         $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
         $attributes = ApigeeService::formatToApigeeAttributes($attributes);
 
+        //TODO: Type to the attributes
         $attributes = array_merge($attributes, [
             [
                 'name' => 'DisplayName',
@@ -313,7 +314,7 @@ class AppController extends Controller
             ->basedOnUser( $user)
             ->get()
             ->merge($assignedProducts);
-    
+
 		$productCategories = $prodGroup->pluck('category.title', 'category.slug');
         $countryCodes = $products->pluck('locations')->implode(',');
         $countries = Country::whereIn('code', explode(',', $countryCodes))->pluck('name', 'code');

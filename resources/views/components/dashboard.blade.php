@@ -126,9 +126,9 @@
                 </div>
             </div>
 
-            {{-- Custom attribe data to go here TODO reuse the code --}}
+            {{-- Custom attribe data to go here  TODO reuse the code --}}
             <div id="custom-attributes-list-partial-{{ $app->aid }}">
-                @include('partials.custom-attributes.list', ['app' => $app])
+                {{-- @include('partials.custom-attributes.list', ['app' => $app])--}}
             </div>
 
             <div class="detail-actions">
@@ -146,75 +146,118 @@
                 @endif
                 <button class="log-notes reset" data-id="{{ $app['aid'] }}">@svg('eye') View application log notes
                 </button>
-                <button class="custom-attributes reset" data-id="{{ $app['aid'] }}"
-                        data-route="{{ route('app.save.attributes', $app) }}">@svg('tag') Custom attributes
-                </button>
+
             </div>
 
             <!--===================================================================================-->
-            <div class="custom-attribute-main">
-                <div class="custom-attribute-heading">
-                    <span class="custom-attribute-heading-text">Custom Attributes</span>
-                    <button class="add-attribute-btn custom-attributes" data-id="{{ $app['aid'] }}"
-                            data-route="{{ route('app.save.attributes', $app) }}">
-                        Add attribute
-                    </button>
-                </div>
-
-                <div class="custom-attribute-body-section">
-                    <div id="table-data">
-                        {{-- Custom attribe data to go here TODO reuse the code --}}
-                        @php
-                            $query = request()->query();
-                            unset($query['supportsWebp']);
-                            $query['order'] = $order ?? 'desc';
-                        @endphp
-                        @php
-                            $query['sort'] = strtok($app, '|');
-                        @endphp
-                        <div id="custom-attributes-list-partial-{{ $app->aid }}">
-                            <table>
-                                <thead>
-                                <th>Name @svg('chevron-sorter')</th>
-                                <th>Value @svg('chevron-sorter')</th>
-                                <th>Type @svg('chevron-sorter')</th>
-                                </thead>
-
-                            </table>
-
-                            @forelse ($app->attributes as $key => $value)
-                              {{--  @php
-                                dd($key, $value);
-                                @endphp--}}
-                                <td>
-                                    {{--@if($key !== 'Notes' && $key !== 'ApprovedAt' && $value !== '')--}}
-                                        <span class="attr-name bold"> {!! $value !!} : </span>
-                                    {{--@endif--}}
-                                </td>
-                                <td>
-                                    <span class="attr-value">{!! $value !!}</span>
-                                </td>
-                            @empty
-                                <div class="no-custom-attribute">None defined</div>
-                            @endforelse
-                        </div>
+            <div class="app-custom-attributes">
+                <div class=main-ca>
+                    <div class="main-ca__heading">
+                        <span class="customAttributeMain__text">Custome Attributes</span>
+                        <button class="btn-show-attribute-modal" data-id="{{ $app->aid }}">
+                            Add attribute
+                        </button>
                     </div>
                 </div>
-            </div>
+                <div class="ca-section">
+                    <table id="table-data">
+                        <thead class="ca-thead">
+                        <tr class="ca-align-left">
+                            <th class="custom-atrribute--table_th "><a href="#">Name @svg('chevron-sorter')</a>
+                            </th>
+                            <th class="custom-atrribute--table_th"><a href="#">Value @svg('chevron-sorter')</a>
+                            </th>
+                            <th class="custom-atrribute--table_th"><a href="#">Type @svg('chevron-sorter')</a>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @php
+                            $filteredAttributes = collect($app->attributes)->except(['Country', 'TeamName', 'location', 'Description', 'DisplayName']);
+                        @endphp
+                        @forelse ($filteredAttributes as $key => $value)
+                            <tr class="ca-trow">
+                                <td class="display_name">
+                                    {!!  $key !!}
+                                </td>
+                                <td class="not-on-mobile">
+                                    {!! $value !!}
+                                </td>
+                                <td class="not-on-mobile">
+                                    <span class="preprod">preprod</span><span class="staging">staging</span></td>
 
+                                <td class="action-row">
+                                    <a href="#">
+                                        @svg('edit')
+                                        Edit
+                                    </a>
+                                    <a href="#">
+                                        @svg('delete')
+                                        Delete</a>
+                                </td>
+                            </tr>
+                        @empty
+                            <div class="no-custom-attribute">None defined</div>
+                        @endforelse
 
-            <div class="custom-attribute-main">
-                <div class="custom-attribute-heading">
-                    <span class="custom-attribute-heading-text">Custom Attributes Heading</span>
-                    <button class="add-attribute-btn">
-                        Add attribute
-                    </button>
+                        </tbody>
+                    </table>
                 </div>
 
-                <div class="custom-attribute-body-section">
-                    Custom Attributes
+                <div class=main-ca>
+                    <div class="main-ca__heading">
+                        <span class="customAttributeMain__text">Reserved Attributes</span>
+                        <button class="btn-show-attribute-modal">
+                            Add reseved attribute
+                        </button>
+                    </div>
+                </div>
+                <div class="ca-section">
+                    <table>
+                        <thead>
+                        <tr class="ca-align-left">
+                            <th class="custom-atrribute--table_th "><a href="#">Name @svg('chevron-sorter')</a>
+                            </th>
+                            <th class="custom-atrribute--table_th"><a href="#">Value @svg('chevron-sorter')</a>
+                            </th>
+                            <th class="custom-atrribute--table_th"><a href="#">Type @svg('chevron-sorter')</a>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody class="ca-tbody">
+                        @php
+                            $filteredAttributes = collect($app->attributes)->only(['Country', 'TeamName', 'location', 'Description', 'DisplayName']);
+                        @endphp
+                        @forelse ($filteredAttributes as $key => $value)
+                            <tr class="ca-trow">
+                                <td class="display_name">
+                                    {{ $key }}
+                                </td>
+                                <td class="not-on-mobile">
+                                    {{ $value }}
+                                </td>
+                                <td class="not-on-mobile">
+                                    String
+                                </td>
+
+                                <td class="action-row">
+                                    <a href="http://localhost:8091/admin/products/account-management/edit">
+                                        @svg('edit')
+                                        Edit
+                                    </a>
+                                    <a href="#">
+                                        @svg('delete')
+                                        Delete</a>
+                                </td>
+                            </tr>
+                        @empty
+                            nothing here {{--Todo fix--}}
+                        @endforelse
+                        </tbody>
+                    </table>
                 </div>
             </div>
+
             <!--=====================================================================================-->
         </div>
 

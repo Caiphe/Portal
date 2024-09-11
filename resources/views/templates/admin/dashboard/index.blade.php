@@ -12,7 +12,7 @@
 @if(!is_null($previous))
 <a href="{{ $previous }}" class="go-back">@svg('chevron-left') Back to user</a>
 @endif
-<h1>Applications</h1>
+<h1> Applications </h1>
 
 <div class="page-actions">
     <a class="button primary page-actions-create" href="{{ route('admin.app.create') }}" aria-label="Create new application"></a>
@@ -67,4 +67,5 @@
 
 @push('scripts')
 <script src="{{ mix('/js/templates/admin/dashboard/index.js') }}" defer></script>
+<script src="{{ mix('/js/templates/admin/dashboard/app-custom-attribute.js') }}" defer></script>
 @endpush

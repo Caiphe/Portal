@@ -12,7 +12,9 @@
 
 <div class="body">
     @forelse($apps as $app)
-        @if(empty($app['attributes'])) @continue @endif
+        @if(empty($app['attributes']))
+            @continue
+        @endif
         @php
             $productCountries = [];
             if(!is_null($app->country_code)){
@@ -41,34 +43,65 @@
         </div>
     </x-dialog-box>
 
-    <x-dialog-box id="custom-attributes-{{ $app->aid }}" dialogTitle="Custom attributes" class="custom-attributes-dialog">
-        <div class="content-container">
+    <x-dialog-box id="custom-attributes-{{ $app->aid }}" dialogTitle="Create a new Attribute" class="custom-attributes-dialog">
 
-            <div class="attributes-heading @if ($app->custom_attributes) show @endif">
-                <h4 class="name-heading">Attribute name</h4>
-                <h4 class="value-heading">Value</h4>
+        <div class="form-container">
+        <form>
+            <div class="content-container">
+
+                <div class="form-group">
+                        <label for="type">Type</label>
+                        <select id="type" name="type" onchange="handleAttributeTypeChange()">
+                            <option value="string">String</option>
+                            <option value="number">CSV String Array</option>
+                            <option value="boolean">Boolean</option>
+                        </select>
+                        <p id="type-description">A string attribute is the default type of attribute and only accepts a text value without special characters or spaces.</p>
+                    </div>
+
+                    <!-- Name Field -->
+                    <div class="form-group" id="name-field">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" placeholder="The name of the attribute" required>
+                        <p class="error-message" id="name-error" style="color: red; display: none;"></p>
+                    </div>
+
+                    <!-- Value Field -->
+                    <div class="form-group" id="value-field">
+                        <label for="value">Value</label>
+                        <input type="text" id="value" name="value" placeholder="The value of the attribute" required>
+                        <p class="error-message" id="value-error" style="color: red; display: none;"></p>
+                    </div>
+
+                    <!-- Number Textarea Field (hidden initially) -->
+                    <div class="form-group" id="number-field" style="display: none;">
+                        <label for="number-value">Value</label>
+                        <textarea id="number-value" name="number-value" placeholder="Enter number value"></textarea>
+                        <div id="tag-container" class="tag-container"></div>
+                    </div>
+
+                    <!-- Boolean Select Field (hidden initially) -->
+                    <div class="form-group" id="boolean-field" style="display: none;">
+                        <label for="boolean-value">Value</label>
+                        <select id="boolean-value" name="boolean-value">
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+                    </div>
             </div>
 
-            {{-- Custom Attributes list --}}
-            <div id="custom-attributes-form-partial-{{ $app->aid }}">
-                @include('partials.custom-attributes.form', ['app' => $app])
-            </div>
+
+            {{--<div class="form-actions">
+                <button type="submit" class="btn-attribute btn-confirm">Confirm</button>
+                <button type="button" class="btn-attribute " id="btn-cancel" onclick="cancelForm()">Cancel</button>
+            </div>--}}
+        </form>
         </div>
 
-            {{-- Custom attributes form --}}
-        <form class="custom-attributes-form" action="">
-            <div class="each-field">
-                <label for="name">Attribute name</label>
-                <input type="text" name="attribute[name][]" class="attribute-field attribute-name" placeholder="New attribute name"/>
-            </div>
-            <div class="each-field">
-                <label for="value">Value</label>
-                <input type="text" name="attribute[value][]" class="attribute-field attribute-value" placeholder="New value"/>
-            </div>
-            <button type="button" class="button add-attribute">Add</button>
-            <div class="attribute-error">Attribute name and value required</div>
-        </form>
-
+        <div class="bottom-shadow-container button-container">
+            <button class="status-dialog-button">Submit</button>
+        </div>
     </x-dialog-box>
 @endforeach
+
 
