@@ -160,32 +160,55 @@
                     </div>
                 </div>
                 <div class="ca-section">
-                    <table id="table-data">
+                    <table class="app-attribute-table">
                         <thead class="ca-thead">
                         <tr class="ca-align-left">
-                            <th class="custom-atrribute--table_th "><a href="#">Name @svg('chevron-sorter')</a>
+                            <th class="custom-atrribute--table_th">
+                                <a href="#">Name @svg('chevron-sorter')</a>
                             </th>
-                            <th class="custom-atrribute--table_th"><a href="#">Value @svg('chevron-sorter')</a>
+                            <th class="custom-atrribute--table_th">
+                                <a href="#">Value @svg('chevron-sorter')</a>
                             </th>
-                            <th class="custom-atrribute--table_th"><a href="#">Type @svg('chevron-sorter')</a>
+                            <th class="custom-atrribute--table_th">
+                                <a href="#">Type @svg('chevron-sorter')</a>
+                            </th>
+                            <th class="custom-atrribute--table_th">
+                                <a href="#">Actions @svg('chevron-sorter')</a>
                             </th>
                         </tr>
                         </thead>
                         <tbody>
                         @php
+                            // Filter attributes, excluding specified keys
                             $filteredAttributes = collect($app->attributes)->except(['Country', 'TeamName', 'location', 'Description', 'DisplayName']);
                         @endphp
+
                         @forelse ($filteredAttributes as $key => $value)
+                            @php
+
+                                if (is_array($value)) {
+
+                                    $displayName = key($value[0]);
+                                    $displayValue = $value[0][$displayName];
+                                    $attributeType = ucfirst($key) === "Number" ? "CSV String Array" : ucfirst($key); // Use key as the type
+                                } else {
+
+                                    $displayName = $key;
+                                    $displayValue = $value;
+                                    $attributeType = 'String'; // Default type to "String"
+                                }
+                            @endphp
+
                             <tr class="ca-trow">
                                 <td class="display_name">
-                                    {!!  $key !!}
+                                    {!! htmlspecialchars($displayName) !!}
                                 </td>
                                 <td class="not-on-mobile">
-                                    {!! $value !!}
+                                    {!! htmlspecialchars($displayValue) !!}
                                 </td>
                                 <td class="not-on-mobile">
-                                    <span class="preprod">preprod</span><span class="staging">staging</span></td>
-
+                                    <span class="attribute-type">{{ $attributeType }}</span>
+                                </td>
                                 <td class="action-row">
                                     <a href="#">
                                         @svg('edit')
@@ -193,27 +216,32 @@
                                     </a>
                                     <a href="#">
                                         @svg('delete')
-                                        Delete</a>
+                                        Delete
+                                    </a>
                                 </td>
                             </tr>
+                        </tbody>
                         @empty
-                            <div class="no-custom-attribute">None defined</div>
+                            <div  class="no-custom-attribute">No custom attribute added yet.</div>
                         @endforelse
 
-                        </tbody>
                     </table>
                 </div>
+
+
+
+
 
                 <div class=main-ca>
                     <div class="main-ca__heading">
                         <span class="customAttributeMain__text">Reserved Attributes</span>
-                        <button class="btn-show-attribute-modal">
+                        <button class="btn-show-attribute-modal btn-show-reserved-attribute-modal" reserved-data-id="{{ $app->aid }}">
                             Add reseved attribute
                         </button>
                     </div>
                 </div>
                 <div class="ca-section">
-                    <table>
+                    <table class="app-attribute-table">
                         <thead>
                         <tr class="ca-align-left">
                             <th class="custom-atrribute--table_th "><a href="#">Name @svg('chevron-sorter')</a>
@@ -241,7 +269,7 @@
                                 </td>
 
                                 <td class="action-row">
-                                    <a href="http://localhost:8091/admin/products/account-management/edit">
+                                    <a href="#">
                                         @svg('edit')
                                         Edit
                                     </a>
@@ -251,7 +279,7 @@
                                 </td>
                             </tr>
                         @empty
-                            nothing here {{--Todo fix--}}
+                            <div class="no-custom-attribute">No reserved attribute added yet.</div>
                         @endforelse
                         </tbody>
                     </table>

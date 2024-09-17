@@ -34,6 +34,9 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 
 	Route::put('apps/{app:slug}', 'AppController@update')->name('app.update');
 	Route::put('apps/{app:aid}/custom-attributes', 'AppController@updateCustomAttributes')->name('app.update.attributes');
+
+    Route::post('admin/apps/{app:aid}/save-custom-attributes', 'AppController@saveAppCustomAttributeFromApigee')->name('app.save-custom-attributes');
+
 	Route::put('admin/apps/{app:aid}/custom-attributes/save', 'AppController@saveCustomAttributeFromApigee')->name('app.save.attributes');
 	Route::delete('apps/{app:slug}', 'AppController@destroy')->name('app.destroy');
 

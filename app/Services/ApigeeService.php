@@ -415,6 +415,7 @@ class ApigeeService
     {
         $a = [];
         foreach ($attributes as $attribute) {
+
             if (!isset($attribute['value'])) {
                 $attribute['value'] = '';
             }

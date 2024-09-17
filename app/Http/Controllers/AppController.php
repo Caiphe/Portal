@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AppAttributesRequest;
 use DB;
 use App\App;
 use App\Team;
@@ -533,8 +534,87 @@ class AppController extends Controller
         return redirect(route('app.index'));
     }
 
-    public function saveCustomAttributeFromApigee(App $app, Request $request)
+    //Todo check record it to update attribute in order to save new custom attribute
+    public function saveAppCustomAttributeFromApigee(App $app, AppAttributesRequest $request)
     {
+        // Validate the incoming request
+        $validated = $request->validated();
+        $newAttributes = $validated['attribute'];
+
+        // Ensure existingAttributes is an array or initialize it as an empty array
+        $existingAttributes = is_array($app->attributes)
+            ? $app->attributes
+            : json_decode($app->attributes, true) ?? [];
+
+        // Merge the new attributes into the existing ones
+        $updatedAttributes = array_merge($existingAttributes, $newAttributes);
+
+        // Format attributes for Apigee
+        $apigeeAttributes = $this->formatForApigee($updatedAttributes);
+
+        $team = $app->team ?? null;
+        $developer = $app->developer ?? null;
+
+        if (!$developer) {
+            $reasonMsg = 'Developer information is missing.';
+            return response()->json([
+                'success' => false,
+                'message' => $reasonMsg
+            ], 400);
+        }
+
+        $developerEmail = $developer->email;
+
+        $accessUrl = $team ? "companies/{$team->username}" : "developers/{$developerEmail}";
+
+        $updatedResponse = ApigeeService::put("{$accessUrl}/apps/{$app->name}", [
+            "name" => $app->name,
+            'attributes' => ApigeeService::formatToApigeeAttributes($apigeeAttributes),
+            "callbackUrl" => $app->url ?? '',
+        ]);
+
+        if ($updatedResponse->failed()) {
+            $reasonMsg = $updatedResponse['message'] ?? 'There was a problem updating your app. Please try again later.';
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $reasonMsg
+                ], $updatedResponse->status());
+            }
+
+            return redirect()->back()->with('alert', $reasonMsg);
+        }
+
+        // Save the merged data back as JSON into the database
+        $app->update(['attributes' => $updatedAttributes]);
+
+        return response()->json(['success' => true], 200);
+    }
+    protected function formatForApigee($attributes)
+    {
+        // Initialize an empty array for formatted attributes
+        $formattedAttributes = [];
+
+        // Ensure $attributes is an array before iterating
+        if (is_array($attributes)) {
+            foreach ($attributes as $type => $items) {
+                if (is_array($items)) {
+                    foreach ($items as $item) {
+                        if (is_array($item)) {
+                            // Merge each item into the formatted attributes
+                            $formattedAttributes = array_merge($formattedAttributes, $item);
+                        }
+                    }
+                }
+            }
+        }
+
+        return $formattedAttributes;
+    }
+    /*public function saveCustomAttributeFromApigee(App $app, Request $request)
+    {
+        dd("hi 1");
         $apigeeAttributes = ApigeeService::getApigeeAppAttributes($app);
         $attrs= ApigeeService::formatToApigeeAttributes($apigeeAttributes);
         $attributes = ApigeeService::formatAppAttributes($attrs);
@@ -549,12 +629,56 @@ class AppController extends Controller
                 'listHtml' => view('partials.custom-attributes.list', ['app' => $app])->render()
             ]);
         }
-    }
+    }*/
 
-    public function updateCustomAttributes(App $app, CustomAttributesRequest $request)
+    //Todo - refactor this method
+   /* public function updateCustomAttributes(App $app, AppAttributesRequest $request)
     {
         $validated = $request->validated();
         $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
+
+        $appAttributes = $app->attributes;
+
+        $previousCustomAttributes = $app->filterCustomAttributes($appAttributes);
+        $appAttributes = array_diff($appAttributes, $previousCustomAttributes);
+        $appAttributes = array_merge($appAttributes, $app->filterCustomAttributes($attributes));
+
+        $team = $app->team ?? null;
+        $developerEmail = $app->developer->email;
+        $accessUrl = $team ? "companies/{$team->username}" : "developers/{$developerEmail}";
+
+        $updatedResponse = ApigeeService::put("{$accessUrl}/apps/{$app->name}", [
+            "name" => $app->name,
+            'attributes' => ApigeeService::formatToApigeeAttributes($appAttributes),
+            "callbackUrl" => $app->url ?? '',
+        ]);
+
+        if ($updatedResponse->failed()) {
+            $reasonMsg = $updatedResponse['message'] ?? 'There was a problem updating your app. Please try again later.';
+
+            if ($request->ajax()) {
+                return response()->json(['response' => "error:{$reasonMsg}"], $updatedResponse->status());
+            }
+
+            return redirect()->back()->with('alert', "error:{$reasonMsg}");
+        }
+
+        $attributes = ApigeeService::formatAppAttributes($updatedResponse['attributes']);
+
+        $attributesWithoutSpaces = array_combine(array_keys($attributes), $attributes);
+
+
+        $app->update(['attributes' =>  $attributesWithoutSpaces]);
+
+        if ($request->ajax()) {
+            return response()->json(['attributes' => $attributesWithoutSpaces]);
+        }
+    }*/
+    public function updateCustomAttributes(App $app, AppAttributesRequest $request)
+    {
+        $validated = $request->validated();
+        $attributes = $validated['attribute'];
+
         $appAttributes = $app->attributes;
 
         $previousCustomAttributes = $app->filterCustomAttributes($appAttributes);
@@ -592,7 +716,6 @@ class AppController extends Controller
             return response()->json(['attributes' => $attributesWithoutSpaces]);
         }
     }
-
     /**
      * Gets the credentials.
      *
