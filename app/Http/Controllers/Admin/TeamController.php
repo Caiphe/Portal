@@ -25,6 +25,7 @@ use App\Http\Helpers\Teams\TeamsCompanyTrait;
 use App\Http\Requests\Teams\RoleUpdateRequest;
 use App\Http\Requests\Teams\Invites\LeavingRequest;
 
+
 class TeamController extends Controller
 {
     use  InviteRequests, InviteActions, TeamsCompanyTrait, CountryTraits;
@@ -43,7 +44,7 @@ class TeamController extends Controller
 
         $teams = Team::with(['apps', 'users'])
             ->when(!$currentUser->hasRole('admin') && $currentUser->hasRole('opco'), function ($query) use ($currentUser) {
-                $query->whereHas('country', fn ($q) => $q->whereIn('code', $currentUser->responsibleCountries()->pluck('code')->toArray()));
+                $query->whereHas('country', fn($q) => $q->whereIn('code', $currentUser->responsibleCountries()->pluck('code')->toArray()));
             })
             ->when($request->has('q'), function ($q) use ($request) {
                 $query = "%" . $request->q . "%";
@@ -57,8 +58,8 @@ class TeamController extends Controller
             ->orderBy('updated_at', 'desc')
             ->paginate($numberPerPage);
 
-        if($request->ajax()) {
-            return response() 
+        if ($request->ajax()) {
+            return response()
                 ->view('templates.admin.teams.data', [
                     'teams' => $teams,
                     'countries' => $this->getCountry(),
@@ -112,12 +113,18 @@ class TeamController extends Controller
      * Store a new team based on the provided request.
      *
      * @param TeamRequest $request The request containing the team data.
-     * @return RedirectResponse Redirects to the team index page.
+     * @return JsonResponse Redirects to the team index page.
      */
-    public function store(TeamRequest $request): RedirectResponse
+    public function store(TeamRequest $request): JsonResponse
     {
+        if (Team::where('name', $request->name)->exists()) {
+            abort(422, 'Team name already exists');
+        }
+
+        // Save or perform any logic with validated data
         $this->storeTeam($request);
-        return redirect()->route('admin.team.index');
+
+        return response()->json(['success' => true], 200);
     }
 
     /**
