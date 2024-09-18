@@ -210,7 +210,7 @@
                                     <span class="attribute-type">{{ $attributeType }}</span>
                                 </td>
                                 <td class="action-row">
-                                    <a href="#">
+                                    <a class="btn-show-edit-attribute-modal" style="cursor: pointer" data-edit-id="{{ $app->aid }}" >
                                         @svg('edit')
                                         Edit
                                     </a>

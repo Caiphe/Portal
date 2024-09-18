@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="{{ mix('/css/templates/admin/index.css') }}">
     <link rel="stylesheet" href="{{ mix('/css/templates/admin/dashboard/index.css') }}">
     <link rel="stylesheet" href="{{ mix('/css/templates/admin/dashboard/custom-attribute.css') }}">
+
 @endpush
 
 @section('title', 'Applications')
@@ -68,4 +69,5 @@
 @push('scripts')
 <script src="{{ mix('/js/templates/admin/dashboard/index.js') }}" defer></script>
 <script src="{{ mix('/js/templates/admin/dashboard/app-custom-attribute.js') }}" defer></script>
+<script src="{{ mix('/js/templates/admin/dashboard/app-edit-custom-attribute.js') }}" defer></script>
 @endpush

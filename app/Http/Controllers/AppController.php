@@ -13,6 +13,8 @@ use App\Product;
 use App\Mail\NewApp;
 use App\Mail\UpdateApp;
 use App\Mail\GoLiveMail;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
 use App\Mail\TeamAppCreated;
 use Illuminate\Http\Request;
@@ -591,18 +593,20 @@ class AppController extends Controller
 
         return response()->json(['success' => true], 200);
     }
-    protected function formatForApigee($attributes)
+
+    /**
+     * @param $attributes
+     * @return array
+     */
+    protected function formatForApigee($attributes): array
     {
-        // Initialize an empty array for formatted attributes
         $formattedAttributes = [];
 
-        // Ensure $attributes is an array before iterating
         if (is_array($attributes)) {
             foreach ($attributes as $type => $items) {
                 if (is_array($items)) {
                     foreach ($items as $item) {
                         if (is_array($item)) {
-                            // Merge each item into the formatted attributes
                             $formattedAttributes = array_merge($formattedAttributes, $item);
                         }
                     }
@@ -612,9 +616,15 @@ class AppController extends Controller
 
         return $formattedAttributes;
     }
-    /*public function saveCustomAttributeFromApigee(App $app, Request $request)
+
+
+    /**
+     * @param App $app
+     * @param Request $request
+     * @return JsonResponse|void
+     */
+    public function saveCustomAttributeFromApigee(App $app, Request $request)
     {
-        dd("hi 1");
         $apigeeAttributes = ApigeeService::getApigeeAppAttributes($app);
         $attrs= ApigeeService::formatToApigeeAttributes($apigeeAttributes);
         $attributes = ApigeeService::formatAppAttributes($attrs);
@@ -629,10 +639,15 @@ class AppController extends Controller
                 'listHtml' => view('partials.custom-attributes.list', ['app' => $app])->render()
             ]);
         }
-    }*/
+    }
 
-    //Todo - refactor this method
-   /* public function updateCustomAttributes(App $app, AppAttributesRequest $request)
+
+    /**
+     * @param App $app
+     * @param AppAttributesRequest $request
+     * @return JsonResponse|RedirectResponse|void
+     */
+    /*public function updateCustomAttributes(App $app, AppAttributesRequest $request)
     {
         $validated = $request->validated();
         $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
@@ -676,46 +691,100 @@ class AppController extends Controller
     }*/
     public function updateCustomAttributes(App $app, AppAttributesRequest $request)
     {
+        // Validate the form data
         $validated = $request->validated();
-        $attributes = $validated['attribute'];
+        $newAttributes = $validated['attribute'];
 
-        $appAttributes = $app->attributes;
+        // Retrieve existing attributes from the app
+        $existingAttributes = is_array($app->attributes)
+            ? $app->attributes
+            : json_decode($app->attributes, true) ?? [];
 
-        $previousCustomAttributes = $app->filterCustomAttributes($appAttributes);
-        $appAttributes = array_diff($appAttributes, $previousCustomAttributes);
-        $appAttributes = array_merge($appAttributes, $app->filterCustomAttributes($attributes));
+        // Merge new attributes with existing ones
+        $updatedAttributes = array_merge($existingAttributes, $newAttributes);
 
+        // Modify specific attributes if necessary
+        if (isset($existingAttributes['test'])) {
+            $existingAttributes['test'] = 'new value'; // Update the "test" key with a new value
+        }
+
+        // Format attributes for Apigee
+        $apigeeAttributes = $this->formatForApigee($updatedAttributes);
+
+        // Get team or developer details
         $team = $app->team ?? null;
-        $developerEmail = $app->developer->email;
+        $developer = $app->developer ?? null;
+
+        if (!$developer) {
+            $reasonMsg = 'Developer information is missing.';
+            return response()->json([
+                'success' => false,
+                'message' => $reasonMsg
+            ], 400);
+        }
+
+        $developerEmail = $developer->email;
         $accessUrl = $team ? "companies/{$team->username}" : "developers/{$developerEmail}";
 
+        // Send updated attributes to Apigee
         $updatedResponse = ApigeeService::put("{$accessUrl}/apps/{$app->name}", [
             "name" => $app->name,
-            'attributes' => ApigeeService::formatToApigeeAttributes($appAttributes),
-            "callbackUrl" => $app->url ?? '',
+            'attributes' => ApigeeService::formatToApigeeAttributes($apigeeAttributes),
         ]);
 
-        if ($updatedResponse->failed()) {
-            $reasonMsg = $updatedResponse['message'] ?? 'There was a problem updating your app. Please try again later.';
+        if ($updatedResponse['success']) {
+            // Update attributes in the local database
+            $app->update(['attributes' => $updatedAttributes]);
 
-            if ($request->ajax()) {
-                return response()->json(['response' => "error:{$reasonMsg}"], $updatedResponse->status());
-            }
-
-            return redirect()->back()->with('alert', "error:{$reasonMsg}");
-        }
-
-        $attributes = ApigeeService::formatAppAttributes($updatedResponse['attributes']);
-
-        $attributesWithoutSpaces = array_combine(array_keys($attributes), $attributes);
-
-
-        $app->update(['attributes' =>  $attributesWithoutSpaces]);
-
-        if ($request->ajax()) {
-            return response()->json(['attributes' => $attributesWithoutSpaces]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Attributes successfully updated',
+                'attributes' => $updatedAttributes // Return updated attributes
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update attributes in Apigee',
+            ], 500);
         }
     }
+
+    public function getCustomAttributes(App $app)
+    {
+        $attributes = is_array($app->attributes)
+            ? $app->attributes
+            : json_decode($app->attributes, true) ?? [];
+
+        // Flatten attributes by ignoring the type (like "string")
+        $flattenedAttributes = $this->flattenAttributes($attributes);
+
+        return response()->json([
+            'success' => true,
+            'attributes' => $flattenedAttributes // Send back flattened attributes
+        ]);
+    }
+
+// Helper function to flatten attributes
+    private function flattenAttributes(array $attributes): array
+    {
+        $flattened = [];
+
+        foreach ($attributes as $key => $value) {
+            // If value is a nested array, handle it
+            if (is_array($value) && isset($value[0])) {
+                foreach ($value[0] as $innerKey => $innerValue) {
+                    // Add only the key-value pair without the type (e.g. "string")
+                    $flattened[$innerKey] = $innerValue;
+                }
+            } else {
+                // Handle simple key-value pairs like {"Country": "za"}
+                $flattened[$key] = $value;
+            }
+        }
+
+        return $flattened;
+    }
+
     /**
      * Gets the credentials.
      *
