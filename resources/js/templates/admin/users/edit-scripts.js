@@ -203,6 +203,8 @@ if(requestDeletionBtn){
                 });
             } else if(xhr.status === 400){
                 addAlert('error', 'User deletion request already exists.');
+            }else if(xhr.status === 405){
+                addAlert('warning', 'Please remove user from the the team (s) before requesting the deletion.');
             }else {
                 var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 

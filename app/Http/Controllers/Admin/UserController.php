@@ -166,6 +166,15 @@ class UserController extends Controller
         $privateProducts = Product::where('access', 'private')->pluck('display_name', 'pid');
         $order = 'desc';
 
+        $teamsName = [];
+        if($user->teams){
+            foreach($user->teams as $team){
+                if($team->owner_id === $user->id){
+                    $teamsName[] = $team->name;
+                }
+            }
+        }
+
         $userTwoFaRequest = TwofaResetRequest::where(['user_id' => $user->id, 'approved_by' => null])->first();
 
         if ($request->has('sort')) {
@@ -203,7 +212,8 @@ class UserController extends Controller
             'userAssignedProducts' => $user->assignedProducts->pluck('pid')->toArray(),
 			'user_twofa_reset_request' => $userTwoFaRequest,
 			'adminRoles' => array_unique(explode(',', $currentUser->getRolesListAttribute())),
-            'deletionRequest' => UserDeletionRequest::where('user_email', $user->email)->whereNull('approved_by')->first()
+            'deletionRequest' => UserDeletionRequest::where('user_email', $user->email)->whereNull('approved_by')->first(),
+            'isOwnerofTeams' => $teamsName,
         ]);
     }
 
@@ -294,6 +304,20 @@ class UserController extends Controller
 
     public function requestUserDeletion(User $user)
     {
+        if($user->teams){
+            $teamsName = [];
+
+            foreach($user->teams as $team){
+                if($team->owner_id === $user->id){
+                    $teamsName[] = $team->name;
+                }
+            }
+
+            if(count($teamsName)){
+                return response()->json(['teams' => $teamsName ,'success' => false, 'code' => 405], 405);
+            }
+        }
+
         $requestedBy = auth()->user()->full_name;
 		$adminUsers = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))->pluck('email')->toArray();
         $usersCountries = $user->countries->pluck('name')->toArray();
@@ -373,7 +397,7 @@ class UserController extends Controller
         }
 
         // Delete users teams / and delete apps associated with the team
-        if($user->team){
+        if($user->teams){
             $user->team()->detach();
 
             foreach($user->team as $team){
