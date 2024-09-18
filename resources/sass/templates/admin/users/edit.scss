@@ -473,3 +473,22 @@ button.show-password {
         margin-bottom: 40px;
     }
 }
+
+.team-owner-message{
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 0px;
+}
+
+.user-teams-list{
+    padding: 0;
+    margin: 0;
+
+    li{
+        margin-bottom: -3px;
+        padding: 0;
+        font-size: 14px;
+        margin-left: 16px;
+        line-height: 13px;
+    }
+}
