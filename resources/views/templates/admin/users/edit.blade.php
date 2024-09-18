@@ -66,6 +66,16 @@
             Are you sure you want to request a deletion of <strong> {{ $user->email }} </strong> ? <br/>  
             A super admin will be notified.
         </span>
+
+        @if(count($isOwnerofTeams) > 0)
+        <p class="team-owner-message">Please delete or remove the user from below team (s) before requesting the deletion :</p>
+        <ul class="user-teams-list">
+            @foreach($isOwnerofTeams as $team)
+                <li>{{ $team }}</li>
+            @endforeach
+        </ul>
+        @endif
+
     </div>
 
     <div class="bottom-shadow-container button-container">
