@@ -396,30 +396,17 @@ class UserController extends Controller
             $user->OpcoRoleRequest()->delete();
         }
 
-        // Delete users teams / and delete apps associated with the team
+        // Delete users team's invites
+        $teamsInvites = TeamInvite::where('user_id', $user->id)->get();
+        if($teamsInvites){
+            $teamsInvites->each->delete();
+        }
+
+        // Remove a user from the team
         if($user->teams){
-            $user->team()->detach();
-
-            foreach($user->team as $team){
-                // Delete team apps
-                $appNamesToDelete = App::where('team_id', $team->id)->pluck('name')->toArray();
-                if($appNamesToDelete) {
-                    App::whereIn('name', $appNamesToDelete)->delete();
-                }
-
-                // Delete team invites if any
-                $teamsInvites = TeamInvite::where('team_id', $team->id)->get();
-                if($teamsInvites){
-                    $teamsInvites->each->delete();
-                }
-
-                // removes members from the team
-                $teamMembers = $team->users->pluck('id')->toArray();
-                if($teamMembers){
-                    $team->users()->detach($teamMembers);
-                }
-
-                $team->delete();
+            foreach($user->teams as $team){
+                ApigeeService::removeDeveloperFromCompany($team, $user);
+                $team->detach();               
             }
         }
 

@@ -338,8 +338,12 @@ function confirmStatusChange(ev) {
 }
 
 //User Verification
-document.querySelector('#user-verify-btn').addEventListener('click', showUserVerificationModal);
+var userVerificationBtn = document.querySelector('#user-verify-btn');
 var verifyUserModal = document.querySelector('.verify-user-modal');
+
+if(userVerificationBtn){
+    userVerificationBtn.addEventListener('click', showUserVerificationModal)
+}
 
 function showUserVerificationModal() {
     verifyUserModal.classList.add('show');

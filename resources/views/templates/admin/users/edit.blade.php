@@ -68,7 +68,7 @@
         </span>
 
         @if(count($isOwnerofTeams) > 0)
-        <p class="team-owner-message">Remove the user from these teams before requesting the deletion :</p>
+        <p class="team-owner-message">Please delete or remove the user from below team (s) before requesting the deletion :</p>
         <ul class="user-teams-list">
             @foreach($isOwnerofTeams as $team)
                 <li>{{ $team }}</li>
