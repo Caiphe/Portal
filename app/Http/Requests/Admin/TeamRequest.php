@@ -43,4 +43,20 @@ class TeamRequest extends FormRequest
         ];
     }
 
+    /**
+     * Prepare the data for validation.
+     *s
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'name' => htmlspecialchars($this->name, ENT_NOQUOTES),
+            'url' => htmlspecialchars($this->url, ENT_NOQUOTES),
+            'contact' => htmlspecialchars($this->contact, ENT_NOQUOTES),
+            'country' => htmlspecialchars($this->country, ENT_NOQUOTES),
+            'description' => htmlspecialchars($this->description, ENT_NOQUOTES),
+        ]);
+    }
+
 }
