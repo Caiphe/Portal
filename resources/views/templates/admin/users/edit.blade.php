@@ -68,7 +68,9 @@
         </span>
 
         @if(count($isOwnerofTeams) > 0)
-        <p class="team-owner-message">Please delete or remove the user from below team (s) before requesting the deletion :</p>
+        <p class="team-owner-message">
+            User is owner of below teams ,please delete the team (s) or remove the user from the team (s) before requesting the deletion :
+        </p>
         <ul class="user-teams-list">
             @foreach($isOwnerofTeams as $team)
                 <li>{{ $team }}</li>
@@ -83,6 +85,7 @@
             @csrf
             <input type="hidden" name="user" value="{{ $user->id }}" />
             <button type="submit" id="confirm-user-deletion-request-btn" class="btn primary">Confirm</button>
+            <button type="button" class="cancel" onclick="closeDialogBox(this);">Cancel</button>
         </form>
     </div>
 </x-dialog-box>
