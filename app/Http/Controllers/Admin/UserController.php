@@ -166,6 +166,15 @@ class UserController extends Controller
         $privateProducts = Product::where('access', 'private')->pluck('display_name', 'pid');
         $order = 'desc';
 
+        $teamsName = [];
+        if($user->teams){
+            foreach($user->teams as $team){
+                if($team->owner_id === $user->id){
+                    $teamsName[] = $team->name;
+                }
+            }
+        }
+
         $userTwoFaRequest = TwofaResetRequest::where(['user_id' => $user->id, 'approved_by' => null])->first();
 
         if ($request->has('sort')) {
@@ -203,7 +212,8 @@ class UserController extends Controller
             'userAssignedProducts' => $user->assignedProducts->pluck('pid')->toArray(),
 			'user_twofa_reset_request' => $userTwoFaRequest,
 			'adminRoles' => array_unique(explode(',', $currentUser->getRolesListAttribute())),
-            'deletionRequest' => UserDeletionRequest::where('user_email', $user->email)->whereNull('approved_by')->first()
+            'deletionRequest' => UserDeletionRequest::where('user_email', $user->email)->whereNull('approved_by')->first(),
+            'isOwnerofTeams' => $teamsName,
         ]);
     }
 
@@ -294,6 +304,20 @@ class UserController extends Controller
 
     public function requestUserDeletion(User $user)
     {
+        if($user->teams){
+            $teamsName = [];
+
+            foreach($user->teams as $team){
+                if($team->owner_id === $user->id){
+                    $teamsName[] = $team->name;
+                }
+            }
+
+            if(count($teamsName)){
+                return response()->json(['teams' => $teamsName ,'success' => false, 'code' => 405], 405);
+            }
+        }
+
         $requestedBy = auth()->user()->full_name;
 		$adminUsers = User::whereHas('roles', fn ($q) => $q->where('name', 'Admin'))->pluck('email')->toArray();
         $usersCountries = $user->countries->pluck('name')->toArray();
@@ -372,30 +396,17 @@ class UserController extends Controller
             $user->OpcoRoleRequest()->delete();
         }
 
-        // Delete users teams / and delete apps associated with the team
-        if($user->team){
-            $user->team()->detach();
+        // Delete users team's invites
+        $teamsInvites = TeamInvite::where('user_id', $user->id)->get();
+        if($teamsInvites){
+            $teamsInvites->each->delete();
+        }
 
-            foreach($user->team as $team){
-                // Delete team apps
-                $appNamesToDelete = App::where('team_id', $team->id)->pluck('name')->toArray();
-                if($appNamesToDelete) {
-                    App::whereIn('name', $appNamesToDelete)->delete();
-                }
-
-                // Delete team invites if any
-                $teamsInvites = TeamInvite::where('team_id', $team->id)->get();
-                if($teamsInvites){
-                    $teamsInvites->each->delete();
-                }
-
-                // removes members from the team
-                $teamMembers = $team->users->pluck('id')->toArray();
-                if($teamMembers){
-                    $team->users()->detach($teamMembers);
-                }
-
-                $team->delete();
+        // Remove a user from the team
+        if($user->teams){
+            foreach($user->teams as $team){
+                ApigeeService::removeDeveloperFromCompany($team, $user);
+                $team->detach();               
             }
         }
 
