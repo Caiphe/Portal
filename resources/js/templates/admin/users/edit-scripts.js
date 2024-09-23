@@ -203,6 +203,8 @@ if(requestDeletionBtn){
                 });
             } else if(xhr.status === 400){
                 addAlert('error', 'User deletion request already exists.');
+            }else if(xhr.status === 405){
+                addAlert('warning', 'Please remove user from the the team (s) before requesting the deletion.');
             }else {
                 var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
 
@@ -336,8 +338,12 @@ function confirmStatusChange(ev) {
 }
 
 //User Verification
-document.querySelector('#user-verify-btn').addEventListener('click', showUserVerificationModal);
+var userVerificationBtn = document.querySelector('#user-verify-btn');
 var verifyUserModal = document.querySelector('.verify-user-modal');
+
+if(userVerificationBtn){
+    userVerificationBtn.addEventListener('click', showUserVerificationModal)
+}
 
 function showUserVerificationModal() {
     verifyUserModal.classList.add('show');
