@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', function () {
         attributeData[name] = value;  // Dynamically create key-value pair
 
         // Send the PUT request to the backend
-        fetch(`/admin/apps/${appAid}/save-custom-attributes`, {
+        fetch(`/admin/apps/${appAid}/custom-attributes/update`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

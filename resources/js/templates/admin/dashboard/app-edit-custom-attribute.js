@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     let appAid = null;
-    let tags = []; // Store tags for number type
 
     // Function to initialize event listeners
     function initializeEventListeners() {
@@ -10,77 +9,118 @@ document.addEventListener('DOMContentLoaded', function () {
         container.addEventListener('click', function (event) {
             if (event.target.matches('.btn-show-edit-attribute-modal')) {
                 appAid = event.target.getAttribute('data-edit-id');
-                const editCustomAttributeModal = document.getElementById(`edit-custom-attributes-${appAid}`);
+                const attributeData = JSON.parse(event.target.getAttribute('data-attribute'));
 
-                if (editCustomAttributeModal) {
-                    editCustomAttributeModal.classList.add('show');
-                    fetchAttributes(appAid, editCustomAttributeModal); // Fetch and populate attributes
-                } else {
-                    console.error(`Modal with id custom-attributes-${appAid} not found`);
-                }
+                openEditAttributeDialog(attributeData);  // Open modal and pass attribute data
             }
         });
     }
 
-    // Fetch existing attributes and populate the modal
-    function fetchAttributes(appAid, modal) {
-        fetch(`/apps/${appAid}/custom-attributes`, {
-            headers: {
-                'X-CSRF-TOKEN': csrfToken
+    // Function to open the modal and populate it with attribute fields
+    function openEditAttributeDialog(attributes) {
+        // Clear the existing form fields
+        const attributeContainer = document.getElementById('attribute-fields-container');
+        attributeContainer.innerHTML = '';
+
+        // Loop through the attributes object and create fields
+        for (const [key, value] of Object.entries(attributes)) {
+            // Create a form group for each key-value pair
+            const formGroup = document.createElement('div');
+            formGroup.classList.add('form-group');
+
+            // Create a label
+            const label = document.createElement('label');
+            label.textContent = key;
+            formGroup.appendChild(label);
+
+            // Create the input field based on the value's type
+            let input;
+            if (typeof value === 'boolean') {
+                input = document.createElement('input');
+                input.type = 'checkbox';
+                input.checked = value; // Set the checkbox value
+            } else {
+                input = document.createElement('input');
+                input.type = 'text';
+                input.value = value; // Set the text field value
             }
+
+            // Set the name attribute to match the key
+            input.classList.add('form-control');
+            input.name = key;
+            formGroup.appendChild(input);
+
+
+            attributeContainer.appendChild(formGroup);
+        }
+
+        // Show the modal
+        const dialog = document.getElementById(`edit-custom-attributes-${appAid}`);
+        if (dialog) {
+            dialog.classList.add('show');
+        }
+    }
+
+    // Update attributes based on identifier
+    function updateAttributes(appAid) {
+        const attributeFieldsContainer = document.querySelector('#attribute-fields-container');
+        const inputFields = attributeFieldsContainer.querySelectorAll('input');
+        const payload = { attributes: {} };
+
+        // Loop through input fields and build the payload
+        inputFields.forEach(input => {
+            const key = input.name;
+            let value;
+
+            if (input.type === 'checkbox') {
+                value = input.checked;
+            } else {
+                value = input.value;
+            }
+
+            payload.attributes[key] = value;
+        });
+
+        fetch(`/admin/apps/${appAid}/custom-attributes/update`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
         })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    populateModal(modal, data.attributes);
+                    console.log('Attributes successfully updated:', data.attributes);
+                    // Handle success, close the modal, or refresh the table data
+                    const dialog = document.getElementById(`edit-custom-attributes-${appAid}`);
+                    dialog.classList.remove('show');
                 } else {
-                    console.error('Error fetching attributes:', data.message);
+                    console.error('Failed to update attributes:', data.message);
                 }
             })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+            .catch(error => console.error('Error:', error));
     }
 
-    // Populate the modal with pre-existing data
-    function populateModal(modal, attributes) {
-        const nameField = modal.querySelector('#name');
-        const valueField = modal.querySelector('#value');
-        const numberField = modal.querySelector('#number-value');
-        const booleanField = modal.querySelector('#boolean-value');
-        const typeSelect = modal.querySelector('#type');
-        const submitButton = modal.querySelector('.btn-confirm');
+    // Sort table based on column index
+    function sortTable(table, columnIndex, isNumeric = false) {
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
 
-        // Iterate over the flattened attributes
-        for (const [name, value] of Object.entries(attributes)) {
-            // Set the name field to the key (e.g. "vvv", "Country")
-            nameField.value = name;
+        rows.sort((rowA, rowB) => {
+            const cellA = rowA.children[columnIndex].innerText.trim();
+            const cellB = rowB.children[columnIndex].innerText.trim();
 
-            // Set the value field based on the type of value
-            if (typeof value === 'string') {
-                // Simple key-value pair, use string type
-                typeSelect.value = 'string';
-                valueField.value = value;
-                valueField.style.display = 'block';
-
-            } else if (typeof value === 'boolean') {
-                // Boolean value, set boolean type
-                typeSelect.value = 'boolean';
-                booleanField.checked = value;
-                booleanField.style.display = 'block';
-
-            } else if (Array.isArray(value)) {
-                // Array type (e.g. CSV string array)
-                typeSelect.value = 'csv string array';
-                numberField.value = value.join(', '); // Assuming CSV array of values
-                numberField.style.display = 'block';
-                updateTagDisplay(modal, value);
+            if (isNumeric) {
+                return parseFloat(cellA) - parseFloat(cellB);
             }
-        }
+            return cellA.localeCompare(cellB);
+        });
 
-        // Revalidate the form
-        checkIfFormIsValid(modal, nameField, valueField, numberField, booleanField, [], submitButton);
+        rows.forEach(row => tbody.appendChild(row)); // Append rows back in sorted order
     }
 
+    // Initialize all event listeners
     initializeEventListeners();
 });

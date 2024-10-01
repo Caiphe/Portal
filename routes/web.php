@@ -34,9 +34,13 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
 
 	Route::put('apps/{app:slug}', 'AppController@update')->name('app.update');
 	Route::put('apps/{app:aid}/custom-attributes', 'AppController@updateCustomAttributes')->name('app.update.attributes');
-    Route::get('apps/{app:aid}/custom-attributes', 'AppController@getCustomAttributes')->name('app.get.customAttributes');
 
+    Route::get('apps/{app:aid}/list-custom-attributes', 'AppController@getCustomAttributes')->name('app.get.customAttributes');
 
+    //Todo fix
+    //Update
+    Route::post('admin/apps/{app:aid}/custom-attributes/update', 'AppController@updateCustomAttributes')->name('app.custom-attribute-update.attributes');
+    //Save
     Route::post('admin/apps/{app:aid}/save-custom-attributes', 'AppController@saveAppCustomAttributeFromApigee')->name('app.save-custom-attributes');
 
 	Route::put('admin/apps/{app:aid}/custom-attributes/save', 'AppController@saveCustomAttributeFromApigee')->name('app.save.attributes');

@@ -163,16 +163,16 @@
                     <table class="app-attribute-table">
                         <thead class="ca-thead">
                         <tr class="ca-align-left">
-                            <th class="custom-atrribute--table_th">
+                            <th class="custom-attribute--table_th">
                                 <a href="#">Name @svg('chevron-sorter')</a>
                             </th>
-                            <th class="custom-atrribute--table_th">
+                            <th class="custom-attribute--table_th not-on-mobile">
                                 <a href="#">Value @svg('chevron-sorter')</a>
                             </th>
-                            <th class="custom-atrribute--table_th">
+                            <th class="custom-attribute--table_th not-on-mobile">
                                 <a href="#">Type @svg('chevron-sorter')</a>
                             </th>
-                            <th class="custom-atrribute--table_th">
+                            <th class="custom-attribute--table_th">
                                 <a href="#">Actions @svg('chevron-sorter')</a>
                             </th>
                         </tr>
@@ -185,14 +185,11 @@
 
                         @forelse ($filteredAttributes as $key => $value)
                             @php
-
                                 if (is_array($value)) {
-
                                     $displayName = key($value[0]);
                                     $displayValue = $value[0][$displayName];
                                     $attributeType = ucfirst($key) === "Number" ? "CSV String Array" : ucfirst($key); // Use key as the type
                                 } else {
-
                                     $displayName = $key;
                                     $displayValue = $value;
                                     $attributeType = 'String'; // Default type to "String"
@@ -210,27 +207,25 @@
                                     <span class="attribute-type">{{ $attributeType }}</span>
                                 </td>
                                 <td class="action-row">
-                                    <a class="btn-show-edit-attribute-modal" style="cursor: pointer" data-edit-id="{{ $app->aid }}" >
-                                        @svg('edit')
-                                        Edit
+                                    <a class="btn-show-edit-attribute-modal"
+                                       style="cursor: pointer"
+                                       data-edit-id="{{ $app->aid }}"
+                                       data-attribute='@json(["name" => $displayName, "value" => $displayValue, "type" => $attributeType])'>
+                                        @svg('edit') Edit
                                     </a>
                                     <a href="#">
-                                        @svg('delete')
-                                        Delete
+                                        @svg('delete') Delete
                                     </a>
                                 </td>
                             </tr>
-                        </tbody>
                         @empty
-                            <div  class="no-custom-attribute">No custom attribute added yet.</div>
+                            <tr>
+                                <td colspan="4" class="no-custom-attribute">No custom attribute added yet.</td>
+                            </tr>
                         @endforelse
-
+                        </tbody>
                     </table>
                 </div>
-
-
-
-
 
                 <div class=main-ca>
                     <div class="main-ca__heading">
@@ -271,7 +266,7 @@
                                 <td class="action-row">
                                     <a href="#">
                                         @svg('edit')
-                                        Edit
+                                        Edit..
                                     </a>
                                     <a href="#">
                                         @svg('delete')
