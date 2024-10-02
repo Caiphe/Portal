@@ -11,18 +11,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
         container.addEventListener('click', function (event) {
 
-            if (event.target.matches('.btn-show-attribute-modal')) {
-                appAid = event.target.getAttribute('data-id');
-                const addCustomAttributeModal = document.getElementById(`custom-attributes-${appAid}`);
+            if (event.target.matches('.btn-show-reserved-attribute-modal')) {
+                const reservedAttributeId = event.target.getAttribute('reserved-data-id');
+                const addReservedAttributeModal = document.getElementById(`reserved-attributes-${reservedAttributeId}`);
 
-                if (addCustomAttributeModal) {
-                    addCustomAttributeModal.classList.add('show');
-                    setupModal(addCustomAttributeModal); // Initialize modal fields and listeners
+                if (addReservedAttributeModal) {
+                    addReservedAttributeModal.classList.add('show');
+                    setupModal(addReservedAttributeModal);
                 } else {
-                    console.error(`Modal with id custom-attributes-${appAid} not found`);
+                    console.error(`Modal with id reserved-attributes-${reservedAttributeId} not found`);
                 }
             }
-
         });
     }
 

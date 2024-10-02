@@ -541,17 +541,19 @@ class AppController extends Controller
     {
         // Validate the incoming request
         $validated = $request->validated();
+
         $newAttributes = $validated['attribute'];
 
-        // Ensure existingAttributes is an array or initialize it as an empty array
+
+        // Ensure existing attributes are an array or initialize as an empty array
         $existingAttributes = is_array($app->attributes)
             ? $app->attributes
             : json_decode($app->attributes, true) ?? [];
 
-        // Merge the new attributes into the existing ones
+        // Merge the new attributes into the existing ones (overriding existing keys)
         $updatedAttributes = array_merge($existingAttributes, $newAttributes);
 
-        // Format attributes for Apigee
+        // Format attributes for Apigee (if needed for Apigee API structure)
         $apigeeAttributes = $this->formatForApigee($updatedAttributes);
 
         $team = $app->team ?? null;
@@ -567,14 +569,17 @@ class AppController extends Controller
 
         $developerEmail = $developer->email;
 
+        // Determine the correct access URL for Apigee
         $accessUrl = $team ? "companies/{$team->username}" : "developers/{$developerEmail}";
 
+        // Update the app on Apigee
         $updatedResponse = ApigeeService::put("{$accessUrl}/apps/{$app->name}", [
             "name" => $app->name,
-            'attributes' => ApigeeService::formatToApigeeAttributes($apigeeAttributes),
+            'attributes' => ApigeeService::formatToApigeeAttributes($apigeeAttributes), // Send formatted attributes to Apigee
             "callbackUrl" => $app->url ?? '',
         ]);
 
+        // Handle the response from Apigee
         if ($updatedResponse->failed()) {
             $reasonMsg = $updatedResponse['message'] ?? 'There was a problem updating your app. Please try again later.';
 
@@ -588,12 +593,11 @@ class AppController extends Controller
             return redirect()->back()->with('alert', $reasonMsg);
         }
 
-        // Save the merged data back as JSON into the database
+        // Save the updated attributes directly as JSON (no type-object structure)
         $app->update(['attributes' => $updatedAttributes]);
 
         return response()->json(['success' => true], 200);
     }
-
     /**
      * @param $attributes
      * @return array

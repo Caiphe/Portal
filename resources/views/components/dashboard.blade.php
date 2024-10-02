@@ -149,8 +149,9 @@
 
             </div>
 
-            <!--===================================================================================-->
+            <!--======Attributes Section====================================================================================-->
             <div class="app-custom-attributes">
+                {{--=================Custom Attributes================--}}
                 <div class=main-ca>
                     <div class="main-ca__heading">
                         <span class="customAttributeMain__text">Custome Attributes</span>
@@ -226,13 +227,87 @@
                         </tbody>
                     </table>
                 </div>
-
+                {{--=================Reserved Attributes================--}}
                 <div class=main-ca>
                     <div class="main-ca__heading">
                         <span class="customAttributeMain__text">Reserved Attributes</span>
                         <button class="btn-show-attribute-modal btn-show-reserved-attribute-modal" reserved-data-id="{{ $app->aid }}">
                             Add reseved attribute
                         </button>
+                    </div>
+                </div>
+                <div class="ca-section">
+                    <table class="app-attribute-table">
+                        <thead class="ca-thead">
+                        <tr class="ca-align-left">
+                            <th class="custom-attribute--table_th">
+                                <a href="#">Name @svg('chevron-sorter')</a>
+                            </th>
+                            <th class="custom-attribute--table_th not-on-mobile">
+                                <a href="#">Value @svg('chevron-sorter')</a>
+                            </th>
+                            <th class="custom-attribute--table_th not-on-mobile">
+                                <a href="#">Type @svg('chevron-sorter')</a>
+                            </th>
+                            <th class="custom-attribute--table_th">
+                                <a href="#">Actions @svg('chevron-sorter')</a>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @php
+                            // Filter reserved attributes, specified keys
+                            $filteredAttributes = collect($app->attributes)->only(['AutoRenewAllowed', 'PermittedSenderIDs', 'SenderMSISDN']);
+                        @endphp
+
+                        @forelse ($filteredAttributes as $key => $value)
+                            @php
+                                if (is_array($value)) {
+                                    $displayName = key($value[0]);
+                                    $displayValue = $value[0][$displayName];
+                                    $attributeType = ucfirst($key) === "Number" ? "CSV String Array" : ucfirst($key); // Use key as the type
+                                } else {
+                                    $displayName = $key;
+                                    $displayValue = $value;
+                                    $attributeType = 'String'; // Default type to "String"
+                                }
+                            @endphp
+
+                            <tr class="ca-trow">
+                                <td class="display_name">
+                                    {!! htmlspecialchars($displayName) !!}
+                                </td>
+                                <td class="not-on-mobile">
+                                    {!! htmlspecialchars($displayValue) !!}
+                                </td>
+                                <td class="not-on-mobile">
+                                    <span class="attribute-type">{{ $attributeType }}</span>
+                                </td>
+                                <td class="action-row">
+                                    <a class="btn-show-edit-attribute-modal"
+                                       style="cursor: pointer"
+                                       data-edit-id="{{ $app->aid }}"
+                                       data-attribute='@json(["name" => $displayName, "value" => $displayValue, "type" => $attributeType])'>
+                                        @svg('edit') Edit
+                                    </a>
+                                    <a href="#">
+                                        @svg('delete') Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="no-custom-attribute">No custom attribute added yet.</td>
+                            </tr>
+                        @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                {{--=================System Attributes================--}}
+                <div class=main-ca>
+                    <div class="main-ca__heading">
+                        <span class="customAttributeMain__text">System Attributes</span>
+
                     </div>
                 </div>
                 <div class="ca-section">
@@ -263,15 +338,6 @@
                                     String
                                 </td>
 
-                                <td class="action-row">
-                                    <a href="#">
-                                        @svg('edit')
-                                        Edit..
-                                    </a>
-                                    <a href="#">
-                                        @svg('delete')
-                                        Delete</a>
-                                </td>
                             </tr>
                         @empty
                             <div class="no-custom-attribute">No reserved attribute added yet.</div>
@@ -280,8 +346,7 @@
                     </table>
                 </div>
             </div>
-
-            <!--=====================================================================================-->
+            <!--======End Attribute Section======================================================================================-->
         </div>
 
     </div>
