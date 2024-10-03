@@ -3,7 +3,6 @@
         <div class="attribute-form-container-data">
             @method('POST')
             @csrf
-
             <div class="form-group">
                 <label for="type">Type</label>
                 <select id="type" name="type">

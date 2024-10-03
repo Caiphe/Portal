@@ -185,16 +185,41 @@
                         @endphp
 
                         @forelse ($filteredAttributes as $key => $value)
+
                             @php
-                                if (is_array($value)) {
-                                    $displayName = key($value[0]);
-                                    $displayValue = $value[0][$displayName];
-                                    $attributeType = ucfirst($key) === "Number" ? "CSV String Array" : ucfirst($key); // Use key as the type
-                                } else {
+
+                                    // Initialize display variables
                                     $displayName = $key;
-                                    $displayValue = $value;
                                     $attributeType = 'String'; // Default type to "String"
-                                }
+                                    $displayValue = ''; // Initialize displayValue as an empty string
+
+                                    // Check the type of value
+                                    if (is_array($value)) {
+                                        // If it's an array, use the first element
+                                        $displayValue = isset($value[0]) ? $value[0] : ''; // Ensure we don't access an undefined index
+
+                                        // Check if the first element is a string containing commas
+                                        if (is_string($displayValue) && strpos($displayValue, ',') !== false) {
+                                            $attributeType = 'CSV String Array'; // If it contains commas, treat it as a CSV String Array
+                                        } else {
+                                            $attributeType = ucfirst($key); // Use key as the type otherwise
+                                            $displayValue = is_string($displayValue) ? $displayValue : json_encode($displayValue); // Convert array to JSON string for display if necessary
+                                        }
+                                        if (is_bool($displayValue) && strpos($displayValue, ',') !== false) {
+                                            $attributeType = 'Boolean'; // If it contains commas, treat it as a CSV String Array
+                                        } else {
+                                            $attributeType = ucfirst($key); // Use key as the type otherwise
+                                            $displayValue = is_string($displayValue) ? $displayValue : json_encode($displayValue); // Convert array to JSON string for display if necessary
+                                        }
+                                    } elseif (is_bool($value)) {
+                                        $attributeType = 'boolean'; // Explicitly set type for booleans
+                                        $displayValue = $value ? 'true' : 'false'; // Convert boolean to string for display
+                                    } elseif (is_string($value) && strpos($value, ',') !== false) {
+                                        $attributeType = 'CSV String Array'; // If it contains commas, treat it as a CSV String Array
+                                        $displayValue = $value; // Keep the original string value
+                                    } else {
+                                        $displayValue = is_string($value) ? $value : json_encode($value); // Convert non-string types to JSON string
+                                    }
                             @endphp
 
                             <tr class="ca-trow">

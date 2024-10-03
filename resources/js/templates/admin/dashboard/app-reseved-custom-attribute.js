@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Function to setup the modal
+    // Function to set up the modal
     function setupModal(modal) {
         const nameField = modal.querySelector('#name');
         const valueField = modal.querySelector('#value');

@@ -15,6 +15,7 @@ use App\Mail\UpdateApp;
 use App\Mail\GoLiveMail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use App\Mail\TeamAppCreated;
 use Illuminate\Http\Request;
@@ -56,7 +57,7 @@ class AppController extends Controller
 
         $apps = App::with(['products.countries', 'country', 'developer'])
             ->byUserEmail($user->email)
-            ->when($userTeams, fn ($q) => $q->orWhereIn('team_id', $userTeams->pluck('id')))
+            ->when($userTeams, fn($q) => $q->orWhereIn('team_id', $userTeams->pluck('id')))
             ->orderBy('updated_at', 'desc')
             ->get()
             ->groupBy('status');
@@ -71,13 +72,13 @@ class AppController extends Controller
         ]);
     }
 
-    public function checkAppName (Request $request)
+    public function checkAppName(Request $request)
     {
         $user = $request->user();
         $appName = Str::slug($request->name);
         $appNameCheck = App::where('name', $appName)->where('developer_id', $user->developer_id)->exists();
 
-        if($appNameCheck){
+        if ($appNameCheck) {
             return response()->json(['success' => true], 409);
         }
 
@@ -95,7 +96,7 @@ class AppController extends Controller
         $products = Product::with(['category', 'countries'])
             ->where('category_cid', '!=', 'misc')
             ->basedOnUser($user)
-            ->when($request->has('product'), function($q) use(&$product, $product_sanitized){
+            ->when($request->has('product'), function ($q) use (&$product, $product_sanitized) {
                 $product = Product::with(['countries'])->where('slug', $product_sanitized)->first();
                 abort_if($product === null, 404);
                 $productLocations = $product->countries->pluck('code')->toArray();
@@ -105,17 +106,17 @@ class AppController extends Controller
             ->merge($assignedProducts);
 
         $prodGroup = Product::with(['category', 'countries'])
-			->where('category_cid', '!=', 'misc')
-			->basedOnUser($request->user())
-			->get()
-			->merge($assignedProducts);
+            ->where('category_cid', '!=', 'misc')
+            ->basedOnUser($request->user())
+            ->get()
+            ->merge($assignedProducts);
 
         $locations = $product->locations ?? $products->pluck('locations')->implode(',');
         $locations = array_unique(explode(',', $locations));
         $countries = Country::whereIn('code', $locations)->pluck('name', 'code');
         $products = $products->sortBy('display_name')->groupBy('category.title')->sortKeys();
-		$productGroups = $prodGroup->pluck('group')->unique()->toArray();
-		$productCategories = $prodGroup->pluck('category.title', 'category.slug');
+        $productGroups = $prodGroup->pluck('group')->unique()->toArray();
+        $productCategories = $prodGroup->pluck('category.title', 'category.slug');
 
         return view('templates.apps.create', [
             'productSelected' => $product,
@@ -124,7 +125,7 @@ class AppController extends Controller
             'teams' => $userOwnTeams,
             'countries' => $countries ?? '',
             'user' => $user,
-			'productGroups' => $productGroups
+            'productGroups' => $productGroups
         ]);
     }
 
@@ -132,12 +133,12 @@ class AppController extends Controller
     {
         $user = $request->user();
         $count = App::where('developer_id', auth()->user()->developer_id)
-                ->where('created_at', '>=', now()->startOfDay())
-                ->count();
+            ->where('created_at', '>=', now()->startOfDay())
+            ->count();
 
         $userRoles = array_unique(explode(',', $user->getRolesListAttribute()));
 
-        if($count >= 5 && !in_array('Admin', $userRoles)){
+        if ($count >= 5 && !in_array('Admin', $userRoles)) {
             abort('429');
         }
 
@@ -162,13 +163,13 @@ class AppController extends Controller
         }
 
         $countTeamApps = 0;
-        if($team){
+        if ($team) {
             $countTeamApps = App::where('team_id', $team->id)
                 ->where('created_at', '>=', now()->startOfDay())
                 ->count();
         }
 
-        abort_if($countTeamApps >= 5 , 429, "Action not allowed.");
+        abort_if($countTeamApps >= 5, 429, "Action not allowed.");
 
         $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
         $attributes = ApigeeService::formatToApigeeAttributes($attributes);
@@ -259,7 +260,7 @@ class AppController extends Controller
             event(new TeamAppCreated($team));
 
             $appUsers = $team->users->pluck('id')->toArray();
-            foreach($appUsers as $user){
+            foreach ($appUsers as $user) {
                 Notification::create([
                     'user_id' => $user,
                     'notification' => "New app <strong> {$app->display_name} </strong> has been created under your team <strong> {$team->name} </strong>. Please navigate to your <a href='/apps'>apps</a> to view.",
@@ -303,22 +304,22 @@ class AppController extends Controller
         $user = auth()->user();
         $userTeams = $user->teams()->pluck('id')->toArray();
         $app = App::where('slug', $app)->where(
-            fn ($q) => $q->where('developer_id', auth()->user()->developer_id)
+            fn($q) => $q->where('developer_id', auth()->user()->developer_id)
                 ->orWhereIn('team_id', $userTeams)
         )->firstOrFail();
         $products = Product::with('category')
             ->where('category_cid', '!=', 'misc')
-            ->where(fn ($q) => $q->basedOnUser(auth()->user())->orWhereIn('pid', $app->products->where('environments', '!=', 'sandbox')->pluck('pid')->toArray()))
+            ->where(fn($q) => $q->basedOnUser(auth()->user())->orWhereIn('pid', $app->products->where('environments', '!=', 'sandbox')->pluck('pid')->toArray()))
             ->get();
         $assignedProducts = $user->assignedProducts()->with('category')->get();
 
         $prodGroup = Product::with(['category', 'countries'])
             ->where('category_cid', '!=', 'misc')
-            ->basedOnUser( $user)
+            ->basedOnUser($user)
             ->get()
             ->merge($assignedProducts);
 
-		$productCategories = $prodGroup->pluck('category.title', 'category.slug');
+        $productCategories = $prodGroup->pluck('category.title', 'category.slug');
         $countryCodes = $products->pluck('locations')->implode(',');
         $countries = Country::whereIn('code', explode(',', $countryCodes))->pluck('name', 'code');
         $productGroups = $prodGroup->pluck('group')->unique()->toArray();
@@ -328,8 +329,8 @@ class AppController extends Controller
         $credentials = $app->credentials;
         $selectedProducts = ApigeeService::getLatestCredentials($credentials)['apiProducts'] ?? [];
 
-        if (count($credentials) === 1 && $app->products->filter(fn ($prod) => isset($prod->attributes['ProductionProduct']))->count() > 0) {
-            $selectedProducts = $app->products->map(fn ($prod) => $prod->attributes['ProductionProduct'] ?? $prod->name)->toArray();
+        if (count($credentials) === 1 && $app->products->filter(fn($prod) => isset($prod->attributes['ProductionProduct']))->count() > 0) {
+            $selectedProducts = $app->products->map(fn($prod) => $prod->attributes['ProductionProduct'] ?? $prod->name)->toArray();
         }
 
         return view('templates.apps.edit', [
@@ -348,7 +349,7 @@ class AppController extends Controller
         $user = auth()->user();
         $userTeams = $user->teams()->pluck('id')->toArray();
         $app = App::where('slug', $app)->where(
-            fn ($q) => $q->where('developer_id', $user->developer_id)
+            fn($q) => $q->where('developer_id', $user->developer_id)
                 ->orWhereIn('team_id', $userTeams)
         )->firstOrFail();
 
@@ -361,8 +362,8 @@ class AppController extends Controller
         $products = Product::whereIn('name', $validated['products'])->get();
         $sandboxProducts = is_null($app->live_at) ? $products : $products->diff($app->products);
         $hasSandboxProducts = $sandboxProducts->filter(function ($prod) {
-            return strpos($prod->attributes, 'SandboxProduct') !== false;
-        })->count() > 0;
+                return strpos($prod->attributes, 'SandboxProduct') !== false;
+            })->count() > 0;
         $productGroups = $app->products->groupBy('name')->toArray();
         $products = $products->pluck('attributes', 'name');
         $countriesByCode = Country::pluck('iso', 'code');
@@ -443,17 +444,17 @@ class AppController extends Controller
         ]);
 
         // Notification creation on apps update
-        if($app->team){
+        if ($app->team) {
             $appUsers = $app->team->users->pluck('id')->toArray();
-            if($previewName !== $app->display_name){
-                foreach($appUsers as $user){
+            if ($previewName !== $app->display_name) {
+                foreach ($appUsers as $user) {
                     Notification::create([
                         'user_id' => $user,
                         'notification' => "Your team's App <strong> {$previewName} </strong> has been updated to <strong> {$app->display_name} </strong>. Please navigate to your <a href='/teams'>team</a> for more info",
                     ]);
                 }
-            }else{
-                foreach($appUsers as $user){
+            } else {
+                foreach ($appUsers as $user) {
                     Notification::create([
                         'user_id' => $user,
                         'notification' => "Your team's App <strong> {$app->display_name} </strong> has been updated. Please navigate to your <a href='/teams'>team</a> for more info",
@@ -462,7 +463,7 @@ class AppController extends Controller
             }
         }
 
-        if($app->developer){
+        if ($app->developer) {
             Notification::create([
                 'user_id' => $app->developer->id,
                 'notification' => "Your App <strong> {$app->display_name} </strong> has been updated please navigate to your <a href='/apps'>apps</a> to view the changes",
@@ -509,16 +510,16 @@ class AppController extends Controller
         $userTeams = $user->teams()->pluck('id')->toArray();
 
         $app = App::where('slug', $app)->where(
-            fn ($q) => $q->where('developer_id', auth()->user()->developer_id)
+            fn($q) => $q->where('developer_id', auth()->user()->developer_id)
                 ->orWhereIn('team_id', $userTeams)
         )->firstOrFail();
 
-        if($app->team_id && $app->team_id !== null){
+        if ($app->team_id && $app->team_id !== null) {
             $appUsers = $app->team->users->pluck('id')->toArray();
             $team = $app->team->name;
 
-            if($appUsers){
-                foreach($appUsers as $user){
+            if ($appUsers) {
+                foreach ($appUsers as $user) {
                     Notification::create([
                         'user_id' => $user,
                         'notification' => "An app <strong> {$app->display_name} </strong> from your team <strong> {$team} </strong>  has been deleted.",
@@ -527,7 +528,7 @@ class AppController extends Controller
             }
         }
 
-        $validated = $request->validated() ;
+        $validated = $request->validated();
         $developerEmail = $user->email ?? $app->team->email;
 
         ApigeeService::delete("developers/{$developerEmail}/apps/{$validated['name']}");
@@ -543,7 +544,6 @@ class AppController extends Controller
         $validated = $request->validated();
 
         $newAttributes = $validated['attribute'];
-
 
         // Ensure existing attributes are an array or initialize as an empty array
         $existingAttributes = is_array($app->attributes)
@@ -598,6 +598,7 @@ class AppController extends Controller
 
         return response()->json(['success' => true], 200);
     }
+
     /**
      * @param $attributes
      * @return array
@@ -630,7 +631,7 @@ class AppController extends Controller
     public function saveCustomAttributeFromApigee(App $app, Request $request)
     {
         $apigeeAttributes = ApigeeService::getApigeeAppAttributes($app);
-        $attrs= ApigeeService::formatToApigeeAttributes($apigeeAttributes);
+        $attrs = ApigeeService::formatToApigeeAttributes($apigeeAttributes);
         $attributes = ApigeeService::formatAppAttributes($attrs);
 
         $app->attributes = $attributes;
@@ -704,14 +705,30 @@ class AppController extends Controller
             ? $app->attributes
             : json_decode($app->attributes, true) ?? [];
 
-        // Merge new attributes with existing ones, prioritizing the new attributes
-        $updatedAttributes = array_merge($existingAttributes, $newAttributes);
+        // Loop through new attributes to update them dynamically
+        foreach ($newAttributes as $oldKey => $newValue) {
+            // Check if the oldKey is an existing key
+            if (array_key_exists($oldKey, $existingAttributes)) {
+                // Update the value of the existing key
+                $existingAttributes[$oldKey] = $newValue;
+            } else {
+                // Rename the key if the oldKey is different from newKey
+                foreach ($existingAttributes as $key => $value) {
+                    if ($value === $newValue) {
+                        // If the value already exists, set it with the new key
+                        $existingAttributes[$oldKey] = $existingAttributes[$key]; // Add with old key
+                        unset($existingAttributes[$key]); // Remove the old key
+                        break;
+                    }
+                }
+            }
+        }
 
         // Prepare attributes for Apigee by flattening them
-        $flattenedAttributes = $this->flattenAttributes($updatedAttributes);
+        $flattenedAttributes = $this->flattenAttributes($existingAttributes);
 
         // Convert flattened attributes back to the structure needed for Apigee
-        $apigeeAttributes = ApigeeService::formatToApigeeAttributes($updatedAttributes);
+        $apigeeAttributes = ApigeeService::formatToApigeeAttributes($existingAttributes);
 
         // Get the developer or team details
         $team = $app->team;
@@ -734,9 +751,10 @@ class AppController extends Controller
             'attributes' => $apigeeAttributes,
         ]);
 
-        if ($apigeeResponse['success']) {
-            // Update the local database
-            $app->update(['attributes' => json_encode($updatedAttributes)]);
+        // Check if the response contains the 'success' key
+        if ($apigeeResponse->status()) {
+            // Update the local database with the edited attributes
+            $app->update(['attributes' => $existingAttributes]);
 
             return response()->json([
                 'success' => true,
@@ -745,13 +763,19 @@ class AppController extends Controller
             ]);
         }
 
+        // Log the error response for debugging
+        Log::error('Apigee response error', [
+            'response' => $apigeeResponse,
+            'url' => "{$accessUrl}/apps/{$app->name}",
+        ]);
+
         return response()->json([
             'success' => false,
             'message' => 'Failed to update attributes in Apigee.',
+            'apigee_response' => $apigeeResponse, // Include the actual response for debugging
         ], 500);
     }
-
-// Helper function to flatten attributes
+    // Helper function to flatten attributes
     private function flattenAttributes(array $attributes): array
     {
         $flattened = [];
@@ -799,11 +823,96 @@ class AppController extends Controller
             'count' => $attributeCount, // Include total count of attributes
         ]);
     }
+
+
+    //Todo this code will work for reserved attributes
+   /* public function updateCustomAttributes(App $app, AppAttributesRequest $request)
+    {
+        // Validate the form data
+        $validated = $request->validated();
+        $newAttributes = $validated['attribute'];
+
+        // Retrieve existing attributes from the app, decode if necessary
+        $existingAttributes = is_array($app->attributes)
+            ? $app->attributes
+            : json_decode($app->attributes, true) ?? [];
+
+        // Loop through new attributes and update them dynamically
+        foreach ($newAttributes as $oldKey => $newValue) {
+            if (array_key_exists($oldKey, $existingAttributes)) {
+                // Update the value of the existing key
+                $existingAttributes[$oldKey] = $newValue;
+            } else {
+                // Search for the matching value to rename the key
+                foreach ($existingAttributes as $key => $value) {
+                    if ($value === $newValue) {
+                        $existingAttributes[$newValue] = $existingAttributes[$key]; // Add with new key
+                        unset($existingAttributes[$key]); // Remove the old key
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Prepare attributes for Apigee by flattening them
+        $flattenedAttributes = $this->flattenAttributes($existingAttributes);
+
+        // Convert flattened attributes back to the structure needed for Apigee
+        $apigeeAttributes = ApigeeService::formatToApigeeAttributes($existingAttributes);
+
+        $app->update(['attributes' => $existingAttributes]);
+
+        // Get the developer or team details
+        $team = $app->team;
+        $developer = $app->developer;
+
+        if (!$developer) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Developer information is missing.',
+            ], 400);
+        }
+
+        // Construct the API access URL for Apigee
+        $developerEmail = $developer->email;
+        $accessUrl = $team ? "companies/{$team->username}" : "developers/{$developerEmail}";
+
+        // Send updated attributes to Apigee
+        $apigeeResponse = ApigeeService::put("{$accessUrl}/apps/{$app->name}", [
+            'name' => $app->name,
+            'attributes' => $apigeeAttributes,
+        ]);
+
+        // Check if the response contains the 'success' key
+        if (isset($apigeeResponse['success']) && $apigeeResponse['success']) {
+            // Update the local database with the edited attributes
+            $app->update(['attributes' => json_encode($existingAttributes)]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Attributes successfully updated.',
+                'attributes' => $flattenedAttributes, // Return flattened attributes
+            ]);
+        }
+
+        // Log the error response for debugging
+        \Log::error('Apigee response error', [
+            'response' => $apigeeResponse,
+            'url' => "{$accessUrl}/apps/{$app->name}",
+        ]);
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to update attributes in Apigee.',
+            'apigee_response' => $apigeeResponse, // Include the actual response for debugging
+        ], 500);
+    }*/
+
     /**
      * Gets the credentials.
      *
-     * @param      \App\App                       $app    The application
-     * @param      string                         $type   The type
+     * @param \App\App $app The application
+     * @param string $type The type
      *
      * @return     string|\Illuminate\Http\JsonResponse  The credentials.
      */
@@ -815,16 +924,16 @@ class AppController extends Controller
     /**
      * Request to renew an apps credentials
      *
-     * @param      \App\App                           $app    The application
-     * @param      string                             $type   The type
+     * @param \App\App $app The application
+     * @param string $type The type
      *
      * @return     \Illuminate\Http\RedirectResponse  Redirect to the Dashboard
      */
     public function requestRenewCredentials(App $app, string $type)
     {
-        if($app->team){
+        if ($app->team) {
             Mail::to($app->team->email)->send(new CredentialRenew($app, $type));
-        }else{
+        } else {
             Mail::to(auth()->user())->send(new CredentialRenew($app, $type));
         }
 
@@ -834,8 +943,8 @@ class AppController extends Controller
     /**
      * Renew an apps credentials
      *
-     * @param      \App\App                           $app    The application
-     * @param      string                             $type   The type
+     * @param \App\App $app The application
+     * @param string $type The type
      *
      * @return     \Illuminate\Http\RedirectResponse  Redirect to the Dashboard
      */
@@ -864,8 +973,8 @@ class AppController extends Controller
     /**
      * Go live process
      *
-     * @param      \App\App                                                          $app         The application
-     * @param      \App\Services\Kyc\KycService                                      $kycService  The kyc service
+     * @param \App\App $app The application
+     * @param \App\Services\Kyc\KycService $kycService The kyc service
      *
      * @return     \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse  Redirect to the correct kyc form
      */
@@ -873,7 +982,7 @@ class AppController extends Controller
     {
         $app->load(['products', 'country']);
         $goLiveProducts = $app->products();
-        $productionProducts = $goLiveProducts->get()->map(fn ($prod) => $prod->attributes['ProductionProduct'] ?? '');
+        $productionProducts = $goLiveProducts->get()->map(fn($prod) => $prod->attributes['ProductionProduct'] ?? '');
         if ($productionProducts->count() > 0) {
             $productionProducts = Product::findMany($productionProducts);
         }
@@ -902,9 +1011,9 @@ class AppController extends Controller
     /**
      * Show the kyc form
      *
-     * @param      \App\App                                                  $app         The application
-     * @param      string                                                    $group       The group
-     * @param      \App\Services\Kyc\KycService                              $kycService  The kyc service
+     * @param \App\App $app The application
+     * @param string $group The group
+     * @param \App\Services\Kyc\KycService $kycService The kyc service
      *
      * @return     \Illuminate\View\View|\Illuminate\Contracts\View\Factory  Show the form
      */
@@ -920,9 +1029,9 @@ class AppController extends Controller
     /**
      * Direct to the store mechanism for this kyc
      *
-     * @param      \App\App                       $app      The application
-     * @param      string                         $group    The group
-     * @param      \App\Http\Requests\KycRequest  $request  The request
+     * @param \App\App $app The application
+     * @param string $group The group
+     * @param \App\Http\Requests\KycRequest $request The request
      *
      * @return     method                         The method to store the form details
      */
@@ -935,9 +1044,9 @@ class AppController extends Controller
     /**
      * The MoMo kyc store method
      *
-     * @param      \App\App                                                          $app      The application
-     * @param      string                                                            $group    The group
-     * @param      \App\Http\Requests\KycRequest                                     $request  The request
+     * @param \App\App $app The application
+     * @param string $group The group
+     * @param \App\Http\Requests\KycRequest $request The request
      *
      * @return     \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse  Redirect to app index
      */
@@ -947,7 +1056,7 @@ class AppController extends Controller
 
         $app->load([
             'products',
-            'country' => fn ($query) => $query->with('opcoUser')
+            'country' => fn($query) => $query->with('opcoUser')
         ]);
 
         $files = $request->file('files');
@@ -996,7 +1105,7 @@ class AppController extends Controller
     /**
      * Adds new credentials.
      *
-     * @param      \App\App  $app    The application
+     * @param \App\App $app The application
      *
      * @return     array     The response shows if successful or not and has response data
      */
