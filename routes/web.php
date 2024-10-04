@@ -163,7 +163,7 @@ Route::namespace('Admin')->prefix('admin')->middleware(['auth', 'verified', '2fa
 	Route::put('users/{user}/verify', 'UserController@verifyEmail')->middleware('can:administer-content')->name('admin.user.verify');
 
 	// Team - Company management
-    Route::prefix('teams')->middleware('can:administer-users')->group(function () {
+    Route::prefix('teams')->middleware('can:administer-content')->group(function () {
         Route::get('/', 'TeamController@index')->name('admin.team.index');
         Route::get('/{team}/team', 'TeamController@show')->name('admin.team.show');
         Route::delete('/{team}/delete', 'TeamController@destroy')->name('admin.team.delete');
