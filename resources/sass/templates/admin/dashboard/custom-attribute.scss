@@ -317,3 +317,24 @@ $color-white: variables.$white;
     margin-bottom: 9px;
     box-shadow: 0px 10px 8px 0px rgba(0, 0, 0, 0.04);
 }
+
+.delete-attribute-bottom-shadow-container {
+    position: absolute;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25), 0px -8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 0px 0px 10px 10px;
+    min-height: 93px;
+    width: 100%;
+    bottom: 0;
+}
+
+.btn-show-reserved-attribute-modal:disabled {
+    pointer-events: none; /* Prevent interactions */
+    background-color: #ccc; /* Change background color */
+    cursor: not-allowed; /* Change cursor to indicate it's disabled */
+    /* Remove hover styles */
+}
+
+.btn-show-reserved-attribute-modal:disabled:hover {
+    background-color: #ccc; /* Keep the same background color on hover */
+    box-shadow: none; /* Remove any hover shadow */
+}

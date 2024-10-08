@@ -1,23 +1,23 @@
-<x-dialog-box id="edit-custom-attributes-{{ $app->aid }}" dialogTitle="Edit Attribute" class="custom-attributes-dialog">
+<x-dialog-box id="edit-reserved-attribute-{{ $app->aid }}" dialogTitle="Edit Reserved Attribute" class="custom-attributes-dialog">
     <form id="custom-attribute-form" method="POST" class="status-dialog-form">
         <div class="attribute-form-container-data">
             @method('POST')
             @csrf
             <div class="form-group">
                 <label for="type">Type</label>
-                <select id="type" name="type">
-                    <option value="string">AutoRenewAllowed</option>
-                    <option value="number">PermittedSenderIDs</option>
-                    <option value="boolean">senderMsisdn</option>
+                <select id="type" name="type" >
+                    <option value="senderMsisdn">senderMsisdn</option>
+                    <option value="PermittedSenderIDs">PermittedSenderIDs</option>
+                    <option value="AutoRenewAllowed">AutoRenewAllowed</option>
                 </select>
                 <p id="type-description">A string attribute is the default type of attribute and only accepts a text value without special characters or spaces.</p>
             </div>
 
             <div id="attribute-fields-container">
                 <!-- Name Field -->
-                <div class="form-group" id="name-field" style="display: none;">
+                <div class="form-group" id="name-field">
                     <label for="name">Name</label>
-                    <input type="text" id="name" name="attribute[name]" placeholder="The name of the attribute" required>
+                    <input type="text" id="name" name="attribute[name]" readonly placeholder="The name of the attribute" required>
                     <p class="error-message" id="name-error" style="color: red; display: none;"></p>
                 </div>
 

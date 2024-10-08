@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
     let appAid = null;
     const regex = /^[a-zA-Z0-9_-]+$/; // Only allows alphanumeric characters, underscores, and dashes (no spaces)
     let tags = []; // For storing tags from textarea
@@ -12,14 +11,14 @@ document.addEventListener('DOMContentLoaded', function () {
         container.addEventListener('click', function (event) {
 
             if (event.target.matches('.btn-show-reserved-attribute-modal')) {
-                const reservedAttributeId = event.target.getAttribute('reserved-data-id');
-                const addReservedAttributeModal = document.getElementById(`reserved-attributes-${reservedAttributeId}`);
+                appAid = event.target.getAttribute('reserved-data-id');
+                const addReservedAttributeModal = document.getElementById(`reserved-attributes-${appAid}`);
 
                 if (addReservedAttributeModal) {
                     addReservedAttributeModal.classList.add('show');
                     setupModal(addReservedAttributeModal);
                 } else {
-                    console.error(`Modal with id reserved-attributes-${reservedAttributeId} not found`);
+                    console.error(`Modal with id reserved-attributes-${appAid} not found`);
                 }
             }
         });
@@ -73,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         checkIfFormIsValid(modal, nameField, valueField, numberField, booleanField, tags, submitButton);
                     } else {
                         addAlert('warning', 'The total size of tags exceeds 2KB.');
-                        //alert('The total size of tags exceeds 2KB.');
+
                         tags = tags.slice(0, -tagArray.length); // Remove the last added tags
                     }
                 }
@@ -81,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         // Handle form submission
-        const form = modal.querySelector('#custom-attribute-form');
+        const form = modal.querySelector('#add-reserved-custom-attribute-form');
         form.addEventListener('submit', function (event) {
             event.preventDefault();  // Prevent default form submission
             submitForm(nameField, valueField, numberField, booleanField, typeSelect, tags, modal);
@@ -110,19 +109,21 @@ document.addEventListener('DOMContentLoaded', function () {
             submitButton.classList.add('disabled');
             submitButton.disabled = true;
         } else {
-            submitButton.classList.remove('disabled');
             errorField.style.display = 'none';
-            checkIfFormIsValid(modal, modal.querySelector('#name'), modal.querySelector('#value'), modal.querySelector('#number-value'), modal.querySelector('#boolean-value'), tags, submitButton);
         }
-    }
 
+        // Trigger form validation after validating a field
+        checkIfFormIsValid(modal, modal.querySelector('#name'), modal.querySelector('#value'), modal.querySelector('#number-value'), modal.querySelector('#boolean-value'), tags, submitButton);
+    }
     function isTagDataValid(tags) {
         const tagString = tags.join(',');
         return new Blob([tagString]).size <= 2048 && tags.length <= 18;
     }
 
+    // Function to handle attribute type changes and update name field
     function handleAttributeTypeChange(modal) {
-        const type = modal.querySelector('#type').value;
+        const typeSelect = modal.querySelector('#type');
+        const nameField = modal.querySelector('#name');
         const valueField = modal.querySelector('#value-field');
         const numberField = modal.querySelector('#number-field');
         const booleanField = modal.querySelector('#boolean-field');
@@ -138,14 +139,18 @@ document.addEventListener('DOMContentLoaded', function () {
         valueInput.required = false;
         booleanInput.required = false;  // Remove required from all inputs
 
-        // Show appropriate fields based on type and set required attribute
-        if (type === 'string') {
+        // Update name field based on selected type
+        const selectedType = typeSelect.value;
+        if (selectedType === 'senderMsisdn') {
+            nameField.value = 'senderMsisdn';
             valueField.style.display = 'block';
             valueInput.required = true;  // Only string field should be required
-        } else if (type === 'number') {
+        } else if (selectedType === 'PermittedSenderIDs') {
+            nameField.value = 'PermittedSenderIDs';
             numberField.style.display = 'block';
             // Do not make textarea required since we are using tags validation
-        } else if (type === 'boolean') {
+        } else if (selectedType === 'AutoRenewAllowed') {
+            nameField.value = 'AutoRenewAllowed';
             booleanField.style.display = 'block';
             booleanInput.required = true;  // Boolean field should be required
         }
@@ -193,11 +198,11 @@ document.addEventListener('DOMContentLoaded', function () {
         let isValueValid = false;
 
         const attributeType = modal.querySelector('#type').value;
-        if (attributeType === 'string') {
+        if (attributeType === 'senderMsisdn') {
             isValueValid = valueField.value.trim() !== '' && regex.test(valueField.value.trim()) && new Blob([valueField.value.trim()]).size <= 2048;
-        } else if (attributeType === 'number') {
+        } else if (attributeType === 'PermittedSenderIDs') {
             isValueValid = isTagDataValid(tags);
-        } else if (attributeType === 'boolean') {
+        } else if (attributeType === 'AutoRenewAllowed') {
             isValueValid = booleanField.value.trim() !== '';
         }
 
@@ -217,15 +222,15 @@ document.addEventListener('DOMContentLoaded', function () {
         const attributeType = typeSelect.value;
 
         // Handle the value based on attribute type
-        if (attributeType === 'string') {
+        if (attributeType === 'senderMsisdn') {
             value = valueField.value.trim();  // String type input
-        } else if (attributeType === 'number') {
+        } else if (attributeType === 'PermittedSenderIDs') {
             value = tags.join(',');  // Collect tags entered in textarea
-        } else if (attributeType === 'boolean') {
+        } else if (attributeType === 'AutoRenewAllowed') {
             value = booleanField.value;  // True or False from select input
         }
 
-        if (!value && attributeType !== 'number') {  // Only require value if it's not a number type
+        if (!value && attributeType !== 'AutoRenewAllowed') {  // Only require value if it's not a number type
             console.error('Value field must not be empty.');
             return;
         }
@@ -271,6 +276,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 addAlert('error', 'Failed to save attribute');
             });
     }
+
     // Initialize event listeners
     initializeEventListeners();
 

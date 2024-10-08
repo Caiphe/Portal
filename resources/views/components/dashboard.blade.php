@@ -152,6 +152,7 @@
             <!--======Attributes Section====================================================================================-->
             <div class="app-custom-attributes">
                 {{--=================Custom Attributes================--}}
+
                 <div class=main-ca>
                     <div class="main-ca__heading">
                         <span class="customAttributeMain__text">Custome Attributes</span>
@@ -181,45 +182,22 @@
                         <tbody>
                         @php
                             // Filter attributes, excluding specified keys
-                            $filteredAttributes = collect($app->attributes)->except(['Country', 'TeamName', 'location', 'Description', 'DisplayName']);
+                            $filteredAttributes = collect($app->attributes)->except(['Country', 'TeamName', 'location', 'Description', 'DisplayName', 'AutoRenewAllowed', 'PermittedSenderIDs', 'senderMsisdn']);
                         @endphp
 
                         @forelse ($filteredAttributes as $key => $value)
 
                             @php
+                                // Initialize display variables
+                                $displayName = $key;
+                                $attributeType = ''; // No default type
+                                $displayValue = $value; // Initialize displayValue
 
-                                    // Initialize display variables
-                                    $displayName = $key;
-                                    $attributeType = 'String'; // Default type to "String"
-                                    $displayValue = ''; // Initialize displayValue as an empty string
-
-                                    // Check the type of value
-                                    if (is_array($value)) {
-                                        // If it's an array, use the first element
-                                        $displayValue = isset($value[0]) ? $value[0] : ''; // Ensure we don't access an undefined index
-
-                                        // Check if the first element is a string containing commas
-                                        if (is_string($displayValue) && strpos($displayValue, ',') !== false) {
-                                            $attributeType = 'CSV String Array'; // If it contains commas, treat it as a CSV String Array
-                                        } else {
-                                            $attributeType = ucfirst($key); // Use key as the type otherwise
-                                            $displayValue = is_string($displayValue) ? $displayValue : json_encode($displayValue); // Convert array to JSON string for display if necessary
-                                        }
-                                        if (is_bool($displayValue) && strpos($displayValue, ',') !== false) {
-                                            $attributeType = 'Boolean'; // If it contains commas, treat it as a CSV String Array
-                                        } else {
-                                            $attributeType = ucfirst($key); // Use key as the type otherwise
-                                            $displayValue = is_string($displayValue) ? $displayValue : json_encode($displayValue); // Convert array to JSON string for display if necessary
-                                        }
-                                    } elseif (is_bool($value)) {
-                                        $attributeType = 'boolean'; // Explicitly set type for booleans
-                                        $displayValue = $value ? 'true' : 'false'; // Convert boolean to string for display
-                                    } elseif (is_string($value) && strpos($value, ',') !== false) {
-                                        $attributeType = 'CSV String Array'; // If it contains commas, treat it as a CSV String Array
-                                        $displayValue = $value; // Keep the original string value
-                                    } else {
-                                        $displayValue = is_string($value) ? $value : json_encode($value); // Convert non-string types to JSON string
-                                    }
+                                // Check if value is an array and convert it to JSON for display
+                                if (is_array($value)) {
+                                    $attributeType = 'Array';
+                                    $displayValue = json_encode($value); // Convert array to JSON string for display
+                                }
                             @endphp
 
                             <tr class="ca-trow">
@@ -230,7 +208,13 @@
                                     {!! htmlspecialchars($displayValue) !!}
                                 </td>
                                 <td class="not-on-mobile">
-                                    <span class="attribute-type">{{ $attributeType }}</span>
+                                    @if($displayValue === 'true' || $displayValue === 'false')
+                                        Boolean
+                                    @elseif (is_string($value) && strpos($value, ',') !== false)
+                                        CSV String Array
+                                    @elseif (is_string($value) && strpos($value, ',') !== true)
+                                        String
+                                    @endif
                                 </td>
                                 <td class="action-row">
                                     <a class="btn-show-edit-attribute-modal"
@@ -239,25 +223,38 @@
                                        data-attribute='@json(["name" => $displayName, "value" => $displayValue, "type" => $attributeType])'>
                                         @svg('edit') Edit
                                     </a>
-                                    <a href="#">
+
+                                    <a class="btn-delete-attribute-modal"
+                                       style="cursor: pointer"
+                                       data-delete-id="{{ $app->aid }}"
+                                       data-attribute-key="{{ $displayName }}"
+                                       data-attribute-value="{{ $displayValue }}">
                                         @svg('delete') Delete
                                     </a>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="no-custom-attribute">No custom attribute added yet.</td>
+                                <div class="no-custom-attribute">No custom attribute added yet.</div>
                             </tr>
                         @endforelse
                         </tbody>
                     </table>
                 </div>
+
                 {{--=================Reserved Attributes================--}}
+
                 <div class=main-ca>
                     <div class="main-ca__heading">
                         <span class="customAttributeMain__text">Reserved Attributes</span>
-                        <button class="btn-show-attribute-modal btn-show-reserved-attribute-modal" reserved-data-id="{{ $app->aid }}">
-                            Add reseved attribute
+                        @php
+                            // Filter reserved attributes, specified keys
+                            $countReservedAttributes = collect($app->attributes)->only(['AutoRenewAllowed', 'PermittedSenderIDs', 'senderMsisdn'])->count();
+                        @endphp
+                        <button class="btn-show-attribute-modal btn-show-reserved-attribute-modal"
+                                reserved-data-id="{{ $app->aid }}"
+                                @if($countReservedAttributes === 3) disabled @endif>
+                            Add reserved attribute
                         </button>
                     </div>
                 </div>
@@ -282,19 +279,20 @@
                         <tbody>
                         @php
                             // Filter reserved attributes, specified keys
-                            $filteredAttributes = collect($app->attributes)->only(['AutoRenewAllowed', 'PermittedSenderIDs', 'SenderMSISDN']);
+                            $filteredAttributes = collect($app->attributes)->only(['AutoRenewAllowed', 'PermittedSenderIDs', 'senderMsisdn']);
                         @endphp
 
                         @forelse ($filteredAttributes as $key => $value)
                             @php
+                                // Initialize display variables
+                                $displayName = $key;
+                                $attributeType = ''; // No default type
+                                $displayValue = $value; // Initialize displayValue
+
+                                // Check if value is an array and convert it to JSON for display
                                 if (is_array($value)) {
-                                    $displayName = key($value[0]);
-                                    $displayValue = $value[0][$displayName];
-                                    $attributeType = ucfirst($key) === "Number" ? "CSV String Array" : ucfirst($key); // Use key as the type
-                                } else {
-                                    $displayName = $key;
-                                    $displayValue = $value;
-                                    $attributeType = 'String'; // Default type to "String"
+                                    $attributeType = 'Array';
+                                    $displayValue = json_encode($value); // Convert array to JSON string for display
                                 }
                             @endphp
 
@@ -306,29 +304,41 @@
                                     {!! htmlspecialchars($displayValue) !!}
                                 </td>
                                 <td class="not-on-mobile">
-                                    <span class="attribute-type">{{ $attributeType }}</span>
+                                    @if($displayValue === 'true' || $displayValue === 'false')
+                                        Boolean
+                                    @elseif (is_string($value) && strpos($value, ',') !== false)
+                                        CSV String Array
+                                    @elseif (is_string($value) && strpos($value, ',') !== true)
+                                        String
+                                    @endif
                                 </td>
                                 <td class="action-row">
-                                    <a class="btn-show-edit-attribute-modal"
+                                    <a class="btn-show-edit-reserved-attribute-modal"
                                        style="cursor: pointer"
                                        data-edit-id="{{ $app->aid }}"
                                        data-attribute='@json(["name" => $displayName, "value" => $displayValue, "type" => $attributeType])'>
                                         @svg('edit') Edit
                                     </a>
-                                    <a href="#">
+                                    <a class="btn-delete-attribute-modal"
+                                       style="cursor: pointer"
+                                       data-delete-id="{{ $app->aid }}"
+                                       data-attribute-key="{{ $displayName }}"
+                                       data-attribute-value="{{ $displayValue }}">
                                         @svg('delete') Delete
                                     </a>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="no-custom-attribute">No custom attribute added yet.</td>
+                                <div class="no-custom-attribute">No reserved attribute added yet.</div>
                             </tr>
                         @endforelse
                         </tbody>
                     </table>
                 </div>
+
                 {{--=================System Attributes================--}}
+
                 <div class=main-ca>
                     <div class="main-ca__heading">
                         <span class="customAttributeMain__text">System Attributes</span>
@@ -360,16 +370,23 @@
                                     {{ $value }}
                                 </td>
                                 <td class="not-on-mobile">
-                                    String
+                                    @if($value === 'true' || $value === 'false')
+                                        Boolean
+                                    @elseif (is_string($value) && strpos($value, ',') !== false)
+                                        CSV String Array
+                                    @elseif (is_string($value) && strpos($value, ',') !== true)
+                                        String
+                                    @endif
                                 </td>
 
                             </tr>
                         @empty
-                            <div class="no-custom-attribute">No reserved attribute added yet.</div>
+                            <div class="no-custom-attribute">No system attribute added yet.</div>
                         @endforelse
                         </tbody>
                     </table>
                 </div>
+
             </div>
             <!--======End Attribute Section======================================================================================-->
         </div>

@@ -71,4 +71,6 @@
 <script src="{{ mix('/js/templates/admin/dashboard/app-custom-attribute.js') }}" defer></script>
 <script src="{{ mix('/js/templates/admin/dashboard/app-edit-custom-attribute.js') }}" defer></script>
 <script src="{{ mix('/js/templates/admin/dashboard/app-reseved-custom-attribute.js') }}" defer></script>
+<script src="{{ mix('/js/templates/admin/dashboard/app-edit-reseved-custom-attribute.js') }}" defer></script>
+<script src="{{ mix('/js/templates/admin/dashboard/app-delete-custom-attribute.js') }}" defer></script>
 @endpush

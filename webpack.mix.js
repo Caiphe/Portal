@@ -17,10 +17,12 @@ mix.scripts("resources/js/scripts.js", "public/js/scripts.js")
     .scripts("resources/js/templates/admin/task/index.js", "public/js/templates/admin/task/index.js")
     .scripts("resources/js/templates/admin/products/edit.js", "public/js/templates/admin/products/edit.js")
     .scripts("resources/js/templates/admin/settings/maintenance.js", "public/js/templates/admin/settings/maintenance.js")
+
     .scripts("resources/js/templates/admin/dashboard/app-custom-attribute.js", "public/js/templates/admin/dashboard/app-custom-attribute.js")
     .scripts("resources/js/templates/admin/dashboard/app-edit-custom-attribute.js", "public/js/templates/admin/dashboard/app-edit-custom-attribute.js")
     .scripts("resources/js/templates/admin/dashboard/app-reseved-custom-attribute.js", "public/js/templates/admin/dashboard/app-reseved-custom-attribute.js")
-
+    .scripts("resources/js/templates/admin/dashboard/app-edit-reseved-custom-attribute.js", "public/js/templates/admin/dashboard/app-edit-reseved-custom-attribute.js")
+    .scripts("resources/js/templates/admin/dashboard/app-delete-custom-attribute.js", "public/js/templates/admin/dashboard/app-delete-custom-attribute.js")
 
     .scripts(["resources/js/templates/admin/dashboard/index.js", "resources/js/templates/admin/index.js"], "public/js/templates/admin/dashboard/index.js")
     .scripts("resources/js/utilities/ajax.js", "public/js/utilities/ajax.js")

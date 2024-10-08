@@ -42,17 +42,25 @@
         </div>
     </x-dialog-box>
 
-    {{--Start of Add attribute dialog--}}
+    {{--Start of Add custom attribute dialog--}}
     @include('templates.admin.dashboard.partial-app-custom-attributes.add-custom-attribute-modal', ['app' => $app])
-    {{--End ofAdd attribute dialog--}}
+    {{--End of Add attribute dialog--}}
 
-    {{--Start of Edit attribute dialog TODO Edit attribute --}}
+    {{--Start of Edit custom attribute dialog --}}
     @include('templates.admin.dashboard.partial-app-custom-attributes.edit-custom-attribute-modal', ['app' => $app])
-    {{--End of Edit attribute dialog--}}
+    {{--End of Edit custom attribute dialog--}}
 
-    {{--Start of Add attribute dialog--}}
+    {{--Start of Add reserved attribute dialog--}}
     @include('templates.admin.dashboard.partial-app-custom-attributes.reserved-attributes.add-reserved-attribute-modal', ['app' => $app])
-    {{--End ofAdd attribute dialog--}}
+    {{--End of Add reserved attribute dialog--}}
+
+    {{--Start of Edit reserved attribute dialog--}}
+    @include('templates.admin.dashboard.partial-app-custom-attributes.reserved-attributes.edit-reserved-attribute-modal', ['app' => $app])
+    {{--End of Edit reserved attribute dialog--}}
+
+    {{--Start of Delete attribute dialog--}}
+    @include('templates.admin.dashboard.partial-app-custom-attributes.delete-attributes-models.attributes-delete-modal', ['app' => $app])
+    {{--End of Delete attribute dialog--}}
 
 @endforeach
 

@@ -2,7 +2,7 @@
               dialogTitle="Add a reserved attribute"
               class="custom-attributes-dialog">
 
-    <form id="custom-attribute-form" method="POST" {{--action="{{ route('app.save-custom-attributes', $app->aid) }}"--}}
+    <form id="add-reserved-custom-attribute-form" method="POST" {{--action="{{ route('app.save-custom-attributes', $app->aid) }}"--}}
           class="status-dialog-form">
         <div class="attribute-form-container-data">
             @method('POST')
@@ -10,9 +10,9 @@
             <div class="form-group">
                 <label for="type">Type</label>
                 <select id="type" name="type" onchange="handleAttributeTypeChange()">
-                    <option value="string">AutoRenewAllowed</option>
-                    <option value="number">PermittedSenderIDs</option>
-                    <option value="boolean">senderMsisdn</option>
+                    <option value="senderMsisdn">senderMsisdn</option>
+                    <option value="PermittedSenderIDs">PermittedSenderIDs</option>
+                    <option value="AutoRenewAllowed">AutoRenewAllowed</option>
                 </select>
                 <p id="type-description">A string attribute is the default type of attribute and only accepts a text
                     value without special characters or spaces.</p>
