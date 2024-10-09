@@ -5,10 +5,13 @@
             @csrf
             <div class="form-group">
                 <label for="type">Type</label>
-                <select id="type" name="type" >
+                <select id="type" name="type">
                     <option value="senderMsisdn">senderMsisdn</option>
-                    <option value="PermittedSenderIDs">PermittedSenderIDs</option>
-                    <option value="AutoRenewAllowed">AutoRenewAllowed</option>
+                    <option value="originalChannelIDs">originalChannelIDs</option>
+                    <option value="partnerName">partnerName</option>
+                    <option value="permittedSenderIDs">PermittedSenderIDs</option>
+                    <option value="permittedPlanIDs">PermittedPlanIDs</option>
+                    <option value="autoRenewAllowed">AutoRenewAllowed</option>
                 </select>
                 <p id="type-description">A string attribute is the default type of attribute and only accepts a text value without special characters or spaces.</p>
             </div>

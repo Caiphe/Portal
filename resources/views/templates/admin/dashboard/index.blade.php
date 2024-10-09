@@ -73,4 +73,48 @@
 <script src="{{ mix('/js/templates/admin/dashboard/app-reseved-custom-attribute.js') }}" defer></script>
 <script src="{{ mix('/js/templates/admin/dashboard/app-edit-reseved-custom-attribute.js') }}" defer></script>
 <script src="{{ mix('/js/templates/admin/dashboard/app-delete-custom-attribute.js') }}" defer></script>
+<script>
+    document.querySelectorAll('.sort').forEach(function(sortLink) {
+        sortLink.addEventListener('click', function() {
+            const order = this.getAttribute('data-order');
+            const column = this.getAttribute('data-sort');
+            const table = this.closest('table');
+            const rows = Array.from(table.querySelectorAll('tbody tr'));
+
+            // Toggle sort order **before** sorting
+            const newOrder = order === 'asc' ? 'desc' : 'asc';
+            this.setAttribute('data-order', newOrder);
+
+            // Sort rows
+            rows.sort(function(a, b) {
+                const aCell = a.querySelector('[data-' + column + ']');
+                const bCell = b.querySelector('[data-' + column + ']');
+
+                // Check if the cells exist and have the required attributes
+                if (!aCell || !bCell) {
+                    return 0; // If cells or attributes are missing, consider them equal
+                }
+
+                const aValue = aCell.getAttribute('data-' + column).toLowerCase();
+                const bValue = bCell.getAttribute('data-' + column).toLowerCase();
+
+                // Compare values for sorting
+                if (aValue < bValue) {
+                    return newOrder === 'asc' ? -1 : 1;
+                }
+                if (aValue > bValue) {
+                    return newOrder === 'asc' ? 1 : -1;
+                }
+                return 0;
+            });
+
+            // Re-arrange the table rows
+            const tbody = table.querySelector('tbody');
+            tbody.innerHTML = '';
+            rows.forEach(function(row) {
+                tbody.appendChild(row);
+            });
+        });
+    });
+</script>
 @endpush

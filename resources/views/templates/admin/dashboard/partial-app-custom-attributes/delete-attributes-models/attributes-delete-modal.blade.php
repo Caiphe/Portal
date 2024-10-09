@@ -1,10 +1,8 @@
-<x-dialog-box id="delete-custom-attribute-{{ $app->aid }}" dialogTitle="Delete App Attribute"
+<x-dialog-box id="delete-custom-attribute-{{ $app->aid }}" dialogTitle="Confirm removal of attribute"
               class="custom-attributes-dialog">
-
-    <div class="data-container" style="text-align: center">
+    <div class="data-container">
         <span>
-            Are you sure you want to delete the
-           Attribute Name and Value: <br>{<strong id="delete-attribute-name"></strong>: <strong id="delete-attribute-value">attribute value</strong>}
+            Are you sure you want to delete the attribute: <strong id="delete-attribute-name"></strong>: <strong id="delete-attribute-value">attribute value</strong>
         </span>
     </div>
     <div class="delete-attribute-bottom-shadow-container button-container">

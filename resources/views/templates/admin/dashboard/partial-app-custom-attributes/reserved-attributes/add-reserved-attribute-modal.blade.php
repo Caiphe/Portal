@@ -11,8 +11,11 @@
                 <label for="type">Type</label>
                 <select id="type" name="type" onchange="handleAttributeTypeChange()">
                     <option value="senderMsisdn">senderMsisdn</option>
-                    <option value="PermittedSenderIDs">PermittedSenderIDs</option>
-                    <option value="AutoRenewAllowed">AutoRenewAllowed</option>
+                    <option value="originalChannelIDs">originalChannelIDs</option>
+                    <option value="partnerName">partnerName</option>
+                    <option value="permittedSenderIDs">PermittedSenderIDs</option>
+                    <option value="permittedPlanIDs">PermittedPlanIDs</option>
+                    <option value="autoRenewAllowed">AutoRenewAllowed</option>
                 </select>
                 <p id="type-description">A string attribute is the default type of attribute and only accepts a text
                     value without special characters or spaces.</p>
@@ -21,7 +24,7 @@
             <!-- Name Field -->
             <div class="form-group" id="name-field">
                 <label for="name">Name</label>
-                <input type="text" id="name" name="attribute[name]" placeholder="The name of the attribute"
+                <input type="text" id="name" name="attribute[name]" readonly placeholder="The name of the attribute"
                        required>
                 <p class="error-message" id="name-error" style="color: red; display: none;"></p>
             </div>

@@ -1,7 +1,7 @@
-<x-dialog-box id="custom-attributes-{{ $app->aid }}" dialogTitle="Create a new Attribute"
+<x-dialog-box id="custom-attributes-{{ $app->aid }}" dialogTitle="Create a new attribute"
               class="custom-attributes-dialog">
 
-    <form id="custom-attribute-form" method="POST" {{--action="{{ route('app.save-custom-attributes', $app->aid) }}"--}}
+    <form id="custom-attribute-form" method="POST"
           class="status-dialog-form">
         <div class="attribute-form-container-data">
             @method('POST')

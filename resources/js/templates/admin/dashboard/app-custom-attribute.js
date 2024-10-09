@@ -3,14 +3,60 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let appAid = null;
     const regex = /^[a-zA-Z0-9_-]+$/; // Only allows alphanumeric characters, underscores, and dashes (no spaces)
+    const forbiddenKeywords = ['sendermsisdn', 'originalchannelids', 'partnername', 'permittedsenderids', 'permittedplanids', 'autorenewallowed', 'country', 'teamname', 'location', 'description', 'displayName'];
     let tags = []; // For storing tags from textarea
+
+    function fetchAttributes() {
+        const token = document.querySelector('meta[name="csrf-token"]').content;
+        const id = appAid; // Use the global appAid variable
+        const url = `/admin/apps/${id}/custom-attributes/save`; // Define your URL based on your routing
+
+        const app = {
+            _method: 'PUT',
+            _token: token,
+            aid: id
+        };
+
+        addLoading('Fetching custom attributes...');
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': token,
+                'Content-Type': 'application/json; charset=utf-8',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify(app)
+        })
+            .then(response => {
+                removeLoading();
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json(); // Parse the JSON response
+            })
+            .then(result => {
+                // Check if the response indicates success
+                if (result.success) {
+                    addAlert('success', result.message);
+                    console.log(result.message); // Optional: log success message
+                } else {
+                    // Handle unexpected response structure
+                    addAlert('error', 'Unexpected response format.');
+                }
+            })
+            .catch(error => {
+                removeLoading(); // Ensure loading is removed even on error
+                console.error('Error fetching attributes:', error);
+                addAlert('error', 'Sorry, there was a problem fetching your app attributes. Please try again.');
+            });
+    }
 
     // Function to initialize event listeners
     function initializeEventListeners() {
         const container = document.querySelector('#table-data'); // Use a common parent element
 
         container.addEventListener('click', function (event) {
-
             if (event.target.matches('.btn-show-attribute-modal')) {
                 appAid = event.target.getAttribute('data-id');
                 const addCustomAttributeModal = document.getElementById(`custom-attributes-${appAid}`);
@@ -18,15 +64,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (addCustomAttributeModal) {
                     addCustomAttributeModal.classList.add('show');
                     setupModal(addCustomAttributeModal); // Initialize modal fields and listeners
+                    fetchAttributes();  // Fetch attributes as soon as the modal is opened
                 } else {
                     console.error(`Modal with id custom-attributes-${appAid} not found`);
                 }
             }
-
         });
     }
 
-    // Function to set up the modal
+    // Function to set up the modal (unchanged)
     function setupModal(modal) {
         const nameField = modal.querySelector('#name');
         const valueField = modal.querySelector('#value');
@@ -36,7 +82,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const submitButton = modal.querySelector('.btn-confirm');
         const nameError = modal.querySelector('#name-error');
         const valueError = modal.querySelector('#value-error');
-        const tagContainer = modal.querySelector('#tag-container');
 
         // Ensure fields are defined
         if (!nameField || !valueField || !numberField || !booleanField || !typeSelect || !submitButton) {
@@ -52,12 +97,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Validate Name Field
         nameField.addEventListener('input', function () {
-            validateField(nameField, nameError, "Name can only contain letters, numbers, underscores, or dashes (no spaces allowed).", modal);
+            validateField(nameField, nameError, "Name can only contain letters, numbers, underscores, or dashes (no spaces allowed).", modal, 'name');
         });
 
         // Validate Value Field
         valueField.addEventListener('input', function () {
-            validateField(valueField, valueError, "Value can only contain letters, numbers, underscores, or dashes (no spaces allowed).", modal);
+            validateField(valueField, valueError, "Value can only contain letters, numbers, underscores, or dashes (no spaces allowed).", modal, 'value');
         });
 
         // Handle tags input for number values
@@ -74,7 +119,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         checkIfFormIsValid(modal, nameField, valueField, numberField, booleanField, tags, submitButton);
                     } else {
                         addAlert('warning', 'The total size of tags exceeds 2KB.');
-                        //alert('The total size of tags exceeds 2KB.');
                         tags = tags.slice(0, -tagArray.length); // Remove the last added tags
                     }
                 }
@@ -91,7 +135,13 @@ document.addEventListener('DOMContentLoaded', function () {
         handleAttributeTypeChange(modal);
     }
 
-    function validateField(field, errorField, errorMessage, modal) {
+    // Add a keyword validation function
+    function containsForbiddenKeyword(value) {
+        const lowerValue = value.toLowerCase();
+        return forbiddenKeywords.some(keyword => lowerValue.includes(keyword));
+    }
+
+    function validateField(field, errorField, errorMessage, modal, fieldType) {
         const inputValue = field.value.trim();
         const submitButton = modal.querySelector('.btn-confirm');
 
@@ -102,6 +152,11 @@ document.addEventListener('DOMContentLoaded', function () {
             submitButton.disabled = true;
         } else if (inputValue === '') {
             errorField.textContent = "This field is required.";
+            errorField.style.display = 'block';
+            submitButton.classList.add('disabled');
+            submitButton.disabled = true;
+        } else if (containsForbiddenKeyword(inputValue)) {
+            errorField.textContent = `The ${fieldType} contains restricted keywords.`;
             errorField.style.display = 'block';
             submitButton.classList.add('disabled');
             submitButton.disabled = true;
@@ -216,6 +271,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const name = nameField.value.trim();
         let value = '';  // Value will change based on type
         const attributeType = typeSelect.value;
+        const submitButton = modal.querySelector('.btn-confirm');
 
         // Handle the value based on attribute type
         if (attributeType === 'string') {
@@ -231,10 +287,17 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        // Disable the submit button to prevent multiple submissions
+        submitButton.classList.add('disabled');
+        submitButton.disabled = true;
+
         // Prepare the data in the simplified key-value format
         const attributeData = {
             [name]: value  // Just name: value
         };
+
+        // Display loading message
+        addLoading('Adding Custom Attribute...');
 
         // Send the PUT request to the backend
         fetch(`/admin/apps/${appAid}/save-custom-attributes`, {
@@ -270,8 +333,19 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => {
                 console.error('Error:', error);
                 addAlert('error', 'Failed to save attribute');
+            })
+            .finally(() => {
+                // Re-enable the submit button after form submission is complete
+                submitButton.classList.remove('disabled');
+                submitButton.disabled = false;
+
+                removeLoading();
+                setTimeout(function () {
+                    window.location.reload();
+                }, 3000); // 3000 milliseconds = 3 seconds
             });
     }
+
     // Initialize event listeners
     initializeEventListeners();
 

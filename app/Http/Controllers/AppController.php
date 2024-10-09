@@ -551,14 +551,61 @@ class AppController extends Controller
         $app->attributes = $attributes;
         $app->save();
 
-        if ($request->ajax()) {
-            return response()->json([
-                'id' => $app->aid,
-                'formHtml' => view('partials.custom-attributes.form', ['app' => $app])->render(),
-                'listHtml' => view('partials.custom-attributes.list', ['app' => $app])->render()
-            ]);
-        }
+        return response()->json([
+            'success' => true,
+            'message' => 'Attributes fetched from Apigee successfully.'
+        ], 200);
     }
+
+    /**
+     * TODO Check if this is needed
+     * Admin update custom attributes
+     * @param App $app
+     * @param AppAttributesRequest $request
+     * @return JsonResponse|RedirectResponse|void
+     */
+   /* public function updateCustomAttributes(App $app, AppAttributesRequest $request)
+    {
+        $validated = $request->validated();
+        $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
+
+        $appAttributes = $app->attributes;
+
+        $previousCustomAttributes = $app->filterCustomAttributes($appAttributes);
+        $appAttributes = array_diff($appAttributes, $previousCustomAttributes);
+        $appAttributes = array_merge($appAttributes, $app->filterCustomAttributes($attributes));
+
+        $team = $app->team ?? null;
+        $developerEmail = $app->developer->email;
+        $accessUrl = $team ? "companies/{$team->username}" : "developers/{$developerEmail}";
+
+        $updatedResponse = ApigeeService::put("{$accessUrl}/apps/{$app->name}", [
+            "name" => $app->name,
+            'attributes' => ApigeeService::formatToApigeeAttributes($appAttributes),
+            "callbackUrl" => $app->url ?? '',
+        ]);
+
+        if ($updatedResponse->failed()) {
+            $reasonMsg = $updatedResponse['message'] ?? 'There was a problem updating your app. Please try again later.';
+
+            if ($request->ajax()) {
+                return response()->json(['response' => "error:{$reasonMsg}"], $updatedResponse->status());
+            }
+
+            return redirect()->back()->with('alert', "error:{$reasonMsg}");
+        }
+
+        $attributes = ApigeeService::formatAppAttributes($updatedResponse['attributes']);
+
+        $attributesWithoutSpaces = array_combine(array_keys($attributes), $attributes);
+
+
+        $app->update(['attributes' =>  $attributesWithoutSpaces]);
+
+        if ($request->ajax()) {
+            return response()->json(['attributes' => $attributesWithoutSpaces]);
+        }
+    }*/
 
     /**
      * Gets the credentials.
@@ -896,57 +943,18 @@ class AppController extends Controller
         // Save the updated attributes directly as JSON (no type-object structure)
         $app->update(['attributes' => $updatedAttributes]);
 
-        return response()->json(['success' => true], 200);
+        return response()->json([
+            'success' => true,
+            'message' => 'App attributes updated successfully.'
+        ], 200);
     }
 
     /**
-     * Admin update custom attributes
+     * Update custom attributes
      * @param App $app
      * @param AppAttributesRequest $request
-     * @return JsonResponse|RedirectResponse|void
+     * @return JsonResponse
      */
-    /*public function updateCustomAttributes(App $app, AppAttributesRequest $request)
-    {
-        $validated = $request->validated();
-        $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
-
-        $appAttributes = $app->attributes;
-
-        $previousCustomAttributes = $app->filterCustomAttributes($appAttributes);
-        $appAttributes = array_diff($appAttributes, $previousCustomAttributes);
-        $appAttributes = array_merge($appAttributes, $app->filterCustomAttributes($attributes));
-
-        $team = $app->team ?? null;
-        $developerEmail = $app->developer->email;
-        $accessUrl = $team ? "companies/{$team->username}" : "developers/{$developerEmail}";
-
-        $updatedResponse = ApigeeService::put("{$accessUrl}/apps/{$app->name}", [
-            "name" => $app->name,
-            'attributes' => ApigeeService::formatToApigeeAttributes($appAttributes),
-            "callbackUrl" => $app->url ?? '',
-        ]);
-
-        if ($updatedResponse->failed()) {
-            $reasonMsg = $updatedResponse['message'] ?? 'There was a problem updating your app. Please try again later.';
-
-            if ($request->ajax()) {
-                return response()->json(['response' => "error:{$reasonMsg}"], $updatedResponse->status());
-            }
-
-            return redirect()->back()->with('alert', "error:{$reasonMsg}");
-        }
-
-        $attributes = ApigeeService::formatAppAttributes($updatedResponse['attributes']);
-
-        $attributesWithoutSpaces = array_combine(array_keys($attributes), $attributes);
-
-
-        $app->update(['attributes' =>  $attributesWithoutSpaces]);
-
-        if ($request->ajax()) {
-            return response()->json(['attributes' => $attributesWithoutSpaces]);
-        }
-    }*/
     public function updateCustomAttributes(App $app, AppAttributesRequest $request)
     {
         // Validate the form data
@@ -1025,7 +1033,6 @@ class AppController extends Controller
         return response()->json([
             'success' => false,
             'message' => 'Failed to update attributes in Apigee.',
-            'apigee_response' => $apigeeResponse, // Include the actual response for debugging
         ], 500);
     }
 
@@ -1178,7 +1185,6 @@ class AppController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update attributes in Apigee.',
-                'apigee_response' => $apigeeResponse, // Include the actual response for debugging
             ], 500);
         }
 

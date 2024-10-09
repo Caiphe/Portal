@@ -126,11 +126,6 @@
                 </div>
             </div>
 
-            {{-- Custom attribe data to go here  TODO reuse the code --}}
-            <div id="custom-attributes-list-partial-{{ $app->aid }}">
-                {{-- @include('partials.custom-attributes.list', ['app' => $app])--}}
-            </div>
-
             <div class="detail-actions">
                 @if($app['status'] === 'approved')
                     <button class="reset app-status-action" data-id="{{ $app['aid'] }}"
@@ -149,15 +144,15 @@
 
             </div>
 
-            <!--======Attributes Section====================================================================================-->
             <div class="app-custom-attributes">
+
                 {{--=================Custom Attributes================--}}
 
                 <div class=main-ca>
                     <div class="main-ca__heading">
                         <span class="customAttributeMain__text">Custome Attributes</span>
                         <button class="btn-show-attribute-modal" data-id="{{ $app->aid }}">
-                            Add attribute
+                            Add custom attribute
                         </button>
                     </div>
                 </div>
@@ -166,26 +161,25 @@
                         <thead class="ca-thead">
                         <tr class="ca-align-left">
                             <th class="custom-attribute--table_th">
-                                <a href="#">Name @svg('chevron-sorter')</a>
+                                <a class="sort" data-sort="name" data-order="asc" href="javascript:void(0)">Name @svg('chevron-sorter')</a>
                             </th>
                             <th class="custom-attribute--table_th not-on-mobile">
-                                <a href="#">Value @svg('chevron-sorter')</a>
+                                <a class="sort" data-sort="value" data-order="asc" href="javascript:void(0)">Value @svg('chevron-sorter')</a>
                             </th>
                             <th class="custom-attribute--table_th not-on-mobile">
-                                <a href="#">Type @svg('chevron-sorter')</a>
+                                <a class="sort" data-sort="type" data-order="asc" href="javascript:void(0)">Type @svg('chevron-sorter')</a>
                             </th>
                             <th class="custom-attribute--table_th">
-                                <a href="#">Actions @svg('chevron-sorter')</a>
+                                <a>Actions @svg('chevron-sorter')</a>
                             </th>
                         </tr>
                         </thead>
                         <tbody>
                         @php
-                            // Filter attributes, excluding specified keys
-                            $filteredAttributes = collect($app->attributes)->except(['Country', 'TeamName', 'location', 'Description', 'DisplayName', 'AutoRenewAllowed', 'PermittedSenderIDs', 'senderMsisdn']);
+                            $filteredAttributes = collect($app->attributes)->except(['Country', 'TeamName', 'location', 'Description', 'DisplayName', 'autoRenewAllowed', 'permittedSenderIDs', 'senderMsisdn']);
                         @endphp
 
-                        @forelse ($filteredAttributes as $key => $value)
+                        @foreach ($filteredAttributes as $key => $value)
 
                             @php
                                 // Initialize display variables
@@ -201,18 +195,18 @@
                             @endphp
 
                             <tr class="ca-trow">
-                                <td class="display_name">
+                                <td class="display_name" data-name="{{ $displayName }}">
                                     {!! htmlspecialchars($displayName) !!}
                                 </td>
-                                <td class="not-on-mobile">
+                                <td class="not-on-mobile" data-value="{{ htmlspecialchars($displayValue) }}">
                                     {!! htmlspecialchars($displayValue) !!}
                                 </td>
-                                <td class="not-on-mobile">
+                                <td class="not-on-mobile" data-type="{{ $attributeType }}">
                                     @if($displayValue === 'true' || $displayValue === 'false')
                                         Boolean
                                     @elseif (is_string($value) && strpos($value, ',') !== false)
                                         CSV String Array
-                                    @elseif (is_string($value) && strpos($value, ',') !== true)
+                                    @elseif (is_string($value) && strpos($value, ',') === false)
                                         String
                                     @endif
                                 </td>
@@ -233,11 +227,7 @@
                                     </a>
                                 </td>
                             </tr>
-                        @empty
-                            <tr>
-                                <div class="no-custom-attribute">No custom attribute added yet.</div>
-                            </tr>
-                        @endforelse
+                        @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -249,11 +239,11 @@
                         <span class="customAttributeMain__text">Reserved Attributes</span>
                         @php
                             // Filter reserved attributes, specified keys
-                            $countReservedAttributes = collect($app->attributes)->only(['AutoRenewAllowed', 'PermittedSenderIDs', 'senderMsisdn'])->count();
+                            $countReservedAttributes = collect($app->attributes)->only(['autoRenewAllowed', 'permittedSenderIDs', 'senderMsisdn', 'originalChannelIDs', 'partnerName', 'permittedPlanIDs'])->count();
                         @endphp
                         <button class="btn-show-attribute-modal btn-show-reserved-attribute-modal"
                                 reserved-data-id="{{ $app->aid }}"
-                                @if($countReservedAttributes === 3) disabled @endif>
+                                @if($countReservedAttributes === 6) disabled @endif>
                             Add reserved attribute
                         </button>
                     </div>
@@ -263,26 +253,27 @@
                         <thead class="ca-thead">
                         <tr class="ca-align-left">
                             <th class="custom-attribute--table_th">
-                                <a href="#">Name @svg('chevron-sorter')</a>
+                                <a class="sort" data-sort="name" data-order="asc" href="javascript:void(0)">Name @svg('chevron-sorter')</a>
                             </th>
                             <th class="custom-attribute--table_th not-on-mobile">
-                                <a href="#">Value @svg('chevron-sorter')</a>
+                                <a class="sort" data-sort="value" data-order="asc" href="javascript:void(0)">Value @svg('chevron-sorter')</a>
                             </th>
                             <th class="custom-attribute--table_th not-on-mobile">
-                                <a href="#">Type @svg('chevron-sorter')</a>
+                                <a class="sort" data-sort="type" data-order="asc" href="javascript:void(0)">Type @svg('chevron-sorter')</a>
                             </th>
                             <th class="custom-attribute--table_th">
-                                <a href="#">Actions @svg('chevron-sorter')</a>
+                                <a>Actions @svg('chevron-sorter')</a>
                             </th>
                         </tr>
                         </thead>
                         <tbody>
                         @php
                             // Filter reserved attributes, specified keys
-                            $filteredAttributes = collect($app->attributes)->only(['AutoRenewAllowed', 'PermittedSenderIDs', 'senderMsisdn']);
+                            $filteredAttributes = collect($app->attributes)->only(['autoRenewAllowed', 'permittedSenderIDs', 'senderMsisdn', 'originalChannelIDs', 'partnerName', 'permittedPlanIDs']);
                         @endphp
 
-                        @forelse ($filteredAttributes as $key => $value)
+                        @foreach ($filteredAttributes as $key => $value)
+
                             @php
                                 // Initialize display variables
                                 $displayName = $key;
@@ -297,28 +288,29 @@
                             @endphp
 
                             <tr class="ca-trow">
-                                <td class="display_name">
+                                <td class="display_name" data-name="{{ $displayName }}">
                                     {!! htmlspecialchars($displayName) !!}
                                 </td>
-                                <td class="not-on-mobile">
+                                <td class="not-on-mobile" data-value="{{ htmlspecialchars($displayValue) }}">
                                     {!! htmlspecialchars($displayValue) !!}
                                 </td>
-                                <td class="not-on-mobile">
+                                <td class="not-on-mobile" data-type="{{ $attributeType }}">
                                     @if($displayValue === 'true' || $displayValue === 'false')
                                         Boolean
                                     @elseif (is_string($value) && strpos($value, ',') !== false)
                                         CSV String Array
-                                    @elseif (is_string($value) && strpos($value, ',') !== true)
+                                    @elseif (is_string($value) && strpos($value, ',') === false)
                                         String
                                     @endif
                                 </td>
                                 <td class="action-row">
-                                    <a class="btn-show-edit-reserved-attribute-modal"
+                                    <a class="btn-show-edit-attribute-modal"
                                        style="cursor: pointer"
                                        data-edit-id="{{ $app->aid }}"
                                        data-attribute='@json(["name" => $displayName, "value" => $displayValue, "type" => $attributeType])'>
                                         @svg('edit') Edit
                                     </a>
+
                                     <a class="btn-delete-attribute-modal"
                                        style="cursor: pointer"
                                        data-delete-id="{{ $app->aid }}"
@@ -328,11 +320,7 @@
                                     </a>
                                 </td>
                             </tr>
-                        @empty
-                            <tr>
-                                <div class="no-custom-attribute">No reserved attribute added yet.</div>
-                            </tr>
-                        @endforelse
+                        @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -346,43 +334,60 @@
                     </div>
                 </div>
                 <div class="ca-section">
+
                     <table class="app-attribute-table">
-                        <thead>
+                        <thead class="ca-thead">
                         <tr class="ca-align-left">
-                            <th class="custom-atrribute--table_th "><a href="#">Name @svg('chevron-sorter')</a>
+                            <th class="custom-attribute--table_th">
+                                <a class="sort" data-sort="name" data-order="asc" href="javascript:void(0)">Name @svg('chevron-sorter')</a>
                             </th>
-                            <th class="custom-atrribute--table_th"><a href="#">Value @svg('chevron-sorter')</a>
+                            <th class="custom-attribute--table_th not-on-mobile">
+                                <a class="sort" data-sort="value" data-order="asc" href="javascript:void(0)">Value @svg('chevron-sorter')</a>
                             </th>
-                            <th class="custom-atrribute--table_th"><a href="#">Type @svg('chevron-sorter')</a>
+                            <th class="custom-attribute--table_th not-on-mobile">
+                                <a class="sort" data-sort="type" data-order="asc" href="javascript:void(0)">Type @svg('chevron-sorter')</a>
                             </th>
+
                         </tr>
                         </thead>
-                        <tbody class="ca-tbody">
+                        <tbody>
                         @php
                             $filteredAttributes = collect($app->attributes)->only(['Country', 'TeamName', 'location', 'Description', 'DisplayName']);
                         @endphp
-                        @forelse ($filteredAttributes as $key => $value)
+
+                        @foreach ($filteredAttributes as $key => $value)
+
+                            @php
+                                // Initialize display variables
+                                $displayName = $key;
+                                $attributeType = ''; // No default type
+                                $displayValue = $value; // Initialize displayValue
+
+                                // Check if value is an array and convert it to JSON for display
+                                if (is_array($value)) {
+                                    $attributeType = 'Array';
+                                    $displayValue = json_encode($value); // Convert array to JSON string for display
+                                }
+                            @endphp
+
                             <tr class="ca-trow">
-                                <td class="display_name">
-                                    {{ $key }}
+                                <td class="display_name" data-name="{{ $displayName }}">
+                                    {!! htmlspecialchars($displayName) !!}
                                 </td>
-                                <td class="not-on-mobile">
-                                    {{ $value }}
+                                <td class="not-on-mobile" data-value="{{ htmlspecialchars($displayValue) }}">
+                                    {!! htmlspecialchars($displayValue) !!}
                                 </td>
-                                <td class="not-on-mobile">
-                                    @if($value === 'true' || $value === 'false')
+                                <td class="not-on-mobile" data-type="{{ $attributeType }}">
+                                    @if($displayValue === 'true' || $displayValue === 'false')
                                         Boolean
                                     @elseif (is_string($value) && strpos($value, ',') !== false)
                                         CSV String Array
-                                    @elseif (is_string($value) && strpos($value, ',') !== true)
+                                    @elseif (is_string($value) && strpos($value, ',') === false)
                                         String
                                     @endif
                                 </td>
-
                             </tr>
-                        @empty
-                            <div class="no-custom-attribute">No system attribute added yet.</div>
-                        @endforelse
+                        @endforeach
                         </tbody>
                     </table>
                 </div>

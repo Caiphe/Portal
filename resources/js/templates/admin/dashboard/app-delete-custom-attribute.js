@@ -40,6 +40,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Get the attribute key from the form
                 const attributeKey = form.querySelector('input[name="attribute_key"]').value;
+                const submitButton = form.querySelector('.confirm-deletion-btn'); // Select the button
+
+                // Disable the confirm deletion button
+                submitButton.disabled = true;
+
+                // Display loading message
+                addLoading('Deleting App Attribute...');
 
                 // Perform the AJAX request to delete the attribute
                 fetch(`/admin/apps/${appAid}/custom-attributes/delete`, {
@@ -48,12 +55,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         'X-CSRF-TOKEN': csrfToken,
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ attribute_key: attributeKey }) // Send the attribute key to be deleted
+                    body: JSON.stringify({attribute_key: attributeKey}) // Send the attribute key to be deleted
                 })
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            addAlert("Custom Attribute deleted successfully");
+                            addAlert('success', data.message);
                             // Attribute successfully deleted, hide the modal and update the table
                             if (deleteCustomAttributeModal) {
                                 deleteCustomAttributeModal.classList.remove('show'); // Hide the modal
@@ -68,13 +75,20 @@ document.addEventListener('DOMContentLoaded', function () {
                             addAlert(data.message);
                             console.log('Attribute deleted:', attributeKey);
                         } else {
-                            addAlert(data.message);
+                            addAlert('danger', data.message);
                             console.error('Failed to delete attribute:', data.message);
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                    });
+                    }).finally(() => {
+                    removeLoading();
+                    // Re-enable the confirm deletion button after the request finishes
+                    submitButton.disabled = false;
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 3000); // 3000 milliseconds = 3 seconds
+                });
             });
         });
     }

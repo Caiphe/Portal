@@ -3,6 +3,13 @@ document.addEventListener('DOMContentLoaded', function () {
     let appAid = null;
     const regex = /^[a-zA-Z0-9_-]+$/; // Only allows alphanumeric characters, underscores, and dashes
     let tags = []; // For storing tags
+    // Restricted keywords (case-insensitive)
+    const restrictedKeywords = ['sendermsisdn', 'originalchannelids', 'partnername', 'permittedsenderids', 'permittedplanids', 'autorenewallowed', 'country', 'teamname', 'location', 'description', 'displayname'];
+
+    // Helper function to check if the name or value is restricted
+    function isRestricted(keyword) {
+        return restrictedKeywords.some(restricted => restricted.toLowerCase() === keyword.toLowerCase());
+    }
 
     // Initialize event listeners
     function initializeEventListeners() {
@@ -31,20 +38,41 @@ document.addEventListener('DOMContentLoaded', function () {
         const booleanField = modal.querySelector('#boolean-value');
         const typeSelect = modal.querySelector('#type');
         const submitButton = modal.querySelector('.btn-confirm');
-        const tagContainer = modal.querySelector('#tag-container');
 
         // Pre-fill the fields with data
         nameField.value = attributeData.name || ''; // Set name field
+
         if (valueField) {
             valueField.value = attributeData.value || ''; // Set value field if it exists
         } else {
             console.error('Value field not found in the modal.');
         }
+
+        // Determine the type based on the valueField
+        const value = valueField.value.trim();
+        if (value.includes(',')) {
+            typeSelect.value = 'number'; // Set type to number if valueField contains a comma
+        } else if (value === 'true' || value === 'false') {
+            typeSelect.value = 'boolean'; // Set type to boolean if valueField is true or false
+        } else {
+            typeSelect.value = 'string'; // Default to string
+        }
+
         numberField.value = attributeData.numberValue || ''; // Set number field if applicable
-        typeSelect.value = 'string'; // Default to 'string' if not present
+
+        // Pre-fill textarea and tags for Number
+        if (typeSelect.value === 'number') {
+            // Check if value is an existing tag list
+            if (attributeData.value) {
+                tags = attributeData.value.split(',').map(tag => tag.trim());
+                numberField.value = tags.join(', '); // Pre-fill the textarea with existing tags
+            }
+            handleAttributeTypeChange(modal); // Ensure correct display of fields
+            updateTagDisplay(modal, tags); // Update tag display
+        }
 
         // Update tags if applicable
-        if (typeof attributeData.value === 'string' && attributeData.value.includes(',')) {
+        if (typeof attributeData.value === nameField.value && attributeData.value.includes(',')) {
             tags = attributeData.value.split(',').map(tag => tag.trim());
             handleAttributeTypeChange(modal);
             updateTagDisplay(modal, tags);
@@ -76,7 +104,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const form = modal.querySelector('#edit-custom-attribute-form');
         form.addEventListener('submit', function (event) {
             event.preventDefault();
-            //submitForm(nameField, valueField, numberField, tags, modal);
             submitForm(nameField, valueField, numberField, booleanField, typeSelect, tags, modal);
         });
 
@@ -143,7 +170,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function checkIfFormIsValid(modal, nameField, valueField, numberField, tags, submitButton) {
-        const isNameValid = nameField.value.trim() !== '' && regex.test(nameField.value.trim()) && new Blob([nameField.value.trim()]).size <= 2048;
+        const name = nameField.value.trim();
+        const isNameValid = name !== '' && regex.test(name) && new Blob([name]).size <= 2048 && !isRestricted(name); // Check if name is restricted
+
         let isValueValid = false;
 
         const attributeType = modal.querySelector('#type').value;
@@ -151,14 +180,15 @@ document.addEventListener('DOMContentLoaded', function () {
         // Check if boolean value exists in the modal
         const booleanValueField = modal.querySelector('#boolean-value');
         if (attributeType === 'string') {
-            isValueValid = valueField.value.trim() !== '' && regex.test(valueField.value.trim()) && new Blob([valueField.value.trim()]).size <= 2048;
+            const value = valueField.value.trim();
+            isValueValid = value !== '' && regex.test(value) && new Blob([value]).size <= 2048 && !isRestricted(value); // Check if value is restricted
         } else if (attributeType === 'number') {
             isValueValid = isTagDataValid(tags);
         } else if (attributeType === 'boolean' && booleanValueField) {
             isValueValid = booleanValueField.value.trim() !== '';
         }
 
-        // Validate form by enabling/disabling the submit button based on field validations
+        // Enable or disable the submit button based on form validity
         if (isNameValid && (attributeType === 'boolean' ? isValueValid : (attributeType === 'number' ? isValueValid : true))) {
             submitButton.classList.remove('disabled');
             submitButton.disabled = false;
@@ -167,6 +197,7 @@ document.addEventListener('DOMContentLoaded', function () {
             submitButton.disabled = true;
         }
     }
+
     // Helper functions
     function isTagDataValid(tags) {
         return tags.join(',').length <= 2048; // 2048 bytes limit for tags
@@ -176,6 +207,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const name = nameField.value.trim();
         let value = '';  // Value will change based on type
         const attributeType = typeSelect.value;
+        const submitButton = modal.querySelector('.btn-confirm');
+
+        // Disable the submit button to prevent multiple submissions
+        submitButton.classList.add('disabled');
+        submitButton.disabled = true;
 
         // Handle the value based on attribute type
         if (attributeType === 'string') {
@@ -185,27 +221,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 addAlert('error', 'Value field must not be empty.');
                 return;
             }
-        } else if (attributeType === 'number') {
-            // Only accept a single number input, not tags
-            value = tags.join(',');  // Collect tags entered in textarea
-            if (!value) {  // Check if the value is a valid number
-                console.error('Number field must contain a valid number.');
-                addAlert('error', 'CSV String Array must contain comma separated characters.');
-                return;
-            }
-        } else if (attributeType === 'boolean') {
-            value = booleanField.value;  // True or False from select input
-            if (value === '') {  // Require a value for boolean type
-                console.error('Boolean field must not be empty.');
-                addAlert('error', 'Boolean field must not be empty.');
-                return;
-            }
         }
+
+        // Perform an additional check for restricted names or values
+        if (isRestricted(name)) {
+            console.error('Invalid attribute name.');
+            addAlert('error', `The attribute name "${name}" is not allowed.`);
+            return;
+        }
+        if (isRestricted(value)) {
+            console.error('Invalid attribute value.');
+            addAlert('error', `The attribute value "${value}" is not allowed.`);
+            return;
+        }
+
 
         // Prepare the data in the simplified key-value format
         const attributeData = {
             [name]: value  // Just name: value
         };
+
+        // Display loading message
+        addLoading('Uppdating Custom Attribute...');
 
         // Submit the form data using fetch (AJAX)
         fetch(`/admin/apps/${appAid}/custom-attributes/update`, {
@@ -227,7 +264,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 if (data.success) {
                     console.log('Success:', data);
-                    addAlert('success', 'Attribute saved');
+                    addAlert('success', data.message);
                     modal.classList.remove('show');
 
                     // Clear the form fields for future use
@@ -246,10 +283,21 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => {
                 console.error('Error:', error); // Debugging: log any error
                 addAlert('error', 'Failed to update custom attribute. Please try again.'); // Optionally handle error, e.g., show an error message
-            });
+            }).finally(() => {
+            // Re-enable the submit button after form submission is complete
+            submitButton.classList.remove('disabled');
+            submitButton.disabled = false;
+
+            removeLoading();
+            setTimeout(function () {
+                window.location.reload();
+            }, 3000); // 3000 milliseconds = 3 seconds
+        });
     }
+
     // Initialize event listeners
     initializeEventListeners();
+
     function handleContentLoad() {
         initializeEventListeners(); // Reinitialize event listeners after new content is loaded
     }
