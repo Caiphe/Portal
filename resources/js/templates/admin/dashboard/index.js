@@ -80,6 +80,7 @@
         noteDialog.classList.add('show');
     }
 
+
     function fetchAttributes(){
         var token = document.querySelector('meta[name="csrf-token"]').content;
         var id = this.dataset.id;
@@ -509,3 +510,4 @@
     }
 
 }());
+
