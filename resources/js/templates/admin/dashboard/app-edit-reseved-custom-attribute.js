@@ -5,6 +5,32 @@ document.addEventListener('DOMContentLoaded', function () {
     const regex = /^[a-zA-Z0-9_-]+$/; // Only allows alphanumeric characters, underscores, and dashes (no spaces)
     let tags = []; // For storing tags from textarea
 
+    // Function to initialize event listeners
+    function initializeEventListeners() {
+        const container = document.querySelector('#table-data'); // Use a common parent element
+
+        container.addEventListener('click', function (event) {
+
+            if (event.target.matches('.btn-show-edit-reserved-attribute-modal')) {
+                appAid = event.target.getAttribute('data-edit-id');
+                const addReservedAttributeModal = document.getElementById(`edit-reserved-attribute-${appAid}`);
+                const attributeData = JSON.parse(event.target.getAttribute('data-attribute'));
+
+                if (addReservedAttributeModal) {
+                    fetchAttributes().then(() => {
+                        addReservedAttributeModal.classList.add('show'); // Show the modal after attributes are fetched
+                        setupModal(addReservedAttributeModal, attributeData);
+                    }).catch(error => {
+                        console.error('Error fetching attributes:', error);
+                        addAlert('error', error.message || 'There was a problem fetching the app attributes.');
+                    });
+                } else {
+                    console.error(`Modal with id reserved-attributes-${appAid} not found`);
+                }
+            }
+        });
+    }
+
     function fetchAttributes() {
         const token = document.querySelector('meta[name="csrf-token"]').content;
         const id = appAid; // Use the global appAid variable
@@ -18,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         addLoading('Fetching custom attributes...');
 
-        fetch(url, {
+        return fetch(url, {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': token,
@@ -39,8 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(result => {
                 // Check if the response indicates success
                 if (result.success) {
-                    //addAlert('success', result.message);
-                    console.log(result.message); // Optional: log success message
+
                 } else {
                     // Handle unexpected response structure
                     addAlert('error', 'Unexpected response format.');
@@ -48,32 +73,8 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .catch(error => {
                 removeLoading(); // Ensure loading is removed even on error
-                console.error('Error fetching attributes:', error);
-                // Display specific error message
-                addAlert('error', error.message || 'Sorry, there was a problem fetching your app attributes. Please try again.');
+                throw error; // Rethrow error to handle in .catch of event listener
             });
-    }
-
-    // Function to initialize event listeners
-    function initializeEventListeners() {
-        const container = document.querySelector('#table-data'); // Use a common parent element
-
-        container.addEventListener('click', function (event) {
-
-            if (event.target.matches('.btn-show-edit-reserved-attribute-modal')) {
-                 appAid = event.target.getAttribute('data-edit-id');
-                const addReservedAttributeModal = document.getElementById(`edit-reserved-attribute-${appAid}`);
-                const attributeData = JSON.parse(event.target.getAttribute('data-attribute'));
-
-                if (addReservedAttributeModal) {
-                    addReservedAttributeModal.classList.add('show');
-                    setupModal(addReservedAttributeModal, attributeData);
-                    fetchAttributes();  // Fetch attributes as soon as the modal is opened
-                } else {
-                    console.error(`Modal with id reserved-attributes-${appAid} not found`);
-                }
-            }
-        });
     }
 
     // Function to set up the modal
@@ -381,7 +382,6 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    console.log('Success:', data);
                     addAlert('success', data.message);
                     modal.classList.remove('show');
 

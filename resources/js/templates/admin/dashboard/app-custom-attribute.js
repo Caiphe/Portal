@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', function () {
         return restrictedKeywords.some(restricted => restricted.toLowerCase() === keyword.toLowerCase());
     }
 
-    function fetchAttributes() {
+    function fetchAttributes(modal) {
         const token = document.querySelector('meta[name="csrf-token"]').content;
-        const id = appAid; // Use the global appAid variable
-        const url = `/admin/apps/${id}/custom-attributes/save`; // Define your URL based on your routing
+        const id = appAid;
+        const url = `/admin/apps/${id}/custom-attributes/save`;
 
         const app = {
             _method: 'PUT',
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         addLoading('Fetching custom attributes...');
 
-        fetch(url, {
+        return fetch(url, {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': token,
@@ -39,29 +39,27 @@ document.addEventListener('DOMContentLoaded', function () {
                         throw new Error(`Error: ${errorData.message}, Code: ${errorData.error_code}`);
                     });
                 }
-                return response.json(); // Parse the JSON response
+                return response.json();
             })
             .then(result => {
-                // Check if the response indicates success
                 if (result.success) {
-                    //addAlert('success', result.message);
-                    console.log(result.message);
+                    // Show the modal after fetching attributes
+                    modal.classList.add('show');
+                    setupModal(modal); // Initialize modal fields and listeners
                 } else {
-                    // Handle unexpected response structure
                     addAlert('error', 'Unexpected response format.');
                 }
             })
             .catch(error => {
                 removeLoading();
                 console.error('Error fetching attributes:', error);
-                // Display specific error message
                 addAlert('error', error.message || 'Sorry, there was a problem fetching your app attributes. Please try again.');
             });
     }
 
     // Function to initialize event listeners
     function initializeEventListeners() {
-        const container = document.querySelector('#table-data'); // Use a common parent element
+        const container = document.querySelector('#table-data');
 
         container.addEventListener('click', function (event) {
             if (event.target.matches('.btn-show-attribute-modal')) {
@@ -69,15 +67,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 const addCustomAttributeModal = document.getElementById(`custom-attributes-${appAid}`);
 
                 if (addCustomAttributeModal) {
-                    addCustomAttributeModal.classList.add('show');
-                    setupModal(addCustomAttributeModal); // Initialize modal fields and listeners
-                    fetchAttributes();  // Fetch attributes as soon as the modal is opened
+                    fetchAttributes(addCustomAttributeModal);
                 } else {
                     console.error(`Modal with id custom-attributes-${appAid} not found`);
                 }
             }
         });
     }
+
 
     // Function to set up the modal (unchanged)
     function setupModal(modal) {
@@ -335,7 +332,6 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    console.log('Success:', data);
                     addAlert('success', data.message);
                     modal.classList.remove('show');
 

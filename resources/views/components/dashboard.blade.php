@@ -312,7 +312,7 @@
                                     @endif
                                 </td>
                                 <td class="action-row">
-                                    <a class="btn-show-edit-attribute-modal"
+                                    <a class="btn-show-edit-reserved-attribute-modal"
                                        style="cursor: pointer"
                                        data-edit-id="{{ $app->aid }}"
                                        data-attribute='@json(["name" => $displayName, "value" => $displayValue, "type" => $attributeType])'>

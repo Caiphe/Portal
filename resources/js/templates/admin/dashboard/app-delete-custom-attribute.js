@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            addAlert('success', data.message);
+                            addAlert('success', data.message, attributeKey);
                             // Attribute successfully deleted, hide the modal and update the table
                             if (deleteCustomAttributeModal) {
                                 deleteCustomAttributeModal.classList.remove('show'); // Hide the modal
@@ -72,8 +72,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                 rowToRemove.remove();
                             }
 
-                            addAlert(data.message);
-                            console.log('Attribute deleted:', attributeKey);
                         } else {
                             addAlert('danger', data.message);
                             console.error('Failed to delete attribute:', data.message);

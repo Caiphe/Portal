@@ -175,7 +175,6 @@ class AppController extends Controller
         $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
         $attributes = ApigeeService::formatToApigeeAttributes($attributes);
 
-        //TODO: Type to the attributes
         $attributes = array_merge($attributes, [
             [
                 'name' => 'DisplayName',

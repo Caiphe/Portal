@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         addLoading('Fetching custom attributes...');
 
-        fetch(url, {
+        return fetch(url, {  // Return the fetch promise
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': token,
@@ -42,22 +42,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 return response.json(); // Parse the JSON response
             })
             .then(result => {
-                // Check if the response indicates success
                 if (result.success) {
-                    //addAlert('success', result.message);
-                    console.log(result.message); // Optional: log success message
+                    return result; // Return the result for chaining
                 } else {
-                    // Handle unexpected response structure
                     addAlert('error', 'Unexpected response format.');
+                    throw new Error('Unexpected response format.');
                 }
             })
             .catch(error => {
-                removeLoading(); // Ensure loading is removed even on error
+                removeLoading();
                 console.error('Error fetching attributes:', error);
-                // Display specific error message
                 addAlert('error', error.message || 'Sorry, there was a problem fetching your app attributes. Please try again.');
+                throw error; // Propagate error for handling
             });
     }
+
     // Initialize event listeners
     function initializeEventListeners() {
         const container = document.querySelector('#table-data');
@@ -66,14 +65,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 appAid = event.target.getAttribute('data-edit-id');
                 const attributeData = JSON.parse(event.target.getAttribute('data-attribute'));
 
-                // Show the modal
-                const editCustomAttribute = document.getElementById(`edit-custom-attributes-${appAid}`);
-                if (editCustomAttribute) {
-                    editCustomAttribute.classList.add('show');
-                }
+                fetchAttributes() // Fetch attributes first
+                    .then(result => {
+                        // Show the modal and setup after fetch success
+                        const editCustomAttribute = document.getElementById(`edit-custom-attributes-${appAid}`);
+                        if (editCustomAttribute) {
+                            editCustomAttribute.classList.add('show');
+                        }
 
-                setupModal(editCustomAttribute, attributeData); // Pass attributeData here
-                fetchAttributes();
+                        setupModal(editCustomAttribute, attributeData); // Set up modal with fetched data
+                    })
+                    .catch(error => {
+                        // Optionally handle fetch error if necessary
+                        console.error('Error while fetching attributes:', error);
+                    });
             }
         });
     }
@@ -311,7 +316,6 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .then(data => {
                 if (data.success) {
-                    console.log('Success:', data);
                     addAlert('success', data.message);
                     modal.classList.remove('show');
 

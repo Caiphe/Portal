@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const regex = /^[a-zA-Z0-9_-]+$/; // Only allows alphanumeric characters, underscores, and dashes (no spaces)
     let tags = []; // For storing tags from textarea
 
-    function fetchAttributes() {
+    function fetchAttributes(modal) {
         const token = document.querySelector('meta[name="csrf-token"]').content;
         const id = appAid; // Use the global appAid variable
         const url = `/admin/apps/${id}/custom-attributes/save`; // Define your URL based on your routing
@@ -39,7 +39,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Check if the response indicates success
                 if (result.success) {
                     // Handle successful response
-                    console.log(result.message); // Optional: log success message
+                    modal.classList.add('show');
+                    setupModal(modal); // Initialize modal fields and listeners
                 } else {
                     // Handle unexpected response structure
                     addAlert('error', 'Unexpected response format.');
@@ -64,9 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const addReservedAttributeModal = document.getElementById(`reserved-attributes-${appAid}`);
 
                 if (addReservedAttributeModal) {
-                    addReservedAttributeModal.classList.add('show');
-                    setupModal(addReservedAttributeModal);
-                    fetchAttributes()
+                    fetchAttributes(addReservedAttributeModal);
                 } else {
                     console.error(`Modal with id reserved-attributes-${appAid} not found`);
                 }
@@ -344,7 +343,6 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    console.log('Success:', data);
                     addAlert('success', data.message);
                     modal.classList.remove('show');
 
