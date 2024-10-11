@@ -1,6 +1,6 @@
 <header class="parent-header">
     <x-banner  />
-    
+
     <div id="header">
         <nav class="header-inner container">
             <a class="site-name" href="/">@svg('logo', '', '/images') Developer Portal</a>
@@ -67,7 +67,7 @@
 
                     {{-- Notification section --}}
                     <x-notifications></x-notifications>
-                    
+
                 </div>
 
 
