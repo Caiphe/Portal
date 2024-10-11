@@ -295,7 +295,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const attributeType = typeSelect.value;
         const submitButton = modal.querySelector('.btn-confirm');
 
-
         // Handle the value based on attribute type
         if (attributeType === 'senderMsisdn') {
             value = valueField.value.trim();
