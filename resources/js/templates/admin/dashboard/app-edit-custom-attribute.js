@@ -51,7 +51,6 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .catch(error => {
                 removeLoading();
-                console.error('Error fetching attributes:', error);
                 addAlert('error', error.message || 'Sorry, there was a problem fetching your app attributes. Please try again.');
                 throw error; // Propagate error for handling
             });
@@ -72,12 +71,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (editCustomAttribute) {
                             editCustomAttribute.classList.add('show');
                         }
-
                         setupModal(editCustomAttribute, attributeData); // Set up modal with fetched data
                     })
                     .catch(error => {
                         // Optionally handle fetch error if necessary
-                        console.error('Error while fetching attributes:', error);
+                        addAlert('error', error.message || 'Sorry, there was a problem fetching your app attributes. Please try again.');
                     });
             }
         });
@@ -98,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (valueField) {
             valueField.value = attributeData.value || ''; // Set value field if it exists
         } else {
-            console.error('Value field not found in the modal.');
+            addAlert('error', 'Value field not found in the modal.');
         }
 
         // Determine the type based on the valueField
@@ -270,7 +268,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (attributeType === 'string') {
             value = valueField.value.trim();  // String type input
             if (!value) {  // Require a value for string type
-                console.error('Value field must not be empty.');
                 addAlert('error', 'Value field must not be empty.');
                 return;
             }
@@ -278,12 +275,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Perform an additional check for restricted names or values
         if (isRestricted(name)) {
-            console.error('Invalid attribute name.');
             addAlert('error', `The attribute name "${name}" is not allowed.`);
             return;
         }
         if (isRestricted(value)) {
-            console.error('Invalid attribute value.');
             addAlert('error', `The attribute value "${value}" is not allowed.`);
             return;
         }
@@ -328,12 +323,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     updateTagDisplay(modal, tags); // Clear the tag display
                     checkIfFormIsValid(modal, nameField, valueField, numberField, booleanField, tags, submitButton); // Revalidate form
                 } else {
-                    console.error('Error:', data.message);
                     addAlert('error', data.message);
                 }
             })
             .catch(error => {
-                console.error('Error:', error); // Debugging: log any error
                 addAlert('error', 'Failed to update custom attribute. Please try again.'); // Optionally handle error, e.g., show an error message
             }).finally(() => {
             // Re-enable the submit button after form submission is complete

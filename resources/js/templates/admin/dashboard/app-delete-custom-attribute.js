@@ -26,8 +26,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     // Set the attribute key in the hidden input field for deletion
                     deleteCustomAttributeModal.querySelector('input[name="attribute_key"]').value = attributeKey;
-                } else {
-                    console.error(`Modal with id delete-custom-attribute-${appAid} not found`);
                 }
             }
         });
