@@ -96,6 +96,7 @@ class CompanyTeamsController extends Controller
 
         $newOwner->teams()->updateExistingPivot($team, ['role_id' => 7]);
         ApigeeService::removeDeveloperFromCompany($team, $user);
+        ApigeeService::updateCompany($team, $newOwner);
         $team->update(['owner_id' => $newOwner->id]);
 
         Notification::create([
@@ -525,10 +526,7 @@ class CompanyTeamsController extends Controller
             $teamLogo = $this->processLogoFile($request);
         }
 
-        $data['name'] = preg_replace('/[±§@#$%^&*()+=!]+/', '', $data['name']);
-
         $team->update([
-            'name' => $data['name'],
             'url' => $data['url'],
             'contact' => $data['contact'],
             'country' => $data['country'],
@@ -592,6 +590,7 @@ class CompanyTeamsController extends Controller
                 }
             }
 
+            ApigeeService::updateCompany($team, $owner);
             Teamwork::acceptInvite($invite);
         } else {
             $resp = ApigeeService::addDeveloperToCompany($team, $invite->user, $invite->role);

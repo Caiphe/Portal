@@ -229,38 +229,52 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     function submitForm() {
         const formData = new FormData(teamForm);
-        const xhr = new XMLHttpRequest();
 
-        xhr.open('POST', teamForm.action, true);
-        xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('input[name="_token"]').value);
+        // Explicitly set the correct URL for the POST request
+        const url = '/admin/teams/store';
 
-        xhr.onload = function() {
-            removeLoading();
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
+            },
+            body: formData,
+        })
+            .then(response => {
+                removeLoading();
 
-            if (xhr.status === 200) {
-                addAlert('success', [`${formData.get('name')} has been successfully created. You will be redirected to your teams page shortly.`], function() {
-                    window.location.href = "/admin/teams";
-                });
-            } else if (xhr.status === 429) {
-                addAlert('warning', ["You are not allowed to create more than 2 teams per day."], function() {
-                    window.location.href = "/admin/teams";
-                });
-            } else if (xhr.status === 413) {
-                addAlert('warning', ["The logo dimensions are too large, please make sure the width and height are less than 2000."]);
-            } else {
-                const result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
-                const messages = result && result.errors ? Object.values(result.errors).flat() : ['Sorry, there was a problem creating your team. Please try again.'];
-                addAlert('error', messages);
-            }
-        };
+                if (response.ok) {
+                    return response.json().then(data => {
+                        addAlert('success', [`${formData.get('name')} has been successfully created. You will be redirected to your teams page shortly.`], function() {
+                            window.location.href = "/admin/teams";
+                        });
+                    });
+                } else if (response.status === 429) {
+                    addAlert('warning', ["You are not allowed to create more than 2 teams per day."], function() {
+                        // Optionally handle the 429 error
+                        window.location.href = "/admin/teams";
+                    });
+                } else if (response.status === 413) {
+                    addAlert('warning', ["The logo dimensions are too large, please make sure the width and height are less than 2000."]);
+                } else if (response.status === 404) {
+                    addAlert('error','Email for team owner not found, Team owner must be an existing user.');
+                } else if (response.status === 422) {
+                    // Handle the 422 Unprocessable Entity response
+                    addAlert('error', 'Team name already exists');
 
-        xhr.onerror = function() {
-            removeLoading();
-            addAlert('error', ['Sorry, there was a problem creating your team. Please try again.']);
-        };
+                } else {
+                    return response.json().then(result => {
+                        const messages = result && result.errors ? Object.values(result.errors).flat() : ['Sorry, there was a problem creating your team. Please try again.'];
+                        addAlert('error', messages);
+                    });
+                }
+            })
+            .catch(error => {
+                removeLoading();
+                addAlert('error', ['Sorry, there was a problem creating your team. Please try again.']);
+            });
 
         addLoading('Creating a new team...');
-        xhr.send(formData);
     }
 
     /**

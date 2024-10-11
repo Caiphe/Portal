@@ -26,9 +26,15 @@ trait TeamsCompanyTrait
 
         //Get first team owner email from Portal and check if it exists in APIGEE
         $owner = User::where('email', $emails[0])->first();
-        $user = ApigeeService::get('developers/' . $owner->email);
+
+        //abort action if user does not exist in Portal
+        if($owner === null) {
+            abort(404, 'User not found in APIGEE');
+        }
 
         //abort action if user does not exist in APIGEE
+        $user = ApigeeService::get('developers/' . $owner->email);
+
         if (isset($user['code'])) {
             return redirect()->back()->with('alert', "error:'" . $user['message'] . "'");
         }
@@ -236,6 +242,9 @@ trait TeamsCompanyTrait
             $owner = User::where('id', $data['new_owner_id'])
                 ->where('developer_id', '!=', null)
                 ->first();
+
+            //Update company in APIGEE with new team owner
+            ApigeeService::updateCompany($team, $owner);
 
             $team->update(['owner_id' => $owner->id]);
             $owner->teams()->updateExistingPivot($team, ['role_id' => 7]);
