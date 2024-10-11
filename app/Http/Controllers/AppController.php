@@ -577,7 +577,7 @@ class AppController extends Controller
                 return response()->json(['response' => "error:{$reasonMsg}"], $updatedResponse->status());
             }
 
-            return redirect()->back()->with('alert', "error:{$reasonMsg}");
+            return redirect()->back()->with('navigate', "error:{$reasonMsg}");
         }
 
         $attributes = ApigeeService::formatAppAttributes($updatedResponse['attributes']);
