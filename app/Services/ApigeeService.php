@@ -404,17 +404,28 @@ class ApigeeService
         return $a;
     }
 
+    /**
+     * Fetch the app attributes from Apigee
+     * @param App $app
+     * @return array|void
+     */
     public static function getApigeeAppAttributes(App $app)
     {
-        $attr = self::get('apps/' . $app->aid)['attributes'] ?? [];
+        $appId = self::get('apps/' . $app['aid'])['appId'];
 
-        return self::getAppAttributes($attr);
+        if($appId === $app['aid']) {
+            $attr = self::get('apps/' . $app['aid'])['attributes'];
+            return self::getAppAttributes($attr);
+        }else{
+            abort(404, 'App Not Found. The app Id does not match the one in Apigee.');
+        }
     }
 
     public static function formatAppAttributes(array $attributes)
     {
         $a = [];
         foreach ($attributes as $attribute) {
+
             if (!isset($attribute['value'])) {
                 $attribute['value'] = '';
             }

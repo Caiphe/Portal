@@ -12,7 +12,9 @@
 
 <div class="body">
     @forelse($apps as $app)
-        @if(empty($app['attributes'])) @continue @endif
+        @if(empty($app['attributes']))
+            @continue
+        @endif
         @php
             $productCountries = [];
             if(!is_null($app->country_code)){
@@ -34,41 +36,32 @@
 </div>
 
 @foreach($apps as $app)
-
     <x-dialog-box id="admin-{{ $app->aid }}" dialogTitle="{{ $app->display_name }} log notes" class="log-content">
         <div class="note">
             {!! $app['notes'] ?: 'No notes at the moment here' !!}
         </div>
     </x-dialog-box>
 
-    <x-dialog-box id="custom-attributes-{{ $app->aid }}" dialogTitle="Custom attributes" class="custom-attributes-dialog">
-        <div class="content-container">
+    {{--Start of Add custom attribute dialog--}}
+    @include('templates.admin.dashboard.partial-app-custom-attributes.add-custom-attribute-modal', ['app' => $app])
+    {{--End of Add attribute dialog--}}
 
-            <div class="attributes-heading @if ($app->custom_attributes) show @endif">
-                <h4 class="name-heading">Attribute name</h4>
-                <h4 class="value-heading">Value</h4>
-            </div>
+    {{--Start of Edit custom attribute dialog --}}
+    @include('templates.admin.dashboard.partial-app-custom-attributes.edit-custom-attribute-modal', ['app' => $app])
+    {{--End of Edit custom attribute dialog--}}
 
-            {{-- Custom Attributes list --}}
-            <div id="custom-attributes-form-partial-{{ $app->aid }}">
-                @include('partials.custom-attributes.form', ['app' => $app])
-            </div>
-        </div>
+    {{--Start of Add reserved attribute dialog--}}
+    @include('templates.admin.dashboard.partial-app-custom-attributes.reserved-attributes.add-reserved-attribute-modal', ['app' => $app])
+    {{--End of Add reserved attribute dialog--}}
 
-            {{-- Custom attributes form --}}
-        <form class="custom-attributes-form" action="">
-            <div class="each-field">
-                <label for="name">Attribute name</label>
-                <input type="text" name="attribute[name][]" class="attribute-field attribute-name" placeholder="New attribute name"/>
-            </div>
-            <div class="each-field">
-                <label for="value">Value</label>
-                <input type="text" name="attribute[value][]" class="attribute-field attribute-value" placeholder="New value"/>
-            </div>
-            <button type="button" class="button add-attribute">Add</button>
-            <div class="attribute-error">Attribute name and value required</div>
-        </form>
+    {{--Start of Edit reserved attribute dialog--}}
+    @include('templates.admin.dashboard.partial-app-custom-attributes.reserved-attributes.edit-reserved-attribute-modal', ['app' => $app])
+    {{--End of Edit reserved attribute dialog--}}
 
-    </x-dialog-box>
+    {{--Start of Delete attribute dialog--}}
+    @include('templates.admin.dashboard.partial-app-custom-attributes.delete-attributes-models.attributes-delete-modal', ['app' => $app])
+    {{--End of Delete attribute dialog--}}
+
 @endforeach
+
 
