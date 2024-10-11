@@ -584,55 +584,6 @@ class AppController extends Controller
         }
     }
 
-    /**
-     * TODO Check if this is needed
-     * Admin update custom attributes
-     * @param App $app
-     * @param AppAttributesRequest $request
-     * @return JsonResponse|RedirectResponse|void
-     */
-    /* public function updateCustomAttributes(App $app, AppAttributesRequest $request)
-     {
-         $validated = $request->validated();
-         $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
-
-         $appAttributes = $app->attributes;
-
-         $previousCustomAttributes = $app->filterCustomAttributes($appAttributes);
-         $appAttributes = array_diff($appAttributes, $previousCustomAttributes);
-         $appAttributes = array_merge($appAttributes, $app->filterCustomAttributes($attributes));
-
-         $team = $app->team ?? null;
-         $developerEmail = $app->developer->email;
-         $accessUrl = $team ? "companies/{$team->username}" : "developers/{$developerEmail}";
-
-         $updatedResponse = ApigeeService::put("{$accessUrl}/apps/{$app->name}", [
-             "name" => $app->name,
-             'attributes' => ApigeeService::formatToApigeeAttributes($appAttributes),
-             "callbackUrl" => $app->url ?? '',
-         ]);
-
-         if ($updatedResponse->failed()) {
-             $reasonMsg = $updatedResponse['message'] ?? 'There was a problem updating your app. Please try again later.';
-
-             if ($request->ajax()) {
-                 return response()->json(['response' => "error:{$reasonMsg}"], $updatedResponse->status());
-             }
-
-             return redirect()->back()->with('alert', "error:{$reasonMsg}");
-         }
-
-         $attributes = ApigeeService::formatAppAttributes($updatedResponse['attributes']);
-
-         $attributesWithoutSpaces = array_combine(array_keys($attributes), $attributes);
-
-
-         $app->update(['attributes' =>  $attributesWithoutSpaces]);
-
-         if ($request->ajax()) {
-             return response()->json(['attributes' => $attributesWithoutSpaces]);
-         }
-     }*/
 
     /**
      * Gets the credentials.
