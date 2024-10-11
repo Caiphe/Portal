@@ -48,7 +48,6 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .catch(error => {
                 removeLoading(); // Ensure loading is removed even on error
-                console.error('Error fetching attributes:', error);
                 // Display specific error message
                 addAlert('error', error.message || 'Sorry, there was a problem fetching your app attributes. Please try again.');
             });
@@ -67,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (addReservedAttributeModal) {
                     fetchAttributes(addReservedAttributeModal);
                 } else {
-                    console.error(`Modal with id reserved-attributes-${appAid} not found`);
+                    addAlert('error', `Modal not found`);
                 }
             }
         });
@@ -87,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Ensure fields are defined
         if (!nameField || !valueField || !numberField || !booleanField || !typeSelect || !submitButton) {
-            console.error('One or more fields are not found in the modal.');
+            addAlert('error', 'One or more fields are not found in the modal.');
             return;
         }
 
@@ -259,7 +258,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let isValueValid = false;
 
         if (!nameField || !valueField || !numberField || !booleanField || !submitButton) {
-            console.error('One or more fields are not found.');
+            addAlert('error', 'One or more fields are not found.');
             return;
         }
 
@@ -296,7 +295,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const attributeType = typeSelect.value;
         const submitButton = modal.querySelector('.btn-confirm');
 
-
         // Handle the value based on attribute type
         if (attributeType === 'senderMsisdn') {
             value = valueField.value.trim();
@@ -313,7 +311,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (!value && attributeType !== 'autoRenewAllowed') {  // Only require value if it's not a number type
-            console.error('Value field must not be empty.');
+            addAlert('error', 'Value field must not be empty. You need to add tags.');
             return;
         }
 
@@ -355,12 +353,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     updateTagDisplay(modal, tags); // Clear the tag display
                     checkIfFormIsValid(modal, nameField, valueField, numberField, booleanField, tags, submitButton); // Revalidate form
                 } else {
-                    console.error('Error:', data.message);
                     addAlert('error', data.message);
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
                 addAlert('error', 'Failed to save attribute');
             }).finally(() => {
             removeLoading();

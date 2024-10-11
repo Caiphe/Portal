@@ -52,7 +52,6 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .catch(error => {
                 removeLoading();
-                console.error('Error fetching attributes:', error);
                 addAlert('error', error.message || 'Sorry, there was a problem fetching your app attributes. Please try again.');
             });
     }
@@ -68,8 +67,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (addCustomAttributeModal) {
                     fetchAttributes(addCustomAttributeModal);
-                } else {
-                    console.error(`Modal with id custom-attributes-${appAid} not found`);
                 }
             }
         });
@@ -89,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Ensure fields are defined
         if (!nameField || !valueField || !numberField || !booleanField || !typeSelect || !submitButton) {
-            console.error('One or more fields are not found in the modal.');
+            addAlert('error', 'One or more fields are not found in the modal.');
             return;
         }
 
@@ -245,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function checkIfFormIsValid(modal, nameField, valueField, numberField, booleanField, tags, submitButton) {
         // Ensure fields are defined
         if (!nameField || !valueField || !numberField || !booleanField || !submitButton) {
-            console.error('One or more fields are not found.');
+            addAlert('error', 'One or more fields are not found in the modal.');
             return;
         }
 
@@ -287,19 +284,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (!value && attributeType !== 'number') {  // Only require value if it's not a number type
-            console.error('Value field must not be empty.');
+            addAlert('error', 'Tags field value  must not be empty.');
             return;
         }
 
         if (isRestricted(name)) {
-            console.error('Invalid attribute name.');
             addAlert('error', `The attribute name "${name}" is not allowed.`);
             submitButton.classList.add('disabled');
         submitButton.disabled = true;
             return;
         }
         if (isRestricted(value)) {
-            console.error('Invalid attribute value.');
             addAlert('error', `The attribute value "${value}" is not allowed.`);
             submitButton.classList.add('disabled');
         submitButton.disabled = true;
@@ -344,12 +339,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     updateTagDisplay(modal, tags); // Clear the tag display
                     checkIfFormIsValid(modal, nameField, valueField, numberField, booleanField, tags, submitButton); // Revalidate form
                 } else {
-                    console.error('Error:', data.message);
                     addAlert('error', data.message);
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
                 addAlert('error', error);
             })
             .finally(() => {
