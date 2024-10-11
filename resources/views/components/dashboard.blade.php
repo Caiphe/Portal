@@ -157,79 +157,80 @@
                     </div>
                 </div>
                 <div class="ca-section">
-                    <table class="app-attribute-table">
-                        <thead class="ca-thead">
-                        <tr class="ca-align-left">
-                            <th class="custom-attribute--table_th">
-                                <a class="sort" data-sort="name" data-order="asc" href="javascript:void(0)">Name @svg('chevron-sorter')</a>
-                            </th>
-                            <th class="custom-attribute--table_th not-on-mobile">
-                                <a class="sort" data-sort="value" data-order="asc" href="javascript:void(0)">Value @svg('chevron-sorter')</a>
-                            </th>
-                            <th class="custom-attribute--table_th not-on-mobile">
-                                <a class="sort" data-sort="type" data-order="asc" href="javascript:void(0)">Type @svg('chevron-sorter')</a>
-                            </th>
-                            <th class="custom-attribute--table_th">
-                                <a>Actions @svg('chevron-sorter')</a>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @php
-                            $filteredAttributes = collect($app->attributes)->except(['Country', 'TeamName', 'location', 'Description', 'DisplayName', 'autoRenewAllowed', 'permittedSenderIDs', 'senderMsisdn']);
-                        @endphp
-
-                        @foreach ($filteredAttributes as $key => $value)
-
+                    <div class="table-responsive">
+                        <table class="app-attribute-table">
+                            <thead class="ca-thead">
+                            <tr class="ca-align-left">
+                                <th class="custom-attribute--table_th">
+                                    <a class="sort" data-sort="name" data-order="asc" href="javascript:void(0)">Name @svg('chevron-sorter')</a>
+                                </th>
+                                <th class="custom-attribute--table_th not-on-mobile">
+                                    <a class="sort" data-sort="value" data-order="asc" href="javascript:void(0)">Value @svg('chevron-sorter')</a>
+                                </th>
+                                <th class="custom-attribute--table_th not-on-mobile">
+                                    <a class="sort" data-sort="type" data-order="asc" href="javascript:void(0)">Type @svg('chevron-sorter')</a>
+                                </th>
+                                <th class="custom-attribute--table_th">
+                                    <a>Actions @svg('chevron-sorter')</a>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
                             @php
-                                // Initialize display variables
-                                $displayName = $key;
-                                $attributeType = ''; // No default type
-                                $displayValue = $value; // Initialize displayValue
-
-                                // Check if value is an array and convert it to JSON for display
-                                if (is_array($value)) {
-                                    $attributeType = 'Array';
-                                    $displayValue = json_encode($value); // Convert array to JSON string for display
-                                }
+                                $filteredAttributes = collect($app->attributes)->except(['Country', 'TeamName', 'location', 'Description', 'DisplayName', 'autoRenewAllowed', 'permittedSenderIDs', 'senderMsisdn', 'permittedPlanIDs', 'originalChannelIDs', 'partnerName']);
                             @endphp
 
-                            <tr class="ca-trow">
-                                <td class="display_name" data-name="{{ $displayName }}">
-                                    {!! htmlspecialchars($displayName) !!}
-                                </td>
-                                <td class="not-on-mobile" data-value="{{ htmlspecialchars($displayValue) }}">
-                                    {!! htmlspecialchars($displayValue) !!}
-                                </td>
-                                <td class="not-on-mobile" data-type="{{ $attributeType }}">
-                                    @if($displayValue === 'true' || $displayValue === 'false')
-                                        Boolean
-                                    @elseif (is_string($value) && strpos($value, ',') !== false)
-                                        CSV String Array
-                                    @elseif (is_string($value) && strpos($value, ',') === false)
-                                        String
-                                    @endif
-                                </td>
-                                <td class="action-row">
-                                    <a class="btn-show-edit-attribute-modal"
-                                       style="cursor: pointer"
-                                       data-edit-id="{{ $app->aid }}"
-                                       data-attribute='@json(["name" => $displayName, "value" => $displayValue, "type" => $attributeType])'>
-                                        @svg('edit') Edit
-                                    </a>
+                            @foreach ($filteredAttributes as $key => $value)
+                                @php
+                                    // Initialize display variables
+                                    $displayName = $key;
+                                    $attributeType = ''; // No default type
+                                    $displayValue = $value; // Initialize displayValue
 
-                                    <a class="btn-delete-attribute-modal"
-                                       style="cursor: pointer"
-                                       data-delete-id="{{ $app->aid }}"
-                                       data-attribute-key="{{ $displayName }}"
-                                       data-attribute-value="{{ $displayValue }}">
-                                        @svg('delete') Delete
-                                    </a>
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
+                                    // Check if value is an array and convert it to JSON for display
+                                    if (is_array($value)) {
+                                        $attributeType = 'Array';
+                                        $displayValue = json_encode($value); // Convert array to JSON string for display
+                                    }
+                                @endphp
+
+                                <tr class="ca-trow">
+                                    <td class="display_name" data-name="{{ $displayName }}">
+                                        {!! htmlspecialchars($displayName) !!}
+                                    </td>
+                                    <td class="not-on-mobile" data-value="{{ htmlspecialchars($displayValue) }}">
+                                        {!! htmlspecialchars($displayValue) !!}
+                                    </td>
+                                    <td class="not-on-mobile" data-type="{{ $attributeType }}">
+                                        @if($displayValue === 'true' || $displayValue === 'false')
+                                            Boolean
+                                        @elseif (is_string($value) && strpos($value, ',') !== false)
+                                            CSV String Array
+                                        @elseif (is_string($value) && strpos($value, ',') === false)
+                                            String
+                                        @endif
+                                    </td>
+                                    <td class="action-row">
+                                        <a class="btn-show-edit-attribute-modal"
+                                           style="cursor: pointer"
+                                           data-edit-id="{{ $app->aid }}"
+                                           data-attribute='@json(["name" => $displayName, "value" => $displayValue, "type" => $attributeType])'>
+                                            @svg('edit') Edit
+                                        </a>
+
+                                        <a class="btn-delete-attribute-modal"
+                                           style="cursor: pointer"
+                                           data-delete-id="{{ $app->aid }}"
+                                           data-attribute-key="{{ $displayName }}"
+                                           data-attribute-value="{{ $displayValue }}">
+                                            @svg('delete') Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 {{--=================Reserved Attributes================--}}

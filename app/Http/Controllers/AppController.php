@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\CreateAppRequest;
 use App\Http\Requests\DeleteAppRequest;
 use App\Http\Requests\CustomAttributesRequest;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AppController extends Controller
 {
@@ -544,17 +545,43 @@ class AppController extends Controller
      */
     public function saveCustomAttributeFromApigee(App $app, Request $request)
     {
+        try {
+        // Fetch attributes from Apigee
         $apigeeAttributes = ApigeeService::getApigeeAppAttributes($app);
-        $attrs = ApigeeService::formatToApigeeAttributes($apigeeAttributes);
-        $attributes = ApigeeService::formatAppAttributes($attrs);
 
-        $app->attributes = $attributes;
+        // Format the Apigee attributes
+        $attrs = ApigeeService::formatToApigeeAttributes($apigeeAttributes);
+        $formattedAttributes = ApigeeService::formatAppAttributes($attrs);
+
+        // Retrieve existing attributes from the app, decode if necessary
+        $existingAttributes = is_array($app->attributes)
+            ? $app->attributes
+            : json_decode($app->attributes, true) ?? [];
+
+        // Merge formatted attributes with existing attributes
+        $mergedAttributes = array_merge($existingAttributes, $formattedAttributes);
+
+        // Update the app's attributes and save
+        $app->attributes = $mergedAttributes;
         $app->save();
 
         return response()->json([
             'success' => true,
-            'message' => 'Attributes fetched from Apigee successfully.'
+            'message' => 'Attributes fetched from Apigee successfully and merged.',
         ], 200);
+        } catch (NotFoundHttpException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+                'error_code' => 404  // Include error code in response
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An unexpected error occurred: ' . $e->getMessage(),
+                'error_code' => 500  // Include error code for unexpected errors
+            ], 500);
+        }
     }
 
     /**
@@ -564,48 +591,48 @@ class AppController extends Controller
      * @param AppAttributesRequest $request
      * @return JsonResponse|RedirectResponse|void
      */
-   /* public function updateCustomAttributes(App $app, AppAttributesRequest $request)
-    {
-        $validated = $request->validated();
-        $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
+    /* public function updateCustomAttributes(App $app, AppAttributesRequest $request)
+     {
+         $validated = $request->validated();
+         $attributes = ApigeeService::formatAppAttributes($validated['attribute']);
 
-        $appAttributes = $app->attributes;
+         $appAttributes = $app->attributes;
 
-        $previousCustomAttributes = $app->filterCustomAttributes($appAttributes);
-        $appAttributes = array_diff($appAttributes, $previousCustomAttributes);
-        $appAttributes = array_merge($appAttributes, $app->filterCustomAttributes($attributes));
+         $previousCustomAttributes = $app->filterCustomAttributes($appAttributes);
+         $appAttributes = array_diff($appAttributes, $previousCustomAttributes);
+         $appAttributes = array_merge($appAttributes, $app->filterCustomAttributes($attributes));
 
-        $team = $app->team ?? null;
-        $developerEmail = $app->developer->email;
-        $accessUrl = $team ? "companies/{$team->username}" : "developers/{$developerEmail}";
+         $team = $app->team ?? null;
+         $developerEmail = $app->developer->email;
+         $accessUrl = $team ? "companies/{$team->username}" : "developers/{$developerEmail}";
 
-        $updatedResponse = ApigeeService::put("{$accessUrl}/apps/{$app->name}", [
-            "name" => $app->name,
-            'attributes' => ApigeeService::formatToApigeeAttributes($appAttributes),
-            "callbackUrl" => $app->url ?? '',
-        ]);
+         $updatedResponse = ApigeeService::put("{$accessUrl}/apps/{$app->name}", [
+             "name" => $app->name,
+             'attributes' => ApigeeService::formatToApigeeAttributes($appAttributes),
+             "callbackUrl" => $app->url ?? '',
+         ]);
 
-        if ($updatedResponse->failed()) {
-            $reasonMsg = $updatedResponse['message'] ?? 'There was a problem updating your app. Please try again later.';
+         if ($updatedResponse->failed()) {
+             $reasonMsg = $updatedResponse['message'] ?? 'There was a problem updating your app. Please try again later.';
 
-            if ($request->ajax()) {
-                return response()->json(['response' => "error:{$reasonMsg}"], $updatedResponse->status());
-            }
+             if ($request->ajax()) {
+                 return response()->json(['response' => "error:{$reasonMsg}"], $updatedResponse->status());
+             }
 
-            return redirect()->back()->with('alert', "error:{$reasonMsg}");
-        }
+             return redirect()->back()->with('alert', "error:{$reasonMsg}");
+         }
 
-        $attributes = ApigeeService::formatAppAttributes($updatedResponse['attributes']);
+         $attributes = ApigeeService::formatAppAttributes($updatedResponse['attributes']);
 
-        $attributesWithoutSpaces = array_combine(array_keys($attributes), $attributes);
+         $attributesWithoutSpaces = array_combine(array_keys($attributes), $attributes);
 
 
-        $app->update(['attributes' =>  $attributesWithoutSpaces]);
+         $app->update(['attributes' =>  $attributesWithoutSpaces]);
 
-        if ($request->ajax()) {
-            return response()->json(['attributes' => $attributesWithoutSpaces]);
-        }
-    }*/
+         if ($request->ajax()) {
+             return response()->json(['attributes' => $attributesWithoutSpaces]);
+         }
+     }*/
 
     /**
      * Gets the credentials.
@@ -899,6 +926,14 @@ class AppController extends Controller
 
         // Merge the new attributes into the existing ones (overriding existing keys)
         $updatedAttributes = array_merge($existingAttributes, $newAttributes);
+
+        // Abort if the updated attributes exceed 18 properties
+        if(count($updatedAttributes) > 19) {
+            return response()->json([
+                'success' => false,
+                'message' => "Attributes array cannot exceed 18 properties."
+            ], 400);
+        }
 
         // Format attributes for Apigee (if needed for Apigee API structure)
         $apigeeAttributes = $this->formatForApigee($updatedAttributes);

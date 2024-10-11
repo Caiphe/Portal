@@ -3,8 +3,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let appAid = null;
     const regex = /^[a-zA-Z0-9_-]+$/; // Only allows alphanumeric characters, underscores, and dashes (no spaces)
-    const forbiddenKeywords = ['sendermsisdn', 'originalchannelids', 'partnername', 'permittedsenderids', 'permittedplanids', 'autorenewallowed', 'country', 'teamname', 'location', 'description', 'displayName'];
+    const forbiddenKeywords = ['displayName','sendermsisdn', 'originalchannelids', 'partnername', 'permittedsenderids', 'permittedplanids', 'autorenewallowed', 'country', 'teamname', 'location', 'description'];
     let tags = []; // For storing tags from textarea
+    const restrictedKeywords = ['displayName','sendermsisdn', 'originalchannelids', 'partnername', 'permittedsenderids', 'permittedplanids', 'autorenewallowed', 'country', 'teamname', 'location', 'description'];
+    function isRestricted(keyword) {
+        return restrictedKeywords.some(restricted => restricted.toLowerCase() === keyword.toLowerCase());
+    }
 
     function fetchAttributes() {
         const token = document.querySelector('meta[name="csrf-token"]').content;
@@ -31,24 +35,27 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => {
                 removeLoading();
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    return response.json().then(errorData => {
+                        throw new Error(`Error: ${errorData.message}, Code: ${errorData.error_code}`);
+                    });
                 }
                 return response.json(); // Parse the JSON response
             })
             .then(result => {
                 // Check if the response indicates success
                 if (result.success) {
-                    addAlert('success', result.message);
-                    console.log(result.message); // Optional: log success message
+                    //addAlert('success', result.message);
+                    console.log(result.message);
                 } else {
                     // Handle unexpected response structure
                     addAlert('error', 'Unexpected response format.');
                 }
             })
             .catch(error => {
-                removeLoading(); // Ensure loading is removed even on error
+                removeLoading();
                 console.error('Error fetching attributes:', error);
-                addAlert('error', 'Sorry, there was a problem fetching your app attributes. Please try again.');
+                // Display specific error message
+                addAlert('error', error.message || 'Sorry, there was a problem fetching your app attributes. Please try again.');
             });
     }
 
@@ -245,12 +252,12 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        const isNameValid = nameField.value.trim() !== '' && regex.test(nameField.value.trim()) && new Blob([nameField.value.trim()]).size <= 2048;
+        const isNameValid = nameField.value.trim() !== '' && regex.test(nameField.value.trim()) && new Blob([nameField.value.trim()]).size <= 2048 && !isRestricted(name);
         let isValueValid = false;
 
         const attributeType = modal.querySelector('#type').value;
         if (attributeType === 'string') {
-            isValueValid = valueField.value.trim() !== '' && regex.test(valueField.value.trim()) && new Blob([valueField.value.trim()]).size <= 2048;
+            isValueValid = valueField.value.trim() !== '' && regex.test(valueField.value.trim()) && new Blob([valueField.value.trim()]).size <= 2048 && !isRestricted(name);
         } else if (attributeType === 'number') {
             isValueValid = isTagDataValid(tags);
         } else if (attributeType === 'boolean') {
@@ -287,6 +294,21 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        if (isRestricted(name)) {
+            console.error('Invalid attribute name.');
+            addAlert('error', `The attribute name "${name}" is not allowed.`);
+            submitButton.classList.add('disabled');
+        submitButton.disabled = true;
+            return;
+        }
+        if (isRestricted(value)) {
+            console.error('Invalid attribute value.');
+            addAlert('error', `The attribute value "${value}" is not allowed.`);
+            submitButton.classList.add('disabled');
+        submitButton.disabled = true;
+            return;
+        }
+
         // Disable the submit button to prevent multiple submissions
         submitButton.classList.add('disabled');
         submitButton.disabled = true;
@@ -314,7 +336,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 if (data.success) {
                     console.log('Success:', data);
-                    addAlert('success', 'Attribute saved');
+                    addAlert('success', data.message);
                     modal.classList.remove('show');
 
                     // Clear the form fields for future use
@@ -332,7 +354,7 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .catch(error => {
                 console.error('Error:', error);
-                addAlert('error', 'Failed to save attribute');
+                addAlert('error', error);
             })
             .finally(() => {
                 // Re-enable the submit button after form submission is complete

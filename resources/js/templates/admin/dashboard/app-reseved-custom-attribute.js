@@ -29,14 +29,16 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => {
                 removeLoading();
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    return response.json().then(errorData => {
+                        throw new Error(`Error: ${errorData.message}, Code: ${errorData.error_code}`);
+                    });
                 }
                 return response.json(); // Parse the JSON response
             })
             .then(result => {
                 // Check if the response indicates success
                 if (result.success) {
-                    addAlert('success', result.message);
+                    // Handle successful response
                     console.log(result.message); // Optional: log success message
                 } else {
                     // Handle unexpected response structure
@@ -46,7 +48,8 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => {
                 removeLoading(); // Ensure loading is removed even on error
                 console.error('Error fetching attributes:', error);
-                addAlert('error', 'Sorry, there was a problem fetching your app attributes. Please try again.');
+                // Display specific error message
+                addAlert('error', error.message || 'Sorry, there was a problem fetching your app attributes. Please try again.');
             });
     }
 
@@ -342,7 +345,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 if (data.success) {
                     console.log('Success:', data);
-                    addAlert('success', 'Attribute saved');
+                    addAlert('success', data.message);
                     modal.classList.remove('show');
 
                     // Clear the form fields for future use

@@ -85,9 +85,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     removeLoading();
                     // Re-enable the confirm deletion button after the request finishes
                     submitButton.disabled = false;
-                    setTimeout(function () {
+                    /*setTimeout(function () {
                         window.location.reload();
-                    }, 3000); // 3000 milliseconds = 3 seconds
+                    }, 3000);*/ // 3000 milliseconds = 3 seconds
                 });
             });
         });

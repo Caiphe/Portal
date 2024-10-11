@@ -77,7 +77,8 @@ $color-white: variables.$white;
     align-items: flex-start;
     align-self: stretch;
     background-color: white;
-    box-shadow: 0px 21px 9px -13px rgba(0, 2, 0, 0.1);
+    margin-bottom: -23px;
+    //box-shadow: 0px 21px 9px -13px rgba(0, 2, 0, 0.1);
 }
 
 .ca-section {
@@ -304,6 +305,7 @@ $color-white: variables.$white;
 .app-attribute-table {
     border-spacing: 0px 8px !important;
     background-color: white;
+    border-radius: 10px;
 }
 
 .no-custom-attribute {
@@ -337,4 +339,70 @@ $color-white: variables.$white;
 .btn-show-reserved-attribute-modal:disabled:hover {
     background-color: #ccc; /* Keep the same background color on hover */
     box-shadow: none; /* Remove any hover shadow */
+}
+
+.ca-thead {
+    height: 46px;
+}
+
+.ca-align-left {
+    background-color: #F0F0F0;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.app-attribute-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.app-attribute-table th,
+.app-attribute-table td {
+    padding: 10px;
+    text-align: left;
+    //border-bottom: 1px solid #ddd;
+}
+
+/* Hide columns on mobile screens */
+.not-on-mobile {
+    display: table-cell;
+}
+
+@media (max-width: 768px) {
+    .not-on-mobile {
+        display: none;
+    }
+
+    .app-attribute-table,
+    .app-attribute-table thead,
+    .app-attribute-table tbody,
+    .app-attribute-table th,
+    .app-attribute-table td,
+    .app-attribute-table tr {
+        display: block;
+        width: 100%; /* Full width */
+    }
+
+    .app-attribute-table tr {
+        margin-bottom: 15px;
+    }
+
+    .app-attribute-table td {
+        text-align: right;
+        position: relative;
+        padding-left: 50%;
+    }
+
+    .app-attribute-table td:before {
+        content: attr(data-name);
+        position: absolute;
+        left: 10px;
+        width: calc(50% - 10px);
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: bold;
+        text-align: left;
+    }
 }

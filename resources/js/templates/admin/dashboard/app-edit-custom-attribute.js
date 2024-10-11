@@ -10,7 +10,54 @@ document.addEventListener('DOMContentLoaded', function () {
     function isRestricted(keyword) {
         return restrictedKeywords.some(restricted => restricted.toLowerCase() === keyword.toLowerCase());
     }
+    function fetchAttributes() {
+        const token = document.querySelector('meta[name="csrf-token"]').content;
+        const id = appAid; // Use the global appAid variable
+        const url = `/admin/apps/${id}/custom-attributes/save`; // Define your URL based on your routing
 
+        const app = {
+            _method: 'PUT',
+            _token: token,
+            aid: id
+        };
+
+        addLoading('Fetching custom attributes...');
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': token,
+                'Content-Type': 'application/json; charset=utf-8',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify(app)
+        })
+            .then(response => {
+                removeLoading();
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        throw new Error(`Error: ${errorData.message}, Code: ${errorData.error_code}`);
+                    });
+                }
+                return response.json(); // Parse the JSON response
+            })
+            .then(result => {
+                // Check if the response indicates success
+                if (result.success) {
+                    //addAlert('success', result.message);
+                    console.log(result.message); // Optional: log success message
+                } else {
+                    // Handle unexpected response structure
+                    addAlert('error', 'Unexpected response format.');
+                }
+            })
+            .catch(error => {
+                removeLoading(); // Ensure loading is removed even on error
+                console.error('Error fetching attributes:', error);
+                // Display specific error message
+                addAlert('error', error.message || 'Sorry, there was a problem fetching your app attributes. Please try again.');
+            });
+    }
     // Initialize event listeners
     function initializeEventListeners() {
         const container = document.querySelector('#table-data');
@@ -26,6 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 setupModal(editCustomAttribute, attributeData); // Pass attributeData here
+                fetchAttributes();
             }
         });
     }
