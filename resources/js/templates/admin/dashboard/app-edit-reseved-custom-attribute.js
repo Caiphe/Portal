@@ -21,11 +21,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         addReservedAttributeModal.classList.add('show'); // Show the modal after attributes are fetched
                         setupModal(addReservedAttributeModal, attributeData);
                     }).catch(error => {
-                        console.error('Error fetching attributes:', error);
                         addAlert('error', error.message || 'There was a problem fetching the app attributes.');
                     });
-                } else {
-                    console.error(`Modal with id reserved-attributes-${appAid} not found`);
                 }
             }
         });
@@ -68,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 } else {
                     // Handle unexpected response structure
-                    addAlert('error', 'Unexpected response format.');
+                    addAlert('error', 'Unexpected response format from the Apigee.');
                 }
             })
             .catch(error => {
@@ -94,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (valueField) {
             valueField.value = attributeData.value || ''; // Set value field if it exists
         } else {
-            console.error('Value field not found in the modal.');
+            addAlert('error', 'Value field not found in the modal.');
         }
         numberField.value = attributeData.numberValue || ''; // Set number field if applicable
 
@@ -124,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Ensure fields are defined
         if (!nameField || !valueField || !numberField || !booleanField || !typeSelect || !submitButton) {
-            console.error('One or more fields are not found in the modal.');
+            addAlert('error', 'One or more fields are not found in the modal to add a custom attribute.');
             return;
         }
 
@@ -293,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let isValueValid = false;
 
         if (!nameField || !valueField || !numberField || !booleanField || !submitButton) {
-            console.error('One or more fields are not found.');
+            addAlert('error', 'One or more fields are not found to validate.');
             return;
         }
 
@@ -351,8 +348,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!value && attributeType !== 'permittedSenderIDs' || !value && attributeType !== 'permittedPlanIDs') {
            // Only require value if it's not a number type
-            addAlert('error', 'You need to add tags.');
-            console.error('Value field must not be empty.');
+            addAlert('error', 'Value field must not be empty. You need to add tags.');
             return;
         }
 
@@ -394,12 +390,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     updateTagDisplay(modal, tags); // Clear the tag display
                     checkIfFormIsValid(modal, nameField, valueField, numberField, booleanField, tags, submitButton); // Revalidate form
                 } else {
-                    console.error('Error:', data.message);
                     addAlert('error', data.message);
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
+
                 addAlert('error', 'Failed to save attribute');
             }).finally(() => {
             removeLoading();
