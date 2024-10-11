@@ -158,6 +158,10 @@
                 </div>
                 <div class="ca-section">
                     <div class="table-responsive">
+                        @php
+                            $filteredAttributes = collect($app->attributes)->except(['Country', 'TeamName', 'location', 'Description', 'DisplayName', 'autoRenewAllowed', 'permittedSenderIDs', 'senderMsisdn', 'permittedPlanIDs', 'originalChannelIDs', 'partnerName']);
+                        @endphp
+                        @if(!$filteredAttributes->isEmpty())
                         <table class="app-attribute-table">
                             <thead class="ca-thead">
                             <tr class="ca-align-left">
@@ -176,9 +180,6 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @php
-                                $filteredAttributes = collect($app->attributes)->except(['Country', 'TeamName', 'location', 'Description', 'DisplayName', 'autoRenewAllowed', 'permittedSenderIDs', 'senderMsisdn', 'permittedPlanIDs', 'originalChannelIDs', 'partnerName']);
-                            @endphp
 
                             @foreach ($filteredAttributes as $key => $value)
                                 @php
@@ -227,9 +228,13 @@
                                         </a>
                                     </td>
                                 </tr>
-                            @endforeach
+
+                                @endforeach
                             </tbody>
                         </table>
+                        @else
+                            <div class="no-custom-attribute">No custom attribute added yet.</div>
+                        @endif
                     </div>
                 </div>
 
@@ -250,6 +255,11 @@
                     </div>
                 </div>
                 <div class="ca-section">
+                    @php
+                        // Filter reserved attributes, specified keys
+                        $filteredAttributes = collect($app->attributes)->only(['autoRenewAllowed', 'permittedSenderIDs', 'senderMsisdn', 'originalChannelIDs', 'partnerName', 'permittedPlanIDs']);
+                    @endphp
+                    @if(!$filteredAttributes->isEmpty())
                     <table class="app-attribute-table">
                         <thead class="ca-thead">
                         <tr class="ca-align-left">
@@ -268,12 +278,9 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @php
-                            // Filter reserved attributes, specified keys
-                            $filteredAttributes = collect($app->attributes)->only(['autoRenewAllowed', 'permittedSenderIDs', 'senderMsisdn', 'originalChannelIDs', 'partnerName', 'permittedPlanIDs']);
-                        @endphp
 
-                        @foreach ($filteredAttributes as $key => $value)
+
+                        @foreach($filteredAttributes as $key => $value)
 
                             @php
                                 // Initialize display variables
@@ -321,9 +328,13 @@
                                     </a>
                                 </td>
                             </tr>
+
                         @endforeach
                         </tbody>
                     </table>
+                    @else
+                        <div class="no-custom-attribute">No reserved attribute added yet.</div>
+                    @endif
                 </div>
 
                 {{--=================System Attributes================--}}
@@ -335,7 +346,10 @@
                     </div>
                 </div>
                 <div class="ca-section">
-
+                    @php
+                        $filteredAttributes = collect($app->attributes)->only(['Country', 'TeamName', 'location', 'Description', 'DisplayName']);
+                    @endphp
+                    @if(!$filteredAttributes->isEmpty())
                     <table class="app-attribute-table">
                         <thead class="ca-thead">
                         <tr class="ca-align-left">
@@ -352,10 +366,6 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @php
-                            $filteredAttributes = collect($app->attributes)->only(['Country', 'TeamName', 'location', 'Description', 'DisplayName']);
-                        @endphp
-
                         @foreach ($filteredAttributes as $key => $value)
 
                             @php
@@ -391,6 +401,9 @@
                         @endforeach
                         </tbody>
                     </table>
+                    @else
+                        <div class="no-custom-attribute">No system attribute added yet.</div>
+                    @endif
                 </div>
 
             </div>
