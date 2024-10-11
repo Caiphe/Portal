@@ -44,6 +44,7 @@
 
     </x-admin.filter>
 
+
     <div id="table-data">
         @include('components.admin.list', [
             'collection' => $products,
