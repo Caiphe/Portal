@@ -24,11 +24,4 @@ Below are all the details:
 <br />
 @endif
 
-@if($noProdApps)
-**Apps With No Products :** <br/>
-@foreach ($noProdApps as $apps)
-- {{ $apps }} <br/>
-@endforeach
-@endif
-
 @endcomponent
