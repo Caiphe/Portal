@@ -8,8 +8,8 @@
             @method('POST')
             @csrf
             <div class="form-group">
-                <label for="type">Type</label>
-                <select id="type" name="type" onchange="handleAttributeTypeChange()">
+                <label for="type">Attribute</label>
+                <select id="type" name="type">
                     <option value="senderMsisdn">senderMsisdn</option>
                     <option value="originalChannelIDs">originalChannelIDs</option>
                     <option value="partnerName">partnerName</option>
@@ -17,14 +17,13 @@
                     <option value="permittedPlanIDs">PermittedPlanIDs</option>
                     <option value="autoRenewAllowed">AutoRenewAllowed</option>
                 </select>
-                <p id="type-description">A string attribute is the default type of attribute and only accepts a text
-                    value without special characters or spaces.</p>
+                <p id="type-description" style="display: none;color: #969696"></p>
             </div>
 
             <!-- Name Field -->
-            <div class="form-group" id="name-field">
+            <div class="form-group" id="name-field" style="display: none">
                 <label for="name">Name</label>
-                <input type="text" id="name" name="attribute[name]" readonly placeholder="The name of the attribute"
+                <input type="hidden" id="name" name="attribute[name]" readonly placeholder="The name of the attribute"
                        required>
                 <p class="error-message" id="name-error" style="color: red; display: none;"></p>
             </div>
@@ -40,8 +39,10 @@
             <!-- Number Textarea Field (hidden initially) -->
             <div class="form-group" id="number-field" style="display: none;">
                 <label for="number-value">Value</label>
+                <span id="value-description" style="display: none;color: #0c678f"></span>
                 <textarea id="number-value" name="attribute[value]"
-                          placeholder="Type comma separated values or use spaces to separate values"></textarea>
+                          placeholder="Type comma or space to separate values"></textarea>
+                <p class="error-message" id="tags-error" style="color: red; display: none;"></p>
                 <div id="tag-container" class="tag-container"></div>
             </div>
 

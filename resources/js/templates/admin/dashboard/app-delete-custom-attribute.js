@@ -58,32 +58,29 @@ document.addEventListener('DOMContentLoaded', function () {
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            addAlert('success', data.message, attributeKey);
+                            addAlert('success', data.message);
                             // Attribute successfully deleted, hide the modal and update the table
                             if (deleteCustomAttributeModal) {
                                 deleteCustomAttributeModal.classList.remove('show'); // Hide the modal
                             }
 
-                            // Optionally remove the row from the table
                             const rowToRemove = document.querySelector(`a[data-delete-id="${appAid}"][data-attribute-key="${attributeKey}"]`).closest('tr');
+
                             if (rowToRemove) {
                                 rowToRemove.remove();
                             }
+                            removeLoading();
 
                         } else {
                             addAlert('danger', data.message);
-                            console.error('Failed to delete attribute:', data.message);
                         }
                     })
                     .catch(error => {
-                        console.error('Error:', error);
+                        addAlert('danger', 'An error occurred while deleting the attribute. Please try again.');
                     }).finally(() => {
                     removeLoading();
                     // Re-enable the confirm deletion button after the request finishes
                     submitButton.disabled = false;
-                    /*setTimeout(function () {
-                        window.location.reload();
-                    }, 3000);*/ // 3000 milliseconds = 3 seconds
                 });
             });
         });

@@ -108,23 +108,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Handle tags input for number values
         numberField.addEventListener('keyup', function (event) {
+
             if (event.key === ' ' || event.key === ',') {
                 const input = numberField.value.trim();
-                if (input) {
+                if (input && !isEmptyOrWhitespace(input)) {
                     const tagArray = input.split(/[, ]+/).filter(tag => tag !== '');
                     tags = tags.concat(tagArray);
                     numberField.value = '';  // Clear the textarea
+
                     // Check total size of tags
                     if (isTagDataValid(tags)) {
+                        const tagError = modal.querySelector('#tags-error');
+                        tagError.style.display = 'none';
                         updateTagDisplay(modal, tags);
                         checkIfFormIsValid(modal, nameField, valueField, numberField, booleanField, tags, submitButton);
                     } else {
                         addAlert('warning', 'The total size of tags exceeds 2KB.');
                         tags = tags.slice(0, -tagArray.length); // Remove the last added tags
                     }
+                } else {
+                    //addAlert('error', 'Tags cannot be empty or contain only spaces.');
+                    numberField.value = ''; // Clear the input if it's invalid
                 }
             }
         });
+
+        function isEmptyOrWhitespace(str) {
+            return !str || str.trim().length === 0;
+        }
 
         // Handle form submission
         const form = modal.querySelector('#custom-attribute-form');
@@ -183,10 +194,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const valueField = modal.querySelector('#value-field');
         const numberField = modal.querySelector('#number-field');
         const booleanField = modal.querySelector('#boolean-field');
-
         const valueInput = modal.querySelector('#value');  // For string type
         const numberInput = modal.querySelector('#number-value');  // For number type
         const booleanInput = modal.querySelector('#boolean-value');  // For boolean type
+        const valueDescription = modal.querySelector('#value-description'); // Description element
+        const typeDescription = modal.querySelector('#type-description'); // Description element
 
         // Reset visibility and required attributes
         valueField.style.display = 'none';
@@ -194,17 +206,26 @@ document.addEventListener('DOMContentLoaded', function () {
         booleanField.style.display = 'none';
         valueInput.required = false;
         booleanInput.required = false;  // Remove required from all inputs
+        valueDescription.style.display = 'none';
+        typeDescription.style.display = 'none';
 
         // Show appropriate fields based on type and set required attribute
         if (type === 'string') {
             valueField.style.display = 'block';
-            valueInput.required = true;  // Only string field should be required
+            valueInput.required = true;
+            typeDescription.textContent = "A string attribute is the default type of attribute and only accepts a text value without special characters or spaces.";
+            typeDescription.style.display = 'block';
         } else if (type === 'number') {
             numberField.style.display = 'block';
-            // Do not make textarea required since we are using tags validation
+            valueDescription.textContent = "Create tags by typing comma or space at the end of a value.";
+            valueDescription.style.display = 'block';
+            typeDescription.textContent = "A CSV String attribute contains text values seperated by \",\". Special characters and spaces are not allowed.";
+            typeDescription.style.display = 'block';
         } else if (type === 'boolean') {
             booleanField.style.display = 'block';
-            booleanInput.required = true;  // Boolean field should be required
+            booleanInput.required = true;
+            typeDescription.textContent = "A boolean has a true or false value only.";
+            typeDescription.style.display = 'block';
         }
 
         // Ensure the form validation state is checked
@@ -248,8 +269,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const isNameValid = nameField.value.trim() !== '' && regex.test(nameField.value.trim()) && new Blob([nameField.value.trim()]).size <= 2048 && !isRestricted(name);
         let isValueValid = false;
-
         const attributeType = modal.querySelector('#type').value;
+
         if (attributeType === 'string') {
             isValueValid = valueField.value.trim() !== '' && regex.test(valueField.value.trim()) && new Blob([valueField.value.trim()]).size <= 2048 && !isRestricted(name);
         } else if (attributeType === 'number') {
@@ -274,10 +295,18 @@ document.addEventListener('DOMContentLoaded', function () {
         const attributeType = typeSelect.value;
         const submitButton = modal.querySelector('.btn-confirm');
 
+        const valueError = modal.querySelector('#tags-error');
+
         // Handle the value based on attribute type
         if (attributeType === 'string') {
             value = valueField.value.trim();  // String type input
         } else if (attributeType === 'number') {
+            if (tags.length === 0) {
+                validateField(valueField, valueError, "Tags field must not be empty. Type a comma or space at the end of a value to create csv string array tags.", modal, 'value');
+                valueError.style.display = 'block';
+                //addAlert('error', 'Tags field must not be empty.');
+                return;
+            }
             value = tags.join(',');  // Collect tags entered in textarea
         } else if (attributeType === 'boolean') {
             value = booleanField.value;  // True or False from select input
@@ -289,13 +318,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (isRestricted(name)) {
-            addAlert('error', `The attribute name "${name}" is not allowed.`);
+            addAlert('error', `You cannot use the name "${name}" of reserved or system attribute`);
+
             submitButton.classList.add('disabled');
         submitButton.disabled = true;
             return;
         }
         if (isRestricted(value)) {
-            addAlert('error', `The attribute value "${value}" is not allowed.`);
+            addAlert('error', `You cannot use the name "${value}" of a reserved or system attribute`);
             submitButton.classList.add('disabled');
         submitButton.disabled = true;
             return;

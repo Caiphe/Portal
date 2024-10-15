@@ -110,22 +110,31 @@ document.addEventListener('DOMContentLoaded', function () {
         numberField.addEventListener('keyup', function (event) {
             if (event.key === ' ' || event.key === ',') {
                 const input = numberField.value.trim();
-                if (input) {
+                if (input && !isEmptyOrWhitespace(input)) { // Check if input is valid
                     const tagArray = input.split(/[, ]+/).filter(tag => tag !== '');
                     tags = tags.concat(tagArray);
                     numberField.value = '';  // Clear the textarea
                     // Check total size of tags
                     if (isTagDataValid(tags)) {
+                        const tagError = modal.querySelector('#tags-error');
+                        tagError.style.display = 'none';
                         updateTagDisplay(modal, tags);
                         checkIfFormIsValid(modal, nameField, valueField, numberField, booleanField, tags, submitButton);
                     } else {
                         addAlert('warning', 'The total size of tags exceeds 2KB.');
-
                         tags = tags.slice(0, -tagArray.length); // Remove the last added tags
                     }
+                } else {
+                    addAlert('error', 'Tags cannot be empty or contain only spaces.');
+                    numberField.value = ''; // Clear the input if it's invalid
                 }
             }
         });
+
+        // Function to check if a string is empty or whitespace
+        function isEmptyOrWhitespace(str) {
+            return !str || str.trim().length === 0;
+        }
 
         // Handle form submission
         const form = modal.querySelector('#add-reserved-custom-attribute-form');
@@ -137,15 +146,37 @@ document.addEventListener('DOMContentLoaded', function () {
         handleAttributeTypeChange(modal);
     }
 
+    // Function to validate the field
     function validateField(field, errorField, errorMessage, modal) {
         const inputValue = field.value.trim();
         const submitButton = modal.querySelector('.btn-confirm');
-        const numericRegex = /^[0-9]+$/; // Numeric validation
+        const noSpacesOrSpecialChars = /^[A-Za-z0-9]+$/; // For partnerName and originalChannelIDs
+        const msisdnRegex = /^\+?[0-9]+$/; // Allows optional '+' and numeric values for senderMsisdn
 
         if (field.id === 'value' && modal.querySelector('#type').value === 'senderMsisdn') {
-            // SenderMsisdn-specific validation
-            if (!numericRegex.test(inputValue)) {
-                errorField.textContent = "senderMsisdn should contain only numeric values.";
+            // senderMsisdn-specific validation allowing the '+' sign
+            if (!msisdnRegex.test(inputValue)) {
+                errorField.textContent = "senderMsisdn should contain only numeric values or start with a + sign.";
+                errorField.style.display = 'block';
+                submitButton.classList.add('disabled');
+                submitButton.disabled = true;
+            } else if (inputValue === '') {
+                errorField.textContent = "This field is required.";
+                errorField.style.display = 'block';
+                submitButton.classList.add('disabled');
+                submitButton.disabled = true;
+            } else if (new Blob([inputValue]).size > 2048) {
+                errorField.textContent = "Input exceeds 2KB limit.";
+                errorField.style.display = 'block';
+                submitButton.classList.add('disabled');
+                submitButton.disabled = true;
+            } else {
+                errorField.style.display = 'none';
+            }
+        } else if (field.id === 'value' && (modal.querySelector('#type').value === 'partnerName' || modal.querySelector('#type').value === 'originalChannelIDs')) {
+            // partnerName and originalChannelIDs validation (no spaces or special characters)
+            if (!noSpacesOrSpecialChars.test(inputValue)) {
+                errorField.textContent = "This field cannot contain spaces or special characters.";
                 errorField.style.display = 'block';
                 submitButton.classList.add('disabled');
                 submitButton.disabled = true;
@@ -173,7 +204,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return new Blob([tagString]).size <= 2048 && tags.length <= 18;
     }
 
-
     // Function to handle attribute type changes and update name field
     function handleAttributeTypeChange(modal) {
         const typeSelect = modal.querySelector('#type');
@@ -181,17 +211,20 @@ document.addEventListener('DOMContentLoaded', function () {
         const valueField = modal.querySelector('#value-field');
         const numberField = modal.querySelector('#number-field');
         const booleanField = modal.querySelector('#boolean-field');
-
         const valueInput = modal.querySelector('#value');  // For string type
         const numberInput = modal.querySelector('#number-value');  // For number type
         const booleanInput = modal.querySelector('#boolean-value');  // For boolean type
-
+        const valueDescription = modal.querySelector('#value-description');
+        const typeDescription = modal.querySelector('#type-description');
+        const valueError = modal.querySelector('#tags-error');
         // Reset visibility and required attributes
         valueField.style.display = 'none';
         numberField.style.display = 'none';
         booleanField.style.display = 'none';
         valueInput.required = false;
         booleanInput.required = false;  // Remove required from all inputs
+        valueDescription.style.display = 'none';
+        typeDescription.style.display = 'none';
 
         // Update name field based on selected type
         const selectedType = typeSelect.value;
@@ -199,22 +232,29 @@ document.addEventListener('DOMContentLoaded', function () {
             nameField.value = 'senderMsisdn';
             valueField.style.display = 'block';
             valueInput.required = true;
+
+            typeDescription.textContent = "senderMsisdn should contain only numeric values.";
+            typeDescription.style.display = 'block';
         } else if (selectedType === 'originalChannelIDs') {
             nameField.value = 'originalChannelIDs';
             valueField.style.display = 'block';
             valueInput.required = true;
-        }else if(selectedType === 'partnerName'){
+        } else if (selectedType === 'partnerName') {
             nameField.value = 'partnerName';
             valueField.style.display = 'block';
             valueInput.required = true;
         } else if (selectedType === 'permittedSenderIDs') {
             nameField.value = 'permittedSenderIDs';
             numberField.style.display = 'block';
-            // Do not make textarea required since we are using tags validation
+            valueDescription.style.display = 'block';
+            valueDescription.textContent = "Create tags by typing values separated by commas or spaces.";
+            valueError.style.display = 'none';
         } else if (selectedType === 'permittedPlanIDs') {
             nameField.value = 'permittedPlanIDs';
             numberField.style.display = 'block';
-            // Do not make textarea required since we are using tags validation
+            valueDescription.style.display = 'block';
+            valueDescription.textContent = "Create tags by typing values separated by commas or spaces.";
+            valueError.style.display = 'none';
         } else if (selectedType === 'autoRenewAllowed') {
             nameField.value = 'autoRenewAllowed';
             booleanField.style.display = 'block';
@@ -263,23 +303,27 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         const attributeType = modal.querySelector('#type').value;
-        // Validate Value Field (specific for senderMsisdn)
+
+        // Updated regex for senderMsisdn: allows numeric values and the "+" sign
+        const msisdnRegex = /^[0-9+]+$/;
+        const noSpacesOrSpecialChars = /^[A-Za-z0-9]+$/;
+
+        // Validate Value Field based on the selected attribute type
         if (attributeType === 'senderMsisdn') {
-            const numericRegex = /^[0-9]+$/; // Allows only numeric values
-            isValueValid = valueField.value.trim() !== '' && numericRegex.test(valueField.value.trim());
-        } else if (attributeType === 'partnerName') {
-            isValueValid = valueField.value.trim() !== '' && regex.test(valueField.value.trim()) && new Blob([valueField.value.trim()]).size <= 2048;
-        } else if (attributeType === 'originalChannelIDs') {
-            isValueValid = valueField.value.trim() !== '' && regex.test(valueField.value.trim()) && new Blob([valueField.value.trim()]).size <= 2048;
-        } else if (attributeType === 'permittedSenderIDs') {
-            isValueValid = isTagDataValid(tags);
-        } else if (attributeType === 'permittedPlanIDs') {
+            // senderMsisdn validation: allows numeric values and the "+" sign
+            isValueValid = valueField.value.trim() !== '' && msisdnRegex.test(valueField.value.trim());
+        } else if (attributeType === 'partnerName' || attributeType === 'originalChannelIDs') {
+            // partnerName and originalChannelIDs: no spaces or special characters
+            isValueValid = valueField.value.trim() !== '' && noSpacesOrSpecialChars.test(valueField.value.trim()) && new Blob([valueField.value.trim()]).size <= 2048;
+        } else if (attributeType === 'permittedSenderIDs' || attributeType === 'permittedPlanIDs') {
+            // Validate tag data for permittedSenderIDs and permittedPlanIDs
             isValueValid = isTagDataValid(tags);
         } else if (attributeType === 'autoRenewAllowed') {
-            isValueValid = booleanField.value.trim() !== '';
+            // Boolean validation for autoRenewAllowed
+            isValueValid = booleanField.value !== '';
         }
 
-        // Validate form by enabling/disabling the submit button based on field validations
+        // Enable or disable the submit button based on validation status
         if (isNameValid && isValueValid) {
             submitButton.classList.remove('disabled');
             submitButton.disabled = false;
@@ -288,23 +332,36 @@ document.addEventListener('DOMContentLoaded', function () {
             submitButton.disabled = true;
         }
     }
-
     function submitForm(nameField, valueField, numberField, booleanField, typeSelect, tags, modal) {
         const name = nameField.value.trim();
         let value = '';  // Value will change based on type
         const attributeType = typeSelect.value;
         const submitButton = modal.querySelector('.btn-confirm');
 
+        const valueError = modal.querySelector('#tags-error');
+
         // Handle the value based on attribute type
         if (attributeType === 'senderMsisdn') {
             value = valueField.value.trim();
-        }else if (attributeType === 'partnerName') {
+        } else if (attributeType === 'partnerName') {
             value = valueField.value.trim();
         } else if (attributeType === 'originalChannelIDs') {
             value = valueField.value.trim();
         } else if (attributeType === 'permittedSenderIDs') {
+            if (tags.length === 0) {
+                console.log("i am here")
+                valueError.textContent = "Tags field must not be empty. Type a comma or space at the end of a value to create csv string array tags.";
+                valueError.style.display = 'block';
+                return;
+            }
             value = tags.join(',');
         } else if (attributeType === 'permittedPlanIDs') {
+            if (tags.length === 0) {
+                valueError.textContent = "Tags field must not be empty. Type a comma or space at the end of a value to create csv string array tags.";
+                valueError.style.display = 'block';
+                //addAlert('error', 'Tags field must not be empty.');
+                return;
+            }
             value = tags.join(',');
         } else if (attributeType === 'autoRenewAllowed') {
             value = booleanField.value;  // True or False from select input
@@ -360,7 +417,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 addAlert('error', 'Failed to save attribute');
             }).finally(() => {
             removeLoading();
-            setTimeout(function() {
+            setTimeout(function () {
                 // Re-enable the submit button after form submission is complete
                 submitButton.classList.remove('disabled');
                 submitButton.disabled = false;
