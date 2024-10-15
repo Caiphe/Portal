@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Pre-fill textarea and tags for Number
         if (typeSelect.value === 'number') {
             // Check if value is an existing tag list
-            numberField.value =  ''; // Pre-fill with existing value
+            numberField.value = ''; // Pre-fill with existing value
             if (attributeData.value) {
                 tags = attributeData.value.split(',').map(tag => tag.trim());
                 //numberField.value = tags.join(', '); // Pre-fill the textarea with existing tags
@@ -174,6 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Update tags if applicable
+
         if (typeof attributeData.value === nameField.value && attributeData.value.includes(',')) {
             tags = attributeData.value.split(',').map(tag => tag.trim());
             handleAttributeTypeChange(modal);
