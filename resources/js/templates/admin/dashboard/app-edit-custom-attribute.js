@@ -8,8 +8,53 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Helper function to check if the name or value is restricted
     function isRestricted(keyword) {
-        return restrictedKeywords.some(restricted => restricted.toLowerCase() === keyword.toLowerCase());
+        return restrictedKeywords.find(restricted => restricted.toLowerCase() === keyword.toLowerCase());
     }
+
+    // Add live validation on keyup event for the name and value fields
+    function addLiveValidation(nameField, valueField, submitButton) {
+        nameField.addEventListener('keyup', function () {
+            validateFields(nameField, valueField, submitButton);
+        });
+        valueField.addEventListener('keyup', function () {
+            validateFields(nameField, valueField, submitButton);
+        });
+    }
+
+    function validateFields(nameField, valueField, submitButton) {
+        const name = nameField.value.trim();
+        const value = valueField.value.trim();
+
+        const restrictedName = isRestricted(name);
+        const restrictedValue = isRestricted(value);
+
+        const isNameValid = regex.test(name) && !restrictedName;
+        const isValueValid = regex.test(value) && !restrictedValue;
+
+        if (isNameValid && isValueValid) {
+            submitButton.classList.remove('disabled');
+            submitButton.disabled = false;
+        } else {
+            submitButton.classList.add('disabled');
+            submitButton.disabled = true;
+        }
+
+        // Dynamically handle error messages
+        toggleError(nameField, isNameValid, restrictedName ? `The name "${name}" contains restricted keywords.` : 'Invalid name. Only letters, numbers, underscores, and dashes are allowed.');
+        toggleError(valueField, isValueValid, restrictedValue ? `The value "${value}" contains restricted keywords.` : 'Invalid value. Only letters, numbers, underscores, and dashes are allowed.');
+    }
+
+
+    function toggleError(field, isValid, errorMessage) {
+        const errorContainer = field.nextElementSibling; // Assume the error message is in a sibling element
+        if (!isValid) {
+            errorContainer.textContent = errorMessage;
+            errorContainer.style.display = 'block';
+        } else {
+            errorContainer.style.display = 'none';
+        }
+    }
+
     function fetchAttributes() {
         const token = document.querySelector('meta[name="csrf-token"]').content;
         const id = appAid; // Use the global appAid variable
@@ -74,7 +119,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         setupModal(editCustomAttribute, attributeData); // Set up modal with fetched data
                     })
                     .catch(error => {
-                        // Optionally handle fetch error if necessary
                         addAlert('error', error.message || 'Sorry, there was a problem fetching your app attributes. Please try again.');
                     });
             }
@@ -98,6 +142,12 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             addAlert('error', 'Value field not found in the modal.');
         }
+        numberField.value = attributeData.numberValue || '';
+
+        addLiveValidation(nameField, valueField, submitButton); // Add live validation
+
+        // Initial validation check
+        validateFields(nameField, valueField, submitButton);
 
         // Determine the type based on the valueField
         const value = valueField.value.trim();
@@ -114,9 +164,10 @@ document.addEventListener('DOMContentLoaded', function () {
         // Pre-fill textarea and tags for Number
         if (typeSelect.value === 'number') {
             // Check if value is an existing tag list
+            numberField.value =  ''; // Pre-fill with existing value
             if (attributeData.value) {
                 tags = attributeData.value.split(',').map(tag => tag.trim());
-                numberField.value = tags.join(', '); // Pre-fill the textarea with existing tags
+                //numberField.value = tags.join(', '); // Pre-fill the textarea with existing tags
             }
             handleAttributeTypeChange(modal); // Ensure correct display of fields
             updateTagDisplay(modal, tags); // Update tag display
@@ -137,17 +188,24 @@ document.addEventListener('DOMContentLoaded', function () {
         numberField.addEventListener('keyup', function (event) {
             if (event.key === ' ' || event.key === ',') {
                 const input = numberField.value.trim();
-                if (input) {
-                    const tagArray = input.split(/[, ]+/).filter(tag => tag !== '');
+                if (input && !isEmptyOrWhitespace(input)) {
+                    const tagArray = input.split(/[, ]+/).filter(tag => tag !== ''); // Split on commas and spaces
                     tags = tags.concat(tagArray);
-                    numberField.value = '';
+                    numberField.value = ''; // Clear input field after tags are processed
+
+                    // Check if tag data is valid
                     if (isTagDataValid(tags)) {
-                        updateTagDisplay(modal, tags);
-                        checkIfFormIsValid(modal, nameField, valueField, numberField, tags, submitButton);
+                        const tagError = modal.querySelector('#tags-error');
+                        tagError.style.display = 'none';
+                        updateTagDisplay(modal, tags); // Update tag display in UI
+                        checkIfFormIsValid(modal, nameField, valueField, numberField, tags, submitButton); // Check form validity
                     } else {
-                        tags = tags.slice(0, -tagArray.length);
+                        tags = tags.slice(0, -tagArray.length); // Revert if tags exceed limit
                         addAlert('warning', 'The total size of tags exceeds 2KB.');
                     }
+                } else {
+                    addAlert('error', 'Tags cannot be empty or contain only spaces.');
+                    numberField.value = ''; // Clear invalid input
                 }
             }
         });
@@ -161,33 +219,47 @@ document.addEventListener('DOMContentLoaded', function () {
         handleAttributeTypeChange(modal); // Initial setup based on the default type
     }
 
+    function isEmptyOrWhitespace(str) {
+        return !str || str.trim().length === 0;
+    }
+
     function handleAttributeTypeChange(modal) {
         const type = modal.querySelector('#type').value;
         const valueField = modal.querySelector('#value-field'); // Ensure the correct field
         const numberField = modal.querySelector('#number-field');
         const booleanField = modal.querySelector('#boolean-field');
-
         const valueInput = modal.querySelector('#value');  // For string type
         const numberInput = modal.querySelector('#number-value');  // For number type
         const booleanInput = modal.querySelector('#boolean-value');  // For boolean type
+        const typeDescription = modal.querySelector('#type-description');
+        const valueDescription = modal.querySelector('#value-description');
 
         // Reset visibility and required attributes
         valueField.style.display = 'none';
         numberField.style.display = 'none';
         booleanField.style.display = 'none';
+        valueDescription.style.display = 'none';
+        typeDescription.style.display = 'none';
         valueInput.required = false;
         booleanInput.required = false;  // Remove required from all inputs
 
         // Show appropriate fields based on type and set required attribute
         if (type === 'string') {
             valueField.style.display = 'block';
-            valueInput.required = true;  // Only string field should be required
+            valueInput.required = true;
+            typeDescription.textContent = "A string attribute is the default type of attribute and only accepts a text value without special characters or spaces.";
+            typeDescription.style.display = 'block';
         } else if (type === 'number') {
             numberField.style.display = 'block';
-            // Do not make textarea required since we are using tags validation
+            valueDescription.textContent = "Create tags by typing comma or space at the end of a value.";
+            valueDescription.style.display = 'block';
+            typeDescription.textContent = "A CSV String attribute contains text values seperated by \",\". Special characters and spaces are not allowed.";
+            typeDescription.style.display = 'block';
         } else if (type === 'boolean') {
             booleanField.style.display = 'block';
-            booleanInput.required = true;  // Boolean field should be required
+            booleanInput.required = true;
+            typeDescription.textContent = "A boolean has a true or false value only.";
+            typeDescription.style.display = 'block';
         }
 
         checkIfFormIsValid(modal, modal.querySelector('#name'), modal.querySelector('#value'), modal.querySelector('#number-value'), tags, modal.querySelector('.btn-confirm'));
@@ -260,6 +332,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const attributeType = typeSelect.value;
         const submitButton = modal.querySelector('.btn-confirm');
 
+        const valueError = modal.querySelector('#tags-error');
+
         // Disable the submit button to prevent multiple submissions
         submitButton.classList.add('disabled');
         submitButton.disabled = true;
@@ -267,10 +341,16 @@ document.addEventListener('DOMContentLoaded', function () {
         // Handle the value based on attribute type
         if (attributeType === 'string') {
             value = valueField.value.trim();  // String type input
-            if (!value) {  // Require a value for string type
-                addAlert('error', 'Value field must not be empty.');
+        } else if (attributeType === 'number') {
+            if (tags.length === 0) {
+                valueError.textContent = "Tags field must not be empty. Type a comma or space at the end of a value to create csv string array tags.";
+                valueError.style.display = 'block';
+                //addAlert('error', 'Tags field must not be empty.');
                 return;
             }
+            value = tags.join(',');  // Collect tags entered in textarea
+        } else if (attributeType === 'boolean') {
+            value = booleanField.value;  // True or False from select input
         }
 
         // Perform an additional check for restricted names or values

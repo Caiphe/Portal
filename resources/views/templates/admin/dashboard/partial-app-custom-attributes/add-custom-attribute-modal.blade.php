@@ -9,13 +9,12 @@
 
             <div class="form-group">
                 <label for="type">Type</label>
-                <select id="type" name="type" onchange="handleAttributeTypeChange()">
+                <select id="type" name="type">
                     <option value="string">String</option>
                     <option value="number">CSV String Array</option>
                     <option value="boolean">Boolean</option>
                 </select>
-                <p id="type-description">A string attribute is the default type of attribute and only accepts a text
-                    value without special characters or spaces.</p>
+                <p id="type-description" style="display: none;color: #969696"></p>
             </div>
 
             <!-- Name Field -->
@@ -37,8 +36,10 @@
             <!-- Number Textarea Field (hidden initially) -->
             <div class="form-group" id="number-field" style="display: none;">
                 <label for="number-value">Value</label>
+                <span id="value-description" style="display: none;color: #0c678f"></span>
                 <textarea id="number-value" name="attribute[value]"
-                          placeholder="Type comma separated values or use spaces to separate values"></textarea>
+                          placeholder="Type comma or space to separate values"></textarea>
+                <p class="error-message" id="tags-error" style="color: red; display: none;"></p>
                 <div id="tag-container" class="tag-container"></div>
             </div>
 

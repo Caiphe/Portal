@@ -62,7 +62,7 @@ $color-white: variables.$white;
 }
 
 .custom-atrribute--table {
-    width: 100%;
+    width: 50%;
 }
 
 .custom-atrribute--table_th {
@@ -405,4 +405,8 @@ $color-white: variables.$white;
         font-weight: bold;
         text-align: left;
     }
+}
+
+.custom-attribute--table_th {
+    width: 35%;
 }
