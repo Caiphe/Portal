@@ -913,7 +913,7 @@ class AppController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Attributes successfully updated.',
+                'message' => 'Attributes successfully saved.',
                 'attributes' => $flattenedAttributes, // Return flattened attributes
             ]);
         }
