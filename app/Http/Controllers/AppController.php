@@ -1062,7 +1062,6 @@ class AppController extends Controller
                 }
             }
         }
-
         return $formattedAttributes;
     }
 
@@ -1175,5 +1174,4 @@ class AppController extends Controller
             'message' => 'Attribute does not exist.',
         ], 404);
     }
-
 }
