@@ -875,8 +875,10 @@ class AppController extends Controller
         // Merge the new attributes into the existing ones (overriding existing keys)
         $updatedAttributes = array_merge($existingAttributes, $newAttributes);
 
+        $apigeeAttributes = ApigeeService::formatToApigeeAttributes($updatedAttributes);
+
         // Abort if the updated attributes exceed 18 properties
-        if (count($updatedAttributes) > 19) {
+        if (count($apigeeAttributes) > 19) {
             return response()->json([
                 'success' => false,
                 'message' => "Attributes array cannot exceed 18 properties."
@@ -884,15 +886,14 @@ class AppController extends Controller
         }
         $flattenedAttributes = $this->flattenAttributes($existingAttributes);
 
-        // Format attributes for Apigee (if needed for Apigee API structure)
+        // Get the developer or team details
         $team = $app->team;
         $developer = $app->developer;
 
         if (!$developer) {
-            $reasonMsg = 'Developer information is missing.';
             return response()->json([
                 'success' => false,
-                'message' => $reasonMsg
+                'message' => 'Developer information is missing.',
             ], 400);
         }
 
@@ -903,13 +904,13 @@ class AppController extends Controller
         // Send updated attributes to Apigee
         $apigeeResponse = ApigeeService::put("{$accessUrl}/apps/{$app->name}", [
             'name' => $app->name,
-            'attributes' => $updatedAttributes,
+            'attributes' => $apigeeAttributes,
         ]);
 
         // Check if the response contains the 'success' key
-        if ($apigeeResponse->status()) {
+        if ($apigeeResponse->status() === 200) {
             // Update the local database with the edited attributes
-            $app->update(['attributes' => $existingAttributes]);
+            $app->update(['attributes' => $updatedAttributes]);
 
             return response()->json([
                 'success' => true,
@@ -994,7 +995,7 @@ class AppController extends Controller
         ]);
 
         // Check if the response contains the 'success' key
-        if ($apigeeResponse->status()) {
+        if ($apigeeResponse->status() === 200) {
             // Update the local database with the edited attributes
             $app->update(['attributes' => $existingAttributes]);
 
