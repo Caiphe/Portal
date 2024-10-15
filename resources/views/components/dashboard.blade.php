@@ -172,10 +172,10 @@
                                     <a class="sort" data-sort="value" data-order="asc" href="javascript:void(0)">Value @svg('chevron-sorter')</a>
                                 </th>
                                 <th class="custom-attribute--table_th not-on-mobile">
-                                    <a class="sort" data-sort="type" data-order="asc" href="javascript:void(0)">Type @svg('chevron-sorter')</a>
+                                    <a class="sort" data-sort="type" data-order="asc" href="javascript:void(0)">Type</a>
                                 </th>
                                 <th class="custom-attribute--table_th">
-                                    <a>Actions @svg('chevron-sorter')</a>
+                                    <a>Actions </a>
                                 </th>
                             </tr>
                             </thead>
@@ -270,15 +270,14 @@
                                 <a class="sort" data-sort="value" data-order="asc" href="javascript:void(0)">Value @svg('chevron-sorter')</a>
                             </th>
                             <th class="custom-attribute--table_th not-on-mobile">
-                                <a class="sort" data-sort="type" data-order="asc" href="javascript:void(0)">Type @svg('chevron-sorter')</a>
+                                <a class="sort" data-sort="type" data-order="asc" href="javascript:void(0)">Type </a>
                             </th>
                             <th class="custom-attribute--table_th">
-                                <a>Actions @svg('chevron-sorter')</a>
+                                <a>Actions</a>
                             </th>
                         </tr>
                         </thead>
                         <tbody>
-
 
                         @foreach($filteredAttributes as $key => $value)
 
@@ -360,7 +359,7 @@
                                 <a class="sort" data-sort="value" data-order="asc" href="javascript:void(0)">Value @svg('chevron-sorter')</a>
                             </th>
                             <th class="custom-attribute--table_th not-on-mobile">
-                                <a class="sort" data-sort="type" data-order="asc" href="javascript:void(0)">Type @svg('chevron-sorter')</a>
+                                <a class="sort" data-sort="type" data-order="asc" href="javascript:void(0)">Type </a>
                             </th>
 
                         </tr>
