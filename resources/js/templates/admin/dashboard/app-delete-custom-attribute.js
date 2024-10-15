@@ -78,9 +78,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     .catch(error => {
                         addAlert('danger', 'An error occurred while deleting the attribute. Please try again.');
                     }).finally(() => {
-                    removeLoading();
-                    // Re-enable the confirm deletion button after the request finishes
+                    submitButton.classList.remove('disabled');
                     submitButton.disabled = false;
+
+                    removeLoading();
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 3000); // 3000 milliseconds = 3 seconds
+
                 });
             });
         });

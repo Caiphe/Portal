@@ -3,9 +3,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let appAid = null;
     const regex = /^[a-zA-Z0-9_-]+$/; // Only allows alphanumeric characters, underscores, and dashes (no spaces)
-    const forbiddenKeywords = ['displayName','sendermsisdn', 'originalchannelids', 'partnername', 'permittedsenderids', 'permittedplanids', 'autorenewallowed', 'country', 'teamname', 'location', 'description'];
+    const forbiddenKeywords = ['displayName', 'sendermsisdn', 'originalchannelids', 'partnername', 'permittedsenderids', 'permittedplanids', 'autorenewallowed', 'country', 'teamname', 'location', 'description'];
     let tags = []; // For storing tags from textarea
-    const restrictedKeywords = ['displayName','sendermsisdn', 'originalchannelids', 'partnername', 'permittedsenderids', 'permittedplanids', 'autorenewallowed', 'country', 'teamname', 'location', 'description'];
+    const restrictedKeywords = ['displayName', 'sendermsisdn', 'originalchannelids', 'partnername', 'permittedsenderids', 'permittedplanids', 'autorenewallowed', 'country', 'teamname', 'location', 'description'];
+
     function isRestricted(keyword) {
         return restrictedKeywords.some(restricted => restricted.toLowerCase() === keyword.toLowerCase());
     }
@@ -321,13 +322,13 @@ document.addEventListener('DOMContentLoaded', function () {
             addAlert('error', `You cannot use the name "${name}" of reserved or system attribute`);
 
             submitButton.classList.add('disabled');
-        submitButton.disabled = true;
+            submitButton.disabled = true;
             return;
         }
         if (isRestricted(value)) {
             addAlert('error', `You cannot use the name "${value}" of a reserved or system attribute`);
             submitButton.classList.add('disabled');
-        submitButton.disabled = true;
+            submitButton.disabled = true;
             return;
         }
 
