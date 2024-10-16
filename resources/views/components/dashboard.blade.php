@@ -369,7 +369,7 @@
                                     <a class="sort" data-sort="type" data-order="asc"
                                        href="javascript:void(0)">Type </a>
                                 </th>
-
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -403,6 +403,9 @@
                                         @elseif (is_string($value) && strpos($value, ',') === false)
                                             String
                                         @endif
+                                    </td>
+                                    <td class="not-on-mobile">
+
                                     </td>
                                 </tr>
                             @endforeach
