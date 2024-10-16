@@ -216,7 +216,8 @@
                                            style="cursor: pointer"
                                            data-edit-id="{{ $app->aid }}"
                                            data-attribute='@json(["name" => $displayName, "value" => $displayValue, "type" => $attributeType])'>
-                                            @svg('edit') Edit
+                                            @svg('edit')
+                                            <span>Edit</span>
                                         </a>
 
                                         <a class="btn-delete-attribute-modal"
@@ -224,7 +225,8 @@
                                            data-delete-id="{{ $app->aid }}"
                                            data-attribute-key="{{ $displayName }}"
                                            data-attribute-value="{{ $displayValue }}">
-                                            @svg('delete') Delete
+                                            @svg('delete')
+                                            <span>Delete</span>
                                         </a>
                                     </td>
                                 </tr>
@@ -232,6 +234,7 @@
                                 @endforeach
                             </tbody>
                         </table>
+
                         @else
                             <div class="no-custom-attribute">No custom attribute added yet.</div>
                         @endif
