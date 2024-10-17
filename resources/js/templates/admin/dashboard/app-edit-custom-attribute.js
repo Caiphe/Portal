@@ -28,8 +28,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const restrictedName = isRestricted(name);
         const restrictedValue = isRestricted(value);
 
-        const isNameValid = regex.test(name) && !restrictedName;
-        const isValueValid = regex.test(value) && !restrictedValue;
+        const nameSize = new Blob([name]).size;
+        const valueSize = new Blob([value]).size;
+
+        const isNameValid = regex.test(name) && !restrictedName && nameSize <= 1024; // 1KB limit
+        const isValueValid = regex.test(value) && !restrictedValue && valueSize <= 2048; // 2KB limit
 
         if (isNameValid && isValueValid) {
             submitButton.classList.remove('disabled');
@@ -40,8 +43,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Dynamically handle error messages
-        toggleError(nameField, isNameValid, restrictedName ? `The name "${name}" contains restricted keywords.` : 'Invalid name. Only letters, numbers, underscores, and dashes are allowed.');
-        toggleError(valueField, isValueValid, restrictedValue ? `The value "${value}" contains restricted keywords.` : 'Invalid value. Only letters, numbers, underscores, and dashes are allowed.');
+        toggleError(nameField, isNameValid, restrictedName ? `The name "${name}" contains restricted keywords.` : nameSize > 1024 ? 'Name cannot exceeds 1KB limit.' : 'Invalid name. Only letters, numbers, underscores, and dashes are allowed.');
+        toggleError(valueField, isValueValid, restrictedValue ? `The value "${value}" contains restricted keywords.` : valueSize > 2048 ? 'Value cannot exceeds 2KB limit.' : 'Invalid value. Only letters, numbers, underscores, and dashes are allowed.');
     }
 
 

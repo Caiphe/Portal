@@ -150,7 +150,7 @@
 
                 <div class=main-ca>
                     <div class="main-ca__heading">
-                        <span class="customAttributeMain__text">Custome Attributes</span>
+                        <span class="customAttributeMain__text">Custom Attributes</span>
                         <button class="btn-show-attribute-modal" data-id="{{ $app->aid }}">
                             Add custom attribute
                         </button>
@@ -199,7 +199,7 @@
 
                                 <tr class="ca-trow">
                                     <td class="display_name" data-name="{{ $displayName }}">
-                                        {!! htmlspecialchars($displayName) !!}
+                                        {!! Str::limit(htmlspecialchars($displayName), 30, '...') !!}
                                     </td>
                                     <td class="not-on-mobile" data-value="{{ htmlspecialchars($displayValue) }}">
                                         {!! Str::limit(htmlspecialchars($displayValue), 30, '...') !!}
@@ -301,7 +301,7 @@
 
                                 <tr class="ca-trow">
                                     <td class="display_name" data-name="{{ $displayName }}">
-                                        {!! htmlspecialchars($displayName) !!}
+                                        {!! Str::limit(htmlspecialchars($displayName), 30, '...') !!}
                                     </td>
                                     <td class="not-on-mobile" data-value="{{ htmlspecialchars($displayValue) }}">
                                         {!! Str::limit(htmlspecialchars($displayValue), 30, '...') !!}
@@ -390,7 +390,7 @@
 
                                 <tr class="ca-trow">
                                     <td class="display_name" data-name="{{ $displayName }}">
-                                        {!! htmlspecialchars($displayName) !!}
+                                        {!! Str::limit(htmlspecialchars($displayName), 30, '...') !!}
                                     </td>
                                     <td class="not-on-mobile" data-value="{{ htmlspecialchars($displayValue) }}">
                                         {!! Str::limit(htmlspecialchars($displayValue), 30, '...') !!}

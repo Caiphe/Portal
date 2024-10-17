@@ -158,6 +158,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const inputValue = field.value.trim();
         const submitButton = modal.querySelector('.btn-confirm');
 
+        // Name validation should not exceed 1KB (1024 bytes)
+        const nameMaxSize = 1024;
+        // Value validation should not exceed 2KB (2048 bytes)
+        const valueMaxSize = 2048;
+
+        let maxSize = fieldType === 'name' ? nameMaxSize : valueMaxSize;
+
         if (!regex.test(inputValue)) {
             errorField.textContent = errorMessage;
             errorField.style.display = 'block';
@@ -173,8 +180,8 @@ document.addEventListener('DOMContentLoaded', function () {
             errorField.style.display = 'block';
             submitButton.classList.add('disabled');
             submitButton.disabled = true;
-        } else if (new Blob([inputValue]).size > 2048) { // Check size limit of 2KB
-            errorField.textContent = "Input exceeds 2KB limit.";
+        } else if (new Blob([inputValue]).size > maxSize) {
+            errorField.textContent = `The ${fieldType} cannot exceeds ${fieldType === 'name' ? '1KB' : '2KB'} limit.`;
             errorField.style.display = 'block';
             submitButton.classList.add('disabled');
             submitButton.disabled = true;
