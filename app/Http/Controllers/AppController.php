@@ -878,7 +878,7 @@ class AppController extends Controller
         $apigeeAttributes = ApigeeService::formatToApigeeAttributes($updatedAttributes);
 
         // Abort if the updated attributes exceed 18 properties
-        if (count($apigeeAttributes) > 19) {
+        if (count($apigeeAttributes) > 18) {
             return response()->json([
                 'success' => false,
                 'message' => "Attributes array cannot exceed 18 properties."
