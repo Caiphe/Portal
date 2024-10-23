@@ -3,7 +3,6 @@
               class="custom-attributes-dialog">
 
     <form id="add-reserved-custom-attribute-form" method="POST"
-          {{--action="{{ route('app.save-custom-attributes', $app->aid) }}"--}}
           class="status-dialog-form">
         <div class="attribute-form-container-data">
             @method('POST')
