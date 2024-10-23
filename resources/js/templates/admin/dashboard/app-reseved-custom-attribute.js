@@ -108,13 +108,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Handle tags input for number values
         numberField.addEventListener('keyup', function (event) {
-            if (event.key === ' ' || event.key === ',') {
-                const input = numberField.value.trim();
-                if (input && !isEmptyOrWhitespace(input)) { // Check if input is valid
-                    const tagArray = input.split(/[, ]+/).filter(tag => tag !== '');
+            if (event.key === 'Enter' || event.key === ',') {
+                const input = numberField.value;
+
+                if (input && !isEmptyOrWhitespace(input)) {
+
+                    const tagArray = input.split(',').filter(tag => tag !== '');
                     tags = tags.concat(tagArray);
-                    numberField.value = '';  // Clear the textarea
-                    // Check total size of tags
+                    numberField.value = '';
+
                     if (isTagDataValid(tags)) {
                         const tagError = modal.querySelector('#tags-error');
                         tagError.style.display = 'none';
@@ -125,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         tags = tags.slice(0, -tagArray.length); // Remove the last added tags
                     }
                 } else {
-                    addAlert('error', 'Tags cannot be empty or contain only spaces.');
+                    //addAlert('error', 'Tags cannot be empty or contain only spaces.');
                     numberField.value = ''; // Clear the input if it's invalid
                 }
             }
@@ -332,6 +334,7 @@ document.addEventListener('DOMContentLoaded', function () {
             submitButton.disabled = true;
         }
     }
+
     function submitForm(nameField, valueField, numberField, booleanField, typeSelect, tags, modal) {
         const name = nameField.value.trim();
         let value = '';  // Value will change based on type
