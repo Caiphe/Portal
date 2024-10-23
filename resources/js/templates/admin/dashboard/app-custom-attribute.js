@@ -109,15 +109,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Handle tags input for number values
         numberField.addEventListener('keyup', function (event) {
+            if (event.key === 'Enter' || event.key === ',') {
+                const input = numberField.value;
 
-            if (event.key === ' ' || event.key === ',') {
-                const input = numberField.value.trim();
                 if (input && !isEmptyOrWhitespace(input)) {
-                    const tagArray = input.split(/[, ]+/).filter(tag => tag !== '');
-                    tags = tags.concat(tagArray);
-                    numberField.value = '';  // Clear the textarea
 
-                    // Check total size of tags
+                    const tagArray = input.split(',').filter(tag => tag !== '');
+
+                    // Add the valid tags to the tags array
+                    tags = tags.concat(tagArray);
+                    numberField.value = ''; // Clear the input field
+
+                    // Validate tags and update the display
                     if (isTagDataValid(tags)) {
                         const tagError = modal.querySelector('#tags-error');
                         tagError.style.display = 'none';
@@ -128,8 +131,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         tags = tags.slice(0, -tagArray.length); // Remove the last added tags
                     }
                 } else {
-                    //addAlert('error', 'Tags cannot be empty or contain only spaces.');
-                    numberField.value = ''; // Clear the input if it's invalid
+                    // If input is invalid, clear the input
+                    numberField.value = '';
                 }
             }
         });
