@@ -115,7 +115,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (input && !isEmptyOrWhitespace(input)) {
 
                     const tagArray = input.split(',').filter(tag => tag !== '');
-
                     // Add the valid tags to the tags array
                     tags = tags.concat(tagArray);
                     numberField.value = ''; // Clear the input field
