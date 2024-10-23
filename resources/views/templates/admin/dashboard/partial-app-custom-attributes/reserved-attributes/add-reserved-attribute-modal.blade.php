@@ -2,7 +2,7 @@
               dialogTitle="Add a reserved attribute"
               class="custom-attributes-dialog">
 
-    <form id="add-reserved-custom-attribute-form" method="POST" {{--action="{{ route('app.save-custom-attributes', $app->aid) }}"--}}
+    <form id="add-reserved-custom-attribute-form" method="POST"
           class="status-dialog-form">
         <div class="attribute-form-container-data">
             @method('POST')
@@ -41,7 +41,7 @@
                 <label for="number-value">Value</label>
                 <span id="value-description" style="display: none;color: #0c678f"></span>
                 <textarea id="number-value" name="attribute[value]"
-                          placeholder="Type comma or space to separate values"></textarea>
+                          placeholder="Type comma or press enter to create tag values"></textarea>
                 <p class="error-message" id="tags-error" style="color: red; display: none;"></p>
                 <div id="tag-container" class="tag-container"></div>
             </div>

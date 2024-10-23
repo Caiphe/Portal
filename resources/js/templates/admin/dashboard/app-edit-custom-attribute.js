@@ -190,12 +190,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         numberField.addEventListener('keyup', function (event) {
-            if (event.key === ' ' || event.key === ',') {
-                const input = numberField.value.trim();
+            if (event.key === 'Enter' || event.key === ',') {
+                const input = numberField.value;
                 if (input && !isEmptyOrWhitespace(input)) {
-                    const tagArray = input.split(/[, ]+/).filter(tag => tag !== ''); // Split on commas and spaces
+
+                    const tagArray = input.split(',').filter(tag => tag !== '');
                     tags = tags.concat(tagArray);
-                    numberField.value = ''; // Clear input field after tags are processed
+                    numberField.value = '';
 
                     // Check if tag data is valid
                     if (isTagDataValid(tags)) {
@@ -208,7 +209,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         addAlert('warning', 'The total size of tags exceeds 2KB.');
                     }
                 } else {
-                    addAlert('error', 'Tags cannot be empty or contain only spaces.');
                     numberField.value = ''; // Clear invalid input
                 }
             }
