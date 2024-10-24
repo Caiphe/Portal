@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function () {
             typeDescription.style.display = 'block';
         } else if (type === 'number') {
             numberField.style.display = 'block';
-            valueDescription.textContent = "Create tags by typing comma or space at the end of a value.";
+            valueDescription.textContent = "Create tags by typing a comma or pressing Enter after each value";
             valueDescription.style.display = 'block';
             typeDescription.textContent = "A CSV String attribute contains text values seperated by \",\". Special characters and spaces are not allowed.";
             typeDescription.style.display = 'block';
@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', function () {
             value = valueField.value.trim();  // String type input
         } else if (attributeType === 'number') {
             if (tags.length === 0) {
-                validateField(valueField, valueError, "Tags field must not be empty. Type a comma or space at the end of a value to create csv string array tags.", modal, 'value');
+                validateField(valueField, valueError, "Tags field must not be empty. Type a comma or press Enter after the value to create CSV string array tags.", modal, 'value');
                 valueError.style.display = 'block';
                 //addAlert('error', 'Tags field must not be empty.');
                 return;

@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     let appAid = null;
-    let deleteCustomAttributeModal = null; // Declare modal reference outside
+    let deleteCustomAttributeModal = null;
 
     // Function to initialize event listeners
     function initializeEventListeners() {
