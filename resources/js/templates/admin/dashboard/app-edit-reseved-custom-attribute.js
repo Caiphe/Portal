@@ -274,13 +274,13 @@ document.addEventListener('DOMContentLoaded', function () {
             valueInput.required = true;
         } else if (selectedType === 'permittedSenderIDs') {
             nameField.value = 'permittedSenderIDs';
-            valueDescription.textContent = "Create tags by typing comma or space at the end of a value.";
+            valueDescription.textContent = "Create tags by typing a comma or pressing Enter after each value";
             valueDescription.style.display = 'block';
             numberField.style.display = 'block';
             valueError.style.display = 'none';
         } else if (selectedType === 'permittedPlanIDs') {
             nameField.value = 'permittedPlanIDs';
-            valueDescription.textContent = "Create tags by typing comma or space at the end of a value.";
+            valueDescription.textContent = "Create tags by typing a comma or pressing Enter after each value";
             valueDescription.style.display = 'block';
             numberField.style.display = 'block';
             valueError.style.display = 'none';
@@ -383,14 +383,14 @@ document.addEventListener('DOMContentLoaded', function () {
             value = valueField.value.trim();
         } else if (attributeType === 'permittedSenderIDs') {
             if (tags.length === 0) {
-                valueError.textContent = "Tags field must not be empty. Type a comma or space at the end of a value to create csv string array tags.";
+                valueError.textContent = "Tags field must not be empty. Type a comma or press Enter after the value to create CSV string array tags.";
                 valueError.style.display = 'block';
                 return;
             }
             value = tags.join(',');
         } else if (attributeType === 'permittedPlanIDs') {
             if (tags.length === 0) {
-                valueError.textContent = "Tags field must not be empty. Type a comma or space at the end of a value to create csv string array tags.";
+                valueError.textContent = "Tags field must not be empty. Type a comma or press Enter after the value to create CSV string array tags.";
                 valueError.style.display = 'block';
                 return;
             }

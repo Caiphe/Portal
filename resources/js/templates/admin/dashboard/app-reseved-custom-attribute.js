@@ -249,13 +249,13 @@ document.addEventListener('DOMContentLoaded', function () {
             nameField.value = 'permittedSenderIDs';
             numberField.style.display = 'block';
             valueDescription.style.display = 'block';
-            valueDescription.textContent = "Create tags by typing values separated by commas or spaces.";
+            valueDescription.textContent = "Create tags by typing a comma or pressing Enter after each value";
             valueError.style.display = 'none';
         } else if (selectedType === 'permittedPlanIDs') {
             nameField.value = 'permittedPlanIDs';
             numberField.style.display = 'block';
             valueDescription.style.display = 'block';
-            valueDescription.textContent = "Create tags by typing values separated by commas or spaces.";
+            valueDescription.textContent = "Create tags by typing a comma or pressing Enter after each value";
             valueError.style.display = 'none';
         } else if (selectedType === 'autoRenewAllowed') {
             nameField.value = 'autoRenewAllowed';
@@ -353,14 +353,14 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (attributeType === 'permittedSenderIDs') {
             if (tags.length === 0) {
                 console.log("i am here")
-                valueError.textContent = "Tags field must not be empty. Type a comma or space at the end of a value to create csv string array tags.";
+                valueError.textContent = "Tags field must not be empty. Type a comma or press Enter after the value to create CSV string array tags.";
                 valueError.style.display = 'block';
                 return;
             }
             value = tags.join(',');
         } else if (attributeType === 'permittedPlanIDs') {
             if (tags.length === 0) {
-                valueError.textContent = "Tags field must not be empty. Type a comma or space at the end of a value to create csv string array tags.";
+                valueError.textContent = "Tags field must not be empty. Type a comma or press Enter after the value to create CSV string array tags.";
                 valueError.style.display = 'block';
                 //addAlert('error', 'Tags field must not be empty.');
                 return;
