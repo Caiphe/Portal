@@ -4,6 +4,18 @@
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12), 0 3px 6px rgba(0, 0, 0, 0.16);
 }
 
+.ly-40 {
+    padding: 0 40px !important;
+}
+
+.max-width-512 {
+    max-width: 512px;
+}
+
+.text-mtn-grey {
+    color: #787878;
+}
+
 .container {
     width: 100%;
     position: relative;
@@ -267,7 +279,7 @@
     background-color: variables.$red;
 }
 
-// Font end app 
+// Font end app
 .updated-app{
     .head{
         .column-heading {
@@ -455,7 +467,7 @@
         right: 20px;
         top: 20px;
         z-index: 4;
-        
+
         @media(max-width: 768px){
             position: relative;
             margin: 18px auto;

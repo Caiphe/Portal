@@ -26,55 +26,64 @@
 @endsection
 
 @section('content')
-
-    <x-heading heading="Apps" tags="CREATE NEW"></x-heading>
-
     <x-twofa-warning class="tall"></x-twofa-warning>
 
     <div class="content">
+        <div class="ly-40">
+            <h1>Create a new application</h1>
 
-        <nav>
-            <a href="#" class="active">
-                <span>1</span> App details
-            </a>
-            <a href="#">
-                <span>2</span> Select a country
-            </a>
-            <a href="#">
-                <span>3</span> Select products
-            </a>
-        </nav>
-
-        <form id="form-create-app" class="create-form">
-
-            <div class="form-first-container active">
-                <div class="user-thumbnails">
-                    <div class="thumbail" style="background-image: url({{ $user->profile_picture }})"></div>
-                    <label for="user-thumb">
-                        <input type="file" name="user-thumb" class="user-thumb">
-                    </label>
+            <form id="create-app-form" class="create-app-form">
+                <div class="group max-width-512">
+                    <h2>Basic Details</h2>
+                    <p class="text-mtn-grey">Enter your application's details</p>
                 </div>
-                {{-- @svg('app-avatar', '#ffffff') --}}
-
-                <div class="groups">
-                    <div class="group">
-                        <label for="name">Application name *</label>
-                        <input type="text" name="name" id="name" placeholder="Enter name" maxlength="100" autocomplete="off" required>
-                        <div class="error">{{ isset($error) && $error->get('display_name', '') }}</div>
+                <br>
+                <div class="group max-width-512">
+                    <label for="name">Application name *</label>
+                    <input type="text" name="name" id="name" placeholder="Enter a name for the application" maxlength="100" autocomplete="off" required>
+                    <div class="error">{{ isset($error) && $error->get('name', '') }}</div>
+                </div>
+                <br>
+                <div class="group max-width-512">
+                    <label for="entity_name">Entity name *</label>
+                    <input type="text" name="entity_name" id="entity_name" placeholder="Provide the partner integrating this app" maxlength="100" autocomplete="off" required>
+                    <div class="error">{{ isset($error) && $error->get('entity_name', '') }}</div>
+                </div>
+                <br>
+                <div class="group max-width-512">
+                    <label for="contact_number">Contact Number *</label>
+                    <input type="text" name="contact_number" id="contact_number" placeholder="Provide contact number for someone relevant to this app" maxlength="100" autocomplete="off" required>
+                    <div class="error">{{ isset($error) && $error->get('entity-name', '') }}</div>
+                </div>
+                <br>
+                <div class="group channels-group max-width-512">
+                    <label for="channels">Channels *</label>
+                    <p class="text-mtn-grey">Select which channels the app will use. This is only for statistical purposes and will not affect the availability of this app.</p>
+                    <div class="list">
+                        <div><input type="checkbox" name="channels" value="MyMTN APP"> <span>MyMTN APP</span></div>
+                        <div><input type="checkbox" name="channels" value="Facebook"> <span>Facebook</span></div>
+                        <div><input type="checkbox" name="channels" value="SMS"> <span>SMS</span></div>
+                        <div><input type="checkbox" name="channels" value="Email"> <span>Email</span></div>
+                        <div><input type="checkbox" name="channels" value="Mobile App (Other)"> <span>Mobile App (Other)</span></div>
+                        <div><input type="checkbox" name="channels" value="WhatsApp"> <span>WhatsApp</span></div>
+                        <div><input type="checkbox" name="channels" value="Voice Services"> <span>Voice Services</span></div>
+                        <div><input type="checkbox" name="channels" value="Other External"> <span>Other External</span></div>
                     </div>
+                    <div class="error">{{ isset($error) && $error->get('channels', '') }}</div>
+                </div>
+                <br>
+                <div class="group group-info max-width-512">
+                    <label for="url">Callback url @svg('info-icon', '#a5a5a5')<small class="tooltip">The callback URL typically specifies the URL of an app that is designated to receive an authorization code on behalf of the client app. In addition, this URL string is used for validation. A callback URL is required only for 3-legged Oauth</small></label>
+                    <input type="url" name="url" id="url" placeholder="Provide a callback URL" autocomplete="off">
+                    <div class="error">{{ isset($error) && $error->get('url', '') }}</div>
+                </div>
+                <br>
+                <div class="group group-info team-field max-width-512">
+                    <label for="team">Select team</label>
 
-                    <div class="group group-info">
-                        <label for="url">Callback url @svg('info-icon', '#a5a5a5')<small class="tooltip">The callback URL typically specifies the URL of an app that is designated to receive an authorization code on behalf of the client app. In addition, this URL string is used for validation. A callback URL is required only for 3-legged Oauth</small></label>
-                        <input type="url" name="url" id="url" placeholder="Enter callback url (eg. https://callback.com)" autocomplete="off">
-                        <div class="error">{{ isset($error) && $error->get('url', '') }}</div>
-                    </div>
-
-                    <div class="group group-info team-field">
-                        <label for="team">Select team</label>
-                       
-                        <div class="select_wrap">
-                            <input name="team" id="team" class="selected-data" value="">
-                            @if($teams->count() > 0)
+                    <div class="select_wrap">
+                        <input name="team" id="team" class="selected-data" value="">
+                        @if($teams->count() > 0)
                             <ul class="default_option">
                                 <li>
                                     <div class="select-default">Please select team <span class="hide-mobi">to publish under</span></div>
@@ -83,147 +92,334 @@
 
                             <ul class="select_ul">
                                 @foreach($teams as $team)
-                                <li>
-                                    <div class="option">
-                                        <div class="icon" style="background-image: url({{ $team['logo'] }})"></div>
-                                        <div class="select-data" data-createdby="{{ $user->email }}" data-teamid="{{ $team['id'] }}">{{ $team['name'] }}</div>
-                                    </div>
-                                </li>
+                                    <li>
+                                        <div class="option">
+                                            <div class="icon" style="background-image: url({{ $team['logo'] }})"></div>
+                                            <div class="select-data" data-createdby="{{ $user->email }}" data-teamid="{{ $team['id'] }}">{{ $team['name'] }}</div>
+                                        </div>
+                                    </li>
                                 @endforeach
                             </ul>
-                            @else
+                        @else
                             <ul class="default_option no-team">
                                 <li>
                                     <div class="select-default select-data" data-createdby="" data-teamid="">You aren't part of any teams</div>
                                 </li>
                             </ul>
-
-                            @endif
-                        </div>
-                        <div class="error">{{ isset($error) && $error->get('team', '') }}</div>
+                        @endif
                     </div>
-
-                    <div class="group">
-                        <label for="description">Description</label>
-                        <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>
-                        <div class="error">{{ isset($error) && $error->get('description', '') }}</div>
-                    </div>
+                    <div class="error">{{ isset($error) && $error->get('team', '') }}</div>
                 </div>
-
-                <div class="form-actions">
-                    <a class="button dark outline" href="{{ route('app.index') }}">Cancel</a>
-                   <button class="button primary next" type="button">Select country</button>
+                <br>
+                <div class="group max-width-512">
+                    <label for="description">Description</label>
+                    <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>
+                    <div class="error">{{ isset($error) && $error->get('description', '') }}</div>
                 </div>
-
-            </div>
-
-            <div class="select-countries">
-                <h3>Select a country you would like to associate with your app *</h3>
-
-                <div class="countries">
-                    @foreach($countries as $key => $country)
-                        <label class="country" for="country-{{ $loop->index + 1 }}" data-location="{{ $key }}">
-                            @svg('$key', '#000000', 'images/locations')
-                            <input type="radio" id="country-{{ $loop->index + 1 }}" class="country-checkbox filter-country" name="country-checkbox" value="{{ $key }}" data-location="{{ $key }}" autocomplete="off">
-                            <div class="country-checked"></div>
-                            <span>{{ $country }}</span>
-                        </label>
-                    @endforeach
-                </div>
-
-                <div class="form-actions">
-                    <button class="button dark outline back">Back</button>
-                    <button class="button primary next" id="select-products-button">
-                        Select products
-                    </button>
-                </div>
-            </div>
-
-            <div class="select-products">
-
-                <div class="product-filter-block">
-
-                    <div class="filter-head">
-                        <h3>Categories</h3>
-                        <button type="button" class="clear-category custom-clear">Clear</button>
-                    </div>
-
-                    @foreach ($productCategories as $slug => $title)
-                        <div class="filter-checkbox">
-                            <input type="checkbox" name="{{ $slug }}" id="category-{{ $slug }}" class="filter-products filter-category" value="{{ $slug }}" @if(isset($selectedCategory) && $selectedCategory === $title) checked=checked @endif autocomplete="off" />
-                            <label class="filter-label" for="category-{{ $slug }}">{{ $title }}</label>
-                        </div>
-                    @endforeach
-
-                    <div class="group-filter">
-                        <div class="filter-head">
-                            <h3>Group</h3>  
-                            <button type="button" class="clear-group custom-clear">Clear</button>
-                        </div>
-                        <div class="custom-select-block">
-                            <x-multiselect id="filter-group" name="filter-group" label="Select group" :options="$productGroups" />
-                            <img class="select-icon" src="/images/select-arrow.svg" />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="product-list-selection">
-                    <h3>Select the products you would like to add to your app.</h3>
-
-                    <div class="filtered-countries">
+                <br>
+                <div class="group max-width-512">
+                    <label for="country">Country Selection *</label>
+                    <select id="country" name="country">
+                        <option value=""> -- Country -- </option>
                         @foreach($countries as $key => $country)
-                        <div class="block-location" data-location="{{ $key }}">
-                            <p>Showing products for</p>
-                            <img src="/images/locations/{{$key}}.svg" title="{{$country}} flag" alt="{{$country}} flag">
-                            <span>{{ $country }}</span>
+                            <option value="{{ $key }}">{{ $country }}</option>
+    {{--                            <label class="country" for="country-{{ $loop->index + 1 }}" data-location="{{ $key }}">--}}
+    {{--                                @svg('$key', '#000000', 'images/locations')--}}
+    {{--                                <input type="radio" id="country-{{ $loop->index + 1 }}" class="country-checkbox filter-country" name="country-checkbox" value="{{ $key }}" data-location="{{ $key }}" autocomplete="off">--}}
+    {{--                                <div class="country-checked"></div>--}}
+    {{--                                <span>{{ $country }}</span>--}}
+    {{--                            </label>--}}
+                        @endforeach
+                    </select>
+                    <div class="error">{{ isset($error) && $error->get('country', '') }}</div>
+                    <br>
+                    <div id="country-info" class="max-width-512">
+                        <div>
+                            <span>@svg('info-icon', '#a5a5a5')</span>
                         </div>
-                        @endforeach
+                        <div>
+                            Your country selection will affect which products are available to use.
+                        </div>
                     </div>
-
-                    <div class="products">
-                        @foreach ($products as $category => $prods)
-                            <div class="category" data-category="{{ $category }}">
-                                <h3 class="category-heading category-title" data-category="{{ $prods[0]->category_cid }}">
-                                    {{ $category }}
-
-                                    <div class="count-contenaire">
-                                        <span class="filters-count"></span>
-                                        <span class="header-count">{{ $products->count() }} products</span>
-                                    </div>
-
-                                </h3>
-                                @foreach ($prods as $prod)
-                                    <x-card-product
-                                                    :product="$prod"
-                                                    :selected="!is_null($productSelected) && $productSelected->pid === $prod->pid"
-                                                    :title="$prod->display_name"
-                                                    class="product-block"
-                                                    :href="route('product.show', $prod->slug)"
-                                                    target="_blank"
-                                                    :tags="[$prod->category->title, $prod->group]"
-                                                    :addButtonId="$prod->slug"
-                                                    :data-title="$prod->name"
-                                                    :data-group="$prod->group"
-                                                    :data-access="$prod->access"
-                                                    :data-category="$prod->category_cid"
-                                                    :data-locations="$prod->locations">{{ !empty($prod->description)?$prod->description:'View the product' }}
-                                    </x-card-product>
-                                @endforeach
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <div class="form-actions create-apps-actions">
-                        <button class="button dark outline back">Back</button>
-                        <button class="button primary" id="create">Create app</button>
-                    </div>
-
-                    <div class="no-products-available">No products available. Please try other filters.</div>
-
                 </div>
+                <br>
+                <div id="product-selection">
+                    <div class="group max-width-512">
+                        <h2>Product Selection</h2>
+                        <p class="text-mtn-grey">Select the products you would like to add to your app</p>
+                    </div>
+                    <br>
+                    <div id="select-ui">
+                        <div id="product-selection-categories" class="grid-1">
+                            <div class="product-filter-block card-grey-border block-padding">
+                                <div class="filter-head">
+                                    <h3>Categories</h3>
+                                    <button type="button" class="clear-category custom-clear">Clear</button>
+                                </div>
 
+                                @foreach ($productCategories as $slug => $title)
+                                    <div class="filter-checkbox">
+                                        <input type="checkbox" name="{{ $slug }}" id="category-{{ $slug }}"
+                                               class="filter-products filter-category" value="{{ $slug }}"
+                                               @if(isset($selectedCategory) && $selectedCategory === $title) checked=checked
+                                               @endif autocomplete="off"/>
+                                        <label class="filter-label" for="category-{{ $slug }}">{{ $title }}</label>
+                                    </div>
+                                @endforeach
+
+                                <div class="group-filter">
+                                    <div class="filter-head">
+                                        <h3>Group</h3>
+                                        <button type="button" class="clear-group custom-clear">Clear</button>
+                                    </div>
+                                    <div class="custom-select-block">
+                                        <x-multiselect id="filter-group" name="filter-group" label="Select group"
+                                                       :options="$productGroups"/>
+                                        <img class="select-icon" src="/images/select-arrow.svg"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="product-selection-products grid-3">
+                            <div class="product-list-selection">
+
+                                <div class="products">
+                                    @foreach ($products as $category => $prods)
+                                        <div class="category" data-category="{{ $category }}">
+                                            <h3 class="category-heading category-title"
+                                                data-category="{{ $prods[0]->category_cid }}">
+                                                {{ $category }}
+                                            </h3>
+                                            @foreach ($prods as $prod)
+                                                <div class="product-block card card--product">
+                                                    <input id="{{ $prod->slug }}" type="checkbox" class="add-product" name="add_product[]" value="{{ $prod->name }}" @if(!is_null($productSelected) && $productSelected->pid === $prod->pid) checked @endif autocomplete="off">
+                                                    <label for="{{$prod->slug}}">{{$prod->display_name}}</label>
+                                                </div>
+{{--                                                <input type="checkbox" id="{{$prod->slug}}" value="{{$prod->slug}}">--}}
+{{--                                                <label for="{{$prod->slug}}">{{$prod->display_name}}</label>--}}
+
+{{--                                                <x-card-product--}}
+{{--                                                    :product="$prod"--}}
+{{--                                                    :selected="!is_null($productSelected) && $productSelected->pid === $prod->pid"--}}
+{{--                                                    :title="$prod->display_name"--}}
+{{--                                                    class="product-block"--}}
+{{--                                                    :href="route('product.show', $prod->slug)"--}}
+{{--                                                    target="_blank"--}}
+{{--                                                    :tags="[$prod->category->title, $prod->group]"--}}
+{{--                                                    :addButtonId="$prod->slug"--}}
+{{--                                                    :data-title="$prod->name"--}}
+{{--                                                    :data-group="$prod->group"--}}
+{{--                                                    :data-access="$prod->access"--}}
+{{--                                                    :data-category="$prod->category_cid"--}}
+{{--                                                    :data-locations="$prod->locations">{{ !empty($prod->description)?$prod->description:'View the product' }}--}}
+{{--                                                </x-card-product>--}}
+                                            @endforeach
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                        <div id="product-selection-filter" class="group grid-2">
+                            <!-- Product Search -->
+                            <input type="text" name="filter-text" id="filter-text" class="filter-text" placeholder="Search for products" autofocus="" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+{{--        <form id="form-create-app" class="create-form">--}}
+{{--            <div class="form-first-container active">--}}
+{{--                <div class="user-thumbnails">--}}
+{{--                    <div class="thumbail" style="background-image: url({{ $user->profile_picture }})"></div>--}}
+{{--                    <label for="user-thumb">--}}
+{{--                        <input type="file" name="user-thumb" class="user-thumb">--}}
+{{--                    </label>--}}
+{{--                </div>--}}
+
+{{--                <div class="groups">--}}
+{{--                    <div class="group">--}}
+{{--                        <label for="name">Application name *</label>--}}
+{{--                        <input type="text" name="name" id="name" placeholder="Enter name" maxlength="100" autocomplete="off" required>--}}
+{{--                        <div class="error">{{ isset($error) && $error->get('display_name', '') }}</div>--}}
+{{--                    </div>--}}
+
+{{--                    <div class="group group-info">--}}
+{{--                        <label for="url">Callback url @svg('info-icon', '#a5a5a5')<small class="tooltip">The callback URL typically specifies the URL of an app that is designated to receive an authorization code on behalf of the client app. In addition, this URL string is used for validation. A callback URL is required only for 3-legged Oauth</small></label>--}}
+{{--                        <input type="url" name="url" id="url" placeholder="Enter callback url (eg. https://callback.com)" autocomplete="off">--}}
+{{--                        <div class="error">{{ isset($error) && $error->get('url', '') }}</div>--}}
+{{--                    </div>--}}
+
+{{--                    <div class="group group-info team-field">--}}
+{{--                        <label for="team">Select team</label>--}}
+
+{{--                        <div class="select_wrap">--}}
+{{--                            <input name="team" id="team" class="selected-data" value="">--}}
+{{--                            @if($teams->count() > 0)--}}
+{{--                            <ul class="default_option">--}}
+{{--                                <li>--}}
+{{--                                    <div class="select-default">Please select team <span class="hide-mobi">to publish under</span></div>--}}
+{{--                                </li>--}}
+{{--                            </ul>--}}
+
+{{--                            <ul class="select_ul">--}}
+{{--                                @foreach($teams as $team)--}}
+{{--                                <li>--}}
+{{--                                    <div class="option">--}}
+{{--                                        <div class="icon" style="background-image: url({{ $team['logo'] }})"></div>--}}
+{{--                                        <div class="select-data" data-createdby="{{ $user->email }}" data-teamid="{{ $team['id'] }}">{{ $team['name'] }}</div>--}}
+{{--                                    </div>--}}
+{{--                                </li>--}}
+{{--                                @endforeach--}}
+{{--                            </ul>--}}
+{{--                            @else--}}
+{{--                            <ul class="default_option no-team">--}}
+{{--                                <li>--}}
+{{--                                    <div class="select-default select-data" data-createdby="" data-teamid="">You aren't part of any teams</div>--}}
+{{--                                </li>--}}
+{{--                            </ul>--}}
+
+{{--                            @endif--}}
+{{--                        </div>--}}
+{{--                        <div class="error">{{ isset($error) && $error->get('team', '') }}</div>--}}
+{{--                    </div>--}}
+
+{{--                    <div class="group">--}}
+{{--                        <label for="description">Description</label>--}}
+{{--                        <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>--}}
+{{--                        <div class="error">{{ isset($error) && $error->get('description', '') }}</div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+
+{{--                <div class="form-actions">--}}
+{{--                    <a class="button dark outline" href="{{ route('app.index') }}">Cancel</a>--}}
+{{--                   <button class="button primary next" type="button">Select country</button>--}}
+{{--                </div>--}}
+
+{{--            </div>--}}
+
+{{--            <div class="select-countries">--}}
+{{--                <h3>Select a country you would like to associate with your app *</h3>--}}
+
+{{--                <div class="countries">--}}
+{{--                    @foreach($countries as $key => $country)--}}
+{{--                        <label class="country" for="country-{{ $loop->index + 1 }}" data-location="{{ $key }}">--}}
+{{--                            @svg('$key', '#000000', 'images/locations')--}}
+{{--                            <input type="radio" id="country-{{ $loop->index + 1 }}" class="country-checkbox filter-country" name="country-checkbox" value="{{ $key }}" data-location="{{ $key }}" autocomplete="off">--}}
+{{--                            <div class="country-checked"></div>--}}
+{{--                            <span>{{ $country }}</span>--}}
+{{--                        </label>--}}
+{{--                    @endforeach--}}
+{{--                </div>--}}
+
+{{--                <div class="form-actions">--}}
+{{--                    <button class="button dark outline back">Back</button>--}}
+{{--                    <button class="button primary next" id="select-products-button">--}}
+{{--                        Select products--}}
+{{--                    </button>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+
+{{--            <div class="select-products">--}}
+
+{{--                <div class="product-filter-block">--}}
+
+{{--                    <div class="filter-head">--}}
+{{--                        <h3>Categories</h3>--}}
+{{--                        <button type="button" class="clear-category custom-clear">Clear</button>--}}
+{{--                    </div>--}}
+
+{{--                    @foreach ($productCategories as $slug => $title)--}}
+{{--                        <div class="filter-checkbox">--}}
+{{--                            <input type="checkbox" name="{{ $slug }}" id="category-{{ $slug }}" class="filter-products filter-category" value="{{ $slug }}" @if(isset($selectedCategory) && $selectedCategory === $title) checked=checked @endif autocomplete="off" />--}}
+{{--                            <label class="filter-label" for="category-{{ $slug }}">{{ $title }}</label>--}}
+{{--                        </div>--}}
+{{--                    @endforeach--}}
+
+{{--                    <div class="group-filter">--}}
+{{--                        <div class="filter-head">--}}
+{{--                            <h3>Group</h3>--}}
+{{--                            <button type="button" class="clear-group custom-clear">Clear</button>--}}
+{{--                        </div>--}}
+{{--                        <div class="custom-select-block">--}}
+{{--                            <x-multiselect id="filter-group" name="filter-group" label="Select group" :options="$productGroups" />--}}
+{{--                            <img class="select-icon" src="/images/select-arrow.svg" />--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+
+{{--                <div class="product-list-selection">--}}
+{{--                    <h3>Select the products you would like to add to your app.</h3>--}}
+
+{{--                    <div class="filtered-countries">--}}
+{{--                        @foreach($countries as $key => $country)--}}
+{{--                        <div class="block-location" data-location="{{ $key }}">--}}
+{{--                            <p>Showing products for</p>--}}
+{{--                            <img src="/images/locations/{{$key}}.svg" title="{{$country}} flag" alt="{{$country}} flag">--}}
+{{--                            <span>{{ $country }}</span>--}}
+{{--                        </div>--}}
+{{--                        @endforeach--}}
+{{--                    </div>--}}
+
+{{--                    <div class="products">--}}
+{{--                        @foreach ($products as $category => $prods)--}}
+{{--                            <div class="category" data-category="{{ $category }}">--}}
+{{--                                <h3 class="category-heading category-title" data-category="{{ $prods[0]->category_cid }}">--}}
+{{--                                    {{ $category }}--}}
+
+{{--                                    <div class="count-contenaire">--}}
+{{--                                        <span class="filters-count"></span>--}}
+{{--                                        <span class="header-count">{{ $products->count() }} products</span>--}}
+{{--                                    </div>--}}
+
+{{--                                </h3>--}}
+{{--                                @foreach ($prods as $prod)--}}
+{{--                                    <x-card-product--}}
+{{--                                                    :product="$prod"--}}
+{{--                                                    :selected="!is_null($productSelected) && $productSelected->pid === $prod->pid"--}}
+{{--                                                    :title="$prod->display_name"--}}
+{{--                                                    class="product-block"--}}
+{{--                                                    :href="route('product.show', $prod->slug)"--}}
+{{--                                                    target="_blank"--}}
+{{--                                                    :tags="[$prod->category->title, $prod->group]"--}}
+{{--                                                    :addButtonId="$prod->slug"--}}
+{{--                                                    :data-title="$prod->name"--}}
+{{--                                                    :data-group="$prod->group"--}}
+{{--                                                    :data-access="$prod->access"--}}
+{{--                                                    :data-category="$prod->category_cid"--}}
+{{--                                                    :data-locations="$prod->locations">{{ !empty($prod->description)?$prod->description:'View the product' }}--}}
+{{--                                    </x-card-product>--}}
+{{--                                @endforeach--}}
+{{--                            </div>--}}
+{{--                        @endforeach--}}
+{{--                    </div>--}}
+
+{{--                    <div class="form-actions create-apps-actions">--}}
+{{--                        <button class="button dark outline back">Back</button>--}}
+{{--                        <button class="button primary" id="create">Create app</button>--}}
+{{--                    </div>--}}
+
+{{--                    <div class="no-products-available">No products available. Please try other filters.</div>--}}
+
+{{--                </div>--}}
+
+{{--            </div>--}}
+{{--        </form>--}}
+
+        </div>
+
+        <div class="create-form-actions">
+            <div class="first">
+                <p><strong>Create a new application</strong></p>
+                <p>Complete all required details before completion.</p>
             </div>
-        </form>
+            <div class="second">
+                <div class="form-actions">
+                    <button class="button dark outline back" id="cancel">Cancel</button>
+                    <button class="button primary" id="create" disabled>Complete</button>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
@@ -334,14 +530,14 @@
 
                                 return;
                             }
-                            
+
                             nav.querySelector('a').nextElementSibling.classList.add('active');
                             form.firstElementChild.classList.remove('active');
                             form.firstElementChild.style.display = 'none';
                             form.firstElementChild.nextElementSibling.classList.add('active');
                         };
                     }
-                   
+
                 } else if (form.firstElementChild.nextElementSibling.classList.contains('active')) {
                     if(document.querySelectorAll('.country-checkbox:checked').length === 0) {
                         return void addAlert('error', 'Please select a country');
@@ -494,7 +690,7 @@
             else if(xhr.status === 422){
                 addAlert('error', [`An application with the name '${elements['name'].value}' already exists. Please wait, you will be redirected back to the app creation page where you can try a different name.`])
                 setTimeout(function(){
-                    location.reload(); 
+                    location.reload();
                 }, 6000);
             }
              else {
