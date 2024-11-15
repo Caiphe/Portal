@@ -44,6 +44,7 @@
                     <label for="name">Application name *</label>
                     <input type="text" name="name" id="name" data-checkurl='{{ route('app.name.check') }}'
                            placeholder="Enter a name for the application" maxlength="100" autocomplete="off" required>
+                    <div id="nameCheck" class="nameCheck"></div>
                     <div class="error">{{ isset($error) && $error->get('name', '') }}</div>
                 </div>
                 <br>

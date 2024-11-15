@@ -1,4 +1,20 @@
 (function () {
+    /* Realtime application name check*/
+    let applicationNameElement = document.getElementById('');
+    applicationNameElement.addEventListener('change', applicationNameDebounce)
+
+    function applicationNameDebounce() {
+        if (timeout) {
+            clearTimeout(timeout);
+            timeout = null;
+        }
+        timeout = setTimeout(applicationNameCheck, 512);
+    }
+
+    function applicationNameCheck() {
+        return false;
+    }
+
     /* Search */
     function debounce() {
         if (timeout) {
