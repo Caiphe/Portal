@@ -155,6 +155,11 @@
                     </div>
                 </div>
                 <br>
+
+                <div id="before-products" class="card-grey-border">
+                    Select a country before adding products
+                </div>
+
                 <div id="product-selection">
                     <div class="group max-width-512">
                         <h2>Product Selection</h2>
@@ -192,8 +197,23 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="product-selection-products grid-3">
-                            <div class="product-list-selection">
+                        <div id="product-selection-products grid-2">
+                            <div id="product-select-info">
+                                <div id="product-selection-country-info">
+                                    <p>Showing products for</p>
+                                    <div class="flag-country container-border">
+                                        <img src="/images/locations/za.svg" alt="Country flag">
+                                        <p>South Africa</p>
+                                    </div>
+                                </div>
+                                <div id="product-selection-filter">
+                                    <input type="text" name="filter-text" id="filter-text" class="filter-text" placeholder="Search for products" autofocus="" autocomplete="off">
+                                </div>
+                            </div>
+                            <div id="no-products" class="card-grey-border">
+                                No products to display
+                            </div>
+                            <div id="product-list-selection" class="product-list-selection">
                                 <div class="products">
                                     @foreach ($products as $category => $prods)
                                         <div class="category" data-category="{{ $category }}">
@@ -205,6 +225,7 @@
                                                 <x-product-select
                                                     :displayName="$prod->display_name"
                                                     :name="$prod->name"
+                                                    :href="route('product.show', $prod->slug)"
                                                     :slug="$prod->slug"
                                                     :data-title="$prod->name"
                                                     :data-group="$prod->group"
@@ -217,9 +238,6 @@
                                     @endforeach
                                 </div>
                             </div>
-                        </div>
-                        <div id="product-selection-filter" class="group grid-2">
-                            <input type="text" name="filter-text" id="filter-text" class="filter-text" placeholder="Search for products" autofocus="" autocomplete="off">
                         </div>
                     </div>
                 </div>
