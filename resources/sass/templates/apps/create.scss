@@ -1011,14 +1011,45 @@
     }
 }
 
+.nameCheck {
+    display: none;
+    visibility: visible;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #000;
+    margin: 10px 0;
+}
+
+.warning {
+    border: 1px solid red;
+    color: red;
+}
+
+.nameCheck img {
+    width: 24px;
+    height:  24px;
+    margin: auto 0;
+}
+
+.nameCheck p {
+    margin: auto 0;
+}
+
 .hide {
     display: none !important;
     visibility: hidden;
-    background: red;
 }
 
 .show {
     display: block !important;
+    visibility: visible;
+}
+
+.show-flex {
+    display: flex !important;
     visibility: visible;
 }
 

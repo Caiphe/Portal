@@ -44,7 +44,10 @@
                     <label for="name">Application name *</label>
                     <input type="text" name="name" id="name" data-checkurl='{{ route('app.name.check') }}'
                            placeholder="Enter a name for the application" maxlength="100" autocomplete="off" required>
-                    <div id="nameCheck" class="nameCheck"></div>
+                    <div id="nameCheck" class="nameCheck" data-token="{{ csrf_token() }}" data-check-uri="{{  route('app.name.duplicate.check') }}">
+                        <img src="/images/icons/loading.svg" alt="Notice Icon">
+                        <p>Checking application name...</p>
+                    </div>
                     <div class="error">{{ isset($error) && $error->get('name', '') }}</div>
                 </div>
                 <br>
@@ -202,7 +205,7 @@
                             <div id="product-select-info">
                                 <div id="product-selection-country-info">
                                     <p>Showing products for</p>
-                                    <div class="flag-country container-border">
+                                    <div id="flag-country" class="flag-country container-border">
                                         <img src="/images/locations/za.svg" alt="Country flag">
                                         <p>South Africa</p>
                                     </div>

@@ -26,6 +26,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Sentry\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AppController extends Controller
@@ -83,6 +84,19 @@ class AppController extends Controller
         }
 
         return response()->json(['success' => false], 422);
+    }
+
+    public function checkAppDuplicateName(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        $appName = Str::slug($request->name);
+        $appNameCheck = App::where('name', $appName)->where('developer_id', $user->developer_id)->exists();
+
+        if ($appNameCheck) {
+            return response()->json(['duplicate' => true], 200);
+        }
+
+        return response()->json(['duplicate' => false], 200);
     }
 
     public function create(Request $request)

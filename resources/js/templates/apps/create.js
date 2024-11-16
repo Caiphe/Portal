@@ -1,7 +1,7 @@
 (function () {
     /* Realtime application name check*/
-    let applicationNameElement = document.getElementById('');
-    applicationNameElement.addEventListener('change', applicationNameDebounce)
+    let applicationNameElement = document.getElementById('name');
+    applicationNameElement.addEventListener('keyup', applicationNameDebounce)
 
     function applicationNameDebounce() {
         if (timeout) {
@@ -12,7 +12,48 @@
     }
 
     function applicationNameCheck() {
-        return false;
+        let nameCheckElement = document.getElementById('nameCheck');
+        let checkUri = nameCheckElement.dataset.checkUri;
+        let csrfToken = nameCheckElement.dataset.token;
+        let nameElement = document.getElementById('name');
+
+        nameCheckElement.querySelector('p')
+            .innerText = 'Checking application name...';
+        nameCheckElement.querySelector('img')
+            .src = '/images/icons/loading.svg'
+        nameCheckElement.classList.remove('warning');
+        nameCheckElement.classList.add('show-flex');
+
+        if (nameElement.value === '') {
+            nameCheckElement.classList.remove('show-flex');
+            return;
+        }
+
+        //check against names
+        fetch(checkUri, {
+            method: "POST",
+            body: JSON.stringify({
+                name: nameElement.value,
+            }),
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": csrfToken,
+            }
+        })
+            .then((response) => {
+                return response.json();
+            })
+            .then((json) => {
+                if(json.duplicate === true) {
+                    nameCheckElement.classList.add('warning');
+                    nameCheckElement.querySelector('p')
+                        .innerText = 'You already have an application with this name, please use another.';
+                    nameCheckElement.querySelector('img')
+                        .src = '/images/icons/error-cross.png'
+                } else {
+                    nameCheckElement.classList.remove('show-flex');
+                }
+            });
     }
 
     /* Search */
@@ -27,18 +68,26 @@
 
     /* Country Selection */
     var countryInputElement = document.getElementById('country');
+
     countryInputElement.addEventListener('change', function(event) {
-        var countryElement = document.getElementById('country');
-        var products = document.getElementById('product-selection');
-        var beforeProducts = document.getElementById('before-products');
+        let countryElement = document.getElementById('country');
+        let countryDisplayElement = document.getElementById('flag-country');
+        let products = document.getElementById('product-selection');
+        let beforeProducts = document.getElementById('before-products');
 
         clearProducts();
         clearGroup();
         clearCategory();
 
         if (countryElement.value !== '') {
+            // update the country view
+            countryDisplayElement.querySelector('p').innerText = countryElement.options[countryElement.selectedIndex].innerText;
+            countryDisplayElement.querySelector('img').src = '/images/locations/' + countryElement.value + '.svg'
+
+            // update the hide/show status
             beforeProducts.classList.add('hide');
             products.classList.add('show');
+
             return;
         }
 
@@ -142,7 +191,6 @@
             noProductsDisplayElement.style.display = 'block';
             ProductsDisplayElement.style.visibility = 'hidden';
             ProductsDisplayElement.style.display = 'none';
-
             return;
         }
 
@@ -202,8 +250,6 @@
 var timeout = null;
 var nav = document.querySelector('.content nav');
 var buttons = document.querySelectorAll('.next');
-//var backButtons = document.querySelectorAll('.back');
-//var checkedBoxes = document.querySelectorAll('input[name=country-checkbox]:checked');
 var default_option = document.querySelector('.default_option');
 var select_wrap = document.querySelector('.select_wrap');
 var inputData = document.querySelector('.selected-data');
