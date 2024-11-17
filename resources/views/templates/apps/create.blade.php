@@ -255,7 +255,7 @@
             </div>
             <div class="second">
                 <div class="form-actions">
-                    <button class="button dark outline back" id="cancel">Cancel</button>
+                    <button class="button dark outline back" id="cancel" data-back-url="{{ route('app.index') }}">Cancel</button>
                     <button class="button primary" id="create" disabled>Complete</button>
                 </div>
             </div>
