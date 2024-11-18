@@ -42,9 +42,20 @@
                 <br>
                 <div class="group max-width-512">
                     <label for="name">Application name *</label>
-                    <input type="text" name="name" id="name" data-checkurl='{{ route('app.name.check') }}'
-                           placeholder="Enter a name for the application" maxlength="100" autocomplete="off" required>
-                    <div id="nameCheck" class="nameCheck" data-token="{{ csrf_token() }}" data-check-uri="{{  route('app.name.duplicate.check') }}">
+                    <input type="text"
+                           name="name"
+                           id="name"
+                           data-checkurl='{{ route('app.name.check') }}'
+                           placeholder="Enter a name for the application"
+                           maxlength="100"
+                           autocomplete="off"
+                           required
+                    >
+                    <div id="nameCheck"
+                         class="nameCheck"
+                         data-token="{{ csrf_token() }}"
+                         data-check-uri="{{ route('app.name.duplicate.check') }}"
+                    >
                         <img src="/images/icons/loading.svg" alt="Notice Icon">
                         <p>Checking application name...</p>
                     </div>
@@ -53,18 +64,28 @@
                 <br>
                 <div class="group max-width-512">
                     <label for="entity_name">Entity name *</label>
-                    <input type="text" name="entity_name" id="entity_name"
-                           placeholder="Provide the partner integrating this app" maxlength="100" autocomplete="off"
-                           required>
+                    <input type="text"
+                           name="entity_name"
+                           id="entity_name"
+                           placeholder="Provide the partner integrating this app"
+                           maxlength="100"
+                           autocomplete="off"
+                           required
+                    >
                     <div class="error">{{ isset($error) && $error->get('entity_name', '') }}</div>
                 </div>
                 <br>
                 <div class="group max-width-512">
                     <label for="contact_number">Contact Number *</label>
-                    <input type="text" name="contact_number" id="contact_number"
-                           placeholder="Provide contact number for someone relevant to this app" maxlength="100"
-                           autocomplete="off" required>
-                    <div class="error">{{ isset($error) && $error->get('entity-name', '') }}</div>
+                    <input type="text"
+                           name="contact_number"
+                           id="contact_number"
+                           placeholder="Provide contact number for someone relevant to this app"
+                           maxlength="100"
+                           autocomplete="off"
+                           required
+                    >
+                    <div class="error">{{ isset($error) && $error->get('contact_number', '') }}</div>
                 </div>
                 <br>
                 <div class="group channels-group max-width-512">
@@ -72,17 +93,29 @@
                     <p class="text-mtn-grey">Select which channels the app will use. This is only for statistical
                         purposes and will not affect the availability of this app.</p>
                     <div class="list">
-                        <div><input type="checkbox" name="channels" value="MyMTN APP"> <span>MyMTN APP</span></div>
-                        <div><input type="checkbox" name="channels" value="Facebook"> <span>Facebook</span></div>
-                        <div><input type="checkbox" name="channels" value="SMS"> <span>SMS</span></div>
-                        <div><input type="checkbox" name="channels" value="Email"> <span>Email</span></div>
-                        <div><input type="checkbox" name="channels" value="Mobile App (Other)">
-                            <span>Mobile App (Other)</span></div>
-                        <div><input type="checkbox" name="channels" value="WhatsApp"> <span>WhatsApp</span></div>
-                        <div><input type="checkbox" name="channels" value="Voice Services"> <span>Voice Services</span>
-                        </div>
-                        <div><input type="checkbox" name="channels" value="Other External"> <span>Other External</span>
-                        </div>
+                        @php
+                            // Move this to the model and pass the values through the view response variables.
+                            $channels = [
+                                "MyMTN APP",
+                                "Facebook",
+                                "SMS",
+                                "Email",
+                                "Mobile App (Other)",
+                                "WhatsApp",
+                                "Voice Services",
+                                "Other External"
+                            ];
+                        @endphp
+                        @foreach($channels as $channel)
+                            <div>
+                                <input
+                                    type="checkbox"
+                                    name="channels[]"
+                                >
+                                &nbsp;
+                                <span>{{$channel}}</span>
+                            </div>
+                        @endforeach
                     </div>
                     <div class="error">{{ isset($error) && $error->get('channels', '') }}</div>
                 </div>
@@ -100,11 +133,12 @@
                     <label for="team">Select team</label>
 
                     <div class="select_wrap">
-                        <input name="team" id="team" class="selected-data" value="">
+                        <input name="team" id="team" class="selected-data">
                         @if($teams->count() > 0)
                             <ul class="default_option">
                                 <li>
-                                    <div class="select-default">Please select team <span class="hide-mobi">to publish under</span>
+                                    <div class="select-default">
+                                        Please select team <span class="hide-mobi">to publish under</span>
                                     </div>
                                 </li>
                             </ul>
@@ -114,8 +148,12 @@
                                     <li>
                                         <div class="option">
                                             <div class="icon" style="background-image: url({{ $team['logo'] }})"></div>
-                                            <div class="select-data" data-createdby="{{ $user->email }}"
-                                                 data-teamid="{{ $team['id'] }}">{{ $team['name'] }}</div>
+                                            <div class="select-data"
+                                                 data-createdby="{{ $user->email }}"
+                                                 data-teamid="{{ $team['id'] }}"
+                                            >
+                                                {{ $team['name'] }}
+                                            </div>
                                         </div>
                                     </li>
                                 @endforeach
@@ -123,8 +161,8 @@
                         @else
                             <ul class="default_option no-team">
                                 <li>
-                                    <div class="select-default select-data" data-createdby="" data-teamid="">You aren't
-                                        part of any teams
+                                    <div class="select-default select-data" data-createdby="" data-teamid="">
+                                        You aren't part of any teams
                                     </div>
                                 </li>
                             </ul>
@@ -180,10 +218,16 @@
 
                                 @foreach ($productCategories as $slug => $title)
                                     <div class="filter-checkbox">
-                                        <input type="checkbox" name="{{ $slug }}" id="category-{{ $slug }}"
-                                               class="filter-products filter-category" value="{{ $slug }}"
-                                               @if(isset($selectedCategory) && $selectedCategory === $title) checked=checked
-                                               @endif autocomplete="off"/>
+                                        <input type="checkbox"
+                                               name="{{ $slug }}"
+                                               id="category-{{ $slug }}"
+                                               class="filter-products filter-category"
+                                               value="{{ $slug }}"
+                                               @if(isset($selectedCategory) && $selectedCategory === $title)
+                                                   checked=checked
+                                               @endif
+                                               autocomplete="off"
+                                        >
                                         <label class="filter-label" for="category-{{ $slug }}">{{ $title }}</label>
                                     </div>
                                 @endforeach
@@ -194,7 +238,9 @@
                                         <button type="button" class="clear-group custom-clear">Clear</button>
                                     </div>
                                     <div class="custom-select-block">
-                                        <x-multiselect id="filter-group" name="filter-group" label="Select group"
+                                        <x-multiselect id="filter-group"
+                                                       name="filter-group"
+                                                       label="Select group"
                                                        :options="$productGroups"/>
                                         <img class="select-icon" src="/images/select-arrow.svg"/>
                                     </div>
@@ -211,7 +257,14 @@
                                     </div>
                                 </div>
                                 <div id="product-selection-filter">
-                                    <input type="text" name="filter-text" id="filter-text" class="filter-text" placeholder="Search for products" autofocus="" autocomplete="off">
+                                    <input type="text"
+                                           name="filter-text"
+                                           id="filter-text"
+                                           class="filter-text"
+                                           placeholder="Search for products"
+                                           autofocus=""
+                                           autocomplete="off"
+                                    >
                                 </div>
                             </div>
                             <div id="no-products" class="card-grey-border">
@@ -255,8 +308,20 @@
             </div>
             <div class="second">
                 <div class="form-actions">
-                    <button class="button dark outline back" id="cancel" data-back-url="{{ route('app.index') }}">Cancel</button>
-                    <button class="button primary" id="create" disabled>Complete</button>
+                    <button type="button"
+                            class="button dark outline back"
+                            id="cancel"
+                            data-back-url="{{ route('app.index') }}"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        class="button primary"
+                        id="complete"
+                    >
+                        Complete
+                    </button>
                 </div>
             </div>
         </div>

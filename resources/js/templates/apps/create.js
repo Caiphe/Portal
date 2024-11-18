@@ -22,23 +22,44 @@
 
     function handleCancelButtonClickEvent(event) {
         event.preventDefault();
-        if(window.confirm('Are you sure you want to leave this page?') === true) {
+        if (window.confirm('Are you sure you want to leave this page?') === true) {
             window.location.replace(this.dataset.backUrl);
         }
+    }
+
+    /* Validate Form Completeness */
+    /**
+     * Create a validator, which will
+     * 1. Check the validity of form elements and report it back in real time for every form element.
+     * 2. keep a running state of the form on every event change.
+     * 3. Activate the form submission button when all errors are cleared.
+     *
+     * !!4. Recover form data and errors after a submission.
+     */
+
+    /* Submit/Complete Button */
+    let completeButtonElement = document.getElementById('complete');
+    completeButtonElement.addEventListener('click', handleCompleteButtonClickEvent);
+
+    function handleCompleteButtonClickEvent(event) {
+        let createForm = document.getElementById('create-app-form');
+        console.log('complete');
+        console.log(createForm.checkValidity());
+        createForm.submit();
     }
 
     /* Teams */
     let default_option = document.querySelector('.default_option');
 
-    default_option.addEventListener('click', function(){
+    default_option.addEventListener('click', function () {
         select_wrap.classList.toggle('active');
     });
 
-    for(let i = 0; i < select_ul.length; i++){
+    for (let i = 0; i < select_ul.length; i++) {
         select_ul[i].addEventListener('click', toggleSelectList);
     }
 
-    function toggleSelectList(){
+    function toggleSelectList() {
         let selectedDataObject = this.querySelector('.select-data');
         default_option.innerHTML = selectedDataObject.innerHTML;
         inputData.setAttribute('value', selectedDataObject.dataset.createdby);
@@ -271,6 +292,7 @@
         nameElement.value = nameElement.value.replace(/  +/g, ' ');
 
         if(specialChrs.test(nameElement.value)){
+            nameCheckElement.classList.remove('show-flex');
             nameElement.value = nameElement.value.replace(specialChrs, '');
             addAlert('warning', 'Application name cannot contain special characters.');
             return;
