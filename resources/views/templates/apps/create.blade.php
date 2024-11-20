@@ -27,14 +27,11 @@
 
 @section('content')
     <x-twofa-warning class="tall"></x-twofa-warning>
-
     <div class="content">
         <div class="ly-40">
             <h1>Create a new application</h1>
-
             <form id="create-app-form" class="create-app-form" action="{{ route('app.store') }}" method="post">
                 @csrf
-
                 <div class="group max-width-512">
                     <h2>Basic Details</h2>
                     <p class="text-mtn-grey">Enter your application's details</p>
@@ -49,7 +46,7 @@
                            placeholder="Enter a name for the application"
                            maxlength="100"
                            autocomplete="off"
-                           required
+                           data-validation-state="invalid"
                     >
                     <div id="nameCheck"
                          class="nameCheck"
@@ -59,7 +56,7 @@
                         <img src="/images/icons/loading.svg" alt="Notice Icon">
                         <p>Checking application name...</p>
                     </div>
-                    <div class="error">{{ isset($error) && $error->get('name', '') }}</div>
+                    <div id="name_error" class="error"></div>
                 </div>
                 <br>
                 <div class="group max-width-512">
@@ -70,9 +67,8 @@
                            placeholder="Provide the partner integrating this app"
                            maxlength="100"
                            autocomplete="off"
-                           required
                     >
-                    <div class="error">{{ isset($error) && $error->get('entity_name', '') }}</div>
+                    <div id="entity_name_error" class="error"></div>
                 </div>
                 <br>
                 <div class="group max-width-512">
@@ -85,7 +81,7 @@
                            autocomplete="off"
                            required
                     >
-                    <div class="error">{{ isset($error) && $error->get('contact_number', '') }}</div>
+                    <div id="contact_number_error" class="error"></div>
                 </div>
                 <br>
                 <div class="group channels-group max-width-512">
@@ -111,13 +107,14 @@
                                 <input
                                     type="checkbox"
                                     name="channels[]"
+                                    value="{{$channel}}"
                                 >
                                 &nbsp;
                                 <span>{{$channel}}</span>
                             </div>
                         @endforeach
                     </div>
-                    <div class="error">{{ isset($error) && $error->get('channels', '') }}</div>
+                    <div id="channel_error" class="error"></div>
                 </div>
                 <br>
                 <div class="group group-info max-width-512">
@@ -126,12 +123,11 @@
                             behalf of the client app. In addition, this URL string is used for validation. A callback
                             URL is required only for 3-legged Oauth</small></label>
                     <input type="url" name="url" id="url" placeholder="Provide a callback URL" autocomplete="off">
-                    <div class="error">{{ isset($error) && $error->get('url', '') }}</div>
+                    <div class="error"></div>
                 </div>
                 <br>
                 <div class="group group-info team-field max-width-512">
                     <label for="team">Select team</label>
-
                     <div class="select_wrap">
                         <input name="team" id="team" class="selected-data">
                         @if($teams->count() > 0)
@@ -142,7 +138,6 @@
                                     </div>
                                 </li>
                             </ul>
-
                             <ul class="select_ul">
                                 @foreach($teams as $team)
                                     <li>
@@ -168,13 +163,13 @@
                             </ul>
                         @endif
                     </div>
-                    <div class="error">{{ isset($error) && $error->get('team', '') }}</div>
+                    <div class="error"></div>
                 </div>
                 <br>
                 <div class="group max-width-512">
                     <label for="description">Description</label>
                     <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>
-                    <div class="error">{{ isset($error) && $error->get('description', '') }}</div>
+                    <div class="error"></div>
                 </div>
                 <br>
                 <div class="group max-width-512">
@@ -185,7 +180,7 @@
                             <option value="{{ $key }}">{{ $country }}</option>
                         @endforeach
                     </select>
-                    <div class="error">{{ isset($error) && $error->get('country', '') }}</div>
+                    <div id="country_error" class="error"></div>
                     <br>
                     <div id="country-info" class="max-width-512">
                         <div>
@@ -197,16 +192,17 @@
                     </div>
                 </div>
                 <br>
-
                 <div id="before-products" class="card-grey-border">
                     Select a country before adding products
                 </div>
-
                 <div id="product-selection">
                     <div class="group max-width-512">
                         <h2>Product Selection</h2>
-                        <p class="text-mtn-grey">Select the products you would like to add to your app</p>
+                        <p class="text-mtn-grey">
+                            Select the products you would like to add to your app. You have to select at least one.
+                        </p>
                     </div>
+                    <div id="product_error" class="error"></div>
                     <br>
                     <div id="select-ui">
                         <div id="product-selection-categories" class="grid-1">
@@ -215,7 +211,6 @@
                                     <h3>Categories</h3>
                                     <button type="button" class="clear-category custom-clear">Clear</button>
                                 </div>
-
                                 @foreach ($productCategories as $slug => $title)
                                     <div class="filter-checkbox">
                                         <input type="checkbox"
@@ -231,7 +226,6 @@
                                         <label class="filter-label" for="category-{{ $slug }}">{{ $title }}</label>
                                     </div>
                                 @endforeach
-
                                 <div class="group-filter">
                                     <div class="filter-head">
                                         <h3>Group</h3>
@@ -300,7 +294,6 @@
                 </div>
             </form>
         </div>
-
         <div class="create-form-actions">
             <div class="first">
                 <p><strong>Create a new application</strong></p>

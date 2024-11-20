@@ -1,20 +1,9 @@
 (function () {
     /* Variables */
     let timeout = null;
-    let nav = document.querySelector('.content nav');
-    let buttons = document.querySelectorAll('.next');
     let inputData = document.querySelector('.selected-data');
     let select_wrap = document.querySelector('.select_wrap');
     let select_ul = document.querySelectorAll('.select_ul li');
-
-    /* Create Application Action */
-    let createForm = document.getElementById('create-app-form');
-    createForm.addEventListener('submit', handleCreate);
-
-    function init() {
-        handleButtonClick();
-        // handleBackButtonClick();
-    }
 
     /* Cancel Button */
     let cancelButtonElement = document.getElementById('cancel');
@@ -27,237 +16,7 @@
         }
     }
 
-    /* Validate Form Completeness */
-    /**
-     * Create a validator, which will
-     * 1. Check the validity of form elements and report it back in real time for every form element.
-     * 2. keep a running state of the form on every event change.
-     * 3. Activate the form submission button when all errors are cleared.
-     *
-     * !!4. Recover form data and errors after a submission.
-     */
-
-    /* Submit/Complete Button */
-    let completeButtonElement = document.getElementById('complete');
-    completeButtonElement.addEventListener('click', handleCompleteButtonClickEvent);
-
-    function handleCompleteButtonClickEvent(event) {
-        let createForm = document.getElementById('create-app-form');
-        console.log('complete');
-        console.log(createForm.checkValidity());
-        createForm.submit();
-    }
-
-    /* Teams */
-    let default_option = document.querySelector('.default_option');
-
-    default_option.addEventListener('click', function () {
-        select_wrap.classList.toggle('active');
-    });
-
-    for (let i = 0; i < select_ul.length; i++) {
-        select_ul[i].addEventListener('click', toggleSelectList);
-    }
-
-    function toggleSelectList() {
-        let selectedDataObject = this.querySelector('.select-data');
-        default_option.innerHTML = selectedDataObject.innerHTML;
-        inputData.setAttribute('value', selectedDataObject.dataset.createdby);
-        inputData.setAttribute('data-teamid', selectedDataObject.dataset.teamid);
-        select_wrap.classList.remove('active');
-    }
-
-    function handleButtonClick() {
-        let elements =  createForm.elements;
-        for (let i = 0; i < buttons.length; i++) {
-            buttons[i].addEventListener('click', function (event) {
-                let errors = [];
-                let urlValue = elements['url'].value;
-                event.preventDefault();
-
-                if( createForm.firstElementChild.classList.contains('active')) {
-
-                    if(urlValue !== '' && !/https?:\/\/.*\..*/.test(urlValue)) {
-                        errors.push({msg: 'Please add a valid url. Eg. https://callback.com', el: elements['url']});
-                    } else {
-                        elements['url'].nextElementSibling.textContent = '';
-                    }
-
-                    if(elements['name'].value === '') {
-                        addAlert('error', 'Please add your app name');
-                        elements['name'].focus();
-                    } else if(elements['name'].value.length === 1){
-                        elements['name'].focus();
-                        addAlert('warning', 'Please provide a valid app name');
-                    } else if(elements['name'].value !== '' && elements['name'].value.length > 1 ){
-
-                        let appName =  elements['name'].value;
-                        let checkUrl = document.getElementById('name').dataset.checkurl;
-
-                        let app = {
-                            name: appName,
-                        }
-
-                        let xhr = new XMLHttpRequest();
-                        addLoading("checking app's name...");
-
-                        xhr.open('POST', checkUrl, true);
-                        xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
-                        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-                        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-
-                        xhr.send(JSON.stringify(app));
-
-                        xhr.onload = function() {
-                            removeLoading();
-
-                            if(xhr.status === 409){
-                                elements['name'].focus();
-                                errors.push({msg: "App name already exists", el: elements['name']});
-                            }
-
-                            if(errors.length > 0){
-                                for (var i = errors.length - 1; i >= 0; i--) {
-                                    errors[i].el.nextElementSibling.textContent = errors[i].msg;
-                                }
-
-                                return;
-                            }
-
-                            nav.querySelector('a').nextElementSibling.classList.add('active');
-                            createForm.firstElementChild.classList.remove('active');
-                            createForm.firstElementChild.style.display = 'none';
-                            createForm.firstElementChild.nextElementSibling.classList.add('active');
-                        };
-                    }
-
-                } else if ( createForm.firstElementChild.nextElementSibling.classList.contains('active')) {
-                    if(document.querySelectorAll('.country-checkbox:checked').length === 0) {
-                        return void addAlert('error', 'Please select a country');
-                    }
-
-                    nav.querySelector('a').nextElementSibling.nextElementSibling.classList.add('active');
-
-                    createForm.firstElementChild.nextElementSibling.classList.remove('active');
-                    createForm.firstElementChild.nextElementSibling.nextElementSibling.classList.add('active');
-                }
-            });
-        }
-    }
-
-    // function filterLocations(selected) {
-    //     var locations = document.querySelectorAll('.filtered-countries .block-location');
-    //
-    //     for(var i = 0; i < locations.length; i++) {
-    //         if (locations[i].dataset.location === selected) {
-    //             locations[i].style.display = "flex";
-    //             continue;
-    //         }
-    //
-    //         locations[i].style.display = "none";
-    //     }
-    // }
-
-    // function filterCountryProducts(selectedCountry) {
-    //     var products = document.querySelectorAll(".card--product");
-    //     var categoryHeadings = document.querySelectorAll(".category-heading");
-    //     var showCategories = [];
-    //     var locations = null;
-    //
-    //     for (var i = products.length - 1; i >= 0; i--) {
-    //         products[i].style.display = "none";
-    //
-    //         if(!products[i].dataset.locations) continue;
-    //         locations =
-    //             products[i].dataset.locations !== undefined
-    //                 ? products[i].dataset.locations.split(",")
-    //                 : ["all"];
-    //
-    //         if(locations[0] === 'all' || locations.indexOf(selectedCountry) !== -1){
-    //             products[i].style.display = "flex";
-    //
-    //             if(showCategories.indexOf(products[i].dataset.category) === -1){
-    //                 showCategories.push(products[i].dataset.category);
-    //             }
-    //         }
-    //     }
-    //
-    //     for (var i = categoryHeadings.length - 1; i >= 0; i--) {
-    //         categoryHeadings[i].style.display = showCategories.indexOf(categoryHeadings[i].dataset.category) === -1 ? "none" : "inherit";
-    //     }
-    // }
-
-    function handleCreate(event) {
-        let elements = this.elements;
-        let app = {
-            display_name: elements['name'].value,
-            url: elements['url'].value,
-            description: elements['description'].value,
-            country: document.querySelector('.country-checkbox:checked').dataset.location,
-            products: [],
-            team_id: inputData.dataset.teamid
-        };
-        let selectedProducts = document.querySelectorAll('.add-product:checked');
-        let button = document.getElementById('create');
-        let url = document.getElementById('create-app-form').action;
-        let xhr = new XMLHttpRequest();
-
-        event.preventDefault();
-
-        for(i = 0; i < selectedProducts.length; i++) {
-            app.products.push(selectedProducts[i].value);
-        }
-
-        if (app.products.length === 0) {
-            return void addAlert('error', 'Please select at least one product.')
-        }
-
-        button.disabled = true;
-        addLoading('Creating app...');
-
-        xhr.open('POST', url);
-        xhr.setRequestHeader('X-CSRF-TOKEN', "{{ csrf_token() }}");
-        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-
-        xhr.send(JSON.stringify(app));
-
-        xhr.onload = function() {
-            removeLoading();
-
-            if (xhr.status === 200) {
-                addAlert('success', ['Application created successfully', 'You will be redirected to your app page shortly.'], function(){
-                    window.location.href = "{{ route('app.index') }}";
-                });}
-            else if(xhr.status === 429){
-                addAlert('warning', ['This action is not allowed.', 'Please contact your admin.'], function(){
-                    window.location.href = "{{ route('app.index') }}";
-                });
-            }
-            else if(xhr.status === 422){
-                addAlert('error', [`An application with the name '${elements['name'].value}' already exists. Please wait, you will be redirected back to the app creation page where you can try a different name.`])
-                setTimeout(function(){
-                    location.reload();
-                }, 6000);
-            }
-            else {
-                let result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
-
-                if(result.errors) {
-                    result.message = [];
-                    for(let error in result.errors){
-                        result.message.push(result.errors[error]);
-                    }
-                }
-
-                addAlert('error', result.message || 'Sorry there was a problem creating your app. Please try again.');
-
-                button.removeAttribute('disabled');
-            }
-        };
-    }
-
-    /* Realtime application name check*/
+    /* Realtime application name check */
     let applicationNameElement = document.getElementById('name');
     applicationNameElement.addEventListener('keyup', applicationNameDebounce)
 
@@ -284,21 +43,25 @@
 
         if (nameElement.value === '') {
             nameCheckElement.classList.remove('show-flex');
+            nameElement.dataset.validationState = "invalid";
+            validate.showError('name_error', 'Your application name cannot be empty.');
             return;
+        } else {
+            validate.hideError('name_error');
         }
 
-        let specialChrs = /[`~!@#$%^&*|+=?;:±§'",.<>\{\}\[\]\\\/]/gi;
+        let specialChrs = /[`~!@#$%^&*|+=?;:±§'",.<>\[\]\\\/]/gi;
 
         nameElement.value = nameElement.value.replace(/  +/g, ' ');
 
-        if(specialChrs.test(nameElement.value)){
+        if (specialChrs.test(nameElement.value)) {
             nameCheckElement.classList.remove('show-flex');
             nameElement.value = nameElement.value.replace(specialChrs, '');
             addAlert('warning', 'Application name cannot contain special characters.');
             return;
         }
 
-        //check against names
+        // Check against names
         fetch(checkUri, {
             method: "POST",
             body: JSON.stringify({
@@ -313,16 +76,203 @@
                 return response.json();
             })
             .then((json) => {
-                if(json.duplicate === true) {
+                if (json.duplicate === true) {
                     nameCheckElement.classList.add('warning');
                     nameCheckElement.querySelector('p')
                         .innerText = 'You already have an application with this name, please use another.';
                     nameCheckElement.querySelector('img')
                         .src = '/images/icons/error-cross.png'
+                    nameElement.dataset.validationState = "invalid";
                 } else {
                     nameCheckElement.classList.remove('show-flex');
+                    nameElement.dataset.validationState = "valid";
                 }
             });
+    }
+
+    /* Validate Form Elements As User Interacts */
+    const validate = {
+        showError(elementID, errorResponseText) {
+            const e = document.getElementById(elementID);
+            e.innerText = errorResponseText;
+            e.style.visibility = 'visible';
+            e.style.display = 'block';
+        },
+
+        hideError(elementID) {
+            const e = document.getElementById(elementID);
+            e.style.visibility = 'hidden';
+            e.style.display = 'none';
+        },
+
+        /**
+         * This checks if the application name has a valid state. There is other code which
+         * checks and sets validity, but this one manages the programmatic check where needed.
+         * @param elementID
+         * @return boolean
+         */
+        checkAppName(elementID) {
+            const e = document.getElementById(elementID);
+            const eValidationState = e.dataset.validationState;
+            return eValidationState === "valid";
+        },
+
+        /**
+         * This very simply checks if a field has been completed, because it is required.
+         * The value itself is not checked.
+         * @param elementID
+         * @return boolean
+         */
+        required(elementID) {
+            const e = document.getElementById(elementID);
+            return e.value !== '';
+        },
+
+        /**
+         * This checks that the given form element array of checkboxes has a specific number of checkboxes
+         * selected.
+         */
+        checked(inputName, min) {
+            const checkboxes = document.querySelectorAll('input[name="' + inputName + '[]"]:checked');
+            return checkboxes.length >= min;
+        },
+    }
+
+    /* Complete Button */
+    let completeButtonElement = document.getElementById('complete');
+    completeButtonElement.addEventListener('click', handleCompleteButtonClickEvent);
+
+    function handleCompleteButtonClickEvent() {
+        let formError = false;
+
+        // Validate the application name
+        if (!validate.checkAppName('name')) {
+            validate.showError('name_error', 'The application name is not valid.');
+            formError = true;
+        }
+
+        // Validate the required fields
+        if (!validate.required('entity_name')) {
+            validate.showError('entity_name_error', 'Entity name is required.')
+            formError = true;
+        } else {
+            validate.hideError('entity_name_error');
+        }
+
+        if (!validate.required('contact_number')) {
+            validate.showError('contact_number_error', 'Contact Number is required.');
+            formError = true;
+        } else {
+            validate.hideError('contact_number_error');
+        }
+
+        if (!validate.required('country')) {
+            validate.showError('country_error', 'Select a country to continue.');
+            formError = true;
+        } else {
+            validate.hideError('country_error');
+        }
+
+        // Validate that at least one checkbox is checked
+        if (!validate.checked('channels', 1)) {
+            validate.showError('channel_error', 'Select at least one channel to continue.');
+            formError = true;
+        } else {
+            validate.hideError('channel_error');
+        }
+
+        // Validate that at least one country is selected
+        if (!validate.checked('add_product', 1)) {
+            validate.showError('product_error', 'Select at least one product to continue.');
+            formError = true;
+        } else {
+            validate.hideError('product_error');
+        }
+
+        if (formError === true) {
+            return;
+        }
+
+        // Create new application with data provided
+        let createAppForm = document.getElementById('create-app-form');
+        let csrfToken = document.querySelector("input[name='_token']").value;
+
+        let name = document.getElementById('name').value;
+        let entity_name = document.getElementById('entity_name').value;
+        let contact_number = document.getElementById('contact_number').value;
+        let url = document.getElementById('url').value;
+        let team = document.getElementById('team').value;
+        let description = document.getElementById('description').value;
+        let country = document.getElementById('country').value;
+
+        let channels = document.querySelectorAll('input[name="channels[]"]:checked');
+        let channels_array = [];
+        channels.forEach((channel) => {
+            channels_array.push(channel.value);
+        });
+
+        let products = document.querySelectorAll('input[name="add_product[]"]:checked');
+        let products_array = [];
+        products.forEach((product) => {
+            products_array.push(product.value);
+        });
+
+        addLoading("Saving New Application ...");
+
+        let createFetch = fetch(createAppForm.action, {
+            method: "POST",
+            body: JSON.stringify({
+                name: name,
+                display_name: name,
+                url: url,
+                description: description,
+                country: country,
+                products: products_array,
+                channels: channels_array,
+                entity_name: entity_name,
+                contact_number: contact_number,
+                team: team,
+            }),
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+                "X-CSRF-TOKEN": csrfToken,
+                "X-Requested-With": "XMLHttpRequest",
+            }
+        });
+
+        createFetch.then((response) => {
+            if (response.status === 200) {
+                addAlert('success', ['Application created successfully', 'You will be redirected to your app page shortly.'], function () {
+                    window.location.href = "";
+                });
+            } else {
+                addAlert('error', 'Something went wrong with creating a new application. If the error persists, contact' +
+                    'the system administrator.')
+            }
+        });
+
+        createFetch.finally(() => {
+            removeLoading();
+        });
+    }
+
+    /* Teams Selection */
+    let default_option = document.querySelector('.default_option');
+
+    default_option.addEventListener('click', function () {
+        select_wrap.classList.toggle('active');
+    });
+
+    for (let i = 0; i < select_ul.length; i++) {
+        select_ul[i].addEventListener('click', toggleSelectList);
+    }
+
+    function toggleSelectList() {
+        let selectedDataObject = this.querySelector('.select-data');
+        default_option.innerHTML = selectedDataObject.innerHTML;
+        inputData.setAttribute('value', selectedDataObject.dataset.createdby);
+        inputData.setAttribute('data-teamid', selectedDataObject.dataset.teamid);
+        select_wrap.classList.remove('active');
     }
 
     /* Search */
@@ -333,12 +283,13 @@
         }
         timeout = setTimeout(filterProducts, 512);
     }
+
     document.getElementById('filter-text').addEventListener('input', debounce);
 
     /* Country Selection */
     let countryInputElement = document.getElementById('country');
 
-    countryInputElement.addEventListener('change', function(event) {
+    countryInputElement.addEventListener('change', function () {
         let countryElement = document.getElementById('country');
         let countryDisplayElement = document.getElementById('flag-country');
         let products = document.getElementById('product-selection');
@@ -374,7 +325,7 @@
     }
 
     let nextBlockBtn = document.querySelector('#next-block-btn');
-    if (nextBlockBtn){
+    if (nextBlockBtn) {
         nextBlockBtn.addEventListener('click', filterProducts);
     }
 
@@ -383,10 +334,9 @@
         product.classList.toggle('selected');
     }
 
-    // Clear products
-    function clearProducts(){
+    /* Clear Products */
+    function clearProducts() {
         let productsElements = document.querySelectorAll("input[name='add_product[]']:checked");
-
         for (let i = productsElements.length - 1; i >= 0; i--) {
             productsElements[i].checked = false;
         }
@@ -394,29 +344,27 @@
 
     let filterProductsEls = document.querySelectorAll('.filter-products');
     document.getElementById('filter-group').addEventListener('change', filterProducts);
-
     for (let i = filterProductsEls.length - 1; i >= 0; i--) {
         filterProductsEls[i].addEventListener('change', filterProducts);
     }
 
     /* Clear category */
     document.querySelector('.clear-category').addEventListener('click', clearCategory);
-    function clearCategory(){
-        let categories = document.querySelectorAll('.filter-category:checked');
 
+    function clearCategory() {
+        let categories = document.querySelectorAll('.filter-category:checked');
         for (let i = categories.length - 1; i >= 0; i--) {
             categories[i].checked = false;
         }
-
         filterProducts();
     }
 
     /* Clear category group */
     document.querySelector('.clear-group').addEventListener('click', clearGroup);
-    function clearGroup(){
+
+    function clearGroup() {
         document.getElementById('filter-group').value = '';
         document.getElementById('filter-group-tags').innerHTML = '';
-
         filterProducts();
     }
 
@@ -433,7 +381,6 @@
                 categoryHeadingsShow.push(cards[i].dataset.category);
                 continue;
             }
-
             cards[i].classList.remove('display-cards');
             cards[i].style.display = 'none';
         }
@@ -443,21 +390,14 @@
                 categoryHeadings[i].style.display = 'inherit';
                 continue;
             }
-
             categoryHeadings[i].style.display = 'none';
-        }
-
-        let allCategories = document.querySelectorAll('.category');
-
-        for(let i =0; i < allCategories.length; i++){
-            let cardsDisplay = allCategories[i].querySelectorAll('.display-cards');
         }
 
         let countDisplayCards = document.querySelectorAll('.display-cards');
         let noProductsDisplayElement = document.getElementById('no-products');
         let ProductsDisplayElement = document.getElementById('product-list-selection');
 
-        if(countDisplayCards.length === 0) {
+        if (countDisplayCards.length === 0) {
             noProductsDisplayElement.style.visibility = 'visible';
             noProductsDisplayElement.style.display = 'block';
             ProductsDisplayElement.style.visibility = 'hidden';
@@ -476,9 +416,8 @@
         let title = card.dataset.title.toLowerCase();
 
         if (filterText === '') return true;
-        if (title.indexOf(filterText) !== -1) return true;
 
-        return false;
+        return title.indexOf(filterText) !== -1;
     }
 
     function testCategories(card) {
@@ -488,7 +427,6 @@
 
         for (let i = categories.length - 1; i >= 0; i--) {
             if (categories[i].value === card.dataset.category) {
-                console.log(card.dataset.category, true)
                 return true;
             }
         }
@@ -505,14 +443,12 @@
                 return true;
             }
         }
+
         return false;
     }
 
     function testLocation(card) {
         let locations = document.getElementById('country').value;
-
-        if (card.dataset.locations.split(',').indexOf(locations) !== -1) return true;
-
-        return false;
+        return card.dataset.locations.split(',').indexOf(locations) !== -1;
     }
 }());
