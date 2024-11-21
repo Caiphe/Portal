@@ -30,7 +30,12 @@
     <div class="content">
         <div class="ly-40">
             <h1>Create a new application</h1>
-            <form id="create-app-form" class="create-app-form" action="{{ route('app.store') }}" method="post">
+            <form id="create-app-form"
+                  class="create-app-form"
+                  action="{{ route('app.store') }}"
+                  data-redirect="{{ route('app.index') }}"
+                  method="post"
+            >
                 @csrf
                 <div class="group max-width-512">
                     <h2>Basic Details</h2>

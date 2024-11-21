@@ -1,7 +1,5 @@
 <?php
 
-// Auth::loginUsingId(1);
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,7 +11,8 @@
 |
  */
 
-use App\Http\Controllers\Api\Admin\DeveloperController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'HomeController')->name('home');
 

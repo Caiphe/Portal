@@ -243,7 +243,7 @@
         createFetch.then((response) => {
             if (response.status === 200) {
                 addAlert('success', ['Application created successfully', 'You will be redirected to your app page shortly.'], function () {
-                    window.location.href = "";
+                    window.location.replace(createAppForm.dataset.redirect);
                 });
             } else {
                 addAlert('error', 'Something went wrong with creating a new application. If the error persists, contact' +
