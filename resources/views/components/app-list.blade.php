@@ -225,7 +225,7 @@
 
                 @if(empty($sandboxProducts))
                 <div class="detail-row cols">
-                    <div class="detail-item"><strong>Country</strong></div>
+                    <div class="detail-item"><strong>Country:</strong></div>
                     <div class="detail-item">{{ $countryName }}</div>
                 </div>
                 @endif
@@ -239,8 +239,16 @@
                 </div>
                 @endif
 
+                @if($app['entity_name'])
+                <div class="detail-row details-row-container">
+                    <div class="detail-item"><strong>Entity Name:</strong></div>
+                    <div class="detail-item detail-item-description">{{ $app['entity_name'] }}</div>
+                </div>
+                @endif
+
             </div>
             <div class="detail-right">
+
                 <div class="detail-row cols">
                     <div class="detail-item"><strong>Key issued:</strong></div>
                     <div class="detail-item">{{ date('d M Y H:i:s', substr(end($credentials)['issuedAt'], 0, 10)) }}</div>
@@ -250,6 +258,17 @@
                     <div class="detail-item"><strong>Expires:</strong></div>
                     <div class="detail-item">Never</div>
                 </div>
+
+                <div class="detail-row cols">
+                    <div class="detail-item"><strong>Contact Number:</strong></div>
+                    <div class="detail-item">{{ $app['contact_number'] }}</div>
+                </div>
+                
+                <div class="detail-row cols">
+                    <div class="detail-item"><strong>Channels:</strong></div>
+                    <div class="detail-item">{{ $app['channels'] }}</div>
+                </div>
+
             </div>
         </div>
         @endif

@@ -90,7 +90,6 @@
             });
     }
 
-    /* Validate Form Elements As User Interacts */
     const validate = {
         showError(elementID, errorResponseText) {
             const e = document.getElementById(elementID);
@@ -146,10 +145,10 @@
         let formError = false;
 
         // Validate the application name
-        if (!validate.checkAppName('name')) {
-            validate.showError('name_error', 'The application name is not valid.');
-            formError = true;
-        }
+        // if (!validate.checkAppName('name')) {
+        //     validate.showError('name_error', 'The application name is not valid.');
+        //     formError = true;
+        // }
 
         // Validate the required fields
         if (!validate.required('entity_name')) {
@@ -203,13 +202,13 @@
         }
 
         // Create new application with data provided
-        let createAppForm = document.getElementById('create-app-form');
+        let createAppForm = document.getElementsByClassName('app-form');
         let csrfToken = document.querySelector("input[name='_token']").value;
-
         let name = document.getElementById('name').value;
         let entity_name = document.getElementById('entity_name').value;
         let contact_number = document.getElementById('contact_number').value;
         let url = document.getElementById('url').value;
+        let team = document.getElementById('team').value;
         let description = document.getElementById('description').value;
         let country = document.getElementById('country').value;
 
@@ -225,10 +224,18 @@
             products_array.push(product.value);
         });
 
-        addLoading("Saving New Application ...");
+        let loadingMessage = 'Saving New Application ...';
+        let successMessage = 'Application created successfully';
+
+        if(createAppForm.method==='PUT'){
+            loadingMessage = 'Updating ...';
+            successMessage = 'Application updated successfully';
+        }
+
+        addLoading(loadingMessage);
 
         let createFetch = fetch(createAppForm.action, {
-            method: "POST",
+            method: createAppForm.method,
             body: JSON.stringify({
                 name: name,
                 display_name: name,
@@ -239,7 +246,7 @@
                 channels: channels_array,
                 entity_name: entity_name,
                 contact_number: contact_number,
-                team_id: inputData.dataset.teamid
+                team: team,
             }),
             headers: {
                 "Content-Type": "application/json; charset=utf-8",
@@ -250,7 +257,7 @@
 
         createFetch.then((response) => {
             if (response.status === 200) {
-                addAlert('success', ['Application created successfully', 'You will be redirected to your app page shortly.'], function () {
+                addAlert('success', [successMessage, 'You will be redirected to your app page shortly.'], function () {
                     window.location.replace(createAppForm.dataset.redirect);
                 });
             } else {
@@ -262,186 +269,5 @@
         createFetch.finally(() => {
             removeLoading();
         });
-    }
-
-    /* Teams Selection */
-    let default_option = document.querySelector('.default_option');
-
-    default_option.addEventListener('click', function () {
-        select_wrap.classList.toggle('active');
-    });
-
-    for (let i = 0; i < select_ul.length; i++) {
-        select_ul[i].addEventListener('click', toggleSelectList);
-    }
-
-    function toggleSelectList() {
-        let selectedDataObject = this.querySelector('.select-data');
-        default_option.innerHTML = selectedDataObject.innerHTML;
-        inputData.setAttribute('value', selectedDataObject.dataset.createdby);
-        inputData.setAttribute('data-teamid', selectedDataObject.dataset.teamid);
-        select_wrap.classList.remove('active');
-    }
-
-    /* Search */
-    function debounce() {
-        if (timeout) {
-            clearTimeout(timeout);
-            timeout = null;
-        }
-        timeout = setTimeout(filterProducts, 512);
-    }
-
-    document.getElementById('filter-text').addEventListener('input', debounce);
-
-    /* Country Selection */
-    let countryInputElement = document.getElementById('country');
-
-    countryInputElement.addEventListener('change', function () {
-        let countryElement = document.getElementById('country');
-        let countryDisplayElement = document.getElementById('flag-country');
-        let products = document.getElementById('product-selection');
-        let beforeProducts = document.getElementById('before-products');
-
-        clearProducts();
-        clearGroup();
-        clearCategory();
-
-        if (countryElement.value !== '') {
-            // update the country view
-            countryDisplayElement.querySelector('p').innerText = countryElement.options[countryElement.selectedIndex].innerText;
-            countryDisplayElement.querySelector('img').src = '/images/locations/' + countryElement.value + '.svg'
-
-            // update the hide/show status
-            beforeProducts.classList.add('hide');
-            products.classList.add('show');
-
-            return;
-        }
-
-        // Hide products if no country is selected
-        beforeProducts.classList.remove('hide');
-        products.classList.remove('show');
-
-        // Filter products
-        filterProducts();
-    });
-
-    /* Clear Products */
-    function clearProducts() {
-        let productsElements = document.querySelectorAll("input[name='add_product[]']:checked");
-        for (let i = productsElements.length - 1; i >= 0; i--) {
-            productsElements[i].checked = false;
-        }
-    }
-
-    let filterProductsEls = document.querySelectorAll('.filter-products');
-    document.getElementById('filter-group').addEventListener('change', filterProducts);
-    for (let i = filterProductsEls.length - 1; i >= 0; i--) {
-        filterProductsEls[i].addEventListener('change', filterProducts);
-    }
-
-    /* Clear category */
-    document.querySelector('.clear-category').addEventListener('click', clearCategory);
-
-    function clearCategory() {
-        let categories = document.querySelectorAll('.filter-category:checked');
-        for (let i = categories.length - 1; i >= 0; i--) {
-            categories[i].checked = false;
-        }
-        filterProducts();
-    }
-
-    /* Clear category group */
-    document.querySelector('.clear-group').addEventListener('click', clearGroup);
-
-    function clearGroup() {
-        document.getElementById('filter-group').value = '';
-        document.getElementById('filter-group-tags').innerHTML = '';
-        filterProducts();
-    }
-
-    /* Filter products */
-    function filterProducts() {
-        let cards = document.querySelectorAll('.card--product');
-        let categoryHeadings = document.querySelectorAll('.category-title');
-        let categoryHeadingsShow = [];
-
-        for (let i = cards.length - 1; i >= 0; i--) {
-            if (testCategories(cards[i]) && testLocation(cards[i]) && testGroup(cards[i]) && testFilterText(cards[i])) {
-                cards[i].style.display = 'flex';
-                cards[i].classList.add('display-cards');
-                categoryHeadingsShow.push(cards[i].dataset.category);
-                continue;
-            }
-            cards[i].classList.remove('display-cards');
-            cards[i].style.display = 'none';
-        }
-
-        for (let i = categoryHeadings.length - 1; i >= 0; i--) {
-            if (categoryHeadingsShow.indexOf(categoryHeadings[i].dataset.category) !== -1) {
-                categoryHeadings[i].style.display = 'inherit';
-                continue;
-            }
-            categoryHeadings[i].style.display = 'none';
-        }
-
-        let countDisplayCards = document.querySelectorAll('.display-cards');
-        let noProductsDisplayElement = document.getElementById('no-products');
-        let ProductsDisplayElement = document.getElementById('product-list-selection');
-
-        if (countDisplayCards.length === 0) {
-            noProductsDisplayElement.style.visibility = 'visible';
-            noProductsDisplayElement.style.display = 'block';
-            ProductsDisplayElement.style.visibility = 'hidden';
-            ProductsDisplayElement.style.display = 'none';
-            return;
-        }
-
-        noProductsDisplayElement.style.visibility = 'hidden';
-        noProductsDisplayElement.style.display = 'none';
-        ProductsDisplayElement.style.visibility = 'visible';
-        ProductsDisplayElement.style.display = 'block';
-    }
-
-    function testFilterText(card) {
-        let filterText = document.getElementById('filter-text').value.toLowerCase();
-        let title = card.dataset.title.toLowerCase();
-
-        if (filterText === '') return true;
-
-        return title.indexOf(filterText) !== -1;
-    }
-
-    function testCategories(card) {
-        let categories = document.querySelectorAll('.filter-category:checked');
-
-        if (categories.length === 0) return true;
-
-        for (let i = categories.length - 1; i >= 0; i--) {
-            if (categories[i].value === card.dataset.category) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    function testGroup(card) {
-        let groups = document.querySelectorAll('#filter-group :checked');
-        if (groups.length === 0 || card.dataset.group === undefined) return true;
-
-        for (let i = groups.length - 1; i >= 0; i--) {
-            if (groups[i].innerHTML === card.dataset.group) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    function testLocation(card) {
-        let locations = document.getElementById('country').value;
-        return card.dataset.locations.split(',').indexOf(locations) !== -1;
     }
 }());

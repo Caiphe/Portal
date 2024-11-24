@@ -5,7 +5,12 @@
 }
 
 .ly-40 {
-    padding: 0 40px !important;
+    padding: 0 40px;
+
+    @media(max-width: 768px){
+        padding: 0 0px;
+        margin-bottom: 90px;
+    }
 }
 
 .max-width-512 {
