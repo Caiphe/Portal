@@ -253,9 +253,21 @@
                 addAlert('success', ['Application created successfully', 'You will be redirected to your app page shortly.'], function () {
                     window.location.replace(createAppForm.dataset.redirect);
                 });
+            }
+            else if(response.status === 409) {
+                addAlert('error', 'You already have an application with this name, please use another.');
             } else {
-                addAlert('error', 'Something went wrong with creating a new application. If the error persists, contact' +
-                    'the system administrator.')
+
+                let result = response.responseText ? JSON.parse(response.responseText) : null;
+
+                if(result.errors) {
+                    result.message = [];
+                    for(let error in result.errors){
+                        result.message.push(result.errors[error]);
+                    }
+                }
+
+                addAlert('error', result.message || 'Sorry there was a problem creating your app. Please try again.');
             }
         });
 
