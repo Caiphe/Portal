@@ -84,6 +84,9 @@
                         "country_code" => $countryCode,
                         "updated_at" => date('Y-m-d H:i:s', $app['lastModifiedAt'] / 1000),
                         "created_at" => date('Y-m-d H:i:s', $app['createdAt'] / 1000),
+                        "entity_name" => $attributes['EntityName'] ?? "",
+                        "channels" => $attributes['Channels'] ?? "",
+                        "contact_number" => $attributes['ContactNumber'] ?? "",
                     ]
                 );
 

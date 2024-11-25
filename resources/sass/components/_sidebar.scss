@@ -17,6 +17,7 @@
         display: flex;
         flex: 1 0 auto;
         padding-left: 0;
+        padding-right: 0;
 
         @media(max-width:768px) {
             display: block;
@@ -35,7 +36,7 @@
             max-width: 270px;
             background-color: variables.$grey200;
             height: 100%;
-            
+
 
             @media(max-width: 768px){
                 display: none;
@@ -57,7 +58,6 @@
 
         &.product-page{
             padding: 40px 5px 40px 21px;
-            margin-right: 0px;
         }
 
         @media screen and (max-width: 768px) {

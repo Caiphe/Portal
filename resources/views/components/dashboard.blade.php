@@ -92,6 +92,10 @@
                             <span class="detail-text"> No callback url</span>
                         @endif</p>
                     <p>Description: <span class="detail-text">{{ $app['description'] ?: 'No description' }}</span></p>
+                    @if($app['channels'])<p>Channels: <span class="detail-text">{{ $app['channels'] }}</span></p>@endif
+                    @if($app['entity_name'])<p>Entity Name: <span class="detail-text">{{ $app['entity_name'] }}</span></p>@endif
+                    @if($app['contact_number'])<p>Contact Number: <span class="detail-text">{{ $app['contact_number'] }}</span></p>@endif
+
                     @if(!is_null($app['kyc_status']))
                         <p>
                             Update the KYC status:

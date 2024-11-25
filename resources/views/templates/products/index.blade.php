@@ -10,7 +10,7 @@
 @section('sidebar')
     <div class="filter-sidebar">
 
-        <h2 class="filter-title-heading filter-show-mobile"> 
+        <h2 class="filter-title-heading filter-show-mobile">
             <img alt="filter-icon" src="/images/filter.svg" /> Filters</h2>
         <div class="filter-head">
             <h3>Categories</h3>
@@ -23,7 +23,6 @@
                 <label class="filter-label" for="category-{{ $slug }}">{{ $title }}</label>
             </div>
         @endforeach
-        
 
         @if($hasPrivateProduct || $hasInternalProduct)
             <h3>Access</h3>
@@ -44,7 +43,7 @@
         <div class="group-filter">
 
             <div class="filter-head">
-                <h3>Group</h3>  
+                <h3>Group</h3>
                 <button class="clear-group custom-clear">Clear</button>
             </div>
             <div class="custom-select-block">
@@ -52,10 +51,10 @@
                 <img class="select-icon" src="/images/select-arrow.svg" />
             </div>
         </div>
-        
+
         <div class="country-filter">
             <div class="filter-head">
-                <h3>Country</h3>  
+                <h3>Country</h3>
                 <button class="clear-country custom-clear">Clear</button>
             </div>
 
@@ -74,7 +73,6 @@
                             Only show the countries that are associated with your profile. You can adjust country associations in your profile if you need to.
                         </div>
                     </div>
-                   
                 </label>
             </div>
             @endif
@@ -107,14 +105,6 @@
 @endsection
 
 @section('content')
-{{-- 
-    <div class="header-block">
-        <h1>{{ $content[0]['title']}} <span class="available-products-count">({{ $products->count() }} available)</span></h1>
-        {!! $content[0]['body'] !!}
-        @svg('people', null, 'images/illustrations')
-    </div>
- --}}
-
     <div class="content">
         <input type="text" name="filter-text" id="filter-text" class="filter-text" placeholder="search for products" autofocus="" autocomplete="off">
         <div class="products">
@@ -124,14 +114,13 @@
                      style="display:none"
                     @endif
                 >
-
-                    <h3 class="category-title" data-category="{{ $products[0]->category_cid }}">{{ $category }} 
+                    <h3 class="category-title" data-category="{{ $products[0]->category_cid }}">{{ $category }}
                         <div class="count-contenaire">
                             <span class="filters-count"></span>
                             <span class="header-count">{{ $products->count() }} products</span>
                         </div>
                     </h3>
-                  
+
                     @foreach ($products as $product)
                         <x-card-product :product="$product"
                                         :title="$product->display_name"

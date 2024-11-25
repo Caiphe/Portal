@@ -26,6 +26,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Sentry\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AppController extends Controller
@@ -83,6 +84,19 @@ class AppController extends Controller
         }
 
         return response()->json(['success' => false], 422);
+    }
+
+    public function checkAppDuplicateName(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        $appName = Str::slug($request->name);
+        $appNameCheck = App::where('name', $appName)->where('developer_id', $user->developer_id)->exists();
+
+        if ($appNameCheck) {
+            return response()->json(['duplicate' => true], 200);
+        }
+
+        return response()->json(['duplicate' => false], 200);
     }
 
     public function create(Request $request)
@@ -143,6 +157,7 @@ class AppController extends Controller
         }
 
         $validated = $request->validated();
+        $channels = implode(', ', $validated['channels']);
         $countriesByCode = Country::pluck('iso', 'code');
         $products = Product::whereIn('name', $validated['products'])->pluck('attributes', 'name');
         $productIds = [];
@@ -182,6 +197,18 @@ class AppController extends Controller
             [
                 'name' => 'Description',
                 'value' => $validated['description'],
+            ],
+            [
+                'name' => 'EntityName',
+                'value' => $validated['entity_name'] ?? "",
+            ],
+            [
+                'name' => 'Channels',
+                'value' => $channels ?? "",
+            ],
+            [
+                'name' => 'ContactNumber',
+                'value' => $validated['contact_number'] ?? "",
             ],
             [
                 'name' => 'Country',
@@ -244,6 +271,9 @@ class AppController extends Controller
             "country_code" => $validated['country'],
             "updated_at" => date('Y-m-d H:i:s', $createdResponse['lastModifiedAt'] / 1000),
             "created_at" => date('Y-m-d H:i:s', $createdResponse['createdAt'] / 1000),
+            "entity_name" => $validated['entity_name'] ?? "",
+            "channels" => $channels ?? "",
+            "contact_number" => $validated['contact_number'] ?? "",
         ]);
 
         if (($user->hasRole('admin') || $user->hasRole('opco')) && $request->has('app_owner')) {
@@ -317,6 +347,7 @@ class AppController extends Controller
             ->basedOnUser($user)
             ->get()
             ->merge($assignedProducts);
+        $userOwnTeams = $user->teams;
 
         $productCategories = $prodGroup->pluck('category.title', 'category.slug');
         $countryCodes = $products->pluck('locations')->implode(',');
@@ -339,7 +370,8 @@ class AppController extends Controller
             'selectedProducts' => $selectedProducts,
             'user' => $user,
             'productCategories' => $productCategories,
-            'productGroups' => $productGroups
+            'productGroups' => $productGroups,
+            'teams' => $userOwnTeams,
         ]);
     }
 
@@ -351,10 +383,12 @@ class AppController extends Controller
             fn($q) => $q->where('developer_id', $user->developer_id)
                 ->orWhereIn('team_id', $userTeams)
         )->firstOrFail();
+        $team = null;
 
         $previewName = $app->display_name;
 
         $validated = $request->validated();
+        $channels = implode(', ', $validated['channels']);
         $app->load('products', 'team');
         $appTeam = $app->team ?? null;
         $credentials = ApigeeService::getLatestCredentials($app->credentials);
@@ -406,7 +440,10 @@ class AppController extends Controller
             'DisplayName' => $validated['display_name'] ?? $app->display_name,
             'Description' => $validated['description'],
             'Country' => $validated['country'],
-            'location' => $countriesByCode[$validated['country']] ?? ""
+            'location' => $countriesByCode[$validated['country']] ?? "",
+            'EntityName' => $validated['entity_name'] ?? "",
+            'Channels' =>  $channels,
+            'ContactNumber' => $validated['contact_number'] ?? "",
         ]);
 
         $data = [
@@ -440,6 +477,9 @@ class AppController extends Controller
             'callback_url' => $data['callbackUrl'],
             'description' => $appAttributes['Description'],
             'country_code' => $validated['country'],
+            "entity_name" => $validated['entity_name'] ?? "",
+            "channels" => $channels ?? "",
+            "contact_number" => $validated['contact_number'] ?? "",
         ]);
 
         // Notification creation on apps update
