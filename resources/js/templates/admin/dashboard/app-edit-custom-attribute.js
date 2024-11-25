@@ -190,12 +190,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         numberField.addEventListener('keyup', function (event) {
-            if (event.key === ' ' || event.key === ',') {
-                const input = numberField.value.trim();
+            if (event.key === 'Enter' || event.key === ',') {
+                const input = numberField.value;
                 if (input && !isEmptyOrWhitespace(input)) {
-                    const tagArray = input.split(/[, ]+/).filter(tag => tag !== ''); // Split on commas and spaces
+
+                    const tagArray = input.split(',').filter(tag => tag !== '');
                     tags = tags.concat(tagArray);
-                    numberField.value = ''; // Clear input field after tags are processed
+                    numberField.value = '';
 
                     // Check if tag data is valid
                     if (isTagDataValid(tags)) {
@@ -208,7 +209,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         addAlert('warning', 'The total size of tags exceeds 2KB.');
                     }
                 } else {
-                    addAlert('error', 'Tags cannot be empty or contain only spaces.');
                     numberField.value = ''; // Clear invalid input
                 }
             }
@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function () {
             typeDescription.style.display = 'block';
         } else if (type === 'number') {
             numberField.style.display = 'block';
-            valueDescription.textContent = "Create tags by typing comma or space at the end of a value.";
+            valueDescription.textContent = "Create tags by typing a comma or pressing Enter after each value";
             valueDescription.style.display = 'block';
             typeDescription.textContent = "A CSV String attribute contains text values seperated by \",\". Special characters and spaces are not allowed.";
             typeDescription.style.display = 'block';
@@ -347,7 +347,7 @@ document.addEventListener('DOMContentLoaded', function () {
             value = valueField.value.trim();  // String type input
         } else if (attributeType === 'number') {
             if (tags.length === 0) {
-                valueError.textContent = "Tags field must not be empty. Type a comma or space at the end of a value to create csv string array tags.";
+                valueError.textContent = "Tags field must not be empty. Type a comma or press Enter after the value to create CSV string array tags.";
                 valueError.style.display = 'block';
                 //addAlert('error', 'Tags field must not be empty.');
                 return;

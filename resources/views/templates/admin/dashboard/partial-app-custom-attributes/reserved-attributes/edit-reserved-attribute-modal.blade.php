@@ -39,7 +39,7 @@
                     <label for="number-value">Value</label>
                     <span id="value-description" style="display: none;color: #0c678f"></span>
                     <textarea id="number-value" name="attribute[value]"
-                              placeholder="Type comma or space to separate values"></textarea>
+                              placeholder="Type comma or press enter to create tag values"></textarea>
                     <p class="error-message" id="tags-error" style="color: red; display: none;"></p>
                     <div id="tag-container" class="tag-container"></div>
                 </div>

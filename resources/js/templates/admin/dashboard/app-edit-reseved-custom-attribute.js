@@ -143,10 +143,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Handle tags input for number values
         numberField.addEventListener('keyup', function (event) {
-            if (event.key === ' ' || event.key === ',') {
-                const input = numberField.value.trim();
+            if (event.key === 'Enter' || event.key === ',') {
+                const input = numberField.value;
+
                 if (input && !isEmptyOrWhitespace(input)) { // Check if input is valid
-                    const tagArray = input.split(/[, ]+/).filter(tag => tag !== '');
+                    const tagArray = input.split(',').filter(tag => tag !== '');
                     tags = tags.concat(tagArray);
                     numberField.value = '';  // Clear the textarea
                     // Check total size of tags
@@ -160,11 +161,15 @@ document.addEventListener('DOMContentLoaded', function () {
                         tags = tags.slice(0, -tagArray.length); // Remove the last added tags
                     }
                 } else {
-                    addAlert('error', 'Tags cannot be empty or contain only spaces.');
+                    //addAlert('error', 'Tags cannot be empty or contain only spaces.');
                     numberField.value = ''; // Clear the input if it's invalid
                 }
             }
         });
+
+        function isEmptyOrWhitespace(str) {
+            return !str || str.trim().length === 0;
+        }
 
         // Handle form submission
         const form = modal.querySelector('#custom-attribute-form');
@@ -176,10 +181,6 @@ document.addEventListener('DOMContentLoaded', function () {
         handleAttributeTypeChange(modal);
     }
 
-    // Function to check if a string is empty or whitespace
-    function isEmptyOrWhitespace(str) {
-        return !str || str.trim().length === 0;
-    }
     function validateField(field, errorField, errorMessage, modal) {
         const inputValue = field.value.trim();
         const submitButton = modal.querySelector('.btn-confirm');
@@ -267,19 +268,19 @@ document.addEventListener('DOMContentLoaded', function () {
             nameField.value = 'originalChannelIDs';
             valueField.style.display = 'block';
             valueInput.required = true;
-        }else if(selectedType === 'partnerName'){
+        } else if (selectedType === 'partnerName') {
             nameField.value = 'partnerName';
             valueField.style.display = 'block';
             valueInput.required = true;
         } else if (selectedType === 'permittedSenderIDs') {
             nameField.value = 'permittedSenderIDs';
-            valueDescription.textContent = "Create tags by typing comma or space at the end of a value.";
+            valueDescription.textContent = "Create tags by typing a comma or pressing Enter after each value";
             valueDescription.style.display = 'block';
             numberField.style.display = 'block';
             valueError.style.display = 'none';
         } else if (selectedType === 'permittedPlanIDs') {
             nameField.value = 'permittedPlanIDs';
-            valueDescription.textContent = "Create tags by typing comma or space at the end of a value.";
+            valueDescription.textContent = "Create tags by typing a comma or pressing Enter after each value";
             valueDescription.style.display = 'block';
             numberField.style.display = 'block';
             valueError.style.display = 'none';
@@ -360,6 +361,7 @@ document.addEventListener('DOMContentLoaded', function () {
             submitButton.disabled = true;
         }
     }
+
     function submitForm(nameField, valueField, numberField, booleanField, typeSelect, tags, modal) {
         const name = nameField.value.trim();
         let value = '';  // Value will change based on type
@@ -375,20 +377,20 @@ document.addEventListener('DOMContentLoaded', function () {
         // Handle the value based on attribute type
         if (attributeType === 'senderMsisdn') {
             value = valueField.value.trim();
-        }else if (attributeType === 'partnerName') {
+        } else if (attributeType === 'partnerName') {
             value = valueField.value.trim();
         } else if (attributeType === 'originalChannelIDs') {
             value = valueField.value.trim();
         } else if (attributeType === 'permittedSenderIDs') {
             if (tags.length === 0) {
-                valueError.textContent = "Tags field must not be empty. Type a comma or space at the end of a value to create csv string array tags.";
+                valueError.textContent = "Tags field must not be empty. Type a comma or press Enter after the value to create CSV string array tags.";
                 valueError.style.display = 'block';
                 return;
             }
             value = tags.join(',');
         } else if (attributeType === 'permittedPlanIDs') {
             if (tags.length === 0) {
-                valueError.textContent = "Tags field must not be empty. Type a comma or space at the end of a value to create csv string array tags.";
+                valueError.textContent = "Tags field must not be empty. Type a comma or press Enter after the value to create CSV string array tags.";
                 valueError.style.display = 'block';
                 return;
             }
@@ -398,7 +400,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         if (!value && attributeType !== 'permittedSenderIDs' || !value && attributeType !== 'permittedPlanIDs') {
-           // Only require value if it's not a number type
+            // Only require value if it's not a number type
             addAlert('error', 'Value field must not be empty. You need to add tags.');
             return;
         }
@@ -453,7 +455,7 @@ document.addEventListener('DOMContentLoaded', function () {
             submitButton.classList.remove('disabled');
             submitButton.disabled = false;
 
-            setTimeout(function() {
+            setTimeout(function () {
                 window.location.reload();
             }, 3000); // 3000 milliseconds = 3 seconds
         });
