@@ -136,13 +136,15 @@ class SyncProducts extends Command
 		if (count($productsToBeDeleted) > 0) {
 			$toDeleProduct = Product::whereIn('pid', array_keys($productsToBeDeleted))->pluck('name')->toArray();
 
-			foreach($toDeleProduct as $prod){
-				Log::create([
-					'user_id' => auth()->user()->id,
-					'logable_id' =>  $prod,
-					'logable_type' => 'App\Product',
-					'message' => "Product name {$prod} has been deleted",
-				]);
+			if(auth()->user()){
+				foreach($toDeleProduct as $prod){
+					Log::create([
+						'user_id' => auth()->user()->id,
+						'logable_id' =>  $prod,
+						'logable_type' => 'App\Product',
+						'message' => "Product name {$prod} has been deleted",
+					]);
+				}
 			}
 
 			Product::whereIn('pid', array_keys($productsToBeDeleted))->forceDelete();
@@ -154,7 +156,7 @@ class SyncProducts extends Command
 			$attr = json_decode($product->attributes, true);
 			$attr['ProductionProduct'] = $sandboxProductAttribute[$product->name];
 			$product->update([
-				'attributes' => $attr 
+				'attributes' => $attr
 			]);
 		});
 
