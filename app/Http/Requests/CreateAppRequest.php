@@ -26,13 +26,16 @@ class CreateAppRequest extends FormRequest
     {
         return [
             'app_owner' => ['sometimes'],
-            'display_name' => ['sometimes', 'max:100'],
+            'display_name' => ['required', 'max:100'],
             'url' => ['sometimes'],
             'description' => ['sometimes'],
             'country' => ['sometimes'],
             'products' => ['required', 'array', 'min:1'],
             'team_id' => ['sometimes'],
             'attribute' => ['sometimes', 'array'],
+            'entity_name' => ['required', 'string'],
+            'channels' => ['required', 'array', 'min:1'],
+            'contact_number' => ['required', 'string'],
         ];
     }
 
@@ -46,6 +49,8 @@ class CreateAppRequest extends FormRequest
         $this->merge([
             'display_name' => htmlspecialchars($this->display_name),
             'url' => htmlspecialchars($this->url),
+            'entity_name' => htmlspecialchars($this->entity_name),
+            'contact_number' => htmlspecialchars($this->contact_number),
             'description' => htmlspecialchars($this->description),
             'attribute' => $this->sanitizeAttributes($this->attribute ?? []),
         ]);
@@ -55,7 +60,10 @@ class CreateAppRequest extends FormRequest
     {
         return [
             'products.required' => 'Please select at least one product.',
+            'channels.required' => 'Please select at least one channel for your app.',
             'team_id.sometimes' => 'Please provide a team for your app.',
+            'contact_number.required' => 'Please provide a contact number.',
+            'display_name.required' => 'Please provide a name for your app.',
         ];
     }
 

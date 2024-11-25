@@ -1,7 +1,5 @@
 <?php
 
-// Auth::loginUsingId(1);
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,7 +11,8 @@
 |
  */
 
-use App\Http\Controllers\Api\Admin\DeveloperController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'HomeController')->name('home');
 
@@ -31,6 +30,7 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
     Route::get('apps/{app:slug}/edit', 'AppController@edit')->name('app.edit');
     Route::post('apps', 'AppController@store')->name('app.store');
     Route::post('app/name-check', 'AppController@checkAppName')->name('app.name.check');
+    Route::post('app/name-duplicate-check', 'AppController@checkAppDuplicateName')->name('app.name.duplicate.check');
 
     Route::put('apps/{app:slug}', 'AppController@update')->name('app.update');
     Route::put('apps/{app:aid}/custom-attributes', 'AppController@updateCustomAttributes')->name('app.update.attributes');
