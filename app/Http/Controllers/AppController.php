@@ -127,7 +127,7 @@ class AppController extends Controller
 
         $locations = $product->locations ?? $products->pluck('locations')->implode(',');
         $locations = array_unique(explode(',', $locations));
-        $countries = Country::whereIn('code', $locations)->pluck('name', 'code');
+        $countries = Country::whereIn('code', $locations)->orderBy('name')->pluck('name', 'code');
         $products = $products->sortBy('display_name')->groupBy('category.title')->sortKeys();
         $productGroups = $prodGroup->pluck('group')->unique()->toArray();
         $productCategories = $prodGroup->pluck('category.title', 'category.slug');

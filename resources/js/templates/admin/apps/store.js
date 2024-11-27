@@ -139,7 +139,6 @@
     }
 
     /* Complete Button */
-
     let createAppForm = document.getElementById('create-app-form');
     createAppForm.addEventListener('submit', handleCompleteButtonClickEvent );
 
@@ -150,6 +149,13 @@
         let attrNames = elements['attribute[name][]'];
         let attrValues = elements['attribute[value][]'];
         let appOwner = elements['app-owner'].value;
+        let contact_number = document.getElementById('contact_number').value;
+        let name = document.getElementById('name').value;
+        let entity_name = document.getElementById('entity_name').value;
+        let description = document.getElementById('description').value;
+        let country = document.getElementById('country').value;
+        let channels = document.querySelectorAll('input[name="channels[]"]:checked');
+        let channels_array = [];
 
         if (!appOwner || appOwner.trim() === '') {
             validate.showError('app_owner_error', 'App owner is required.')
@@ -173,10 +179,13 @@
         if (!validate.required('contact_number')) {
             validate.showError('contact_number_error', 'Contact Number is required.');
             formError = true;
-        } else if (!validateContactNumber(document.getElementById('contact_number').value)) {
+        } else if (!validateContactNumber(contact_number)) {
             validate.showError('contact_number_error', 'Invalid Contact Number format.');
             formError = true;
-        } else {
+        } else if (contact_number.length > 20) {
+            validate.showError('contact_number_error', 'Contact Number is too long.');
+            formError = true;
+        }else {
             validate.hideError('contact_number_error');
         }
 
@@ -204,25 +213,10 @@
         }
 
         if (formError === true) {
-
             return;
         }
 
-        // Function to validate contact number format
-        function validateContactNumber(number) {
-            const contactNumberRegex = /^\+?[\d\s\-()]{7,15}$/;
-            return contactNumberRegex.test(number);
-        }
-
         // Create new application with data provided
-        let name = document.getElementById('name').value;
-        let entity_name = document.getElementById('entity_name').value;
-        let contact_number = document.getElementById('contact_number').value;
-        let description = document.getElementById('description').value;
-        let country = document.getElementById('country').value;
-        let channels = document.querySelectorAll('input[name="channels[]"]:checked');
-        let channels_array = [];
-
         channels.forEach((channel) => {
             channels_array.push(channel.value);
         });
@@ -233,13 +227,6 @@
         products.forEach((product) => {
             products_array.push(product.value);
         });
-
-        setTimeout(function(){
-            let errors = document.querySelectorAll('.error');
-            errors.forEach((error) => {
-                error.style.display = 'none';
-            });
-        }, 1000);
 
         addLoading("Creating Application ...");
 
@@ -288,7 +275,7 @@
     
             if (xhr.status === 200) {
 
-                addAlert('success', ['Application created successfully', 'You will be redirected to your app page shortly.'], function () {
+                addAlert('success', ['Application created successfully', 'You will be redirected to the apps page shortly.'], function () {
                     window.location.replace('/admin/dashboard');
                 });
 
@@ -318,6 +305,11 @@
         };
     }
 
+    // Function to validate contact number format
+    function validateContactNumber(number) {
+        const contactNumberRegex = /^\+?[\d\s\-()]{7,20}$/;
+        return contactNumberRegex.test(number);
+    }
 
     /* Teams Selection */
     let default_option = document.querySelector('.default_option');

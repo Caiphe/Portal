@@ -2,7 +2,7 @@
     <h2>Basic Details</h2>
     <p class="text-mtn-grey">Enter your application's details</p>
 </div>
-<br>
+
 <div class="group max-width-512">
     <label for="name">Application name *</label>
     <input type="text"
@@ -24,7 +24,7 @@
     </div>
     <div id="name_error" class="error"></div>
 </div>
-<br>
+
 <div class="group max-width-512">
     <label for="entity_name">Entity name *</label>
     <input type="text"
@@ -36,19 +36,17 @@
     >
     <div id="entity_name_error" class="error"></div>
 </div>
-<br>
 <div class="group max-width-512">
     <label for="contact_number">Contact Number *</label>
     <input type="text"
            name="contact_number"
            id="contact_number"
            placeholder="Provide contact number for someone relevant to this app"
-           maxlength="100"
+           maxlength="20"
            autocomplete="off"
     >
     <div id="contact_number_error" class="error"></div>
 </div>
-<br>
 <div class="group channels-group max-width-512">
     <label for="channels">Channels *</label>
     <p class="text-mtn-grey">Select which channels the app will use. This is only for statistical
@@ -81,7 +79,6 @@
     </div>
     <div id="channel_error" class="error"></div>
 </div>
-<br>
 <div class="group group-info max-width-512">
     <label for="url">Callback url @svg('info-icon', '#a5a5a5')<small class="tooltip">The callback URL
             typically specifies the URL of an app that is designated to receive an authorization code on
@@ -90,7 +87,6 @@
     <input type="url" name="url" id="url" placeholder="Provide a callback URL" autocomplete="off">
     <div class="error"></div>
 </div>
-<br>
 
 {{-- Select a team --}}
 <div class="group group-info team-field max-width-512">
@@ -134,13 +130,11 @@
 </div>
 {{-- select a team ends --}}
 
-<br>
 <div class="group max-width-512">
     <label for="description">Description</label>
     <textarea name="description" id="description" rows="5" placeholder="Enter description"></textarea>
-    <div class="error"></div>
 </div>
-<br>
+
 <div class="group max-width-512">
     <label for="country">Country Selection *</label>
     <select id="country" name="country">
@@ -150,7 +144,7 @@
         @endforeach
     </select>
     <div id="country_error" class="error"></div>
-    <br>
+
     <div id="country-info" class="max-width-512">
         <div>
             <img src="/images/dark-info.svg" alt="dark-info" />
@@ -172,7 +166,7 @@
         </p>
     </div>
     <div id="product_error" class="error"></div>
-    <br>
+
     <div id="select-ui">
         <div id="product-selection-categories" class="grid-1">
             <div class="product-filter-block card-grey-border block-padding">
