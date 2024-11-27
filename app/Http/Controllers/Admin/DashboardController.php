@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\App;
+use App\Team;
 use App\User;
 use App\Country;
 use App\Product;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Contracts\View\Factory;
 use App\Services\ProductLocationService;
 use App\Http\Requests\UpdateStatusRequest;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -324,7 +326,9 @@ class DashboardController extends Controller
             'products' => $products,
             'chosenUser' => $user,
             'productCategories' => $productCategories,
-			'productGroups' => $productGroups
+			'productGroups' => $productGroups,
+            'teams' => Team::all(),
+            'user' => Auth::user()
         ]);
     }
 }

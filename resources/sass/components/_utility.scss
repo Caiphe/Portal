@@ -15,6 +15,10 @@
 
 .max-width-512 {
     max-width: 512px;
+
+    @media(max-width: 768px){
+        max-width: 95%;
+    }
 }
 
 .text-mtn-grey {

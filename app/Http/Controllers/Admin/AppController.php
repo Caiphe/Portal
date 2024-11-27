@@ -11,7 +11,7 @@ use App\Http\Controllers\Controller;
 class AppController extends Controller
 {
     public function approve(App $app)
-    {        
+    {
         $app->load(['products', 'country']);
         $currentUser = \Auth::user();
         $updatedApiProducts = [];
