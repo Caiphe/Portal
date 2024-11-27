@@ -207,7 +207,7 @@
 
         // Function to validate contact number format
         function validateContactNumber(number) {
-            const contactNumberRegex = /^\+?[\d\s\-()]{7,15}$/;
+            const contactNumberRegex = /^\+?[\d\s\-()]{7,20}$/;
             return contactNumberRegex.test(number);
         }
 
