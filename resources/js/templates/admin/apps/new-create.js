@@ -243,6 +243,13 @@ function handleCreate() {
             return;
         }
 
+        // Check if the value contains only numbers
+        if (/^\d+$/.test(this.value)) {
+            addAlert('warning', 'The attribute name cannot contain only numbers.');
+            this.value = '';
+            return;
+        }
+
         if(this.value.includes(' ')){
             addAlert('warning', 'White spaces are not allowed to be used in attribute names and have been automatically removed.');
         }
