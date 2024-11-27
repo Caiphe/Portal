@@ -131,9 +131,7 @@
     }
 </script>
 
-<script src="{{ mix('/js/templates/admin/dashboard/create-app.js') }}" defer></script>
-
-{{-- <script src="{{ mix('/js/templates/apps/create.js') }}" defer></script> --}}
-<script src="{{ mix('/js/templates/admin/apps/new-create.js') }}" defer></script>
-{{-- <script src="{{ mix('/js/templates/admin/apps/create.js') }}" defer></script> --}}
+<script src="{{ mix('/js/components/app-validate-fields.js') }}" defer></script>
+<script src="{{ mix('/js/templates/admin/apps/create.js') }}" defer></script>
+<script src="{{ mix('/js/templates/admin/apps/store.js') }}" defer></script>
 @endpush
