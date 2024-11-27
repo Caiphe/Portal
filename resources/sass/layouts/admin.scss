@@ -157,6 +157,9 @@ textarea{
           
         &.logout-menu{
             svg{
+                width: 31px;
+                height: 30px;
+
                 @media screen and (max-height: 814px) {
                     width: 28px;
                     height: 28px;
@@ -237,7 +240,7 @@ textarea{
                 display: block;
                 position: absolute;
                 right: 10px;
-                top: 5px;
+                top: 2px;
                 box-sizing: border-box;
                 border-radius: 50%;
                 text-align: center;

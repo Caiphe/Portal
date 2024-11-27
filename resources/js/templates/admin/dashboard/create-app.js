@@ -4,15 +4,6 @@
     let inputData = document.querySelector('.selected-data');
     let select_wrap = document.querySelector('.select_wrap');
     let select_ul = document.querySelectorAll('.select_ul li');
-    let beforeProducts = document.getElementById('before-products');
-    let productsBlock = document.getElementById('product-selection');
-    let countryElement = document.getElementById('country');
-
-    window.addEventListener('load', function(){
-        countryElement.value = '';
-        beforeProducts.classList.remove('hide');
-        productsBlock.classList.remove('show');
-    })
 
     /* Cancel Button */
     let cancelButtonElement = document.getElementById('cancel');
@@ -148,11 +139,22 @@
     }
 
     /* Complete Button */
-    let completeButtonElement = document.getElementById('complete');
-    completeButtonElement.addEventListener('click', handleCompleteButtonClickEvent);
 
-    function handleCompleteButtonClickEvent() {
+    let createAppForm = document.getElementById('create-app-form');
+    createAppForm.addEventListener('submit', handleCompleteButtonClickEvent );
+
+    function handleCompleteButtonClickEvent(e) {
+        e.preventDefault();
         let formError = false;
+        let elements = createAppForm.elements;
+        let attrNames = elements['attribute[name][]'];
+        let attrValues = elements['attribute[value][]'];
+        let appOwner = elements['app-owner'].value;
+
+        if (!appOwner || appOwner.trim() === '') {
+            validate.showError('app_owner_error', 'App owner is required.')
+            formError = true;
+        }
 
         // Validate the application name
         if (!validate.checkAppName('name')) {
@@ -202,6 +204,7 @@
         }
 
         if (formError === true) {
+
             return;
         }
 
@@ -212,87 +215,109 @@
         }
 
         // Create new application with data provided
-        let createAppForm = document.getElementById('create-app-form');
-        let csrfToken = document.querySelector("input[name='_token']").value;
-
         let name = document.getElementById('name').value;
         let entity_name = document.getElementById('entity_name').value;
         let contact_number = document.getElementById('contact_number').value;
-        let url = document.getElementById('url').value;
         let description = document.getElementById('description').value;
         let country = document.getElementById('country').value;
-        let beforeProducts = document.getElementById('before-products');
-        let productsBlock = document.getElementById('product-selection');
-
-
-        window.addEventListener('load', function(){
-            country = '';
-            beforeProducts.classList.remove('hide');
-            productsBlock.classList.remove('show');
-        })
-
         let channels = document.querySelectorAll('input[name="channels[]"]:checked');
         let channels_array = [];
+
         channels.forEach((channel) => {
             channels_array.push(channel.value);
         });
 
         let products = document.querySelectorAll('input[name="add_product[]"]:checked');
         let products_array = [];
+
         products.forEach((product) => {
             products_array.push(product.value);
         });
 
-        addLoading("Saving New Application ...");
+        setTimeout(function(){
+            let errors = document.querySelectorAll('.error');
+            errors.forEach((error) => {
+                error.style.display = 'none';
+            });
+        }, 1000);
 
-        let createFetch = fetch(createAppForm.action, {
-            method: "POST",
-            body: JSON.stringify({
-                name: name,
-                display_name: name,
-                url: url,
-                description: description,
-                country: country,
-                products: products_array,
-                channels: channels_array,
-                entity_name: entity_name,
-                contact_number: contact_number,
-                team_id: inputData.dataset.teamid
-            }),
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-                "X-CSRF-TOKEN": csrfToken,
-                "X-Requested-With": "XMLHttpRequest",
-            }
-        });
+        addLoading("Creating Application ...");
 
-        createFetch.then((response) => {
-            if (response.status === 200) {
-                addAlert('success', ['Application created successfully', 'You will be redirected to your app page shortly.'], function () {
-                    window.location.replace(createAppForm.dataset.redirect);
+        var app = {
+            app_owner: document.querySelector('.search-field').value,
+            name: name,
+            display_name: name,
+            url: url,
+            description: description,
+            country: country,
+            products: products_array,
+            channels: channels_array,
+            entity_name: entity_name,
+            contact_number: contact_number,
+            team_id: inputData.dataset.teamid,
+            attribute: [],
+        };
+
+        if(attrNames && attrNames.length === undefined) {
+            attrNames = [attrNames];
+            attrValues = [attrValues];
+        }
+
+        if(attrNames){
+            for(var i = 0; i < attrNames.length; i++) {
+                app.attribute.push({
+                    'name': attrNames[i].value,
+                    'value': attrValues[i].value
                 });
             }
-            else if(response.status === 409) {
-                addAlert('error', 'You already have an application with this name, please use another.');
-            } else {
+        }
 
-                let result = response.responseText ? JSON.parse(response.responseText) : null;
+        addLoading('Creating app...');
 
-                if(result.errors) {
-                    result.message = [];
-                    for(let error in result.errors){
-                        result.message.push(result.errors[error]);
-                    }
-                }
+        var url = adminAppsCreateLookup('appStoreUrl');
+        var xhr = new XMLHttpRequest();
+    
+        xhr.open('POST', url);
+        xhr.setRequestHeader('X-CSRF-TOKEN', adminAppsCreateLookup('csrfToken'));
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.send(JSON.stringify(app));
 
-                addAlert('error', result.message || 'Sorry there was a problem creating your app. Please try again.');
-            }
-        });
-
-        createFetch.finally(() => {
+        xhr.onload = function () {
             removeLoading();
-        });
+    
+            if (xhr.status === 200) {
+
+                addAlert('success', ['Application created successfully', 'You will be redirected to your app page shortly.'], function () {
+                    window.location.replace('/admin/dashboard');
+                });
+
+            } else if(xhr.status === 429){
+                addAlert('warning', ['This action is not allowed.', 'Please contact your admin.'], function(){
+                    window.location.href = "/admin/dashboard";
+                });
+            }
+            else if(xhr.status === 422){
+                addAlert('warning', [`Application name '${elements['name'].value}' exists already, try with a different name`]);
+                setTimeout(function(){
+                    location.reload(); 
+                }, 6000);
+            }
+    
+            var result = xhr.responseText ? JSON.parse(xhr.responseText) : null;
+    
+            if (result.errors) {
+                result.message = [];
+                for (var error in result.errors) {
+                    result.message.push(result.errors[error]);
+                }
+            }
+    
+            button.removeAttribute('disabled');
+            addAlert('error', result.message || 'Sorry there was a problem creating your app. Please try again.');
+        };
     }
+
 
     /* Teams Selection */
     let default_option = document.querySelector('.default_option');
@@ -323,15 +348,22 @@
     }
 
     document.getElementById('filter-text').addEventListener('input', debounce);
+    let beforeProducts = document.getElementById('before-products');
+    let products = document.getElementById('product-selection');
+    let countryElement = document.getElementById('country');
+
+
+    window.addEventListener('load', function(){
+        countryElement.value = '';
+        beforeProducts.classList.remove('hide');
+        products.classList.remove('show');
+    })
 
     /* Country Selection */
     let countryInputElement = document.getElementById('country');
 
     countryInputElement.addEventListener('change', function () {
-        let countryElement = document.getElementById('country');
         let countryDisplayElement = document.getElementById('flag-country');
-        let products = document.getElementById('product-selection');
-        let beforeProducts = document.getElementById('before-products');
 
         clearProducts();
         clearGroup();
