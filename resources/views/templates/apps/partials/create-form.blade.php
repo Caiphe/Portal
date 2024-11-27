@@ -45,7 +45,6 @@
            placeholder="Provide contact number for someone relevant to this app"
            maxlength="100"
            autocomplete="off"
-           required
     >
     <div id="contact_number_error" class="error"></div>
 </div>
@@ -145,7 +144,7 @@
 <div class="group max-width-512">
     <label for="country">Country Selection *</label>
     <select id="country" name="country">
-        <option value=""> -- Country --</option>
+        <option value="">Select a country you would like to associate with your app</option>
         @foreach($countries as $key => $country)
             <option value="{{ $key }}">{{ $country }}</option>
         @endforeach

@@ -163,7 +163,7 @@
                 <div class="ca-section">
 
                     @php
-                        $filteredAttributes = collect($app->attributes)->except(['Country', 'TeamName', 'location', 'Description', 'DisplayName', 'autoRenewAllowed', 'permittedSenderIDs', 'senderMsisdn', 'permittedPlanIDs', 'originalChannelIDs', 'partnerName']);
+                        $filteredAttributes = collect($app->attributes)->except(['Country', 'TeamName', 'location', 'Description', 'DisplayName', 'autoRenewAllowed', 'permittedSenderIDs', 'senderMsisdn', 'permittedPlanIDs', 'originalChannelIDs', 'partnerName', 'Channels', ' EntityName ', 'ContactNumber']);
                     @endphp
                     @if(!$filteredAttributes->isEmpty())
                         <table class="app-attribute-table">
@@ -355,7 +355,7 @@
                 </div>
                 <div class="ca-section">
                     @php
-                        $filteredAttributes = collect($app->attributes)->only(['Country', 'TeamName', 'location', 'Description', 'DisplayName']);
+                        $filteredAttributes = collect($app->attributes)->only(['Country', 'TeamName', 'location', 'Description', 'DisplayName', 'EntityName', ' EntityName ', 'ContactNumber']);
                     @endphp
                     @if(!$filteredAttributes->isEmpty())
                         <table class="app-attribute-table">
