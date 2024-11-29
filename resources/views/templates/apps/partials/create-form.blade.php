@@ -14,14 +14,13 @@
            autocomplete="off"
            data-validation-state="invalid"
     >
+
     <div id="nameCheck"
          class="nameCheck"
          data-token="{{ csrf_token() }}"
-         data-check-uri="{{ route('app.name.duplicate.check') }}"
-    >
-        <img src="/images/icons/loading.svg" alt="Notice Icon">
-        <p>Checking application name...</p>
+         data-check-uri="{{ route('app.name.duplicate.check') }}">
     </div>
+
     <div id="name_error" class="error"></div>
 </div>
 

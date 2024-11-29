@@ -16,16 +16,16 @@
            autocomplete="off"
            data-validation-state="invalid"
     >
+    
     <div id="nameCheck"
          class="nameCheck"
          data-token="{{ csrf_token() }}"
-         data-check-uri="{{ route('app.name.duplicate.check') }}"
-    >
-        <img src="/images/icons/loading.svg" alt="Notice Icon">
-        <p>Checking application name...</p>
+         data-check-uri="{{ route('app.name.duplicate.check') }}">
     </div>
+
     <div id="name_error" class="error"></div>
 </div>
+
 <br>
 
 <div class="group max-width-512">
@@ -35,7 +35,7 @@
             value="{{ $data['entity_name'] }}"
            id="entity_name"
            placeholder="Provide the partner integrating this app"
-           maxlength="100"
+           maxlength="50"
            autocomplete="off"
     >
     <div id="entity_name_error" class="error"></div>
@@ -49,7 +49,7 @@
            id="contact_number"
             value="{{ $data['contact_number'] }}"
            placeholder="Provide contact number for someone relevant to this app"
-           maxlength="100"
+           maxlength="20"
            autocomplete="off"
            required
     >
@@ -92,6 +92,7 @@
     <div id="channel_error" class="error"></div>
 </div>
 <br>
+
 <div class="group group-info max-width-512">
     <label for="url">Callback url @svg('info-icon', '#a5a5a5')<small class="tooltip">The callback URL
             typically specifies the URL of an app that is designated to receive an authorization code on

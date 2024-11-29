@@ -71,5 +71,7 @@
 
 @endsection
 @push('scripts')
+    {{-- <script src="{{ mix('/js/components/app-name-check.js') }}" defer></script> --}}
+    <script src="{{ mix('/js/components/app-edit-validate-fields.js') }}" defer></script>
     <script src="{{ mix('/js/templates/apps/edit.js') }}" defer></script>
 @endpush

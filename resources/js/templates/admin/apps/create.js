@@ -108,6 +108,16 @@
 
     function addNewAttribute(){
         let attributeName = document.querySelector('#attribute-name');
+        const attributeBlocks = document.querySelectorAll('.each-attribute-block');
+
+        // Check if the number of attribute blocks is greater than 18
+        if (attributeBlocks.length > 18) {
+            attributeName.value = '';
+            attributeValue.value = '';
+            addAlert('warning', 'You cannot add more than 18 attributes.');
+            return false; 
+        }
+
         let elements = document.getElementById('create-app-form').elements;
 
         if(attributeName.value === "" || attributeValue.value === ''){

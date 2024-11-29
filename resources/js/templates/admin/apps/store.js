@@ -34,15 +34,15 @@
         let csrfToken = nameCheckElement.dataset.token;
         let nameElement = document.getElementById('name');
 
-        nameCheckElement.querySelector('p')
-            .innerText = 'Checking application name...';
-        nameCheckElement.querySelector('img')
-            .src = '/images/icons/loading.svg'
-        nameCheckElement.classList.remove('warning');
-        nameCheckElement.classList.add('show-flex');
+        nameCheckElement.innerHTML = "Checking application name ...";
+        nameCheckElement.classList.add('loading');
+        nameCheckElement.classList.remove('error-check');
+        nameCheckElement.classList.remove('success-check');
 
         if (nameElement.value === '') {
-            nameCheckElement.classList.remove('show-flex');
+            nameCheckElement.classList.remove('loading');
+            nameCheckElement.classList.remove('error-check');
+            nameCheckElement.classList.remove('success-check');
             nameElement.dataset.validationState = "invalid";
             validate.showError('name_error', 'Your application name cannot be empty.');
             return;
@@ -55,39 +55,45 @@
         nameElement.value = nameElement.value.replace(/  +/g, ' ');
 
         if (specialChrs.test(nameElement.value)) {
-            nameCheckElement.classList.remove('show-flex');
+            nameCheckElement.classList.remove('loading');
             nameElement.value = nameElement.value.replace(specialChrs, '');
             addAlert('warning', 'Application name cannot contain special characters.');
             return;
         }
 
-        // Check against names
-        fetch(checkUri, {
-            method: "POST",
-            body: JSON.stringify({
-                name: nameElement.value,
-            }),
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": csrfToken,
-            }
-        })
-            .then((response) => {
-                return response.json();
-            })
-            .then((json) => {
-                if (json.duplicate === true) {
-                    nameCheckElement.classList.add('warning');
-                    nameCheckElement.querySelector('p')
-                        .innerText = 'You already have an application with this name, please use another.';
-                    nameCheckElement.querySelector('img')
-                        .src = '/images/icons/error-cross.png'
-                    nameElement.dataset.validationState = "invalid";
-                } else {
-                    nameCheckElement.classList.remove('show-flex');
-                    nameElement.dataset.validationState = "valid";
+        setTimeout(() => {
+            // Check against names
+            fetch(checkUri, {
+                method: "POST",
+                body: JSON.stringify({
+                    name: nameElement.value,
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": csrfToken,
                 }
-            });
+            })
+                .then((response) => {
+                    nameCheckElement.classList.remove('error-check');
+                    nameCheckElement.classList.add('success-check');
+                    nameCheckElement.innerHTML = "This application name is available";
+                    return response.json();
+                })
+                .then((json) => {
+                    if (json.duplicate === true) {
+                        nameCheckElement.classList.remove('success-check');
+                        nameCheckElement.classList.add('error-check');
+                        nameCheckElement.innerHTML = "You already have an application with this name, please use another.";
+                        nameElement.dataset.validationState = "invalid";
+                    } else {
+                        nameCheckElement.classList.remove('loading');
+                        nameCheckElement.classList.remove('error-check');
+                        nameCheckElement.classList.add('success-check');
+                        nameElement.dataset.validationState = "valid";
+                    }
+                });
+
+        }, 500);
     }
 
     /* Validate Form Elements As User Interacts */
