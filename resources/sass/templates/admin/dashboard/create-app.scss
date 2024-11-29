@@ -1268,13 +1268,60 @@ body {
 .nameCheck {
     display: none;
     visibility: visible;
-    flex-direction: row;
-    flex-wrap: nowrap;
     gap: 10px;
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid #000;
+    border: 1px solid #000000;
     margin: 10px 0;
+    position: relative;
+    padding-left: 31px;
+    color: #000000;
+    min-height: 43px;
+    display: none;
+    font-size: 13px;
+
+    &.loading{
+        display: flex;
+        align-items: center;
+    }
+
+    &::after{
+        content: "";
+        position: absolute;
+        top: 13px;
+        left: 8px;
+        width: 15px;
+        height: 15px;
+        background-image: url("/images/loading.svg");
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+    }
+
+    &.error-check{
+        display: flex;
+        border: 1px solid #FF0000;
+        color: #FF0000;
+
+
+        &::after{
+            top: 13px;
+            left: 8px;
+            width: 15px;
+            height: 15px;
+            background-image: url("/images/red-error.svg");
+        }
+    }
+
+    &.success-check{
+        display: flex;
+        border: 1px solid #19AC4A;
+        color: #19AC4A;
+
+        &::after{
+            background-image: url("/images/green-tick.svg");
+        }
+    }
 }
 
 .warning {
