@@ -312,15 +312,18 @@ class DashboardController extends Controller
         $prodGroup = Product::with(['category', 'countries'])
             ->where('category_cid', '!=', 'misc')
             ->get();
+        
+        $sortedItems = $countries->sortBy(function ($value, $key) {
+            return $value;
+        })->toArray();
 
         $productGroups = $prodGroup->pluck('group')->unique()->toArray();
 		$productCategories = $prodGroup->pluck('category.title', 'category.slug');
 
-
         return view('templates.admin.apps.create', [
             'productCategories' => array_keys($products->toArray()),
             'appCreatorEmail' => $appCreator->email,
-            'countries' => $countries ?? '',
+            'countries' => $sortedItems ?? '',
             'userProfiles' => $profiles,
             'userEmails' => $emails,
             'products' => $products,
