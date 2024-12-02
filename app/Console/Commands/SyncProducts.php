@@ -75,6 +75,7 @@ class SyncProducts extends Command
 					'dev' => 'prod',
 					'test' => 'sandbox',
 					'preprod' => 'prod',
+					'qa' => 'qa',
 				];
 
 				return $lookup[$env] ?? $env;
