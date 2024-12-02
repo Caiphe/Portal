@@ -265,7 +265,9 @@
         }
 
         var deleteButtons = document.querySelector('.app-delete');
-        deleteButtons.addEventListener('click', handleDeleteMenuClick);
+        if(deleteButtons){
+            deleteButtons.addEventListener('click', handleDeleteMenuClick);
+        }
 
         function handleDeleteMenuClick(event) {
             event.preventDefault();

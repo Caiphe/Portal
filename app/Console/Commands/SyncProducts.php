@@ -73,7 +73,9 @@ class SyncProducts extends Command
 			$productEnvironments = array_map(function ($env) {
 				$lookup = [
 					'dev' => 'prod',
-					'test' => 'sandbox'
+					'test' => 'sandbox',
+					'preprod' => 'prod',
+					'qa' => 'qa',
 				];
 
 				return $lookup[$env] ?? $env;
@@ -150,7 +152,7 @@ class SyncProducts extends Command
 			Product::whereIn('pid', array_keys($productsToBeDeleted))->forceDelete();
 		}
 
-		if (empty($sandboxProductAttribute)) return;
+		// if (empty($sandboxProductAttribute)) return;
 
 		Product::whereIn('name', array_keys($sandboxProductAttribute))->get()->each(function ($product) use ($sandboxProductAttribute) {
 			$attr = json_decode($product->attributes, true);
