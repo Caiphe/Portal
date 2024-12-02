@@ -3,7 +3,6 @@
     <h2>Basic Details</h2>
     <p class="text-mtn-grey">Enter your application's details</p>
 </div>
-<br>
 <div class="group max-width-512">
     <label for="name">Application name *</label>
     <input type="text"
@@ -26,7 +25,6 @@
     <div id="name_error" class="error"></div>
 </div>
 
-<br>
 
 <div class="group max-width-512">
     <label for="entity_name">Entity name *</label>
@@ -40,7 +38,6 @@
     >
     <div id="entity_name_error" class="error"></div>
 </div>
-<br>
 
 <div class="group max-width-512">
     <label for="contact_number">Contact Number *</label>
@@ -55,7 +52,6 @@
     >
     <div id="contact_number_error" class="error"></div>
 </div>
-<br>
 <div class="group channels-group max-width-512">
     <label for="channels">Channels *</label>
     <p class="text-mtn-grey">Select which channels the app will use. This is only for statistical
@@ -91,7 +87,6 @@
     </div>
     <div id="channel_error" class="error"></div>
 </div>
-<br>
 
 <div class="group group-info max-width-512">
     <label for="url">Callback url @svg('info-icon', '#a5a5a5')<small class="tooltip">The callback URL
@@ -102,13 +97,11 @@
     <div class="error"></div>
 </div>
 
-<br>
 <div class="group max-width-512">
     <label for="description">Description</label>
     <textarea name="description" id="description" rows="5" placeholder="Enter description">{{ $data['description'] }}</textarea>
     <div class="error"></div>
 </div>
-<br>
 
 {{-- Product selection starts here --}}
 <div id="product-selection">
@@ -119,7 +112,7 @@
         </p>
     </div>
     <div id="product_error" class="error"></div>
-    <br>
+
     <div id="select-ui">
         <div id="product-selection-categories" class="grid-1">
             <div class="product-filter-block card-grey-border block-padding">

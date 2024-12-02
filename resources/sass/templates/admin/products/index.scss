@@ -8,6 +8,7 @@
 .rejected,
 .draft,
 .sandbox,
+.qa,
 .review{
     border-radius: 16px;
     border-width: 1px;
@@ -27,6 +28,11 @@
 .preprod{
     color: variables.$orange;
     border-color: variables.$orange;
+}
+
+.qa{
+    color: variables.$yellowDark;
+    border-color: variables.$yellowDark;
 }
 
 .staging {

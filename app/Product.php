@@ -55,7 +55,7 @@ class Product extends Model
 
     public function scopeIsPublic($query)
     {
-        return $query->hasSwagger()->whereAccess("public");
+        return $query->whereAccess("public");
     }
 
     public function scopeHasCategory($query, $category)
@@ -85,9 +85,9 @@ class Product extends Model
             return $query->isPublicWithPrivate()->orWhere(fn($q) => $q->isPublicWithInternal())->getEnvironment($environment);
         }
 
-        if ($user && $user->hasPermissionTo('view_internal_products')) {
-            return $query->isPublicWithInternal()->getEnvironment($environment);
-        }
+        // if ($user && $user->hasPermissionTo('view_internal_products')) {
+        //     return $query->isPublicWithInternal()->getEnvironment($environment);
+        // }
 
         if ($user && $user->hasPermissionTo('view_private_products')) {
             return $query->isPublicWithPrivate()->getEnvironment($environment);
