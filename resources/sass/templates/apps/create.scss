@@ -15,7 +15,6 @@
     margin-bottom: 0px;
 
     .content {
-        // height: 100%;
         width: 100%;
         padding: 0 0 0 0;
 
@@ -556,6 +555,26 @@
             @media #{variables.$small} {
                 width: 100%;
             }
+        }
+
+        .hide {
+            display: none !important;
+            visibility: hidden;
+        }
+        
+        .show {
+            display: block !important;
+            visibility: visible;
+        }
+        
+        .show-flex {
+            display: flex !important;
+            visibility: visible;
+        }
+        
+        .filter-text {
+            min-width: 100%;
+            border-color: #000 !important;
         }
     }
 }
@@ -1121,26 +1140,6 @@
 .warning {
     border: 1px solid red;
     color: red;
-}
-
-.hide {
-    display: none !important;
-    visibility: hidden;
-}
-
-.show {
-    display: block !important;
-    visibility: visible;
-}
-
-.show-flex {
-    display: flex !important;
-    visibility: visible;
-}
-
-.filter-text {
-    min-width: 100%;
-    border-color: #000 !important;
 }
 
 #footer{
