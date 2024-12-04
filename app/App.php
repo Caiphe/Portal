@@ -202,8 +202,8 @@ class App extends Model
             $attributes = json_decode($attributes, true);
         }
         return array_diff_ukey(
-            $attributes, 
-            array_flip(['Location', 'Country', 'TeamName', 'Description', 'DisplayName', 'Notes']), 
+            $attributes,
+            array_flip(['Location', 'Country', 'TeamName', 'Description', 'DisplayName', 'Notes', 'Channels', 'EntityName', 'ContactNumber']),
             fn($a, $b) => strtolower($a) <=> strtolower($b)
         );
     }
