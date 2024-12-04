@@ -104,17 +104,17 @@
 
     attributeName.addEventListener('change', checkNameExists);
     
-    attributeValue.addEventListener('change', removeQuote);
+    attributeValue.addEventListener('change', validateAttributeValue);
 
     function addNewAttribute(){
         let attributeName = document.querySelector('#attribute-name');
         const attributeBlocks = document.querySelectorAll('.each-attribute-block');
 
         // Check if the number of attribute blocks is greater than 18
-        if (attributeBlocks.length > 18) {
+        if (attributeBlocks.length > 11) {
             attributeName.value = '';
             attributeValue.value = '';
-            addAlert('warning', 'You cannot add more than 18 attributes.');
+            addAlert('warning', 'You have reached the limit of attributes.');
             return false; 
         }
 
@@ -158,9 +158,28 @@
         }
     }
 
+    function validateAttributeValue(){
+        const valueMaxSize = 2048;
+
+        this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, '');
+
+        if(this.value.length > valueMaxSize){
+            addAlert('warning', `Attribute value cannot exceed ${valueMaxSize} characters.`);
+            this.value = '';
+            return;
+        }
+    }
+
     function checkNameExists(){
         if(this.value.length <= 1){
             addAlert('warning', 'Please provide a valid attribute name.');
+            this.value = '';
+            return;
+        }
+
+        const nameMaxSize = 1024;
+        if(this.value.length > nameMaxSize){
+            addAlert('warning', `Attribute name cannot exceed ${nameMaxSize} characters.`);
             this.value = '';
             return;
         }
@@ -197,7 +216,7 @@
             }
         }
 
-        var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName', 'Notes'];
+        var existingNames = ['Location', 'Country', 'TeamName', 'Description', 'DisplayName', 'Notes', 'Channels', 'EntityName', 'ContactNumber'];
         for(var i = 0; i < existingNames.length; i++){
             if(existingNames[i].toLowerCase() === this.value.toLowerCase()){
                 this.value = '';
