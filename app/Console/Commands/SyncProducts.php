@@ -138,8 +138,8 @@ class SyncProducts extends Command
 		if (count($productsToBeDeleted) > 0) {
 			$toDeleProduct = Product::whereIn('pid', array_keys($productsToBeDeleted))->pluck('name')->toArray();
 
-			if(auth()->user()){
-				foreach($toDeleProduct as $prod){
+			foreach($toDeleProduct as $prod){
+				if(auth()->user()){
 					Log::create([
 						'user_id' => auth()->user()->id,
 						'logable_id' =>  $prod,
@@ -148,6 +148,11 @@ class SyncProducts extends Command
 					]);
 				}
 			}
+
+			$productsIds = array_keys($productsToBeDeleted);
+			Product::whereIn('pid', $productsIds)->each(function ($product) {
+				$product->users()->detach();
+			});
 
 			Product::whereIn('pid', array_keys($productsToBeDeleted))->forceDelete();
 		}

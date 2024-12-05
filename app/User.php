@@ -334,4 +334,9 @@ class User extends Authenticatable implements MustVerifyEmail
 	{
 		return $this->hasMany(OpcoRoleRequest::class);
 	}
+
+	public function products()
+	{
+		return $this->belongsToMany(Product::class);
+	}
 }
