@@ -118,6 +118,11 @@
                         'message' => "Product name {$prod} has been deleted",
                     ]);
                 }
+
+                $productsIds = array_keys($productsToBeDeleted);
+                Product::whereIn('pid', $productsIds)->each(function ($product) {
+                    $product->users()->detach();
+                });
     
                 Product::whereIn('pid', array_keys($productsToBeDeleted))->forceDelete();
             }

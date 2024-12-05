@@ -178,4 +178,9 @@ class Product extends Model
 
         return $notes;
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
 }

@@ -35,7 +35,7 @@
             validate.hideError('name_error');
         }
 
-        let specialChrs = /[`~!@#$%^&*|+=?;:±§'",.<>\[\]\\\/]/gi;
+        let specialChrs = /[`~!@#$%^&*|+=?;:±§'",.<>\[\]\\\/{}]/gi;
 
         nameElement.value = nameElement.value.replace(/  +/g, ' ');
 
