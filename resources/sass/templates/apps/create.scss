@@ -164,6 +164,9 @@
                     width: 10%;
                 }
 
+                +div {
+                    display: none;
+                }
 
                 &.active {
                     display: flex;
@@ -1158,5 +1161,11 @@
             grid-template-columns: 1fr 2fr;
             grid-gap: 50px;
         }
+    }
+}
+
+.apps-edit{
+    #product-selection{
+        display: block !important;
     }
 }
