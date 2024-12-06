@@ -85,7 +85,6 @@
                 @include('templates.apps.partials.create-form')
             </div>
 
-
             <div class="create-form-actions">
                 <div class="first">
                     <p><strong>Create a new application</strong></p>
@@ -108,8 +107,6 @@
             </div>
 
         </form>
-
-
     </div>
        
     <template id="custom-attribute" hidden>
@@ -131,7 +128,7 @@
     }
 </script>
 
+<script src="{{ mix('/js/components/app-name-check.js') }}" defer></script>
 <script src="{{ mix('/js/components/app-validate-fields.js') }}" defer></script>
-<script src="{{ mix('/js/templates/admin/apps/create.js') }}" defer></script>
 <script src="{{ mix('/js/templates/admin/apps/store.js') }}" defer></script>
 @endpush

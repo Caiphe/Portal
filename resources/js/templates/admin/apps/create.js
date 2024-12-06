@@ -111,7 +111,7 @@
         const attributeBlocks = document.querySelectorAll('.each-attribute-block');
 
         // Check if the number of attribute blocks is greater than 18
-        if (attributeBlocks.length > 11) {
+        if (attributeBlocks.length > 9) {
             attributeName.value = '';
             attributeValue.value = '';
             addAlert('warning', 'You have reached the limit of attributes.');
