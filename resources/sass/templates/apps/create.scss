@@ -148,7 +148,6 @@
 
             >div {
                 width: 100%;
-                //display: none;
 
                 &.select-countries,
                 &.form-first-container{
@@ -165,9 +164,6 @@
                     width: 10%;
                 }
 
-                +div {
-                    display: none;
-                }
 
                 &.active {
                     display: flex;
