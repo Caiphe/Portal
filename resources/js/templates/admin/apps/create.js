@@ -226,16 +226,8 @@
             }
         }
 
+        // Removes extra spaces
         var pattern = new RegExp('[ ]+', 'g');
         this.value = this.value.replaceAll(/["']/g, "").replace(pattern, '');
-    }
-
-    function removeQuote(){
-        this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, '');
-    }
-
-    function removeSpaces(){
-        var pattern = new RegExp('[ ]+', 'g');
-        this.value = this.value.replace(pattern, '');
     }
 }());
