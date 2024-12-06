@@ -24,6 +24,19 @@
         nameCheckElement.classList.remove('error-check');
         nameCheckElement.classList.remove('success-check');
 
+        const specialCharOnlyRegex = /^[^a-zA-Z0-9]+$/;
+
+        if(specialCharOnlyRegex.test(nameElement.value)){
+            nameCheckElement.classList.remove('loading');
+            nameCheckElement.classList.remove('error-check');
+            nameCheckElement.classList.remove('success-check');
+            nameElement.dataset.validationState = "invalid";
+            nameCheckElement.value= '';
+            nameCheckElement.focus();
+            validate.showError('name_error', 'Application name cannot contain only special characters.');
+            return;
+        }
+
         if (nameElement.value === '') {
             nameCheckElement.classList.remove('loading');
             nameCheckElement.classList.remove('error-check');

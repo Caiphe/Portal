@@ -111,7 +111,7 @@
         const attributeBlocks = document.querySelectorAll('.each-attribute-block');
 
         // Check if the number of attribute blocks is greater than 18
-        if (attributeBlocks.length > 11) {
+        if (attributeBlocks.length > 9) {
             attributeName.value = '';
             attributeValue.value = '';
             addAlert('warning', 'You have reached the limit of attributes.');
@@ -226,16 +226,8 @@
             }
         }
 
+        // Removes extra spaces
         var pattern = new RegExp('[ ]+', 'g');
         this.value = this.value.replaceAll(/["']/g, "").replace(pattern, '');
-    }
-
-    function removeQuote(){
-        this.value = this.value.replaceAll(/["']/g, "").replaceAll(/  +/g, '');
-    }
-
-    function removeSpaces(){
-        var pattern = new RegExp('[ ]+', 'g');
-        this.value = this.value.replace(pattern, '');
     }
 }());

@@ -131,6 +131,7 @@
     }
 </script>
 
+<script src="{{ mix('/js/components/app-name-check.js') }}" defer></script>
 <script src="{{ mix('/js/components/app-validate-fields.js') }}" defer></script>
 <script src="{{ mix('/js/templates/admin/apps/create.js') }}" defer></script>
 <script src="{{ mix('/js/templates/admin/apps/store.js') }}" defer></script>
