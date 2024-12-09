@@ -2,7 +2,6 @@
     let profiles = adminAppsCreateLookup('userProfiles');
     let searchWrapper = document.querySelector(".search-input");
     let searchField = searchWrapper.querySelector(".search-field");
-    let form = document.getElementById('create-app-form');
     let removeThumbnail = document.getElementById('remove-assignee');
     let appCreatorEmail = adminAppsCreateLookup('appCreatorEmail');
     let suggestions = adminAppsCreateLookup('userEmails');
@@ -111,7 +110,7 @@
         const attributeBlocks = document.querySelectorAll('.each-attribute-block');
 
         // Check if the number of attribute blocks is greater than 18
-        if (attributeBlocks.length > 9) {
+        if (attributeBlocks.length > 10) {
             attributeName.value = '';
             attributeValue.value = '';
             addAlert('warning', 'You have reached the limit of attributes.');
