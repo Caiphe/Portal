@@ -224,6 +224,9 @@
                     window.location.replace(createAppForm.dataset.redirect);
                 });
             }
+            else if(response.status === 417){
+                addAlert('error', 'There was a problem with the selected product (s), please contact your admin.');
+            }
             else if(response.status === 409) {
                 addAlert('error', 'You already have an application with this name, please use another.');
             } else {
