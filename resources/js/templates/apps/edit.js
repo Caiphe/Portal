@@ -3,6 +3,10 @@
     let categoryCheckboxes = document.querySelectorAll('.filter-category');
     document.getElementById('cancel').addEventListener('click', handleCancelButtonClickEvent)
 
+    window.onload = function() {
+        window.scrollTo(0, 0);
+    };
+
     function handleCancelButtonClickEvent(event) {
         event.preventDefault();
         if (window.confirm('Are you sure you want to leave this page?') === true) {
