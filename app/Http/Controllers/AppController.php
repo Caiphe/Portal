@@ -596,8 +596,30 @@ class AppController extends Controller
                 ? $app->attributes
                 : json_decode($app->attributes, true) ?? [];
 
-            // Merge formatted attributes with existing attributes
-            $mergedAttributes = array_merge($existingAttributes, $formattedAttributes);
+            // Normalize keys: case-sensitive reference keys you want to preserve
+            $referenceKeys = [
+                'Country', 'TeamName', 'location', 'Description', 'DisplayName',
+                'AutoRenewAllowed', 'PermittedSenderIDs', 'senderMsisdn',
+                'PermittedPlanIDs', 'originalChannelID', 'partnerName',
+                'Channels', 'EntityName', 'ContactNumber'
+            ];
+
+            // Normalize formatted attributes
+            $normalizedAttributes = [];
+            foreach ($formattedAttributes as $key => $value) {
+                $normalizedKey = array_search(strtolower($key), array_map('strtolower', $referenceKeys));
+                $normalizedAttributes[$normalizedKey !== false ? $referenceKeys[$normalizedKey] : $key] = $value;
+            }
+
+            // Normalize existing attributes
+            $normalizedExistingAttributes = [];
+            foreach ($existingAttributes as $key => $value) {
+                $normalizedKey = array_search(strtolower($key), array_map('strtolower', $referenceKeys));
+                $normalizedExistingAttributes[$normalizedKey !== false ? $referenceKeys[$normalizedKey] : $key] = $value;
+            }
+
+            // Merge normalized attributes
+            $mergedAttributes = array_merge($normalizedExistingAttributes, $normalizedAttributes);
 
             // Update the app's attributes and save
             $app->attributes = $mergedAttributes;
@@ -605,19 +627,19 @@ class AppController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Attributes fetched from Apigee successfully and merged.',
+                'message' => 'Attributes fetched from Apigee successfully, normalized, and merged.',
             ], 200);
         } catch (NotFoundHttpException $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage(),
-                'error_code' => 404  // Include error code in response
+                'error_code' => 404
             ], 404);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'An unexpected error occurred: ' . $e->getMessage(),
-                'error_code' => 500  // Include error code for unexpected errors
+                'error_code' => 500
             ], 500);
         }
     }

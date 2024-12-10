@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const regex = /^[a-zA-Z0-9_-]+$/; // Only allows alphanumeric characters, underscores, and dashes
     let tags = []; // For storing tags
     // Restricted keywords (case-insensitive)
-    const restrictedKeywords = ['sendermsisdn', 'originalchannelids', 'partnername', 'permittedsenderids', 'permittedplanids', 'autorenewallowed', 'country', 'teamname', 'location', 'description', 'displayname'];
+    const restrictedKeywords = ['sendermsisdn', 'originalChannelID', 'partnername', 'PermittedSenderIDs', 'PermittedPlanIDs', 'AutoRenewAllowed', 'country', 'teamname', 'location', 'description', 'displayname'];
 
     // Helper function to check if the name or value is restricted
     function isRestricted(keyword) {

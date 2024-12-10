@@ -8,11 +8,11 @@
                 <label for="type">Attribute</label>
                 <select id="type" name="type">
                     <option value="senderMsisdn">senderMsisdn</option>
-                    <option value="originalChannelIDs">originalChannelIDs</option>
+                    <option value="originalChannelID">originalChannelID</option>
                     <option value="partnerName">partnerName</option>
-                    <option value="permittedSenderIDs">PermittedSenderIDs</option>
-                    <option value="permittedPlanIDs">PermittedPlanIDs</option>
-                    <option value="autoRenewAllowed">AutoRenewAllowed</option>
+                    <option value="PermittedSenderIDs">PermittedSenderIDs</option>
+                    <option value="PermittedPlanIDs">PermittedPlanIDs</option>
+                    <option value="AutoRenewAllowed">AutoRenewAllowed</option>
                 </select>
 
             </div>

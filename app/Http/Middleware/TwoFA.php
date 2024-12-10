@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use App\Services\ApigeeUserService;
 use PragmaRX\Google2FALaravel\Support\Authenticator;
 
 class TwoFA
@@ -27,6 +28,7 @@ class TwoFA
                 $authenticator = app(Authenticator::class)->boot($request);
 
                 if (skip_2fa() || $authenticator->isAuthenticated()) {
+                    ApigeeUserService::setupUser($user);
                     return $next($request);
                 }
                 return $authenticator->makeRequestOneTimePasswordResponse();
