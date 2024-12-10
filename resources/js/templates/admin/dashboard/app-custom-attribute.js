@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Add a keyword validation function
     function containsForbiddenKeyword(value) {
         const lowerValue = value.toLowerCase();
-        return forbiddenKeywords.some(keyword => lowerValue.includes(keyword));
+        return forbiddenKeywords.some(keyword => lowerValue.includes(keyword.toLowerCase()));
     }
 
     function validateField(field, errorField, errorMessage, modal, fieldType) {
