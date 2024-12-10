@@ -99,8 +99,8 @@ document.addEventListener('DOMContentLoaded', function () {
         typeSelect.value = attributeData.name; // Default to the attribute name
 
         // Update tags if applicable
-        if (typeSelect.value === 'permittedSenderIDs') {
-            // Pre-fill textarea and tags for permittedSenderIDs
+        if (typeSelect.value === 'PermittedSenderIDs') {
+            // Pre-fill textarea and tags for PermittedSenderIDs
             valueField.value = attributeData.value || ''; // Pre-fill with existing value
             if (attributeData.value && attributeData.value.includes(',')) {
                 tags = attributeData.value.split(',').map(tag => tag.trim());
@@ -109,8 +109,8 @@ document.addEventListener('DOMContentLoaded', function () {
             updateTagDisplay(modal, tags); // Update tag display
         }
 
-        if (typeSelect.value === 'permittedPlanIDs' || typeSelect.value === 'permittedPlanIDs') {
-            // Pre-fill textarea and tags for permittedSenderIDs
+        if (typeSelect.value === 'PermittedPlanIDs' || typeSelect.value === 'PermittedPlanIDs') {
+            // Pre-fill textarea and tags for PermittedSenderIDs
             valueField.value = attributeData.value || ''; // Pre-fill with existing value
             if (attributeData.value && attributeData.value.includes(',')) {
                 tags = attributeData.value.split(',').map(tag => tag.trim());
@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function validateField(field, errorField, errorMessage, modal) {
         const inputValue = field.value.trim();
         const submitButton = modal.querySelector('.btn-confirm');
-        const noSpacesOrSpecialChars = /^[A-Za-z0-9]+$/; // For partnerName and originalChannelIDs
+        const noSpacesOrSpecialChars = /^[A-Za-z0-9]+$/; // For partnerName and originalChannelID
         const msisdnRegex = /^\+?[0-9]+$/;
 
         if (field.id === 'value' && modal.querySelector('#type').value === 'senderMsisdn') {
@@ -207,8 +207,8 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 errorField.style.display = 'none';
             }
-        } else if (field.id === 'value' && (modal.querySelector('#type').value === 'partnerName' || modal.querySelector('#type').value === 'originalChannelIDs')) {
-            // partnerName and originalChannelIDs specific validation (no spaces or special characters)
+        } else if (field.id === 'value' && (modal.querySelector('#type').value === 'partnerName' || modal.querySelector('#type').value === 'originalChannelID')) {
+            // partnerName and originalChannelID specific validation (no spaces or special characters)
             if (!noSpacesOrSpecialChars.test(inputValue)) {
                 errorField.textContent = "This field cannot contain spaces or special characters.";
                 errorField.style.display = 'block';
@@ -264,28 +264,28 @@ document.addEventListener('DOMContentLoaded', function () {
             nameField.value = 'senderMsisdn';
             valueField.style.display = 'block';
             valueInput.required = true;
-        } else if (selectedType === 'originalChannelIDs') {
-            nameField.value = 'originalChannelIDs';
+        } else if (selectedType === 'originalChannelID') {
+            nameField.value = 'originalChannelID';
             valueField.style.display = 'block';
             valueInput.required = true;
         } else if (selectedType === 'partnerName') {
             nameField.value = 'partnerName';
             valueField.style.display = 'block';
             valueInput.required = true;
-        } else if (selectedType === 'permittedSenderIDs') {
-            nameField.value = 'permittedSenderIDs';
+        } else if (selectedType === 'PermittedSenderIDs') {
+            nameField.value = 'PermittedSenderIDs';
             valueDescription.textContent = "Create tags by typing a comma or pressing Enter after each value";
             valueDescription.style.display = 'block';
             numberField.style.display = 'block';
             valueError.style.display = 'none';
-        } else if (selectedType === 'permittedPlanIDs') {
-            nameField.value = 'permittedPlanIDs';
+        } else if (selectedType === 'PermittedPlanIDs') {
+            nameField.value = 'PermittedPlanIDs';
             valueDescription.textContent = "Create tags by typing a comma or pressing Enter after each value";
             valueDescription.style.display = 'block';
             numberField.style.display = 'block';
             valueError.style.display = 'none';
-        } else if (selectedType === 'autoRenewAllowed') {
-            nameField.value = 'autoRenewAllowed';
+        } else if (selectedType === 'AutoRenewAllowed') {
+            nameField.value = 'AutoRenewAllowed';
             booleanField.style.display = 'block';
             booleanInput.required = true;  // Boolean field should be required
         }
@@ -341,14 +341,14 @@ document.addEventListener('DOMContentLoaded', function () {
         if (attributeType === 'senderMsisdn') {
             // senderMsisdn validation: allows numeric values and the "+" sign
             isValueValid = valueField.value.trim() !== '' && msisdnRegex.test(valueField.value.trim());
-        } else if (attributeType === 'partnerName' || attributeType === 'originalChannelIDs') {
-            // partnerName and originalChannelIDs: no spaces or special characters
+        } else if (attributeType === 'partnerName' || attributeType === 'originalChannelID') {
+            // partnerName and originalChannelID: no spaces or special characters
             isValueValid = valueField.value.trim() !== '' && noSpacesOrSpecialChars.test(valueField.value.trim()) && new Blob([valueField.value.trim()]).size <= 2048;
-        } else if (attributeType === 'permittedSenderIDs' || attributeType === 'permittedPlanIDs') {
-            // Validate tag data for permittedSenderIDs and permittedPlanIDs
+        } else if (attributeType === 'PermittedSenderIDs' || attributeType === 'PermittedPlanIDs') {
+            // Validate tag data for PermittedSenderIDs and PermittedPlanIDs
             isValueValid = isTagDataValid(tags);
-        } else if (attributeType === 'autoRenewAllowed') {
-            // Boolean validation for autoRenewAllowed
+        } else if (attributeType === 'AutoRenewAllowed') {
+            // Boolean validation for AutoRenewAllowed
             isValueValid = booleanField.value !== '';
         }
 
@@ -379,27 +379,27 @@ document.addEventListener('DOMContentLoaded', function () {
             value = valueField.value.trim();
         } else if (attributeType === 'partnerName') {
             value = valueField.value.trim();
-        } else if (attributeType === 'originalChannelIDs') {
+        } else if (attributeType === 'originalChannelID') {
             value = valueField.value.trim();
-        } else if (attributeType === 'permittedSenderIDs') {
+        } else if (attributeType === 'PermittedSenderIDs') {
             if (tags.length === 0) {
                 valueError.textContent = "Tags field must not be empty. Type a comma or press Enter after the value to create CSV string array tags.";
                 valueError.style.display = 'block';
                 return;
             }
             value = tags.join(',');
-        } else if (attributeType === 'permittedPlanIDs') {
+        } else if (attributeType === 'PermittedPlanIDs') {
             if (tags.length === 0) {
                 valueError.textContent = "Tags field must not be empty. Type a comma or press Enter after the value to create CSV string array tags.";
                 valueError.style.display = 'block';
                 return;
             }
             value = tags.join(',');
-        } else if (attributeType === 'autoRenewAllowed') {
+        } else if (attributeType === 'AutoRenewAllowed') {
             value = booleanField.value;  // True or False from select input
         }
 
-        if (!value && attributeType !== 'permittedSenderIDs' || !value && attributeType !== 'permittedPlanIDs') {
+        if (!value && attributeType !== 'PermittedSenderIDs' || !value && attributeType !== 'PermittedPlanIDs') {
             // Only require value if it's not a number type
             addAlert('error', 'Value field must not be empty. You need to add tags.');
             return;

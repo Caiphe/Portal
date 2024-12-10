@@ -163,8 +163,18 @@
                 <div class="ca-section">
 
                     @php
-                        $filteredAttributes = collect($app->attributes)->except(['Country', 'TeamName', 'location', 'Description', 'DisplayName', 'autoRenewAllowed', 'permittedSenderIDs', 'senderMsisdn', 'permittedPlanIDs', 'originalChannelIDs', 'partnerName', 'Channels', 'EntityName', 'ContactNumber']);
+                    $excludedKeys = [
+                        'Country', 'TeamName', 'location', 'Description', 'DisplayName',
+                        'AutoRenewAllowed', 'PermittedSenderIDs', 'senderMsisdn',
+                        'PermittedPlanIDs', 'originalChannelID', 'partnerName',
+                        'Channels', 'EntityName', 'ContactNumber'
+                    ];
+                    
+                    $filteredAttributes = collect($app->attributes)->reject(function ($value, $key) use ($excludedKeys) {
+                        return in_array(strtolower($key), array_map('strtolower', $excludedKeys));
+                    });
                     @endphp
+
                     @if(!$filteredAttributes->isEmpty())
                         <table class="app-attribute-table">
                             <thead class="ca-thead">
@@ -246,12 +256,22 @@
 
                 {{--=================Reserved Attributes================--}}
 
-                <div class=main-ca>
+                <div class="main-ca">
                     <div class="main-ca__heading">
                         <span class="customAttributeMain__text">Reserved Attributes</span>
                         @php
-                            // Filter reserved attributes, specified keys
-                            $countReservedAttributes = collect($app->attributes)->only(['autoRenewAllowed', 'permittedSenderIDs', 'senderMsisdn', 'originalChannelIDs', 'partnerName', 'permittedPlanIDs'])->count();
+                            // List of reserved attribute keys
+                            $reservedKeys = [
+                                'AutoRenewAllowed', 'PermittedSenderIDs', 'senderMsisdn', 
+                                'originalChannelID', 'partnerName', 'PermittedPlanIDs'
+                            ];
+                    
+                            // Filter reserved attributes with case-insensitive matching
+                            $countReservedAttributes = collect($app->attributes)
+                                ->filter(function ($value, $key) use ($reservedKeys) {
+                                    return in_array(strtolower($key), array_map('strtolower', $reservedKeys));
+                                })
+                                ->count();
                         @endphp
                         <button class="btn-show-attribute-modal btn-show-reserved-attribute-modal"
                                 reserved-data-id="{{ $app->aid }}"
@@ -259,12 +279,22 @@
                             Add reserved attribute
                         </button>
                     </div>
+
                 </div>
                 <div class="ca-section">
                     @php
-                        // Filter reserved attributes, specified keys
-                        $filteredAttributes = collect($app->attributes)->only(['autoRenewAllowed', 'permittedSenderIDs', 'senderMsisdn', 'originalChannelIDs', 'partnerName', 'permittedPlanIDs']);
+                        // List of keys to include
+                        $allowedKeys = [
+                            'AutoRenewAllowed', 'PermittedSenderIDs', 'senderMsisdn',
+                            'originalChannelID', 'partnerName', 'PermittedPlanIDs'
+                        ];
+
+                        // Filter attributes with case-insensitive matching
+                        $filteredAttributes = collect($app->attributes)->filter(function ($value, $key) use ($allowedKeys) {
+                            return in_array(strtolower($key), array_map('strtolower', $allowedKeys));
+                        });
                     @endphp
+
                     @if(!$filteredAttributes->isEmpty())
                         <table class="app-attribute-table">
                             <thead class="ca-thead">
@@ -355,8 +385,16 @@
                 </div>
                 <div class="ca-section">
                     @php
-                        $filteredAttributes = collect($app->attributes)->only(['Country', 'TeamName', 'location', 'Description', 'DisplayName', 'EntityName', ' EntityName ', 'ContactNumber']);
+                        $allowedKeys = [
+                            'Country', 'TeamName', 'location', 'Description', 'DisplayName', 
+                            'EntityName', ' EntityName ', 'ContactNumber'
+                        ];
+                    
+                        $filteredAttributes = collect($app->attributes)->filter(function ($value, $key) use ($allowedKeys) {
+                            return in_array(strtolower(trim($key)), array_map('strtolower', array_map('trim', $allowedKeys)));
+                        });
                     @endphp
+
                     @if(!$filteredAttributes->isEmpty())
                         <table class="app-attribute-table">
                             <thead class="ca-thead">
