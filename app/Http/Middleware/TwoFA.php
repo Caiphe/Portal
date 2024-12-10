@@ -28,7 +28,6 @@ class TwoFA
                 $authenticator = app(Authenticator::class)->boot($request);
 
                 if (skip_2fa() || $authenticator->isAuthenticated()) {
-                    ApigeeUserService::setupUser($user);
                     return $next($request);
                 }
                 return $authenticator->makeRequestOneTimePasswordResponse();
