@@ -427,6 +427,7 @@
 
     function testLocation(card) {
         let locations = document.getElementById('country').value;
+        if (!card.dataset.locations) return false; 
         return card.dataset.locations.split(',').indexOf(locations) !== -1;
     }
 }());

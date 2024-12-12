@@ -126,6 +126,7 @@
 
     function testLocation(card) {
         let locations = document.getElementById('selectedCountry').value;
+        if (!card.dataset.locations) return false; 
         return card.dataset.locations.split(',').indexOf(locations) !== -1;
     }
     // End of filters options
