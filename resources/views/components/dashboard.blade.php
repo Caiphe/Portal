@@ -387,7 +387,7 @@
                     @php
                         $allowedKeys = [
                             'Country', 'TeamName', 'location', 'Description', 'DisplayName',
-                            'EntityName', ' EntityName ', 'ContactNumber', 'Notes'
+                            'EntityName', ' EntityName ', 'ContactNumber'
                         ];
                     
                         $filteredAttributes = collect($app->attributes)->filter(function ($value, $key) use ($allowedKeys) {
