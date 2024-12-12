@@ -601,7 +601,7 @@ class AppController extends Controller
                 'Country', 'TeamName', 'location', 'Description', 'DisplayName',
                 'AutoRenewAllowed', 'PermittedSenderIDs', 'senderMsisdn',
                 'PermittedPlanIDs', 'originalChannelID', 'partnerName',
-                'Channels', 'EntityName', 'ContactNumber'
+                'Channels', 'EntityName', 'ContactNumber', 'Notes'
             ];
 
             // Normalize formatted attributes
@@ -918,6 +918,8 @@ class AppController extends Controller
     }
 
     /**
+     * Note that teams are not  synced to apigee they are created from the portal and synced to Apigee
+     * We have to make a call to apigee to get the team/company details in order to create attributes
      * Save custom attributes to Apigee
      * @param App $app
      * @param AppAttributesRequest $request
@@ -929,39 +931,69 @@ class AppController extends Controller
         $validated = $request->validated();
         $newAttributes = $validated['attribute'];
 
+        // Validate attribute keys
+        foreach ($newAttributes as $key => $value) {
+            if (is_numeric($key) && !preg_match('/[a-zA-Z]/', $key)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "The name value '{$key}' cannot be a numeric value only.",
+                ], 400);
+            }
+        }
+
         // Ensure existing attributes are an array or initialize as an empty array
         $existingAttributes = is_array($app->attributes)
             ? $app->attributes
             : json_decode($app->attributes, true) ?? [];
 
-        // Merge the new attributes into the existing ones (overriding existing keys)
-        $updatedAttributes = array_merge($existingAttributes, $newAttributes);
+        // Normalize and merge attributes
+        $referenceKeys = [
+            'Country', 'TeamName', 'location', 'Description', 'DisplayName',
+            'AutoRenewAllowed', 'PermittedSenderIDs', 'senderMsisdn',
+            'PermittedPlanIDs', 'originalChannelID', 'partnerName',
+            'Channels', 'EntityName', 'ContactNumber', 'Notes'
+        ];
 
-        $apigeeAttributes = ApigeeService::formatToApigeeAttributes($updatedAttributes);
+        $normalizedAttributes = $this->normalizeAttributes($existingAttributes, $referenceKeys);
+        $normalizedNewAttributes = $this->normalizeAttributes($newAttributes, $referenceKeys);
+        $mergedAttributes = array_merge($normalizedAttributes, $normalizedNewAttributes);
 
-        // Abort if the updated attributes exceed 18 properties
+        $apigeeAttributes = ApigeeService::formatToApigeeAttributes($mergedAttributes);
+
         if (count($apigeeAttributes) > 18) {
             return response()->json([
                 'success' => false,
-                'message' => "Attributes array cannot exceed 18 properties."
+                'message' => 'Attributes array cannot exceed 18 properties.'
             ], 400);
         }
-        $flattenedAttributes = $this->flattenAttributes($existingAttributes);
 
-        // Get the developer or team details
+        // Get developer or team details
         $team = $app->team;
         $developer = $app->developer;
 
-        if (!$developer) {
+
+        if ($team) {
+            $teamName = strtolower($team->username);
+            $getCompany = ApigeeService::get("companies/{$teamName}"); // Get company details from APIGEE
+
+            if (isset($getCompany['code'])) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'The Team does not exist in Apigee.',
+                ], 400);
+            }
+
+            $companyName = strtolower($getCompany['name']);
+            $accessUrl = "companies/{$companyName}";
+        } elseif ($developer) {
+            $developerEmail = $developer->email;
+            $accessUrl = "developers/{$developerEmail}";
+        } else {
             return response()->json([
                 'success' => false,
-                'message' => 'Developer information is missing.',
+                'message' => 'Developer or Team/Company does not exists in Apigee.',
             ], 400);
         }
-
-        // Construct the API access URL for Apigee
-        $developerEmail = $developer->email;
-        $accessUrl = $team ? "companies/{$team->username}" : "developers/{$developerEmail}";
 
         // Send updated attributes to Apigee
         $apigeeResponse = ApigeeService::put("{$accessUrl}/apps/{$app->name}", [
@@ -969,19 +1001,16 @@ class AppController extends Controller
             'attributes' => $apigeeAttributes,
         ]);
 
-        // Check if the response contains the 'success' key
         if ($apigeeResponse->status() === 200) {
-            // Update the local database with the edited attributes
-            $app->update(['attributes' => $updatedAttributes]);
+            $app->update(['attributes' => $mergedAttributes]);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Attributes successfully saved.',
-                'attributes' => $flattenedAttributes, // Return flattened attributes
+                'attributes' => $mergedAttributes,
             ]);
         }
 
-        // Log the error response for debugging
         Log::error('Apigee response error', [
             'response' => $apigeeResponse,
             'url' => "{$accessUrl}/apps/{$app->name}",
@@ -991,6 +1020,22 @@ class AppController extends Controller
             'success' => false,
             'message' => 'Failed to update attributes in Apigee.',
         ], 500);
+    }
+
+    /**
+     * Normalize attributes
+     * @param array $attributes
+     * @param array $referenceKeys
+     * @return array
+     */
+    private function normalizeAttributes(array $attributes, array $referenceKeys)
+    {
+        $normalized = [];
+        foreach ($attributes as $key => $value) {
+            $normalizedKey = array_search(strtolower($key), array_map('strtolower', $referenceKeys));
+            $normalized[$normalizedKey !== false ? $referenceKeys[$normalizedKey] : $key] = $value;
+        }
+        return $normalized;
     }
 
     /**

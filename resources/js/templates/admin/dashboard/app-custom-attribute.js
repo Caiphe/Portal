@@ -3,9 +3,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let appAid = null;
     const regex = /^[a-zA-Z0-9_-]+$/; // Only allows alphanumeric characters, underscores, and dashes (no spaces)
-    const forbiddenKeywords = ['displayName', 'sendermsisdn', 'originalChannelID', 'partnername', 'PermittedSenderIDs', 'PermittedPlanIDs', 'AutoRenewAllowed', 'country', 'teamname', 'location', 'description', 'Channels', 'EntityName', 'ContactNumber'];
+    const forbiddenKeywords = ['displayName', 'sendermsisdn', 'originalChannelID', 'partnername', 'PermittedSenderIDs', 'PermittedPlanIDs', 'AutoRenewAllowed', 'country', 'teamname', 'location', 'description', 'Channels', 'EntityName', 'ContactNumber', 'Notes'];
     let tags = []; // For storing tags from textarea
-    const restrictedKeywords = ['displayName', 'sendermsisdn', 'originalChannelID', 'partnername', 'PermittedSenderIDs', 'PermittedPlanIDs', 'AutoRenewAllowed', 'country', 'teamname', 'location', 'description', 'Channels', 'EntityName', 'ContactNumber'];
+    const restrictedKeywords = ['displayName', 'sendermsisdn', 'originalChannelID', 'partnername', 'PermittedSenderIDs', 'PermittedPlanIDs', 'AutoRenewAllowed', 'country', 'teamname', 'location', 'description', 'Channels', 'EntityName', 'ContactNumber', 'Notes'];
 
     function isRestricted(keyword) {
         return restrictedKeywords.some(restricted => restricted.toLowerCase() === keyword.toLowerCase());
