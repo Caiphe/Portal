@@ -167,7 +167,7 @@
                         'Country', 'TeamName', 'location', 'Description', 'DisplayName',
                         'AutoRenewAllowed', 'PermittedSenderIDs', 'senderMsisdn',
                         'PermittedPlanIDs', 'originalChannelID', 'partnerName',
-                        'Channels', 'EntityName', 'ContactNumber'
+                        'Channels', 'EntityName', 'ContactNumber', 'Notes'
                     ];
                     
                     $filteredAttributes = collect($app->attributes)->reject(function ($value, $key) use ($excludedKeys) {
@@ -262,7 +262,7 @@
                         @php
                             // List of reserved attribute keys
                             $reservedKeys = [
-                                'AutoRenewAllowed', 'PermittedSenderIDs', 'senderMsisdn', 
+                                'AutoRenewAllowed', 'PermittedSenderIDs', 'senderMsisdn',
                                 'originalChannelID', 'partnerName', 'PermittedPlanIDs'
                             ];
                     
@@ -386,7 +386,7 @@
                 <div class="ca-section">
                     @php
                         $allowedKeys = [
-                            'Country', 'TeamName', 'location', 'Description', 'DisplayName', 
+                            'Country', 'TeamName', 'location', 'Description', 'DisplayName',
                             'EntityName', ' EntityName ', 'ContactNumber'
                         ];
                     
